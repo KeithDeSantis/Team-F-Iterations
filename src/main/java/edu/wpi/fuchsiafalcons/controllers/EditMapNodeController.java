@@ -338,13 +338,9 @@ public class EditMapNodeController {
     public void handleFileNameType(KeyEvent keyEvent) {
         errorMessageLabel.setText("");
         errorMessageLabel.setStyle("-fx-text-fill: black");
-
         //TODO: better checking
-        final boolean disableBtns = !filenameField.getText().endsWith(".csv");
-
+        final boolean disableBtns = filenameField.getText().isEmpty();
         saveToFileButton.setDisable(disableBtns);
-       // loadFromFileButton.setDisable(disableBtns); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
-        loadFromFileButton.setDisable(false); //FIXME: REM WHEN ABOVE CONDITION IS MET.
 
     }
 
