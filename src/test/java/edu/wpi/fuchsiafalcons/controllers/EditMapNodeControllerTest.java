@@ -109,6 +109,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
     public void testEditNodeFeature() {
         verifyThat("Edit", Node::isVisible);
         clickOn("Reset Database");
+        clickOn("Edit");
         clickOn("CCONF001L1");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);

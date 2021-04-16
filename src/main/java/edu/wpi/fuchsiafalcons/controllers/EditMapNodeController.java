@@ -226,6 +226,7 @@ public class EditMapNodeController {
      */
     @FXML
     private void handleEditNode() throws IOException, SQLException {
+        if(nodeTreeTable.getSelectionModel().getSelectedItem() == null) { return; }
         NodeEntry selectedNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue(); // get item the is selected - KD
         if(selectedNode == null) { return; } // ensure there is a selection - KD
 
