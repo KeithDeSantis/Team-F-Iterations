@@ -347,4 +347,38 @@ public class EditMapNodeController {
         loadFromFileButton.setDisable(false); //FIXME: REM WHEN ABOVE CONDITION IS MET.
 
     }
+
+    /**
+     * Resets the database
+     * @author KD and ahf
+     */
+    public void handleResetDatabase() throws Exception {
+
+        nodeList.clear();
+
+        List<String[]> nodeData = null;
+        List<String[]> edgeData = null;
+
+        try {
+            nodeData = (CSVManager.load("L1Nodes.csv"));
+            edgeData = CSVManager.load("L1Edges.csv");
+        } catch (Exception e) {
+            errorMessageLabel.setText(e.getMessage());
+            errorMessageLabel.setStyle("-fx-text-fill: red");
+            e.printStackTrace();
+            return;
+        }
+
+        if(nodeData != null )
+        {
+            if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
+            {
+                nodeList.addAll(nodeData.stream().map(line -> {
+                    return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
+                }).collect(Collectors.toList()));
+                PopulateDB p = new PopulateDB();
+                p.main(ConnectionHandler.getConnection(), nodeData, edgeData); //NOTE: now can specify CSV arguments
+            }
+        }
+    }
 }
