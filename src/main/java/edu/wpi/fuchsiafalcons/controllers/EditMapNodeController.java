@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.wpi.fuchsiafalcons.database.*;
+import org.apache.derby.iapi.db.Database;
+
 import java.sql.*;
 
 /**
@@ -75,10 +77,9 @@ public class EditMapNodeController {
         final Image logo = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoView.setImage(logo);
 
-        PopulateDB populateDB = new PopulateDB();
         List <NodeEntry> data = new ArrayList<>();
         try {
-            data = populateDB.genNodeEntries(ConnectionHandler.getConnection());
+            data = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -249,8 +250,8 @@ public class EditMapNodeController {
                 nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
-                PopulateDB p = new PopulateDB();
-                p.main(ConnectionHandler.getConnection(), nodeData, edgeData); //NOTE: now can specify CSV arguments
+
+                DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), nodeData, edgeData); //NOTE: now can specify CSV arguments
             }
         }
 
