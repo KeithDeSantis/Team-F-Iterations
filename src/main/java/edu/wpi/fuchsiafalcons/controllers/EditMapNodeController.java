@@ -185,9 +185,6 @@ public class EditMapNodeController {
         nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
 
-        floor = nodeFloor;
-        switchMap();
-        drawCircle(xCoord, yCoord, nodeID);
         nodeTable.requestFocus();
         nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
         nodeTable.scrollTo(findNode(nodeID));
@@ -219,6 +216,11 @@ public class EditMapNodeController {
         String shortName = selectedNode.getShortName();
 
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
+
+        nodeTable.requestFocus();
+        nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
+        nodeTable.scrollTo(findNode(nodeID));
+        selectNode();
     }
 
     /**
