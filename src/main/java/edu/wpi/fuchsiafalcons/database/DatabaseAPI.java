@@ -298,7 +298,8 @@ public class DatabaseAPI {
             if(e.getMessage().contains("'DROP TABLE' cannot be performed on '" + table + "' because it does not exist."))
                 return false;
 
-            e.printStackTrace();
+            //FIXME: DO BETTER
+            //e.printStackTrace();
             return false;
         }
     }
