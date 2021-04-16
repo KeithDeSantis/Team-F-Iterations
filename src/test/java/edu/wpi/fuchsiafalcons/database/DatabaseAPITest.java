@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
 import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,9 @@ import javax.swing.plaf.nimbus.State;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.util.ArrayList;
 import java.sql.*;
+import java.util.List;
 
 class DatabaseAPITest {
     //private DatabaseAPI api;
@@ -109,4 +112,81 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI.getDatabaseAPI().updateEntry("L1Nodes", "node", "test",
                 "id", "dummyID"));
     }
+
+    @Test
+    @DisplayName("test dropping non-existent table")
+    public void testDropBadTable() throws SQLException{
+        assertFalse(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "test-table"));
+    }
+
+    @Test
+    @DisplayName("test dropping valid table")
+    public void testDropValidTable() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges"));
+    }
+
+    @Test
+    @DisplayName("test populate edges method")
+    public void testPopulateEdge() throws SQLException{
+        ArrayList<String[]> data = new ArrayList<>();
+        String[] edgeOneData = {"firstID", "firstStart", "firstEnd"};
+        String[] edgeTwoData = {"secondID", "secondStart", "secondEnd"};
+        data.add(edgeOneData);
+        data.add(edgeTwoData);
+
+        DatabaseAPI.getDatabaseAPI().populateEdges(data);
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteEdge("firstID"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteEdge("secondID"));
+    }
+
+    @Test
+    @DisplayName("test populate nodes method")
+    public void testPopulateNodes() throws SQLException{
+        ArrayList<String[]> data = new ArrayList<>();
+        String[] nodeOneData = {"id1", "1", "1", "test", "test1", "test2", "test3", "test4"};
+        String[] nodeTwoData = {"id2", "2", "2", "test", "test5", "test6", "test7", "test8"};
+        data.add(nodeOneData);
+        data.add(nodeTwoData);
+
+        DatabaseAPI.getDatabaseAPI().populateNodes(data);
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("id1"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("id2"));
+    }
+
+    @Test
+    @DisplayName("test valid table creation")
+    public void testValidTableCreation() throws SQLException{
+        String sql = "CREATE TABLE DUMMY (TEST INTEGER)";
+        DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "DUMMY"));
+    }
+
+    @Test
+    @DisplayName("test invalid table creation")
+    public void testInvalidTableCreation() throws SQLException{
+        String sql = "invalid query here";
+        assertThrows(SQLException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
+            }
+        });
+    }
+
+    @Test
+    @DisplayName("test generate node entry objects")
+    public void testGenNodeEntries() throws SQLException{
+        NodeEntry entry = new NodeEntry("test", "1", "1", "f", "b", "t", "l", "s");
+        ArrayList<NodeEntry> expected = new ArrayList<>();
+        expected.add(entry);
+        String sql = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+        DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Nodes");
+        DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
+        DatabaseAPI.getDatabaseAPI().addNode("test", 1, 1, "f", "b", "t", "l", "s");
+        List<NodeEntry> actual = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+        assertEquals(expected.get(0).getNodeID(), actual.get(0).getNodeID());
+    }
+
 }

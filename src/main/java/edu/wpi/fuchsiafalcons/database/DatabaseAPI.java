@@ -234,7 +234,7 @@ public class DatabaseAPI {
         return nodeEntries;
     }
 
-    private void createTable(Connection conn, String createCMD) throws SQLException {
+    public void createTable(Connection conn, String createCMD) throws SQLException {
         //create the tables
 
         Statement initStmt = conn.createStatement();
@@ -265,7 +265,7 @@ public class DatabaseAPI {
         return true;
     }
 
-    private void populateNodes(List<String[]> data) throws SQLException //I'll get back to that
+    public void populateNodes(List<String[]> data) throws SQLException //I'll get back to that
     {
         //This here is the tricky part b/c of the formatting....
         for (String[] arr : data) {
@@ -281,7 +281,7 @@ public class DatabaseAPI {
      * @return true if the table was dropped, false otherwise.
      * @author Alex Friedman (ahf)
      */
-    private final boolean dropTable(Connection conn, String table)
+    public final boolean dropTable(Connection conn, String table)
     {
         try
         {
@@ -303,7 +303,7 @@ public class DatabaseAPI {
         }
     }
 
-    private void populateEdges(List<String[]> data) throws SQLException //I'll get back to that
+    public void populateEdges(List<String[]> data) throws SQLException //I'll get back to that
     {
         //This here is the tricky part b/c of the formatting....
         for (String[] arr : data) {
