@@ -153,6 +153,9 @@ public class EditMapNodeController {
         String targetID = nodeTable.getItems().get(selectedIndex).getNodeID();
         DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
         nodeTable.getItems().remove(selectedIndex); // remove said index from table - KD
+
+        canvas.getChildren().remove(selectedCircle);
+        selectedCircle = null;
     }
 
     /**
@@ -181,6 +184,14 @@ public class EditMapNodeController {
 
         nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
+
+        floor = nodeFloor;
+        switchMap();
+        drawCircle(xCoord, yCoord, nodeID);
+        nodeTable.requestFocus();
+        nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
+        nodeTable.scrollTo(findNode(nodeID));
+        selectNode();
     }
 
 
@@ -374,7 +385,9 @@ public class EditMapNodeController {
             case "L1": map.setImage(L1Image); break;
             case "L2": map.setImage(L2Image); break;
             case "G": map.setImage(GImage); break;
+            default: map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
         }
+        floorComboBox.setValue(floor);
         drawNodeOnFloor();
     }
 
@@ -432,10 +445,9 @@ public class EditMapNodeController {
 
     /**
      * Select node based on selection in Table, focus on the node
-     * @param mouseEvent
      * @author ZheCheng
      */
-    public void selectNode(MouseEvent mouseEvent) {
+    public void selectNode() {
         if(nodeTable.getSelectionModel().getSelectedIndex() < 0){
             // FIXME Error Handling
             return;
