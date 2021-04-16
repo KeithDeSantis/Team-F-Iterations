@@ -13,6 +13,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -25,6 +28,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.wpi.fuchsiafalcons.database.*;
+import org.w3c.dom.NodeList;
+
 import java.sql.*;
 
 /**
@@ -49,10 +54,12 @@ public class EditMapNodeController {
     @FXML private Pane canvas;
     @FXML private ImageView logoView;
 
+    @FXML private ComboBox floorComboBox;
+
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
 
-
+    final double zoomLevel = 5.0;
     /**
      * Overriding Initialize for testing and set up
      * @author Keith DeSantis
@@ -64,7 +71,6 @@ public class EditMapNodeController {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-        final double zoomLevel = 5.0;
         final double width = image.getWidth()/zoomLevel;
         final double height = image.getHeight()/zoomLevel;
         canvas.setPrefSize(width,height);
@@ -94,6 +100,12 @@ public class EditMapNodeController {
         ShortNameColumn.setCellValueFactory(cellData -> cellData.getValue().getShortNameProperty()); // Set second column to display second name property - KD
         nodeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue)); // Listener to watch for changes - KD
         loadFromFileButton.setDisable(false);
+
+        final ObservableList<String> floorName = FXCollections.observableArrayList();
+        floorName.addAll("1","2","3","L1","L2","G");
+        floorComboBox.setItems(floorName);
+        floorComboBox.setValue("1");
+        drawNodeOnFloor("1");
     }
 
     /**
@@ -325,5 +337,57 @@ public class EditMapNodeController {
        // loadFromFileButton.setDisable(disableBtns); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
         loadFromFileButton.setDisable(false); //FIXME: REM WHEN ABOVE CONDITION IS MET.
 
+    }
+
+    public void handleFloorBoxAction(ActionEvent actionEvent) {
+        switchMap(floorComboBox.getValue().toString());
+    }
+
+    private void switchMap(String floor){
+        String source = "";
+        switch(floor){
+            case "1": source = "/maps/01_thefirstfloor.png"; break;
+            case "2": source = "/maps/02_thesecondfloor.png"; break;
+            case "3": source = "/maps/03_thethirdfloor.png"; break;
+            case "L1": source = "/maps/00_thelowerlevel1.png"; break;
+            case "L2": source = "/maps/00_thelowerlevel2.png"; break;
+            case "G": source = "/maps/00_thegroundfloor.png"; break;
+        }
+        Image image = new Image(getClass().getResourceAsStream(source));
+        map.setImage(image);
+        drawNodeOnFloor(floor);
+    }
+
+    private void drawNodeOnFloor(String floor){
+        canvas.getChildren().removeIf(x -> {
+            return x instanceof Circle;
+        });
+        for(NodeEntry n : nodeList){
+            if(n.getFloor().equals(floor)) {
+                drawCircle(Double.parseDouble(n.getXcoord())/zoomLevel, Double.parseDouble(n.getYcoord())/zoomLevel, n.getNodeID());
+            }
+        }
+    }
+
+    private void drawCircle(double x, double y, String nodeID){
+        System.out.println(x + " " + y + " " + nodeID);
+        Circle c = new Circle(x, y, 7.0);
+        c.setFill(Color.BLUE);
+        c.setOnMouseEntered(e->{c.setFill(Color.RED);});
+        c.setOnMouseExited(e->{c.setFill(Color.BLUE);});
+        c.setOnMouseClicked(e->{nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));nodeTable.requestFocus();});
+
+        this.canvas.getChildren().add(c);
+    }
+
+    private int findNode(String nodeID){
+        int index = 0;
+        for(NodeEntry n: nodeList){
+            if(n.getNodeID() == nodeID){
+                break;
+            }
+            index++;
+        }
+        return index;
     }
 }
