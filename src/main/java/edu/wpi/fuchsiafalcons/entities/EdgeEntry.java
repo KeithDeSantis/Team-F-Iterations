@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.entities;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -7,7 +8,7 @@ import javafx.beans.property.StringProperty;
  * Entity Class to store basic info for edges
  * @author Leo Morris
  */
-public class EdgeEntry {
+public class EdgeEntry extends RecursiveTreeObject<EdgeEntry> {
 
     private final StringProperty edgeID;
     private final StringProperty startNode;

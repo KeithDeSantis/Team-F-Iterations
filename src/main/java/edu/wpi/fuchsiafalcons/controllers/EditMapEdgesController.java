@@ -1,7 +1,10 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
+import javafx.util.Callback;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,37 +34,34 @@ public class EditMapEdgesController {
     private Button goBack;
 
     @FXML
-    private Button newEdge;
+    private JFXButton newEdge;
 
     @FXML
-    private Button editEdge;
+    private JFXButton editEdge;
 
     @FXML
-    private Button deleteEdge;
+    private JFXButton deleteEdge;
 
     @FXML
-    private Button loadCSV;
+    private JFXButton loadCSV;
 
     @FXML
-    private Button saveCSV;
+    private JFXButton saveCSV;
 
     @FXML
-    private TextField CSVFile;
+    private JFXTextField CSVFile;
 
     @FXML
     private Label CSVErrorLabel;
 
     @FXML
-    private TableView<EdgeEntry> edgeTable;
-
-    @FXML
-    private TableColumn<EdgeEntry, String> edgeIDColumn;
+    private JFXTreeTableView edgeTable;
 
     // Create an observable list of edges
     private ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
 
     @FXML
-    private ScrollPane scroll;
+    private JFXScrollPane scroll;
     @FXML
     private ImageView map;
 
@@ -76,8 +77,6 @@ public class EditMapEdgesController {
         CSVErrorLabel.setText("");
 
         // setup the map view
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
         final double zoomLevel = 4.0;
@@ -90,6 +89,9 @@ public class EditMapEdgesController {
         // Set the save button to disabled by default (enabled by a valid file name being entered)
         saveCSV.setDisable(true);
 
+
+
+        // Populate an observable list from CSV
         //FIXME: do better, hook into db
         try {
             edgeEntryObservableList.addAll( CSVManager.load("L1Edges.csv").stream().map(line-> {
@@ -99,17 +101,26 @@ public class EditMapEdgesController {
             e.printStackTrace();
         }
 
+        // Set up cell factory for the edge ID table
+        JFXTreeTableColumn<EdgeEntry, String> edgeIDColumn = new JFXTreeTableColumn<>("Edge ID");
+        edgeIDColumn.setPrefWidth(250);
+        edgeIDColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<EdgeEntry, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<EdgeEntry, String> param) {
+                return param.getValue().getValue().edgeIDProperty();
+            }
+        });
 
-        edgeTable.setItems(edgeEntryObservableList);
-
-        // Initialize the edges table with edges
-        edgeIDColumn.setCellValueFactory(cellData -> cellData.getValue().edgeIDProperty());
+        final TreeItem<EdgeEntry> root = new RecursiveTreeItem<EdgeEntry>(edgeEntryObservableList, RecursiveTreeObject::getChildren);
+        edgeTable.getColumns().setAll(edgeIDColumn);
+        edgeTable.setRoot(root);
+        edgeTable.setShowRoot(false);
 
         // Set initial selected edge to null
         showSelectedEdge(null);
 
         // Listen for selection changes on the table view
-        edgeTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showSelectedEdge(newValue)));
+        //edgeTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showSelectedEdge(newVwalue)));
     }
 
     /**
@@ -133,9 +144,9 @@ public class EditMapEdgesController {
         int index = edgeTable.getSelectionModel().getSelectedIndex();
 
         // Check for a valid index (-1 = no selection)
-        if(index >= 0){
+        if(index >= 0 && index <= edgeEntryObservableList.size()){
             // Remove the edge, this will update the TableView automatically
-            edgeTable.getItems().remove(index);
+            edgeEntryObservableList.remove(index);
         } else {
             // Create an alert to inform the user there is no edge selected
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -154,7 +165,8 @@ public class EditMapEdgesController {
      */
     @FXML
     private void handleEditEdge() throws IOException {
-        EdgeEntry selectedEdge = edgeTable.getSelectionModel().getSelectedItem();
+        int index = edgeTable.getSelectionModel().getSelectedIndex();
+        EdgeEntry selectedEdge = edgeEntryObservableList.get(index);
         if(selectedEdge != null){
             openEditDialogue(selectedEdge);
         }
@@ -180,6 +192,7 @@ public class EditMapEdgesController {
      * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
      * @author ZheCheng Song
      */
+    /*
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
@@ -195,7 +208,23 @@ public class EditMapEdgesController {
             stage.show();
         }
     }
+*/
 
+    /**
+     * Handles pressing of "HOME" button, replaces handleButtonPushed
+     * @throws IOException
+     * @author Leo Morris
+     */
+    @FXML
+    private void handleHomeButton() throws IOException{
+        Stage stage;
+        Parent root;
+        stage = (Stage) goBack.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Default Page");
+        stage.show();
+    }
     /**
      * Opens edit dialogue to edit edge
      * Written with code from KD
