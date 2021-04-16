@@ -156,6 +156,7 @@ public class EditMapNodeController {
 
         canvas.getChildren().remove(selectedCircle);
         selectedCircle = null;
+        drawNodeOnFloor(); // added to handle deletion without selection - KD
     }
 
     /**
