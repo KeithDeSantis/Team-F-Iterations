@@ -40,45 +40,53 @@ public class PopulateDB {
         return nodeEntries;
     }
 
-    private boolean populateData(Connection conn, List<String[]> data, List <String[]> data1) throws Exception {
-        boolean success = false;
-        try {
-            Statement initStmt = conn.createStatement();
-            Statement init2Stmt = conn.createStatement();
+    private void createTable(Connection conn, String createCMD) throws SQLException {
+        //create the tables
 
-            String init = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
-                    "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                    "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
-            initStmt.execute(init);
+        Statement initStmt = conn.createStatement();
+        initStmt.execute(createCMD);
 
+        initStmt.close();
 
-            String init2 = "CREATE TABLE L1Edges(edgeID varchar(200), " +
-                    "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
-            init2Stmt.execute(init2);
+    }
 
-            initStmt.close();
-            init2Stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+    private void populateNodes(List<String[]> data) throws SQLException //I'll get back to that
+    {
+        //This here is the tricky part b/c of the formatting....
         for (String[] arr : data) {
             final int x = Integer.parseInt(arr[1]);
             final int y = Integer.parseInt(arr[2]);
             DatabaseAPI.getDatabaseAPI().addNode(arr[0], x, y, arr[3], arr[4], arr[5], arr[6], arr[7]);
         }
+    }
 
-        for (String[] arr : data1) {
-            try {
-                DatabaseAPI.getDatabaseAPI().addEdge(arr[0], arr[1], arr[2]);
-                success = true;
-
-            } catch (SQLException e) {
-                System.out.println("Connection failed. Check output console.");
-                e.printStackTrace();
-            }
+    private void populateEdges(List<String[]> data) throws SQLException //I'll get back to that
+    {
+        //This here is the tricky part b/c of the formatting....
+        for (String[] arr : data) {
+            DatabaseAPI.getDatabaseAPI().addEdge(arr[0], arr[1], arr[2]);
         }
-        return success;
+    }
+
+    private boolean populateData(Connection conn, List<String[]> nodeData, List <String[]> edgeData) throws Exception {
+        try {
+            final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                    "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                    "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+            createTable(conn, initNodesTable);
+            populateNodes(nodeData);
+
+
+            final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
+                    "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
+            createTable(conn, initEdgesTable);
+
+            populateEdges(edgeData);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
 

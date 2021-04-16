@@ -47,6 +47,7 @@ public class DatabaseAPI {
 
         final PreparedStatement stmt = conn.prepareStatement(sql);
 
+
         stmt.setString(1, id);
         stmt.setInt(2, x);
         stmt.setInt(3, y);
@@ -58,6 +59,8 @@ public class DatabaseAPI {
 
         return stmt.executeUpdate() != 0;//isnt that the same?
     }
+
+
 
     /**
      * Method to add an edge to the L1Edges table
