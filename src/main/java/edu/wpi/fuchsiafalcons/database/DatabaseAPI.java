@@ -111,21 +111,37 @@ public class DatabaseAPI {
      */
     public boolean addNode(String id, int x, int y, String floor, String building, String type, String longName, String shortName) throws SQLException {
 
-        final String sql = "INSERT INTO L1Nodes values(?, ?, ?, ?, ?, ?, ?, ?)";
+//        final String sql = "INSERT INTO L1Nodes values(?, ?, ?, ?, ?, ?, ?, ?)";
+//
+//        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+//
+//
+//        stmt.setString(1, id);
+//        stmt.setInt(2, x);
+//        stmt.setInt(3, y);
+//        stmt.setString(4, floor);
+//        stmt.setString(5, building);
+//        stmt.setString(6, type);
+//        stmt.setString(7, longName);
+//        stmt.setString(8, shortName);
 
-        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
 
+        //FIXME: DO BETTER!!!
+        return addNode(new String[] {
+                id,
+                "" + x,
+                "" + y,
+                floor,
+                building,
+                type,
+                longName,
+                shortName
+        });
+    }
 
-        stmt.setString(1, id);
-        stmt.setInt(2, x);
-        stmt.setInt(3, y);
-        stmt.setString(4, floor);
-        stmt.setString(5, building);
-        stmt.setString(6, type);
-        stmt.setString(7, longName);
-        stmt.setString(8, shortName);
-
-        return stmt.executeUpdate() != 0;//isnt that the same?
+    public boolean addNode(String[] data) throws SQLException {
+        final PreparedStatement stmt = DatabaseAPI.nodeDatabase.getInsertStatement(data);
+        return stmt.executeUpdate() != 0;
     }
 
 
@@ -329,9 +345,8 @@ public class DatabaseAPI {
     {
         //This here is the tricky part b/c of the formatting....
         for (String[] arr : data) {
-            final int x = Integer.parseInt(arr[1]);
-            final int y = Integer.parseInt(arr[2]);
-            DatabaseAPI.getDatabaseAPI().addNode(arr[0], x, y, arr[3], arr[4], arr[5], arr[6], arr[7]);
+
+            DatabaseAPI.getDatabaseAPI().addNode(arr);
         }
     }
     /**

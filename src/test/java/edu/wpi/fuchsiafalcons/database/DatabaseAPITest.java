@@ -15,9 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.sql.*;
 
 class DatabaseAPITest {
-    //private DatabaseAPI api;
-  //  private ConnectionHandler connHandler = new ConnectionHandler();
-//    private Connection connection = connHandler.main(false);
+
 
     @BeforeEach
     public void setUp() throws Exception
