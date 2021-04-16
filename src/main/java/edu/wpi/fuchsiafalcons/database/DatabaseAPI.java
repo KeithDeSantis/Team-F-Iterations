@@ -13,7 +13,8 @@ public class DatabaseAPI {
 
     /*
      * These two private classes were written by Alex Friedman (ahf). I'll have to do something better than this at some point,
-     * but this is the start of how we might be able to methodize some stuff.
+     * but this is the start of how we might be able to methodize some stuff. For example, I'll probably switch
+     * this over to an abstract factor w/ singletons or strategy or something.
      */
     //FIXME: DO BETTER
     private static final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
