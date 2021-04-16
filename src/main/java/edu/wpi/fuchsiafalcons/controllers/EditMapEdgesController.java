@@ -61,7 +61,7 @@ public class EditMapEdgesController {
     private ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
 
     @FXML
-    private JFXScrollPane scroll;
+    private ScrollPane scroll;
     @FXML
     private ImageView map;
 
@@ -77,9 +77,11 @@ public class EditMapEdgesController {
         CSVErrorLabel.setText("");
 
         // setup the map view
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-        final double zoomLevel = 4.0;
+        final double zoomLevel = 2.0;
         final double width = image.getWidth()/zoomLevel;
         final double height = image.getHeight()/zoomLevel;
         map.setFitWidth(width);
