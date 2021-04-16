@@ -51,10 +51,15 @@
                            <font>
                               <Font name="Tahoma" size="13.0" />
                            </font></JFXButton>
-                        <JFXButton fx:id="loadFromFileButton" buttonType="RAISED" onAction="#handleLoadButtonClicked" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="Load From File/Reset Database" textFill="WHITE">
+                        <JFXButton fx:id="loadFromFileButton" buttonType="RAISED" onAction="#handleLoadButtonClicked" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="Load From File" textFill="WHITE">
                            <font>
                               <Font name="Tahoma" size="13.0" />
                            </font></JFXButton>
+                        <JFXButton fx:id="resetDatabaseButton" buttonType="RAISED" onAction="#handleResetDatabase" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="Reset Database" textFill="WHITE">
+                           <font>
+                              <Font name="Tahoma" size="13.0" />
+                           </font>
+                        </JFXButton>
                         <Label fx:id="errorMessageLabel" />
                      </children>
                   </VBox>

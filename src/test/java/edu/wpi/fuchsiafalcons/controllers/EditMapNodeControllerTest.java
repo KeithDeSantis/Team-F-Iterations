@@ -102,14 +102,13 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         ).collect(Collectors.toList());
         verifyThat("#TestNode", Node::isVisible);
         assertEquals(pre + 1, query.size());
-        clickOn("Load From File/Reset Database");
-        System.out.println("tyo");
+        clickOn("Reset Database");
     }
 
     @Test
     public void testEditNodeFeature() {
         verifyThat("Edit", Node::isVisible);
-        clickOn("Load From File/Reset Database");
+        clickOn("Reset Database");
         clickOn("CCONF001L1");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
@@ -137,7 +136,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("OK");
         verifyThat("#testID", Node::isVisible);
         verifyThat("testID", Node::isVisible);
-        clickOn("Load From File/Reset Database");
+        clickOn("Reset Database");
     }
 
 
@@ -146,14 +145,12 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         verifyThat("Save to File", Node::isVisible);
         clickOn("#filenameField");
         verifyThat("Save to File", Node::isDisable);
-        write("Test");
-        verifyThat("Save to File", Node::isDisable);
     }
 
     @Test
     public void testDeleteNodeOnMap() {
-        verifyThat("Load From File/Reset Database", Node::isVisible);
-        clickOn("Load From File/Reset Database");
+        verifyThat("Reset Database", Node::isVisible);
+        clickOn("Reset Database");
         verifyThat("CCONF001L1", Node::isVisible);
         clickOn("CCONF001L1");
         verifyThat("#CCONF001L1", Node::isVisible);

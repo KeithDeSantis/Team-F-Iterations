@@ -21,11 +21,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -86,14 +88,14 @@ public class EditMapNodeController {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
-
-        F1Image = new Image("/maps/01_thefirstfloor.png");
-        final double width = F1Image.getWidth()/zoomLevel;
-        final double height = F1Image.getHeight()/zoomLevel;
+        final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+        final double zoomLevel = 5.0;
+        final double width = image.getWidth()/zoomLevel;
+        final double height = image.getHeight()/zoomLevel;
         canvas.setPrefSize(width,height);
         map.setFitWidth(width);
         map.setFitHeight(height);
-        map.setImage(F1Image); // Copied from A* Vis - KD
+        map.setImage(image); // Copied from A* Vis - KD
 
         final Image logo = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoView.setImage(logo);
@@ -286,7 +288,15 @@ public class EditMapNodeController {
     public void handleLoadButtonClicked(ActionEvent actionEvent) throws Exception {
         //FIXME: NULL ERROR CHECK.
         //Maybe this should be methodized out of the controller? - ahf (yes I know I wrote this, I was being lazy)
-        final String fileName = filenameField.getText();
+
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setTitle("Choose CSV File");
+        Stage FileStage = new Stage();
+        File file = fileChooser.showOpenDialog(FileStage);
+        final String fileName = String.valueOf(file);
 
         nodeList.clear();
 
@@ -307,7 +317,7 @@ public class EditMapNodeController {
         {
             if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
             {
-                nodeList.addAll(nodeData.stream().map(line -> { //TODO Issues with TreeTableView?
+                nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
                 PopulateDB p = new PopulateDB();
@@ -335,32 +345,43 @@ public class EditMapNodeController {
         //FIXME: NULL ERROR CHECK.
         final String fileName = filenameField.getText();
 
-        //Maybe this should be methodized out of the controller? - ahf (yes I know I wrote this, I was being lazy)
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV File");
+        fileChooser.setInitialFileName(fileName);
 
-        //FIXME: DO BETTER!!!
-        final List<String[]> data = new LinkedList<String[]>();
-        Collections.addAll(data, "nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName".split(","));
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
 
-        data.addAll(nodeList.stream().map(node -> {
-            return new String[] {
-                    node.getNodeID(),
-                    node.getXcoord(),
-                    node.getYcoord(),
-                    node.getFloor(),
-                    node.getBuilding(),
-                    node.getNodeType(),
-                    node.getLongName(),
-                    node.getShortName()
-            };
-        }).collect(Collectors.toList()));
+        Stage FileStage = new Stage();
+        File file = fileChooser.showSaveDialog(FileStage);
 
-        try {
-            CSVManager.writeFile(fileName, data);
-        } catch (Exception e) {
-            errorMessageLabel.setStyle("-fx-text-fill: red");
-            errorMessageLabel.setText(e.getMessage());
-            e.printStackTrace();
-            return;
+        if (file != null) {
+            //FIXME: DO BETTER!!!
+            final List<String[]> data = new LinkedList<String[]>();
+            Collections.addAll(data, "nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName".split(","));
+
+            data.addAll(nodeList.stream().map(node -> {
+                return new String[] {
+                        node.getNodeID(),
+                        node.getXcoord(),
+                        node.getYcoord(),
+                        node.getFloor(),
+                        node.getBuilding(),
+                        node.getNodeType(),
+                        node.getLongName(),
+                        node.getShortName()
+                };
+            }).collect(Collectors.toList()));
+
+            try {
+                CSVManager.writeToFile(file, data);
+            } catch (Exception e) {
+                errorMessageLabel.setStyle("-fx-text-fill: red");
+                errorMessageLabel.setText(e.getMessage());
+                e.printStackTrace();
+                return;
+            }
         }
 
         errorMessageLabel.setText("File successfully exported.");
@@ -382,15 +403,11 @@ public class EditMapNodeController {
         errorMessageLabel.setStyle("-fx-text-fill: black");
 
         //TODO: better checking
-        final boolean disableBtns = !filenameField.getText().endsWith(".csv");
-
+        final boolean disableBtns = filenameField.getText().isEmpty();
         saveToFileButton.setDisable(disableBtns);
-       // loadFromFileButton.setDisable(disableBtns); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
-        loadFromFileButton.setDisable(false); //FIXME: REM WHEN ABOVE CONDITION IS MET.
 
     }
-
-    /**
+/**
      * Handle switching floor using combobox
      * @param actionEvent
      * @author ZheCheng
@@ -530,4 +547,45 @@ public class EditMapNodeController {
                 / (scroll.getContent().getBoundsInLocal().getWidth() - (c.getBoundsInParent().getMaxX() +
                 c.getBoundsInParent().getMinX()) / 2.0)));
     }
+
+ /**
+     * Resets the database
+     * @author KD and ahf
+     */
+    public void handleResetDatabase() throws Exception {
+
+        nodeList.clear();
+
+        List<String[]> nodeData = null;
+        List<String[]> edgeData = null;
+
+        try {
+            nodeData = (CSVManager.load("L1Nodes.csv"));
+            edgeData = CSVManager.load("L1Edges.csv");
+        } catch (Exception e) {
+            errorMessageLabel.setText(e.getMessage());
+            errorMessageLabel.setStyle("-fx-text-fill: red");
+            e.printStackTrace();
+            return;
+        }
+
+        if(nodeData != null )
+        {
+            if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
+            {
+                nodeList.addAll(nodeData.stream().map(line -> {
+                    return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
+                }).collect(Collectors.toList()));
+                PopulateDB p = new PopulateDB();
+                p.main(ConnectionHandler.getConnection(), nodeData, edgeData); //NOTE: now can specify CSV arguments
+            }
+        }
+        errorMessageLabel.setText("");
+        errorMessageLabel.setStyle("-fx-text-fill: black");
+
+        filenameField.setText("");
+        saveToFileButton.setDisable(true);
+    }
+
+
 }
