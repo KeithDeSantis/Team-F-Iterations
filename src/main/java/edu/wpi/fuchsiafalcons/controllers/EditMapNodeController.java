@@ -376,5 +376,10 @@ public class EditMapNodeController {
                 p.main(ConnectionHandler.getConnection(), nodeData, edgeData); //NOTE: now can specify CSV arguments
             }
         }
+        errorMessageLabel.setText("");
+        errorMessageLabel.setStyle("-fx-text-fill: black");
+
+        filenameField.setText("");
+        saveToFileButton.setDisable(true);
     }
 }
