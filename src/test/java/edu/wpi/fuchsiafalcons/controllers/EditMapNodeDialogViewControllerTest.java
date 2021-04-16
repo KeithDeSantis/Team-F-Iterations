@@ -13,6 +13,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
 
+
     @Override
     public void start(Stage primaryStage) throws IOException {
 
@@ -46,6 +47,7 @@ public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
         write(".");
         clickOn("OK");
         moveTo("CCONF001L1");
+        //scroll(10,DOWN);
         clickOn("Load From File/Reset Database");
 
     }
