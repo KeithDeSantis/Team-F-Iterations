@@ -1,6 +1,7 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.VerticalDirection;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,9 +31,9 @@ public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
         clickOn("#nodeIDField");
         write("Test");
         clickOn("#xCoordField");
-        write(".");
+        write("3");
         clickOn("#yCoordField");
-        write(".");
+        write("2");
         clickOn("#floorField");
         write(".");
         clickOn("#buildingField");
@@ -44,7 +45,9 @@ public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
         clickOn("#shortNameField");
         write(".");
         clickOn("OK");
-        verifyThat("Test", Node::isVisible);
+        moveTo("CCONF001L1");
+        clickOn("Load From File/Reset Database");
+
     }
 
 }
