@@ -13,11 +13,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -223,9 +225,16 @@ public class EditMapNodeController {
      * @author KD, ahf
      */
     public void handleLoadButtonClicked(ActionEvent actionEvent) throws Exception {
-        //FIXME: NULL ERROR CHECK.
         //Maybe this should be methodized out of the controller? - ahf (yes I know I wrote this, I was being lazy)
-        final String fileName = filenameField.getText();
+
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setTitle("Choose CSV File");
+        Stage FileStage = new Stage();
+        File file = fileChooser.showOpenDialog(FileStage);
+        final String fileName = String.valueOf(file);
 
         nodeList.clear();
 
@@ -272,34 +281,44 @@ public class EditMapNodeController {
         //FIXME: NULL ERROR CHECK.
         final String fileName = filenameField.getText();
 
-        //Maybe this should be methodized out of the controller? - ahf (yes I know I wrote this, I was being lazy)
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV File");
+        fileChooser.setInitialFileName(fileName);
 
-        //FIXME: DO BETTER!!!
-        final List<String[]> data = new LinkedList<String[]>();
-        Collections.addAll(data, "nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName".split(","));
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
 
-        data.addAll(nodeList.stream().map(node -> {
-            return new String[] {
-                    node.getNodeID(),
-                    node.getXcoord(),
-                    node.getYcoord(),
-                    node.getFloor(),
-                    node.getBuilding(),
-                    node.getNodeType(),
-                    node.getLongName(),
-                    node.getShortName()
-            };
-        }).collect(Collectors.toList()));
+        Stage FileStage = new Stage();
+        File file = fileChooser.showSaveDialog(FileStage);
 
-        try {
-            CSVManager.writeFile(fileName, data);
-        } catch (Exception e) {
-            errorMessageLabel.setStyle("-fx-text-fill: red");
-            errorMessageLabel.setText(e.getMessage());
-            e.printStackTrace();
-            return;
+        if (file != null) {
+            //FIXME: DO BETTER!!!
+            final List<String[]> data = new LinkedList<String[]>();
+            Collections.addAll(data, "nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName".split(","));
+
+            data.addAll(nodeList.stream().map(node -> {
+                return new String[] {
+                        node.getNodeID(),
+                        node.getXcoord(),
+                        node.getYcoord(),
+                        node.getFloor(),
+                        node.getBuilding(),
+                        node.getNodeType(),
+                        node.getLongName(),
+                        node.getShortName()
+                };
+            }).collect(Collectors.toList()));
+
+            try {
+                CSVManager.writeToFile(file, data);
+            } catch (Exception e) {
+                errorMessageLabel.setStyle("-fx-text-fill: red");
+                errorMessageLabel.setText(e.getMessage());
+                e.printStackTrace();
+                return;
+            }
         }
-
         errorMessageLabel.setText("File successfully exported.");
         errorMessageLabel.setStyle("-fx-text-fill: black");
 
@@ -307,6 +326,8 @@ public class EditMapNodeController {
         saveToFileButton.setDisable(true);
         //loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
     }
+
+
 
     /**
      * Used to make sure load and save buttons are only enabled when they should be
