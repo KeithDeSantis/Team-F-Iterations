@@ -44,12 +44,8 @@ import java.sql.*;
 public class EditMapNodeController {
 
     @FXML private Button goBack;
-    //@FXML private TableView<NodeEntry> nodeTable;
 
     @FXML private JFXTreeTableView<NodeEntry> nodeTreeTable;
-
-    //@FXML private TableColumn<NodeEntry, String> NodeIDColumn;
-    //@FXML private TableColumn<NodeEntry, String> ShortNameColumn;
 
     @FXML private TextField filenameField;
     @FXML private Label errorMessageLabel;
@@ -118,11 +114,12 @@ public class EditMapNodeController {
 
         // START OF JFX TREETABLE COLUMN SETUP
 
+        int colWidth = 120;
         JFXTreeTableColumn<NodeEntry, String> idColumn = new JFXTreeTableColumn<>("Node ID");
-        idColumn.setPrefWidth(150);
+        idColumn.setPrefWidth(colWidth);
         idColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getNodeIDProperty());
         JFXTreeTableColumn<NodeEntry, String> shortColumn = new JFXTreeTableColumn<>("Name");
-        shortColumn.setPrefWidth(150);
+        shortColumn.setPrefWidth(colWidth);
         shortColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getShortNameProperty());
         final TreeItem<NodeEntry> root = new RecursiveTreeItem<NodeEntry>(nodeList, RecursiveTreeObject::getChildren);
         nodeTreeTable.setRoot(root);
@@ -291,11 +288,7 @@ public class EditMapNodeController {
         //Maybe this should be methodized out of the controller? - ahf (yes I know I wrote this, I was being lazy)
         final String fileName = filenameField.getText();
 
-        nodeList.clear(); //Why doesn't this work with JFXTreeTableView?  Weird. - KD
-        //int lengthOfNodeList = nodeList.size();
-        //for(int index = nodeList.size() - 1; index >= 0; index--) {
-        //    nodeList.remove(index);
-       // }
+        nodeList.clear();
 
         List<String[]> nodeData = null;
         List<String[]> edgeData = null;
