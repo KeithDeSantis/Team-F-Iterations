@@ -115,7 +115,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         write("G");
         clickOn("OK");
         verifyThat("#CCONF001L1", Node::isVisible);
-        verifyThat("G", Node::isVisible);
+        verifyThat("G", Node::isVisible); // Testing changing of Floor
         //TODO add more testing Specifically, if coords are changed and if nodeID is changed - KD
         clickOn("Load From File/Reset Database");
     }
@@ -138,7 +138,6 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("CCONF001L1");
         verifyThat("#CCONF001L1", Node::isVisible);
         clickOn("Delete");
-        //verifyThat("#CCONF001L1", Node::isVisible);
     }
 }
 
