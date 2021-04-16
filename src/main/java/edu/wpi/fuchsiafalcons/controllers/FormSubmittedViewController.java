@@ -1,0 +1,23 @@
+package edu.wpi.fuchsiafalcons.controllers;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+
+/**
+ * Controller for Form Submitted Pop Up
+ */
+public class FormSubmittedViewController {
+
+    @FXML private Button okButton;
+
+    /**
+     * Handles ok button by closing window.
+     * @author keithdesantis
+     */
+    @FXML
+    private void okButtonPushed() {
+        ( (Stage) okButton.getScene().getWindow()).close();
+    }
+
+}
