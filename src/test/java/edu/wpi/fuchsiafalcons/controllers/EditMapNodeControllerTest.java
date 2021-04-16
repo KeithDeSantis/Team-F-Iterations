@@ -60,14 +60,6 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         verifyThat("Welcome to the Navigation Page", Node::isVisible);
     }
 
-    @Test
-    public void testNewNodeButton() {
-        verifyThat("New", Node::isVisible);
-        clickOn("New");
-       // verifyThat("Ok", Node::isVisible);
-        //clickOn("Ok");
-        //verifyThat("Ok", Node::isVisible);
-    }
 
     @Test
     public void testNewNodeFeature() {
@@ -89,7 +81,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("#yCoordField");
         write("200");
         clickOn("#floorField");
-        write("1");
+        write("bad");
         clickOn("#buildingField");
         write("TestBuilding");
         clickOn("#nodeTypeField");
@@ -99,13 +91,15 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("#shortNameField");
         write("Testing1");
         clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#floorField");
+        write("1");
+        clickOn("OK");
 
         query = this.nodeList.stream().filter(node ->
             node.getNodeID().equals("TestNode") && node.getShortName().equals("Testing1")
         ).collect(Collectors.toList());
-        //verifyThat("TestNode", Node::isVisible);
-        //verifyThat("Testing1", Node::isVisible);
-
+        verifyThat("#TestNode", Node::isVisible);
         assertEquals(pre + 1, query.size());
         clickOn("Load From File/Reset Database");
     }
@@ -117,25 +111,15 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("CCONF001L1");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
-        clickOn("#nodeIDField");
-        press(KeyCode.CONTROL, KeyCode.A);
-        release(KeyCode.CONTROL, KeyCode.A);
-        type(KeyCode.BACK_SPACE);
-        write("Test");
+        doubleClickOn("#floorField");
+        write("G");
         clickOn("OK");
-        verifyThat("Test", Node::isVisible);
+        verifyThat("#CCONF001L1", Node::isVisible);
+        verifyThat("G", Node::isVisible);
+        //TODO add more testing Specifically, if coords are changed and if nodeID is changed - KD
         clickOn("Load From File/Reset Database");
     }
 
-    @Test
-    public void testNewNodeNotFilledOut() {
-        verifyThat("New", Node::isVisible);
-        clickOn("New");
-        clickOn("#nodeIDField");
-        write("Test");
-        clickOn("OK");
-        verifyThat("OK", Node::isVisible);
-    }
 
     @Test
     public void testSaveToFileDisable() {

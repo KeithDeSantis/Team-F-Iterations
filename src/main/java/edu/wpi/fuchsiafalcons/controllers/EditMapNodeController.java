@@ -464,13 +464,13 @@ public class EditMapNodeController {
 
         // Check if need to switch map
         if(node.getFloor().equals(floor)){
+            drawNodeOnFloor();
             if(selectedCircle != null)
                 selectedCircle.setFill(Color.BLUE);
         }else{
             floor = node.getFloor();
             switchMap();
         }
-
         Circle c = (Circle) canvas.lookup("#"+node.getNodeID());
         if(c == null){
             //FIXME Null Warning
