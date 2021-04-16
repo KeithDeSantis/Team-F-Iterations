@@ -4,31 +4,9 @@ import java.sql.*;
 
 public class ConnectionHandler {
 
-    private static Connection connection;
-
-
-
-    private static Connection establishConnection(String URL)
+    //FIXME: at some point, refactor better, probably move into helper
+    private static Connection establishConnection(boolean createDB)
     {
-        if(connection != null)
-            return connection;
-
-        //Connection connection = null;
-        try
-        {
-            connection = DriverManager.getConnection(URL);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return connection;
-    }
-
-    private static Connection main(boolean createDB)
-    {
-        if(connection != null)
-            return connection;
         String driver = "org.apache.derby.jdbc.EmbeddedDriver";
         String protocol = "jdbc:derby:";
         String URL;
@@ -38,14 +16,22 @@ public class ConnectionHandler {
             URL = protocol + "projectC1;create=true";
         }
         else {URL = protocol + "projectC1";}
-        Connection connection = establishConnection(URL);
-        return connection;
+        
+        try {
+            return DriverManager.getConnection(URL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private static class ConnectionSingletonHelper {
+        private static final Connection connection = establishConnection(true);
+
     }
 
     public static Connection getConnection() {
-        if(connection == null)
-            return connection = main(true);
-        return connection;
-        //return connection;
+        return ConnectionSingletonHelper.connection;
     }
 }
