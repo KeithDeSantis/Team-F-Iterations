@@ -60,6 +60,7 @@ public class EditMapNodeController {
     private NodeEntry selectedNode;
 
     final double zoomLevel = 5.0;
+    private String floor = "1";
     /**
      * Overriding Initialize for testing and set up
      * @author Keith DeSantis
@@ -104,8 +105,8 @@ public class EditMapNodeController {
         final ObservableList<String> floorName = FXCollections.observableArrayList();
         floorName.addAll("1","2","3","L1","L2","G");
         floorComboBox.setItems(floorName);
-        floorComboBox.setValue("1");
-        drawNodeOnFloor("1");
+        floorComboBox.setValue(floor);
+        drawNodeOnFloor();
     }
 
     /**
@@ -271,6 +272,8 @@ public class EditMapNodeController {
         filenameField.setText("");
         saveToFileButton.setDisable(true);
        // loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
+
+        drawNodeOnFloor();
     }
 
 
@@ -339,11 +342,22 @@ public class EditMapNodeController {
 
     }
 
+    /**
+     * Handle switching floor using combobox
+     * @param actionEvent
+     * @author ZheCheng
+     */
+    @FXML
     public void handleFloorBoxAction(ActionEvent actionEvent) {
-        switchMap(floorComboBox.getValue().toString());
+        floor = floorComboBox.getValue().toString();
+        switchMap();
     }
 
-    private void switchMap(String floor){
+    /**
+     * Handle switching floor map and redraw the nodes in new floor
+     * @author ZheCheng
+     */
+    private void switchMap(){
         String source = "";
         switch(floor){
             case "1": source = "/maps/01_thefirstfloor.png"; break;
@@ -355,10 +369,14 @@ public class EditMapNodeController {
         }
         Image image = new Image(getClass().getResourceAsStream(source));
         map.setImage(image);
-        drawNodeOnFloor(floor);
+        drawNodeOnFloor();
     }
 
-    private void drawNodeOnFloor(String floor){
+    /**
+     * Clear the canvas and draw nodes that are on current floor
+     * @author ZheCheng
+     */
+    private void drawNodeOnFloor(){
         canvas.getChildren().removeIf(x -> {
             return x instanceof Circle;
         });
@@ -369,8 +387,11 @@ public class EditMapNodeController {
         }
     }
 
+    /**
+     * Draw a single circle to represent the node
+     * @author ZheCheng
+     */
     private void drawCircle(double x, double y, String nodeID){
-        System.out.println(x + " " + y + " " + nodeID);
         Circle c = new Circle(x, y, 7.0);
         c.setFill(Color.BLUE);
         c.setOnMouseEntered(e->{c.setFill(Color.RED);});
@@ -380,6 +401,10 @@ public class EditMapNodeController {
         this.canvas.getChildren().add(c);
     }
 
+    /**
+     * Find the index of a given node with nodeID in nodeList
+     * @author ZheCheng
+     */
     private int findNode(String nodeID){
         int index = 0;
         for(NodeEntry n: nodeList){
