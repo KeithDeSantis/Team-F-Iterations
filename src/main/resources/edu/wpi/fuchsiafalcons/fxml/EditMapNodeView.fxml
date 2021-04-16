@@ -26,7 +26,7 @@
             </Label>
             <HBox alignment="CENTER" prefHeight="419.0" prefWidth="940.0">
                <children>
-                  <TableView fx:id="nodeTable" prefHeight="333.0" prefWidth="229.0">
+                  <TableView fx:id="nodeTable" onMouseClicked="#selectNode" prefHeight="333.0" prefWidth="229.0">
                     <columns>
                       <TableColumn fx:id="NodeIDColumn" prefWidth="75.0" text="Node ID" />
                       <TableColumn fx:id="ShortNameColumn" prefWidth="75.0" text="Short Name" />

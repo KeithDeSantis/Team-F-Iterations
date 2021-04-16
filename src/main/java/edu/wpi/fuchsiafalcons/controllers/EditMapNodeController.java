@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -61,6 +62,15 @@ public class EditMapNodeController {
 
     final double zoomLevel = 5.0;
     private String floor = "1";
+    private Circle selectedCircle = null;
+
+    final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+    final Image F2Image = new Image(getClass().getResourceAsStream("/maps/02_thesecondfloor.png"));
+    final Image F3Image = new Image(getClass().getResourceAsStream("/maps/03_thethirdfloor.png"));
+    final Image L1Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
+    final Image L2Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel2.png"));
+    final Image GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
+
     /**
      * Overriding Initialize for testing and set up
      * @author Keith DeSantis
@@ -71,13 +81,12 @@ public class EditMapNodeController {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
-        final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-        final double width = image.getWidth()/zoomLevel;
-        final double height = image.getHeight()/zoomLevel;
+        final double width = F1Image.getWidth()/zoomLevel;
+        final double height = F1Image.getHeight()/zoomLevel;
         canvas.setPrefSize(width,height);
         map.setFitWidth(width);
         map.setFitHeight(height);
-        map.setImage(image); // Copied from A* Vis - KD
+        map.setImage(F1Image); // Copied from A* Vis - KD
 
         final Image logo = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoView.setImage(logo);
@@ -358,17 +367,14 @@ public class EditMapNodeController {
      * @author ZheCheng
      */
     private void switchMap(){
-        String source = "";
         switch(floor){
-            case "1": source = "/maps/01_thefirstfloor.png"; break;
-            case "2": source = "/maps/02_thesecondfloor.png"; break;
-            case "3": source = "/maps/03_thethirdfloor.png"; break;
-            case "L1": source = "/maps/00_thelowerlevel1.png"; break;
-            case "L2": source = "/maps/00_thelowerlevel2.png"; break;
-            case "G": source = "/maps/00_thegroundfloor.png"; break;
+            case "1": map.setImage(F1Image); break;
+            case "2": map.setImage(F2Image); break;
+            case "3": map.setImage(F3Image); break;
+            case "L1": map.setImage(L1Image); break;
+            case "L2": map.setImage(L2Image); break;
+            case "G": map.setImage(GImage); break;
         }
-        Image image = new Image(getClass().getResourceAsStream(source));
-        map.setImage(image);
         drawNodeOnFloor();
     }
 
@@ -380,6 +386,7 @@ public class EditMapNodeController {
         canvas.getChildren().removeIf(x -> {
             return x instanceof Circle;
         });
+        selectedCircle = null;
         for(NodeEntry n : nodeList){
             if(n.getFloor().equals(floor)) {
                 drawCircle(Double.parseDouble(n.getXcoord())/zoomLevel, Double.parseDouble(n.getYcoord())/zoomLevel, n.getNodeID());
@@ -394,9 +401,16 @@ public class EditMapNodeController {
     private void drawCircle(double x, double y, String nodeID){
         Circle c = new Circle(x, y, 7.0);
         c.setFill(Color.BLUE);
-        c.setOnMouseEntered(e->{c.setFill(Color.RED);});
-        c.setOnMouseExited(e->{c.setFill(Color.BLUE);});
-        c.setOnMouseClicked(e->{nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));nodeTable.requestFocus();nodeTable.scrollTo(findNode(nodeID));});
+        c.setId(nodeID);
+        c.setOnMouseEntered(e->{if(!c.equals(selectedCircle))c.setFill(Color.RED);});
+        c.setOnMouseExited(e->{if(!c.equals(selectedCircle))c.setFill(Color.BLUE);});
+        c.setOnMouseClicked(e->{
+            if(selectedCircle != null)
+                selectedCircle.setFill(Color.BLUE);
+            selectedCircle = c;
+            c.setFill(Color.GREEN);
+            nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
+            nodeTable.requestFocus();nodeTable.scrollTo(findNode(nodeID));});
 
         this.canvas.getChildren().add(c);
     }
@@ -414,5 +428,59 @@ public class EditMapNodeController {
             index++;
         }
         return index;
+    }
+
+    /**
+     * Select node based on selection in Table, focus on the node
+     * @param mouseEvent
+     * @author ZheCheng
+     */
+    public void selectNode(MouseEvent mouseEvent) {
+        if(nodeTable.getSelectionModel().getSelectedIndex() < 0){
+            // FIXME Error Handling
+            return;
+        }
+        // FIXME: ADD TRY_CATCH
+        NodeEntry node = nodeList.get(nodeTable.getSelectionModel().getSelectedIndex());
+
+        if(node == null){
+            //FIXME Null Warning
+            return;
+        }
+
+        // Check if need to switch map
+        if(node.getFloor().equals(floor)){
+            if(selectedCircle != null)
+                selectedCircle.setFill(Color.BLUE);
+        }else{
+            floor = node.getFloor();
+            switchMap();
+        }
+
+        Circle c = (Circle) canvas.lookup("#"+node.getNodeID());
+        if(c == null){
+            //FIXME Null Warning
+            return;
+        }
+        selectedCircle = c;
+        c.setFill(Color.GREEN);
+        centerNode(c);
+    }
+
+    /**
+     * Center the given node in scrollpane
+     * @param c The node to be centered
+     * @author ZheCheng
+     */
+    public void centerNode(Circle c){
+        scroll.setVvalue(scroll.getVmax() * ((((c.getBoundsInParent().getMaxY() +
+                c.getBoundsInParent().getMinY()) / 2.0) - (0.5 * scroll.getViewportBounds().getHeight()))
+                / (scroll.getContent().getBoundsInLocal().getHeight() - (c.getBoundsInParent().getMaxY() +
+                c.getBoundsInParent().getMinY()) / 2.0)));
+
+        scroll.setHvalue(scroll.getHmax() * ((((c.getBoundsInParent().getMaxX() +
+                c.getBoundsInParent().getMinX()) / 2.0) - (0.5 * scroll.getViewportBounds().getWidth()))
+                / (scroll.getContent().getBoundsInLocal().getWidth() - (c.getBoundsInParent().getMaxX() +
+                c.getBoundsInParent().getMinX()) / 2.0)));
     }
 }
