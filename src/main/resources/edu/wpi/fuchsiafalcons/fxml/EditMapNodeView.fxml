@@ -30,7 +30,7 @@
                      <content>
                         <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" onContextMenuRequested="#handleMapContextMenu" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </Pane>
                      </content>

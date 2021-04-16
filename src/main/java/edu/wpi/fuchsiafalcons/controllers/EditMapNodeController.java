@@ -8,6 +8,7 @@ import edu.wpi.fuchsiafalcons.utils.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -60,7 +62,7 @@ public class EditMapNodeController {
     @FXML private Pane canvas;
     @FXML private ImageView logoView;
 
-    @FXML private ComboBox floorComboBox;
+    @FXML private ComboBox<String> floorComboBox;
 
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
@@ -142,6 +144,41 @@ public class EditMapNodeController {
         floorComboBox.setItems(floorName);
         floorComboBox.setValue(floor);
         drawNodeOnFloor();
+
+
+
+        final ContextMenu contextMenu = new ContextMenu();
+
+        final MenuItem createNodeMenuItem = new MenuItem("Create Node Here");
+
+        contextMenu.getItems().addAll(createNodeMenuItem);
+
+
+        map.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+            @Override
+            public void handle(ContextMenuEvent event) {
+                contextMenu.show(map, event.getScreenX(), event.getScreenY());
+
+                createNodeMenuItem.setOnAction((ActionEvent e) -> {
+                    NodeEntry nodeEntry = new NodeEntry();
+                    nodeEntry.setXcoord("" + (event.getX() * zoomLevel));
+                    nodeEntry.setYcoord("" + (event.getY() * zoomLevel));
+                    nodeEntry.setFloor(floorComboBox.valueProperty().get());
+
+                    try {
+                        openEditDialog(nodeEntry);
+                        updateNodeEntry(nodeEntry);
+                    } catch (IOException | SQLException ioException) {
+                        ioException.printStackTrace();
+                    }
+                });
+
+                //System.out.println(event.getX() + " " + event.getSceneX() + " " + event.getScreenX());
+            }
+        });
+
+        //contextMenu.show(map, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+
     }
 
     /**
@@ -194,22 +231,30 @@ public class EditMapNodeController {
         NodeEntry newNode = new NodeEntry(); // create new node - KD
         openEditDialog(newNode); // allow editing of the new node - KD
 
-        if(newNode.getNodeID().isEmpty() || newNode.getXcoord().isEmpty() || newNode.getYcoord().isEmpty() ||
-        newNode.getFloor().isEmpty() || newNode.getBuilding().isEmpty() || newNode.getNodeType().isEmpty() ||
-        newNode.getLongName().isEmpty() || newNode.getShortName().isEmpty())
+        updateNodeEntry(newNode);
+    }
+
+    /**
+     * Used to update a node entry in the UI and database //FIXME: Add delete if we already had the node
+     * @param nodeEntry
+     */
+    private void updateNodeEntry(NodeEntry nodeEntry) throws SQLException {
+
+        if(nodeEntry.getNodeID().isEmpty() || nodeEntry.getXcoord().isEmpty() || nodeEntry.getYcoord().isEmpty() ||
+                nodeEntry.getFloor().isEmpty() || nodeEntry.getBuilding().isEmpty() || nodeEntry.getNodeType().isEmpty() ||
+                nodeEntry.getLongName().isEmpty() || nodeEntry.getShortName().isEmpty())
             return; //FIXME: DO BETTER ERROR CHECKING, CHECK THAT WE ARE GETTING INTS
 
+        String nodeID = nodeEntry.getNodeID();
+        int xCoord = Integer.parseInt(nodeEntry.getXcoord());
+        int yCoord = Integer.parseInt(nodeEntry.getYcoord());
+        String nodeFloor = nodeEntry.getFloor();
+        String nodeBuilding = nodeEntry.getBuilding();
+        String nodeType = nodeEntry.getNodeType();
+        String longName = nodeEntry.getLongName();
+        String shortName = nodeEntry.getShortName();
 
-        String nodeID = newNode.getNodeID();
-        int xCoord = Integer.parseInt(newNode.getXcoord());
-        int yCoord = Integer.parseInt(newNode.getYcoord());
-        String nodeFloor = newNode.getFloor();
-        String nodeBuilding = newNode.getBuilding();
-        String nodeType = newNode.getNodeType();
-        String longName = newNode.getLongName();
-        String shortName = newNode.getShortName();
-
-        nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
+        nodeList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
 
         nodeTreeTable.requestFocus();
@@ -234,21 +279,7 @@ public class EditMapNodeController {
 
         openEditDialog(selectedNode); // allow editing of selection - KD
 
-        String nodeID = selectedNode.getNodeID();
-        int xCoord = Integer.parseInt(selectedNode.getXcoord());
-        int yCoord = Integer.parseInt(selectedNode.getYcoord());
-        String nodeFloor = selectedNode.getFloor();
-        String nodeBuilding = selectedNode.getBuilding();
-        String nodeType = selectedNode.getNodeType();
-        String longName = selectedNode.getLongName();
-        String shortName = selectedNode.getShortName();
-
-        DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
-
-        nodeTreeTable.requestFocus();
-        nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
-        nodeTreeTable.scrollTo(findNode(nodeID));
-        selectNode();
+        updateNodeEntry(selectedNode);
     }
 
     /**
@@ -587,5 +618,14 @@ public class EditMapNodeController {
         saveToFileButton.setDisable(true);
     }
 
+    /**
+     * Used to make it so that we can right-click to create nodes.
+     * @param contextMenuEvent
+     * @author Alex Friedman (ahf), KD
+     */
+    public void handleMapContextMenu(ContextMenuEvent contextMenuEvent) {
+        //FIXME: do better, at the same time, we can't actually do this in FXML
 
+
+    }
 }
