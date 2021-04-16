@@ -146,5 +146,15 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         verifyThat("Save to File", Node::isDisable);
     }
 
+    @Test
+    public void testDeleteNodeOnMap() {
+        verifyThat("Load From File/Reset Database", Node::isVisible);
+        clickOn("Load From File/Reset Database");
+        verifyThat("CCONF001L1", Node::isVisible);
+        clickOn("CCONF001L1");
+        verifyThat("#CCONF001L1", Node::isVisible);
+        clickOn("Delete");
+        //verifyThat("#CCONF001L1", Node::isVisible);
+    }
 }
 
