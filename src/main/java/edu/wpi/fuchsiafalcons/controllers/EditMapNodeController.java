@@ -84,9 +84,9 @@ public class EditMapNodeController {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
 
-        F1Image = new Image("/maps/01_thefirstfloor.png",5000.0/zoomLevel,3400.0/zoomLevel,true,true);
-        final double width = F1Image.getWidth();
-        final double height = F1Image.getHeight();
+        F1Image = new Image("/maps/01_thefirstfloor.png");
+        final double width = F1Image.getWidth()/zoomLevel;
+        final double height = F1Image.getHeight()/zoomLevel;
         canvas.setPrefSize(width,height);
         map.setFitWidth(width);
         map.setFitHeight(height);
@@ -386,19 +386,19 @@ public class EditMapNodeController {
      */
     private void switchMap(){
         switch(floor){
-            case "1": if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png",5000.0/zoomLevel,3400.0/zoomLevel,true,true);
+            case "1": if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
             map.setImage(F1Image); break;
-            case "2": if (F2Image == null)F2Image = new Image("/maps/02_thesecondfloor.png",5000.0/zoomLevel,3400.0/zoomLevel,true,true);
+            case "2": if (F2Image == null)F2Image = new Image("/maps/02_thesecondfloor.png");
             map.setImage(F2Image); break;
-            case "3": if (F3Image == null)F3Image = new Image("/maps/03_thethirdfloor.png",5000.0/zoomLevel,3400.0/zoomLevel,true,true);
+            case "3": if (F3Image == null)F3Image = new Image("/maps/03_thethirdfloor.png");
             map.setImage(F3Image); break;
-            case "L1": if (L1Image == null)L1Image = new Image("/maps/00_thelowerlevel1.png",5000.0/zoomLevel,3400.0/zoomLevel,true,true);
+            case "L1": if (L1Image == null)L1Image = new Image("/maps/00_thelowerlevel1.png");
             map.setImage(L1Image); break;
-            case "L2": if (L2Image == null)L2Image = new Image("/maps/00_thelowerlevel2.png",5000.0/zoomLevel,3400.0/zoomLevel,true,true);
+            case "L2": if (L2Image == null)L2Image = new Image("/maps/00_thelowerlevel2.png");
             map.setImage(L2Image); break;
-            case "G": if (GImage == null)GImage = new Image("/maps/00_thegroundfloor.png",5000.0/zoomLevel,3400.0/zoomLevel,true,true);
+            case "G": if (GImage == null)GImage = new Image("/maps/00_thegroundfloor.png");
             map.setImage(GImage); break;
-            default: if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png",5000.0/zoomLevel,3400.0/zoomLevel,true,true);
+            default: if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
                 map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
         }
         floorComboBox.setValue(floor);

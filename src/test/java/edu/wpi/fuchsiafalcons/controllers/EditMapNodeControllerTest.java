@@ -32,6 +32,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage primaryStage) throws IOException, NoSuchFieldException, IllegalAccessException {
+        System.gc();
 
         final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapNodeView.fxml"));
         Parent root = loader.load();
