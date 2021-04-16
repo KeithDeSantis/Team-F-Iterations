@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.database.entities.IDatabaseTable;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 
 import java.sql.*;
@@ -9,7 +10,72 @@ import java.util.List;
 
 public class DatabaseAPI {
 
-    private static DatabaseAPI databaseAPI;
+
+    //FIXME: DO BETTER
+    private static final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+            "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+            "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+
+    private static final IDatabaseTable nodeDatabase = new IDatabaseTable(initNodesTable) {
+
+        final String insertString = "INSERT INTO L1Nodes values(?, ?, ?, ?, ?, ?, ?, ?)";
+
+        @Override
+        public PreparedStatement getInsertStatement(String[] data) throws SQLException {
+            if(data == null || data.length != 8) //FIXME: DO BETTER NULL CHECKS
+                return null;
+
+            int xCoordinate = 0;
+            int yCoordinate = 0;
+
+            try {
+                xCoordinate = Integer.parseInt(data[1]);
+                yCoordinate = Integer.parseInt(data[2]);
+            }
+            catch (Exception e)
+            {
+                return null; //Number format wrong
+            }
+
+            final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(insertString);
+
+
+            stmt.setString(1, data[0]);
+            stmt.setInt(2, xCoordinate);
+            stmt.setInt(3, yCoordinate);
+            stmt.setString(4, data[3]);
+            stmt.setString(5, data[4]);
+            stmt.setString(6, data[5]);
+            stmt.setString(7, data[6]);
+            stmt.setString(8, data[7]);
+
+            return stmt;
+        }
+    };
+
+
+    //FIXME: DO BETTER
+    private static final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
+            "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
+
+    private static final IDatabaseTable edgesDatabaseTable = new IDatabaseTable(initEdgesTable) {
+        final String insertString = "INSERT INTO L1Edges values(?, ?, ?)";
+
+        @Override
+        public PreparedStatement getInsertStatement(String[] data) throws SQLException {
+            if(data == null || data.length != 3) //FIXME: DO BETTER NULL CHECKS
+                return null;
+
+            PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(insertString);
+            stmt.setString(1, data[0]);
+            stmt.setString(2, data[1]);
+            stmt.setString(3, data[2]);
+
+            return stmt;
+        }
+    };
+
+
 
     /**
      * Method to build prepared sql update statement
@@ -246,17 +312,11 @@ public class DatabaseAPI {
 
     private boolean populateData(Connection conn, List<String[]> nodeData, List <String[]> edgeData) throws Exception {
         try {
-            final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
-                    "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                    "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+
             createTable(conn, initNodesTable);
             populateNodes(nodeData);
 
-
-            final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
-                    "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
             createTable(conn, initEdgesTable);
-
             populateEdges(edgeData);
 
         } catch (SQLException e) {
