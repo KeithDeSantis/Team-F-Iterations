@@ -156,6 +156,21 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("CCONF001L1");
         verifyThat("#CCONF001L1", Node::isVisible);
         clickOn("Delete");
+        // Could add a more thorough test though unsure how - KD and ZS
+    }
+
+    @Test
+    public void testSwitchFloors() {
+        verifyThat("1", Node::isVisible);
+        clickOn("#floorComboBox");
+        verifyThat("1", Node::isVisible);
+        verifyThat("2", Node::isVisible);
+        verifyThat("3", Node::isVisible);
+        verifyThat("L1", Node::isVisible);
+        verifyThat("L2", Node::isVisible);
+        verifyThat("G", Node::isVisible);
+        clickOn("3");
+        verifyThat("3", Node::isVisible);
     }
 }
 
