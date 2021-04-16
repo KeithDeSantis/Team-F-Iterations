@@ -64,12 +64,14 @@ public class EditMapNodeController {
     private String floor = "1";
     private Circle selectedCircle = null;
 
-    final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-    final Image F2Image = new Image(getClass().getResourceAsStream("/maps/02_thesecondfloor.png"));
-    final Image F3Image = new Image(getClass().getResourceAsStream("/maps/03_thethirdfloor.png"));
-    final Image L1Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
-    final Image L2Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel2.png"));
-    final Image GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
+    //final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+    //final Image F2Image = new Image(getClass().getResourceAsStream("/maps/02_thesecondfloor.png"));
+    //final Image F3Image = new Image(getClass().getResourceAsStream("/maps/03_thethirdfloor.png"));
+    //final Image L1Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
+    //final Image L2Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel2.png"));
+    //final Image GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
+
+    private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
 
     /**
      * Overriding Initialize for testing and set up
@@ -81,6 +83,8 @@ public class EditMapNodeController {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
+
+        F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
         final double width = F1Image.getWidth()/zoomLevel;
         final double height = F1Image.getHeight()/zoomLevel;
         canvas.setPrefSize(width,height);
@@ -382,13 +386,20 @@ public class EditMapNodeController {
      */
     private void switchMap(){
         switch(floor){
-            case "1": map.setImage(F1Image); break;
-            case "2": map.setImage(F2Image); break;
-            case "3": map.setImage(F3Image); break;
-            case "L1": map.setImage(L1Image); break;
-            case "L2": map.setImage(L2Image); break;
-            case "G": map.setImage(GImage); break;
-            default: map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
+            case "1": if (F1Image == null)F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+            map.setImage(F1Image); break;
+            case "2": if (F2Image == null)F2Image = new Image(getClass().getResourceAsStream("/maps/02_thesecondfloor.png"));
+            map.setImage(F2Image); break;
+            case "3": if (F3Image == null)F3Image = new Image(getClass().getResourceAsStream("/maps/03_thethirdfloor.png"));
+            map.setImage(F3Image); break;
+            case "L1": if (L1Image == null)L1Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
+            map.setImage(L1Image); break;
+            case "L2": if (L2Image == null)L2Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel2.png"));
+            map.setImage(L2Image); break;
+            case "G": if (GImage == null)GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
+            map.setImage(GImage); break;
+            default: if (F1Image == null)F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+                map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
         }
         floorComboBox.setValue(floor);
         drawNodeOnFloor();
