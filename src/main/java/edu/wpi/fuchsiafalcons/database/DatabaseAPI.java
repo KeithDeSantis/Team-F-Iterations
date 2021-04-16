@@ -11,8 +11,6 @@ public class DatabaseAPI {
 
     private static DatabaseAPI databaseAPI;
 
-    private final Connection conn; //FIXME: CONVERT TO SINGLETON
-
     /**
      * Method to build prepared sql update statement
      * @param tableName the name of the table wth relevant entry
@@ -49,7 +47,7 @@ public class DatabaseAPI {
 
         final String sql = "INSERT INTO L1Nodes values(?, ?, ?, ?, ?, ?, ?, ?)";
 
-        final PreparedStatement stmt = conn.prepareStatement(sql);
+        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
 
 
         stmt.setString(1, id);
@@ -78,7 +76,7 @@ public class DatabaseAPI {
         boolean addSuccess = false;
         String sql = "INSERT INTO L1Edges values(?, ?, ?)";
 
-        PreparedStatement stmt = conn.prepareStatement(sql);
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, id);
         stmt.setString(2, startNode);
         stmt.setString(3, endNode);
@@ -101,7 +99,7 @@ public class DatabaseAPI {
     {
         boolean deleteSuccess = false;
         String sql = "DELETE FROM L1Nodes WHERE nodeID=(?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, nodeID);
         int ret = stmt.executeUpdate();
         if (ret != 0)
@@ -121,7 +119,7 @@ public class DatabaseAPI {
     {
         boolean deleteSuccess = false;
         String sql = "DELETE FROM L1Edges WHERE edgeID=(?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, edgeID);
         int ret = stmt.executeUpdate();
         if (ret != 0)
@@ -188,7 +186,7 @@ public class DatabaseAPI {
                 sql = buildUpdateQuery(tableName, "endnode", "edge");
                 break;
         }
-        PreparedStatement stmt = conn.prepareStatement(sql);
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         if (coordUpdate) {
             stmt.setInt(1, Integer.parseInt(newVal));
         }
@@ -326,15 +324,13 @@ public class DatabaseAPI {
     }
 
 
-    private DatabaseAPI(Connection connection) {
-        conn = connection;
+    private DatabaseAPI() {}
+
+    private static class DatabaseSingletonHelper {
+        private static final DatabaseAPI databaseAPI = new DatabaseAPI();
     }
 
     public static DatabaseAPI getDatabaseAPI() {
-//        if(ConnectionHandler.getConnection() == null)
-//            return null;
-        if(databaseAPI == null)
-            return databaseAPI = new DatabaseAPI(ConnectionHandler.getConnection());
-        return databaseAPI;
+        return DatabaseSingletonHelper.databaseAPI;
     }
 }

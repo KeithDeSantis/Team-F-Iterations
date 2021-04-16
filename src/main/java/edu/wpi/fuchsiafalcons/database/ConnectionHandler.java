@@ -4,6 +4,8 @@ import java.sql.*;
 
 public class ConnectionHandler {
 
+    private ConnectionHandler() {}
+
     //FIXME: at some point, refactor better, probably move into helper
     private static Connection establishConnection(boolean createDB)
     {
