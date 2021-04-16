@@ -9,8 +9,8 @@ public class TestDriverCode {
     public static void main(String[] args) throws Exception {
         //ConnectionHandler c = new ConnectionHandler();
         //Connection conn = c.main(false);
-        PopulateDB p = new PopulateDB();
-        p.main(ConnectionHandler.getConnection(), CSVManager.load("L1Nodes.csv"), CSVManager.load("L1Edges.csv"));
+
+        DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), CSVManager.load("L1Nodes.csv"), CSVManager.load("L1Edges.csv"));
         //DatabaseAPI api = new DatabaseAPI(conn);
         DatabaseAPI api = DatabaseAPI.getDatabaseAPI();
         boolean testAdd = api.addNode("TEST", 1, 1, "FLOOR", "BUILD", "TYPE",

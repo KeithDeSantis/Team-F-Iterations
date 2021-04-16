@@ -22,9 +22,7 @@ class DatabaseAPITest {
     @BeforeEach
     public void setUp() throws Exception
     {
-        //api = DatabaseAPI.getDatabaseAPI(); //new DatabaseAPI(connection);
-        PopulateDB p = new PopulateDB();
-        p.main(ConnectionHandler.getConnection(), CSVManager.load("L1Nodes.csv"), CSVManager.load("L1Edges.csv"));
+        DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), CSVManager.load("L1Nodes.csv"), CSVManager.load("L1Edges.csv"));
     }
 
     @Test
