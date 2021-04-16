@@ -103,6 +103,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         verifyThat("#TestNode", Node::isVisible);
         assertEquals(pre + 1, query.size());
         clickOn("Load From File/Reset Database");
+        System.out.println("tyo");
     }
 
     @Test

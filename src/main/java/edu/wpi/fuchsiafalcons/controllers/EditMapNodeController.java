@@ -1,4 +1,8 @@
 package edu.wpi.fuchsiafalcons.controllers;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.*;
 import javafx.collections.FXCollections;
@@ -40,9 +44,8 @@ import java.sql.*;
 public class EditMapNodeController {
 
     @FXML private Button goBack;
-    @FXML private TableView<NodeEntry> nodeTable;
-    @FXML private TableColumn<NodeEntry, String> NodeIDColumn;
-    @FXML private TableColumn<NodeEntry, String> ShortNameColumn;
+
+    @FXML private JFXTreeTableView<NodeEntry> nodeTreeTable;
 
     @FXML private TextField filenameField;
     @FXML private Label errorMessageLabel;
@@ -109,10 +112,28 @@ public class EditMapNodeController {
             nodeList.add(e);
         }
 
-        nodeTable.setItems(nodeList); // Put Observable list into TableView so that we can watch for changes in values - KD
-        NodeIDColumn.setCellValueFactory(cellData -> cellData.getValue().getNodeIDProperty()); // Set first column to display first name property - KD
-        ShortNameColumn.setCellValueFactory(cellData -> cellData.getValue().getShortNameProperty()); // Set second column to display second name property - KD
-        nodeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue)); // Listener to watch for changes - KD
+        // START OF JFX TREETABLE COLUMN SETUP
+
+        int colWidth = 120;
+        JFXTreeTableColumn<NodeEntry, String> idColumn = new JFXTreeTableColumn<>("Node ID");
+        idColumn.setPrefWidth(colWidth);
+        idColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getNodeIDProperty());
+        JFXTreeTableColumn<NodeEntry, String> shortColumn = new JFXTreeTableColumn<>("Name");
+        shortColumn.setPrefWidth(colWidth);
+        shortColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getShortNameProperty());
+        final TreeItem<NodeEntry> root = new RecursiveTreeItem<NodeEntry>(nodeList, RecursiveTreeObject::getChildren);
+        nodeTreeTable.setRoot(root);
+        nodeTreeTable.setShowRoot(false);
+        nodeTreeTable.getColumns().setAll(idColumn, shortColumn);
+        //nodeTreeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue.getValue()));
+        loadFromFileButton.setDisable(false);
+
+        // END OF JFX TREETABLE COLUMN SETUP
+
+        //nodeTable.setItems(nodeList); // Put Observable list into TableView so that we can watch for changes in values - KD
+        //NodeIDColumn.setCellValueFactory(cellData -> cellData.getValue().getNodeIDProperty()); // Set first column to display first name property - KD
+        //ShortNameColumn.setCellValueFactory(cellData -> cellData.getValue().getShortNameProperty()); // Set second column to display second name property - KD
+        //nodeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue)); // Listener to watch for changes - KD
         loadFromFileButton.setDisable(false);
 
         final ObservableList<String> floorName = FXCollections.observableArrayList();
@@ -152,11 +173,11 @@ public class EditMapNodeController {
      */
     @FXML
     private void handleDeletePushed(ActionEvent actionEvent) throws SQLException {
-        int selectedIndex = nodeTable.getSelectionModel().getSelectedIndex(); // get index of table that is selected - KD
+        int selectedIndex = nodeTreeTable.getSelectionModel().getSelectedIndex(); // get index of table that is selected - KD
         if(selectedIndex<0) { return; }
-        String targetID = nodeTable.getItems().get(selectedIndex).getNodeID();
+        String targetID = nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID();
         DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
-        nodeTable.getItems().remove(selectedIndex); // remove said index from table - KD
+        nodeList.remove(selectedIndex); // remove said index from table - KD
 
         canvas.getChildren().remove(selectedCircle);
         selectedCircle = null;
@@ -190,9 +211,9 @@ public class EditMapNodeController {
         nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
 
-        nodeTable.requestFocus();
-        nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
-        nodeTable.scrollTo(findNode(nodeID));
+        nodeTreeTable.requestFocus();
+        nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
+        nodeTreeTable.scrollTo(findNode(nodeID));
         selectNode();
     }
 
@@ -203,7 +224,7 @@ public class EditMapNodeController {
      */
     @FXML
     private void handleEditNode() throws IOException, SQLException {
-        NodeEntry selectedNode = nodeTable.getSelectionModel().getSelectedItem(); // get item the is selected - KD
+        NodeEntry selectedNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue(); // get item the is selected - KD
         if(selectedNode == null) { return; } // ensure there is a selection - KD
 
         String targetID = selectedNode.getNodeID();
@@ -222,9 +243,9 @@ public class EditMapNodeController {
 
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
 
-        nodeTable.requestFocus();
-        nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
-        nodeTable.scrollTo(findNode(nodeID));
+        nodeTreeTable.requestFocus();
+        nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
+        nodeTreeTable.scrollTo(findNode(nodeID));
         selectNode();
     }
 
@@ -286,7 +307,7 @@ public class EditMapNodeController {
         {
             if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
             {
-                nodeList.addAll(nodeData.stream().map(line -> {
+                nodeList.addAll(nodeData.stream().map(line -> { //TODO Issues with TreeTableView?
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
                 PopulateDB p = new PopulateDB();
@@ -436,8 +457,8 @@ public class EditMapNodeController {
                 selectedCircle.setFill(Color.BLUE);
             selectedCircle = c;
             c.setFill(Color.GREEN);
-            nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
-            nodeTable.requestFocus();nodeTable.scrollTo(findNode(nodeID));});
+            nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
+            nodeTreeTable.requestFocus();nodeTreeTable.scrollTo(findNode(nodeID));});
 
         this.canvas.getChildren().add(c);
     }
@@ -462,12 +483,12 @@ public class EditMapNodeController {
      * @author ZheCheng
      */
     public void selectNode() {
-        if(nodeTable.getSelectionModel().getSelectedIndex() < 0){
+        if(nodeTreeTable.getSelectionModel().getSelectedIndex() < 0){
             // FIXME Error Handling
             return;
         }
         // FIXME: ADD TRY_CATCH
-        NodeEntry node = nodeList.get(nodeTable.getSelectionModel().getSelectedIndex());
+        NodeEntry node = nodeList.get(nodeTreeTable.getSelectionModel().getSelectedIndex());
 
         if(node == null){
             //FIXME Null Warning
