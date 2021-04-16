@@ -85,7 +85,7 @@ public class EditMapNodeDialogViewController {
         if(nodeIDField.getText().length() <= 0) {
             nodeIDField.setStyle("-fx-background-color:  #ffbab8");
         }
-        if(floorField.getText().length() <= 0) {
+        if(!isProperFloor(floorField.getText())) {
             floorField.setStyle("-fx-background-color:  #ffbab8");
         }
         if(buildingField.getText().length() <= 0) {
@@ -116,7 +116,7 @@ public class EditMapNodeDialogViewController {
         return nodeIDField.getText().length() > 0 &&
                 xCoordValid &&
                 yCoordValid &&
-                floorField.getText().length() > 0 &&
+                isProperFloor(floorField.getText()) &&
                 buildingField.getText().length() > 0 &&
                 nodeTypeField.getText().length() > 0 &&
                 longNameField.getText().length() > 0 &&
@@ -145,6 +145,22 @@ public class EditMapNodeDialogViewController {
      * @author KD
      */
     public void setDialogStage (Stage theStage) { dialogStage = theStage; }
+
+
+    /**
+     * Checks that the inputted floor is a valid floor
+     * @param floor the inputted floor
+     * @author KD
+     */
+    public boolean isProperFloor (String floor) {
+        boolean is1 = floor.equals("1");
+        boolean is2 = floor.equals("2");
+        boolean is3 = floor.equals("3");
+        boolean isL1 = floor.equals("L1");
+        boolean isL2 = floor.equals("L2");
+        boolean isG = floor.equals("G");
+        return is1 || is2 || is3 || isL1 || isL2 || isG;
+    }
 
 
 
