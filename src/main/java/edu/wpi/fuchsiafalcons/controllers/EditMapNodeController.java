@@ -1,4 +1,8 @@
 package edu.wpi.fuchsiafalcons.controllers;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.*;
 import javafx.collections.FXCollections;
@@ -41,6 +45,9 @@ public class EditMapNodeController {
 
     @FXML private Button goBack;
     @FXML private TableView<NodeEntry> nodeTable;
+
+    @FXML private JFXTreeTableView<NodeEntry> nodeTreeTable;
+
     @FXML private TableColumn<NodeEntry, String> NodeIDColumn;
     @FXML private TableColumn<NodeEntry, String> ShortNameColumn;
 
@@ -109,6 +116,21 @@ public class EditMapNodeController {
             nodeList.add(e);
         }
 
+        // START OF JFX TREETABLE COLUMN SETUP
+
+        JFXTreeTableColumn<NodeEntry, String> idColumn = new JFXTreeTableColumn<>("Node ID");
+        idColumn.setPrefWidth(150);
+        idColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getNodeIDProperty());
+        JFXTreeTableColumn<NodeEntry, String> shortColumn = new JFXTreeTableColumn<>("Name");
+        shortColumn.setPrefWidth(150);
+        shortColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getShortNameProperty());
+        final TreeItem<NodeEntry> root = new RecursiveTreeItem<NodeEntry>(nodeList, RecursiveTreeObject::getChildren);
+        nodeTreeTable.setRoot(root);
+        nodeTreeTable.setShowRoot(false);
+        nodeTreeTable.getColumns().setAll(idColumn, shortColumn);
+
+
+        // END OF JFX TREETABLE COLUMN SETUP
         nodeTable.setItems(nodeList); // Put Observable list into TableView so that we can watch for changes in values - KD
         NodeIDColumn.setCellValueFactory(cellData -> cellData.getValue().getNodeIDProperty()); // Set first column to display first name property - KD
         ShortNameColumn.setCellValueFactory(cellData -> cellData.getValue().getShortNameProperty()); // Set second column to display second name property - KD
