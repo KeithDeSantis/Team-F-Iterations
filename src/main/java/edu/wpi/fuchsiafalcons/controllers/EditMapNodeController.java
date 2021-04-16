@@ -396,7 +396,7 @@ public class EditMapNodeController {
         c.setFill(Color.BLUE);
         c.setOnMouseEntered(e->{c.setFill(Color.RED);});
         c.setOnMouseExited(e->{c.setFill(Color.BLUE);});
-        c.setOnMouseClicked(e->{nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));nodeTable.requestFocus();});
+        c.setOnMouseClicked(e->{nodeTable.getSelectionModel().clearAndSelect(findNode(nodeID));nodeTable.requestFocus();nodeTable.scrollTo(findNode(nodeID));});
 
         this.canvas.getChildren().add(c);
     }
