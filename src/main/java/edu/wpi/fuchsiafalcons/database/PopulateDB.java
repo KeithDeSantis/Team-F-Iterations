@@ -1,9 +1,8 @@
 package edu.wpi.fuchsiafalcons.database;
 
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
-import edu.wpi.fuchsiafalcons.utils.*;
 
-import javax.xml.soap.Node;
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ public class PopulateDB {
     public List<NodeEntry> genNodeEntries(Connection conn) throws SQLException {
         List<NodeEntry> nodeEntries = new ArrayList<>();
         String sql = "SELECT * FROM L1Nodes";
-        Statement stmt =  conn.createStatement();;
+        Statement stmt =  conn.createStatement();
 
         ResultSet rset = null;
         try {
@@ -64,44 +63,14 @@ public class PopulateDB {
         }
 
         for (String[] arr : data) {
-            try {
-                Statement stmt = conn.createStatement();
-                StringBuilder str = new StringBuilder();
-
-                str.append("INSERT INTO L1Nodes VALUES(");
-                str.append("'" + arr[0] + "',");
-                str.append(arr[1] + ",");
-                str.append(arr[2] + ",");
-                str.append("'" + arr[3] + "',");
-                str.append("'" + arr[4] + "',");
-                str.append("'" + arr[5] + "',");
-                str.append("'" + arr[6] + "',");
-                str.append("'" + arr[7] + "')");
-
-                //System.out.println(str.toString());
-                stmt.execute(str.toString());
-                stmt.close();
-
-            } catch (SQLException e) {
-                System.out.println("Connection failed. Check output console.");
-                e.printStackTrace();
-            }
+            final int x = Integer.parseInt(arr[1]);
+            final int y = Integer.parseInt(arr[2]);
+            DatabaseAPI.getDatabaseAPI().addNode(arr[0], x, y, arr[3], arr[4], arr[5], arr[6], arr[7]);
         }
 
         for (String[] arr : data1) {
             try {
-                Statement initStmt = conn.createStatement();
-                Statement stmt = conn.createStatement();
-
-                StringBuilder str = new StringBuilder();
-                str.append("INSERT INTO L1Edges VALUES(");
-                str.append("'" + arr[0] + "',");
-                str.append("'" + arr[1] + "',");
-                str.append("'" + arr[2] + "')");
-
-               // System.out.println(str.toString());
-                stmt.execute(str.toString());
-                stmt.close();
+                DatabaseAPI.getDatabaseAPI().addEdge(arr[0], arr[1], arr[2]);
                 success = true;
 
             } catch (SQLException e) {

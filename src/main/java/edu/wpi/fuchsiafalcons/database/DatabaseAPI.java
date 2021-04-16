@@ -41,33 +41,22 @@ public class DatabaseAPI {
      * @return true on success, false otherwise
      * @throws SQLException on sql operation error
      */
-    public boolean addNode(String id, int x, int y, String floor, String building, String type,
-                           String longName, String shortName)  {
-        boolean addSuccess = false;
-        String sql = "INSERT INTO L1Nodes values(?, ?, ?, ?, ?, ?, ?, ?)";
-        int result = 0;
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, id);
-            stmt.setInt(2, x);
-            stmt.setInt(3, y);
-            stmt.setString(4, floor);
-            stmt.setString(5, building);
-            stmt.setString(6, type);
-            stmt.setString(7, longName);
-            stmt.setString(8, shortName);
+    public boolean addNode(String id, int x, int y, String floor, String building, String type, String longName, String shortName) throws SQLException {
 
-            result = stmt.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            addSuccess = false;
-        }
+        final String sql = "INSERT INTO L1Nodes values(?, ?, ?, ?, ?, ?, ?, ?)";
 
-        if (result != 0){
-            addSuccess = true;
-        }
-        return addSuccess;
+        final PreparedStatement stmt = conn.prepareStatement(sql);
+
+        stmt.setString(1, id);
+        stmt.setInt(2, x);
+        stmt.setInt(3, y);
+        stmt.setString(4, floor);
+        stmt.setString(5, building);
+        stmt.setString(6, type);
+        stmt.setString(7, longName);
+        stmt.setString(8, shortName);
+
+        return stmt.executeUpdate() != 0;//isnt that the same?
     }
 
     /**

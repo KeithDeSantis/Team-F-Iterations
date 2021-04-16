@@ -1,6 +1,7 @@
 package edu.wpi.fuchsiafalcons.database;
 
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
+import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,13 +44,13 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("test"));
     }
 
-    @Test
+
     @DisplayName("Test for making sure can't add duplicate node")
     public void testAddDuplicate() throws SQLException
     {
         DatabaseAPI.getDatabaseAPI().addNode("test", 1, 1, "testfloor", "testbuilding", "testtype",
                 "testlong", "testshort");
-        assertFalse(DatabaseAPI.getDatabaseAPI().addNode("test", 1, 1, "testfloor", "testbuilding", "testtype",
+        assertThrows(DerbySQLIntegrityConstraintViolationException.class, () -> DatabaseAPI.getDatabaseAPI().addNode("test", 1, 1, "testfloor", "testbuilding", "testtype",
                 "testlong", "testshort"));
     }
 
