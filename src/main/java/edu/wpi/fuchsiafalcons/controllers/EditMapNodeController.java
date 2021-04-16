@@ -128,7 +128,7 @@ public class EditMapNodeController {
         nodeTreeTable.setRoot(root);
         nodeTreeTable.setShowRoot(false);
         nodeTreeTable.getColumns().setAll(idColumn, shortColumn);
-        nodeTreeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue.getValue()));
+        //nodeTreeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue.getValue()));
         loadFromFileButton.setDisable(false);
 
         // END OF JFX TREETABLE COLUMN SETUP
@@ -291,11 +291,11 @@ public class EditMapNodeController {
         //Maybe this should be methodized out of the controller? - ahf (yes I know I wrote this, I was being lazy)
         final String fileName = filenameField.getText();
 
-        //nodeList.clear(); //Why doesn't this work with JFXTreeTableView?  Weird. - KD
-        int lengthOfNodeList = nodeList.size();
-        for(int index = nodeList.size() - 1; index >= 0; index--) {
-            nodeList.remove(index);
-        }
+        nodeList.clear(); //Why doesn't this work with JFXTreeTableView?  Weird. - KD
+        //int lengthOfNodeList = nodeList.size();
+        //for(int index = nodeList.size() - 1; index >= 0; index--) {
+        //    nodeList.remove(index);
+       // }
 
         List<String[]> nodeData = null;
         List<String[]> edgeData = null;
