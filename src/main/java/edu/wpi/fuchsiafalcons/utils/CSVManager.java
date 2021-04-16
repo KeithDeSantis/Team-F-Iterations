@@ -130,4 +130,34 @@ public class CSVManager {
         }
         writer.close();
     }
+
+    /**
+     * Copied to write to File than to filename
+     * @param file The directory/name of the file.
+     * @param csvData The data that the file contains. This is in the same format as load(File), with
+     *                the exception that the list provided here should contain the names of each
+     *                column.
+     * @author Alex Friedman (ahf)
+     * @throws Exception
+     */
+    public static void writeToFile(File file, List<String[]> csvData) throws Exception {
+        if(file == null || csvData == null)
+            throw new Exception("Could not write null data/file.");
+
+        final BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+        for(String[] line : csvData)
+        {
+            for(int i = 0; i < line.length; i++)
+            {
+                writer.write(line[i]);
+
+                if(i + 1 < line.length)
+                    writer.write(", ");
+                else
+                    writer.write("\n");
+            }
+        }
+        writer.close();
+    }
 }

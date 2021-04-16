@@ -1,12 +1,14 @@
 package edu.wpi.fuchsiafalcons.entities;
 
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
  * Class that represents a node, uses SimpleStringProperties so that it can be used in a TableView
  * @author KD
  */
-public class NodeEntry {
+public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
 
     private String nodeID;
     private String xcoord;
