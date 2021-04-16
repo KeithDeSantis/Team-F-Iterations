@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -45,6 +46,7 @@
                   </ScrollPane>
                   <VBox alignment="CENTER" prefHeight="427.0" prefWidth="207.0" spacing="20.0">
                      <children>
+                        <JFXComboBox fx:id="floorComboBox" onAction="#handleFloorBoxAction" />
                         <ImageView fx:id="logoView" fitHeight="168.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                         <JFXTextField fx:id="filenameField" alignment="CENTER" focusColor="#1d26c2" onKeyReleased="#handleFileNameType" promptText="Filename Here" style="-fx-background-color: #ced7dd;">
                            <VBox.margin>
