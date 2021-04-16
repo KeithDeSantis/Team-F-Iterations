@@ -11,6 +11,10 @@ import java.util.List;
 public class DatabaseAPI {
 
 
+    /*
+     * These two private classes were written by Alex Friedman (ahf). I'll have to do something better than this at some point,
+     * but this is the start of how we might be able to methodize some stuff.
+     */
     //FIXME: DO BETTER
     private static final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
             "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
@@ -25,8 +29,8 @@ public class DatabaseAPI {
             if(data == null || data.length != 8) //FIXME: DO BETTER NULL CHECKS
                 return null;
 
-            int xCoordinate = 0;
-            int yCoordinate = 0;
+            int xCoordinate;
+            int yCoordinate;
 
             try {
                 xCoordinate = Integer.parseInt(data[1]);
@@ -110,22 +114,6 @@ public class DatabaseAPI {
      * @throws SQLException on sql operation error
      */
     public boolean addNode(String id, int x, int y, String floor, String building, String type, String longName, String shortName) throws SQLException {
-
-//        final String sql = "INSERT INTO L1Nodes values(?, ?, ?, ?, ?, ?, ?, ?)";
-//
-//        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
-//
-//
-//        stmt.setString(1, id);
-//        stmt.setInt(2, x);
-//        stmt.setInt(3, y);
-//        stmt.setString(4, floor);
-//        stmt.setString(5, building);
-//        stmt.setString(6, type);
-//        stmt.setString(7, longName);
-//        stmt.setString(8, shortName);
-
-
         //FIXME: DO BETTER!!!
         return addNode(new String[] {
                 id,
@@ -155,20 +143,13 @@ public class DatabaseAPI {
      * @throws SQLException on sql operation error
      */
     public boolean addEdge(String id, String startNode, String endNode) throws SQLException {
-        boolean addSuccess = false;
-        String sql = "INSERT INTO L1Edges values(?, ?, ?)";
+        //FIXME: DO BETTER
+        return addEdge(new String[] {id, startNode, endNode});
+    }
 
-        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
-        stmt.setString(1, id);
-        stmt.setString(2, startNode);
-        stmt.setString(3, endNode);
-
-        int result = stmt.executeUpdate();
-        if (result != 0)
-        {
-            addSuccess = true;
-        }
-        return addSuccess;
+    public boolean addEdge(String[] data) throws SQLException {
+        final PreparedStatement stmt = DatabaseAPI.edgesDatabaseTable.getInsertStatement(data);
+        return stmt.executeUpdate() != 0;
     }
 
     /**
@@ -289,10 +270,10 @@ public class DatabaseAPI {
         String sql = "SELECT * FROM L1Nodes";
         Statement stmt =  conn.createStatement();
 
-        ResultSet rset = null;
+        ResultSet resultSet;
         try {
 
-            rset = stmt.executeQuery(sql);
+            resultSet = stmt.executeQuery(sql);
         } catch (SQLException e) {
             if(e.getMessage().contains("Table/View 'L1NODES' does not exist."))
                 return nodeEntries;
@@ -300,17 +281,17 @@ public class DatabaseAPI {
                 e.printStackTrace();
             return null;
         }
-        while (rset.next()) {
-            String nodeID = rset.getString(1);
-            int xCoord = rset.getInt(2);
-            int yCoord = rset.getInt(3);
-            String floor = rset.getString(4);
-            String building = rset.getString(5);
-            String type = rset.getString(6);
-            String longName = rset.getString(7);
-            String shortName = rset.getString(8);
+        while (resultSet.next()) {
+            String nodeID = resultSet.getString(1);
+            int xCoordinate = resultSet.getInt(2);
+            int yCoordinate = resultSet.getInt(3);
+            String floor = resultSet.getString(4);
+            String building = resultSet.getString(5);
+            String type = resultSet.getString(6);
+            String longName = resultSet.getString(7);
+            String shortName = resultSet.getString(8);
 
-            NodeEntry newEntry = new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
+            NodeEntry newEntry = new NodeEntry(nodeID, Integer.toString(xCoordinate), Integer.toString(yCoordinate), floor, building, type, longName, shortName);
             nodeEntries.add(newEntry);
         }
         return nodeEntries;
@@ -318,22 +299,18 @@ public class DatabaseAPI {
 
     private void createTable(Connection conn, String createCMD) throws SQLException {
         //create the tables
-
         Statement initStmt = conn.createStatement();
         initStmt.execute(createCMD);
-
         initStmt.close();
-
     }
 
-    private boolean populateData(Connection conn, List<String[]> nodeData, List <String[]> edgeData) throws Exception {
+    private boolean populateData(Connection conn, List<String[]> nodeData, List <String[]> edgeData){
         try {
-
             createTable(conn, initNodesTable);
-            populateNodes(nodeData);
+            populateTable(DatabaseAPI.nodeDatabase, nodeData);
 
             createTable(conn, initEdgesTable);
-            populateEdges(edgeData);
+            populateTable(DatabaseAPI.edgesDatabaseTable, edgeData);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -341,14 +318,12 @@ public class DatabaseAPI {
         return true;
     }
 
-    private void populateNodes(List<String[]> data) throws SQLException //I'll get back to that
-    {
-        //This here is the tricky part b/c of the formatting....
+    private void populateTable(IDatabaseTable table, List<String[]> data) throws SQLException {
         for (String[] arr : data) {
-
-            DatabaseAPI.getDatabaseAPI().addNode(arr);
+           table.getInsertStatement(arr).executeUpdate();
         }
     }
+
     /**
      * Used to drop a table
      * @param conn The SQL Connection
@@ -356,7 +331,7 @@ public class DatabaseAPI {
      * @return true if the table was dropped, false otherwise.
      * @author Alex Friedman (ahf)
      */
-    private final boolean dropTable(Connection conn, String table)
+    private boolean dropTable(Connection conn, String table)
     {
         try
         {
@@ -369,7 +344,6 @@ public class DatabaseAPI {
         }
         catch (SQLException e)
         {
-            //System.out.println("MSG: " + e.getMessage());
             if(e.getMessage().contains("'DROP TABLE' cannot be performed on '" + table + "' because it does not exist."))
                 return false;
 
@@ -378,23 +352,13 @@ public class DatabaseAPI {
         }
     }
 
-    private void populateEdges(List<String[]> data) throws SQLException //I'll get back to that
-    {
-        //This here is the tricky part b/c of the formatting....
-        for (String[] arr : data) {
-            DatabaseAPI.getDatabaseAPI().addEdge(arr[0], arr[1], arr[2]);
-        }
-    }
-
-    public boolean populateDB(Connection conn, List<String[]> nodeData, List<String[]> edgeData) throws Exception {
+    public boolean populateDB(Connection conn, List<String[]> nodeData, List<String[]> edgeData) {
         boolean success = false;
-        //What can I rename 'main' to?
 
         dropTable(conn, "L1NODES");
         dropTable(conn, "L1EDGES");
 
         success = populateData(conn, nodeData, edgeData);
-        //conn.close();
         return success;
     }
 
