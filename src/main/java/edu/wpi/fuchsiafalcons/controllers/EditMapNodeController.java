@@ -616,6 +616,7 @@ public class EditMapNodeController {
 
         filenameField.setText("");
         saveToFileButton.setDisable(true);
+        drawNodeOnFloor();
     }
 
     /**
