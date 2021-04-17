@@ -181,6 +181,7 @@ public class EditMapNodeController {
         });
 
         //contextMenu.show(map, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+        nodeTreeTable.setStyle("-fx-tree-table-color: #8adaff;"); // KD - transfer to CSS file?
     }
 
     /**
