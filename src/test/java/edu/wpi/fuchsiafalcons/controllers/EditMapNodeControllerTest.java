@@ -100,7 +100,6 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         query = this.nodeList.stream().filter(node ->
             node.getNodeID().equals("TestNode") && node.getShortName().equals("Testing1")
         ).collect(Collectors.toList());
-        verifyThat("#TestNode", Node::isVisible);
         assertEquals(pre + 1, query.size());
         clickOn("Reset Database");
     }
@@ -138,6 +137,10 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         write("0");
         clickOn("OK");
         verifyThat("#CCONF001L1", Node::isVisible); // Testing changing position
+        boolean oneCCONF001L1 = false;
+        for(NodeEntry n : nodeList) { if(n.getNodeID().equals("CCONF001L1")) oneCCONF001L1 = !oneCCONF001L1; }
+        assertTrue(oneCCONF001L1);
+
 
         clickOn("CCONF001L1");
         clickOn("Edit");
@@ -205,7 +208,13 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("#shortNameField");
         write(".");
         clickOn("OK");
-        verifyThat("#testClicking", Node::isVisible);
+        boolean hasTestClicking = false;
+        for(NodeEntry n : nodeList) {
+            if (n.getNodeID().equals("testClicking")) {
+                hasTestClicking = true;
+            }
+        }
+        assertTrue(hasTestClicking);
         clickOn("Reset Database");
     }
 }

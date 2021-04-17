@@ -171,6 +171,7 @@ public class EditMapNodeController {
                     try {
                         openEditDialog(nodeEntry);
                         updateNodeEntry(nodeEntry);
+                        nodeList.add(nodeEntry);
                     } catch (IOException | SQLException ioException) {
                         ioException.printStackTrace();
                     }
