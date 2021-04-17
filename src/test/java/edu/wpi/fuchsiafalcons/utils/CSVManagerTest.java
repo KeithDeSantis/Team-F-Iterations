@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * This class is used to test the CSVReader.
  * @author Alex Friedman (ahfriedman)
- * @see CSVReaderTest
+ * @see CSVManager
  */
-public class CSVReaderTest {
+public class CSVManagerTest {
 
   /** Setup test suite. */
   @BeforeAll
@@ -110,5 +110,25 @@ public class CSVReaderTest {
 
     assertEquals(data.get(2)[0], "4");
     assertEquals(data.get(2)[1], "5");
+  }
+
+  @Test
+  public void testGetJarResource() throws Exception {
+    //ahf - this tests if we are able to read files from our resources folder correctly (we've already tested regular files)
+
+    System.out.println((new File("")).getAbsolutePath());
+
+    final List<String[]> regFile = CSVManager.load(new File("./src/main/resources/L1Edges.csv"));
+    final List<String[]> jarFile = CSVManager.load("L1Edges.csv");
+
+    assertNotNull(regFile);
+    assertNotNull(jarFile);
+
+    assertEquals(regFile.size(), jarFile.size());
+
+    for(int i = 0; i < regFile.size(); i++)
+    {
+      assertArrayEquals(regFile.get(i), jarFile.get(i));
+    }
   }
 }

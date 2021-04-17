@@ -111,24 +111,7 @@ public class CSVManager {
      * @throws Exception
      */
     public static void writeFile(String fileName, List<String[]> csvData) throws Exception {
-        if(fileName == null || csvData == null)
-            throw new Exception("Could not write null data/file.");
-
-        final BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-
-        for(String[] line : csvData)
-        {
-            for(int i = 0; i < line.length; i++)
-            {
-                writer.write(line[i]);
-
-                if(i + 1 < line.length)
-                    writer.write(", ");
-                else
-                    writer.write("\n");
-            }
-        }
-        writer.close();
+        CSVManager.writeToFile(new File(fileName), csvData);
     }
 
     /**
