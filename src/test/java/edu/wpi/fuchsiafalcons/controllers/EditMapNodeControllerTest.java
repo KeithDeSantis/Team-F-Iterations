@@ -170,6 +170,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         verifyThat("#CCONF001L1", Node::isVisible);
         clickOn("Delete");
         // Could add a more thorough test though unsure how - KD and ZS
+        clickOn("Reset Database");
     }
 
     @Test

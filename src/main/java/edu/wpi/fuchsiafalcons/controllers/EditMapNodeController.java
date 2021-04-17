@@ -236,6 +236,10 @@ public class EditMapNodeController {
         openEditDialog(newNode); // allow editing of the new node - KD
 
         updateNodeEntry(newNode);
+        if(newNode.getNodeID().isEmpty() || newNode.getXcoord().isEmpty() || newNode.getYcoord().isEmpty() ||
+                newNode.getFloor().isEmpty() || newNode.getBuilding().isEmpty() || newNode.getNodeType().isEmpty() ||
+                newNode.getLongName().isEmpty() || newNode.getShortName().isEmpty())
+            return; //FIXME: Better error checking like in updateNodeEntry
         nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
     }
 
@@ -248,7 +252,7 @@ public class EditMapNodeController {
         if(nodeEntry.getNodeID().isEmpty() || nodeEntry.getXcoord().isEmpty() || nodeEntry.getYcoord().isEmpty() ||
                 nodeEntry.getFloor().isEmpty() || nodeEntry.getBuilding().isEmpty() || nodeEntry.getNodeType().isEmpty() ||
                 nodeEntry.getLongName().isEmpty() || nodeEntry.getShortName().isEmpty())
-            return; //FIXME: DO BETTER ERROR CHECKING, CHECK THAT WE ARE GETTING INTS
+            return; //FIXME: DO BETTER ERROR CHECKING
 
         String nodeID = nodeEntry.getNodeID();
         int xCoord = Integer.parseInt(nodeEntry.getXcoord());
