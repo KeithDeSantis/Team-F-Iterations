@@ -1,4 +1,5 @@
 package edu.wpi.fuchsiafalcons.controllers;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
@@ -47,15 +48,15 @@ import java.sql.*;
  */
 public class EditMapNodeController {
 
-    @FXML private Button goBack;
+    @FXML private JFXButton goBack;
 
     @FXML private JFXTreeTableView<NodeEntry> nodeTreeTable;
 
     @FXML private TextField filenameField;
     @FXML private Label errorMessageLabel;
 
-    @FXML private Button saveToFileButton;
-    @FXML private Button loadFromFileButton;
+    @FXML private JFXButton saveToFileButton;
+    @FXML private JFXButton loadFromFileButton;
 
     @FXML private ScrollPane scroll;
     @FXML private ImageView map;
@@ -64,10 +65,13 @@ public class EditMapNodeController {
 
     @FXML private ComboBox<String> floorComboBox;
 
+    @FXML private JFXButton zoomInButton;
+    @FXML private JFXButton zoomOutButton;
+
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
 
-    final double zoomLevel = 5.0;
+    double zoomLevel = 5.0;
     private String floor = "1";
     private Circle selectedCircle = null;
 
@@ -91,7 +95,6 @@ public class EditMapNodeController {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-        final double zoomLevel = 5.0;
         final double width = image.getWidth()/zoomLevel;
         final double height = image.getHeight()/zoomLevel;
         canvas.setPrefSize(width,height);
@@ -627,5 +630,31 @@ public class EditMapNodeController {
         //FIXME: do better, at the same time, we can't actually do this in FXML
 
 
+    }
+
+    /**
+     * Basic implementation of Zooming the map by changing the zoom level and reloading
+     * @param actionEvent the press of zoom in or zoom out
+     * @author KD
+     */
+    public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
+        JFXButton btn = (JFXButton) actionEvent.getSource();
+        if(btn == zoomInButton) {
+            if(zoomLevel > 1) {
+                zoomLevel--;
+            }
+        } else if (btn == zoomOutButton) {
+            if(zoomLevel < 8) {
+                zoomLevel++;
+            }
+        }
+        drawNodeOnFloor();
+        Image image = map.getImage();
+        double width = image.getWidth()/zoomLevel;
+        double height = image.getHeight()/zoomLevel;
+        canvas.setPrefSize(width,height);
+        map.setFitWidth(width);
+        map.setFitHeight(height);
+        map.setImage(image);
     }
 }
