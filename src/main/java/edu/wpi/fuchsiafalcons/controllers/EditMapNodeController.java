@@ -235,6 +235,7 @@ public class EditMapNodeController {
         openEditDialog(newNode); // allow editing of the new node - KD
 
         updateNodeEntry(newNode);
+        nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
     }
 
     /**
@@ -257,7 +258,7 @@ public class EditMapNodeController {
         String longName = nodeEntry.getLongName();
         String shortName = nodeEntry.getShortName();
 
-        nodeList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
+
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
 
         nodeTreeTable.requestFocus();
