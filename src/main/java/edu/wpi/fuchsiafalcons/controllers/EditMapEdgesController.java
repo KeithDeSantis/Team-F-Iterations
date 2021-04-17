@@ -96,7 +96,11 @@ public class EditMapEdgesController {
         //FIXME: do better, hook into db
         List<EdgeEntry> edgeList = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
 
+        final String sql = "CREATE TABLE L1Edges(EdgeID varchar(200), " +
+                "startNode varchar(200), endNode varchar(200), " +
+                "primary key(edgeID))";
         try {
+            DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
             DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("L1Edges.csv"));
 //            edgeEntryObservableList.addAll( CSVManager.load("L1Edges.csv").stream().map(line-> {
 //                return new EdgeEntry(line[0], line[1], line[2]);
