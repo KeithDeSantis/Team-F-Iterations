@@ -40,6 +40,32 @@ public class EdgeEntry {
     public StringProperty startNodeProperty() {return startNode;}
     public StringProperty endNodeProperty() {return endNode;}
 
+
+    /**
+     * getter for edgeID
+     *
+     */
+    public String getEdgeID() {
+        return edgeID.get();
+    }
+
+    /**
+     * getter for startNode
+     *
+     */
+    public String getStartNode() {
+        return startNode.get();
+    }
+
+
+    /**
+     * getter for endNode
+     * @return
+     */
+    public String getEndNode() {
+        return endNode.get();
+    }
+
     /**
      * Setter to input a new edge ID, will update the starting and end nodes for consistency
      * @param newEdgeID New edge ID formatted as [NODEID]_[NODEID]
