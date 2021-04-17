@@ -120,12 +120,12 @@ public class EditMapNodeDialogViewController {
             shortNameField.setStyle("-fx-background-color:  #ffbab8");
         }
         try {
-            xCoordValid = Integer.parseInt(xCoordField.getText()) >= 0; } // make sure coordinates are integers and not negative
+            xCoordValid = Integer.parseInt(xCoordField.getText()) >= 0 && Integer.parseInt(xCoordField.getText()) <= 5000; } // make sure coordinates are valid integers and not negative
         catch(NumberFormatException e) {
             xCoordValid = false;
         }
         try {
-            yCoordValid = Integer.parseInt(yCoordField.getText()) >= 0;
+            yCoordValid = Integer.parseInt(yCoordField.getText()) >= 0 && Integer.parseInt(yCoordField.getText()) <= 3400;
         } catch (NumberFormatException e){
             yCoordValid = false;
         }

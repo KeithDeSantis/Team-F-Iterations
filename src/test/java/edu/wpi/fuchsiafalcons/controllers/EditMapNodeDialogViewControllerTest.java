@@ -16,7 +16,7 @@ public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapNodeView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapNodeDialogView.fxml"));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -24,7 +24,6 @@ public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
 
     @Test
     public void testIsFilledOut() {
-        clickOn("New");
         verifyThat("OK", Node::isVisible);
         clickOn("OK");
         verifyThat("OK", Node::isVisible);
@@ -44,8 +43,6 @@ public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
         write(".");
         clickOn("#shortNameField");
         write(".");
-        clickOn("OK");
-        verifyThat("Test", Node::isVisible);
     }
 
     @Test
@@ -64,10 +61,6 @@ public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
 
     @Test
     public void testHelpMenu() {
-        verifyThat("Edit", Node::isVisible);
-        clickOn("Reset Database");
-        clickOn("CCONF001L1");
-        clickOn("Edit");
         verifyThat("?", Node::isVisible);
         clickOn("?");
         verifyThat("Back", Node::isVisible);
