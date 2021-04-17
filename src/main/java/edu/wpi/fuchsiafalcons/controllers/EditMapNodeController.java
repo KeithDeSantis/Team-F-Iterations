@@ -149,7 +149,6 @@ public class EditMapNodeController {
         drawNodeOnFloor();
 
 
-
         final ContextMenu contextMenu = new ContextMenu();
 
         final MenuItem createNodeMenuItem = new MenuItem("Create Node Here");
@@ -181,7 +180,6 @@ public class EditMapNodeController {
         });
 
         //contextMenu.show(map, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
-
     }
 
     /**
@@ -571,15 +569,19 @@ public class EditMapNodeController {
      * @author ZheCheng
      */
     public void centerNode(Circle c){
-        scroll.setVvalue(scroll.getVmax() * ((((c.getBoundsInParent().getMaxY() +
-                c.getBoundsInParent().getMinY()) / 2.0) - (0.5 * scroll.getViewportBounds().getHeight()))
-                / (scroll.getContent().getBoundsInLocal().getHeight() - (c.getBoundsInParent().getMaxY() +
-                c.getBoundsInParent().getMinY()) / 2.0)));
 
-        scroll.setHvalue(scroll.getHmax() * ((((c.getBoundsInParent().getMaxX() +
-                c.getBoundsInParent().getMinX()) / 2.0) - (0.5 * scroll.getViewportBounds().getWidth()))
-                / (scroll.getContent().getBoundsInLocal().getWidth() - (c.getBoundsInParent().getMaxX() +
-                c.getBoundsInParent().getMinX()) / 2.0)));
+        double h = scroll.getContent().getBoundsInLocal().getHeight();
+        double y = (c.getBoundsInParent().getMaxY() +
+                c.getBoundsInParent().getMinY()) / 2.0;
+        double v = scroll.getViewportBounds().getHeight();
+        scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
+
+        double w = scroll.getContent().getBoundsInLocal().getWidth();
+        double x = (c.getBoundsInParent().getMaxX() +
+                c.getBoundsInParent().getMinX()) / 2.0;
+        double hw = scroll.getViewportBounds().getWidth();
+        scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
+
     }
 
  /**
