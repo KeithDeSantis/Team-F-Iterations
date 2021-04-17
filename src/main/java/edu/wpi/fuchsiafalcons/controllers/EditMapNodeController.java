@@ -333,11 +333,9 @@ public class EditMapNodeController {
         nodeList.clear();
 
         List<String[]> nodeData = null;
-        List<String[]> edgeData = null;
 
         try {
             nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("L1Nodes.csv") : CSVManager.load(new File(fileName));
-            edgeData = CSVManager.load("L1Edges.csv");
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -353,7 +351,8 @@ public class EditMapNodeController {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
 
-                DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), nodeData, edgeData); //NOTE: now can specify CSV arguments
+                //DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
+                DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
 
@@ -593,11 +592,9 @@ public class EditMapNodeController {
         nodeList.clear();
 
         List<String[]> nodeData = null;
-        List<String[]> edgeData = null;
 
         try {
             nodeData = (CSVManager.load("L1Nodes.csv"));
-            edgeData = CSVManager.load("L1Edges.csv");
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -613,7 +610,8 @@ public class EditMapNodeController {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
 
-                DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), nodeData, edgeData); //NOTE: now can specify CSV arguments
+                //DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
+                DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
         errorMessageLabel.setText("");
@@ -631,6 +629,8 @@ public class EditMapNodeController {
     public void handleMapContextMenu(ContextMenuEvent contextMenuEvent) {
         //FIXME: do better, at the same time, we can't actually do this in FXML
 
+
+        nodeTreeTable.setStyle("-fx-tree-table-color: #006DA3;");
 
     }
 
