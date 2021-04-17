@@ -296,15 +296,6 @@ public class DatabaseAPI {
         }
     }
 
-    public void createNodesTable() throws SQLException
-    {
-        final String sql = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
-                "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
-        createTable(ConnectionHandler.getConnection(), sql);
-    }
-
-
     /**
      * Used to drop a table
      * @param conn The SQL Connection
