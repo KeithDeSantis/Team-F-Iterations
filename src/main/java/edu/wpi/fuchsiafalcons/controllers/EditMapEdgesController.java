@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import edu.wpi.fuchsiafalcons.database.ConnectionHandler;
 import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
@@ -19,6 +20,7 @@ import javafx.stage.Modality;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,7 +73,7 @@ public class EditMapEdgesController {
      * @author Leo Morris
      */
     @FXML
-    private void initialize() {
+    private void initialize() throws SQLException {
         // Clear the file error label
         CSVErrorLabel.setStyle("-fx-text-fill: black");
         CSVErrorLabel.setText("");
@@ -92,15 +94,20 @@ public class EditMapEdgesController {
         saveCSV.setDisable(true);
 
         //FIXME: do better, hook into db
+        List<EdgeEntry> edgeList = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+
         try {
-            //DatabaseAPI.getDatabaseAPI().populateEdges();
-            edgeEntryObservableList.addAll( CSVManager.load("L1Edges.csv").stream().map(line-> {
-                return new EdgeEntry(line[0], line[1], line[2]);
-            }).collect(Collectors.toList()));
+            DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("L1Edges.csv"));
+//            edgeEntryObservableList.addAll( CSVManager.load("L1Edges.csv").stream().map(line-> {
+//                return new EdgeEntry(line[0], line[1], line[2]);
+//            }).collect(Collectors.toList()));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        for(EdgeEntry e: edgeList){
+            edgeEntryObservableList.add(e);
+        }
 
         edgeTable.setItems(edgeEntryObservableList);
 
