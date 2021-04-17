@@ -114,6 +114,10 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#floorField");
+        write("f");
+        clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#floorField");
         write("G");
         clickOn("OK");
         verifyThat("#CCONF001L1", Node::isVisible);
@@ -121,6 +125,12 @@ public class EditMapNodeControllerTest extends ApplicationTest {
 
         clickOn("CCONF001L1");
         clickOn("Edit");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#xCoordField");
+        write("-1");
+        doubleClickOn("#yCoordField");
+        write("-1");
+        clickOn("OK");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#xCoordField");
         write("0");
@@ -171,6 +181,32 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         verifyThat("G", Node::isVisible);
         clickOn("3");
         verifyThat("3", Node::isVisible);
+    }
+
+    @Test
+    public void testClickToMakeNode() {
+        verifyThat("#deleteButton", Node::isVisible);
+        rightClickOn("#map");
+        clickOn("Create Node Here");
+        verifyThat("OK", Node::isVisible);
+        clickOn("#nodeIDField");
+        write("testClicking");
+        doubleClickOn("#xCoordField"); // Change to test better (right now it can't accept doubles cause of db) - KD
+        write("1500");
+        doubleClickOn("#yCoordField");
+        write("1500");
+        verifyThat("1", Node::isVisible);
+        clickOn("#buildingField");
+        write(".");
+        clickOn("#nodeTypeField");
+        write(".");
+        clickOn("#longNameField");
+        write(".");
+        clickOn("#shortNameField");
+        write(".");
+        clickOn("OK");
+        verifyThat("#testClicking", Node::isVisible);
+        clickOn("Reset Database");
     }
 }
 

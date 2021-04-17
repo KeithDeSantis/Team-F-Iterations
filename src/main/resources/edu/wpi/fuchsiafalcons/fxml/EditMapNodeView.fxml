@@ -80,6 +80,9 @@
                         <Font name="Tahoma" size="18.0" />
                      </font></JFXButton>
                </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
             </HBox>
          </children>
          <padding>

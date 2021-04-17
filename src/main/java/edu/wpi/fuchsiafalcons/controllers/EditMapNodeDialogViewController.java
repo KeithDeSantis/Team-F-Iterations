@@ -109,17 +109,18 @@ public class EditMapNodeDialogViewController {
             shortNameField.setStyle("-fx-background-color:  #ffbab8");
         }
         try {
-            Integer.parseInt(xCoordField.getText()); }
+            xCoordValid = Integer.parseInt(xCoordField.getText()) >= 0; } // make sure coordinates are integers and not negative
         catch(NumberFormatException e) {
-            xCoordField.setStyle("-fx-background-color:  #ffbab8");
             xCoordValid = false;
         }
         try {
-            Integer.parseInt(yCoordField.getText());
+            yCoordValid = Integer.parseInt(yCoordField.getText()) >= 0;
         } catch (NumberFormatException e){
-            yCoordField.setStyle("-fx-background-color: #ffbab8");
             yCoordValid = false;
         }
+
+        if(!xCoordValid) {xCoordField.setStyle("-fx-background-color:  #ffbab8");}
+        if(!yCoordValid) {yCoordField.setStyle("-fx-background-color: #ffbab8");}
 
         return nodeIDField.getText().length() > 0 &&
                 xCoordValid &&
