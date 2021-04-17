@@ -12,18 +12,19 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -72,7 +73,7 @@ public class EditMapNodeController {
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
 
-    double zoomLevel = 5.0;
+    double zoomLevel = 1.0;
     private String floor = "1";
     private Circle selectedCircle = null;
 
@@ -92,16 +93,151 @@ public class EditMapNodeController {
     @FXML
     private void initialize() {
 
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
+
+
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-        final double width = image.getWidth()/zoomLevel;
-        final double height = image.getHeight()/zoomLevel;
-        canvas.setPrefSize(width,height);
-        map.setFitWidth(width);
-        map.setFitHeight(height);
         map.setImage(image); // Copied from A* Vis - KD
+
+        updateZoom();
+
+
+        map.setOnScroll( e -> {
+            if(e.isControlDown());
+            {
+                e.consume();
+
+                final double nextScaleFactor = Math.max(1, Math.min(10, zoomLevel - e.getDeltaY() * 0.01));
+
+                final double W = map.getImage().getWidth();
+                final double H = map.getImage().getHeight();
+
+                final double cX = e.getX() * zoomLevel;
+                final double cY = e.getY() * zoomLevel;
+
+                final double nX = e.getX() * nextScaleFactor;
+                final double nY = e.getY() * nextScaleFactor;
+
+                final double dX = nX - cX;
+                final double dY = nY - cY;
+
+
+               // System.out.println(cX + ", " + cY);
+
+               // System.out.println(nhV  + " : " + -(dX/W));
+               // zoomLevel = nextScaleFactor;
+                //updateZoom();
+
+
+                //System.out.println(cX + " " + dX + " " + canvas.getTranslateX());
+
+                if(e.getDeltaY() < 0);
+                {
+                    final double w = scroll.getWidth();
+                  // System.out.println(w);
+                    final double p = w/(W * nextScaleFactor * 2.0);
+
+                    final double r = e.getX() / W;
+
+                    final double hV = r - p;
+
+
+                    zoomLevel = nextScaleFactor;
+
+                    updateZoom();
+
+                    System.out.println((cX/W) + ", " + (cY/H));
+
+                    scroll.setHvalue(cX/W);
+                    scroll.setVvalue(cY/H);
+                }
+
+                //canvas.setTranslateX(canvas.getTranslateX() - dX);
+                //canvas.setTranslateY(canvas.getTranslateY() - dY);
+
+                //scroll.setHvalue(nhV);
+                //scroll.setVvalue(nvV);
+            }
+        });
+
+
+        // scroll.addEventFilter(ScrollEvent.ANY, e -> {
+        /*
+        canvas.setOnScroll(e -> {;
+        //System.out.println("HAHAH " + System.currentTimeMillis());
+        //System.out.println(e.getX());
+        // System.out.println(scroll.getVmin() + ", " + scroll.getVvalue() + " " + scroll.getVmax());
+            if(e.isControlDown()) {
+                e.consume();
+
+
+                final double nextScaleFactor = Math.max(1, Math.min(10, zoomLevel - e.getDeltaY() * 0.01));
+
+                final double mX = e.getX() * zoomLevel;
+                final double mY = e.getY() * zoomLevel;
+//
+//                Point2D posInZoomTarget = (canvas.parentToLocal(new Point2D(e.getX(), e.getY())));
+//                System.out.println(posInZoomTarget +
+//                        " (" +(posInZoomTarget.getX() * zoomLevel)  +", " + (posInZoomTarget.getY() * zoomLevel + ") (" +
+//                        (e.getX() / zoomLevel)) + ", " + (e.getY() / zoomLevel) + ") " + zoomLevel);
+//
+//
+
+                final double imgWidth = map.getImage().getWidth();
+               // System.out.println(mX + ", " + mY  + " @ " + zoomLevel + " : " + imgWidth);
+
+                final double nX = e.getX() * nextScaleFactor;
+                final double nY = e.getY() * nextScaleFactor;
+
+                System.out.println(mX + ", " + mY);
+
+                zoomLevel = nextScaleFactor;
+
+
+                canvas.setScaleX(nextScaleFactor);
+                canvas.setScaleY(nextScaleFactor);
+
+
+
+                scroll.setHvalue(0.5);
+                scroll.setVvalue(0.5);
+
+
+                scroll.setHmax(2.0);
+
+                //canvas.setTranslateX(canvas.getTranslateX() - dX);
+
+                //updateZoom();
+                //scroll.setHvalue(0.5);
+
+              //  System.out.println(hV + " : " + dX / nW);
+
+
+                /*
+                double zoom_fac = 1.08;
+
+                if(e.getDeltaY() < 0) {
+                    zoom_fac = 2.0 - zoom_fac;
+                }
+
+                Scale newScale = new Scale();
+                newScale.setPivotX(e.getX());
+                newScale.setPivotY(e.getY());
+                newScale.setX( canvas.getScaleX() * zoom_fac );
+                newScale.setY( canvas.getScaleY() * zoom_fac );
+
+                canvas.getTransforms().add(newScale);
+                */
+/*
+         }
+
+        });
+
+ */
+
 
         final Image logo = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoView.setImage(logo);
@@ -654,13 +790,31 @@ public class EditMapNodeController {
                 zoomLevel++;
             }
         }
+       updateZoom();
+    }
+
+    private void updateZoom()
+    {
         drawNodeOnFloor();
-        Image image = map.getImage();
-        double width = image.getWidth()/zoomLevel;
-        double height = image.getHeight()/zoomLevel;
-        canvas.setPrefSize(width,height);
+
+        final Image image = map.getImage();
+
+        final double width = image.getWidth() / zoomLevel;
+        final double height = image.getHeight() / zoomLevel;
+
+
+        canvas.setPrefSize(width, height);
         map.setFitWidth(width);
         map.setFitHeight(height);
-        map.setImage(image);
+        //map.setImage(image);
+        scroll.layout();
+    }
+
+    public void handleOnScroll(ScrollEvent scrollEvent) {
+        System.out.println("Scroll!!! "  + System.currentTimeMillis());
+    }
+
+    public void handleOnZoom(ZoomEvent zoomEvent) {
+        System.out.println("Zoom!!!! " + System.currentTimeMillis());
     }
 }
