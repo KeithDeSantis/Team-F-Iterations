@@ -124,16 +124,6 @@ public class EditMapNodeController {
                 final double dX = nX - cX;
                 final double dY = nY - cY;
 
-
-               // System.out.println(cX + ", " + cY);
-
-               // System.out.println(nhV  + " : " + -(dX/W));
-               // zoomLevel = nextScaleFactor;
-                //updateZoom();
-
-
-                //System.out.println(cX + " " + dX + " " + canvas.getTranslateX());
-
                 if(e.getDeltaY() < 0);
                 {
                     final double w = scroll.getWidth();
@@ -145,13 +135,16 @@ public class EditMapNodeController {
                     final double hV = r - p;
 
 
+                    final double lerpX = .5 * (scroll.getWidth() * zoomLevel) / W * (2 * scroll.getHvalue() - 1);
+
                     zoomLevel = nextScaleFactor;
 
                     updateZoom();
 
                     System.out.println((cX/W) + ", " + (cY/H));
+                    System.out.println(cX + ", " + cY);
 
-                    scroll.setHvalue(cX/W);
+                    scroll.setHvalue((cX/W) -  lerpX);
                     scroll.setVvalue(cY/H);
                 }
 
@@ -165,58 +158,12 @@ public class EditMapNodeController {
 
 
         // scroll.addEventFilter(ScrollEvent.ANY, e -> {
+
         /*
         canvas.setOnScroll(e -> {;
-        //System.out.println("HAHAH " + System.currentTimeMillis());
-        //System.out.println(e.getX());
-        // System.out.println(scroll.getVmin() + ", " + scroll.getVvalue() + " " + scroll.getVmax());
+
             if(e.isControlDown()) {
                 e.consume();
-
-
-                final double nextScaleFactor = Math.max(1, Math.min(10, zoomLevel - e.getDeltaY() * 0.01));
-
-                final double mX = e.getX() * zoomLevel;
-                final double mY = e.getY() * zoomLevel;
-//
-//                Point2D posInZoomTarget = (canvas.parentToLocal(new Point2D(e.getX(), e.getY())));
-//                System.out.println(posInZoomTarget +
-//                        " (" +(posInZoomTarget.getX() * zoomLevel)  +", " + (posInZoomTarget.getY() * zoomLevel + ") (" +
-//                        (e.getX() / zoomLevel)) + ", " + (e.getY() / zoomLevel) + ") " + zoomLevel);
-//
-//
-
-                final double imgWidth = map.getImage().getWidth();
-               // System.out.println(mX + ", " + mY  + " @ " + zoomLevel + " : " + imgWidth);
-
-                final double nX = e.getX() * nextScaleFactor;
-                final double nY = e.getY() * nextScaleFactor;
-
-                System.out.println(mX + ", " + mY);
-
-                zoomLevel = nextScaleFactor;
-
-
-                canvas.setScaleX(nextScaleFactor);
-                canvas.setScaleY(nextScaleFactor);
-
-
-
-                scroll.setHvalue(0.5);
-                scroll.setVvalue(0.5);
-
-
-                scroll.setHmax(2.0);
-
-                //canvas.setTranslateX(canvas.getTranslateX() - dX);
-
-                //updateZoom();
-                //scroll.setHvalue(0.5);
-
-              //  System.out.println(hV + " : " + dX / nW);
-
-
-                /*
                 double zoom_fac = 1.08;
 
                 if(e.getDeltaY() < 0) {
@@ -230,13 +177,13 @@ public class EditMapNodeController {
                 newScale.setY( canvas.getScaleY() * zoom_fac );
 
                 canvas.getTransforms().add(newScale);
-                */
-/*
+
+
          }
 
         });
+    */
 
- */
 
 
         final Image logo = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
