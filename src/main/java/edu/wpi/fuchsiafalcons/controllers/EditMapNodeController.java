@@ -354,7 +354,10 @@ public class EditMapNodeController {
                 }).collect(Collectors.toList()));
 
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
-                DatabaseAPI.getDatabaseAPI().createNodesTable();
+                final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                        "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                        "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable);
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
@@ -614,7 +617,10 @@ public class EditMapNodeController {
                 }).collect(Collectors.toList()));
 
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
-                DatabaseAPI.getDatabaseAPI().createNodesTable();
+                final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                        "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                        "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable);
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
