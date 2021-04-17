@@ -1,4 +1,5 @@
 package edu.wpi.fuchsiafalcons.controllers;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
 import edu.wpi.fuchsiafalcons.database.*;
 import org.apache.derby.iapi.db.Database;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 
 /**
@@ -47,15 +49,15 @@ import java.sql.*;
  */
 public class EditMapNodeController {
 
-    @FXML private Button goBack;
+    @FXML private JFXButton goBack;
 
     @FXML private JFXTreeTableView<NodeEntry> nodeTreeTable;
 
     @FXML private TextField filenameField;
     @FXML private Label errorMessageLabel;
 
-    @FXML private Button saveToFileButton;
-    @FXML private Button loadFromFileButton;
+    @FXML private JFXButton saveToFileButton;
+    @FXML private JFXButton loadFromFileButton;
 
     @FXML private ScrollPane scroll;
     @FXML private ImageView map;
@@ -64,10 +66,13 @@ public class EditMapNodeController {
 
     @FXML private ComboBox<String> floorComboBox;
 
+    @FXML private JFXButton zoomInButton;
+    @FXML private JFXButton zoomOutButton;
+
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
 
-    final double zoomLevel = 5.0;
+    double zoomLevel = 5.0;
     private String floor = "1";
     private Circle selectedCircle = null;
 
@@ -91,7 +96,6 @@ public class EditMapNodeController {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-        final double zoomLevel = 5.0;
         final double width = image.getWidth()/zoomLevel;
         final double height = image.getHeight()/zoomLevel;
         canvas.setPrefSize(width,height);
@@ -146,7 +150,6 @@ public class EditMapNodeController {
         drawNodeOnFloor();
 
 
-
         final ContextMenu contextMenu = new ContextMenu();
 
         final MenuItem createNodeMenuItem = new MenuItem("Create Node Here");
@@ -178,7 +181,6 @@ public class EditMapNodeController {
         });
 
         //contextMenu.show(map, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
-
     }
 
     /**
@@ -332,11 +334,9 @@ public class EditMapNodeController {
         nodeList.clear();
 
         List<String[]> nodeData = null;
-        List<String[]> edgeData = null;
 
         try {
             nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("L1Nodes.csv") : CSVManager.load(new File(fileName));
-            edgeData = CSVManager.load("L1Edges.csv");
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -352,7 +352,9 @@ public class EditMapNodeController {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
 
-                DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), nodeData, edgeData); //NOTE: now can specify CSV arguments
+                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
+                DatabaseAPI.getDatabaseAPI().createNodesTable();
+                DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
 
@@ -568,15 +570,19 @@ public class EditMapNodeController {
      * @author ZheCheng
      */
     public void centerNode(Circle c){
-        scroll.setVvalue(scroll.getVmax() * ((((c.getBoundsInParent().getMaxY() +
-                c.getBoundsInParent().getMinY()) / 2.0) - (0.5 * scroll.getViewportBounds().getHeight()))
-                / (scroll.getContent().getBoundsInLocal().getHeight() - (c.getBoundsInParent().getMaxY() +
-                c.getBoundsInParent().getMinY()) / 2.0)));
 
-        scroll.setHvalue(scroll.getHmax() * ((((c.getBoundsInParent().getMaxX() +
-                c.getBoundsInParent().getMinX()) / 2.0) - (0.5 * scroll.getViewportBounds().getWidth()))
-                / (scroll.getContent().getBoundsInLocal().getWidth() - (c.getBoundsInParent().getMaxX() +
-                c.getBoundsInParent().getMinX()) / 2.0)));
+        double h = scroll.getContent().getBoundsInLocal().getHeight();
+        double y = (c.getBoundsInParent().getMaxY() +
+                c.getBoundsInParent().getMinY()) / 2.0;
+        double v = scroll.getViewportBounds().getHeight();
+        scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
+
+        double w = scroll.getContent().getBoundsInLocal().getWidth();
+        double x = (c.getBoundsInParent().getMaxX() +
+                c.getBoundsInParent().getMinX()) / 2.0;
+        double hw = scroll.getViewportBounds().getWidth();
+        scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
+
     }
 
  /**
@@ -588,11 +594,9 @@ public class EditMapNodeController {
         nodeList.clear();
 
         List<String[]> nodeData = null;
-        List<String[]> edgeData = null;
 
         try {
             nodeData = (CSVManager.load("L1Nodes.csv"));
-            edgeData = CSVManager.load("L1Edges.csv");
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -608,7 +612,9 @@ public class EditMapNodeController {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
 
-                DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), nodeData, edgeData); //NOTE: now can specify CSV arguments
+                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
+                DatabaseAPI.getDatabaseAPI().createNodesTable();
+                DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
         errorMessageLabel.setText("");
@@ -628,5 +634,33 @@ public class EditMapNodeController {
         //FIXME: do better, at the same time, we can't actually do this in FXML
 
 
+        nodeTreeTable.setStyle("-fx-tree-table-color: #006DA3;");
+
+    }
+
+    /**
+     * Basic implementation of Zooming the map by changing the zoom level and reloading
+     * @param actionEvent the press of zoom in or zoom out
+     * @author KD
+     */
+    public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
+        JFXButton btn = (JFXButton) actionEvent.getSource();
+        if(btn == zoomInButton) {
+            if(zoomLevel > 1) {
+                zoomLevel--;
+            }
+        } else if (btn == zoomOutButton) {
+            if(zoomLevel < 8) {
+                zoomLevel++;
+            }
+        }
+        drawNodeOnFloor();
+        Image image = map.getImage();
+        double width = image.getWidth()/zoomLevel;
+        double height = image.getHeight()/zoomLevel;
+        canvas.setPrefSize(width,height);
+        map.setFitWidth(width);
+        map.setFitHeight(height);
+        map.setImage(image);
     }
 }

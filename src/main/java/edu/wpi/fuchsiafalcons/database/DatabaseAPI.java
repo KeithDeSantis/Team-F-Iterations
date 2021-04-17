@@ -269,11 +269,21 @@ public class DatabaseAPI {
     {
         //This here is the tricky part b/c of the formatting....
         for (String[] arr : data) {
-            final int x = Integer.parseInt(arr[1]);
-            final int y = Integer.parseInt(arr[2]);
+            final int x = Integer.parseInt(arr[1].trim());
+            final int y = Integer.parseInt(arr[2].trim());
             DatabaseAPI.getDatabaseAPI().addNode(arr[0], x, y, arr[3], arr[4], arr[5], arr[6], arr[7]);
         }
     }
+
+    public void createNodesTable() throws SQLException
+    {
+        final String sql = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+        createTable(ConnectionHandler.getConnection(), sql);
+    }
+
+
     /**
      * Used to drop a table
      * @param conn The SQL Connection
