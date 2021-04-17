@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 import edu.wpi.fuchsiafalcons.database.*;
 import org.apache.derby.iapi.db.Database;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 
 /**
@@ -351,7 +352,8 @@ public class EditMapNodeController {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
 
-                //DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
+                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
+                DatabaseAPI.getDatabaseAPI().createNodesTable();
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
@@ -610,7 +612,8 @@ public class EditMapNodeController {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
 
-                //DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
+                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
+                DatabaseAPI.getDatabaseAPI().createNodesTable();
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }

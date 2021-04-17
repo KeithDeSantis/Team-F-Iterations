@@ -269,8 +269,8 @@ public class DatabaseAPI {
     {
         //This here is the tricky part b/c of the formatting....
         for (String[] arr : data) {
-            final int x = Integer.parseInt(arr[1]);
-            final int y = Integer.parseInt(arr[2]);
+            final int x = Integer.parseInt(arr[1].trim());
+            final int y = Integer.parseInt(arr[2].trim());
             DatabaseAPI.getDatabaseAPI().addNode(arr[0], x, y, arr[3], arr[4], arr[5], arr[6], arr[7]);
         }
     }
