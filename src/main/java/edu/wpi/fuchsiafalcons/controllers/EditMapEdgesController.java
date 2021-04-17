@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
 import javafx.collections.FXCollections;
@@ -92,6 +93,7 @@ public class EditMapEdgesController {
 
         //FIXME: do better, hook into db
         try {
+            //DatabaseAPI.getDatabaseAPI().populateEdges();
             edgeEntryObservableList.addAll( CSVManager.load("L1Edges.csv").stream().map(line-> {
                 return new EdgeEntry(line[0], line[1], line[2]);
             }).collect(Collectors.toList()));
