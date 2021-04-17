@@ -2,6 +2,7 @@ package edu.wpi.fuchsiafalcons.utils;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -89,7 +90,8 @@ public class CSVManager {
         //Reads in all the vertices.
         String lineStr = null;
         while ((lineStr = fileReader.readLine()) != null) {
-            final String[] currLine = lineStr.split(",");
+            final String[] currLine = Arrays.stream(lineStr.split(",")).map(String::trim).toArray(String[]::new);
+
 
             //FIXME: VERIFY returns out of method.
             if (currLine.length != d.length)
@@ -136,7 +138,7 @@ public class CSVManager {
                 writer.write(line[i]);
 
                 if(i + 1 < line.length)
-                    writer.write(", ");
+                    writer.write(",");
                 else
                     writer.write("\n");
             }
