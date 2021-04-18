@@ -170,6 +170,11 @@ public class EditMapNodeController {
 
                     try {
                         openEditDialog(nodeEntry);
+                        if(nodeEntry.getNodeID().isEmpty() || nodeEntry.getXcoord().isEmpty() || nodeEntry.getYcoord().isEmpty() ||
+                                nodeEntry.getFloor().isEmpty() || nodeEntry.getBuilding().isEmpty() || nodeEntry.getNodeType().isEmpty() ||
+                                nodeEntry.getLongName().isEmpty() || nodeEntry.getShortName().isEmpty())
+                            return; //FIXME: Better error checking like in updateNodeEntry
+                        nodeList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
                         updateNodeEntry(nodeEntry);
                         nodeList.add(nodeEntry);
                     } catch (IOException | SQLException ioException) {
@@ -234,12 +239,12 @@ public class EditMapNodeController {
         NodeEntry newNode = new NodeEntry(); // create new node - KD
         openEditDialog(newNode); // allow editing of the new node - KD
 
-        updateNodeEntry(newNode);
         if(newNode.getNodeID().isEmpty() || newNode.getXcoord().isEmpty() || newNode.getYcoord().isEmpty() ||
                 newNode.getFloor().isEmpty() || newNode.getBuilding().isEmpty() || newNode.getNodeType().isEmpty() ||
                 newNode.getLongName().isEmpty() || newNode.getShortName().isEmpty())
             return; //FIXME: Better error checking like in updateNodeEntry
         nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
+        updateNodeEntry(newNode);
     }
 
     /**
