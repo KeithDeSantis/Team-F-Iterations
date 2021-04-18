@@ -1,0 +1,11 @@
+.scroll-pane .scroll-bar {
+    -fx-background-color: #1C77C3;
+}
+.scroll-pane .scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb,
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow,
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow{
+    -fx-background-color: #d1d1d1;
+}

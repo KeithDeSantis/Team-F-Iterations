@@ -22,11 +22,14 @@
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
             </Label>
             <HBox alignment="CENTER" prefHeight="419.0" prefWidth="940.0">
                <children>
-                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#selectNode" stylesheets="@../../../../stylesheets/NodeEditorTreeTableStyle.css" />
-                  <ScrollPane fx:id="scroll" prefHeight="442.0" prefWidth="521.0">
+                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#selectNode" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
+                  <ScrollPane fx:id="scroll" stylesheets="/stylesheets/NodeEditorScrollPaneStyle.css" prefHeight="442.0" prefWidth="521.0">
                      <content>
                         <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
                            <children>
@@ -95,12 +98,12 @@
                               <Font name="Tahoma" size="18.0" />
                            </font>
                         </Label>
-                        <JFXButton fx:id="zoomInButton" onAction="#handleZoom" style="-fx-background-color: #a7b1c2;" text="+">
+                        <JFXButton fx:id="zoomInButton" buttonType="RAISED" onAction="#handleZoom" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="+" textFill="WHITE">
                            <font>
                               <Font size="19.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="zoomOutButton" onAction="#handleZoom" style="-fx-background-color: #a7b1c2;" text="-">
+                        <JFXButton fx:id="zoomOutButton" buttonType="RAISED" onAction="#handleZoom" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="-" textFill="WHITE">
                            <font>
                               <Font size="19.0" />
                            </font>
