@@ -1,6 +1,8 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import edu.wpi.fuchsiafalcons.pathfinding.Edge;
 
 import java.sql.*;
 import java.lang.*;
@@ -24,8 +26,11 @@ public class DatabaseAPI {
         if (entryType.equals("node")) {
             query = "UPDATE " + tableName + " SET " + "node" + colName + "=(?) WHERE nodeid=(?)";
         }
-        else if (entryType.equals("edge")){
+        else if (entryType.equals("edge") && colName.equals("id")){
             query = "UPDATE " + tableName + " SET " + "edge" + colName + "=(?) WHERE edgeid=(?)";
+        }
+        else if (entryType.equals("edge")){
+            query = "UPDATE " + tableName + " SET " + colName + "=(?) WHERE edgeid=(?)";
         }
         return query;
     }
@@ -200,6 +205,25 @@ public class DatabaseAPI {
         }
 
         return updateSuccess;
+    }
+
+    public List<EdgeEntry> genEdgeEntries(Connection conn) throws SQLException{
+        List <EdgeEntry> edgeEntries = new ArrayList<>();
+        String sql = "SELECT * FROM L1Edges";
+        Statement stmt = conn.createStatement();
+        ResultSet rset = null;
+
+        rset = stmt.executeQuery(sql);
+        while (rset.next())
+        {
+            String edgeID = rset.getString(1);
+            String startNode = rset.getString(2);
+            String endNode = rset.getString(3);
+
+            EdgeEntry newEntry = new EdgeEntry(edgeID, startNode, endNode);
+            edgeEntries.add(newEntry);
+        }
+        return edgeEntries;
     }
 
     public List<NodeEntry> genNodeEntries(Connection conn) throws SQLException {
