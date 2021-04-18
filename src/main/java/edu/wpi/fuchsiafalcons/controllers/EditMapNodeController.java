@@ -112,6 +112,9 @@ public class EditMapNodeController {
        canvas.getTransforms().add(scale);
 
 
+//        map.setOnMouseMoved(e -> {
+//            System.out.println(((e.getSceneX() - scroll.getBoundsInParent().getMinX()) / scroll.getWidth()));
+//        });
         map.setOnScroll( e -> {
             if(e.isControlDown());
             {
@@ -119,39 +122,16 @@ public class EditMapNodeController {
 
                 final double nextScaleFactor = Math.max(0.1, Math.min(2, zoomLevel - e.getDeltaY() * 0.001));
 
-
-
-
-
-                double h = image.getHeight();//image.getHeight();//scrollGroup.getBoundsInLocal().getHeight();//image.getHeight() / zoomLevel;
-                double y = 680;// * nextScaleFactor / zoomLevel;
-                double v = scroll.getHeight();
-
-
                // scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
 
-                double w = image.getWidth();
-                double x = 1200;// * nextScaleFactor/ zoomLevel;// e.getX();//image.getWidth()/2.0;
-                double vx = scroll.getWidth();
 
-                System.out.println(scroll.getHmax() + " " + vx + " " + w + " @ " + zoomLevel + " -> " + (scroll.getHmax() * ((x - 0.5 * vx) / (w - vx))));
+                Point2D at = new Point2D(e.getX() * nextScaleFactor, e.getY() * nextScaleFactor);
 
-                //scroll.setHvalue(scroll.getHmax() * ((x - 0.5 * vx) / (w - vx)));
-               // scroll.setHvalue(scroll.getHmax() * ((x) / (w - vx)));
+                final double px = ((e.getSceneX() - scroll.getBoundsInParent().getMinX()) / scroll.getWidth());
+                final double py = ((e.getSceneY() - scroll.getBoundsInParent().getMinY()) / scroll.getHeight());
 
-//                scroll.layout();
-
-                Point2D at = new Point2D(zoomX * nextScaleFactor, zoomY * nextScaleFactor);
-
-                //Point2D localCoordinates = mapCenter();
-                //System.out.println(localCoordinates);
-                //Point2D inv = inverse(localCoordinates);
-                //System.out.println(inv);
-                System.out.println(scroll.getHvalue() + ", " + scroll.getVvalue());
-               // System.out.println("PERCENT: " + mapPercent(at));
-                Point2D inv2 = inverse(at, new Point2D(2.0, 2.0));
+                Point2D inv2 = inverse(at, new Point2D(1/px, 1/py));
                 System.out.println(inv2);
-
 
 
                 scroll.setVvalue(inv2.getY());
@@ -159,10 +139,6 @@ public class EditMapNodeController {
 
                 scroll.layout();
 
-                System.out.println("CENTER: " + mapCenter() + " @ " + zoomLevel);
-                System.out.println(scroll.getHvalue() + ", " + scroll.getVvalue());
-                //System.out.println("PERCENT: " + mapPercent(at));
-                System.out.println();
 
 
                 scale.setPivotX(0);
@@ -312,27 +288,9 @@ public class EditMapNodeController {
         return localCoordinates;
     }
 
-    private Point2D mapPercent(Point2D pt) {
-        final Bounds viewportBounds = scroll.getViewportBounds();
-        final Bounds contentBounds = scrollGroup.getBoundsInLocal();
 
-        final double hRel = scroll.getHvalue() / scroll.getHmax();
-        final double vRel = scroll.getVvalue() / scroll.getVmax();
-
-        final double deltaW = contentBounds.getWidth() - viewportBounds.getWidth();
-        final double deltaH = contentBounds.getHeight() - viewportBounds.getHeight();
-
-        final double rX = viewportBounds.getWidth() / (pt.getX() - Math.max(0, (deltaW) * hRel));
-        final double rY = viewportBounds.getHeight() / (pt.getY() - Math.max(0, (deltaH) * vRel));
-
-        //double x1 = Math.max(0, (deltaW) * hRel) + viewportBounds.getWidth() / 2;
-        //double y1 = Math.max(0, (deltaH) * vRel) + viewportBounds.getHeight() / 2;
-
-        return new Point2D(rX, rY);
-    }
 
     public Point2D inverse(Point2D pt, Point2D at) {
-        //System.out.println(localCoordinates);
 
         Point2D inverse = scrollGroup.localToParent(pt);//new Point2D(1200, 680));
 
@@ -341,27 +299,6 @@ public class EditMapNodeController {
 
         final double deltaW = contentBounds.getWidth() - viewportBounds.getWidth();
         final double deltaH = contentBounds.getHeight() - viewportBounds.getHeight();
-
-        System.out.println("VPB: " + viewportBounds);
-        System.out.println(contentBounds);
-        System.out.println("PT: " + inverse);
-
-        System.out.println("DW: " + deltaW);
-
-        final double tX = deltaW * scroll.getHvalue();
-        final double tY = deltaH * scroll.getVvalue();
-
-        final double bX = (deltaW * scroll.getHvalue()) + viewportBounds.getWidth();
-
-        System.out.println(tX + " - " + bX);
-
-
-
-        final double pX = (inverse.getX() + tX) / (viewportBounds.getWidth());
-        final double pY = (inverse.getY() + tY) / (viewportBounds.getHeight());
-
-        System.out.println(inverse.getX() + " + " +tX + " / " + viewportBounds.getWidth());
-        System.out.println(pX + ", " + pY);
 
         double hRel2 = (deltaW > 0) ? (inverse.getX() - viewportBounds.getWidth() / at.getX()) / deltaW : 0;
         double vRel2 = (deltaH > 0) ? (inverse.getY() - viewportBounds.getHeight() / at.getY()) / deltaH : 0;
