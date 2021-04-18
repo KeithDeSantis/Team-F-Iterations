@@ -1,6 +1,8 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import edu.wpi.fuchsiafalcons.pathfinding.Edge;
 
 import java.sql.*;
 import java.lang.*;
@@ -202,6 +204,25 @@ public class DatabaseAPI {
         return updateSuccess;
     }
 
+    public List<EdgeEntry> genEdgeEntries(Connection conn) throws SQLException{
+        List <EdgeEntry> edgeEntries = new ArrayList<>();
+        String sql = "SELECT * FROM L1Edges";
+        Statement stmt = conn.createStatement();
+        ResultSet rset = null;
+
+        rset = stmt.executeQuery(sql);
+        while (rset.next())
+        {
+            String edgeID = rset.getString(1);
+            String startNode = rset.getString(2);
+            String endNode = rset.getString(3);
+
+            EdgeEntry newEntry = new EdgeEntry(edgeID, startNode, endNode);
+            edgeEntries.add(newEntry);
+        }
+        return edgeEntries;
+    }
+
     public List<NodeEntry> genNodeEntries(Connection conn) throws SQLException {
         List<NodeEntry> nodeEntries = new ArrayList<>();
         String sql = "SELECT * FROM L1Nodes";
@@ -269,11 +290,21 @@ public class DatabaseAPI {
     {
         //This here is the tricky part b/c of the formatting....
         for (String[] arr : data) {
-            final int x = Integer.parseInt(arr[1]);
-            final int y = Integer.parseInt(arr[2]);
+            final int x = Integer.parseInt(arr[1].trim());
+            final int y = Integer.parseInt(arr[2].trim());
             DatabaseAPI.getDatabaseAPI().addNode(arr[0], x, y, arr[3], arr[4], arr[5], arr[6], arr[7]);
         }
     }
+
+    public void createNodesTable() throws SQLException
+    {
+        final String sql = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+        createTable(ConnectionHandler.getConnection(), sql);
+    }
+
+
     /**
      * Used to drop a table
      * @param conn The SQL Connection

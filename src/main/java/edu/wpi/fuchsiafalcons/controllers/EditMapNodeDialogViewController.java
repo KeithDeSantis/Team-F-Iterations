@@ -1,11 +1,18 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -22,6 +29,7 @@ public class EditMapNodeDialogViewController {
     @FXML private TextField nodeTypeField;
     @FXML private TextField longNameField;
     @FXML private TextField shortNameField;
+    @FXML private JFXButton backButton;
     private NodeEntry node = new NodeEntry(); // This will be the node that we pass in to edit - KD
     private Stage dialogStage; // This will be so we have access to our stage - KD
     public boolean okClicked; // Used to tell if edit was went through with - KD
@@ -85,7 +93,7 @@ public class EditMapNodeDialogViewController {
         if(nodeIDField.getText().length() <= 0) {
             nodeIDField.setStyle("-fx-background-color:  #ffbab8");
         }
-        if(floorField.getText().length() <= 0) {
+        if(!isProperFloor(floorField.getText())) {
             floorField.setStyle("-fx-background-color:  #ffbab8");
         }
         if(buildingField.getText().length() <= 0) {
@@ -101,22 +109,23 @@ public class EditMapNodeDialogViewController {
             shortNameField.setStyle("-fx-background-color:  #ffbab8");
         }
         try {
-            Integer.parseInt(xCoordField.getText()); }
+            xCoordValid = Integer.parseInt(xCoordField.getText()) >= 0; } // make sure coordinates are integers and not negative
         catch(NumberFormatException e) {
-            xCoordField.setStyle("-fx-background-color:  #ffbab8");
             xCoordValid = false;
         }
         try {
-            Integer.parseInt(yCoordField.getText());
+            yCoordValid = Integer.parseInt(yCoordField.getText()) >= 0;
         } catch (NumberFormatException e){
-            yCoordField.setStyle("-fx-background-color: #ffbab8");
             yCoordValid = false;
         }
+
+        if(!xCoordValid) {xCoordField.setStyle("-fx-background-color:  #ffbab8");}
+        if(!yCoordValid) {yCoordField.setStyle("-fx-background-color: #ffbab8");}
 
         return nodeIDField.getText().length() > 0 &&
                 xCoordValid &&
                 yCoordValid &&
-                floorField.getText().length() > 0 &&
+                isProperFloor(floorField.getText()) &&
                 buildingField.getText().length() > 0 &&
                 nodeTypeField.getText().length() > 0 &&
                 longNameField.getText().length() > 0 &&
@@ -147,7 +156,38 @@ public class EditMapNodeDialogViewController {
     public void setDialogStage (Stage theStage) { dialogStage = theStage; }
 
 
+    /**
+     * Checks that the inputted floor is a valid floor
+     * @param floor the inputted floor
+     * @author KD
+     */
+    public boolean isProperFloor (String floor) {
+        boolean is1 = floor.equals("1");
+        boolean is2 = floor.equals("2");
+        boolean is3 = floor.equals("3");
+        boolean isL1 = floor.equals("L1");
+        boolean isL2 = floor.equals("L2");
+        boolean isG = floor.equals("G");
+        return is1 || is2 || is3 || isL1 || isL2 || isG;
+    }
 
 
+    public void handleBackClicked() {
+         Stage helpStage = (Stage) backButton.getScene().getWindow();
+         helpStage.close();
+    }
 
+    public void openHelpMenu() throws IOException {
+        FXMLLoader dialogLoader = new FXMLLoader();
+        dialogLoader.setLocation(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/NodeEditHelpView.fxml")); // load in Edit Dialog - KD
+        Stage helpStage = new Stage();
+        Parent root = dialogLoader.load();
+        EditMapNodeDialogViewController dialogController = dialogLoader.getController(); // get edit dialog's controller - KD
+        helpStage.setTitle("Edit Node");
+        helpStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
+        helpStage.initOwner(dialogStage);
+        helpStage.setScene(new Scene(root)); // set scene - KD
+
+        helpStage.showAndWait(); // open pop up - KD
+    }
 }

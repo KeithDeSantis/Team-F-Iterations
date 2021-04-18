@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import java.io.IOException;
 import static org.testfx.api.FxAssert.verifyThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
 
@@ -30,11 +31,11 @@ public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
         clickOn("#nodeIDField");
         write("Test");
         clickOn("#xCoordField");
-        write(".");
+        write("1");
         clickOn("#yCoordField");
-        write(".");
+        write("2");
         clickOn("#floorField");
-        write(".");
+        write("2");
         clickOn("#buildingField");
         write(".");
         clickOn("#nodeTypeField");
@@ -45,6 +46,20 @@ public class EditMapNodeDialogViewControllerTest extends ApplicationTest {
         write(".");
         clickOn("OK");
         verifyThat("Test", Node::isVisible);
+    }
+
+    @Test
+    public void testIsProperFloor() {
+        EditMapNodeDialogViewController dialogViewController = new EditMapNodeDialogViewController();
+        assertTrue(dialogViewController.isProperFloor("1"));
+        assertTrue(dialogViewController.isProperFloor("2"));
+        assertTrue(dialogViewController.isProperFloor("3"));
+        assertTrue(dialogViewController.isProperFloor("L1"));
+        assertTrue(dialogViewController.isProperFloor("L2"));
+        assertTrue(dialogViewController.isProperFloor("G"));
+        assertFalse(dialogViewController.isProperFloor("4"));
+        assertFalse(dialogViewController.isProperFloor("test"));
+        assertFalse(dialogViewController.isProperFloor(""));
     }
 
 }

@@ -32,6 +32,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage primaryStage) throws IOException, NoSuchFieldException, IllegalAccessException {
+        System.gc();
 
         final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapNodeView.fxml"));
         Parent root = loader.load();
@@ -60,14 +61,6 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         verifyThat("Welcome to the Navigation Page", Node::isVisible);
     }
 
-    @Test
-    public void testNewNodeButton() {
-        verifyThat("New", Node::isVisible);
-        clickOn("New");
-       // verifyThat("Ok", Node::isVisible);
-        //clickOn("Ok");
-        //verifyThat("Ok", Node::isVisible);
-    }
 
     @Test
     public void testNewNodeFeature() {
@@ -89,7 +82,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("#yCoordField");
         write("200");
         clickOn("#floorField");
-        write("1");
+        write("bad");
         clickOn("#buildingField");
         write("TestBuilding");
         clickOn("#nodeTypeField");
@@ -99,52 +92,121 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("#shortNameField");
         write("Testing1");
         clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#floorField");
+        write("1");
+        clickOn("OK");
 
         query = this.nodeList.stream().filter(node ->
             node.getNodeID().equals("TestNode") && node.getShortName().equals("Testing1")
         ).collect(Collectors.toList());
-        //verifyThat("TestNode", Node::isVisible);
-        //verifyThat("Testing1", Node::isVisible);
-
+        verifyThat("#TestNode", Node::isVisible);
         assertEquals(pre + 1, query.size());
-        clickOn("Load From File/Reset Database");
+        clickOn("Reset Database");
     }
 
     @Test
     public void testEditNodeFeature() {
         verifyThat("Edit", Node::isVisible);
-        clickOn("Load From File/Reset Database");
+        clickOn("Reset Database");
+        clickOn("Edit");
         clickOn("CCONF001L1");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
-        clickOn("#nodeIDField");
-        press(KeyCode.CONTROL, KeyCode.A);
-        release(KeyCode.CONTROL, KeyCode.A);
-        type(KeyCode.BACK_SPACE);
-        write("Test");
-        clickOn("OK");
-        verifyThat("Test", Node::isVisible);
-        clickOn("Load From File/Reset Database");
-    }
-
-    @Test
-    public void testNewNodeNotFilledOut() {
-        verifyThat("New", Node::isVisible);
-        clickOn("New");
-        clickOn("#nodeIDField");
-        write("Test");
+        doubleClickOn("#floorField");
+        write("f");
         clickOn("OK");
         verifyThat("OK", Node::isVisible);
+        doubleClickOn("#floorField");
+        write("G");
+        clickOn("OK");
+        verifyThat("#CCONF001L1", Node::isVisible);
+        verifyThat("G", Node::isVisible); // Testing changing of Floor
+
+        clickOn("CCONF001L1");
+        clickOn("Edit");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#xCoordField");
+        write("-1");
+        doubleClickOn("#yCoordField");
+        write("-1");
+        clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#xCoordField");
+        write("0");
+        doubleClickOn("#yCoordField");
+        write("0");
+        clickOn("OK");
+        verifyThat("#CCONF001L1", Node::isVisible); // Testing changing position
+
+        clickOn("CCONF001L1");
+        clickOn("Edit");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#nodeIDField");
+        write("testID");
+        clickOn("OK");
+        verifyThat("#testID", Node::isVisible);
+        verifyThat("testID", Node::isVisible);
+        clickOn("Reset Database");
     }
+
 
     @Test
     public void testSaveToFileDisable() {
         verifyThat("Save to File", Node::isVisible);
         clickOn("#filenameField");
         verifyThat("Save to File", Node::isDisable);
-        write("Test");
-        verifyThat("Save to File", Node::isDisable);
     }
 
+    @Test
+    public void testDeleteNodeOnMap() {
+        verifyThat("Reset Database", Node::isVisible);
+        clickOn("Reset Database");
+        verifyThat("CCONF001L1", Node::isVisible);
+        clickOn("CCONF001L1");
+        verifyThat("#CCONF001L1", Node::isVisible);
+        clickOn("Delete");
+        // Could add a more thorough test though unsure how - KD and ZS
+    }
+
+    @Test
+    public void testSwitchFloors() {
+        verifyThat("1", Node::isVisible);
+        clickOn("#floorComboBox");
+        verifyThat("1", Node::isVisible);
+        verifyThat("2", Node::isVisible);
+        verifyThat("3", Node::isVisible);
+        verifyThat("L1", Node::isVisible);
+        verifyThat("L2", Node::isVisible);
+        verifyThat("G", Node::isVisible);
+        clickOn("3");
+        verifyThat("3", Node::isVisible);
+    }
+
+    @Test
+    public void testClickToMakeNode() {
+        verifyThat("#deleteButton", Node::isVisible);
+        rightClickOn("#map");
+        clickOn("Create Node Here");
+        verifyThat("OK", Node::isVisible);
+        clickOn("#nodeIDField");
+        write("testClicking");
+        doubleClickOn("#xCoordField"); // Change to test better (right now it can't accept doubles cause of db) - KD
+        write("1500");
+        doubleClickOn("#yCoordField");
+        write("1500");
+        verifyThat("1", Node::isVisible);
+        clickOn("#buildingField");
+        write(".");
+        clickOn("#nodeTypeField");
+        write(".");
+        clickOn("#longNameField");
+        write(".");
+        clickOn("#shortNameField");
+        write(".");
+        clickOn("OK");
+        verifyThat("#testClicking", Node::isVisible);
+        clickOn("Reset Database");
+    }
 }
 
