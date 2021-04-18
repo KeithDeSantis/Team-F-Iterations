@@ -26,8 +26,11 @@ public class DatabaseAPI {
         if (entryType.equals("node")) {
             query = "UPDATE " + tableName + " SET " + "node" + colName + "=(?) WHERE nodeid=(?)";
         }
-        else if (entryType.equals("edge")){
+        else if (entryType.equals("edge") && colName.equals("id")){
             query = "UPDATE " + tableName + " SET " + "edge" + colName + "=(?) WHERE edgeid=(?)";
+        }
+        else if (entryType.equals("edge")){
+            query = "UPDATE " + tableName + " SET " + colName + "=(?) WHERE edgeid=(?)";
         }
         return query;
     }
