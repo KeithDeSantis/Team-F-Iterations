@@ -149,39 +149,9 @@ public class AStarDemoController implements Initializable {
      */
     @FXML
     public void handlePathfindButtonClicked(ActionEvent actionEvent) {
+        clearPath();
+        updatePath();
 
-        final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
-        final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
-
-       //canvas.getChildren().clear();
-
-        canvas.getChildren().removeIf(x -> {
-            return x instanceof Line;
-        });
-
-        if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
-        {
-            final Path path = this.graph.getPath(startVertex, endVertex);
-            if(path != null)
-            {
-                final List<Vertex> pathData = path.asList();
-                for (int i = 0; i < pathData.size() - 1; i++)
-                {
-                    final Vertex start = pathData.get(i);
-                    final Vertex end = pathData.get(i + 1);
-
-                    final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
-                    line.setStrokeWidth(2);
-                    line.setStroke(Color.ORANGE);
-
-                    canvas.getChildren().add(line);
-                }
-            }
-        }
-        else
-        {
-            //FIXME: INFORM USER OF ERROR
-        }
 
     }
 
@@ -235,12 +205,69 @@ public class AStarDemoController implements Initializable {
 
     }
 
-    public void checkInput() {
+    /**
+     * This is used to clear the pathfinding drawn path.
+     * @author Alex Friedman (ahf)
+     */
+    private void clearPath()
+    {
+        canvas.getChildren().removeIf(x -> {
+            return x instanceof Line;
+        });
+    }
+
+    /**
+     * This is used to re-render the A* path
+     * @author Alex Friedman (ahf)
+     */
+    private boolean updatePath()
+    {
+        final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
+        final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
+
+        if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
+        {
+            final Path path = this.graph.getPath(startVertex, endVertex);
+            if(path != null)
+            {
+                final List<Vertex> pathData = path.asList();
+                for (int i = 0; i < pathData.size() - 1; i++)
+                {
+                    final Vertex start = pathData.get(i);
+                    final Vertex end = pathData.get(i + 1);
+
+                    final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
+                    line.setStrokeWidth(2);
+                    line.setStroke(Color.ORANGE);
+
+                    canvas.getChildren().add(line);
+                }
+                return true;
+            }
+        }
+        else
+        {
+            //FIXME: INFORM USER OF ERROR
+        }
+
+        return false; //We had an error
+    }
+
+    /**
+     * Used to check if our input is valid to run the pathfinding algorithm or not
+     * @author Alex Friedman (ahf)
+     */
+    private void checkInput() {
         if (startComboBox.getValue() == null ||
                 endComboBox.getValue() == null){
             pathfindButton.setDisable(true);
+            clearPath();
+
         }else{
             pathfindButton.setDisable(false);
+
+            clearPath();
+            updatePath();
         }
     }
 }
