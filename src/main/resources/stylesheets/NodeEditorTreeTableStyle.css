@@ -1,0 +1,4 @@
+.tree-table-view{
+    -fx-tree-table-color: #8adaff;
+    -fx-tree-table-rippler-color : rgba(0, 50, 100, 0.9);
+}

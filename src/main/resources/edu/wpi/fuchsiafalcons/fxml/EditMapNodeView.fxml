@@ -25,7 +25,7 @@
             </Label>
             <HBox alignment="CENTER" prefHeight="419.0" prefWidth="940.0">
                <children>
-                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#selectNode" />
+                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#selectNode" stylesheets="@../../../../stylesheets/NodeEditorTreeTableStyle.css" />
                   <ScrollPane fx:id="scroll" prefHeight="442.0" prefWidth="521.0">
                      <content>
                         <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
