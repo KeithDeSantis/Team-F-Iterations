@@ -27,7 +27,7 @@
             <HBox alignment="CENTER" prefHeight="419.0" prefWidth="940.0">
                <children>
                   <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#selectNode" />
-                  <ScrollPane fx:id="scroll" onScroll="#handleOnScroll" onZoom="#handleOnZoom" prefHeight="442.0" prefWidth="521.0">
+                  <ScrollPane fx:id="scroll" prefHeight="442.0" prefWidth="521.0">
                      <content>
                         <Group fx:id="scrollGroup">
                            <children>
@@ -35,7 +35,7 @@
                                  <children>
                                     <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
                                        <children>
-                                          <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" onContextMenuRequested="#handleMapContextMenu" pickOnBounds="true" preserveRatio="true" />
+                                          <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" onContextMenuRequested="#handleMapContextMenu" onMouseClicked="#handleZoomClicked" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                     </Pane>
                                  </children>
