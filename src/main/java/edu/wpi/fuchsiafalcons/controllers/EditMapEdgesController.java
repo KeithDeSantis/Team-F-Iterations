@@ -159,10 +159,10 @@ public class EditMapEdgesController {
         int index = edgeTable.getSelectionModel().getSelectedIndex();
 
         // Check for a valid index (-1 = no selection)
-        if(index >= 0 && index <= edgeEntryObservableList.size()){
+        if(index >= 0 && index <= edgeEntryObservableList.size() - 1){
             // Remove the edge, this will update the TableView automatically
-            edgeEntryObservableList.remove(index);
             DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntryObservableList.get(index).getEdgeID());
+            edgeEntryObservableList.remove(index);
         } else {
             // Create an alert to inform the user there is no edge selected
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -180,7 +180,7 @@ public class EditMapEdgesController {
      * @author Karen Hou
      */
     @FXML
-    private void handleEditEdge() throws IOException {
+    private void handleEditEdge() throws IOException, SQLException {
         int index = edgeTable.getSelectionModel().getSelectedIndex();
         EdgeEntry selectedEdge = edgeEntryObservableList.get(index);
         if(selectedEdge != null){
@@ -249,7 +249,7 @@ public class EditMapEdgesController {
 */
 
     /**
-     * Handles pressing of "HOME" button, replaces handleButtonPushed
+     * Handles pressing of "HOME" button, replaces handleButtonPushed to remove some excess lines
      * @throws IOException
      * @author Leo Morris
      */
