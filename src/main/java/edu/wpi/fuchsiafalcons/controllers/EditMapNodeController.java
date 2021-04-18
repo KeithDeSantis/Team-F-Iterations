@@ -112,20 +112,27 @@ public class EditMapNodeController {
 
                 final double nextScaleFactor = Math.max(1, Math.min(10, zoomLevel - e.getDeltaY() * 0.01));
 
-                final double W = map.getImage().getWidth();
-                final double H = map.getImage().getHeight();
+                final double cX = e.getX();
+                final double cY = e.getY();
 
-                final double cX = e.getX() * zoomLevel;
-                final double cY = e.getY() * zoomLevel;
-
-                final double nX = e.getX() * nextScaleFactor;
-                final double nY = e.getY() * nextScaleFactor;
+                final double nX = e.getX() * zoomLevel / nextScaleFactor;
+                final double nY = e.getY() * zoomLevel / nextScaleFactor;
 
                 final double dX = nX - cX;
                 final double dY = nY - cY;
 
-                if(e.getDeltaY() < 0);
+                if(e.getDeltaY() > 0);
                 {
+                    zoomLevel = nextScaleFactor;
+                    updateZoom();
+
+                    double iW = scroll.getContent().getBoundsInLocal().getWidth();
+                    double iH = scroll.getContent().getBoundsInLocal().getHeight();
+
+                    scroll.setHvalue(nX / iW);
+                    scroll.setVvalue(nY / iH);
+                    System.out.println(nX + " " + nY + " " + iW + " " + iH);
+                    /*
                     final double w = scroll.getWidth();
                   // System.out.println(w);
                     final double p = w/(W * nextScaleFactor * 2.0);
@@ -146,13 +153,9 @@ public class EditMapNodeController {
 
                     scroll.setHvalue((cX/W) -  lerpX);
                     scroll.setVvalue(cY/H);
+
+                     */
                 }
-
-                //canvas.setTranslateX(canvas.getTranslateX() - dX);
-                //canvas.setTranslateY(canvas.getTranslateY() - dY);
-
-                //scroll.setHvalue(nhV);
-                //scroll.setVvalue(nvV);
             }
         });
 
