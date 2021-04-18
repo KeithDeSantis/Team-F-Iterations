@@ -45,6 +45,6 @@
       </ButtonBar>
       <Label fx:id="CSVErrorLabel" layoutX="655.0" layoutY="545.0" text="CSV Error Label" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="655.0" />
       <JFXButton fx:id="goBack" layoutX="14.0" layoutY="14.0" onAction="#handleHomeButton" ripplerFill="BLACK" style="-fx-background-color: #cbcbcb;" text="HOME" textAlignment="CENTER" />
-      <JFXTextField fx:id="CSVFile" layoutX="290.0" layoutY="480.0" prefHeight="31.0" prefWidth="354.0" promptText="CSV File Location" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="290.0" />
+      <JFXTextField fx:id="CSVFile" layoutX="290.0" layoutY="480.0" onKeyReleased="#handleFileNameType" prefHeight="31.0" prefWidth="354.0" promptText="CSV File Location" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="290.0" />
    </children>
 </AnchorPane>

@@ -366,7 +366,7 @@ public class EditMapEdgesController {
      * Loads in the CSV file specified in the CSVFile TextField by the user
      * Written with code from KD and AHF
      *
-     * @param actionEvent Pressing the LOad CSV Button
+     * @param actionEvent Pressing the Load CSV Button
      * @author Leo Morris
      */
     public void handleLoadButtonClicked(ActionEvent actionEvent) {
