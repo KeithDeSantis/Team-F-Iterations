@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class AStarDemoControllerTest extends ApplicationTest {
 
+
     @Override
     public void start(Stage primaryStage) throws IOException {
 
@@ -28,6 +29,7 @@ public class AStarDemoControllerTest extends ApplicationTest {
         clickOn("X");
         verifyThat("Welcome to the Navigation Page", Node::isVisible);
     }
+
 
     @Test
     public void testComboBox() {
@@ -55,6 +57,8 @@ public class AStarDemoControllerTest extends ApplicationTest {
         verifyThat("Go", Node::isVisible);
         clickOn("Go");
     }
+
+
 
 }
 

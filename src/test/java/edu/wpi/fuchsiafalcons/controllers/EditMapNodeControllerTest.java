@@ -108,7 +108,6 @@ public class EditMapNodeControllerTest extends ApplicationTest {
     @Test
     public void testEditNodeFeature() {
         verifyThat("Edit", Node::isVisible);
-        clickOn("Reset Database");
         clickOn("Edit");
         clickOn("CCONF001L1");
         clickOn("Edit");
@@ -128,6 +127,11 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("OK");
         verifyThat("#CCONF001L1", Node::isVisible);
         verifyThat("G", Node::isVisible); // Testing changing of Floor
+        clickOn("Reset Database");
+    }
+
+    @Test
+    public void testEditValidity() {
 
         clickOn("CCONF001L1");
         clickOn("Edit");
