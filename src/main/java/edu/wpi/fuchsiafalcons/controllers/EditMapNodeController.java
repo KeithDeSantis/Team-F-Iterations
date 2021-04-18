@@ -352,8 +352,11 @@ public class EditMapNodeController {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
 
+                final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                        "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                        "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
-                DatabaseAPI.getDatabaseAPI().createNodesTable();
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable);
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
@@ -612,8 +615,11 @@ public class EditMapNodeController {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).collect(Collectors.toList()));
 
+                final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                        "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                        "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
-                DatabaseAPI.getDatabaseAPI().createNodesTable();
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable);
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }

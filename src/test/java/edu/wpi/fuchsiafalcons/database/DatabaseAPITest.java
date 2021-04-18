@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
 import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
@@ -7,8 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-
-import javax.swing.plaf.nimbus.State;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,9 +17,6 @@ import java.sql.*;
 import java.util.List;
 
 class DatabaseAPITest {
-    //private DatabaseAPI api;
-  //  private ConnectionHandler connHandler = new ConnectionHandler();
-//    private Connection connection = connHandler.main(false);
 
     @BeforeEach
     public void setUp() throws Exception
@@ -45,7 +41,7 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("test"));
     }
 
-
+    @Test
     @DisplayName("Test for making sure can't add duplicate node")
     public void testAddDuplicate() throws SQLException
     {
@@ -70,13 +66,10 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("add dulplicate edge")
-    public void addDuplicateEdge() throws SQLException{
-        assertThrows(SQLException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
-                DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
-            }
+    public void addDuplicateEdge() {
+        assertThrows(SQLException.class, () -> {
+            DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
+            DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
         });
     }
 
@@ -89,7 +82,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test build update query")
-    public void testBuildUpdateQuery() throws SQLException{
+    public void testBuildUpdateQuery() {
         String expected = "UPDATE L1Nodes SET nodeid=(?) WHERE nodeid=(?)";
         assertEquals(expected, DatabaseAPI.getDatabaseAPI().buildUpdateQuery("L1Nodes", "id", "node"));
     }
@@ -97,12 +90,8 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test incorrect update query build")
     public void testFaultyUpdateQuery() throws NullPointerException{
-        assertThrows(NullPointerException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().buildUpdateQuery(null, null, null);
-            }
-        });
+        assertThrows(NullPointerException.class, () ->
+                DatabaseAPI.getDatabaseAPI().buildUpdateQuery(null, null, null));
     }
 
     @Test
@@ -115,13 +104,13 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test dropping non-existent table")
-    public void testDropBadTable() throws SQLException{
+    public void testDropBadTable() {
         assertFalse(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "test-table"));
     }
 
     @Test
     @DisplayName("test dropping valid table")
-    public void testDropValidTable() throws SQLException{
+    public void testDropValidTable() {
         assertTrue(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges"));
     }
 
@@ -163,14 +152,9 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test invalid table creation")
-    public void testInvalidTableCreation() throws SQLException{
+    public void testInvalidTableCreation() {
         String sql = "invalid query here";
-        assertThrows(SQLException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
-            }
-        });
+        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql));
     }
 
     @Test
@@ -179,7 +163,7 @@ class DatabaseAPITest {
         NodeEntry entry = new NodeEntry("test", "1", "1", "f", "b", "t", "l", "s");
         ArrayList<NodeEntry> expected = new ArrayList<>();
         expected.add(entry);
-        String sql = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+        final String sql = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
                 "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
                 "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
         DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Nodes");
@@ -187,6 +171,21 @@ class DatabaseAPITest {
         DatabaseAPI.getDatabaseAPI().addNode("test", 1, 1, "f", "b", "t", "l", "s");
         List<NodeEntry> actual = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
         assertEquals(expected.get(0).getNodeID(), actual.get(0).getNodeID());
+    }
+
+    @Test
+    @DisplayName("test generate edge entry objects")
+    public void testGenEdgeEntries() throws SQLException{
+        EdgeEntry entry = new EdgeEntry("testID", "start", "end");
+        ArrayList<EdgeEntry> expected = new ArrayList<>();
+        expected.add(entry);
+        final String sql = "CREATE TABLE L1Edges(edgeID varchar(200), " +
+                "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
+        DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges");
+        DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
+        DatabaseAPI.getDatabaseAPI().addEdge("testID", "start", "end");
+        List <EdgeEntry> actual = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+        assertEquals(expected.get(0).getEdgeID(), actual.get(0).getEdgeID());
     }
 
 }
