@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
@@ -28,11 +29,19 @@
                   <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#selectNode" />
                   <ScrollPane fx:id="scroll" onScroll="#handleOnScroll" onZoom="#handleOnZoom" prefHeight="442.0" prefWidth="521.0">
                      <content>
-                        <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
+                        <Group fx:id="scrollGroup">
                            <children>
-                              <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" onContextMenuRequested="#handleMapContextMenu" pickOnBounds="true" preserveRatio="true" />
+                              <Group fx:id="innerGroup">
+                                 <children>
+                                    <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
+                                       <children>
+                                          <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" onContextMenuRequested="#handleMapContextMenu" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                    </Pane>
+                                 </children>
+                              </Group>
                            </children>
-                        </Pane>
+                        </Group>
                      </content>
                   </ScrollPane>
                   <VBox alignment="CENTER" prefHeight="427.0" prefWidth="207.0" spacing="20.0">
