@@ -170,13 +170,9 @@ public class EditMapNodeController {
 
                     try {
                         openEditDialog(nodeEntry);
-                        if(nodeEntry.getNodeID().isEmpty() || nodeEntry.getXcoord().isEmpty() || nodeEntry.getYcoord().isEmpty() ||
-                                nodeEntry.getFloor().isEmpty() || nodeEntry.getBuilding().isEmpty() || nodeEntry.getNodeType().isEmpty() ||
-                                nodeEntry.getLongName().isEmpty() || nodeEntry.getShortName().isEmpty())
-                            return; //FIXME: Better error checking like in updateNodeEntry
+                        if(!checkNodeEntryNotEmpty(nodeEntry)) return;
                         nodeList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
                         updateNodeEntry(nodeEntry);
-                        nodeList.add(nodeEntry);
                     } catch (IOException | SQLException ioException) {
                         ioException.printStackTrace();
                     }
@@ -238,13 +234,21 @@ public class EditMapNodeController {
     private void handleNewNode() throws IOException, SQLException {
         NodeEntry newNode = new NodeEntry(); // create new node - KD
         openEditDialog(newNode); // allow editing of the new node - KD
-
-        if(newNode.getNodeID().isEmpty() || newNode.getXcoord().isEmpty() || newNode.getYcoord().isEmpty() ||
-                newNode.getFloor().isEmpty() || newNode.getBuilding().isEmpty() || newNode.getNodeType().isEmpty() ||
-                newNode.getLongName().isEmpty() || newNode.getShortName().isEmpty())
-            return; //FIXME: Better error checking like in updateNodeEntry
+        if(!checkNodeEntryNotEmpty(newNode)) return;
         nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
         updateNodeEntry(newNode);
+    }
+
+    /**
+     * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
+     * @param nodeEntry the node entry
+     * @return true if the node has no empty fields
+     * @author KD
+     */
+    public boolean checkNodeEntryNotEmpty(NodeEntry nodeEntry) {
+        return!nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXcoord().isEmpty() && !nodeEntry.getYcoord().isEmpty() &&
+                !nodeEntry.getFloor().isEmpty() && !nodeEntry.getBuilding().isEmpty() && !nodeEntry.getNodeType().isEmpty() &&
+                !nodeEntry.getLongName().isEmpty() && !nodeEntry.getShortName().isEmpty();
     }
 
     /**
@@ -253,10 +257,8 @@ public class EditMapNodeController {
      */
     private void updateNodeEntry(NodeEntry nodeEntry) throws SQLException {
 
-        if(nodeEntry.getNodeID().isEmpty() || nodeEntry.getXcoord().isEmpty() || nodeEntry.getYcoord().isEmpty() ||
-                nodeEntry.getFloor().isEmpty() || nodeEntry.getBuilding().isEmpty() || nodeEntry.getNodeType().isEmpty() ||
-                nodeEntry.getLongName().isEmpty() || nodeEntry.getShortName().isEmpty())
-            return; //FIXME: DO BETTER ERROR CHECKING
+        if(!checkNodeEntryNotEmpty(nodeEntry))
+            return;
 
         String nodeID = nodeEntry.getNodeID();
         int xCoord = Integer.parseInt(nodeEntry.getXcoord());
@@ -309,6 +311,7 @@ public class EditMapNodeController {
         EditMapNodeDialogViewController dialogController = dialogLoader.getController(); // get edit dialog's controller - KD
         dialogController.setDialogStage(dialogStage); // set the stage attribute - KD
         dialogController.setTheNode(editedNode); // inject the node attribute so that specific instance is the one edited - KD
+        dialogController.setNodeList(nodeList);
         dialogStage.setTitle("Edit Node");
         dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
         dialogStage.initOwner((Stage) goBack.getScene().getWindow());

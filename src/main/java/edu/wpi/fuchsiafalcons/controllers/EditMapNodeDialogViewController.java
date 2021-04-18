@@ -2,9 +2,11 @@ package edu.wpi.fuchsiafalcons.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -44,6 +46,7 @@ public class EditMapNodeDialogViewController {
     private NodeEntry node = new NodeEntry(); // This will be the node that we pass in to edit - KD
     private Stage dialogStage; // This will be so we have access to our stage - KD
     public boolean okClicked; // Used to tell if edit was went through with - KD
+    private ObservableList<NodeEntry> nodeList;
 
 
     public EditMapNodeDialogViewController() {}
@@ -166,6 +169,7 @@ public class EditMapNodeDialogViewController {
      */
     public void setDialogStage (Stage theStage) { dialogStage = theStage; }
 
+    public void setNodeList(ObservableList<NodeEntry> nodeList) { this.nodeList = nodeList; }
 
     /**
      * Checks that the inputted floor is a valid floor
@@ -234,5 +238,17 @@ public class EditMapNodeDialogViewController {
      */
     public void changeHelpLabel(String label) {
         helpText.setText(label);
+    }
+
+    /**
+     * Helper for isFilledOut() that ensures the nodeID given by the users isn't a duplicate to one
+     * that already exists.
+     * @param nodeID the nodeID given by the user
+     * @return true if the ID is unique
+     * @author KD
+     */
+    public boolean isUniqueNodeID(String nodeID) {
+        for(NodeEntry n : nodeList) { if(n.getNodeID().equals(nodeID)) return false; }
+        return true;
     }
 }
