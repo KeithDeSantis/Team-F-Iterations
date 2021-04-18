@@ -125,12 +125,12 @@ public class EditMapNodeController {
                // scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
 
 
-                Point2D at = new Point2D(e.getX() * nextScaleFactor, e.getY() * nextScaleFactor);
+                Point2D at = new Point2D(zoomX * nextScaleFactor, zoomY * nextScaleFactor);
 
                 final double px = ((e.getSceneX() - scroll.getBoundsInParent().getMinX()) / scroll.getWidth());
                 final double py = ((e.getSceneY() - scroll.getBoundsInParent().getMinY()) / scroll.getHeight());
 
-                Point2D inv2 = inverse(at, new Point2D(1/px, 1/py));
+                Point2D inv2 = inverse(at, new Point2D(2.0, 2.0));//new Point2D(1/px, 1/py));
                 System.out.println(inv2);
 
 
