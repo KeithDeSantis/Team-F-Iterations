@@ -36,13 +36,13 @@ public class AStarDemoControllerTest extends ApplicationTest {
         verifyThat("#startComboBox", Node::isVisible);
         clickOn("#startComboBox");
         sleep(100);
-        verifyThat("DHALL01202", Node::isVisible);
-        clickOn("DHALL01202");
+        verifyThat("CLABS003L1", Node::isVisible);
+        clickOn("CLABS003L1");
         verifyThat("#endComboBox", Node::isVisible);
         clickOn("#endComboBox");
         sleep(100);
-        verifyThat("DHALL03502", Node::isVisible);
-        clickOn("DHALL03502");
+        verifyThat("CSERV001L1", Node::isVisible);
+        clickOn("CSERV001L1");
     }
 
     @Test

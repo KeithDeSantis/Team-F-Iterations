@@ -1,5 +1,9 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import edu.wpi.fuchsiafalcons.database.ConnectionHandler;
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
+import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.pathfinding.Graph;
 import edu.wpi.fuchsiafalcons.pathfinding.GraphLoader;
 import edu.wpi.fuchsiafalcons.pathfinding.Path;
@@ -22,6 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import org.apache.derby.iapi.db.Database;
 
 import java.io.IOException;
 import java.net.URL;
@@ -82,7 +87,10 @@ public class AStarDemoController implements Initializable {
         //ahf - yes this should be done better. At some point.
 
         try {
-            this.graph = GraphLoader.load("nodes_1.csv", "edges.csv");
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+
+            this.graph = GraphLoader.load(nodeEntries, edgeEntries);
         } catch (Exception e) {
             this.graph = new Graph();
             e.printStackTrace();
@@ -119,27 +127,9 @@ public class AStarDemoController implements Initializable {
         }
     }
 
-    //Please comment this!
-    private double prevX, prevY;
-    private boolean firstClick = false;
-    private Line newLine;
+
     public void drawLine(MouseEvent mouseEvent) {
-        /*
-        if (!mouseEvent.isPrimaryButtonDown()) {
-            return;
-        }
-        firstClick = ! firstClick;
-        if(!firstClick){
-            newLine = new Line(prevX, prevY,
-                    mouseEvent.getX(), mouseEvent.getY());
-            newLine.setStrokeWidth(5);
-            newLine.setStroke(Color.BLACK);
-            canvas.getChildren().add(newLine);
-        }else{
-            prevX = mouseEvent.getX();
-            prevY = mouseEvent.getY();
-        }
-         */
+
     }
 
 

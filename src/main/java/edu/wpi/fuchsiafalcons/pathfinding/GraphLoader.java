@@ -1,7 +1,10 @@
 package edu.wpi.fuchsiafalcons.pathfinding;
 
+import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
 
+import javax.xml.soap.Node;
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,6 +75,71 @@ public class GraphLoader {
 
             final String startNode = currLine[1];
             final String endNode = currLine[2];
+
+            final Vertex startVertex = vertices.get(startNode);
+            if(startVertex == null)
+                throw new Exception("In edge: " + edgeID + ", start vertex (" + startNode + ") is undefined.");
+
+            final Vertex endVertex = vertices.get(endNode);
+            if(endVertex == null)
+                throw new Exception("In edge: " + edgeID + ", end vertex (" + endNode + ") is undefined.");
+
+            final Edge edge = new Edge(startVertex, endVertex); //Edge will automatically add itself to each of the verticies
+
+            graph.addEdge(edge);
+        }
+        return graph;
+    }
+
+    /**
+     * Loads from node/edge entries respectivley //FIXME: DO BETTER & METHODZIE
+     * @return
+     * @author Alex Friedman (ahf)
+     * @throws Exception
+     */
+    public static Graph load(List<NodeEntry> nodeEntries, List<EdgeEntry> edgeEntries) throws Exception {
+        //Null checks provided by exceptions in CSVReader.load
+
+        //The graph that we will return
+        final Graph graph = new Graph();
+
+
+        //I would use a HashSet, but HashSets use HashMaps anyways, so this just makes sense.
+        final HashMap<String, Vertex> vertices = new HashMap<>();
+
+
+        for(NodeEntry nodeEntry : nodeEntries)
+        {
+            //Each line going to be same length b/c of how CSVReader works.
+
+            try {
+                final String nodeID = nodeEntry.getNodeID();
+
+                if(vertices.get(nodeID) != null)
+                    throw new Exception("nodesCVS lists the same vertex twice: " + nodeID);
+
+                final int xCoordinate = Integer.parseInt(nodeEntry.getXcoord());
+                final int yCoordinate = Integer.parseInt(nodeEntry.getYcoord());
+
+                final Vertex currVertex = new Vertex(nodeID, xCoordinate, yCoordinate);
+                vertices.put(nodeID, currVertex);
+
+                graph.addVertex(currVertex);
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Incorrect node CSV format: " + e.getMessage());
+            }
+        }
+
+
+        //Read in all the edges.
+        for(EdgeEntry edgeEntry : edgeEntries)
+        {
+            final String edgeID = edgeEntry.getEdgeID(); //Currently unused, but will be taken out by compiler anyways.
+
+            final String startNode = edgeEntry.getStartNode();
+            final String endNode = edgeEntry.getEndNode();
 
             final Vertex startVertex = vertices.get(startNode);
             if(startVertex == null)
