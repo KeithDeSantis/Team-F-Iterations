@@ -47,6 +47,7 @@ public class EditMapNodeDialogViewController {
     private Stage dialogStage; // This will be so we have access to our stage - KD
     public boolean okClicked; // Used to tell if edit was went through with - KD
     private ObservableList<NodeEntry> nodeList;
+    private String currentIDIfEditing; //FIXME stupid way to fix making nodes with duplicate ID's, find better way
 
 
     public EditMapNodeDialogViewController() {}
@@ -104,7 +105,7 @@ public class EditMapNodeDialogViewController {
 
         // Check if each field has been filled out, if not do not continue and highlight the text field red - KD
 
-        if(nodeIDField.getText().length() <= 0) {
+        if(nodeIDField.getText().length() <= 0 || !isUniqueNodeID(nodeIDField.getText())) {
             nodeIDField.setStyle("-fx-background-color:  #ffbab8");
         }
         if(!isProperFloor(floorField.getText())) {
@@ -137,6 +138,7 @@ public class EditMapNodeDialogViewController {
         if(!yCoordValid) {yCoordField.setStyle("-fx-background-color: #ffbab8");}
 
         return nodeIDField.getText().length() > 0 &&
+                isUniqueNodeID(nodeIDField.getText()) &&
                 xCoordValid &&
                 yCoordValid &&
                 isProperFloor(floorField.getText()) &&
@@ -240,6 +242,10 @@ public class EditMapNodeDialogViewController {
         helpText.setText(label);
     }
 
+    public void setCurrentIDIfEditing(String currentIDIfEditing) {
+        this.currentIDIfEditing = currentIDIfEditing;
+    }
+
     /**
      * Helper for isFilledOut() that ensures the nodeID given by the users isn't a duplicate to one
      * that already exists.
@@ -248,7 +254,10 @@ public class EditMapNodeDialogViewController {
      * @author KD
      */
     public boolean isUniqueNodeID(String nodeID) {
-        for(NodeEntry n : nodeList) { if(n.getNodeID().equals(nodeID)) return false; }
+        for(NodeEntry n : nodeList) {
+            if(n.getNodeID().equals(nodeID) && !(n.getNodeID().equals(currentIDIfEditing)))
+                return false;
+        }
         return true;
     }
 }

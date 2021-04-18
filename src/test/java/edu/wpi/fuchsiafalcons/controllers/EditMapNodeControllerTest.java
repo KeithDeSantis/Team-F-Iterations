@@ -112,6 +112,12 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("CCONF001L1");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
+        doubleClickOn("#nodeIDField");
+        write("CCONF002L1");
+        clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#nodeIDField");
+        write("CCONF001L1");
         doubleClickOn("#floorField");
         write("f");
         clickOn("OK");
