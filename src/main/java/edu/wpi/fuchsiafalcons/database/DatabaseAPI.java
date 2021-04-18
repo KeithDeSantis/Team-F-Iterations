@@ -233,7 +233,6 @@ public class DatabaseAPI {
 
         ResultSet rset = null;
         try {
-
             rset = stmt.executeQuery(sql);
         } catch (SQLException e) {
             if(e.getMessage().contains("Table/View 'L1NODES' does not exist."))
@@ -268,6 +267,58 @@ public class DatabaseAPI {
 
     }
 
+    public boolean editServiceReq(String name, String colName, String newVal) throws SQLException
+    {
+        String query = "";
+        boolean success = false;
+        switch (colName)
+        {
+            case "name":
+                query = "UPDATE SERVICE_REQUESTS SET NAME=(?) WHERE NAME=(?)";
+                break;
+            case "person":
+                query = "UPDATE SERVICE_REQUESTS SET PERSON=(?) WHERE NAME=(?)";
+                break;
+            case "completed":
+                query = "UPDATE SERVICE_REQUESTS SET COMPLETED=(?) WHERE NAME=(?)";
+                break;
+        }
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+        stmt.setString(1, newVal);
+        stmt.setString(2, name);
+        int ret = stmt.executeUpdate();
+
+        if (ret != 0)
+        {
+            success = true;
+        }
+        return success;
+    }
+
+    public boolean addServiceReq(String name, String person, String completed) throws SQLException {
+        boolean success = false;
+        String sql = "INSERT INTO SERVICE_REQUESTS values(?, ?, ?)";
+
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, name);
+        stmt.setString(2, person);
+        stmt.setString(3, completed);
+
+        int result = stmt.executeUpdate();
+        if (result != 0)
+        {
+            success = true;
+        }
+        return success;
+    }
+
+    public void populateReqs(List<String[]> reqData) throws SQLException {
+        for (String[] arr : reqData)
+        {
+            addServiceReq(arr[0], arr[1], arr[2]);
+        }
+    }
+
     private boolean populateData(Connection conn, List<String[]> nodeData, List <String[]> edgeData) throws Exception {
         try {
             final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
@@ -276,12 +327,14 @@ public class DatabaseAPI {
             createTable(conn, initNodesTable);
             populateNodes(nodeData);
 
-
             final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
                     "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
             createTable(conn, initEdgesTable);
-
             populateEdges(edgeData);
+
+            final String initServiceReqTable = "CREATE TABLE SERVICE_REQUESTS(name varchar(200), " +
+                    "assignedPerson varchar(200), completed varchar(200))";
+            createTable(conn, initServiceReqTable);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -298,15 +351,6 @@ public class DatabaseAPI {
             DatabaseAPI.getDatabaseAPI().addNode(arr[0], x, y, arr[3], arr[4], arr[5], arr[6], arr[7]);
         }
     }
-
-    public void createNodesTable() throws SQLException
-    {
-        final String sql = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
-                "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
-        createTable(ConnectionHandler.getConnection(), sql);
-    }
-
 
     /**
      * Used to drop a table
@@ -352,6 +396,7 @@ public class DatabaseAPI {
 
         dropTable(conn, "L1NODES");
         dropTable(conn, "L1EDGES");
+        dropTable(conn, "SERVICE_REQUESTS");
 
         success = populateData(conn, nodeData, edgeData);
         //conn.close();
