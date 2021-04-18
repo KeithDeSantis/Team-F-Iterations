@@ -18,6 +18,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -62,6 +67,9 @@ public class EditMapEdgesController {
     @FXML
     private JFXTreeTableView edgeTable;
 
+    @FXML
+    private Pane canvas;
+
     // Create an observable list of edges
     private ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
 
@@ -69,6 +77,8 @@ public class EditMapEdgesController {
     private ScrollPane scroll;
     @FXML
     private ImageView map;
+
+    private double zoomLevel = 5.0;
 
     /**
      * Initializes controller, called when EditMapEdges.fxml is loaded.
@@ -85,10 +95,13 @@ public class EditMapEdgesController {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
-        final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-        final double zoomLevel = 2.0;
+        final Image image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
+
         final double width = image.getWidth() / zoomLevel;
         final double height = image.getHeight() / zoomLevel;
+
+        canvas.setPrefSize(width,height);
+
         map.setFitWidth(width);
         map.setFitHeight(height);
         map.setImage(image); // Copied from EditMapEdges - LM
@@ -394,4 +407,54 @@ public class EditMapEdgesController {
         }
     }
 
+    /**
+     * Used to highlight selected edges
+     * @author Alex Friedman
+     * @param mouseEvent
+     */
+    public void handleSelectEdge(MouseEvent mouseEvent) {
+        if(edgeTable.getSelectionModel().getSelectedIndex() < 0){
+            // FIXME Error Handling
+            return;
+        }
+
+        canvas.getChildren().removeIf(x -> {
+            return x instanceof Line;
+        });
+
+        EdgeEntry node = edgeEntryObservableList.get(edgeTable.getSelectionModel().getSelectedIndex());
+
+        if(node == null){
+            //FIXME Null Warning
+            return;
+        }
+
+        NodeEntry startNode = null;
+        NodeEntry endNode = null;
+        try {
+            startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), node.getStartNode());
+            endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), node.getEndNode());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        if(startNode == null || endNode == null)
+        {
+            return; //FIXME: ERROR
+        }
+
+        final double startX = Double.parseDouble(startNode.getXcoord());
+        final double startY = Double.parseDouble(startNode.getYcoord());
+
+        final double endX = Double.parseDouble(endNode.getXcoord());
+        final double endY = Double.parseDouble(endNode.getYcoord());
+
+
+        final Line line = new Line(startX/zoomLevel, startY/zoomLevel, endX/zoomLevel, endY/zoomLevel);
+        line.setStrokeWidth(2);
+        line.setStroke(Color.ORANGE);
+
+        canvas.getChildren().add(line);
+    }
 }

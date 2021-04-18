@@ -258,6 +258,41 @@ public class DatabaseAPI {
         return nodeEntries;
     }
 
+
+
+    public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLException {
+
+        final String sql = "SELECT * FROM L1Nodes WHERE nodeID=(?)";
+        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, requestNodeID);
+
+        ResultSet rset;
+        try {
+            rset = stmt.executeQuery();
+        } catch (SQLException e) {
+            if(e.getMessage().contains("Table/View 'L1NODES' does not exist."))
+                return null;
+            else
+                e.printStackTrace();
+            return null;
+        }
+        while (rset.next()) {
+            final String nodeID = rset.getString(1);
+            final int xCoord = rset.getInt(2);
+            final int yCoord = rset.getInt(3);
+            final String floor = rset.getString(4);
+            final String building = rset.getString(5);
+            final String type = rset.getString(6);
+            final String longName = rset.getString(7);
+            final String shortName = rset.getString(8);
+
+            return new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
+           // nodeEntries.add(newEntry);
+        }
+        //return nodeEntries;
+        return null;
+    }
+
     public void createTable(Connection conn, String createCMD) throws SQLException {
         //create the tables
 

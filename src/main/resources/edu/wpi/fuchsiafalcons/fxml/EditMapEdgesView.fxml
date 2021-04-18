@@ -9,6 +9,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 
 <AnchorPane maxHeight="540.0" maxWidth="960.0" minHeight="540.0" minWidth="960.0" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.EditMapEdgesController">
    <children>
@@ -16,14 +17,18 @@
          <items>
             <AnchorPane maxWidth="250.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <JFXTreeTableView fx:id="edgeTable" layoutX="-12.0" layoutY="-29.0" minWidth="250.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <JFXTreeTableView fx:id="edgeTable" layoutX="-12.0" layoutY="-29.0" minWidth="250.0" onMouseClicked="#handleSelectEdge" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
                   <ScrollPane fx:id="scroll" prefHeight="358.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
-                        <ImageView fx:id="map" fitHeight="284.0" fitWidth="532.0" pickOnBounds="true" preserveRatio="true" />
+                        <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fx:id="map" fitHeight="284.0" fitWidth="532.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </Pane>
                      </content>
                   </ScrollPane>
                </children>
