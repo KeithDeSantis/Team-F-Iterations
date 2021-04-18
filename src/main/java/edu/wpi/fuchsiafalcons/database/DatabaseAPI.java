@@ -207,6 +207,12 @@ public class DatabaseAPI {
         return updateSuccess;
     }
 
+    /**
+     * method to generate all the edge entry objects for the edge editor
+     * @param conn the active connection object to use
+     * @return lits of edge entry objects
+     * @throws SQLException if error occurs performing DB operations
+     */
     public List<EdgeEntry> genEdgeEntries(Connection conn) throws SQLException{
         List <EdgeEntry> edgeEntries = new ArrayList<>();
         String sql = "SELECT * FROM L1Edges";
@@ -226,6 +232,12 @@ public class DatabaseAPI {
         return edgeEntries;
     }
 
+    /**
+     * method to generate a list of node entry objects from the DB
+     * @param conn the active DB conection object to use
+     * @return list of node entry objects
+     * @throws SQLException if error occurs performing DB operations
+     */
     public List<NodeEntry> genNodeEntries(Connection conn) throws SQLException {
         List<NodeEntry> nodeEntries = new ArrayList<>();
         String sql = "SELECT * FROM L1Nodes";
@@ -257,10 +269,7 @@ public class DatabaseAPI {
         }
         return nodeEntries;
     }
-
-
-
-    public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLException {
+public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLException {
 
         final String sql = "SELECT * FROM L1Nodes WHERE nodeID=(?)";
         final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
@@ -293,6 +302,12 @@ public class DatabaseAPI {
         return null;
     }
 
+    /**
+     * method to create a table
+     * @param conn connection object to the DB to use
+     * @param createCMD the string query to create the table
+     * @throws SQLException if error occurs while creating the table
+     */
     public void createTable(Connection conn, String createCMD) throws SQLException {
         //create the tables
 
@@ -303,6 +318,87 @@ public class DatabaseAPI {
 
     }
 
+    /**
+     * method to edit a service request column in the database
+     * @param name name of the service request to be edited
+     * @param colName name of the column to be edited
+     * @param newVal new value for the column to have
+     * @return true on success, false otherwise
+     * @throws SQLException on error performing DB operations
+     */
+    public boolean editServiceReq(String name, String colName, String newVal) throws SQLException
+    {
+        String query = "";
+        boolean success = false;
+        switch (colName)
+        {
+            case "name":
+                query = "UPDATE SERVICE_REQUESTS SET NAME=(?) WHERE NAME=(?)";
+                break;
+            case "person":
+                query = "UPDATE SERVICE_REQUESTS SET PERSON=(?) WHERE NAME=(?)";
+                break;
+            case "completed":
+                query = "UPDATE SERVICE_REQUESTS SET COMPLETED=(?) WHERE NAME=(?)";
+                break;
+        }
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+        stmt.setString(1, newVal);
+        stmt.setString(2, name);
+        int ret = stmt.executeUpdate();
+
+        if (ret != 0)
+        {
+            success = true;
+        }
+        return success;
+    }
+
+    /**
+     * Method to add a single service request to the DB
+     * @param name name of the service request to be added
+     * @param person person assigned to the new service request
+     * @param completed status of the service request either "true" or "false"
+     * @return true on success, false otherwise
+     * @throws SQLException on error performing DB operations
+     */
+    public boolean addServiceReq(String name, String person, String completed) throws SQLException {
+        boolean success = false;
+        String sql = "INSERT INTO SERVICE_REQUESTS values(?, ?, ?)";
+
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, name);
+        stmt.setString(2, person);
+        stmt.setString(3, completed);
+
+        int result = stmt.executeUpdate();
+        if (result != 0)
+        {
+            success = true;
+        }
+        return success;
+    }
+
+    /**
+     * Method for adding multiple service requests to the DB at once if needed
+     * @param reqData list of strings containing the service request data
+     * @throws SQLException on error performing DB operations
+     */
+    public void populateReqs(List<String[]> reqData) throws SQLException {
+        for (String[] arr : reqData)
+        {
+            addServiceReq(arr[0], arr[1], arr[2]);
+        }
+    }
+
+    /**
+     * method to create and populate the tables needed in the database (DOES NOT POPULATE SERVICE REQUESTS)
+     * @param conn the active connection object to the DB to use
+     * @param nodeData list of string arrays with node data
+     * @param edgeData list of string arrays with edge data
+     * @return true on success, false otherwise
+     * @throws Exception if error occurs in DB operations
+     */
     private boolean populateData(Connection conn, List<String[]> nodeData, List <String[]> edgeData) throws Exception {
         try {
             final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
@@ -318,12 +414,21 @@ public class DatabaseAPI {
 
             populateEdges(edgeData);
 
+            final String initServiceReqTable = "CREATE TABLE SERVICE_REQUESTS(name varchar(200), " +
+                    "assignedPerson varchar(200), completed varchar(200))";
+            createTable(conn, initServiceReqTable);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return true;
     }
 
+    /**
+     * method to add all the nodes to the databases passed from populateDB()
+     * @param data lit of string arrays containing all the node data
+     * @throws SQLException on error performing database operations
+     */
     public void populateNodes(List<String[]> data) throws SQLException //I'll get back to that
     {
         //This here is the tricky part b/c of the formatting....
@@ -333,15 +438,6 @@ public class DatabaseAPI {
             DatabaseAPI.getDatabaseAPI().addNode(arr[0], x, y, arr[3], arr[4], arr[5], arr[6], arr[7]);
         }
     }
-
-    public void createNodesTable() throws SQLException
-    {
-        final String sql = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
-                "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
-        createTable(ConnectionHandler.getConnection(), sql);
-    }
-
 
     /**
      * Used to drop a table
@@ -373,6 +469,11 @@ public class DatabaseAPI {
         }
     }
 
+    /**
+     * Method to add all the edges in the list of string arrays passed to populateDB
+     * @param data list of string arrays containing edge data
+     * @throws SQLException on error executing DB operations
+     */
     public void populateEdges(List<String[]> data) throws SQLException //I'll get back to that
     {
         //This here is the tricky part b/c of the formatting....
@@ -381,15 +482,23 @@ public class DatabaseAPI {
         }
     }
 
+    /**
+     * Method to populate the DB with initial values of edges and nodes
+     * @param conn the active connection object to use
+     * @param nodeData list of string arrays containing node column values
+     * @param edgeData list of string arrays containing edge column values
+     * @return true on succes, false otherwise
+     * @throws Exception for errors during execution of DB operations
+     */
     public boolean populateDB(Connection conn, List<String[]> nodeData, List<String[]> edgeData) throws Exception {
         boolean success = false;
         //What can I rename 'main' to?
 
         dropTable(conn, "L1NODES");
         dropTable(conn, "L1EDGES");
+        dropTable(conn, "SERVICE_REQUESTS");
 
         success = populateData(conn, nodeData, edgeData);
-        //conn.close();
         return success;
     }
 
