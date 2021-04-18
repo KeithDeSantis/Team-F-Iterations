@@ -30,6 +30,7 @@ import org.apache.derby.iapi.db.Database;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -98,7 +99,8 @@ public class AStarDemoController implements Initializable {
         }
 
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(this.graph.getVertices().stream().map(vertex -> vertex.getID()).collect(Collectors.toList()));
+        nodeList.addAll(this.graph.getVertices().stream().map(vertex -> vertex.getID())
+         .sorted().collect(Collectors.toList()));
 
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);

@@ -26,7 +26,7 @@ class DatabaseAPITest {
     @BeforeEach
     public void setUp() throws Exception
     {
-        DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), CSVManager.load("L1Nodes.csv"), CSVManager.load("L1Edges.csv"));
+        DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), CSVManager.load("MapfAllnodes.csv"), CSVManager.load("MapfAlledges.csv"));
     }
 
     @Test

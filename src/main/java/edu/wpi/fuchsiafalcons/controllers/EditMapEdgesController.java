@@ -21,7 +21,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -65,13 +64,13 @@ public class EditMapEdgesController {
     private Label CSVErrorLabel;
 
     @FXML
-    private JFXTreeTableView edgeTable;
+    private JFXTreeTableView<EdgeEntry> edgeTable;
 
     @FXML
     private Pane canvas;
 
     // Create an observable list of edges
-    private ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
+    private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
 
     @FXML
     private ScrollPane scroll;
@@ -86,7 +85,7 @@ public class EditMapEdgesController {
      * @author Leo Morris
      */
     @FXML
-    private void initialize() throws SQLException {
+    private void initialize() {
         // Clear the file error label
         CSVErrorLabel.setStyle("-fx-text-fill: black");
         CSVErrorLabel.setText("");
@@ -118,11 +117,11 @@ public class EditMapEdgesController {
         try {
             DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges");
             DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
+
+            List<String[]> edgeData = CSVManager.load("MapfAlledges.csv");
             edgeList = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
-            DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("L1Edges.csv"));
-//            edgeEntryObservableList.addAll( CSVManager.load("L1Edges.csv").stream().map(line-> {
-//                return new EdgeEntry(line[0], line[1], line[2]);
-//            }).collect(Collectors.toList()));
+            DatabaseAPI.getDatabaseAPI().populateEdges(edgeData);
+            edgeEntryObservableList.addAll(edgeData.stream().map(line-> new EdgeEntry(line[0], line[1], line[2])).collect(Collectors.toList()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -130,17 +129,10 @@ public class EditMapEdgesController {
         // Set up cell factory for the edge ID table
         JFXTreeTableColumn<EdgeEntry, String> edgeIDColumn = new JFXTreeTableColumn<>("Edge ID");
         edgeIDColumn.setPrefWidth(250);
-        edgeIDColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<EdgeEntry, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<EdgeEntry, String> param) {
-                return param.getValue().getValue().edgeIDProperty();
-            }
-        });
-        for (EdgeEntry e : edgeList) {
-            edgeEntryObservableList.add(e);
-        }
+        edgeIDColumn.setCellValueFactory(param -> param.getValue().getValue().edgeIDProperty());
+        edgeEntryObservableList.addAll(edgeList);
 
-        final TreeItem<EdgeEntry> root = new RecursiveTreeItem<EdgeEntry>(edgeEntryObservableList, RecursiveTreeObject::getChildren);
+        final TreeItem<EdgeEntry> root = new RecursiveTreeItem<>(edgeEntryObservableList, RecursiveTreeObject::getChildren);
         edgeTable.getColumns().setAll(edgeIDColumn);
         edgeTable.setRoot(root);
         edgeTable.setShowRoot(false);
@@ -390,7 +382,7 @@ public class EditMapEdgesController {
         List<String[]> edgeData = null;
 
         try {
-            edgeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("L1Edges.csv") : CSVManager.load(new File(fileName));
+            edgeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAlledges.csv") : CSVManager.load(new File(fileName));
         } catch (Exception e) {
             CSVErrorLabel.setStyle("-fx-text-fill: red");
             CSVErrorLabel.setText(e.getMessage());
