@@ -103,6 +103,7 @@ public class EditMapEdgesController {
                 "primary key(edgeID))";
         List<EdgeEntry> edgeList = new ArrayList<>();
         try {
+            DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges");
             DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
             edgeList = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
             DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("L1Edges.csv"));
@@ -184,9 +185,17 @@ public class EditMapEdgesController {
         int index = edgeTable.getSelectionModel().getSelectedIndex();
         EdgeEntry selectedEdge = edgeEntryObservableList.get(index);
         if(selectedEdge != null){
-            openEditDialogue(selectedEdge);
-            DatabaseAPI.getDatabaseAPI().deleteEdge(selectedEdge.getEdgeID());
-            updateEdgeEntry(selectedEdge);
+            String oldID = selectedEdge.getEdgeID();
+            String oldStartNode = selectedEdge.getStartNode();
+            String oldEndNode = selectedEdge.getEndNode();
+            ArrayList<String> newValues = openEditDialogue(selectedEdge);
+            while(!oldID.equals(newValues.get(0)) || !oldStartNode.equals(newValues.get(1)) || !oldEndNode.equals(newValues.get(2))) {
+                DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "Startnode", newValues.get(1));
+                DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "endnode", newValues.get(2));
+                DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "ID", newValues.get(0));
+            }
+            //DatabaseAPI.getDatabaseAPI().deleteEdge(selectedEdge.getEdgeID());
+            //updateEdgeEntry(selectedEdge);
         }
     }
 
@@ -202,7 +211,6 @@ public class EditMapEdgesController {
             newEdge.endNodeProperty().getValue().isEmpty())
             return; //FIXME: DO BETTER ERROR CHECKING
         updateEdgeEntry(newEdge);
-
     }
 
     private void updateEdgeEntry(EdgeEntry edgeEntry) throws SQLException {
@@ -269,7 +277,7 @@ public class EditMapEdgesController {
      * @param editedEdge is the edge being edited
      * @author Karen Hou
      */
-    private void openEditDialogue(EdgeEntry editedEdge) throws IOException{
+    private ArrayList<String> openEditDialogue(EdgeEntry editedEdge) throws IOException{
         FXMLLoader editDialogueLoader = new FXMLLoader();
         editDialogueLoader.setLocation(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapEdgeDialogueView.fxml"));
         Stage dialogueStage = new Stage();
@@ -285,6 +293,14 @@ public class EditMapEdgesController {
         dialogueStage.setScene(new Scene(root));
 
         dialogueStage.showAndWait();
+
+        ArrayList<String> returnList = new ArrayList<>();
+
+        returnList.add(editedEdge.getEdgeID());
+        returnList.add(editedEdge.getStartNode());
+        returnList.add(editedEdge.getEndNode());
+
+        return returnList;
     }
 
     /**
