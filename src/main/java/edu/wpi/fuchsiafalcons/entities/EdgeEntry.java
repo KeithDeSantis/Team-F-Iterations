@@ -74,8 +74,8 @@ public class EdgeEntry extends RecursiveTreeObject<EdgeEntry> {
      */
     public void setEdgeID(String newEdgeID){
         edgeID.setValue(newEdgeID);
-        //startNode.setValue(newEdgeID.split("_")[0]);
-        //endNode.setValue(newEdgeID.split("_")[1]);
+        startNode.setValue(newEdgeID.split("_")[0]);
+        endNode.setValue(newEdgeID.split("_")[1]);
     }
 
     /**
@@ -85,7 +85,7 @@ public class EdgeEntry extends RecursiveTreeObject<EdgeEntry> {
      */
     public void setStartNode(String newStartNode) {
         startNode.setValue(newStartNode);
-        //edgeID.setValue(newStartNode + "_" + endNode.getValue());
+        edgeID.setValue(newStartNode + "_" + endNode.getValue());
     }
 
     /**
@@ -95,6 +95,6 @@ public class EdgeEntry extends RecursiveTreeObject<EdgeEntry> {
      */
     public void setEndNode(String newEndNode) {
         endNode.setValue(newEndNode);
-        //edgeID.setValue(startNode.getValue() + "_" + newEndNode);
+        edgeID.setValue(startNode.getValue() + "_" + newEndNode);
     }
 }

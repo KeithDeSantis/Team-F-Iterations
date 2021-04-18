@@ -1,8 +1,11 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -11,18 +14,26 @@ import javafx.stage.Stage;
  * @author Karen Hou
  */
 public class EditMapEdgeDialogueViewController {
-    @FXML private TextField edgeID;
-    @FXML private TextField startNode;
-    @FXML private TextField endNode;
+    @FXML
+    private JFXTextField startNode;
+
+    @FXML
+    private JFXTextField endNode;
+
+    @FXML
+    private Label edgeID;
+
+    @FXML
+    private JFXButton ok;
 
     private EdgeEntry edge = new EdgeEntry();
     private Stage dialogueStage;
     public boolean okClicked;
 
     public EditMapEdgeDialogueViewController(){}
+
     @FXML
     private void initialize(){
-
     }
 
     /**
@@ -33,7 +44,6 @@ public class EditMapEdgeDialogueViewController {
     @FXML
     private void handleOKClicked(ActionEvent e){
         if(formFilled()){
-            edge.setEdgeID(edgeID.getText());
             edge.setStartNode(startNode.getText());
             edge.setEndNode(endNode.getText());
             okClicked = true;
@@ -50,12 +60,14 @@ public class EditMapEdgeDialogueViewController {
         edgeID.setStyle("-fx-border-width: 0px");
         startNode.setStyle("-fx-border-width: 0px");
         endNode.setStyle("-fx-border-width: 0px");
-
+/*
         //check each field for filled out
         if(edgeID.getText().length() <=0){
             edgeID.setStyle("-fx-border-widge: 2px");
             edgeID.setStyle("-fx-border-color: red");
         }
+
+ */
         if(startNode.getText().length() <=0){
             startNode.setStyle("-fx-border-widge: 2px");
             startNode.setStyle("-fx-border-color: red");
@@ -77,9 +89,9 @@ public class EditMapEdgeDialogueViewController {
      */
     public void setEdge(EdgeEntry enteredEdge){
         edge = enteredEdge;
-        edgeID.setText(edge.edgeIDProperty().getValue());
         startNode.setText(edge.startNodeProperty().getValue());
         endNode.setText(edge.endNodeProperty().getValue());
+        updateEdgeIDLabel();
     }
 
     /**
@@ -88,4 +100,14 @@ public class EditMapEdgeDialogueViewController {
      * @author Keith DeSantis
      */
     public void setDialogueStage(Stage theStage) {dialogueStage = theStage;}
+
+    /**
+     * Updates the label displaying a preview of the edge ID
+     * Called on key release of either text field and when the dialogue is opened
+     * @author Leo Morris
+     */
+    @FXML
+    private void updateEdgeIDLabel(){
+        edgeID.setText("Edge ID: " +startNode.getText() + "_" + endNode.getText());
+    }
 }
