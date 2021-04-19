@@ -66,13 +66,10 @@
                               <ImageView fx:id="serviceButton" fitHeight="100.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="quit" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " GridPane.rowIndex="4">
+                        <JFXButton fx:id="quit" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <font>
                               <Font size="18.0" />
                            </font>
-                           <graphic>
-                              <Ellipse fill="#ff1f1f" radiusX="50.0" radiusY="50.0" stroke="RED" strokeType="INSIDE" strokeWidth="0.0" />
-                           </graphic>
                         </JFXButton>
                         <Label text="Service Request Menu" GridPane.rowIndex="1">
                            <font>
@@ -84,12 +81,18 @@
                               <Font name="Tahoma" size="18.0" />
                            </font>
                         </Label>
-                        <Label text="Quit App" GridPane.rowIndex="5">
+                        <Label text="Quit App" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>
                         </Label>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="X" textAlignment="CENTER" wrappingWidth="50.41455078125" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                        <JFXButton fx:id="AStarDemo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" GridPane.rowIndex="2">
+                           <graphic>
+                              <ImageView fx:id="directionsImage" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </JFXButton>
+                        <Ellipse fill="#ff1f1f" radiusX="50.0" radiusY="50.0" stroke="RED" strokeType="INSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="X" textAlignment="CENTER" wrappingWidth="50.41455078125" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                            <font>
                               <Font name="Tahoma Bold" size="61.0" />
                            </font>
@@ -97,9 +100,14 @@
                               <Insets left="50.0" right="53.0" />
                            </GridPane.margin>
                         </Text>
-                        <JFXButton fx:id="AStarDemo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" GridPane.rowIndex="2">
+                        <Label text="Login" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="loginButton" ellipsisString="" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" text=" " GridPane.columnIndex="1">
                            <graphic>
-                              <ImageView fx:id="directionsImage" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="login" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </JFXButton>
                      </children>

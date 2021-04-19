@@ -15,29 +15,28 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class DefaultPageController {
-
-    @FXML
-    private Button editVertex;
-    @FXML
-    private Button editEdges;
     @FXML
     private Button AStarDemo;
     @FXML
     private Button serviceRequest;
     @FXML
-    private Button service2;
-    @FXML
     private Button quit;
+    @FXML
+    private Button loginButton;
 
     @FXML private ImageView directionsImage;
 
     @FXML private ImageView serviceButton;
+
+    @FXML private ImageView login;
 
     @FXML private void initialize(){
         final Image directions = new Image(getClass().getResourceAsStream("/imagesAndLogos/directionsArrow.png"));
         directionsImage.setImage(directions);
         final Image serviceRequest = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButton.png"));
         serviceButton.setImage(serviceRequest);
+        final Image lockImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButton.png"));
+        login.setImage(lockImage);
     }
     /**
      * Handles the pushing of a button on the screen
@@ -52,17 +51,11 @@ public class DefaultPageController {
         Stage stage;
         Parent root;
 
-        if (buttonPushed == editVertex) {
+        if (buttonPushed == loginButton) {
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapNodeView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/Login.fxml"));
             stage.getScene().setRoot(root);
-            stage.setTitle("Edit Map Vertex");
-            stage.show();
-        } else if (buttonPushed == editEdges) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapEdgesView.fxml"));
-            stage.getScene().setRoot(root);  //Changing the stage
-            stage.setTitle("Edit Map Edges");
+            stage.setTitle("Log in");
             stage.show();
         } else if (buttonPushed == AStarDemo) {
             stage = (Stage) buttonPushed.getScene().getWindow();
@@ -76,18 +69,7 @@ public class DefaultPageController {
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/ServiceRequestHomeView.fxml"));
             stage.getScene().setRoot(root);
-            stage.setTitle("Language Interpretation Request");
-            stage.show();
-
-        } else if (buttonPushed == service2) {
-            // Implement Later
-
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FoodDeliveryServiceRequestView.fxml"));
-            //Scene scene = new Scene(root);
-            //stage.setScene(scene);
-            stage.getScene().setRoot(root);
-            stage.setTitle("Service Request Two");
+            stage.setTitle("Service Request Home");
             stage.show();
 
         } else if (buttonPushed == quit) {
