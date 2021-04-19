@@ -27,7 +27,7 @@ public class AStarDemoControllerTest extends ApplicationTest {
     public void testBackButton() {
         verifyThat("X", Node::isVisible);
         clickOn("X");
-        verifyThat("Welcome to the Navigation Page", Node::isVisible);
+        verifyThat("Directions", Node::isVisible);
     }
 
 

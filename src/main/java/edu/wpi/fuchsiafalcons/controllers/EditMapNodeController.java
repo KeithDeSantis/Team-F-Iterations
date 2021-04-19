@@ -19,25 +19,19 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import edu.wpi.fuchsiafalcons.database.*;
-import org.apache.derby.iapi.db.Database;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 
 /**
@@ -342,7 +336,7 @@ public class EditMapNodeController {
 
         //FIXME: METHODIZE THISS!!!!
         try {
-            nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllnodes.csv") : CSVManager.load(new File(fileName));
+            nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllNodes.csv") : CSVManager.load(new File(fileName));
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -605,7 +599,7 @@ public class EditMapNodeController {
         List<String[]> nodeData = null;
 
         try {
-            nodeData = (CSVManager.load("MapfAllnodes.csv"));
+            nodeData = (CSVManager.load("MapfAllNodes.csv"));
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
