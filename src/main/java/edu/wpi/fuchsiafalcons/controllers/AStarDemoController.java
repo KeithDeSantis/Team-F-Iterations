@@ -20,17 +20,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import org.apache.derby.iapi.db.Database;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -99,7 +96,7 @@ public class AStarDemoController implements Initializable {
         }
 
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(this.graph.getVertices().stream().map(vertex -> vertex.getID())
+        nodeList.addAll(this.graph.getVertices().stream().map(Vertex::getID)
          .sorted().collect(Collectors.toList()));
 
         startComboBox.setItems(nodeList);
@@ -129,12 +126,6 @@ public class AStarDemoController implements Initializable {
         }
     }
 
-
-    public void drawLine(MouseEvent mouseEvent) {
-
-    }
-
-
     /**
      * Handles the pathfind btn.
      * @author Alex Friedman (ahf), Tony Vuolo
@@ -143,8 +134,6 @@ public class AStarDemoController implements Initializable {
     public void handlePathfindButtonClicked(ActionEvent actionEvent) {
         clearPath();
         updatePath();
-
-
     }
 
     /**
@@ -203,9 +192,7 @@ public class AStarDemoController implements Initializable {
      */
     private void clearPath()
     {
-        canvas.getChildren().removeIf(x -> {
-            return x instanceof Line;
-        });
+        canvas.getChildren().removeIf(x -> x instanceof Line);
     }
 
     /**
