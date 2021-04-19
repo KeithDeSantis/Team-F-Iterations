@@ -362,6 +362,19 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         return deleteSuccess;
     }
 
+    public ArrayList<String> listAllUsers() throws SQLException{
+        ArrayList<String> allUsernames = new ArrayList<>();
+        String query = "SELECT * FROM USERS";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+        while (rset.next())
+        {
+            allUsernames.add(rset.getString(1));
+        }
+        return allUsernames;
+    }
+
     public boolean authenticate(String username, String suppliedPassword) throws SQLException
     {
         boolean authenticated = false;
