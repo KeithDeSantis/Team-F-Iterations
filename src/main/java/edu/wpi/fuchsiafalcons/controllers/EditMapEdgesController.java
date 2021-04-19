@@ -417,7 +417,7 @@ public class EditMapEdgesController {
         if(startNode.getFloor().equals(floor) || endNode.getFloor().equals(floor)) {
             drawEdgeNodeOnFloor();
             if(selectedLine != null)
-                selectedLine.setStroke(Color.ORANGE);
+                selectedLine.setStroke(DEFAULT_LINE_COLOR);
         }else{
             floor = startNode.getFloor();
             switchMap();
@@ -565,6 +565,7 @@ public class EditMapEdgesController {
         updateEdgeEntry(newEdge);
     }
 
+    private final Color DEFAULT_LINE_COLOR = new Color(Color.ORANGE.getRed(), Color.ORANGE.getGreen(), Color.ORANGE.getBlue(), 0.5);
     /**
      * Draw a single line to represent the node
      * @author ZheCheng
@@ -572,13 +573,13 @@ public class EditMapEdgesController {
     private void drawLine(double startX, double startY, double endX, double endY, String edgeID){
         Line l = new Line(startX, startY, endX, endY);
         l.setStrokeWidth(7);
-        l.setStroke(Color.ORANGE);
+        l.setStroke(DEFAULT_LINE_COLOR);
         l.setId(edgeID);
         l.setOnMouseEntered(e->{if(!l.equals(selectedLine))l.setStroke(Color.RED);});
-        l.setOnMouseExited(e->{if(!l.equals(selectedLine))l.setStroke(Color.ORANGE);});
+        l.setOnMouseExited(e->{if(!l.equals(selectedLine))l.setStroke(DEFAULT_LINE_COLOR);});
         l.setOnMouseClicked(e->{
             if(selectedLine != null)
-                selectedLine.setStroke(Color.ORANGE);
+                selectedLine.setStroke(DEFAULT_LINE_COLOR);
             selectedLine = l;
             l.setStroke(Color.GREEN);
             edgeTable.getSelectionModel().clearAndSelect(findEdge(edgeID));
