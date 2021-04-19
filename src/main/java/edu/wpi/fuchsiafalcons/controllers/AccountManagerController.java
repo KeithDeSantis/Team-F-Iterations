@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -19,7 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class AccountManagerController {
+public class AccountManagerController implements Initializable {
     @FXML
     private JFXButton quit;
     @FXML
@@ -47,8 +48,15 @@ public class AccountManagerController {
 
     private String fieldChanged = "";
 
-    public void initialize(URL location, ResourceBundle resources) throws SQLException {
-        ArrayList<String> allUsers = DatabaseAPI.getDatabaseAPI().listAllUsers();
+    public void initialize(URL location, ResourceBundle resources) {
+        ArrayList<String> allUsers = new ArrayList<>();
+        try {
+            allUsers = DatabaseAPI.getDatabaseAPI().listAllUsers();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
         for (String s : allUsers)
         {
             selectUser.getItems().add(s);
@@ -69,20 +77,23 @@ public class AccountManagerController {
         Platform.exit();
     }
 
-    public void handleDeleteUser(ActionEvent actionEvent) throws SQLException {
+    public void handleDeleteUser(ActionEvent actionEvent) throws SQLException, IOException {
         String target = username.getText();
         DatabaseAPI.getDatabaseAPI().deleteUser(target);
+        refreshPage(actionEvent);
     }
 
-    public void handleAddUser(ActionEvent actionEvent) throws SQLException{
+    public void handleAddUser(ActionEvent actionEvent) throws SQLException, IOException {
         String user = addUsername.getText();
         String pass = addPassword.getText();
         String type = (String) newUserType.getValue();
 
         DatabaseAPI.getDatabaseAPI().addUser(type, user, pass);
+
+        refreshPage(actionEvent);
     }
 
-    public void handleSaveChanges(ActionEvent actionEvent) throws SQLException{
+    public void handleSaveChanges(ActionEvent actionEvent) throws SQLException, IOException {
         String targetUser = "";
         String newVal = "";
         if (fieldChanged.equals("username")){
@@ -101,6 +112,19 @@ public class AccountManagerController {
             DatabaseAPI.getDatabaseAPI().editUser(targetUser, "type", newVal);
         }
         fieldChanged = "";
+
+        refreshPage(actionEvent);
+    }
+
+    private void refreshPage(ActionEvent actionEvent) throws IOException {
+        Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
+        Stage stage;
+        Parent root;
+        stage = (Stage) buttonPushed.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/AccountManagerView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Account Manager");
+        stage.show();
     }
 
     public void handleAdminHome(ActionEvent actionEvent) throws IOException {

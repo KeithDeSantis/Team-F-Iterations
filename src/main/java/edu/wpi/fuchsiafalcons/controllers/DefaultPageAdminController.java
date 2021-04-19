@@ -60,7 +60,6 @@ public class DefaultPageAdminController {
      */
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
-
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
         Stage stage;
         Parent root;

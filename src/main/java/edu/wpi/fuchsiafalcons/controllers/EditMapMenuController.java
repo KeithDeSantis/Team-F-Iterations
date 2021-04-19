@@ -18,7 +18,7 @@ import java.io.IOException;
 public class EditMapMenuController {
 
     @FXML
-    private JFXButton editVertex;
+    private JFXButton mapVertex;
     @FXML
     private JFXButton editEdges;
     @FXML
@@ -26,7 +26,7 @@ public class EditMapMenuController {
 
     @FXML private ImageView mapEdge;
 
-    @FXML private ImageView mapVertex;
+    @FXML private ImageView mapNode;
 
     @FXML private ImageView homeIcon;
 
@@ -34,7 +34,7 @@ public class EditMapMenuController {
         final Image edge = new Image(getClass().getResourceAsStream("/imagesAndLogos/mapEdge.png"));
         mapEdge.setImage(edge);
         final Image vertex = new Image(getClass().getResourceAsStream("/imagesAndLogos/mapNode.png"));
-        mapVertex.setImage(vertex);
+        mapNode.setImage(vertex);
         final Image homeButton = new Image(getClass().getResourceAsStream("/imagesAndLogos/home.png"));
         homeIcon.setImage(homeButton);
     }
@@ -46,12 +46,11 @@ public class EditMapMenuController {
      */
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
-
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
         Stage stage;
         Parent root;
 
-        if (buttonPushed == editVertex) {
+        if (buttonPushed == mapVertex) {
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapNodeView.fxml"));
             stage.getScene().setRoot(root);

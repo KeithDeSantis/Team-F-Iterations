@@ -18,25 +18,24 @@ public class DatabaseAPI {
 
     /**
      * Method to build prepared sql update statement
+     *
      * @param tableName the name of the table wth relevant entry
-     * @param colName the name of the column to be modified
+     * @param colName   the name of the column to be modified
      * @param entryType type of entry either node or edge
      * @return complete prepared update query as string
      */
-    public String buildUpdateQuery(String tableName, String colName, String entryType) throws NullPointerException
-    {
+    public String buildUpdateQuery(String tableName, String colName, String entryType) throws NullPointerException {
         String query = "";
         if (entryType.equals("node")) {
             query = "UPDATE " + tableName + " SET " + "node" + colName + "=(?) WHERE nodeid=(?)";
-        }
-        else if (entryType.equals("edge") && colName.equals("id")){
+        } else if (entryType.equals("edge") && colName.equals("id")) {
             query = "UPDATE " + tableName + " SET " + "edge" + colName + "=(?) WHERE edgeid=(?)";
-        }
-        else if (entryType.equals("edge")){
+        } else if (entryType.equals("edge")) {
             query = "UPDATE " + tableName + " SET " + colName + "=(?) WHERE edgeid=(?)";
         }
         return query;
     }
+
     /**
      * API method to add a node into the L1Nodes table
      *
@@ -71,12 +70,12 @@ public class DatabaseAPI {
     }
 
 
-
     /**
      * Method to add an edge to the L1Edges table
-     * @param id the edge ID
+     *
+     * @param id        the edge ID
      * @param startNode starting node of the edge
-     * @param endNode ending node of the edge
+     * @param endNode   ending node of the edge
      * @return true on success, false otherwise
      * @throws SQLException on sql operation error
      */
@@ -89,19 +88,18 @@ public class DatabaseAPI {
 
     /**
      * Method to delete a node from the L1Nodes table
+     *
      * @param nodeID the ID of the node to be deleted
      * @return true on success, false otherwise
      * @throws SQLException on failure of sql operation
      */
-    public boolean deleteNode(String nodeID) throws SQLException
-    {
+    public boolean deleteNode(String nodeID) throws SQLException {
         boolean deleteSuccess = false;
         String sql = "DELETE FROM L1Nodes WHERE nodeID=(?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, nodeID);
         int ret = stmt.executeUpdate();
-        if (ret != 0)
-        {
+        if (ret != 0) {
             deleteSuccess = true;
         }
         return deleteSuccess;
@@ -109,19 +107,18 @@ public class DatabaseAPI {
 
     /**
      * Method to delete an edge from the L1Edges table
+     *
      * @param edgeID the ID of the edge to be deleted
      * @return true on success, false otherwise
      * @throws SQLException on error with sql db operations
      */
-    public boolean deleteEdge(String edgeID) throws SQLException
-    {
+    public boolean deleteEdge(String edgeID) throws SQLException {
         boolean deleteSuccess = false;
         String sql = "DELETE FROM L1Edges WHERE edgeID=(?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, edgeID);
         int ret = stmt.executeUpdate();
-        if (ret != 0)
-        {
+        if (ret != 0) {
             deleteSuccess = true;
         }
         return deleteSuccess;
@@ -129,22 +126,21 @@ public class DatabaseAPI {
 
     /**
      * Method to update the value of a column of a node or an edge
+     *
      * @param tableName name of the table with db entry to be modified
-     * @param type either "node" or "edge" specifies which is being changed
-     * @param entryID the ID of the entry being modified
-     * @param colName the name of the column to be modified
-     * @param newVal the new value for the column entry
+     * @param type      either "node" or "edge" specifies which is being changed
+     * @param entryID   the ID of the entry being modified
+     * @param colName   the name of the column to be modified
+     * @param newVal    the new value for the column entry
      * @return true on success, false otherwise
      * @throws SQLException on error with sql operations
      */
     public boolean updateEntry(String tableName, String type, String entryID, String colName, String newVal)
-            throws SQLException
-    {
+            throws SQLException {
         boolean updateSuccess = false;
         boolean coordUpdate = false;
         String sql = "";
-        switch (colName)
-        {
+        switch (colName) {
             case "id":
                 sql = buildUpdateQuery(tableName, "id", type);
                 break;
@@ -187,13 +183,12 @@ public class DatabaseAPI {
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         if (coordUpdate) {
             stmt.setInt(1, Integer.parseInt(newVal));
-        }
-        else {
+        } else {
             stmt.setString(1, newVal);
         }
         stmt.setString(2, entryID);
         int ret = stmt.executeUpdate();
-        if (ret != 0){
+        if (ret != 0) {
             updateSuccess = true;
         }
 
@@ -202,19 +197,19 @@ public class DatabaseAPI {
 
     /**
      * method to generate all the edge entry objects for the edge editor
+     *
      * @param conn the active connection object to use
      * @return lits of edge entry objects
      * @throws SQLException if error occurs performing DB operations
      */
-    public List<EdgeEntry> genEdgeEntries(Connection conn) throws SQLException{
-        List <EdgeEntry> edgeEntries = new ArrayList<>();
+    public List<EdgeEntry> genEdgeEntries(Connection conn) throws SQLException {
+        List<EdgeEntry> edgeEntries = new ArrayList<>();
         String sql = "SELECT * FROM L1Edges";
         Statement stmt = conn.createStatement();
         ResultSet rset = null;
 
         rset = stmt.executeQuery(sql);
-        while (rset.next())
-        {
+        while (rset.next()) {
             String edgeID = rset.getString(1);
             String startNode = rset.getString(2);
             String endNode = rset.getString(3);
@@ -227,6 +222,7 @@ public class DatabaseAPI {
 
     /**
      * method to generate a list of node entry objects from the DB
+     *
      * @param conn the active DB conection object to use
      * @return list of node entry objects
      * @throws SQLException if error occurs performing DB operations
@@ -234,13 +230,13 @@ public class DatabaseAPI {
     public List<NodeEntry> genNodeEntries(Connection conn) throws SQLException {
         List<NodeEntry> nodeEntries = new ArrayList<>();
         String sql = "SELECT * FROM L1Nodes";
-        Statement stmt =  conn.createStatement();
+        Statement stmt = conn.createStatement();
 
         ResultSet rset = null;
         try {
             rset = stmt.executeQuery(sql);
         } catch (SQLException e) {
-            if(e.getMessage().contains("Table/View 'L1NODES' does not exist."))
+            if (e.getMessage().contains("Table/View 'L1NODES' does not exist."))
                 return nodeEntries;
             else
                 e.printStackTrace();
@@ -261,8 +257,15 @@ public class DatabaseAPI {
         }
         return nodeEntries;
     }
-public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLException {
 
+    /**
+     * Method to get a specific node from the database
+     * @param conn the current connection object
+     * @param requestNodeID the requested node ID
+     * @return a NodeEntry object for the requested node
+     * @throws SQLException on error performing DB operations
+     */
+    public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLException {
         final String sql = "SELECT * FROM L1Nodes WHERE nodeID=(?)";
         final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, requestNodeID);
@@ -271,7 +274,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         try {
             rset = stmt.executeQuery();
         } catch (SQLException e) {
-            if(e.getMessage().contains("Table/View 'L1NODES' does not exist."))
+            if (e.getMessage().contains("Table/View 'L1NODES' does not exist."))
                 return null;
             else
                 e.printStackTrace();
@@ -288,7 +291,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
             final String shortName = rset.getString(8);
 
             return new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
-           // nodeEntries.add(newEntry);
+            // nodeEntries.add(newEntry);
         }
         //return nodeEntries;
         return null;
@@ -296,7 +299,8 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * method to create a table
-     * @param conn connection object to the DB to use
+     *
+     * @param conn      connection object to the DB to use
      * @param createCMD the string query to create the table
      * @throws SQLException if error occurs while creating the table
      */
@@ -310,12 +314,19 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     }
 
-    public boolean editUser(String userName, String colName, String newVal) throws SQLException
-    {
+    /**
+     * method to edit a user's username, password or type in the DB
+     *
+     * @param userName the username of the user to edit
+     * @param colName  the column name to edit
+     * @param newVal   the new value to be inserted
+     * @return true on success, false otherwise
+     * @throws SQLException on error with DB operations
+     */
+    public boolean editUser(String userName, String colName, String newVal) throws SQLException {
         String query = "";
         boolean success = false;
-        switch (colName)
-        {
+        switch (colName) {
             case "username":
                 query = "UPDATE USERS SET USERNAME=(?) WHERE USERNAME=(?)";
                 break;
@@ -329,14 +340,23 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         return genEditQuery(userName, newVal, query, success);
     }
 
+    /**
+     * Method to make a query to edit table with 3 columns (NEEDS TO BE REFACTORED FOR ALL TABLES)
+     *
+     * @param first   first column
+     * @param second  second column
+     * @param third   third column
+     * @param success boolean for return value
+     * @return true on success, false otherwise
+     * @throws SQLException on error with DB operations
+     */
     private boolean genEditQuery(String first, String second, String third, boolean success) throws SQLException {
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(third);
         stmt.setString(1, second);
         stmt.setString(2, first);
         int ret = stmt.executeUpdate();
 
-        if (ret != 0)
-        {
+        if (ret != 0) {
             success = true;
         }
         return success;
@@ -344,46 +364,50 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * method for deleting a user from the USERS database
+     *
      * @param username the username of the user to delete
      * @return true on success, false otherwise
      * @throws SQLException on error performing SQL operations
      */
-    public boolean deleteUser(String username) throws SQLException
-    {
+    public boolean deleteUser(String username) throws SQLException {
         boolean deleteSuccess = false;
         String sql = "DELETE FROM USERS WHERE USERNAME=(?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, username);
         int ret = stmt.executeUpdate();
-        if (ret != 0)
-        {
+        if (ret != 0) {
             deleteSuccess = true;
         }
         return deleteSuccess;
     }
 
-    public ArrayList<String> listAllUsers() throws SQLException{
+    /**
+     * Method to return list of all users in the DB (needed for the UI)
+     *
+     * @return list of strings with all the usernames
+     * @throws SQLException on error performing DB operations
+     */
+    public ArrayList<String> listAllUsers() throws SQLException {
         ArrayList<String> allUsernames = new ArrayList<>();
         String query = "SELECT * FROM USERS";
         ResultSet rset;
         Statement stmt = ConnectionHandler.getConnection().createStatement();
         rset = stmt.executeQuery(query);
-        while (rset.next())
-        {
-            allUsernames.add(rset.getString(1));
+        while (rset.next()) {
+            allUsernames.add(rset.getString(2));
         }
         return allUsernames;
     }
 
     /**
      * method to check a given username and password and see if it is valid
-     * @param username the username for the account to login
+     *
+     * @param username         the username for the account to login
      * @param suppliedPassword the password supplied by the user
      * @return true if the password is correct
      * @throws SQLException on error with DB operations
      */
-    public boolean authenticate(String username, String suppliedPassword) throws SQLException
-    {
+    public boolean authenticate(String username, String suppliedPassword) throws SQLException {
         boolean authenticated = false;
         String query = "SELECT * FROM USERS WHERE USERNAME=(?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
@@ -402,14 +426,14 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * adds a user to the database in the table USERS
+     *
      * @param userType employee, visitor, admin
      * @param username username of the user
      * @param password the user's password
      * @return true on success false otherwise
      * @throws SQLException on error with DB operations
      */
-    public boolean addUser(String userType, String username, String password) throws SQLException
-    {
+    public boolean addUser(String userType, String username, String password) throws SQLException {
         boolean success = false;
         String sql = "INSERT INTO USERS values(?, ?, ?)";
 
@@ -418,11 +442,12 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * method to construct add query for tables with 3 columns (NEEDS REFACTORING FOR ALL INSERTIONS)
-     * @param first first string value in column 1
-     * @param second second value for column 2
-     * @param third third value for column 3
+     *
+     * @param first   first string value in column 1
+     * @param second  second value for column 2
+     * @param third   third value for column 3
      * @param success the boolean value for the return
-     * @param sql the variable to hold the query
+     * @param sql     the variable to hold the query
      * @return boolean for success or not
      * @throws SQLException
      */
@@ -433,8 +458,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         stmt.setString(3, third);
 
         int result = stmt.executeUpdate();
-        if (result != 0)
-        {
+        if (result != 0) {
             success = true;
         }
         return success;
@@ -442,18 +466,17 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * method to edit a service request column in the database
-     * @param name name of the service request to be edited
+     *
+     * @param name    name of the service request to be edited
      * @param colName name of the column to be edited
-     * @param newVal new value for the column to have
+     * @param newVal  new value for the column to have
      * @return true on success, false otherwise
      * @throws SQLException on error performing DB operations
      */
-    public boolean editServiceReq(String name, String colName, String newVal) throws SQLException
-    {
+    public boolean editServiceReq(String name, String colName, String newVal) throws SQLException {
         String query = "";
         boolean success = false;
-        switch (colName)
-        {
+        switch (colName) {
             case "name":
                 query = "UPDATE SERVICE_REQUESTS SET NAME=(?) WHERE NAME=(?)";
                 break;
@@ -469,8 +492,9 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * Method to add a single service request to the DB
-     * @param name name of the service request to be added
-     * @param person person assigned to the new service request
+     *
+     * @param name      name of the service request to be added
+     * @param person    person assigned to the new service request
      * @param completed status of the service request either "true" or "false"
      * @return true on success, false otherwise
      * @throws SQLException on error performing DB operations
@@ -484,17 +508,17 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * Method for adding multiple service requests to the DB at once if needed
+     *
      * @param reqData list of strings containing the service request data
      * @throws SQLException on error performing DB operations
      */
     public void populateReqs(List<String[]> reqData) throws SQLException {
-        for (String[] arr : reqData)
-        {
+        for (String[] arr : reqData) {
             addServiceReq(arr[0], arr[1], arr[2]);
         }
     }
 
-    public void populateUsers(Connection conn) throws Exception{
+    public void populateUsers(Connection conn) throws Exception {
         final String initUserTable = "CREATE TABLE USERS(type varchar(200), " +
                 "username varchar(200), password varchar(200), primary key(username))";
         createTable(conn, initUserTable);
@@ -503,13 +527,14 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * method to create and populate the tables needed in the database (DOES NOT POPULATE SERVICE REQUESTS OR USERS)
-     * @param conn the active connection object to the DB to use
+     *
+     * @param conn     the active connection object to the DB to use
      * @param nodeData list of string arrays with node data
      * @param edgeData list of string arrays with edge data
      * @return true on success, false otherwise
      * @throws Exception if error occurs in DB operations
      */
-    private boolean populateData(Connection conn, List<String[]> nodeData, List <String[]> edgeData) throws Exception {
+    private boolean populateData(Connection conn, List<String[]> nodeData, List<String[]> edgeData) throws Exception {
         try {
             final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
                     "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
@@ -534,6 +559,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * method to add all the nodes to the databases passed from populateDB()
+     *
      * @param data lit of string arrays containing all the node data
      * @throws SQLException on error performing database operations
      */
@@ -549,26 +575,23 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * Used to drop a table
-     * @param conn The SQL Connection
+     *
+     * @param conn  The SQL Connection
      * @param table The name of the table to drop
      * @return true if the table was dropped, false otherwise.
      * @author Alex Friedman (ahf)
      */
-    public final boolean dropTable(Connection conn, String table)
-    {
-        try
-        {
+    public final boolean dropTable(Connection conn, String table) {
+        try {
             String sql = "drop table " + table;
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             stmt.close();
 
             return true;
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             //System.out.println("MSG: " + e.getMessage());
-            if(e.getMessage().contains("'DROP TABLE' cannot be performed on '" + table + "' because it does not exist."))
+            if (e.getMessage().contains("'DROP TABLE' cannot be performed on '" + table + "' because it does not exist."))
                 return false;
 
             //FIXME: DO BETTER
@@ -579,6 +602,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * Method to add all the edges in the list of string arrays passed to populateDB
+     *
      * @param data list of string arrays containing edge data
      * @throws SQLException on error executing DB operations
      */
@@ -592,7 +616,8 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     /**
      * Method to populate the DB with initial values of edges and nodes
-     * @param conn the active connection object to use
+     *
+     * @param conn     the active connection object to use
      * @param nodeData list of string arrays containing node column values
      * @param edgeData list of string arrays containing edge column values
      * @return true on succes, false otherwise
@@ -610,7 +635,8 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         return success;
     }
 
-    private DatabaseAPI() {}
+    private DatabaseAPI() {
+    }
 
     private static class DatabaseSingletonHelper {
         private static final DatabaseAPI databaseAPI = new DatabaseAPI();
