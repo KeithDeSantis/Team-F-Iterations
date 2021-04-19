@@ -326,10 +326,11 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
                 query = "UPDATE USERS SET PASSWORD=(?) WHERE USERNAME=(?)";
                 break;
         }
-        return genEditQuery(userName, newVal, query, success);
+        return genEditQuery(userName, newVal, query);
     }
 
-    private boolean genEditQuery(String first, String second, String third, boolean success) throws SQLException {
+    private boolean genEditQuery(String first, String second, String third) throws SQLException {
+        boolean success = false;
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(third);
         stmt.setString(1, second);
         stmt.setString(2, first);
@@ -427,7 +428,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
                 query = "UPDATE SERVICE_REQUESTS SET COMPLETED=(?) WHERE NAME=(?)";
                 break;
         }
-        return genEditQuery(name, newVal, query, success);
+        return genEditQuery(name, newVal, query);
     }
 
     /**
