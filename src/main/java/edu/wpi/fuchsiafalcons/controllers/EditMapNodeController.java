@@ -73,6 +73,8 @@ public class EditMapNodeController {
     @FXML private JFXButton zoomInButton;
     @FXML private JFXButton zoomOutButton;
 
+    @FXML private Pane outerPane;
+
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
 
@@ -106,6 +108,7 @@ public class EditMapNodeController {
         updateZoom();
 
         final Scale scale = new Scale(zoomLevel,zoomLevel, 0, 0);
+
 
        canvas.getTransforms().add(scale);
 
@@ -164,7 +167,7 @@ public class EditMapNodeController {
 
         // scroll.addEventFilter(ScrollEvent.ANY, e -> {
 
-
+        outerPane.setStyle("-fx-background-color: #ff0000");
 
         canvas.setOnScroll(e -> {
 
@@ -189,6 +192,67 @@ public class EditMapNodeController {
                 canvas.getTransforms().add(newScale);
 
                 final double zt = canvas.getBoundsInParent().getWidth() / canvas.getBoundsInLocal().getWidth();
+
+                final Bounds bounds = canvas.getBoundsInParent();
+
+                if(zt < 0.1 || bounds.getMinX()  > 0 || bounds.getMinY() > 0)
+                {
+                    canvas.getTransforms().remove(newScale);
+                    return;
+                }
+                //   map.setFitWidth(canvas.getBoundsInParent().getw);
+
+                System.out.println(zt);
+
+
+               // System.out.println(bounds);
+                // canvas.getTransforms().clear();
+
+                outerPane.setPrefSize(bounds.getWidth(), bounds.getHeight());
+
+//
+//                outerPane.setTranslateX(- bounds.getMinX());
+//                outerPane.setTranslateY(- bounds.getMinY());
+//
+//                canvas.setTranslateX(0);//-bounds.getMinX());
+//                canvas.setTranslateY(0);//-bounds.getMinY());
+
+
+                scroll.layout();
+
+            }
+
+        });
+        /*
+        canvas.setOnScroll(e -> {
+
+            if(e.isControlDown()) {
+                e.consume();
+                double zoom_fac = 1.08;
+
+                if(e.getDeltaY() < 0) {
+                    zoom_fac = 2.0 - zoom_fac;
+                }
+
+                Scale newScale = new Scale();
+                newScale.setPivotX(e.getX());
+                newScale.setPivotY(e.getY());
+                newScale.setX( canvas.getScaleX() * zoom_fac );
+                newScale.setY( canvas.getScaleY() * zoom_fac );
+
+
+
+
+
+                canvas.getTransforms().add(newScale);
+
+                final double zt = canvas.getBoundsInParent().getWidth() / canvas.getBoundsInLocal().getWidth();
+
+                if(zt < 0.1)
+                {
+                    canvas.getTransforms().remove(newScale);
+                    return;
+                }
              //   map.setFitWidth(canvas.getBoundsInParent().getw);
 
                 System.out.println(zt);
@@ -196,7 +260,28 @@ public class EditMapNodeController {
                 final Bounds bounds = canvas.getBoundsInParent();
                // canvas.getTransforms().clear();
 
-                canvas.setPrefSize(bounds.getWidth(), bounds.getHeight());
+                outerPane.setPrefSize(bounds.getWidth(), bounds.getHeight());
+
+               scroll.setVmin(0);
+               scroll.setVvalue(bounds.getMinY());
+               scroll.setVmax(bounds.getHeight());
+
+                //outerPane.setTranslateX(100);
+
+
+                //outerPane.setTranslateX(- bounds.getMinX());
+                //outerPane.setTranslateY(- bounds.getMinY());
+
+                //canvas.setTranslateX(0);//-bounds.getMinX());
+                //canvas.setTranslateY(0);//-bounds.getMinY());
+
+               // final double ox = bounds.getMinX() / bounds.getWidth();
+               // final double oy = bounds.getMinY() / bounds.getHeight();
+
+                final Point2D ox = inverse(new Point2D(-bounds.getMinX(), -bounds.getMinY()), null);
+
+               // scroll.setHvalue(ox.getX());
+              //  scroll.setVvalue(ox.getY());
 
 
                 //canvas.setTranslateX(-bounds.getMinX());
@@ -230,6 +315,8 @@ public class EditMapNodeController {
             }
 
         });
+        */
+
         /*
 
         canvas.setOnScroll(e -> {
@@ -364,7 +451,7 @@ public class EditMapNodeController {
 
     public Point2D inverse(Point2D pt, Point2D at) {
 
-        Point2D inverse = canvas.localToParent(pt);//new Point2D(1200, 680));
+        Point2D inverse = new Point2D(1200, 680);
 
         final Bounds viewportBounds = scroll.getViewportBounds();
         final Bounds contentBounds = canvas.getBoundsInLocal();
@@ -866,6 +953,8 @@ public class EditMapNodeController {
         map.setFitWidth(width);
         map.setFitHeight(height);
         //map.setImage(image);
+
+        outerPane.setPrefSize(width, height);
         scroll.layout();
     }
 

@@ -26,11 +26,15 @@
             <HBox alignment="CENTER" prefHeight="419.0" prefWidth="940.0">
                <children>
                   <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#selectNode" />
-                  <ScrollPane fx:id="scroll" prefHeight="442.0" prefWidth="521.0">
+                  <ScrollPane fx:id="scroll" maxHeight="-Infinity" prefHeight="334.0" prefWidth="521.0">
                      <content>
-                        <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
+                        <Pane fx:id="outerPane" prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" onContextMenuRequested="#handleMapContextMenu" onMouseClicked="#handleZoomClicked" pickOnBounds="true" preserveRatio="true" />
+                              <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" onContextMenuRequested="#handleMapContextMenu" onMouseClicked="#handleZoomClicked" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </Pane>
                            </children>
                         </Pane>
                      </content>
@@ -59,11 +63,13 @@
                         <JFXButton fx:id="saveToFileButton" buttonType="RAISED" disable="true" onAction="#handleSaveButtonClicked" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="Save to File" textFill="WHITE">
                            <font>
                               <Font name="Tahoma" size="13.0" />
-                           </font></JFXButton>
+                           </font>
+                        </JFXButton>
                         <JFXButton fx:id="loadFromFileButton" buttonType="RAISED" onAction="#handleLoadButtonClicked" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="Load From File" textFill="WHITE">
                            <font>
                               <Font name="Tahoma" size="13.0" />
-                           </font></JFXButton>
+                           </font>
+                        </JFXButton>
                         <JFXButton fx:id="resetDatabaseButton" buttonType="RAISED" onAction="#handleResetDatabase" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="Reset Database" textFill="WHITE">
                            <font>
                               <Font name="Tahoma" size="13.0" />
