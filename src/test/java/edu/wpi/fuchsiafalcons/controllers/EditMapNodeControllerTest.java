@@ -181,6 +181,13 @@ public class EditMapNodeControllerTest extends ApplicationTest {
 
     @Test
     public void testDeleteNodeOnMap() {
+        //USed to get anything matching b/c we seem to have multiple now? //FIXME: IMPROVE
+        List<NodeEntry> query = this.nodeList.stream().filter(node ->
+                node.getNodeID().equals("ACONF00103")
+        ).collect(Collectors.toList());
+
+        final int pre = query.size();
+
         verifyThat("Reset Database", Node::isVisible);
         clickOn("Reset Database");
         verifyThat("ACONF00103", Node::isVisible);
@@ -188,6 +195,12 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         verifyThat("#ACONF00103", Node::isVisible);
         clickOn("Delete");
         // Could add a more thorough test though unsure how - KD and ZS
+        clickOn("Reset Database");
+
+        query = this.nodeList.stream().filter(node ->
+                node.getNodeID().equals("ACONF00103")
+        ).collect(Collectors.toList());
+        assertEquals(pre, query.size());
         clickOn("Reset Database");
     }
 

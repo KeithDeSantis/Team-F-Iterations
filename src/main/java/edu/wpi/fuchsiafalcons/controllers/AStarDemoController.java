@@ -86,10 +86,15 @@ public class AStarDemoController implements Initializable {
         //ahf - yes this should be done better. At some point.
 
         try {
-            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
-            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            List<NodeEntry> allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            List<EdgeEntry> alleEgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
 
-            this.graph = GraphLoader.load(nodeEntries, edgeEntries);
+//            final List<NodeEntry> nodeEntries = allNodeEntries.stream().filter(node -> node.getFloor().equals("1")
+//            && !node.getBuilding().equals("Shapiro") && !node.getBuilding().equals("BTM")).collect(Collectors.toList());
+//
+//            final List<EdgeEntry> edgeEntries = alleEgeEntries.stream().filter( node -> haveNode(nodeEntries, node.getStartNode())
+//                    && haveNode(nodeEntries, node.getEndNode()) ).collect(Collectors.toList());
+            this.graph = GraphLoader.load(allNodeEntries, alleEgeEntries);
         } catch (Exception e) {
             this.graph = new Graph();
             e.printStackTrace();
@@ -103,6 +108,15 @@ public class AStarDemoController implements Initializable {
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
         pathfindButton.setDisable(true);
+    }
+
+    private boolean haveNode(List<NodeEntry> nodeEntries, String nodeID){
+        for(NodeEntry n : nodeEntries){
+            if (n.getNodeID().equals(nodeID)) {
+                return true;
+            }
+        }
+        return false;
     }
 
         /**
