@@ -3,6 +3,7 @@ package edu.wpi.fuchsiafalcons.database;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 
+import javax.xml.transform.Result;
 import java.util.Base64;
 import java.util.Base64.*;
 
@@ -237,7 +238,6 @@ public class DatabaseAPI {
 
         ResultSet rset = null;
         try {
-
             rset = stmt.executeQuery(sql);
         } catch (SQLException e) {
             if(e.getMessage().contains("Table/View 'L1NODES' does not exist."))
@@ -362,6 +362,23 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         return deleteSuccess;
     }
 
+    public boolean authenticate(String username, String suppliedPassword) throws SQLException
+    {
+        boolean authenticated = false;
+        String query = "SELECT * FROM USERS WHERE USERNAME=(?)";
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+        stmt.setString(1, username);
+        ResultSet rset;
+        rset = stmt.executeQuery();
+        String validPass = rset.getString(3);
+
+        if (validPass.equals(suppliedPassword))
+        {
+            authenticated = true;
+        }
+        return authenticated;
+    }
+
     /**
      * adds a user to the database in the table USERS
      * @param userType employee, visitor, admin
@@ -374,7 +391,6 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
     {
         boolean success = false;
         String sql = "INSERT INTO USERS values(?, ?, ?)";
-        password = Base64.getEncoder().encodeToString(password.getBytes());
 
         return buildInsertQuery(userType, username, password, success, sql);
     }

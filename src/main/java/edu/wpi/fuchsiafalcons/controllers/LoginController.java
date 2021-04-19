@@ -3,6 +3,7 @@ package edu.wpi.fuchsiafalcons.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.SQLDataException;
+import java.sql.SQLException;
+import java.util.Base64;
 import java.io.IOException;
 
 public class LoginController {
@@ -39,9 +43,13 @@ public class LoginController {
      * @throws IOException
      * @author Jay Yen
      */
-    public void handleSignIn(ActionEvent actionEvent) throws IOException{
-        //signs in
-        if (/*username and password match an account*/ true){
+    public void handleSignIn(ActionEvent actionEvent) throws IOException, SQLException {
+        boolean authenticated = false;
+        String user = username.getText();
+        String pass = password.getText();
+
+        authenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
+        if (authenticated){
             Stage currentStage = (Stage)signIn.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageView.fxml"));
             Scene homeScene = new Scene(root);
