@@ -95,18 +95,18 @@
                         </RadialGradient>
                      </ripplerFill>
                   </JFXButton>
-                  <JFXTextField fx:id="newUsername" promptText="Add User's username" GridPane.rowIndex="2">
+                  <JFXTextField fx:id="addUsername" promptText="Add User's username" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="25.0" right="25.0" top="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
-                  <JFXTextField fx:id="newPassword" promptText="Add User's password" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <JFXTextField fx:id="addPassword" promptText="Add User's password" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="25.0" right="25.0" top="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
                   <Label text="Type of User" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <JFXComboBox fx:id="changeUserType" promptText="Change User Type" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <JFXComboBox fx:id="changeUserType" onMouseClicked="#changingUserType" promptText="Change User Type" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   <JFXComboBox fx:id="newUserType" promptText="New User Type" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets top="25.0" />

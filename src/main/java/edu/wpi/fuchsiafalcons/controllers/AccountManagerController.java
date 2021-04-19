@@ -116,4 +116,8 @@ public class AccountManagerController {
     public void changingPassword(MouseEvent mouseEvent) throws SQLException{
         fieldChanged = "password";
     }
+
+    public void changingUserType(MouseEvent mouseEvent) {
+        fieldChanged = "type";
+    }
 }
