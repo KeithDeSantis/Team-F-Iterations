@@ -118,8 +118,8 @@ public class CSVManagerTest {
 
     System.out.println((new File("")).getAbsolutePath());
 
-    final List<String[]> regFile = CSVManager.load(new File("./src/main/resources/L1Edges.csv"));
-    final List<String[]> jarFile = CSVManager.load("L1Edges.csv");
+    final List<String[]> regFile = CSVManager.load(new File("./src/main/resources/MapfAlledges.csv"));
+    final List<String[]> jarFile = CSVManager.load("MapfAlledges.csv");
 
     assertNotNull(regFile);
     assertNotNull(jarFile);
