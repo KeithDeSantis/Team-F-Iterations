@@ -375,6 +375,13 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         return allUsernames;
     }
 
+    /**
+     * method to check a given username and password and see if it is valid
+     * @param username the username for the account to login
+     * @param suppliedPassword the password supplied by the user
+     * @return true if the password is correct
+     * @throws SQLException on error with DB operations
+     */
     public boolean authenticate(String username, String suppliedPassword) throws SQLException
     {
         boolean authenticated = false;
@@ -383,11 +390,12 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         stmt.setString(1, username);
         ResultSet rset;
         rset = stmt.executeQuery();
-        String validPass = rset.getString(3);
+        if (rset.next()) {
+            String validPass = rset.getString(3);
 
-        if (validPass.equals(suppliedPassword))
-        {
-            authenticated = true;
+            if (validPass.equals(suppliedPassword)) {
+                authenticated = true;
+            }
         }
         return authenticated;
     }
@@ -486,6 +494,13 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         }
     }
 
+    public void populateUsers(Connection conn) throws Exception{
+        final String initUserTable = "CREATE TABLE USERS(type varchar(200), " +
+                "username varchar(200), password varchar(200), primary key(username))";
+        createTable(conn, initUserTable);
+        addUser("administrator", "admin", "admin");
+    }
+
     /**
      * method to create and populate the tables needed in the database (DOES NOT POPULATE SERVICE REQUESTS OR USERS)
      * @param conn the active connection object to the DB to use
@@ -510,10 +525,6 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
             final String initServiceReqTable = "CREATE TABLE SERVICE_REQUESTS(name varchar(200), " +
                     "assignedPerson varchar(200), completed varchar(200))";
             createTable(conn, initServiceReqTable);
-
-            final String initUserTable = "CREATE TABLE USERS(type varchar(200), " +
-                    "username varchar(200), password varchar(200), primary key(username))";
-            createTable(conn, initUserTable);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -589,7 +600,6 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
      */
     public boolean populateDB(Connection conn, List<String[]> nodeData, List<String[]> edgeData) throws Exception {
         boolean success = false;
-        //What can I rename 'main' to?
 
         dropTable(conn, "L1NODES");
         dropTable(conn, "L1EDGES");
@@ -599,7 +609,6 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         success = populateData(conn, nodeData, edgeData);
         return success;
     }
-
 
     private DatabaseAPI() {}
 

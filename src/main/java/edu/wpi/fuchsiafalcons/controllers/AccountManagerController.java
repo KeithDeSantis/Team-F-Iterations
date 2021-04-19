@@ -95,6 +95,11 @@ public class AccountManagerController {
             newVal = password.getText();
             DatabaseAPI.getDatabaseAPI().editUser(targetUser, "password", newVal);
         }
+        else if (fieldChanged.equals("type")){
+            targetUser = (String) selectUser.getValue();
+            newVal = (String) changeUserType.getValue();
+            DatabaseAPI.getDatabaseAPI().editUser(targetUser, "type", newVal);
+        }
         fieldChanged = "";
     }
 

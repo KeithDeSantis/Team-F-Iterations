@@ -91,7 +91,9 @@ public class DefaultPageEmployeeController {
             stage.setTitle("Language Interpretation Request");
             stage.show();
 
-        } else if (buttonPushed == service2) {
+        }
+        /**
+        else if (buttonPushed == service2) {
             // Implement Later
 
             stage = (Stage) buttonPushed.getScene().getWindow();
@@ -102,7 +104,9 @@ public class DefaultPageEmployeeController {
             stage.setTitle("Service Request Two");
             stage.show();
 
-        } else if (buttonPushed == quit) {
+        }
+         **/
+        else if (buttonPushed == quit) {
             Platform.exit();
         }
     }

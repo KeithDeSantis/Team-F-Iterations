@@ -3,7 +3,9 @@ package edu.wpi.fuchsiafalcons.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.fuchsiafalcons.database.ConnectionHandler;
 import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
+import edu.wpi.fuchsiafalcons.utils.CSVManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,15 +45,17 @@ public class LoginController {
      * @throws IOException
      * @author Jay Yen
      */
-    public void handleSignIn(ActionEvent actionEvent) throws IOException, SQLException {
+    public void handleSignIn(ActionEvent actionEvent) throws Exception {
         boolean authenticated = false;
         String user = username.getText();
         String pass = password.getText();
 
+        DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "USERS");
+        DatabaseAPI.getDatabaseAPI().populateUsers(ConnectionHandler.getConnection());
         authenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
         if (authenticated){
             Stage currentStage = (Stage)signIn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageAdminView.fxml"));
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
             currentStage.show();
@@ -60,7 +64,7 @@ public class LoginController {
         //displays error message
         else{
             Stage currentStage = (Stage)signIn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/LoginFailView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/LoginFail.fxml"));
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
             currentStage.show();
