@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class AccountManagerController {
     @FXML
     private JFXTextField addUsername;
 
-
+    private String fieldChanged = "";
 
     public void initialize(URL location, ResourceBundle resources) throws SQLException {
         ArrayList<String> allUsers = DatabaseAPI.getDatabaseAPI().listAllUsers();
@@ -76,18 +77,28 @@ public class AccountManagerController {
     public void handleAddUser(ActionEvent actionEvent) throws SQLException{
         String user = addUsername.getText();
         String pass = addPassword.getText();
+        String type = (String) newUserType.getValue();
 
         DatabaseAPI.getDatabaseAPI().addUser(type, user, pass);
     }
 
-    public void handleSaveChanges(ActionEvent actionEvent) {
-        String user = username.getText();
-        String type = (String) changeUserType.getValue();
-        String pass = password.getText();
+    public void handleSaveChanges(ActionEvent actionEvent) throws SQLException{
+        String targetUser = "";
+        String newVal = "";
+        if (fieldChanged.equals("username")){
+            targetUser = (String) selectUser.getValue();
+            newVal = username.getText();
+            DatabaseAPI.getDatabaseAPI().editUser(targetUser, "username", newVal);
+        }
+        else if (fieldChanged.equals("password")){
+            targetUser = (String) selectUser.getValue();
+            newVal = password.getText();
+            DatabaseAPI.getDatabaseAPI().editUser(targetUser, "password", newVal);
+        }
+        fieldChanged = "";
     }
 
-    public void handleAdminHome(ActionEvent actionEvent) {
-
+    public void handleAdminHome(ActionEvent actionEvent) throws IOException {
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
         Stage stage;
         Parent root;
@@ -98,9 +109,11 @@ public class AccountManagerController {
         stage.show();
     }
 
-    public void changingUsername(MouseEvent mouseEvent) {
+    public void changingUsername(MouseEvent mouseEvent) throws SQLException{
+        fieldChanged = "username";
     }
 
-    public void changingPassword(MouseEvent mouseEvent) {
+    public void changingPassword(MouseEvent mouseEvent) throws SQLException{
+        fieldChanged = "password";
     }
 }
