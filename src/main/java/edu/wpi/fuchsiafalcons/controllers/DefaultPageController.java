@@ -35,7 +35,7 @@ public class DefaultPageController {
         directionsImage.setImage(directions);
         final Image serviceRequest = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButton.png"));
         serviceButton.setImage(serviceRequest);
-        final Image lockImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButton.png"));
+        final Image lockImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/login.png"));
         login.setImage(lockImage);
     }
     /**

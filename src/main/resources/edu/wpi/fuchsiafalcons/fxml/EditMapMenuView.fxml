@@ -55,7 +55,7 @@
                         <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <JFXButton fx:id="editVertex" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true">
+                        <JFXButton fx:id="mapVertex" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>

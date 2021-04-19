@@ -27,6 +27,7 @@ public class DefaultPageEmployeeController {
     private JFXButton serviceRequest;
     @FXML
     private JFXButton quit;
+    @FXML private JFXButton serviceManager;
 
     @FXML private ImageView directionsImage;
 
@@ -88,24 +89,22 @@ public class DefaultPageEmployeeController {
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/ServiceRequestHomeView.fxml"));
             stage.getScene().setRoot(root);
-            stage.setTitle("Language Interpretation Request");
+            stage.setTitle("Service Request Home");
             stage.show();
-
         }
-        /**
-        else if (buttonPushed == service2) {
+
+        else if (buttonPushed == serviceManager) {
             // Implement Later
 
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FoodDeliveryServiceRequestView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/ServiceRequestManageView.fxml"));
             //Scene scene = new Scene(root);
             //stage.setScene(scene);
             stage.getScene().setRoot(root);
-            stage.setTitle("Service Request Two");
+            stage.setTitle("Service Request Manager");
             stage.show();
 
         }
-         **/
         else if (buttonPushed == quit) {
             Platform.exit();
         }

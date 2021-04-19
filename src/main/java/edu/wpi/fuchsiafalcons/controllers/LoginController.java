@@ -54,6 +54,7 @@ public class LoginController {
         DatabaseAPI.getDatabaseAPI().populateUsers(ConnectionHandler.getConnection());
         authenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
         if (authenticated){
+
             Stage currentStage = (Stage)signIn.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageAdminView.fxml"));
             Scene homeScene = new Scene(root);

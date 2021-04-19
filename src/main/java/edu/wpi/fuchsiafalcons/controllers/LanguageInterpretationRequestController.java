@@ -68,7 +68,7 @@ public class LanguageInterpretationRequestController implements Initializable {
      */
     public void handleSubmit(ActionEvent actionEvent) throws IOException{
         Stage currentStage = (Stage)submit.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/LanguageInterpretationSubmitView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FormSubmittedView.fxml"));
         Scene homeScene = new Scene(root);
         currentStage.setScene(homeScene);
         currentStage.show();

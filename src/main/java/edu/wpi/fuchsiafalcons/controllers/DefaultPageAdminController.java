@@ -93,13 +93,12 @@ public class DefaultPageAdminController {
             stage.show();
 
         } else if (buttonPushed == manageAccount) {
-//create account manager page
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FoodDeliveryServiceRequestView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/AccountManagerView.fxml"));
             //Scene scene = new Scene(root);
             //stage.setScene(scene);
             stage.getScene().setRoot(root);
-            stage.setTitle("Service Request Two");
+            stage.setTitle("Account Manager");
             stage.show();
 
         } else if (buttonPushed == quit) {
