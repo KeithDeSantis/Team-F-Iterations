@@ -506,16 +506,16 @@ public class EditMapNodeController {
      * @author ZheCheng
      */
     private void drawCircle(double x, double y, String nodeID){
-        Circle c = new Circle(x, y, 7.0);
-        c.setFill(Color.BLUE);
+        Circle c = new Circle(x, y, UIConstants.NODE_RADIUS);
+        c.setFill(UIConstants.NODE_COLOR);
         c.setId(nodeID);
-        c.setOnMouseEntered(e->{if(!c.equals(selectedCircle))c.setFill(Color.RED);});
-        c.setOnMouseExited(e->{if(!c.equals(selectedCircle))c.setFill(Color.BLUE);});
+        c.setOnMouseEntered(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
+        c.setOnMouseExited(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR);});
         c.setOnMouseClicked(e->{
             if(selectedCircle != null)
-                selectedCircle.setFill(Color.BLUE);
+                selectedCircle.setFill(UIConstants.NODE_COLOR);
             selectedCircle = c;
-            c.setFill(Color.GREEN);
+            c.setFill(UIConstants.NODE_COLOR_SELECTED);
             nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
             nodeTreeTable.requestFocus();nodeTreeTable.scrollTo(findNode(nodeID));});
 
@@ -558,7 +558,7 @@ public class EditMapNodeController {
         if(node.getFloor().equals(floor)){
             drawNodeOnFloor();
             if(selectedCircle != null)
-                selectedCircle.setFill(Color.BLUE);
+                selectedCircle.setFill(UIConstants.NODE_COLOR);
         }else{
             floor = node.getFloor();
             switchMap();
@@ -569,7 +569,7 @@ public class EditMapNodeController {
             return;
         }
         selectedCircle = c;
-        c.setFill(Color.GREEN);
+        c.setFill(UIConstants.NODE_COLOR_SELECTED);
         centerNode(c);
     }
 

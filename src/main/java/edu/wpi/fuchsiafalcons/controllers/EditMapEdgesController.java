@@ -7,6 +7,7 @@ import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
+import edu.wpi.fuchsiafalcons.utils.UIConstants;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +29,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.util.Callback;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -417,7 +419,7 @@ public class EditMapEdgesController {
         if(startNode.getFloor().equals(floor) || endNode.getFloor().equals(floor)) {
             drawEdgeNodeOnFloor();
             if(selectedLine != null)
-                selectedLine.setStroke(DEFAULT_LINE_COLOR);
+                selectedLine.setStroke(UIConstants.LINE_COLOR);
         }else{
             floor = startNode.getFloor();
             switchMap();
@@ -522,16 +524,16 @@ public class EditMapEdgesController {
      */
     private void drawCircle(double x, double y, String nodeID){
         Circle c = new Circle(x, y, 4.0);
-        c.setFill(Color.BLUE);
+        c.setFill(UIConstants.NODE_COLOR);
         c.setId(nodeID);
-        c.setOnMouseEntered(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(Color.RED);});
-        c.setOnMouseExited(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(Color.BLUE);});
+        c.setOnMouseEntered(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
+        c.setOnMouseExited(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(UIConstants.NODE_COLOR);});
         c.setOnMouseClicked(e->{
             if(c.equals(firstCircle)) {
                 firstCircle = null;
                 return;
             }
-            c.setFill(Color.GREEN);
+            c.setFill(UIConstants.NODE_COLOR_SELECTED);
             if(firstCircle == null)
                 firstCircle = c;
             else {
@@ -565,21 +567,21 @@ public class EditMapEdgesController {
         updateEdgeEntry(newEdge);
     }
 
-    private final Color DEFAULT_LINE_COLOR = new Color(Color.ORANGE.getRed(), Color.ORANGE.getGreen(), Color.ORANGE.getBlue(), 0.5);
+
     /**
      * Draw a single line to represent the node
      * @author ZheCheng
      */
     private void drawLine(double startX, double startY, double endX, double endY, String edgeID){
         Line l = new Line(startX, startY, endX, endY);
-        l.setStrokeWidth(7);
-        l.setStroke(DEFAULT_LINE_COLOR);
+        l.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
+        l.setStroke(UIConstants.LINE_COLOR);
         l.setId(edgeID);
-        l.setOnMouseEntered(e->{if(!l.equals(selectedLine))l.setStroke(Color.RED);});
-        l.setOnMouseExited(e->{if(!l.equals(selectedLine))l.setStroke(DEFAULT_LINE_COLOR);});
+        l.setOnMouseEntered(e->{if(!l.equals(selectedLine))l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);});
+        l.setOnMouseExited(e->{if(!l.equals(selectedLine))l.setStroke(UIConstants.LINE_COLOR);});
         l.setOnMouseClicked(e->{
             if(selectedLine != null)
-                selectedLine.setStroke(DEFAULT_LINE_COLOR);
+                selectedLine.setStroke(UIConstants.LINE_COLOR);
             selectedLine = l;
             l.setStroke(Color.GREEN);
             edgeTable.getSelectionModel().clearAndSelect(findEdge(edgeID));

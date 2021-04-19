@@ -8,6 +8,7 @@ import edu.wpi.fuchsiafalcons.pathfinding.Graph;
 import edu.wpi.fuchsiafalcons.pathfinding.GraphLoader;
 import edu.wpi.fuchsiafalcons.pathfinding.Path;
 import edu.wpi.fuchsiafalcons.pathfinding.Vertex;
+import edu.wpi.fuchsiafalcons.utils.UIConstants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -147,8 +148,8 @@ public class AStarDemoController implements Initializable {
         if(this.startNodeDisplay == null)
         {
             this.startNodeDisplay = new Circle();
-            this.startNodeDisplay.setFill(Color.BLUE);
-            this.startNodeDisplay.setRadius(7.0);
+            this.startNodeDisplay.setFill(UIConstants.NODE_COLOR);
+            this.startNodeDisplay.setRadius(UIConstants.NODE_RADIUS);
 
             this.canvas.getChildren().add(this.startNodeDisplay);
         }
@@ -216,7 +217,7 @@ public class AStarDemoController implements Initializable {
                     final Vertex end = pathData.get(i + 1);
 
                     final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
-                    line.setStrokeWidth(2);
+                    line.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
                     line.setStroke(Color.ORANGE);
 
                     canvas.getChildren().add(line);
