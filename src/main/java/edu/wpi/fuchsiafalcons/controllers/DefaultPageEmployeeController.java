@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,27 +18,37 @@ import java.io.IOException;
 public class DefaultPageEmployeeController {
 
     @FXML
-    private Button editVertex;
+    private JFXButton editVertex;
     @FXML
-    private Button editEdges;
+    private JFXButton editEdges;
     @FXML
-    private Button AStarDemo;
+    private JFXButton AStarDemo;
     @FXML
-    private Button serviceRequest;
+    private JFXButton serviceRequest;
     @FXML
-    private Button service2;
-    @FXML
-    private Button quit;
+    private JFXButton quit;
 
     @FXML private ImageView directionsImage;
 
     @FXML private ImageView serviceButton;
+
+    @FXML private ImageView mapEdge;
+
+    @FXML private ImageView mapNode;
+
+    @FXML private ImageView manageServices;
 
     @FXML private void initialize(){
         final Image directions = new Image(getClass().getResourceAsStream("/imagesAndLogos/directionsArrow.png"));
         directionsImage.setImage(directions);
         final Image serviceRequest = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButton.png"));
         serviceButton.setImage(serviceRequest);
+        final Image mapLine = new Image(getClass().getResourceAsStream("/imagesAndLogos/mapEdge.png"));
+        mapEdge.setImage(mapLine);
+        final Image mapDot = new Image(getClass().getResourceAsStream("/imagesAndLogos/mapNode.png"));
+        mapNode.setImage(mapDot);
+        final Image serviceManage = new Image(getClass().getResourceAsStream("/imagesAndLogos/manageServices.png"));
+        manageServices.setImage(serviceManage);
     }
 
     /**

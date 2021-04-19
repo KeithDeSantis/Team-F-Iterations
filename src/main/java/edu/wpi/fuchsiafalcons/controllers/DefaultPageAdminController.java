@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,17 +18,17 @@ import java.io.IOException;
 public class DefaultPageAdminController {
 
     @FXML
-    private Button editMap;
+    private JFXButton editMap;
     @FXML
-    private Button manageServices;
+    private JFXButton manageServices;
     @FXML
-    private Button AStarDemo;
+    private JFXButton AStarDemo;
     @FXML
-    private Button serviceRequest;
+    private JFXButton serviceRequest;
     @FXML
-    private Button manageAccount;
+    private JFXButton manageAccount;
     @FXML
-    private Button quit;
+    private JFXButton quit;
     @FXML
     private ImageView directionsImage;
     @FXML

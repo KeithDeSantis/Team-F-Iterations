@@ -58,23 +58,23 @@
                         <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <JFXButton fx:id="editVertex" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleButtonPushed" prefHeight="91.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                        <JFXButton fx:id="editVertex" alignment="CENTER" contentDisplay="CENTER" onAction="#handleButtonPushed" prefHeight="91.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>
                            <graphic>
-                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="mapNode" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="editEdges" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.rowIndex="2">
+                        <JFXButton fx:id="editEdges" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true" GridPane.rowIndex="2">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>
                            <graphic>
-                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="mapEdge" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="service2" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.rowIndex="4">
+                        <JFXButton fx:id="serviceManager" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true" GridPane.rowIndex="4">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -123,7 +123,7 @@
                               <Font name="Tahoma" size="18.0" />
                            </font>
                         </Label>
-                        <Label text="Service 2" GridPane.rowIndex="5">
+                        <Label text="Manage Services" GridPane.rowIndex="5">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>
@@ -141,7 +141,7 @@
                               <Insets left="50.0" right="53.0" />
                            </GridPane.margin>
                         </Text>
-                        <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
+                        <ImageView fx:id="manageServices" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
                      </children>
                      <VBox.margin>
                         <Insets left="60.0" right="60.0" top="50.0" />
