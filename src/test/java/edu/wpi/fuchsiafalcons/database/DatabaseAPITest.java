@@ -250,4 +250,18 @@ class DatabaseAPITest {
         });
     }
 
+    @Test
+    @DisplayName("test adding a user")
+    public void testAddingAUser() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().addUser("Employee","user1","password"));
+    }
+
+
+    @Test
+    @DisplayName("test edit a user")
+    public void testEditAUser() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addUser("Employee","user1","password");
+        assertTrue(DatabaseAPI.getDatabaseAPI().editUser("user1","username","user2"));
+    }
+
 }

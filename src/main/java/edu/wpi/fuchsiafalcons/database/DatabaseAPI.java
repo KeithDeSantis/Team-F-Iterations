@@ -2,7 +2,9 @@ package edu.wpi.fuchsiafalcons.database;
 
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
-import edu.wpi.fuchsiafalcons.pathfinding.Edge;
+
+import java.util.Base64;
+import java.util.Base64.*;
 
 import java.sql.*;
 import java.lang.*;
@@ -81,17 +83,7 @@ public class DatabaseAPI {
         boolean addSuccess = false;
         String sql = "INSERT INTO L1Edges values(?, ?, ?)";
 
-        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
-        stmt.setString(1, id);
-        stmt.setString(2, startNode);
-        stmt.setString(3, endNode);
-
-        int result = stmt.executeUpdate();
-        if (result != 0)
-        {
-            addSuccess = true;
-        }
-        return addSuccess;
+        return buildInsertQuery(id, startNode, endNode, addSuccess, sql);
     }
 
     /**
@@ -318,6 +310,99 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
 
     }
 
+    public boolean editUser(String userName, String colName, String newVal) throws SQLException
+    {
+        String query = "";
+        boolean success = false;
+        switch (colName)
+        {
+            case "username":
+                query = "UPDATE USERS SET USERNAME=(?) WHERE USERNAME=(?)";
+                break;
+            case "type":
+                query = "UPDATE USERS SET TYPE=(?) WHERE USERNAME=(?)";
+                break;
+            case "password":
+                query = "UPDATE USERS SET PASSWORD=(?) WHERE USERNAME=(?)";
+                break;
+        }
+        return genEditQuery(userName, newVal, query, success);
+    }
+
+    private boolean genEditQuery(String first, String second, String third, boolean success) throws SQLException {
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(third);
+        stmt.setString(1, second);
+        stmt.setString(2, first);
+        int ret = stmt.executeUpdate();
+
+        if (ret != 0)
+        {
+            success = true;
+        }
+        return success;
+    }
+
+    /**
+     * method for deleting a user from the USERS database
+     * @param username the username of the user to delete
+     * @return true on success, false otherwise
+     * @throws SQLException on error performing SQL operations
+     */
+    public boolean deleteUser(String username) throws SQLException
+    {
+        boolean deleteSuccess = false;
+        String sql = "DELETE FROM USERS WHERE USERNAME=(?)";
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, username);
+        int ret = stmt.executeUpdate();
+        if (ret != 0)
+        {
+            deleteSuccess = true;
+        }
+        return deleteSuccess;
+    }
+
+    /**
+     * adds a user to the database in the table USERS
+     * @param userType employee, visitor, admin
+     * @param username username of the user
+     * @param password the user's password
+     * @return true on success false otherwise
+     * @throws SQLException on error with DB operations
+     */
+    public boolean addUser(String userType, String username, String password) throws SQLException
+    {
+        boolean success = false;
+        String sql = "INSERT INTO USERS values(?, ?, ?)";
+        password = Base64.getEncoder().encodeToString(password.getBytes());
+
+        return buildInsertQuery(userType, username, password, success, sql);
+    }
+
+    /**
+     * method to construct add query for tables with 3 columns (NEEDS REFACTORING FOR ALL INSERTIONS)
+     * @param first first string value in column 1
+     * @param second second value for column 2
+     * @param third third value for column 3
+     * @param success the boolean value for the return
+     * @param sql the variable to hold the query
+     * @return boolean for success or not
+     * @throws SQLException
+     */
+    private boolean buildInsertQuery(String first, String second, String third, boolean success, String sql) throws SQLException {
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, first);
+        stmt.setString(2, second);
+        stmt.setString(3, third);
+
+        int result = stmt.executeUpdate();
+        if (result != 0)
+        {
+            success = true;
+        }
+        return success;
+    }
+
     /**
      * method to edit a service request column in the database
      * @param name name of the service request to be edited
@@ -342,16 +427,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
                 query = "UPDATE SERVICE_REQUESTS SET COMPLETED=(?) WHERE NAME=(?)";
                 break;
         }
-        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
-        stmt.setString(1, newVal);
-        stmt.setString(2, name);
-        int ret = stmt.executeUpdate();
-
-        if (ret != 0)
-        {
-            success = true;
-        }
-        return success;
+        return genEditQuery(name, newVal, query, success);
     }
 
     /**
@@ -366,17 +442,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         boolean success = false;
         String sql = "INSERT INTO SERVICE_REQUESTS values(?, ?, ?)";
 
-        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
-        stmt.setString(1, name);
-        stmt.setString(2, person);
-        stmt.setString(3, completed);
-
-        int result = stmt.executeUpdate();
-        if (result != 0)
-        {
-            success = true;
-        }
-        return success;
+        return buildInsertQuery(name, person, completed, success, sql);
     }
 
     /**
@@ -392,7 +458,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
     }
 
     /**
-     * method to create and populate the tables needed in the database (DOES NOT POPULATE SERVICE REQUESTS)
+     * method to create and populate the tables needed in the database (DOES NOT POPULATE SERVICE REQUESTS OR USERS)
      * @param conn the active connection object to the DB to use
      * @param nodeData list of string arrays with node data
      * @param edgeData list of string arrays with edge data
@@ -407,16 +473,18 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
             createTable(conn, initNodesTable);
             populateNodes(nodeData);
 
-
             final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
                     "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
             createTable(conn, initEdgesTable);
-
             populateEdges(edgeData);
 
             final String initServiceReqTable = "CREATE TABLE SERVICE_REQUESTS(name varchar(200), " +
                     "assignedPerson varchar(200), completed varchar(200))";
             createTable(conn, initServiceReqTable);
+
+            final String initUserTable = "CREATE TABLE USERS(type varchar(200), " +
+                    "username varchar(200), password varchar(200), primary key(username))";
+            createTable(conn, initUserTable);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -497,6 +565,7 @@ public NodeEntry getNode(Connection conn, String requestNodeID) throws SQLExcept
         dropTable(conn, "L1NODES");
         dropTable(conn, "L1EDGES");
         dropTable(conn, "SERVICE_REQUESTS");
+        dropTable(conn, "USERS");
 
         success = populateData(conn, nodeData, edgeData);
         return success;
