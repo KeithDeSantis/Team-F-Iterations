@@ -6,13 +6,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class DefaultPageController {
+public class DefaultPageEmployeeController {
 
     @FXML
     private Button editVertex;
@@ -26,12 +24,7 @@ public class DefaultPageController {
     private Button service2;
     @FXML
     private Button quit;
-    @FXML private ImageView directionsImage;
 
-    @FXML private void initialize(){
-        final Image directions = new Image(getClass().getResourceAsStream("/imagesAndLogos/directionsArrow.png"));
-        directionsImage.setImage(directions);
-    }
     /**
      * Handles the pushing of a button on the screen
      * @param actionEvent the button's push

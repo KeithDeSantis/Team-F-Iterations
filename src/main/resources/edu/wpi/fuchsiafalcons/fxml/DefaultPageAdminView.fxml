@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.DefaultPageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.DefaultPageAdminController">
    <children>
       <HBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -58,17 +58,41 @@
                         <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
+                        <JFXButton fx:id="editVertex" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleButtonPushed" prefHeight="91.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="editEdges" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </JFXButton>
                         <JFXButton fx:id="AStarDemo" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.rowIndex="4">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <graphic>
-                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </JFXButton>
                         <JFXButton fx:id="serviceRequest" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.columnIndex="1">
                            <font>
                               <Font name="Tahoma" size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="service2" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="18.0" />
                            </font>
                            <graphic>
                               <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
@@ -82,12 +106,27 @@
                               <Ellipse fill="#ff1f1f" radiusX="50.0" radiusY="50.0" stroke="RED" strokeType="INSIDE" strokeWidth="0.0" />
                            </graphic>
                         </JFXButton>
+                        <Label text="Edit Map Nodes" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
                         <Label text="Service Request Menu" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>
                         </Label>
-                        <Label text="Directions" GridPane.rowIndex="5">
+                        <Label text="Edit Map Edges" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="2nd Service Request" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="A* Pathfinding" GridPane.rowIndex="5">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>
