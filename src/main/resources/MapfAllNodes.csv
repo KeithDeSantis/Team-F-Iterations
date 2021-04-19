@@ -580,3 +580,34 @@ WHALL00702,1740,1500,2,Tower,HALL,Hallway Connector 7 Floor 2,Hallway W0702
 WHALL00802,1720,1745,2,Shapiro,HALL,Hallway Connector 8 Floor 2,Hallway W0802
 WHALL00902,1690,2240,2,Shapiro,HALL,Hallway Connector 9 Floor 2,Hallway W0902
 WHALL01002,1690,2455,2,BTM,HALL,Hallway Connector 10 Floor 2,Hallway W1002
+fPARK00101,151,1720,1,Parking,PARK,Parking Space 01 001,Park f00101
+fPARK00201,215,1720,1,Parking,PARK,Parking Space 01 002,Park f00201
+fPARK00301,276,1720,1,Parking,PARK,Parking Space 01 003,Park f00301
+fPARK00401,340,1720,1,Parking,PARK,Parking Space 01 004,Park f00401
+fPARK00501,121,1852,1,Parking,PARK,Parking Space 01 005,Park f00501
+fPARK00601,185,1852,1,Parking,PARK,Parking Space 01 006,Park f00601
+fPARK00701,249,1852,1,Parking,PARK,Parking Space 01 007,Park f00701
+fPARK00801,317,1852,1,Parking,PARK,Parking Space 01 008,Park f00801
+fPARK00901,457,1852,1,Parking,PARK,Parking Space 01 009,Park f00901
+fPARK01001,522,1852,1,Parking,PARK,Parking Space 01 010,Park f01001
+fPARK01101,3114,1126,1,Parking,PARK,Parking Space 01 011,Park f01101
+fPARK01201,3114,1175,1,Parking,PARK,Parking Space 01 012,Park f01201
+fPARK01301,3114,1228,1,Parking,PARK,Parking Space 01 013,Park f01301
+fPARK01401,3243,1115,1,Parking,PARK,Parking Space 01 014,Park f01401
+fPARK01501,3243,1152,1,Parking,PARK,Parking Space 01 015,Park f01501
+fPARK01601,3292,1115,1,Parking,PARK,Parking Space 01 016,Park f01601
+fPARK01701,3292,1157,1,Parking,PARK,Parking Space 01 017,Park f01701
+fPARK01801,3292,1259,1,Parking,PARK,Parking Space 01 018,Park f01801
+fPARK01901,3292,1304,1,Parking,PARK,Parking Space 01 019,Park f01901
+fPARK02001,3398,1107,1,Parking,PARK,Parking Space 01 020,Park f02001
+fPARK02101,3398,1156,1,Parking,PARK,Parking Space 01 021,Park f02101
+fPARK02201,3398,1206,1,Parking,PARK,Parking Space 01 022,Park f02201
+fPARK02301,3398,1259,1,Parking,PARK,Parking Space 01 023,Park f02301
+fPARK02401,3398,1308,1,Parking,PARK,Parking Space 01 024,Park f02401
+fPARK02501,3398,1357,1,Parking,PARK,Parking Space 01 025,Park f02501
+fWALK00101,491,1674,1,Parking,WALK,Francis St. Walkway 001,Walk f00101
+fWALK00201,646,1674,1,Parking,WALK,Francis St. Walkway 002,Walk f00201
+fWALK00301,1742,1674,1,Parking,WALK,Francis St. Walkway 003,Walk f00301
+fWALK00401,3288,1674,1,Parking,WALK,Francis St. Walkway 004,Walk f00401
+fWALK00501,1742,1512,1,Parking,WALK,Francis St. Walkway 005,Walk f00501
+fWALK00601,3205,1361,1,Parking,WALK,Francis St. Walkway 006,Walk f00601

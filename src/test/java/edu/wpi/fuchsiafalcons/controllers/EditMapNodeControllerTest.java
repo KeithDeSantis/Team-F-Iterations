@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -54,6 +55,12 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         primaryStage.show();
     }
 
+
+    @BeforeEach
+    public void beforeTest()
+    {
+        clickOn("Reset Database");
+    }
     @Test
     public void testBackButton() {
         verifyThat("Save to File", Node::isVisible);
@@ -64,6 +71,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
 
     @Test
     public void testNewNodeFeature() {
+
 
         //USed to get anything matching b/c we seem to have multiple now? //FIXME: IMPROVE
         List<NodeEntry> query = this.nodeList.stream().filter(node ->
@@ -100,7 +108,6 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         query = this.nodeList.stream().filter(node ->
             node.getNodeID().equals("TestNode") && node.getShortName().equals("Testing1")
         ).collect(Collectors.toList());
-        verifyThat("#TestNode", Node::isVisible);
         assertEquals(pre + 1, query.size());
         clickOn("Reset Database");
     }
@@ -108,11 +115,16 @@ public class EditMapNodeControllerTest extends ApplicationTest {
     @Test
     public void testEditNodeFeature() {
         verifyThat("Edit", Node::isVisible);
-        clickOn("Reset Database");
         clickOn("Edit");
-        clickOn("CCONF001L1");
+        clickOn("ACONF00102");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
+        doubleClickOn("#nodeIDField");
+        write("ACONF00103");
+        clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#nodeIDField");
+        write("ACONF00102");
         doubleClickOn("#floorField");
         write("f");
         clickOn("OK");
@@ -120,10 +132,15 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         doubleClickOn("#floorField");
         write("G");
         clickOn("OK");
-        verifyThat("#CCONF001L1", Node::isVisible);
+        verifyThat("#ACONF00102", Node::isVisible);
         verifyThat("G", Node::isVisible); // Testing changing of Floor
+        clickOn("Reset Database");
+    }
 
-        clickOn("CCONF001L1");
+    @Test
+    public void testEditValidity() {
+
+        clickOn("ACONF00102");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#xCoordField");
@@ -137,9 +154,13 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         doubleClickOn("#yCoordField");
         write("0");
         clickOn("OK");
-        verifyThat("#CCONF001L1", Node::isVisible); // Testing changing position
+        verifyThat("#ACONF00102", Node::isVisible); // Testing changing position
+        boolean oneCCONF001L1 = false;
+        for(NodeEntry n : nodeList) { if(n.getNodeID().equals("ACONF00102")) oneCCONF001L1 = !oneCCONF001L1; }
+        assertTrue(oneCCONF001L1);
 
-        clickOn("CCONF001L1");
+
+        clickOn("ACONF00102");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#nodeIDField");
@@ -160,13 +181,27 @@ public class EditMapNodeControllerTest extends ApplicationTest {
 
     @Test
     public void testDeleteNodeOnMap() {
+        //USed to get anything matching b/c we seem to have multiple now? //FIXME: IMPROVE
+        List<NodeEntry> query = this.nodeList.stream().filter(node ->
+                node.getNodeID().equals("ACONF00103")
+        ).collect(Collectors.toList());
+
+        final int pre = query.size();
+
         verifyThat("Reset Database", Node::isVisible);
         clickOn("Reset Database");
-        verifyThat("CCONF001L1", Node::isVisible);
-        clickOn("CCONF001L1");
-        verifyThat("#CCONF001L1", Node::isVisible);
+        verifyThat("ACONF00103", Node::isVisible);
+        clickOn("ACONF00103");
+        verifyThat("#ACONF00103", Node::isVisible);
         clickOn("Delete");
         // Could add a more thorough test though unsure how - KD and ZS
+        clickOn("Reset Database");
+
+        query = this.nodeList.stream().filter(node ->
+                node.getNodeID().equals("ACONF00103")
+        ).collect(Collectors.toList());
+        assertEquals(pre, query.size());
+        clickOn("Reset Database");
     }
 
     @Test
@@ -186,7 +221,10 @@ public class EditMapNodeControllerTest extends ApplicationTest {
     @Test
     public void testClickToMakeNode() {
         verifyThat("#deleteButton", Node::isVisible);
-        rightClickOn("#map");
+        moveTo("#map");
+        moveBy(-100, -100);
+        rightClickOn();
+        //rightClickOn("#map");
         clickOn("Create Node Here");
         verifyThat("OK", Node::isVisible);
         clickOn("#nodeIDField");
@@ -205,7 +243,13 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("#shortNameField");
         write(".");
         clickOn("OK");
-        verifyThat("#testClicking", Node::isVisible);
+        boolean hasTestClicking = false;
+        for(NodeEntry n : nodeList) {
+            if (n.getNodeID().equals("testClicking")) {
+                hasTestClicking = true;
+            }
+        }
+        assertTrue(hasTestClicking);
         clickOn("Reset Database");
     }
 }

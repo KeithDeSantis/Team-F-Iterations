@@ -31,7 +31,7 @@ public class GraphLoaderTest {
     public void testNullFiles()
     {
         //ahf - tests that we throw exceptions when loading null files.
-        assertThrows(Exception.class, () -> GraphLoader.load(null, null));
+        assertThrows(Exception.class, () -> GraphLoader.load((String) null, null));
         //We rely on CSVReader, so as long as we know that we can catch one bad CSV, we're good.
     }
 
@@ -45,8 +45,8 @@ public class GraphLoaderTest {
     {
         //ahf - tests the format of the files that we read.
 
-        final String edgesCSV = "L1Edges.csv";
-        final String nodesCSV = "L1Nodes.csv";
+        final String edgesCSV = "MapfAllEdges.csv";
+        final String nodesCSV = "MapfAllNodes.csv";
 
         //Here we provide incorrect file dimensions, but valid files
         assertThrows(Exception.class, () -> GraphLoader.load(edgesCSV, edgesCSV));
