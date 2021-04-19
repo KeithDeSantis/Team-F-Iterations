@@ -215,6 +215,7 @@ public class EditMapEdgesController {
 
             //DatabaseAPI.getDatabaseAPI().deleteEdge(selectedEdge.getEdgeID());
             //updateEdgeEntry(selectedEdge);
+            drawEdgeNodeOnFloor();
         }
     }
 
@@ -383,6 +384,8 @@ public class EditMapEdgesController {
                 }).collect(Collectors.toList()));
             }
         }
+
+        drawEdgeNodeOnFloor();
     }
 
     /**
