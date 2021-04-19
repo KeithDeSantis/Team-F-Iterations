@@ -46,6 +46,7 @@
                <children>
                   <GridPane alignment="CENTER" prefHeight="474.0" prefWidth="405.0">
                     <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="203.0" />
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="202.0" minWidth="10.0" prefWidth="202.0" />
                     </columnConstraints>
                     <rowConstraints>
