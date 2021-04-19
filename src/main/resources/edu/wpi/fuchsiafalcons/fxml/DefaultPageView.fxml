@@ -71,7 +71,7 @@
                               <Font name="Tahoma" size="18.0" />
                            </font>
                            <graphic>
-                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="directionsImage" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </JFXButton>
                         <JFXButton fx:id="quit" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" text=" " GridPane.columnIndex="1" GridPane.rowIndex="4">
