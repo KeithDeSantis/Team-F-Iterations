@@ -11,13 +11,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.RadialGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.AccountManagerController">
    <children>
-      <JFXButton buttonType="RAISED" layoutY="-1.0" text="x">
+      <JFXButton fx:id="quit" buttonType="RAISED" layoutY="-1.0" onAction="#handleQuit" text="x">
          <ripplerFill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -34,18 +35,18 @@
                   <Font name="Tahoma" size="24.0" />
                </font>
             </Label>
-            <GridPane alignment="CENTER" gridLinesVisible="true">
+            <GridPane alignment="CENTER">
               <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="75.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="75.0" valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
                <VBox.margin>
                   <Insets left="25.0" right="25.0" top="25.0" />
@@ -53,42 +54,95 @@
                <children>
                   <Label contentDisplay="CENTER" text="Name" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                   <Label text="Username" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <Label text="Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Label text="Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="Tahoma" size="15.0" />
+                     </font>
+                  </Label>
                   <JFXComboBox fx:id="name" onAction="#handleUserSearch" promptText="Name" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                  <JFXTextField GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <JFXTextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="25.0" right="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
-                  <JFXTextField layoutX="339.0" layoutY="50.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                  <JFXTextField fx:id="password" layoutX="339.0" layoutY="50.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="25.0" right="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
-                  <JFXButton text="Delete User" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                  <JFXButton text="Add User" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                  <JFXButton fx:id="deleteUser" buttonType="RAISED" onAction="#handleDeleteUser" text="Delete User" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <ripplerFill>
+                        <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                           <stops>
+                              <Stop color="RED" />
+                              <Stop color="#790000" offset="1.0" />
+                           </stops>
+                        </RadialGradient>
+                     </ripplerFill>
+                  </JFXButton>
+                  <JFXButton fx:id="addUser" buttonType="RAISED" onAction="#handleAddUser" text="Add User" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets top="25.0" />
+                     </GridPane.margin>
+                     <ripplerFill>
+                        <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                           <stops>
+                              <Stop color="#00ae1a" />
+                              <Stop color="#00720f" offset="0.9927536231884058" />
+                              <Stop color="#00720f" offset="1.0" />
+                           </stops>
+                        </RadialGradient>
+                     </ripplerFill>
+                  </JFXButton>
                   <JFXTextField promptText="Add User's name" GridPane.rowIndex="2">
                      <GridPane.margin>
-                        <Insets left="25.0" right="25.0" />
+                        <Insets left="25.0" right="25.0" top="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
                   <JFXTextField promptText="Add User's username" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <GridPane.margin>
-                        <Insets left="25.0" right="25.0" />
+                        <Insets left="25.0" right="25.0" top="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
                   <JFXTextField promptText="Add User's password" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <GridPane.margin>
-                        <Insets left="25.0" right="25.0" />
+                        <Insets left="25.0" right="25.0" top="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
-                  <Label text="Label" GridPane.columnIndex="3" />
+                  <Label text="Type of User" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <JFXComboBox promptText="change exisitng user" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <JFXComboBox promptText="new user type" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets top="25.0" />
+                     </GridPane.margin>
+                  </JFXComboBox>
                </children>
             </GridPane>
-            <JFXButton text="Save Changes">
+            <JFXButton fx:id="saveChanges" buttonType="RAISED" onAction="#handleSaveChanges" text="Save Changes">
                <VBox.margin>
                   <Insets top="25.0" />
                </VBox.margin>
+               <ripplerFill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="#478eb7" />
+                        <Stop color="#011147" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </ripplerFill>
+            </JFXButton>
+            <JFXButton fx:id="home" buttonType="RAISED" onAction="#handleAdminHome" text="Home">
+               <VBox.margin>
+                  <Insets top="25.0" />
+               </VBox.margin>
+               <ripplerFill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="#478eb7" />
+                        <Stop color="#011147" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </ripplerFill>
             </JFXButton>
          </children>
       </VBox>
