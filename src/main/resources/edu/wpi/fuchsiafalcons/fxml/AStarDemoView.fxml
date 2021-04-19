@@ -23,7 +23,7 @@
             </Label>
             <ScrollPane fx:id="scroll" prefHeight="450.0" prefWidth="700.0">
                <content>
-                  <Pane fx:id="canvas" maxHeight="-Infinity" maxWidth="-Infinity" onMousePressed="#drawLine" prefHeight="200.0" prefWidth="200.0">
+                  <Pane fx:id="canvas" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <ImageView fx:id="map" fitHeight="170.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
                      </children>

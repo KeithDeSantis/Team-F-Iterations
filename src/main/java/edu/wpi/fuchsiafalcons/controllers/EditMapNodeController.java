@@ -31,10 +31,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import edu.wpi.fuchsiafalcons.database.*;
@@ -76,13 +73,6 @@ public class EditMapNodeController {
     private String floor = "1";
     private Circle selectedCircle = null;
 
-    //final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-    //final Image F2Image = new Image(getClass().getResourceAsStream("/maps/02_thesecondfloor.png"));
-    //final Image F3Image = new Image(getClass().getResourceAsStream("/maps/03_thethirdfloor.png"));
-    //final Image L1Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
-    //final Image L2Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel2.png"));
-    //final Image GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
-
     private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
 
     /**
@@ -96,9 +86,12 @@ public class EditMapNodeController {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+
         final double width = image.getWidth()/zoomLevel;
         final double height = image.getHeight()/zoomLevel;
+
         canvas.setPrefSize(width,height);
+
         map.setFitWidth(width);
         map.setFitHeight(height);
         map.setImage(image); // Copied from A* Vis - KD
@@ -114,10 +107,7 @@ public class EditMapNodeController {
             e.printStackTrace();
         }
 
-        for (NodeEntry e : data)
-        {
-            nodeList.add(e);
-        }
+        data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(e -> nodeList.add(e));
 
         // START OF JFX TREETABLE COLUMN SETUP
 
@@ -170,6 +160,8 @@ public class EditMapNodeController {
 
                     try {
                         openEditDialog(nodeEntry);
+                        if(!checkNodeEntryNotEmpty(nodeEntry)) return;
+                        nodeList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
                         updateNodeEntry(nodeEntry);
                     } catch (IOException | SQLException ioException) {
                         ioException.printStackTrace();
@@ -232,8 +224,21 @@ public class EditMapNodeController {
     private void handleNewNode() throws IOException, SQLException {
         NodeEntry newNode = new NodeEntry(); // create new node - KD
         openEditDialog(newNode); // allow editing of the new node - KD
-
+        if(!checkNodeEntryNotEmpty(newNode)) return;
+        nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
         updateNodeEntry(newNode);
+    }
+
+    /**
+     * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
+     * @param nodeEntry the node entry
+     * @return true if the node has no empty fields
+     * @author KD
+     */
+    public boolean checkNodeEntryNotEmpty(NodeEntry nodeEntry) {
+        return!nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXcoord().isEmpty() && !nodeEntry.getYcoord().isEmpty() &&
+                !nodeEntry.getFloor().isEmpty() && !nodeEntry.getBuilding().isEmpty() && !nodeEntry.getNodeType().isEmpty() &&
+                !nodeEntry.getLongName().isEmpty() && !nodeEntry.getShortName().isEmpty();
     }
 
     /**
@@ -242,10 +247,8 @@ public class EditMapNodeController {
      */
     private void updateNodeEntry(NodeEntry nodeEntry) throws SQLException {
 
-        if(nodeEntry.getNodeID().isEmpty() || nodeEntry.getXcoord().isEmpty() || nodeEntry.getYcoord().isEmpty() ||
-                nodeEntry.getFloor().isEmpty() || nodeEntry.getBuilding().isEmpty() || nodeEntry.getNodeType().isEmpty() ||
-                nodeEntry.getLongName().isEmpty() || nodeEntry.getShortName().isEmpty())
-            return; //FIXME: DO BETTER ERROR CHECKING, CHECK THAT WE ARE GETTING INTS
+        if(!checkNodeEntryNotEmpty(nodeEntry))
+            return;
 
         String nodeID = nodeEntry.getNodeID();
         int xCoord = Integer.parseInt(nodeEntry.getXcoord());
@@ -256,7 +259,7 @@ public class EditMapNodeController {
         String longName = nodeEntry.getLongName();
         String shortName = nodeEntry.getShortName();
 
-        nodeList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
+
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
 
         nodeTreeTable.requestFocus();
@@ -298,6 +301,8 @@ public class EditMapNodeController {
         EditMapNodeDialogViewController dialogController = dialogLoader.getController(); // get edit dialog's controller - KD
         dialogController.setDialogStage(dialogStage); // set the stage attribute - KD
         dialogController.setTheNode(editedNode); // inject the node attribute so that specific instance is the one edited - KD
+        dialogController.setNodeList(nodeList);
+        dialogController.setCurrentIDIfEditing(editedNode.getNodeID());
         dialogStage.setTitle("Edit Node");
         dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
         dialogStage.initOwner((Stage) goBack.getScene().getWindow());
@@ -335,8 +340,9 @@ public class EditMapNodeController {
 
         List<String[]> nodeData = null;
 
+        //FIXME: METHODIZE THISS!!!!
         try {
-            nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("L1Nodes.csv") : CSVManager.load(new File(fileName));
+            nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllnodes.csv") : CSVManager.load(new File(fileName));
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -350,10 +356,13 @@ public class EditMapNodeController {
             {
                 nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
-                }).collect(Collectors.toList()));
+                }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
 
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
-                DatabaseAPI.getDatabaseAPI().createNodesTable();
+                final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                        "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                        "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable);
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
@@ -497,16 +506,16 @@ public class EditMapNodeController {
      * @author ZheCheng
      */
     private void drawCircle(double x, double y, String nodeID){
-        Circle c = new Circle(x, y, 7.0);
-        c.setFill(Color.BLUE);
+        Circle c = new Circle(x, y, UIConstants.NODE_RADIUS);
+        c.setFill(UIConstants.NODE_COLOR);
         c.setId(nodeID);
-        c.setOnMouseEntered(e->{if(!c.equals(selectedCircle))c.setFill(Color.RED);});
-        c.setOnMouseExited(e->{if(!c.equals(selectedCircle))c.setFill(Color.BLUE);});
+        c.setOnMouseEntered(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
+        c.setOnMouseExited(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR);});
         c.setOnMouseClicked(e->{
             if(selectedCircle != null)
-                selectedCircle.setFill(Color.BLUE);
+                selectedCircle.setFill(UIConstants.NODE_COLOR);
             selectedCircle = c;
-            c.setFill(Color.GREEN);
+            c.setFill(UIConstants.NODE_COLOR_SELECTED);
             nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
             nodeTreeTable.requestFocus();nodeTreeTable.scrollTo(findNode(nodeID));});
 
@@ -549,7 +558,7 @@ public class EditMapNodeController {
         if(node.getFloor().equals(floor)){
             drawNodeOnFloor();
             if(selectedCircle != null)
-                selectedCircle.setFill(Color.BLUE);
+                selectedCircle.setFill(UIConstants.NODE_COLOR);
         }else{
             floor = node.getFloor();
             switchMap();
@@ -560,7 +569,7 @@ public class EditMapNodeController {
             return;
         }
         selectedCircle = c;
-        c.setFill(Color.GREEN);
+        c.setFill(UIConstants.NODE_COLOR_SELECTED);
         centerNode(c);
     }
 
@@ -596,7 +605,7 @@ public class EditMapNodeController {
         List<String[]> nodeData = null;
 
         try {
-            nodeData = (CSVManager.load("L1Nodes.csv"));
+            nodeData = (CSVManager.load("MapfAllnodes.csv"));
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -610,10 +619,13 @@ public class EditMapNodeController {
             {
                 nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
-                }).collect(Collectors.toList()));
+                }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
 
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
-                DatabaseAPI.getDatabaseAPI().createNodesTable();
+                final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
+                        "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
+                        "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable);
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
