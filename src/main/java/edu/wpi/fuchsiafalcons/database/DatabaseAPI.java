@@ -305,13 +305,9 @@ public class DatabaseAPI {
      * @throws SQLException if error occurs while creating the table
      */
     public void createTable(Connection conn, String createCMD) throws SQLException {
-        //create the tables
-
         Statement initStmt = conn.createStatement();
         initStmt.execute(createCMD);
-
         initStmt.close();
-
     }
 
     /**
@@ -401,7 +397,6 @@ public class DatabaseAPI {
 
     /**
      * method to check a given username and password and see if it is valid
-     *
      * @param username         the username for the account to login
      * @param suppliedPassword the password supplied by the user
      * @return true if the password is correct

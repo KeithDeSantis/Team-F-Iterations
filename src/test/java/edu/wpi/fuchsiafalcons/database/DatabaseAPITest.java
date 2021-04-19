@@ -16,14 +16,11 @@ import java.sql.*;
 import java.util.List;
 
 class DatabaseAPITest {
-    //private DatabaseAPI api;
-  //  private ConnectionHandler connHandler = new ConnectionHandler();
-//    private Connection connection = connHandler.main(false);
-
     @BeforeEach
     public void setUp() throws Exception
     {
         DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), CSVManager.load("MapfAllNodes.csv"), CSVManager.load("MapfAllEdges.csv"));
+        DatabaseAPI.getDatabaseAPI().populateUsers(ConnectionHandler.getConnection());
     }
 
     @Test
@@ -42,7 +39,6 @@ class DatabaseAPITest {
                 "testlong", "testshort");
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("test"));
     }
-
 
     @DisplayName("Test for making sure can't add duplicate node")
     public void testAddDuplicate() throws SQLException
@@ -253,7 +249,6 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI.getDatabaseAPI().addUser("Employee","user1","password"));
     }
 
-
     @Test
     @DisplayName("test edit a user")
     public void testEditAUser() throws SQLException{
@@ -261,4 +256,29 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI.getDatabaseAPI().editUser("user1","username","user2"));
     }
 
+    @Test
+    @DisplayName("test listing all users")
+    public void testListUsers() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addUser("adminstrator", "test", "password");
+        DatabaseAPI.getDatabaseAPI().addUser("employee", "test1", "password");
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("test");
+        expected.add("test1");
+        ArrayList<String> actual = new ArrayList<>();
+        actual = DatabaseAPI.getDatabaseAPI().listAllUsers();
+        assertEquals(expected.get(0), actual.get(1)); //0 entry is the admin so we start at 1
+        assertEquals(expected.get(1), actual.get(2));
+    }
+
+    @Test
+    @DisplayName("test valid authentication with admin user")
+    public void testValidAuth() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().authenticate("admin", "admin"));
+    }
+
+    @Test
+    @DisplayName("test invalid authentication")
+    public void testInvalidAuth() throws SQLException{
+        assertFalse(DatabaseAPI.getDatabaseAPI().authenticate("admin", "asdf"));
+    }
 }
