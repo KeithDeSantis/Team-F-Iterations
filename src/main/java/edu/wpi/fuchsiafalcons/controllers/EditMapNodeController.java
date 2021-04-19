@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -72,9 +73,6 @@ public class EditMapNodeController {
     @FXML private JFXButton zoomInButton;
     @FXML private JFXButton zoomOutButton;
 
-    @FXML private Group scrollGroup;
-    @FXML private Group innerGroup;
-
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
 
@@ -115,7 +113,8 @@ public class EditMapNodeController {
 //        map.setOnMouseMoved(e -> {
 //            System.out.println(((e.getSceneX() - scroll.getBoundsInParent().getMinX()) / scroll.getWidth()));
 //        });
-        map.setOnScroll( e -> {
+        /*
+        canvas.setOnScroll( e -> {
             if(e.isControlDown());
             {
                 e.consume();
@@ -134,22 +133,24 @@ public class EditMapNodeController {
                 System.out.println(inv2);
 
 
-                scroll.setVvalue(inv2.getY());
-                scroll.setHvalue(inv2.getX());
+//                scroll.setVvalue(inv2.getY());
+  //              scroll.setHvalue(inv2.getX());
 
                 scroll.layout();
 
 
 
-                scale.setPivotX(0);
-                scale.setPivotY(0);
+                final double nsi = 2 - nextScaleFactor;
+
+                scale.setPivotX(e.getX());// * nsi);
+                scale.setPivotY(e.getY());
                 scale.setX(nextScaleFactor);
                 scale.setY(nextScaleFactor);
 
 
-                scroll.layout();
+               // scroll.layout();
 
-
+               // updateZoom();
                 zoomLevel = nextScaleFactor;
 
 
@@ -158,12 +159,80 @@ public class EditMapNodeController {
         });
 
 
+*/
 
 
         // scroll.addEventFilter(ScrollEvent.ANY, e -> {
 
+
+
+        canvas.setOnScroll(e -> {
+
+            if(e.isControlDown()) {
+                e.consume();
+                double zoom_fac = 1.08;
+
+                if(e.getDeltaY() < 0) {
+                    zoom_fac = 2.0 - zoom_fac;
+                }
+
+                Scale newScale = new Scale();
+                newScale.setPivotX(e.getX());
+                newScale.setPivotY(e.getY());
+                newScale.setX( canvas.getScaleX() * zoom_fac );
+                newScale.setY( canvas.getScaleY() * zoom_fac );
+
+
+
+
+
+                canvas.getTransforms().add(newScale);
+
+                final double zt = canvas.getBoundsInParent().getWidth() / canvas.getBoundsInLocal().getWidth();
+             //   map.setFitWidth(canvas.getBoundsInParent().getw);
+
+                System.out.println(zt);
+
+                final Bounds bounds = canvas.getBoundsInParent();
+               // canvas.getTransforms().clear();
+
+                canvas.setPrefSize(bounds.getWidth(), bounds.getHeight());
+
+
+                //canvas.setTranslateX(-bounds.getMinX());
+
+               // scroll.setHvalue(bounds.getMinX()/bounds.getWidth());
+
+                //canvas.setTranslateX(-100);
+
+              //  map.getTransforms().add(newScale);
+
+                //map.ge
+                //map.setFitWidth(bounds.getWidth());
+               // map.setFitHeight(bounds.getHeight());
+
+              //  map.setTranslateX(bounds.getMinX());
+               // map.setTranslateY(bounds.getMinY());
+
+               // map.setTranslateX(bounds.getMinX());
+               // map.setTranslateY(bounds.getMinY());
+
+                //scroll.setPrefViewportWidth(canvas.getBoundsInParent().getWidth());
+                //System.out.println(scroll.getv)
+                System.out.println(bounds);
+                //System.out.println(canvas.getBoundsInLocal().getWidth()  + " " + zt);
+
+
+                //scroll.setMaxWidth(image.getWidth());
+               // scroll.setMaxHeight(canvas.getScaleY() * image.getHeight());
+                scroll.layout();
+
+            }
+
+        });
         /*
-        canvas.setOnScroll(e -> {;
+
+        canvas.setOnScroll(e -> {
 
             if(e.isControlDown()) {
                 e.consume();
@@ -181,11 +250,14 @@ public class EditMapNodeController {
 
                 canvas.getTransforms().add(newScale);
 
+                scroll.setMaxWidth(canvas.getScaleX() * image.getWidth());
+                scroll.setMaxHeight(canvas.getScaleY() * image.getHeight());
+                scroll.layout();
 
          }
 
         });
-    */
+        */
 
 
 
@@ -272,7 +344,7 @@ public class EditMapNodeController {
 
     private Point2D mapCenter() {
         final Bounds viewportBounds = scroll.getViewportBounds();
-        final Bounds contentBounds = scrollGroup.getBoundsInLocal();
+        final Bounds contentBounds = canvas.getBoundsInLocal();
 
         final double hRel = scroll.getHvalue() / scroll.getHmax();
         final double vRel = scroll.getVvalue() / scroll.getVmax();
@@ -283,7 +355,7 @@ public class EditMapNodeController {
         double x1 = Math.max(0, (deltaW) * hRel) + viewportBounds.getWidth() / 2;
         double y1 = Math.max(0, (deltaH) * vRel) + viewportBounds.getHeight() / 2;
 
-        Point2D localCoordinates = scrollGroup.parentToLocal(x1, y1);
+        Point2D localCoordinates = canvas.parentToLocal(x1, y1);
 
         return localCoordinates;
     }
@@ -292,10 +364,10 @@ public class EditMapNodeController {
 
     public Point2D inverse(Point2D pt, Point2D at) {
 
-        Point2D inverse = scrollGroup.localToParent(pt);//new Point2D(1200, 680));
+        Point2D inverse = canvas.localToParent(pt);//new Point2D(1200, 680));
 
         final Bounds viewportBounds = scroll.getViewportBounds();
-        final Bounds contentBounds = scrollGroup.getBoundsInLocal();
+        final Bounds contentBounds = canvas.getBoundsInLocal();
 
         final double deltaW = contentBounds.getWidth() - viewportBounds.getWidth();
         final double deltaH = contentBounds.getHeight() - viewportBounds.getHeight();
