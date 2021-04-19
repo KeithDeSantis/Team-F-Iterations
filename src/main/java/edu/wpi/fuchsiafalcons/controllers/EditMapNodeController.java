@@ -31,10 +31,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import edu.wpi.fuchsiafalcons.database.*;
@@ -114,10 +111,7 @@ public class EditMapNodeController {
             e.printStackTrace();
         }
 
-        for (NodeEntry e : data)
-        {
-            nodeList.add(e);
-        }
+        data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(e -> nodeList.add(e));
 
         // START OF JFX TREETABLE COLUMN SETUP
 
@@ -350,8 +344,9 @@ public class EditMapNodeController {
 
         List<String[]> nodeData = null;
 
+        //FIXME: METHODIZE THISS!!!!
         try {
-            nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("L1Nodes.csv") : CSVManager.load(new File(fileName));
+            nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllnodes.csv") : CSVManager.load(new File(fileName));
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -365,7 +360,7 @@ public class EditMapNodeController {
             {
                 nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
-                }).collect(Collectors.toList()));
+                }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
 
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
                 final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
@@ -614,7 +609,7 @@ public class EditMapNodeController {
         List<String[]> nodeData = null;
 
         try {
-            nodeData = (CSVManager.load("L1Nodes.csv"));
+            nodeData = (CSVManager.load("MapfAllnodes.csv"));
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -628,7 +623,7 @@ public class EditMapNodeController {
             {
                 nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
-                }).collect(Collectors.toList()));
+                }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
 
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
                 final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +

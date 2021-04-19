@@ -1,7 +1,13 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import edu.wpi.fuchsiafalcons.database.ConnectionHandler;
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,12 +18,19 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
+import javafx.util.Callback;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,39 +43,41 @@ public class EditMapEdgesController {
     private Button goBack;
 
     @FXML
-    private Button newEdge;
+    private JFXButton newEdge;
 
     @FXML
-    private Button editEdge;
+    private JFXButton editEdge;
 
     @FXML
-    private Button deleteEdge;
+    private JFXButton deleteEdge;
 
     @FXML
-    private Button loadCSV;
+    private JFXButton loadCSV;
 
     @FXML
-    private Button saveCSV;
+    private JFXButton saveCSV;
 
     @FXML
-    private TextField CSVFile;
+    private JFXTextField CSVFile;
 
     @FXML
     private Label CSVErrorLabel;
 
     @FXML
-    private TableView<EdgeEntry> edgeTable;
+    private JFXTreeTableView<EdgeEntry> edgeTable;
 
     @FXML
-    private TableColumn<EdgeEntry, String> edgeIDColumn;
+    private Pane canvas;
 
     // Create an observable list of edges
-    private ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
+    private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
 
     @FXML
     private ScrollPane scroll;
     @FXML
     private ImageView map;
+
+    private double zoomLevel = 5.0;
 
     /**
      * Initializes controller, called when EditMapEdges.fxml is loaded.
@@ -79,10 +94,13 @@ public class EditMapEdgesController {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
-        final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-        final double zoomLevel = 4.0;
-        final double width = image.getWidth()/zoomLevel;
-        final double height = image.getHeight()/zoomLevel;
+        final Image image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
+
+        final double width = image.getWidth() / zoomLevel;
+        final double height = image.getHeight() / zoomLevel;
+
+        canvas.setPrefSize(width,height);
+
         map.setFitWidth(width);
         map.setFitHeight(height);
         map.setImage(image); // Copied from EditMapEdges - LM
@@ -91,51 +109,68 @@ public class EditMapEdgesController {
         saveCSV.setDisable(true);
 
         //FIXME: do better, hook into db
+
+        final String sql = "CREATE TABLE L1Edges(EdgeID varchar(200), " +
+                "startNode varchar(200), endNode varchar(200), " +
+                "primary key(edgeID))";
+        List<EdgeEntry> edgeList = new ArrayList<>();
         try {
-            edgeEntryObservableList.addAll( CSVManager.load("L1Edges.csv").stream().map(line-> {
-                return new EdgeEntry(line[0], line[1], line[2]);
-            }).collect(Collectors.toList()));
+            DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges");
+            DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
+
+            List<String[]> edgeData = CSVManager.load("MapfAlledges.csv");
+            edgeList = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            DatabaseAPI.getDatabaseAPI().populateEdges(edgeData);
+            edgeEntryObservableList.addAll(edgeData.stream().map(line-> new EdgeEntry(line[0], line[1], line[2])).collect(Collectors.toList()));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        // Set up cell factory for the edge ID table
+        JFXTreeTableColumn<EdgeEntry, String> edgeIDColumn = new JFXTreeTableColumn<>("Edge ID");
+        edgeIDColumn.setPrefWidth(250);
+        edgeIDColumn.setCellValueFactory(param -> param.getValue().getValue().edgeIDProperty());
+        edgeEntryObservableList.addAll(edgeList);
 
-        edgeTable.setItems(edgeEntryObservableList);
-
-        // Initialize the edges table with edges
-        edgeIDColumn.setCellValueFactory(cellData -> cellData.getValue().edgeIDProperty());
+        final TreeItem<EdgeEntry> root = new RecursiveTreeItem<>(edgeEntryObservableList, RecursiveTreeObject::getChildren);
+        edgeTable.getColumns().setAll(edgeIDColumn);
+        edgeTable.setRoot(root);
+        edgeTable.setShowRoot(false);
 
         // Set initial selected edge to null
         showSelectedEdge(null);
 
         // Listen for selection changes on the table view
-        edgeTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showSelectedEdge(newValue)));
+        //edgeTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showSelectedEdge(newVwalue)));
     }
 
     /**
      * Called from listener on the table view.
      * Shows the selected edge on the map view.
+     *
      * @param edge the selected edge
      * @author Leo Morris
      */
-    public void showSelectedEdge(EdgeEntry edge){
+    public void showSelectedEdge(EdgeEntry edge) {
         //TODO show selected edge on Map
     }
 
     /**
      * Deletes the selected node from the table. Called when the delete button is pressed
      * Creates an alert pop-up if no edge is selected
+     *
      * @author Leo Morris
      */
     @FXML
-    private void handleDelete(){
+    private void handleDelete() throws SQLException {
         // Get the current selected edge
         int index = edgeTable.getSelectionModel().getSelectedIndex();
 
         // Check for a valid index (-1 = no selection)
-        if(index >= 0){
+        if (index >= 0 && index <= edgeEntryObservableList.size() - 1) {
             // Remove the edge, this will update the TableView automatically
-            edgeTable.getItems().remove(index);
+            DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntryObservableList.get(index).getEdgeID());
+            edgeEntryObservableList.remove(index);
         } else {
             // Create an alert to inform the user there is no edge selected
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -150,28 +185,60 @@ public class EditMapEdgesController {
 
     /**
      * Called when an edge is selected to be edited
+     *
      * @author Karen Hou
      */
     @FXML
-    private void handleEditEdge() throws IOException {
-        EdgeEntry selectedEdge = edgeTable.getSelectionModel().getSelectedItem();
-        if(selectedEdge != null){
-            openEditDialogue(selectedEdge);
+    private void handleEditEdge() throws IOException, SQLException {
+        int index = edgeTable.getSelectionModel().getSelectedIndex();
+        EdgeEntry selectedEdge = edgeEntryObservableList.get(index);
+        if (selectedEdge != null) {
+            String oldID = selectedEdge.getEdgeID();
+            String oldStartNode = selectedEdge.getStartNode();
+            String oldEndNode = selectedEdge.getEndNode();
+            ArrayList<String> newValues = openEditDialogue(selectedEdge);
+
+            DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "startNode", newValues.get(1));
+            DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "endNode", newValues.get(2));
+            DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "id", newValues.get(0));
+
+            //DatabaseAPI.getDatabaseAPI().deleteEdge(selectedEdge.getEdgeID());
+            //updateEdgeEntry(selectedEdge);
         }
     }
 
     /**
      * Called when an edge is to be created
+     *
      * @author Karen Hou
      */
     @FXML
-    private void handleNewEdge() throws IOException {
+    private void handleNewEdge() throws IOException, SQLException {
         EdgeEntry newEdge = new EdgeEntry();
         openEditDialogue(newEdge);
-        if(newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||
-            newEdge.endNodeProperty().getValue().isEmpty())
+        if (newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||
+                newEdge.endNodeProperty().getValue().isEmpty())
             return; //FIXME: DO BETTER ERROR CHECKING
-        edgeEntryObservableList.add(newEdge);
+        updateEdgeEntry(newEdge);
+    }
+
+    private void updateEdgeEntry(EdgeEntry edgeEntry) throws SQLException {
+
+        if (edgeEntry.getEdgeID().isEmpty() || edgeEntry.getStartNode().isEmpty() || edgeEntry.getEndNode().isEmpty())
+            return; //FIXME: DO BETTER ERROR CHECKING, CHECK THAT WE ARE GETTING INTS
+
+        String edgeID = edgeEntry.getEdgeID();
+        String startNode = edgeEntry.getStartNode();
+        String endNode = edgeEntry.getEndNode();
+
+        edgeEntryObservableList.add(edgeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
+        DatabaseAPI.getDatabaseAPI().addEdge(edgeID, startNode, endNode);
+/*
+        nodeTreeTable.requestFocus();
+        nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
+        nodeTreeTable.scrollTo(findNode(nodeID));
+        selectNode();
+        */
     }
 
     /**
@@ -180,6 +247,7 @@ public class EditMapEdgesController {
      * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
      * @author ZheCheng Song
      */
+    /*
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
@@ -195,14 +263,33 @@ public class EditMapEdgesController {
             stage.show();
         }
     }
+*/
+
+    /**
+     * Handles pressing of "HOME" button, replaces handleButtonPushed to remove some excess lines
+     *
+     * @throws IOException
+     * @author Leo Morris
+     */
+    @FXML
+    private void handleHomeButton() throws IOException {
+        Stage stage;
+        Parent root;
+        stage = (Stage) goBack.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Default Page");
+        stage.show();
+    }
 
     /**
      * Opens edit dialogue to edit edge
      * Written with code from KD
+     *
      * @param editedEdge is the edge being edited
      * @author Karen Hou
      */
-    private void openEditDialogue(EdgeEntry editedEdge) throws IOException{
+    private ArrayList<String> openEditDialogue(EdgeEntry editedEdge) throws IOException {
         FXMLLoader editDialogueLoader = new FXMLLoader();
         editDialogueLoader.setLocation(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapEdgeDialogueView.fxml"));
         Stage dialogueStage = new Stage();
@@ -218,30 +305,39 @@ public class EditMapEdgesController {
         dialogueStage.setScene(new Scene(root));
 
         dialogueStage.showAndWait();
+
+        ArrayList<String> returnList = new ArrayList<>();
+
+        returnList.add(editedEdge.getEdgeID());
+        returnList.add(editedEdge.getStartNode());
+        returnList.add(editedEdge.getEndNode());
+
+        return returnList;
     }
 
     /**
      * Saves the current list of edges to a CSV file at the location specified in the TextField by the user
      * Written with code from KD and AHF
+     *
      * @param actionEvent Save button action
      * @author Leo Morris
      */
-    public void handleSaveButton(ActionEvent actionEvent){
+    public void handleSaveButton(ActionEvent actionEvent) {
         final String fileName = CSVFile.getText();
 
         final List<String[]> data = new LinkedList<String[]>();
         Collections.addAll(data, "edgeID, startingNode, endingNode".split(","));
 
-        data.addAll(edgeEntryObservableList.stream().map(edge->{
-            return new String[] {
+        data.addAll(edgeEntryObservableList.stream().map(edge -> {
+            return new String[]{
                     edge.edgeIDProperty().getValue(),
                     edge.startNodeProperty().getValue(),
                     edge.endNodeProperty().getValue()
             };
         }).collect(Collectors.toList()));
-        try{
+        try {
             CSVManager.writeFile(fileName, data);
-        } catch (Exception e){
+        } catch (Exception e) {
             CSVErrorLabel.setStyle("-fx-text-fill: red");
             CSVErrorLabel.setText(e.getMessage());
             e.printStackTrace();
@@ -257,10 +353,11 @@ public class EditMapEdgesController {
 
     /**
      * Disables the save and load buttons if the file name is invalid
+     *
      * @param keyEvent Calls on key release in the CSVFile TextField
      */
     @FXML
-    public void handleFileNameType(KeyEvent keyEvent){
+    public void handleFileNameType(KeyEvent keyEvent) {
         CSVErrorLabel.setText("");
         CSVErrorLabel.setStyle("-fx-text-fill: black");
 
@@ -273,10 +370,11 @@ public class EditMapEdgesController {
     /**
      * Loads in the CSV file specified in the CSVFile TextField by the user
      * Written with code from KD and AHF
-     * @param actionEvent Pressing the LOad CSV Button
+     *
+     * @param actionEvent Pressing the Load CSV Button
      * @author Leo Morris
      */
-    public void handleLoadButtonClicked(ActionEvent actionEvent){
+    public void handleLoadButtonClicked(ActionEvent actionEvent) {
         final String fileName = CSVFile.getText();
 
         edgeEntryObservableList.clear();
@@ -284,21 +382,71 @@ public class EditMapEdgesController {
         List<String[]> edgeData = null;
 
         try {
-            edgeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("L1Edges.csv") : CSVManager.load(new File(fileName));
-        } catch (Exception e){
+            edgeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAlledges.csv") : CSVManager.load(new File(fileName));
+        } catch (Exception e) {
             CSVErrorLabel.setStyle("-fx-text-fill: red");
             CSVErrorLabel.setText(e.getMessage());
             e.printStackTrace();
             return;
         }
 
-        if(edgeData != null){
-            if(!edgeData.isEmpty() && edgeData.get(0).length == 3) {
-                edgeEntryObservableList.addAll(edgeData.stream().map(line-> {
+        if (edgeData != null) {
+            if (!edgeData.isEmpty() && edgeData.get(0).length == 3) {
+                edgeEntryObservableList.addAll(edgeData.stream().map(line -> {
                     return new EdgeEntry(line[0], line[1], line[2]);
                 }).collect(Collectors.toList()));
             }
         }
     }
 
+    /**
+     * Used to highlight selected edges
+     * @author Alex Friedman
+     * @param mouseEvent
+     */
+    public void handleSelectEdge(MouseEvent mouseEvent) {
+        if(edgeTable.getSelectionModel().getSelectedIndex() < 0){
+            // FIXME Error Handling
+            return;
+        }
+
+        canvas.getChildren().removeIf(x -> {
+            return x instanceof Line;
+        });
+
+        EdgeEntry node = edgeEntryObservableList.get(edgeTable.getSelectionModel().getSelectedIndex());
+
+        if(node == null){
+            //FIXME Null Warning
+            return;
+        }
+
+        NodeEntry startNode = null;
+        NodeEntry endNode = null;
+        try {
+            startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), node.getStartNode());
+            endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), node.getEndNode());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        if(startNode == null || endNode == null)
+        {
+            return; //FIXME: ERROR
+        }
+
+        final double startX = Double.parseDouble(startNode.getXcoord());
+        final double startY = Double.parseDouble(startNode.getYcoord());
+
+        final double endX = Double.parseDouble(endNode.getXcoord());
+        final double endY = Double.parseDouble(endNode.getYcoord());
+
+
+        final Line line = new Line(startX/zoomLevel, startY/zoomLevel, endX/zoomLevel, endY/zoomLevel);
+        line.setStrokeWidth(2);
+        line.setStroke(Color.ORANGE);
+
+        canvas.getChildren().add(line);
+    }
 }

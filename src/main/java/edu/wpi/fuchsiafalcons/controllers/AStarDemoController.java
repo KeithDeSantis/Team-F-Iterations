@@ -1,5 +1,9 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import edu.wpi.fuchsiafalcons.database.ConnectionHandler;
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
+import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.pathfinding.Graph;
 import edu.wpi.fuchsiafalcons.pathfinding.GraphLoader;
 import edu.wpi.fuchsiafalcons.pathfinding.Path;
@@ -22,9 +26,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import org.apache.derby.iapi.db.Database;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -82,7 +88,10 @@ public class AStarDemoController implements Initializable {
         //ahf - yes this should be done better. At some point.
 
         try {
-            this.graph = GraphLoader.load("nodes_1.csv", "edges.csv");
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+
+            this.graph = GraphLoader.load(nodeEntries, edgeEntries);
         } catch (Exception e) {
             this.graph = new Graph();
             e.printStackTrace();
@@ -90,7 +99,8 @@ public class AStarDemoController implements Initializable {
         }
 
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(this.graph.getVertices().stream().map(vertex -> vertex.getID()).collect(Collectors.toList()));
+        nodeList.addAll(this.graph.getVertices().stream().map(vertex -> vertex.getID())
+         .sorted().collect(Collectors.toList()));
 
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
@@ -119,27 +129,9 @@ public class AStarDemoController implements Initializable {
         }
     }
 
-    //Please comment this!
-    private double prevX, prevY;
-    private boolean firstClick = false;
-    private Line newLine;
+
     public void drawLine(MouseEvent mouseEvent) {
-        /*
-        if (!mouseEvent.isPrimaryButtonDown()) {
-            return;
-        }
-        firstClick = ! firstClick;
-        if(!firstClick){
-            newLine = new Line(prevX, prevY,
-                    mouseEvent.getX(), mouseEvent.getY());
-            newLine.setStrokeWidth(5);
-            newLine.setStroke(Color.BLACK);
-            canvas.getChildren().add(newLine);
-        }else{
-            prevX = mouseEvent.getX();
-            prevY = mouseEvent.getY();
-        }
-         */
+
     }
 
 
@@ -149,39 +141,9 @@ public class AStarDemoController implements Initializable {
      */
     @FXML
     public void handlePathfindButtonClicked(ActionEvent actionEvent) {
+        clearPath();
+        updatePath();
 
-        final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
-        final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
-
-       //canvas.getChildren().clear();
-
-        canvas.getChildren().removeIf(x -> {
-            return x instanceof Line;
-        });
-
-        if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
-        {
-            final Path path = this.graph.getPath(startVertex, endVertex);
-            if(path != null)
-            {
-                final List<Vertex> pathData = path.asList();
-                for (int i = 0; i < pathData.size() - 1; i++)
-                {
-                    final Vertex start = pathData.get(i);
-                    final Vertex end = pathData.get(i + 1);
-
-                    final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
-                    line.setStrokeWidth(2);
-                    line.setStroke(Color.ORANGE);
-
-                    canvas.getChildren().add(line);
-                }
-            }
-        }
-        else
-        {
-            //FIXME: INFORM USER OF ERROR
-        }
 
     }
 
@@ -235,12 +197,69 @@ public class AStarDemoController implements Initializable {
 
     }
 
-    public void checkInput() {
+    /**
+     * This is used to clear the pathfinding drawn path.
+     * @author Alex Friedman (ahf)
+     */
+    private void clearPath()
+    {
+        canvas.getChildren().removeIf(x -> {
+            return x instanceof Line;
+        });
+    }
+
+    /**
+     * This is used to re-render the A* path
+     * @author Alex Friedman (ahf)
+     */
+    private boolean updatePath()
+    {
+        final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
+        final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
+
+        if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
+        {
+            final Path path = this.graph.getPath(startVertex, endVertex);
+            if(path != null)
+            {
+                final List<Vertex> pathData = path.asList();
+                for (int i = 0; i < pathData.size() - 1; i++)
+                {
+                    final Vertex start = pathData.get(i);
+                    final Vertex end = pathData.get(i + 1);
+
+                    final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
+                    line.setStrokeWidth(2);
+                    line.setStroke(Color.ORANGE);
+
+                    canvas.getChildren().add(line);
+                }
+                return true;
+            }
+        }
+        else
+        {
+            //FIXME: INFORM USER OF ERROR
+        }
+
+        return false; //We had an error
+    }
+
+    /**
+     * Used to check if our input is valid to run the pathfinding algorithm or not
+     * @author Alex Friedman (ahf)
+     */
+    private void checkInput() {
         if (startComboBox.getValue() == null ||
                 endComboBox.getValue() == null){
             pathfindButton.setDisable(true);
+            clearPath();
+
         }else{
             pathfindButton.setDisable(false);
+
+            clearPath();
+            updatePath();
         }
     }
 }

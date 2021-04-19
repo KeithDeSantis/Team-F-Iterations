@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -54,6 +55,12 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         primaryStage.show();
     }
 
+
+    @BeforeEach
+    public void beforeTest()
+    {
+        clickOn("Reset Database");
+    }
     @Test
     public void testBackButton() {
         verifyThat("Save to File", Node::isVisible);
@@ -109,15 +116,15 @@ public class EditMapNodeControllerTest extends ApplicationTest {
     public void testEditNodeFeature() {
         verifyThat("Edit", Node::isVisible);
         clickOn("Edit");
-        clickOn("CCONF001L1");
+        clickOn("ACONF00102");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#nodeIDField");
-        write("CCONF002L1");
+        write("ACONF00103");
         clickOn("OK");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#nodeIDField");
-        write("CCONF001L1");
+        write("ACONF00102");
         doubleClickOn("#floorField");
         write("f");
         clickOn("OK");
@@ -125,7 +132,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         doubleClickOn("#floorField");
         write("G");
         clickOn("OK");
-        verifyThat("#CCONF001L1", Node::isVisible);
+        verifyThat("#ACONF00102", Node::isVisible);
         verifyThat("G", Node::isVisible); // Testing changing of Floor
         clickOn("Reset Database");
     }
@@ -133,7 +140,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
     @Test
     public void testEditValidity() {
 
-        clickOn("CCONF001L1");
+        clickOn("ACONF00102");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#xCoordField");
@@ -147,13 +154,13 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         doubleClickOn("#yCoordField");
         write("0");
         clickOn("OK");
-        verifyThat("#CCONF001L1", Node::isVisible); // Testing changing position
+        verifyThat("#ACONF00102", Node::isVisible); // Testing changing position
         boolean oneCCONF001L1 = false;
-        for(NodeEntry n : nodeList) { if(n.getNodeID().equals("CCONF001L1")) oneCCONF001L1 = !oneCCONF001L1; }
+        for(NodeEntry n : nodeList) { if(n.getNodeID().equals("ACONF00102")) oneCCONF001L1 = !oneCCONF001L1; }
         assertTrue(oneCCONF001L1);
 
 
-        clickOn("CCONF001L1");
+        clickOn("ACONF00102");
         clickOn("Edit");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#nodeIDField");
@@ -176,9 +183,9 @@ public class EditMapNodeControllerTest extends ApplicationTest {
     public void testDeleteNodeOnMap() {
         verifyThat("Reset Database", Node::isVisible);
         clickOn("Reset Database");
-        verifyThat("CCONF001L1", Node::isVisible);
-        clickOn("CCONF001L1");
-        verifyThat("#CCONF001L1", Node::isVisible);
+        verifyThat("ACONF00103", Node::isVisible);
+        clickOn("ACONF00103");
+        verifyThat("#ACONF00103", Node::isVisible);
         clickOn("Delete");
         // Could add a more thorough test though unsure how - KD and ZS
         clickOn("Reset Database");
@@ -201,7 +208,10 @@ public class EditMapNodeControllerTest extends ApplicationTest {
     @Test
     public void testClickToMakeNode() {
         verifyThat("#deleteButton", Node::isVisible);
-        rightClickOn("#map");
+        moveTo("#map");
+        moveBy(-100, -100);
+        rightClickOn();
+        //rightClickOn("#map");
         clickOn("Create Node Here");
         verifyThat("OK", Node::isVisible);
         clickOn("#nodeIDField");

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import javax.swing.plaf.nimbus.State;
+import javax.xml.crypto.Data;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -25,7 +26,7 @@ class DatabaseAPITest {
     @BeforeEach
     public void setUp() throws Exception
     {
-        DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), CSVManager.load("L1Nodes.csv"), CSVManager.load("L1Edges.csv"));
+        DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), CSVManager.load("MapfAllnodes.csv"), CSVManager.load("MapfAlledges.csv"));
     }
 
     @Test
@@ -187,6 +188,66 @@ class DatabaseAPITest {
         DatabaseAPI.getDatabaseAPI().addNode("test", 1, 1, "f", "b", "t", "l", "s");
         List<NodeEntry> actual = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
         assertEquals(expected.get(0).getNodeID(), actual.get(0).getNodeID());
+    }
+
+    @Test
+    @DisplayName("test make sure service request table exists")
+    public void testServiceReqTable() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "SERVICE_REQUESTS"));
+    }
+
+    @Test
+    @DisplayName("testing adding one service request")
+    public void testOneServiceReq() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().addServiceReq("test", "name", "false"));
+    }
+
+    @Test
+    @DisplayName("test service requests are appropriately added")
+    public void testAddServiceReq() throws SQLException{
+        String[] reqOne = {"test1", "test person", "false"};
+        String[] reqTwo = {"test2", "test person2", "true"};
+        List<String[]> reqData = new ArrayList<>();
+        reqData.add(reqOne);
+        reqData.add(reqTwo);
+        DatabaseAPI.getDatabaseAPI().populateReqs(reqData);
+        ResultSet rset = null;
+        String query = "SELECT * FROM SERVICE_REQUESTS";
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+        int counter = 0;
+        while (rset.next()) {
+            if (counter == 0) {
+                assertEquals(rset.getString(1), reqOne[0]);
+                assertEquals(rset.getString(2), reqOne[1]);
+                assertEquals(rset.getString(3), reqOne[2]);
+            }
+            else {
+                assertEquals(rset.getString(1), reqTwo[0]);
+                assertEquals(rset.getString(2), reqTwo[1]);
+                assertEquals(rset.getString(3), reqTwo[2]);
+            }
+            counter = counter + 1;
+        }
+    }
+
+    @Test
+    @DisplayName("test editing a service request")
+    public void testEditRequest() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addServiceReq("test", "person", "false");
+        assertTrue(DatabaseAPI.getDatabaseAPI().editServiceReq("test", "completed", "true"));
+    }
+
+    @Test
+    @DisplayName("test invalid service request edit")
+    public void testInvalidRequestEdit() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addServiceReq("name", "test", "false");
+        assertThrows(SQLException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                DatabaseAPI.getDatabaseAPI().editServiceReq("name", "asdf", "1234");
+            }
+        });
     }
 
 }
