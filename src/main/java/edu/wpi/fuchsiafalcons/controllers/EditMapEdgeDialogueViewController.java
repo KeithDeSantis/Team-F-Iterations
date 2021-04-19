@@ -1,10 +1,22 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import edu.wpi.fuchsiafalcons.database.ConnectionHandler;
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import edu.wpi.fuchsiafalcons.pathfinding.Graph;
+import edu.wpi.fuchsiafalcons.pathfinding.GraphLoader;
+import edu.wpi.fuchsiafalcons.pathfinding.Vertex;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller for new edge or edit edge pop-up in edge editor
@@ -12,8 +24,8 @@ import javafx.stage.Stage;
  */
 public class EditMapEdgeDialogueViewController {
     @FXML private TextField edgeID;
-    @FXML private TextField startNode;
-    @FXML private TextField endNode;
+    @FXML private ComboBox<String> startNode;
+    @FXML private ComboBox<String> endNode;
 
     private EdgeEntry edge = new EdgeEntry();
     private Stage dialogueStage;
@@ -22,7 +34,21 @@ public class EditMapEdgeDialogueViewController {
     public EditMapEdgeDialogueViewController(){}
     @FXML
     private void initialize(){
+        Graph graph = new Graph();
+        try {
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
 
+            graph = GraphLoader.load(nodeEntries, edgeEntries);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //return;
+        }
+        final ObservableList<String> nodeList = FXCollections.observableArrayList();
+        nodeList.addAll(graph.getVertices().stream().map(Vertex::getID)
+                .sorted().collect(Collectors.toList()));
+        this.startNode.setItems(nodeList);
+        this.endNode.setItems(nodeList);
     }
 
     /**
@@ -34,8 +60,8 @@ public class EditMapEdgeDialogueViewController {
     private void handleOKClicked(ActionEvent e){
         if(formFilled()){
             edge.setEdgeID(edgeID.getText());
-            edge.setStartNode(startNode.getText());
-            edge.setEndNode(endNode.getText());
+            edge.setStartNode(startNode.getValue());
+            edge.setEndNode(endNode.getValue());
             okClicked = true;
             dialogueStage.close();
         }
@@ -56,18 +82,15 @@ public class EditMapEdgeDialogueViewController {
             edgeID.setStyle("-fx-border-widge: 2px");
             edgeID.setStyle("-fx-border-color: red");
         }
-        if(startNode.getText().length() <=0){
+        if(startNode.getValue().length() <=0){
             startNode.setStyle("-fx-border-widge: 2px");
             startNode.setStyle("-fx-border-color: red");
         }
-        if(endNode.getText().length() <=0){
+        if(endNode.getValue().length() <=0){
             endNode.setStyle("-fx-border-widge: 2px");
             endNode.setStyle("-fx-border-color: red");
         }
-        if(edgeID.getText().length() > 0 && startNode.getText().length() > 0 && endNode.getText().length() > 0) {
-            return true;
-        }
-        return false;
+        return edgeID.getText().length() > 0 && startNode.getValue().length() > 0 && endNode.getValue().length() > 0;
     }
 
     /**
@@ -78,8 +101,8 @@ public class EditMapEdgeDialogueViewController {
     public void setEdge(EdgeEntry enteredEdge){
         edge = enteredEdge;
         edgeID.setText(edge.edgeIDProperty().getValue());
-        startNode.setText(edge.startNodeProperty().getValue());
-        endNode.setText(edge.endNodeProperty().getValue());
+        startNode.setValue(edge.startNodeProperty().getValue());
+        endNode.setValue(edge.endNodeProperty().getValue());
     }
 
     /**
