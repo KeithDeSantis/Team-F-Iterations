@@ -496,9 +496,8 @@ public class EditMapEdgesController {
             }
             if(startNode == null || endNode == null) {
                 System.out.println("Edge with no actual Node");
-                return;
-            }
-            if(startNode.getFloor().equals(floor) || endNode.getFloor().equals(floor)) {
+                //return;
+            }else if(startNode.getFloor().equals(floor) || endNode.getFloor().equals(floor)) {
                 if(!nodeList.contains(startNode))
                     nodeList.add(startNode);
                 if(!nodeList.contains(endNode))
@@ -550,6 +549,13 @@ public class EditMapEdgesController {
         this.canvas.getChildren().add(c);
     }
 
+    /**
+     * Open window for user to create new edge with two node selected
+     *
+     * @throws IOException
+     * @throws SQLException
+     * @author ZheCheng
+     */
     private void createNewEdge() throws IOException, SQLException{
         EdgeEntry newEdge = new EdgeEntry(firstCircle.getId()+"_"+secondCircle.getId(),firstCircle.getId(),secondCircle.getId());
         openEditDialogue(newEdge);
