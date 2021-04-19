@@ -52,9 +52,9 @@
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
@@ -74,28 +74,25 @@
                               <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="AStarDemo" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.rowIndex="4">
+                        <JFXButton fx:id="service2" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.rowIndex="4">
                            <font>
                               <Font size="18.0" />
                            </font>
-                           <graphic>
-                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
-                           </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="serviceRequest" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.columnIndex="1">
+                        <JFXButton fx:id="serviceRequest" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true" GridPane.columnIndex="1">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>
                            <graphic>
-                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="serviceButton" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="service2" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text=" " wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <JFXButton fx:id="AStarDemo" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" text=" " wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <graphic>
-                              <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="directionsImage" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </JFXButton>
                         <JFXButton fx:id="quit" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" text=" " GridPane.columnIndex="1" GridPane.rowIndex="4">
@@ -121,12 +118,12 @@
                               <Font name="Tahoma" size="18.0" />
                            </font>
                         </Label>
-                        <Label text="2nd Service Request" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <Label text="Directions" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>
                         </Label>
-                        <Label text="A* Pathfinding" GridPane.rowIndex="5">
+                        <Label text="Service 2" GridPane.rowIndex="5">
                            <font>
                               <Font name="Tahoma" size="18.0" />
                            </font>
@@ -144,6 +141,7 @@
                               <Insets left="50.0" right="53.0" />
                            </GridPane.margin>
                         </Text>
+                        <ImageView fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
                      </children>
                      <VBox.margin>
                         <Insets left="60.0" right="60.0" top="50.0" />

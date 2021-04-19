@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,11 +28,16 @@ public class DefaultPageController {
     private Button service2;
     @FXML
     private Button quit;
+
     @FXML private ImageView directionsImage;
+
+    @FXML private ImageView serviceButton;
 
     @FXML private void initialize(){
         final Image directions = new Image(getClass().getResourceAsStream("/imagesAndLogos/directionsArrow.png"));
         directionsImage.setImage(directions);
+        final Image serviceRequest = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButton.png"));
+        serviceButton.setImage(serviceRequest);
     }
     /**
      * Handles the pushing of a button on the screen

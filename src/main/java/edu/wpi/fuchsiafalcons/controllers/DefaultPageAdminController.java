@@ -6,6 +6,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -13,18 +17,40 @@ import java.io.IOException;
 public class DefaultPageAdminController {
 
     @FXML
-    private Button editVertex;
+    private Button editMap;
     @FXML
-    private Button editEdges;
+    private Button manageServices;
     @FXML
     private Button AStarDemo;
     @FXML
     private Button serviceRequest;
     @FXML
-    private Button service2;
+    private Button manageAccount;
     @FXML
     private Button quit;
-
+    @FXML
+    private ImageView directionsImage;
+    @FXML
+    private ImageView serviceButton;
+    @FXML
+    private ImageView manageAccounts;
+    @FXML
+    private ImageView mapIcon;
+    @FXML
+    private ImageView serviceManageIcon;
+    @FXML
+    private void initialize(){
+        final Image directions = new Image(getClass().getResourceAsStream("/imagesAndLogos/directionsArrow.png"));
+        directionsImage.setImage(directions);
+        final Image serviceRequest = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButton.png"));
+        serviceButton.setImage(serviceRequest);
+        final Image account = new Image(getClass().getResourceAsStream("/imagesAndLogos/manageAccounts.png"));
+        manageAccounts.setImage(account);
+        final Image map = new Image(getClass().getResourceAsStream("/imagesAndLogos/map.png"));
+        mapIcon.setImage(map);
+        final Image serviceManage = new Image(getClass().getResourceAsStream("/imagesAndLogos/manageServices.png"));
+        serviceManageIcon.setImage(serviceManage);
+    }
     /**
      * Handles the pushing of a button on the screen
      * @param actionEvent the button's push
@@ -38,17 +64,17 @@ public class DefaultPageAdminController {
         Stage stage;
         Parent root;
 
-        if (buttonPushed == editVertex) {
+        if (buttonPushed == editMap) {
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapNodeView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapMenuView.fxml"));
             stage.getScene().setRoot(root);
-            stage.setTitle("Edit Map Vertex");
+            stage.setTitle("Edit Map Menu");
             stage.show();
-        } else if (buttonPushed == editEdges) {
+        } else if (buttonPushed == manageServices) {
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/EditMapEdgesView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/ServiceRequestManageView.fxml"));
             stage.getScene().setRoot(root);  //Changing the stage
-            stage.setTitle("Edit Map Edges");
+            stage.setTitle("Service Request Manager");
             stage.show();
         } else if (buttonPushed == AStarDemo) {
             stage = (Stage) buttonPushed.getScene().getWindow();
@@ -62,12 +88,11 @@ public class DefaultPageAdminController {
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/ServiceRequestHomeView.fxml"));
             stage.getScene().setRoot(root);
-            stage.setTitle("Language Interpretation Request");
+            stage.setTitle("Service Request Home");
             stage.show();
 
-        } else if (buttonPushed == service2) {
-            // Implement Later
-
+        } else if (buttonPushed == manageAccount) {
+//create account manager page
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FoodDeliveryServiceRequestView.fxml"));
             //Scene scene = new Scene(root);

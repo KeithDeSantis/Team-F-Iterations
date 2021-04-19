@@ -2,7 +2,10 @@ package edu.wpi.fuchsiafalcons.controllers;
 
 import static org.junit.Assert.*;
 
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -14,31 +17,43 @@ import org.junit.jupiter.api.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import java.lang.reflect.Field;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 public class LanguageInterpretationRequestControllerTest extends ApplicationTest{
 
+    private ObservableList<NodeEntry> nodeList;
+
     @Override
     public void start (Stage stage) throws Exception {
-        Parent mainScreen = FXMLLoader.load(LanguageInterpretationRequestControllerTest.class.getResource("LanguageInterpretationRequestController.fxml"));
-        stage.setScene(new Scene(mainScreen));
+        System.gc();
+
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/LanguageInterpretationServiceRequestView.fxml"));
+        Parent root = loader.load();
+
+        final LanguageInterpretationRequestController controller = loader.getController();
+
+        //Uses JavaReflection to access classes so that we don't have to change their actual accessibility
+        final Field nodeListField = controller.getClass().getDeclaredField("nodeList");
+
+        //Set the fields to be accessible
+        nodeListField.setAccessible(true);
+
+        //Initialize our local lists
+        this.nodeList = (ObservableList<NodeEntry>) nodeListField.get(controller);
+
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         stage.show();
-        stage.toFront();
-    }
-    @Before
-    public void setUp () throws Exception {
     }
 
-    @After
-    public void tearDown () throws Exception {
-        FxToolkit.hideStage();
-        release(new KeyCode[]{});
-        release(new MouseButton[]{});
-    }
 
     @Test
     public void handleClose() {
-
+        clickOn("close");
+        verifyThat("Welcome to the Service Request Application Home Menu", Node::isVisible);
     }
 
     @Test
