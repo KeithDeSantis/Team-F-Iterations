@@ -21,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -77,8 +78,18 @@ public class EditMapEdgesController {
     @FXML
     private ImageView map;
 
-    private double zoomLevel = 5.0;
+    @FXML private ComboBox<String> floorComboBox;
 
+    private double zoomLevel = 3.0;
+    private String floor = "1";
+    private Line selectedLine = null;
+
+    private Circle firstCircle = null;
+    private Circle secondCircle = null;
+
+    private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
+
+    List<NodeEntry> nodeList = new ArrayList<>();
     /**
      * Initializes controller, called when EditMapEdges.fxml is loaded.
      *
@@ -86,6 +97,7 @@ public class EditMapEdgesController {
      */
     @FXML
     private void initialize() {
+        List<EdgeEntry> edgeList = new ArrayList<>();
         // Clear the file error label
         CSVErrorLabel.setStyle("-fx-text-fill: black");
         CSVErrorLabel.setText("");
@@ -94,7 +106,7 @@ public class EditMapEdgesController {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
-        final Image image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
+        final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
 
         final double width = image.getWidth() / zoomLevel;
         final double height = image.getHeight() / zoomLevel;
@@ -113,7 +125,7 @@ public class EditMapEdgesController {
         final String sql = "CREATE TABLE L1Edges(EdgeID varchar(200), " +
                 "startNode varchar(200), endNode varchar(200), " +
                 "primary key(edgeID))";
-        List<EdgeEntry> edgeList = new ArrayList<>();
+
         try {
             DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges");
             DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
@@ -137,22 +149,13 @@ public class EditMapEdgesController {
         edgeTable.setRoot(root);
         edgeTable.setShowRoot(false);
 
-        // Set initial selected edge to null
-        showSelectedEdge(null);
-
+        final ObservableList<String> floorName = FXCollections.observableArrayList();
+        floorName.addAll("1","2","3","L1","L2","G");
+        floorComboBox.setItems(floorName);
+        floorComboBox.setValue(floor);
+        drawEdgeNodeOnFloor();
         // Listen for selection changes on the table view
         //edgeTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showSelectedEdge(newVwalue)));
-    }
-
-    /**
-     * Called from listener on the table view.
-     * Shows the selected edge on the map view.
-     *
-     * @param edge the selected edge
-     * @author Leo Morris
-     */
-    public void showSelectedEdge(EdgeEntry edge) {
-        //TODO show selected edge on Map
     }
 
     /**
@@ -180,6 +183,12 @@ public class EditMapEdgesController {
             alert.setContentText("Please select an edge from the list");
 
             alert.showAndWait();
+        }
+
+        if(selectedLine!=null) {
+            canvas.getChildren().remove(selectedLine);
+            selectedLine = null;
+            drawEdgeNodeOnFloor(); // added to handle deletion without selection - KD
         }
     }
 
@@ -233,37 +242,12 @@ public class EditMapEdgesController {
 
         edgeEntryObservableList.add(edgeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
         DatabaseAPI.getDatabaseAPI().addEdge(edgeID, startNode, endNode);
-/*
-        nodeTreeTable.requestFocus();
-        nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
-        nodeTreeTable.scrollTo(findNode(nodeID));
-        selectNode();
-        */
+
+        edgeTable.requestFocus();
+        edgeTable.getSelectionModel().clearAndSelect(findEdge(edgeID));
+        edgeTable.scrollTo(findEdge(edgeID));
+        handleSelectEdge();
     }
-
-    /**
-     * Handles the pushing of a button on the screen
-     * @param actionEvent the button's push
-     * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
-     * @author ZheCheng Song
-     */
-    /*
-    @FXML
-    private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
-
-        Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
-
-        if (buttonPushed == goBack) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Default Page");
-            stage.show();
-        }
-    }
-*/
 
     /**
      * Handles pressing of "HOME" button, replaces handleButtonPushed to remove some excess lines
@@ -401,19 +385,14 @@ public class EditMapEdgesController {
 
     /**
      * Used to highlight selected edges
-     * @author Alex Friedman
-     * @param mouseEvent
+     * @author Alex Friedman & ZheCheng
      */
-    public void handleSelectEdge(MouseEvent mouseEvent) {
+    public void handleSelectEdge() {
         if(edgeTable.getSelectionModel().getSelectedIndex() < 0){
             // FIXME Error Handling
             return;
         }
-
-        canvas.getChildren().removeIf(x -> {
-            return x instanceof Line;
-        });
-
+        // FIXME: ADD TRY_CATCH
         EdgeEntry node = edgeEntryObservableList.get(edgeTable.getSelectionModel().getSelectedIndex());
 
         if(node == null){
@@ -429,24 +408,213 @@ public class EditMapEdgesController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
-
-        if(startNode == null || endNode == null)
-        {
-            return; //FIXME: ERROR
+        if(startNode == null || endNode == null) {
+            System.out.println("Edge with no actual Node");
+            return;
         }
 
-        final double startX = Double.parseDouble(startNode.getXcoord());
-        final double startY = Double.parseDouble(startNode.getYcoord());
+        // Check if need to switch map
+        if(startNode.getFloor().equals(floor) || endNode.getFloor().equals(floor)) {
+            drawEdgeNodeOnFloor();
+            if(selectedLine != null)
+                selectedLine.setStroke(Color.ORANGE);
+        }else{
+            floor = startNode.getFloor();
+            switchMap();
+        }
+        Line l = (Line) canvas.lookup("#"+node.getEdgeID());
+        if(l == null){
+            //FIXME Null Warning
+            return;
+        }
+        selectedLine = l;
+        l.setStroke(Color.GREEN);
+        centerNode(l);
+    }
 
-        final double endX = Double.parseDouble(endNode.getXcoord());
-        final double endY = Double.parseDouble(endNode.getYcoord());
+    /**
+     * Handle switching floor using combobox
+     * @param actionEvent
+     * @author ZheCheng
+     */
+    @FXML
+    public void handleFloorBoxAction(ActionEvent actionEvent) {
+        floor = floorComboBox.getValue().toString();
+        switchMap();
+    }
 
+    /**
+     * Handle switching floor map and redraw the nodes in new floor
+     * @author ZheCheng
+     */
+    private void switchMap(){
+        switch(floor){
+            case "1": if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
+                map.setImage(F1Image); break;
+            case "2": if (F2Image == null)F2Image = new Image("/maps/02_thesecondfloor.png");
+                map.setImage(F2Image); break;
+            case "3": if (F3Image == null)F3Image = new Image("/maps/03_thethirdfloor.png");
+                map.setImage(F3Image); break;
+            case "L1": if (L1Image == null)L1Image = new Image("/maps/00_thelowerlevel1.png");
+                map.setImage(L1Image); break;
+            case "L2": if (L2Image == null)L2Image = new Image("/maps/00_thelowerlevel2.png");
+                map.setImage(L2Image); break;
+            case "G": if (GImage == null)GImage = new Image("/maps/00_thegroundfloor.png");
+                map.setImage(GImage); break;
+            default: if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
+                map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
+        }
+        floorComboBox.setValue(floor);
+        drawEdgeNodeOnFloor();
+    }
 
-        final Line line = new Line(startX/zoomLevel, startY/zoomLevel, endX/zoomLevel, endY/zoomLevel);
-        line.setStrokeWidth(2);
-        line.setStroke(Color.ORANGE);
+    /**
+     * Clear the canvas and draw edges and nodes that are on current floor
+     * @author ZheCheng
+     */
+    private void drawEdgeNodeOnFloor() {
+        canvas.getChildren().removeIf(x -> {
+            return x instanceof Circle;
+        });
+        canvas.getChildren().removeIf(x -> {
+            return x instanceof Line;
+        });
 
-        canvas.getChildren().add(line);
+        selectedLine = null;
+        firstCircle = null;
+        secondCircle = null;
+        nodeList = new ArrayList<>();
+
+        for(EdgeEntry e : edgeEntryObservableList){
+            NodeEntry startNode = null;
+            NodeEntry endNode = null;
+            try {
+                startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getStartNode());
+                endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getEndNode());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            if(startNode == null || endNode == null) {
+                System.out.println("Edge with no actual Node");
+                return;
+            }
+            if(startNode.getFloor().equals(floor) || endNode.getFloor().equals(floor)) {
+                if(!nodeList.contains(startNode))
+                    nodeList.add(startNode);
+                if(!nodeList.contains(endNode))
+                    nodeList.add(endNode);
+                drawLine(Double.parseDouble(startNode.getXcoord())/zoomLevel,
+                        Double.parseDouble(startNode.getYcoord())/zoomLevel,
+                        Double.parseDouble(endNode.getXcoord())/zoomLevel,
+                        Double.parseDouble(endNode.getYcoord())/zoomLevel,
+                        e.getEdgeID());
+            }
+        }
+
+        // Comment this to not show nodes
+        for(NodeEntry n : nodeList){
+            drawCircle(Double.parseDouble(n.getXcoord()) / zoomLevel, Double.parseDouble(n.getYcoord()) / zoomLevel, n.getNodeID());
+        }
+    }
+
+    /**
+     * Draw a single circle to represent the node
+     * @author ZheCheng
+     */
+    private void drawCircle(double x, double y, String nodeID){
+        Circle c = new Circle(x, y, 4.0);
+        c.setFill(Color.BLUE);
+        c.setId(nodeID);
+        c.setOnMouseEntered(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(Color.RED);});
+        c.setOnMouseExited(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(Color.BLUE);});
+        c.setOnMouseClicked(e->{
+            if(c.equals(firstCircle)) {
+                firstCircle = null;
+                return;
+            }
+            c.setFill(Color.GREEN);
+            if(firstCircle == null)
+                firstCircle = c;
+            else {
+                secondCircle = c;
+                try {
+                    createNewEdge();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
+
+        this.canvas.getChildren().add(c);
+    }
+
+    private void createNewEdge() throws IOException, SQLException{
+        EdgeEntry newEdge = new EdgeEntry(firstCircle.getId()+"_"+secondCircle.getId(),firstCircle.getId(),secondCircle.getId());
+        openEditDialogue(newEdge);
+        if (newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||
+                newEdge.endNodeProperty().getValue().isEmpty())
+            return; //FIXME: DO BETTER ERROR CHECKING
+        updateEdgeEntry(newEdge);
+    }
+
+    /**
+     * Draw a single line to represent the node
+     * @author ZheCheng
+     */
+    private void drawLine(double startX, double startY, double endX, double endY, String edgeID){
+        Line l = new Line(startX, startY, endX, endY);
+        l.setStrokeWidth(7);
+        l.setStroke(Color.ORANGE);
+        l.setId(edgeID);
+        l.setOnMouseEntered(e->{if(!l.equals(selectedLine))l.setStroke(Color.RED);});
+        l.setOnMouseExited(e->{if(!l.equals(selectedLine))l.setStroke(Color.ORANGE);});
+        l.setOnMouseClicked(e->{
+            if(selectedLine != null)
+                selectedLine.setStroke(Color.ORANGE);
+            selectedLine = l;
+            l.setStroke(Color.GREEN);
+            edgeTable.getSelectionModel().clearAndSelect(findEdge(edgeID));
+            edgeTable.requestFocus();
+            edgeTable.scrollTo(findEdge(edgeID));
+        });
+
+        this.canvas.getChildren().add(l);
+    }
+
+    /**
+     * Find the index of a given node with nodeID in nodeList
+     * @author ZheCheng
+     */
+    private int findEdge(String nodeID){
+        int index = 0;
+        for(EdgeEntry e: edgeEntryObservableList){
+            if(e.getEdgeID() == nodeID){
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    /**
+     * Center the given line in scrollpane
+     * @param l The line to be centered
+     * @author ZheCheng
+     */
+    public void centerNode(Line l){
+
+        double h = scroll.getContent().getBoundsInLocal().getHeight();
+        double y = (l.getBoundsInParent().getMaxY() +
+                l.getBoundsInParent().getMinY()) / 2.0;
+        double v = scroll.getViewportBounds().getHeight();
+        scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
+
+        double w = scroll.getContent().getBoundsInLocal().getWidth();
+        double x = (l.getBoundsInParent().getMaxX() +
+                l.getBoundsInParent().getMinX()) / 2.0;
+        double hw = scroll.getViewportBounds().getWidth();
+        scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
     }
 }

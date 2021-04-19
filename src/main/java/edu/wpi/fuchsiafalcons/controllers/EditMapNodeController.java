@@ -73,13 +73,6 @@ public class EditMapNodeController {
     private String floor = "1";
     private Circle selectedCircle = null;
 
-    //final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-    //final Image F2Image = new Image(getClass().getResourceAsStream("/maps/02_thesecondfloor.png"));
-    //final Image F3Image = new Image(getClass().getResourceAsStream("/maps/03_thethirdfloor.png"));
-    //final Image L1Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
-    //final Image L2Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel2.png"));
-    //final Image GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
-
     private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
 
     /**
@@ -93,9 +86,12 @@ public class EditMapNodeController {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+
         final double width = image.getWidth()/zoomLevel;
         final double height = image.getHeight()/zoomLevel;
+
         canvas.setPrefSize(width,height);
+
         map.setFitWidth(width);
         map.setFitHeight(height);
         map.setImage(image); // Copied from A* Vis - KD
