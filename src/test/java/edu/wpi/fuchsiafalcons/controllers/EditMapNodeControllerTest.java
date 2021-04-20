@@ -252,5 +252,20 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         assertTrue(hasTestClicking);
         clickOn("Reset Database");
     }
+
+    /**
+     * Test that the drag node feature updates the node entry in nodelist
+     */
+    @Test
+    public void testDragNode() {
+        drag("#fWALK00201").dropBy(40,10);
+        for(NodeEntry nodeEntry : nodeList) {
+            if(nodeEntry.getNodeID().equals("fWALK00201")) {
+                assertTrue(Integer.parseInt(nodeEntry.getXcoord()) == 845); // Could do better, coordinates get a bit funky with the dropBy function but this is right - KD
+                assertTrue(Integer.parseInt(nodeEntry.getYcoord()) == 1720);
+            }
+        }
+        clickOn("Reset Database");
+    }
 }
 
