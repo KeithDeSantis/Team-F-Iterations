@@ -1,6 +1,7 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -65,13 +67,14 @@ public class LanguageInterpretationRequestController implements Initializable {
      * @throws IOException
      * @author Jay Yen
      */
-    public void handleSubmit(ActionEvent actionEvent) throws IOException{
+    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
         String uuid = UUID.randomUUID().toString();
-        ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request","","false");
+        ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", name.getText(), "false");
         //services.add(newServiceRequest);
         //update service requests
         //after this is updated, copy into the other service request submits
-
+        DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
+                newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus());
         Stage currentStage = (Stage)submit.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FormSubmittedView.fxml"));
         Scene homeScene = new Scene(root);

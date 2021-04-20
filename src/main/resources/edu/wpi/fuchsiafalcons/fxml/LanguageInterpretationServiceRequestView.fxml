@@ -15,9 +15,10 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.LanguageInterpretationRequestController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.LanguageInterpretationRequestController">
    <children>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: cde7ff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: cde7ff;">
          <children>
             <JFXButton fx:id="close" buttonType="RAISED" onAction="#handleClose" text="x" textAlignment="CENTER">
                <ripplerFill>
@@ -25,22 +26,23 @@
                      <stops>
                         <Stop>
                            <color>
-                              <Color blue="0.7184210419654846" green="0.5569537281990051" red="0.2780555486679077" />
+                              <Color red="0.2780555486679077" green="0.5569537281990051" blue="0.7184210419654846" />
                            </color>
                         </Stop>
                         <Stop offset="0.013740458015267151">
                            <color>
-                              <Color blue="0.7176470756530762" green="0.5568627715110779" red="0.27843138575553894" />
+                              <Color red="0.27843138575553894" green="0.5568627715110779" blue="0.7176470756530762" />
                            </color>
                         </Stop>
                         <Stop offset="1.0">
                            <color>
-                              <Color blue="0.27843138575553894" green="0.06666667014360428" red="0.003921568859368563" />
+                              <Color red="0.003921568859368563" green="0.06666667014360428" blue="0.27843138575553894" />
                            </color>
                         </Stop>
                      </stops>
                   </LinearGradient>
-               </ripplerFill></JFXButton>
+               </ripplerFill>
+            </JFXButton>
             <Label alignment="CENTER" lineSpacing="8.0" prefHeight="18.0" prefWidth="378.0" text="Brigham and Women's Language Interpretation Service Request Form" textAlignment="CENTER" underline="true">
                <font>
                   <Font name="Tahoma" size="12.0" />
@@ -59,10 +61,11 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextField promptText="Name">
+                  <JFXTextField fx:id="name" promptText="Name">
                      <VBox.margin>
                         <Insets top="10.0" />
-                     </VBox.margin></JFXTextField>
+                     </VBox.margin>
+                  </JFXTextField>
                   <Label text="Appointment Date and Time:">
                      <VBox.margin>
                         <Insets top="10.0" />
@@ -89,7 +92,8 @@
                   <JFXComboBox fx:id="appointment" labelFloat="true" prefHeight="26.0" prefWidth="164.0" promptText="Appointment">
                      <VBox.margin>
                         <Insets top="10.0" />
-                     </VBox.margin></JFXComboBox>
+                     </VBox.margin>
+                  </JFXComboBox>
                   <Label layoutX="40.0" layoutY="111.0" text="Language:">
                      <VBox.margin>
                         <Insets top="10.0" />
@@ -104,22 +108,23 @@
                                  <stops>
                                     <Stop>
                                        <color>
-                                          <Color blue="0.7184210419654846" green="0.5569537281990051" red="0.2780555486679077" />
+                                          <Color red="0.2780555486679077" green="0.5569537281990051" blue="0.7184210419654846" />
                                        </color>
                                     </Stop>
                                     <Stop offset="0.007633587786259542">
                                        <color>
-                                          <Color blue="0.7184210419654846" green="0.5569537281990051" red="0.2780555486679077" />
+                                          <Color red="0.2780555486679077" green="0.5569537281990051" blue="0.7184210419654846" />
                                        </color>
                                     </Stop>
                                     <Stop offset="1.0">
                                        <color>
-                                          <Color blue="0.27843138575553894" green="0.06666667014360428" red="0.003921568859368563" />
+                                          <Color red="0.003921568859368563" green="0.06666667014360428" blue="0.27843138575553894" />
                                        </color>
                                     </Stop>
                                  </stops>
                               </LinearGradient>
-                           </ripplerFill></JFXButton>
+                           </ripplerFill>
+                        </JFXButton>
                         <JFXButton fx:id="translate" buttonType="RAISED" onAction="#handleTranslate" prefHeight="26.0" prefWidth="104.0" text="Translate">
                            <HBox.margin>
                               <Insets left="50.0" />
@@ -129,17 +134,17 @@
                                  <stops>
                                     <Stop>
                                        <color>
-                                          <Color blue="0.7184210419654846" green="0.5569537281990051" red="0.2780555486679077" />
+                                          <Color red="0.2780555486679077" green="0.5569537281990051" blue="0.7184210419654846" />
                                        </color>
                                     </Stop>
                                     <Stop offset="0.007633587786259542">
                                        <color>
-                                          <Color blue="0.7184210419654846" green="0.5569537281990051" red="0.2780555486679077" />
+                                          <Color red="0.2780555486679077" green="0.5569537281990051" blue="0.7184210419654846" />
                                        </color>
                                     </Stop>
                                     <Stop offset="1.0">
                                        <color>
-                                          <Color blue="0.27843138575553894" green="0.06666667014360428" red="0.003921568859368563" />
+                                          <Color red="0.003921568859368563" green="0.06666667014360428" blue="0.27843138575553894" />
                                        </color>
                                     </Stop>
                                  </stops>
@@ -152,17 +157,17 @@
                                  <stops>
                                     <Stop>
                                        <color>
-                                          <Color blue="0.7176470756530762" green="0.5568627715110779" red="0.27843138575553894" />
+                                          <Color red="0.27843138575553894" green="0.5568627715110779" blue="0.7176470756530762" />
                                        </color>
                                     </Stop>
                                     <Stop offset="0.007633587786259542">
                                        <color>
-                                          <Color blue="0.7176470756530762" green="0.5568627715110779" red="0.27843138575553894" />
+                                          <Color red="0.27843138575553894" green="0.5568627715110779" blue="0.7176470756530762" />
                                        </color>
                                     </Stop>
                                     <Stop offset="1.0">
                                        <color>
-                                          <Color blue="0.27843138575553894" green="0.06666667014360428" red="0.003921568859368563" />
+                                          <Color red="0.003921568859368563" green="0.06666667014360428" blue="0.27843138575553894" />
                                        </color>
                                     </Stop>
                                  </stops>

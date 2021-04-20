@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 import javafx.application.Platform;
@@ -26,6 +27,8 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MarkRequestsCompleteController implements Initializable {
@@ -54,9 +57,21 @@ public class MarkRequestsCompleteController implements Initializable {
         status.setCellValueFactory(cellData -> cellData.getValue().getValue().getCompleteStatusProperty());
 
         final TreeItem<ServiceEntry> root = new RecursiveTreeItem<ServiceEntry>(services, RecursiveTreeObject::getChildren);
+        //JFXTreeTableView<ServiceEntry> requestView = new JFXTreeTableView<ServiceEntry>(root);
         requestView.setRoot(root);
         requestView.setShowRoot(false);
         requestView.getColumns().setAll(request, assign, status);
+
+        ArrayList<ServiceEntry> data;
+        try {
+            data = DatabaseAPI.getDatabaseAPI().genServiceEntries();
+            for (ServiceEntry e : data) {
+                services.add(e);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         //add table entries like in account manager
         //syntax of adding item: services.add(new ServiceEntry("Request Type", "Assigned To", "Status));
@@ -67,10 +82,17 @@ public class MarkRequestsCompleteController implements Initializable {
         Platform.exit();
     }
 
-    public void handleMarkAsComplete(ActionEvent actionEvent) {
+    public void handleMarkAsComplete(ActionEvent actionEvent) throws SQLException {
         //change status to complete
         //isSelected(int rowIndex) is true if the row is selected
-
+        int row = 0;
+        for (int i=0; i< services.size(); i++)
+        {
+            if (isSelected()){row = i};
+        }
+        TreeItem<ServiceEntry> e = requestView.getTreeItem(row);
+        ServiceEntry data = e.getValue();
+        DatabaseAPI.getDatabaseAPI().editServiceReq(data.getRequestType(), "completed", "true");
     }
 
     public void handleHome(ActionEvent actionEvent) throws IOException {
