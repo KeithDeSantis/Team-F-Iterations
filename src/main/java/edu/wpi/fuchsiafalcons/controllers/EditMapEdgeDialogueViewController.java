@@ -11,11 +11,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -59,9 +61,24 @@ public class EditMapEdgeDialogueViewController {
     @FXML
     private void handleOKClicked(ActionEvent e){
         if(formFilled()){
-            edge.setEdgeID(edgeID.getText());
-            edge.setStartNode(startNode.getValue());
-            edge.setEndNode(endNode.getValue());
+            String newID = edgeID.getText(), newStart = startNode.getValue(), newEnd = endNode.getValue();
+
+            if((newID.contains(edge.getStartNode()) && !newID.contains(newStart))
+                    || (newID.contains(edge.getEndNode()) && !newID.contains(newEnd))) {
+                String updatedID = newStart + "_" + newEnd;
+                ChoiceDialog<String> cd = new ChoiceDialog<>("YES", "NO");
+                cd.setTitle("Improper edge name");
+                cd.setContentText("The new ID of this edge may not properly reflect its location.\nWould you like " +
+                        "to change the ID from " + newID + " to " + updatedID + "?");
+                cd.setHeaderText("Edge ID Error");
+                Optional<String> result = cd.showAndWait();
+                if(result.isPresent() && result.get().equals("YES")) {
+                    newID = updatedID;
+                }
+            }
+            edge.setEdgeID(newID);
+            edge.setStartNode(newStart);
+            edge.setEndNode(newEnd);
             okClicked = true;
             dialogueStage.close();
         }
