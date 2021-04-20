@@ -89,12 +89,12 @@ public class AStarDemoController implements Initializable {
             List<NodeEntry> allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
             List<EdgeEntry> alleEgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
 
-//            final List<NodeEntry> nodeEntries = allNodeEntries.stream().filter(node -> node.getFloor().equals("1")
-//            && !node.getBuilding().equals("Shapiro") && !node.getBuilding().equals("BTM")).collect(Collectors.toList());
-//
-//            final List<EdgeEntry> edgeEntries = alleEgeEntries.stream().filter( node -> haveNode(nodeEntries, node.getStartNode())
-//                    && haveNode(nodeEntries, node.getEndNode()) ).collect(Collectors.toList());
-            this.graph = GraphLoader.load(allNodeEntries, alleEgeEntries);
+            final List<NodeEntry> nodeEntries = allNodeEntries.stream().filter(node -> node.getFloor().equals("1")
+            && !node.getBuilding().equals("Shapiro") && !node.getBuilding().equals("BTM")).collect(Collectors.toList());
+
+            final List<EdgeEntry> edgeEntries = alleEgeEntries.stream().filter( node -> haveNode(nodeEntries, node.getStartNode())
+                    && haveNode(nodeEntries, node.getEndNode()) ).collect(Collectors.toList());
+            this.graph = GraphLoader.load(nodeEntries, edgeEntries);
         } catch (Exception e) {
             this.graph = new Graph();
             e.printStackTrace();
