@@ -3,6 +3,7 @@ package edu.wpi.fuchsiafalcons.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
+import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -28,7 +29,7 @@ public class MarkRequestsCompleteController implements Initializable {
     @FXML
     private JFXButton home;
     @FXML
-    private JFXTreeTableView<Service> requestView;
+    private JFXTreeTableView<ServiceEntry> requestView;
 
     public void initialize(URL location, ResourceBundle resources) {
         //creating table columns
