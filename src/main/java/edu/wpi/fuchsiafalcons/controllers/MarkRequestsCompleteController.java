@@ -3,21 +3,28 @@ package edu.wpi.fuchsiafalcons.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,46 +37,30 @@ public class MarkRequestsCompleteController implements Initializable {
     private JFXButton home;
     @FXML
     private JFXTreeTableView<ServiceEntry> requestView;
+    private ObservableList<ServiceEntry> services = FXCollections.observableArrayList();
 
     public void initialize(URL location, ResourceBundle resources) {
-        //creating table columns
-        JFXTreeTableView<service> treeTableView = new JFXTreeTableView<service>();
+        int colWidth = 300;
+        JFXTreeTableColumn<ServiceEntry, String> request = new JFXTreeTableColumn<>("Request Type");
+        request.setPrefWidth(colWidth);
+        request.setCellValueFactory(cellData -> cellData.getValue().getValue().getRequestTypeProperty());
 
-        JFXTreeTableColumn<service, String> type = new JFXTreeTableColumn<>("Request Type");
-        type.setPrefWidth(300);
-        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<service, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<service, String> param) {
-                return param.getValue().getValue().requestType;
-            }
-        });
-        JFXTreeTableColumn<service, String> assign = new JFXTreeTableColumn<>("Assigned To");
-        assign.setPrefWidth(300);
-        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<service, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<service, String> param) {
-                return param.getValue().getValue().assignedTo;
-            }
-        });
-        JFXTreeTableColumn<service, String> status = new JFXTreeTableColumn<>("Status");
-        status.setPrefWidth(300);
-        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<service, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<service, String> param) {
-                return param.getValue().getValue().completeStatus;
-            }
-        });
+        JFXTreeTableColumn<ServiceEntry, String> assign = new JFXTreeTableColumn<>("Assigned To");
+        assign.setPrefWidth(colWidth);
+        assign.setCellValueFactory(cellData -> cellData.getValue().getValue().getAssignedToProperty());
 
+        JFXTreeTableColumn<ServiceEntry, String> status = new JFXTreeTableColumn<>("Status");
+        status.setPrefWidth(colWidth);
+        status.setCellValueFactory(cellData -> cellData.getValue().getValue().getCompleteStatusProperty());
 
+        final TreeItem<ServiceEntry> root = new RecursiveTreeItem<ServiceEntry>(services, RecursiveTreeObject::getChildren);
+        requestView.setRoot(root);
+        requestView.setShowRoot(false);
+        requestView.getColumns().setAll(request, assign, status);
 
-        //assign.setCellValueFactory(new TreeItemPropertyValueFactory<>("Assigned To"));
-        //status.setCellValueFactory(new TreeItemPropertyValueFactory<>("Status"));
-
-        JFXTreeTableView.getColumns().add(type);
-        JFXTreeTableView.getColumns().add(assign);
-        JFXTreeTableView.getColumns().add(status);
         //add table entries like in account manager
-        //syntax of adding item: TreeItem nameOfRequest = new TreeItem(new service("Request Type", "Assigned To", "Status));
+        //syntax of adding item: services.add(new ServiceEntry("Request Type", "Assigned To", "Status));
+
     }
 
     public void handleClose(ActionEvent actionEvent) {
@@ -82,7 +73,7 @@ public class MarkRequestsCompleteController implements Initializable {
 
     }
 
-    public void handleHome(ActionEvent actionEvent) {
+    public void handleHome(ActionEvent actionEvent) throws IOException {
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
         Stage stage;
         Parent root;

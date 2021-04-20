@@ -2,6 +2,7 @@ package edu.wpi.fuchsiafalcons.controllers;
 
 import com.jfoenix.controls.*;
 import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
