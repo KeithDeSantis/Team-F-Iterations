@@ -72,7 +72,7 @@ public class DefaultPageAdminController {
             stage.show();
         } else if (buttonPushed == manageServices) {
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/ServiceRequestManageView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/MarkRequestsCompleteView.fxml"));
             stage.getScene().setRoot(root);  //Changing the stage
             stage.setTitle("Service Request Manager");
             stage.show();
