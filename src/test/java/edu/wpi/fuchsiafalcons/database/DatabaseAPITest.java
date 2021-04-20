@@ -64,13 +64,10 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("add dulplicate edge")
-    public void addDuplicateEdge() throws SQLException{
-        assertThrows(SQLException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
-                DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
-            }
+    public void addDuplicateEdge() {
+        assertThrows(SQLException.class, () -> {
+            DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
+            DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
         });
     }
 
@@ -83,7 +80,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test build update query")
-    public void testBuildUpdateQuery() throws SQLException{
+    public void testBuildUpdateQuery() {
         String expected = "UPDATE L1Nodes SET nodeid=(?) WHERE nodeid=(?)";
         assertEquals(expected, DatabaseAPI.getDatabaseAPI().buildUpdateQuery("L1Nodes", "id", "node"));
     }
@@ -91,12 +88,7 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test incorrect update query build")
     public void testFaultyUpdateQuery() throws NullPointerException{
-        assertThrows(NullPointerException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().buildUpdateQuery(null, null, null);
-            }
-        });
+        assertThrows(NullPointerException.class, () -> DatabaseAPI.getDatabaseAPI().buildUpdateQuery(null, null, null));
     }
 
     @Test
@@ -109,13 +101,13 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test dropping non-existent table")
-    public void testDropBadTable() throws SQLException{
+    public void testDropBadTable() {
         assertFalse(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "test-table"));
     }
 
     @Test
     @DisplayName("test dropping valid table")
-    public void testDropValidTable() throws SQLException{
+    public void testDropValidTable() {
         assertTrue(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges"));
     }
 
@@ -157,14 +149,9 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test invalid table creation")
-    public void testInvalidTableCreation() throws SQLException{
+    public void testInvalidTableCreation() {
         String sql = "invalid query here";
-        assertThrows(SQLException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
-            }
-        });
+        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql));
     }
 
     @Test
@@ -185,7 +172,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test make sure service request table exists")
-    public void testServiceReqTable() throws SQLException{
+    public void testServiceReqTable() {
         assertTrue(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "SERVICE_REQUESTS"));
     }
 
@@ -204,7 +191,7 @@ class DatabaseAPITest {
         reqData.add(reqOne);
         reqData.add(reqTwo);
         DatabaseAPI.getDatabaseAPI().populateReqs(reqData);
-        ResultSet rset = null;
+        ResultSet rset;
         String query = "SELECT * FROM SERVICE_REQUESTS";
         Statement stmt = ConnectionHandler.getConnection().createStatement();
         rset = stmt.executeQuery(query);
@@ -235,12 +222,7 @@ class DatabaseAPITest {
     @DisplayName("test invalid service request edit")
     public void testInvalidRequestEdit() throws SQLException{
         DatabaseAPI.getDatabaseAPI().addServiceReq("name", "test", "false");
-        assertThrows(SQLException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().editServiceReq("name", "asdf", "1234");
-            }
-        });
+        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().editServiceReq("name", "asdf", "1234"));
     }
 
     @Test
@@ -264,7 +246,7 @@ class DatabaseAPITest {
         ArrayList<String> expected = new ArrayList<>();
         expected.add("test");
         expected.add("test1");
-        ArrayList<String> actual = new ArrayList<>();
+        ArrayList<String> actual;
         actual = DatabaseAPI.getDatabaseAPI().listAllUsers();
         assertEquals(expected.get(0), actual.get(1)); //0 entry is the admin so we start at 1
         assertEquals(expected.get(1), actual.get(2));
