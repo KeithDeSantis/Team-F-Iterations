@@ -8,7 +8,6 @@ import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
 import edu.wpi.fuchsiafalcons.utils.UIConstants;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +18,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -27,9 +25,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
-import javafx.util.Callback;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -132,7 +128,7 @@ public class EditMapEdgesController {
             DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges");
             DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
 
-            List<String[]> edgeData = CSVManager.load("MapfAlledges.csv");
+            List<String[]> edgeData = CSVManager.load("MapfAllEdges.csv");
             edgeList = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
             DatabaseAPI.getDatabaseAPI().populateEdges(edgeData);
             edgeEntryObservableList.addAll(edgeData.stream().map(line-> new EdgeEntry(line[0], line[1], line[2])).collect(Collectors.toList()));
@@ -273,7 +269,7 @@ public class EditMapEdgesController {
         Stage stage;
         Parent root;
         stage = (Stage) goBack.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageView.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageAdminView.fxml"));
         stage.getScene().setRoot(root);
         stage.setTitle("Default Page");
         stage.show();
@@ -378,7 +374,7 @@ public class EditMapEdgesController {
         List<String[]> edgeData = null;
 
         try {
-            edgeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAlledges.csv") : CSVManager.load(new File(fileName));
+            edgeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllEdges.csv") : CSVManager.load(new File(fileName));
         } catch (Exception e) {
             CSVErrorLabel.setStyle("-fx-text-fill: red");
             CSVErrorLabel.setText(e.getMessage());

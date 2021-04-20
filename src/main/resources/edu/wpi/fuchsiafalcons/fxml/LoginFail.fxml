@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.LoginFailController">
+   <children>
+      <JFXButton fx:id="closeLogin" onAction="#handleCloseLogin" text="x">
+         <font>
+            <Font name="Tahoma" size="15.0" />
+         </font>
+         <ripplerFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#478eb7" />
+                  <Stop color="#011147" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </ripplerFill>
+      </JFXButton>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="623.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" lineSpacing="8.0" text="Welcome to Brigham and Women's Hospital!" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Tahoma Bold" size="27.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="25.0" right="25.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="Incorrect username or password" textFill="RED">
+               <font>
+                  <Font name="Tahoma Bold" size="15.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="username" focusColor="#478eb7" promptText="Username or email">
+               <VBox.margin>
+                  <Insets bottom="25.0" left="100.0" right="100.0" top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Tahoma" size="15.0" />
+               </font>
+            </JFXTextField>
+            <JFXPasswordField fx:id="password" focusColor="#478eb7" promptText="Password">
+               <VBox.margin>
+                  <Insets left="100.0" right="100.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Tahoma" size="15.0" />
+               </font>
+            </JFXPasswordField>
+            <JFXButton fx:id="signIn" buttonType="RAISED" onAction="#handleSignIn" text="Sign in">
+               <VBox.margin>
+                  <Insets bottom="25.0" top="25.0" />
+               </VBox.margin>
+               <ripplerFill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="#478eb7" />
+                        <Stop color="#011147" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </ripplerFill>
+               <font>
+                  <Font name="Tahoma" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

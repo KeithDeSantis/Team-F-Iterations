@@ -10,7 +10,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.LanguageInterpretationHelpController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.LanguageInterpretationHelpController">
     <children>
         <VBox layoutX="91.0" layoutY="52.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: cde7ff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -20,12 +20,12 @@
                             <stops>
                                 <Stop>
                                     <color>
-                                        <Color red="0.27843138575553894" green="0.5568627715110779" blue="0.7176470756530762" />
+                                        <Color blue="0.7176470756530762" green="0.5568627715110779" red="0.27843138575553894" />
                                     </color>
                                 </Stop>
                                 <Stop offset="1.0">
                                     <color>
-                                        <Color red="0.003921568859368563" green="0.06666667014360428" blue="0.27843138575553894" />
+                                        <Color blue="0.27843138575553894" green="0.06666667014360428" red="0.003921568859368563" />
                                     </color>
                                 </Stop>
                             </stops>
@@ -112,12 +112,12 @@
                             <stops>
                                 <Stop>
                                     <color>
-                                        <Color red="0.27843138575553894" green="0.5568627715110779" blue="0.7176470756530762" />
+                                        <Color blue="0.7176470756530762" green="0.5568627715110779" red="0.27843138575553894" />
                                     </color>
                                 </Stop>
                                 <Stop offset="1.0">
                                     <color>
-                                        <Color red="0.003921568859368563" green="0.06666667014360428" blue="0.27843138575553894" />
+                                        <Color blue="0.27843138575553894" green="0.06666667014360428" red="0.003921568859368563" />
                                     </color>
                                 </Stop>
                             </stops>
@@ -133,17 +133,17 @@
                             <stops>
                                 <Stop>
                                     <color>
-                                        <Color red="0.27843138575553894" green="0.5568627715110779" blue="0.7176470756530762" />
+                                        <Color blue="0.7176470756530762" green="0.5568627715110779" red="0.27843138575553894" />
                                     </color>
                                 </Stop>
                                 <Stop offset="0.007633587786259542">
                                     <color>
-                                        <Color red="0.27843138575553894" green="0.5568627715110779" blue="0.7176470756530762" />
+                                        <Color blue="0.7176470756530762" green="0.5568627715110779" red="0.27843138575553894" />
                                     </color>
                                 </Stop>
                                 <Stop offset="1.0">
                                     <color>
-                                        <Color red="0.003921568859368563" green="0.06666667014360428" blue="0.27843138575553894" />
+                                        <Color blue="0.27843138575553894" green="0.06666667014360428" red="0.003921568859368563" />
                                     </color>
                                 </Stop>
                             </stops>

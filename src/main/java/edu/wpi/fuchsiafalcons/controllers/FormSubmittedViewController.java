@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -9,7 +10,7 @@ import javafx.stage.Stage;
  */
 public class FormSubmittedViewController {
 
-    @FXML private Button okButton;
+    @FXML private JFXButton okButton;
 
     /**
      * Handles ok button by closing window.

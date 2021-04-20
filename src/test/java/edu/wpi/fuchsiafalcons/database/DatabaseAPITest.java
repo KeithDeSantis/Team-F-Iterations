@@ -8,9 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import javax.swing.plaf.nimbus.State;
-import javax.xml.crypto.Data;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -19,14 +16,11 @@ import java.sql.*;
 import java.util.List;
 
 class DatabaseAPITest {
-    //private DatabaseAPI api;
-  //  private ConnectionHandler connHandler = new ConnectionHandler();
-//    private Connection connection = connHandler.main(false);
-
     @BeforeEach
     public void setUp() throws Exception
     {
-        DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), CSVManager.load("MapfAllnodes.csv"), CSVManager.load("MapfAlledges.csv"));
+        DatabaseAPI.getDatabaseAPI().populateDB(ConnectionHandler.getConnection(), CSVManager.load("MapfAllNodes.csv"), CSVManager.load("MapfAllEdges.csv"));
+        DatabaseAPI.getDatabaseAPI().populateUsers(ConnectionHandler.getConnection());
     }
 
     @Test
@@ -45,7 +39,6 @@ class DatabaseAPITest {
                 "testlong", "testshort");
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("test"));
     }
-
 
     @DisplayName("Test for making sure can't add duplicate node")
     public void testAddDuplicate() throws SQLException
@@ -71,13 +64,10 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("add dulplicate edge")
-    public void addDuplicateEdge() throws SQLException{
-        assertThrows(SQLException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
-                DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
-            }
+    public void addDuplicateEdge() {
+        assertThrows(SQLException.class, () -> {
+            DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
+            DatabaseAPI.getDatabaseAPI().addEdge("test", "b1", "B2");
         });
     }
 
@@ -90,7 +80,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test build update query")
-    public void testBuildUpdateQuery() throws SQLException{
+    public void testBuildUpdateQuery() {
         String expected = "UPDATE L1Nodes SET nodeid=(?) WHERE nodeid=(?)";
         assertEquals(expected, DatabaseAPI.getDatabaseAPI().buildUpdateQuery("L1Nodes", "id", "node"));
     }
@@ -98,12 +88,7 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test incorrect update query build")
     public void testFaultyUpdateQuery() throws NullPointerException{
-        assertThrows(NullPointerException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().buildUpdateQuery(null, null, null);
-            }
-        });
+        assertThrows(NullPointerException.class, () -> DatabaseAPI.getDatabaseAPI().buildUpdateQuery(null, null, null));
     }
 
     @Test
@@ -116,13 +101,13 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test dropping non-existent table")
-    public void testDropBadTable() throws SQLException{
+    public void testDropBadTable() {
         assertFalse(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "test-table"));
     }
 
     @Test
     @DisplayName("test dropping valid table")
-    public void testDropValidTable() throws SQLException{
+    public void testDropValidTable() {
         assertTrue(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges"));
     }
 
@@ -164,14 +149,9 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test invalid table creation")
-    public void testInvalidTableCreation() throws SQLException{
+    public void testInvalidTableCreation() {
         String sql = "invalid query here";
-        assertThrows(SQLException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
-            }
-        });
+        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql));
     }
 
     @Test
@@ -192,7 +172,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test make sure service request table exists")
-    public void testServiceReqTable() throws SQLException{
+    public void testServiceReqTable() {
         assertTrue(DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "SERVICE_REQUESTS"));
     }
 
@@ -211,7 +191,7 @@ class DatabaseAPITest {
         reqData.add(reqOne);
         reqData.add(reqTwo);
         DatabaseAPI.getDatabaseAPI().populateReqs(reqData);
-        ResultSet rset = null;
+        ResultSet rset;
         String query = "SELECT * FROM SERVICE_REQUESTS";
         Statement stmt = ConnectionHandler.getConnection().createStatement();
         rset = stmt.executeQuery(query);
@@ -242,12 +222,7 @@ class DatabaseAPITest {
     @DisplayName("test invalid service request edit")
     public void testInvalidRequestEdit() throws SQLException{
         DatabaseAPI.getDatabaseAPI().addServiceReq("name", "test", "false");
-        assertThrows(SQLException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                DatabaseAPI.getDatabaseAPI().editServiceReq("name", "asdf", "1234");
-            }
-        });
+        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().editServiceReq("name", "asdf", "1234"));
     }
 
     @Test
@@ -256,7 +231,6 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI.getDatabaseAPI().addUser("Employee","user1","password"));
     }
 
-
     @Test
     @DisplayName("test edit a user")
     public void testEditAUser() throws SQLException{
@@ -264,4 +238,29 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI.getDatabaseAPI().editUser("user1","username","user2"));
     }
 
+    @Test
+    @DisplayName("test listing all users")
+    public void testListUsers() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addUser("adminstrator", "test", "password");
+        DatabaseAPI.getDatabaseAPI().addUser("employee", "test1", "password");
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("test");
+        expected.add("test1");
+        ArrayList<String> actual;
+        actual = DatabaseAPI.getDatabaseAPI().listAllUsers();
+        assertEquals(expected.get(0), actual.get(1)); //0 entry is the admin so we start at 1
+        assertEquals(expected.get(1), actual.get(2));
+    }
+
+    @Test
+    @DisplayName("test valid authentication with admin user")
+    public void testValidAuth() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().authenticate("admin", "admin"));
+    }
+
+    @Test
+    @DisplayName("test invalid authentication")
+    public void testInvalidAuth() throws SQLException{
+        assertFalse(DatabaseAPI.getDatabaseAPI().authenticate("admin", "asdf"));
+    }
 }

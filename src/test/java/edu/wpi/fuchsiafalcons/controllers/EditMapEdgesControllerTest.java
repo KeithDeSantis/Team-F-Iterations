@@ -55,7 +55,7 @@ public class EditMapEdgesControllerTest extends ApplicationTest{
     public void testBackButton() {
         verifyThat("Save to CSV", Node::isVisible);
         clickOn("HOME");
-        verifyThat("Welcome to the Navigation Page", Node::isVisible);
+        verifyThat("Welcome to Brigham and Women's Hospital!", Node::isVisible);
     }
 
     @Test
