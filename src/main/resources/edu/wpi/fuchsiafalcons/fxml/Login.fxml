@@ -13,19 +13,6 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.LoginController">
    <children>
-      <JFXButton fx:id="closeLogin" onAction="#handleCloseLogin" text="x">
-         <font>
-            <Font name="Tahoma" size="15.0" />
-         </font>
-         <ripplerFill>
-            <LinearGradient endX="1.0" endY="1.0">
-               <stops>
-                  <Stop color="#478eb7" />
-                  <Stop color="#011147" offset="1.0" />
-               </stops>
-            </LinearGradient>
-         </ripplerFill>
-      </JFXButton>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="623.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" lineSpacing="8.0" text="Welcome to Brigham and Women's Hospital!" textAlignment="CENTER" wrapText="true">
@@ -70,5 +57,18 @@
             </JFXButton>
          </children>
       </VBox>
+      <JFXButton fx:id="closeLogin" onAction="#handleCloseLogin" text="x">
+         <font>
+            <Font name="Tahoma" size="15.0" />
+         </font>
+         <ripplerFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#478eb7" />
+                  <Stop color="#011147" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </ripplerFill>
+      </JFXButton>
    </children>
 </AnchorPane>
