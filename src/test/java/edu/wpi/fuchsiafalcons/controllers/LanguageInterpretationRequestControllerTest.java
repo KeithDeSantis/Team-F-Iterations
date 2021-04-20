@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 public class LanguageInterpretationRequestControllerTest extends ApplicationTest{
 
-    private ObservableList<NodeEntry> nodeList;
-
     @Override
     public void start (Stage stage) throws Exception {
         System.gc();
@@ -34,16 +32,6 @@ public class LanguageInterpretationRequestControllerTest extends ApplicationTest
 
         final LanguageInterpretationRequestController controller = loader.getController();
 
-        //Uses JavaReflection to access classes so that we don't have to change their actual accessibility
-        final Field nodeListField = controller.getClass().getDeclaredField("nodeList");
-
-        //Set the fields to be accessible
-        nodeListField.setAccessible(true);
-
-        //Initialize our local lists
-        this.nodeList = (ObservableList<NodeEntry>) nodeListField.get(controller);
-
-
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
@@ -52,23 +40,31 @@ public class LanguageInterpretationRequestControllerTest extends ApplicationTest
 
     @Test
     public void handleClose() {
-        clickOn("close");
+        clickOn("#close");
         verifyThat("Welcome to the Service Request Application Home Menu", Node::isVisible);
     }
 
     @Test
     public void handleHelp() {
+        clickOn("#help");
+        verifyThat("Help", Node::isVisible);
     }
 
-    @Test
-    public void handleTranslate() {
-    }
+//    @Test
+//    public void handleTranslate() {
+//        clickOn("#translate");
+//        verifyThat("Translate", Node::isVisible);
+//    }
 
     @Test
     public void handleSubmit() {
+        clickOn("#submit");
+        verifyThat("Successfully submitted request!", Node::isVisible);
     }
 
     @Test
     public void initialize() {
+        clickOn("#appointment");
+        verifyThat("Non-Specific", Node::isVisible);
     }
 }
