@@ -30,6 +30,8 @@ public class EditMapEdgeDialogueViewController {
     private EdgeEntry edge = new EdgeEntry();
     private Stage dialogueStage;
     public boolean okClicked;
+    private ObservableList<EdgeEntry> edgeList;
+    private String currentIDIfEditing; //FIXME stupid way to fix making nodes with duplicate ID's, find better way
 
     public EditMapEdgeDialogueViewController(){}
     @FXML
@@ -78,7 +80,7 @@ public class EditMapEdgeDialogueViewController {
         endNode.setStyle("-fx-border-width: 0px");
 
         //check each field for filled out
-        if(edgeID.getText().length() <=0){
+        if(edgeID.getText().length() <=0 || !isUniqueNodeID(edgeID.getText())){
             edgeID.setStyle("-fx-border-widge: 2px");
             edgeID.setStyle("-fx-border-color: red");
         }
@@ -90,7 +92,10 @@ public class EditMapEdgeDialogueViewController {
             endNode.setStyle("-fx-border-widge: 2px");
             endNode.setStyle("-fx-border-color: red");
         }
-        return edgeID.getText().length() > 0 && startNode.getValue().length() > 0 && endNode.getValue().length() > 0;
+        return isUniqueNodeID(edgeID.getText()) &&
+                edgeID.getText().length() > 0 &&
+                startNode.getValue().length() > 0 &&
+                endNode.getValue().length() > 0;
     }
 
     /**
@@ -111,4 +116,25 @@ public class EditMapEdgeDialogueViewController {
      * @author Keith DeSantis
      */
     public void setDialogueStage(Stage theStage) {dialogueStage = theStage;}
+
+    public void setEdgeList(ObservableList<EdgeEntry> edgeList) { this.edgeList = edgeList; }
+
+    public void setCurrentIDIfEditing(String currentIDIfEditing) {
+        this.currentIDIfEditing = currentIDIfEditing;
+    }
+
+    /**
+     * Helper for isFilledOut() that ensures the nodeID given by the users isn't a duplicate to one
+     * that already exists.
+     * @param nodeID the nodeID given by the user
+     * @return true if the ID is unique
+     * @author KD
+     */
+    public boolean isUniqueNodeID(String nodeID) {
+        for(EdgeEntry n : edgeList) {
+            if(n.getEdgeID().equals(nodeID) && !(n.getEdgeID().equals(currentIDIfEditing)))
+                return false;
+        }
+        return true;
+    }
 }
