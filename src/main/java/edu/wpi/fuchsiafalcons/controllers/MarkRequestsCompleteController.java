@@ -85,13 +85,15 @@ public class MarkRequestsCompleteController implements Initializable {
     public void handleMarkAsComplete(ActionEvent actionEvent) throws SQLException {
         //change status to complete
         //isSelected(int rowIndex) is true if the row is selected
-        int row = 0;
-        for (int i=0; i< services.size(); i++)
-        {
-            if (isSelected()){row = i};
-        }
-        TreeItem<ServiceEntry> e = requestView.getTreeItem(row);
-        ServiceEntry data = e.getValue();
+
+//        int row = 0;
+//        for (int i=0; i< services.size(); i++)
+//        {
+//            if (isSelected()){row = i};
+//        }
+        ServiceEntry data = requestView.getSelectionModel().getSelectedItem().getValue();
+        //TreeItem<ServiceEntry> e = requestView.getTreeItem(row);
+        //ServiceEntry data = e.getValue();
         DatabaseAPI.getDatabaseAPI().editServiceReq(data.getRequestType(), "completed", "true");
     }
 
