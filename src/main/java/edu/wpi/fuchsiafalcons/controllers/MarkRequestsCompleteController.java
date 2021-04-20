@@ -39,22 +39,34 @@ public class MarkRequestsCompleteController implements Initializable {
         type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<service, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<service, String> param) {
-                return param.getValue().getValue().RequestType;
+                return param.getValue().getValue().requestType;
             }
         });
-        JFXTreeTableColumn<service, String> treeTableColumn2 = new JFXTreeTableColumn<>("Assigned To");
-        treeTableColumn1.setPrefWidth(300);
-        JFXTreeTableColumn<service, String> treeTableColumn3 = new JFXTreeTableColumn<>("Status");
-        treeTableColumn1.setPrefWidth(300);
+        JFXTreeTableColumn<service, String> assign = new JFXTreeTableColumn<>("Assigned To");
+        assign.setPrefWidth(300);
+        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<service, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<service, String> param) {
+                return param.getValue().getValue().assignedTo;
+            }
+        });
+        JFXTreeTableColumn<service, String> status = new JFXTreeTableColumn<>("Status");
+        status.setPrefWidth(300);
+        type.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<service, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<service, String> param) {
+                return param.getValue().getValue().completeStatus;
+            }
+        });
 
 
 
-        treeTableColumn2.setCellValueFactory(new TreeItemPropertyValueFactory<>("Assigned To"));
-        treeTableColumn3.setCellValueFactory(new TreeItemPropertyValueFactory<>("Status"));
+        //assign.setCellValueFactory(new TreeItemPropertyValueFactory<>("Assigned To"));
+        //status.setCellValueFactory(new TreeItemPropertyValueFactory<>("Status"));
 
-        JFXTreeTableView.getColumns().add(treeTableColumn1);
-        JFXTreeTableView.getColumns().add(treeTableColumn2);
-        JFXTreeTableView.getColumns().add(treeTableColumn3);
+        JFXTreeTableView.getColumns().add(type);
+        JFXTreeTableView.getColumns().add(assign);
+        JFXTreeTableView.getColumns().add(status);
         //add table entries like in account manager
         //syntax of adding item: TreeItem nameOfRequest = new TreeItem(new service("Request Type", "Assigned To", "Status));
     }
