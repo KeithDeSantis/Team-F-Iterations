@@ -52,8 +52,8 @@ public class GraphTest {
          * data as well as initialize our copy of the vertex and edges storing datastructures
          * so that we have easy access later.
          */
-        final String edgesCSV = "MapfAlledges.csv";
-        final String nodesCSV = "MapfAllnodes.csv";
+        final String edgesCSV = "DFSEdges.csv";
+        final String nodesCSV = "DFSNodes.csv";
         graph = GraphLoader.load(nodesCSV, edgesCSV);
 
         //Uses JavaReflection to access classes so that we don't have to change their actual accessibility
