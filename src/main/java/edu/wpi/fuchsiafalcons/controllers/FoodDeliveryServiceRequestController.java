@@ -37,6 +37,12 @@ public class FoodDeliveryServiceRequestController {
     @FXML private CheckBox cbSide3;
     @FXML private CheckBox cbSide4;
 
+    /**
+     * handles submit being pressed
+     * @param e is the button being pushed
+     * @throws IOException
+     * @author Keith DeSantis
+     */
     @FXML
     private void handleSubmitPushed(ActionEvent e) throws IOException{
         if(formFilledOut()){
@@ -59,6 +65,12 @@ public class FoodDeliveryServiceRequestController {
     }
 
 
+    /**
+     * handles cancel and x button being pushed
+     * @param e is the button being pressed
+     * @throws IOException
+     * @author KH
+     */
     @FXML
     private void handleButtonPushed(ActionEvent e) throws IOException{
         Button buttonPushed = (Button) e.getSource();
