@@ -315,7 +315,6 @@ public class EditMapNodeController {
         File file = fileChooser.showOpenDialog(FileStage);
         final String fileName = String.valueOf(file);
 
-        nodeList.clear();
 
         List<String[]> nodeData = null;
 
@@ -328,6 +327,7 @@ public class EditMapNodeController {
             e.printStackTrace();
             return;
         }
+        nodeList.clear();
 
         if(nodeData != null )
         {
