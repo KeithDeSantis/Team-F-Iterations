@@ -224,8 +224,8 @@ public class EditMapNodeDialogViewController {
     public void helpButtonPressed(ActionEvent actionEvent) {
         JFXButton btn = (JFXButton) actionEvent.getSource();
         if(btn==nodeIDButton) changeHelpLabel("An identifying key for your node, of a format similar to: CCONF001L1.");
-        else if(btn==xCoordButton) changeHelpLabel("A non-negative number between _ and _ that is the x-position of your node.");
-        else if(btn==yCoordButton) changeHelpLabel("A non-negative number between _ and _ that is the y-position of your node.");
+        else if(btn==xCoordButton) changeHelpLabel("A non-negative integer between 0 and 5000 that is the x-position of your node.");
+        else if(btn==yCoordButton) changeHelpLabel("A non-negative integer between 0 and 3400 that is the y-position of your node.");
         else if(btn==floorButton) changeHelpLabel("The floor your node is on out of the options L2, L1, G, 1, 2, or 3.");
         else if(btn==buildingButton) changeHelpLabel("The building your node is in.");
         else if(btn==nodeTypeButton) changeHelpLabel("The type of room your node represents, for example a restroom has node type \"REST\".");
