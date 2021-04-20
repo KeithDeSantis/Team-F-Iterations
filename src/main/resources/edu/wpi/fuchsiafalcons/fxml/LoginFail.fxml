@@ -26,7 +26,7 @@
             </LinearGradient>
          </ripplerFill>
       </JFXButton>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="623.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="623.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" lineSpacing="8.0" text="Welcome to Brigham and Women's Hospital!" textAlignment="CENTER" wrapText="true">
                <font>
