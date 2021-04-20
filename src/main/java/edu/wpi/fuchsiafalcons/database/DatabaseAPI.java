@@ -543,7 +543,7 @@ public class DatabaseAPI {
             populateEdges(edgeData);
 
             final String initServiceReqTable = "CREATE TABLE SERVICE_REQUESTS(name varchar(200), " +
-                    "assignedPerson varchar(200), completed varchar(200))";
+                    "assignedPerson varchar(200), completed varchar(200)), primary key(name))";
             createTable(conn, initServiceReqTable);
 
         } catch (SQLException e) {
