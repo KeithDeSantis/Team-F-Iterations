@@ -65,7 +65,7 @@ public class EditMapNodeControllerTest extends ApplicationTest {
     public void testBackButton() {
         verifyThat("Save to File", Node::isVisible);
         clickOn("X");
-        verifyThat("Welcome to the Navigation Page", Node::isVisible);
+        verifyThat("Welcome to Brigham and Women's Hospital!", Node::isVisible);
     }
 
 

@@ -259,7 +259,7 @@ public class EditMapEdgesController {
         Stage stage;
         Parent root;
         stage = (Stage) goBack.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageView.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageAdminView.fxml"));
         stage.getScene().setRoot(root);
         stage.setTitle("Default Page");
         stage.show();
