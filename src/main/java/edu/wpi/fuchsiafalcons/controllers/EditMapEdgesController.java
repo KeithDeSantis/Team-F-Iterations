@@ -232,8 +232,8 @@ public class EditMapEdgesController {
 
             // Focus on selected edge both on table and on map
             edgeTable.requestFocus();
-            edgeTable.getSelectionModel().clearAndSelect(findEdge(newValues.get(1)));
-            edgeTable.scrollTo(findEdge(newValues.get(1)));
+            edgeTable.getSelectionModel().clearAndSelect(findEdge(newValues.get(0)));
+            edgeTable.scrollTo(findEdge(newValues.get(0)));
             handleSelectEdge();
         }
     }
@@ -247,8 +247,19 @@ public class EditMapEdgesController {
     private void handleNewEdge() throws IOException, SQLException {
         EdgeEntry newEdge = new EdgeEntry();
         openEditDialogue(newEdge);
-        // Error checking are done in dialogue
+        if(!checkEdgeEntryNotEmpty(newEdge)){return;}
         updateEdgeEntry(newEdge);
+    }
+
+
+    /**
+     * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
+     * @param edgeEntry the node entry
+     * @return true if the node has no empty fields
+     * @author KD
+     */
+    public boolean checkEdgeEntryNotEmpty(EdgeEntry edgeEntry) {
+        return!edgeEntry.getEdgeID().isEmpty() && !edgeEntry.getStartNode().isEmpty() && !edgeEntry.getEndNode().isEmpty();
     }
 
     private void updateEdgeEntry(EdgeEntry edgeEntry) throws SQLException {
@@ -296,6 +307,8 @@ public class EditMapEdgesController {
         editDialogueController.setDialogueStage(dialogueStage);
         editDialogueController.setEdge(editedEdge);
 
+        editDialogueController.setEdgeList(edgeEntryObservableList);
+        editDialogueController.setCurrentIDIfEditing(editedEdge.getEdgeID());
         dialogueStage.setTitle("Edit Edge");
         dialogueStage.initModality(Modality.WINDOW_MODAL);
         dialogueStage.initOwner((Stage) goBack.getScene().getWindow());
