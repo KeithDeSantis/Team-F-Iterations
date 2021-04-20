@@ -27,6 +27,7 @@ public class DefaultPageEmployeeController {
     private JFXButton serviceRequest;
     @FXML
     private JFXButton quit;
+
     @FXML private JFXButton serviceManager;
 
     @FXML private ImageView directionsImage;
