@@ -68,9 +68,10 @@ public class LanguageInterpretationRequestController implements Initializable {
     public void handleSubmit(ActionEvent actionEvent) throws IOException{
         String uuid = UUID.randomUUID().toString();
         ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request","","false");
-        //add(newServiceRequest);
+        //services.add(newServiceRequest);
         //update service requests
         //after this is updated, copy into the other service request submits
+
         Stage currentStage = (Stage)submit.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FormSubmittedView.fxml"));
         Scene homeScene = new Scene(root);
