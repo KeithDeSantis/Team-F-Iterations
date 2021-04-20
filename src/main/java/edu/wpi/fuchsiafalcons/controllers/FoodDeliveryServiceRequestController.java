@@ -41,7 +41,7 @@ public class FoodDeliveryServiceRequestController {
     private void handleSubmitPushed(ActionEvent e) throws IOException{
         if(formFilledOut()){
             Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuschiafalcons/fxml/FormSubmittedView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FormSubmittedView.fxml"));
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
