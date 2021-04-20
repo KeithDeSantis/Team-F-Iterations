@@ -70,5 +70,18 @@
             </JFXButton>
          </children>
       </VBox>
+      <JFXButton fx:id="closeLogin" onAction="#handleCloseLogin" text="x">
+         <font>
+            <Font name="Tahoma" size="15.0" />
+         </font>
+         <ripplerFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#478eb7" />
+                  <Stop color="#011147" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </ripplerFill>
+      </JFXButton>
    </children>
 </AnchorPane>
