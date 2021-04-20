@@ -180,11 +180,9 @@ public class NodeMap {
     }
 
     public void setFloor(String floor) { this.floor = floor; }
-
     public void setNodeTreeTable(JFXTreeTableView<NodeEntry> nodeTreeTable) {
         this.nodeTreeTable = nodeTreeTable;
     }
-
     public void setSelectedCircle(Circle selectedCircle) {
         this.selectedCircle = selectedCircle;
     }

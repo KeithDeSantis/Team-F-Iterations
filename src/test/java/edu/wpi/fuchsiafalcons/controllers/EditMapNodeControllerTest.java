@@ -252,5 +252,22 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         assertTrue(hasTestClicking);
         clickOn("Reset Database");
     }
+
+    @Test
+    public void testZoom() {
+        clickOn("+");
+        clickOn("+");
+        clickOn("+");
+        clickOn("+");
+        verifyThat("#zoomInButton", Node::isDisabled);
+        clickOn("-");
+        clickOn("-");
+        clickOn("-");
+        clickOn("-");
+        clickOn("-");
+        clickOn("-");
+        clickOn("-");
+        verifyThat("#zoomOutButton", Node::isDisabled);
+    }
 }
 

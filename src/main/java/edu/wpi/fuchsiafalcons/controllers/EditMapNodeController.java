@@ -47,25 +47,38 @@ import java.sql.*;
  */
 public class EditMapNodeController {
 
-    @FXML private JFXButton goBack;
+    @FXML
+    private JFXButton goBack;
 
-    @FXML private JFXTreeTableView<NodeEntry> nodeTreeTable;
+    @FXML
+    private JFXTreeTableView<NodeEntry> nodeTreeTable;
 
-    @FXML private TextField filenameField;
-    @FXML private Label errorMessageLabel;
+    @FXML
+    private TextField filenameField;
+    @FXML
+    private Label errorMessageLabel;
 
-    @FXML private JFXButton saveToFileButton;
-    @FXML private JFXButton loadFromFileButton;
+    @FXML
+    private JFXButton saveToFileButton;
+    @FXML
+    private JFXButton loadFromFileButton;
 
-    @FXML private ScrollPane scroll;
-    @FXML private ImageView map;
-    @FXML private Pane canvas;
-    @FXML private ImageView logoView;
+    @FXML
+    private ScrollPane scroll;
+    @FXML
+    private ImageView map;
+    @FXML
+    private Pane canvas;
+    @FXML
+    private ImageView logoView;
 
-    @FXML private ComboBox<String> floorComboBox;
+    @FXML
+    private ComboBox<String> floorComboBox;
 
-    @FXML private JFXButton zoomInButton;
-    @FXML private JFXButton zoomOutButton;
+    @FXML
+    private JFXButton zoomInButton;
+    @FXML
+    private JFXButton zoomOutButton;
 
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
@@ -74,11 +87,12 @@ public class EditMapNodeController {
     private String floor = "1";
     private Circle selectedCircle = null;
 
-    private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
+    private Image F1Image, F2Image, F3Image, L1Image, L2Image, GImage = null;
     private NodeMap nodeMap;
 
     /**
      * Overriding Initialize for testing and set up
+     *
      * @author Keith DeSantis
      */
     @FXML
@@ -89,10 +103,10 @@ public class EditMapNodeController {
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
 
-        final double width = image.getWidth()/zoomLevel;
-        final double height = image.getHeight()/zoomLevel;
+        final double width = image.getWidth() / zoomLevel;
+        final double height = image.getHeight() / zoomLevel;
 
-        canvas.setPrefSize(width,height);
+        canvas.setPrefSize(width, height);
 
         map.setFitWidth(width);
         map.setFitHeight(height);
@@ -101,11 +115,10 @@ public class EditMapNodeController {
         final Image logo = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoView.setImage(logo);
 
-        List <NodeEntry> data = new ArrayList<>();
+        List<NodeEntry> data = new ArrayList<>();
         try {
             data = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -138,7 +151,7 @@ public class EditMapNodeController {
         nodeMap = new NodeMap(nodeTreeTable, floor, selectedCircle, canvas, floorComboBox, nodeList, scroll, zoomLevel, map);
 
         final ObservableList<String> floorName = FXCollections.observableArrayList();
-        floorName.addAll("1","2","3","L1","L2","G");
+        floorName.addAll("1", "2", "3", "L1", "L2", "G");
         floorComboBox.setItems(floorName);
         floorComboBox.setValue(floor);
         nodeMap.drawNodeOnFloor();
@@ -164,7 +177,7 @@ public class EditMapNodeController {
 
                     try {
                         openEditDialog(nodeEntry);
-                        if(!checkNodeEntryNotEmpty(nodeEntry)) return;
+                        if (!checkNodeEntryNotEmpty(nodeEntry)) return;
                         nodeList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
                         updateNodeEntry(nodeEntry);
                     } catch (IOException | SQLException ioException) {
@@ -181,6 +194,7 @@ public class EditMapNodeController {
 
     /**
      * Handles the pushing of a button on the screen
+     *
      * @param actionEvent the button's push
      * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
      * @author ZheCheng Song
@@ -193,7 +207,7 @@ public class EditMapNodeController {
         Parent root;
 
         if (buttonPushed == goBack) {
-          //  ConnectionHandler.getConnection().close();
+            //  ConnectionHandler.getConnection().close();
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageView.fxml"));
             stage.getScene().setRoot(root);
@@ -204,13 +218,16 @@ public class EditMapNodeController {
 
     /**
      * Called when delete button is pressed
+     *
      * @param actionEvent
      * @author KD
      */
     @FXML
     private void handleDeletePushed(ActionEvent actionEvent) throws SQLException {
         int selectedIndex = nodeTreeTable.getSelectionModel().getSelectedIndex(); // get index of table that is selected - KD
-        if(selectedIndex<0) { return; }
+        if (selectedIndex < 0) {
+            return;
+        }
         String targetID = nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID();
         DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
         nodeList.remove(selectedIndex); // remove said index from table - KD
@@ -220,36 +237,39 @@ public class EditMapNodeController {
 
     /**
      * Call when the new node button is pressed to open edit dialog and add node
+     *
      * @throws IOException
      */
     @FXML
     private void handleNewNode() throws IOException, SQLException {
         NodeEntry newNode = new NodeEntry(); // create new node - KD
         openEditDialog(newNode); // allow editing of the new node - KD
-        if(!checkNodeEntryNotEmpty(newNode)) return;
+        if (!checkNodeEntryNotEmpty(newNode)) return;
         nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
         updateNodeEntry(newNode);
     }
 
     /**
      * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
+     *
      * @param nodeEntry the node entry
      * @return true if the node has no empty fields
      * @author KD
      */
     public boolean checkNodeEntryNotEmpty(NodeEntry nodeEntry) {
-        return!nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXcoord().isEmpty() && !nodeEntry.getYcoord().isEmpty() &&
+        return !nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXcoord().isEmpty() && !nodeEntry.getYcoord().isEmpty() &&
                 !nodeEntry.getFloor().isEmpty() && !nodeEntry.getBuilding().isEmpty() && !nodeEntry.getNodeType().isEmpty() &&
                 !nodeEntry.getLongName().isEmpty() && !nodeEntry.getShortName().isEmpty();
     }
 
     /**
      * Used to update a node entry in the UI and database //FIXME: Add delete if we already had the node
+     *
      * @param nodeEntry
      */
     private void updateNodeEntry(NodeEntry nodeEntry) throws SQLException {
 
-        if(!checkNodeEntryNotEmpty(nodeEntry))
+        if (!checkNodeEntryNotEmpty(nodeEntry))
             return;
 
         String nodeID = nodeEntry.getNodeID();
@@ -273,13 +293,18 @@ public class EditMapNodeController {
 
     /**
      * Called when a node is to be edited, pens the dialog editing page with the chosen node
+     *
      * @author KD
      */
     @FXML
     private void handleEditNode() throws IOException, SQLException {
-        if(nodeTreeTable.getSelectionModel().getSelectedItem() == null) { return; }
+        if (nodeTreeTable.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
         NodeEntry selectedNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue(); // get item the is selected - KD
-        if(selectedNode == null) { return; } // ensure there is a selection - KD
+        if (selectedNode == null) {
+            return;
+        } // ensure there is a selection - KD
 
         String targetID = selectedNode.getNodeID();
         DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
@@ -291,6 +316,7 @@ public class EditMapNodeController {
 
     /**
      * Opens the edit dialog to edit a particular node
+     *
      * @param editedNode the node being edited
      * @author KD
      */
@@ -315,10 +341,13 @@ public class EditMapNodeController {
 
     /**
      * Setter for selected node
+     *
      * @param node
      * @author KD
      */
-    public void setSelectedNode(NodeEntry node) { selectedNode = node; }
+    public void setSelectedNode(NodeEntry node) {
+        selectedNode = node;
+    }
 
     @FXML
     /**
@@ -351,10 +380,8 @@ public class EditMapNodeController {
             return;
         }
 
-        if(nodeData != null )
-        {
-            if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
-            {
+        if (nodeData != null) {
+            if (!nodeData.isEmpty() && nodeData.get(0).length == 8) {
                 nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
@@ -372,7 +399,7 @@ public class EditMapNodeController {
         errorMessageLabel.setStyle("-fx-text-fill: black");
         filenameField.setText("");
         saveToFileButton.setDisable(true);
-       // loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
+        // loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
 
         nodeMap.drawNodeOnFloor();
     }
@@ -380,11 +407,11 @@ public class EditMapNodeController {
 
     /**
      * Saves the current list of nodes to a CSV
+     *
      * @param actionEvent
      * @author ahf, KD
      */
-    public void handleSaveButtonClicked(ActionEvent actionEvent)
-    {
+    public void handleSaveButtonClicked(ActionEvent actionEvent) {
         //FIXME: NULL ERROR CHECK.
         final String fileName = filenameField.getText();
 
@@ -405,7 +432,7 @@ public class EditMapNodeController {
             Collections.addAll(data, "nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName".split(","));
 
             data.addAll(nodeList.stream().map(node -> {
-                return new String[] {
+                return new String[]{
                         node.getNodeID(),
                         node.getXcoord(),
                         node.getYcoord(),
@@ -437,6 +464,7 @@ public class EditMapNodeController {
 
     /**
      * Used to make sure load and save buttons are only enabled when they should be
+     *
      * @param keyEvent
      * @author ahf, KD
      */
@@ -450,8 +478,10 @@ public class EditMapNodeController {
         saveToFileButton.setDisable(disableBtns);
 
     }
-/**
+
+    /**
      * Handle switching floor using combobox
+     *
      * @param actionEvent
      * @author ZheCheng
      */
@@ -464,12 +494,16 @@ public class EditMapNodeController {
 
     /**
      * Select node based on selection in Table, focus on the node
+     *
      * @author ZheCheng
      */
-    public void selectNode() { nodeMap.selectNode(); }
+    public void selectNode() {
+        nodeMap.selectNode();
+    }
 
- /**
+    /**
      * Resets the database
+     *
      * @author KD and ahf
      */
     public void handleResetDatabase() throws Exception {
@@ -487,10 +521,8 @@ public class EditMapNodeController {
             return;
         }
 
-        if(nodeData != null )
-        {
-            if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
-            {
+        if (nodeData != null) {
+            if (!nodeData.isEmpty() && nodeData.get(0).length == 8) {
                 nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
@@ -513,6 +545,7 @@ public class EditMapNodeController {
 
     /**
      * Used to make it so that we can right-click to create nodes.
+     *
      * @param contextMenuEvent
      * @author Alex Friedman (ahf), KD
      */
@@ -526,29 +559,39 @@ public class EditMapNodeController {
 
     /**
      * Basic implementation of Zooming the map by changing the zoom level and reloading
+     *
      * @param actionEvent the press of zoom in or zoom out
      * @author KD
      */
     public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
         JFXButton btn = (JFXButton) actionEvent.getSource();
-        if(btn == zoomInButton) {
-            if(zoomLevel > 1) {
+        if (btn == zoomInButton) {
+            if (zoomLevel > 1) {
                 zoomLevel--;
                 nodeMap.decrementZoom();
+                zoomOutButton.setDisable(false);
+            }
+            if (zoomLevel == 1) {
+                zoomInButton.setDisable(true);
             }
         } else if (btn == zoomOutButton) {
-            if(zoomLevel < 8) {
+            if (zoomLevel < 8) {
                 zoomLevel++;
                 nodeMap.incrementZoom();
+                zoomInButton.setDisable(false);
+            }
+            if (zoomLevel == 8) {
+                zoomOutButton.setDisable(true);
             }
         }
-        nodeMap.drawNodeOnFloor();
-        Image image = map.getImage();
-        double width = image.getWidth()/zoomLevel;
-        double height = image.getHeight()/zoomLevel;
-        canvas.setPrefSize(width,height);
-        map.setFitWidth(width);
-        map.setFitHeight(height);
-        map.setImage(image);
-    }
+            nodeMap.drawNodeOnFloor();
+            Image image = map.getImage();
+            double width = image.getWidth() / zoomLevel;
+            double height = image.getHeight() / zoomLevel;
+            canvas.setPrefSize(width, height);
+            map.setFitWidth(width);
+            map.setFitHeight(height);
+            map.setImage(image);
+        }
 }
+

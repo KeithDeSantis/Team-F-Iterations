@@ -1,3 +1,4 @@
+
 package edu.wpi.fuchsiafalcons.pathfinding;
 
 
@@ -15,43 +16,53 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GraphTest {
 
-    /**
+
+/**
      * An instance of Graph initialized with our data that we will run tests with.
      *
      * Created by Alex Friedman
      * @see Graph
      */
+
     private Graph graph;
 
-    /**
+
+/**
      * Stores the edges in the graph.
      *
      * Created by Alex Friedman (ahf)
      * @see Graph
      * @see Edge
      */
+
     private List<Edge> edges;
 
-    /**
+
+/**
      * Stores the vertices in the graph.
      *
      * Created by Alex Friedman
      * @see Graph
      * @see Vertex
      */
+
     private HashMap<String, Vertex> vertices;
 
-    /**
+
+/**
      * Setup test suite.
      */
+
     @BeforeAll
     public void setUp() throws Exception {
 
-        /*
+
+/*
          * Alex Friedman (ahf) - This section is used to initialize the Graph with our
          * data as well as initialize our copy of the vertex and edges storing datastructures
          * so that we have easy access later.
          */
+
         final String edgesCSV = "DFSEdges.csv";
         final String nodesCSV = "DFSNodes.csv";
         graph = GraphLoader.load(nodesCSV, edgesCSV);
@@ -76,45 +87,55 @@ public class GraphTest {
 
 
 
-    /**
+
+/**
      * This function tests Graph.contains(Vertex)
      * @author Alex Friedman (ahf)
      * @see Graph
      * @see Vertex
      */
+
     @Test
     public void testContainsVertex() {
-        /*
+
+/*
          * Iterate through our list of vertices and make sure that the graph
          * contains them all (as we know the graph does).
          */
+
         for (Vertex v : vertices.values()) {
             assertTrue(graph.contains(v));
         }
     }
 
-    /**
+
+/**
      * This tests Graph.contains(Edge)
      * @author Alex Friedman (ahf)
      * @see Graph
      * @see Edge
      */
+
     @Test
     public void testContainsEdge() {
-        /*
+
+/*
          * Iterate through the list of edges that we know are all in the graph, and
          * make sure that Graph.contains(Edge) correctly identifies them.
          */
+
         for (Edge e : edges) {
             assertTrue(graph.contains(e));
         }
     }
 
-    /**
+
+/**
      * Tests isEndpoint, getNeighbor, and equals methods [Vertex and Edge]
      *
      * @author Tony Vuolo
      */
+
     @Test
     public void testEdgeConnector() {
         Vertex v0 = new Vertex("0", 0, 0, ""), v1 = new Vertex("1", 3, 4, "");
@@ -167,7 +188,8 @@ public class GraphTest {
         assertEquals(v1.getEdges().size(), 3);
     }
 
-    /**
+
+/**
      * This runs a basic test of DFS by making sure that the DFS algorithm is able
      * to path find along edges. As DFS does not guarantee that the shortest path is
      * found first, having this work in all cases is a decent DFS test, but more
@@ -177,6 +199,7 @@ public class GraphTest {
      * @see Edge
      * @see Vertex
      */
+
     @Test
     public void testDFSPathEdges() {
         //Tests that we always get the shortest path along an edge.
@@ -197,7 +220,8 @@ public class GraphTest {
         }
     }
 
-    /**
+
+/**
      * This runs a simple test of DFS to make sure when inputting null vertex, it's
      * able to avoid error and return null
      * @author ZheCheng Song
@@ -205,6 +229,7 @@ public class GraphTest {
      * @see Edge
      * @see Vertex
      */
+
     @Test
     public void testDFSPathNullVertex() {
         final Edge e = edges.get(0);
@@ -216,7 +241,7 @@ public class GraphTest {
         assertNull(graph.DFS(null, null));
     }
 
-    /**
+/**
      * This runs a simple test on DFS to find the shortest path (least nodes), with three nodes in a loop,
      * check to see if the path always only contains two node
      * @author ZheCheng Song
@@ -224,6 +249,7 @@ public class GraphTest {
      * @see Edge
      * @see Vertex
      */
+
     @Test
     public void testDFSPathShortest() {
         final Vertex v0 = new Vertex("T0", 0, 0, "");
@@ -256,13 +282,15 @@ public class GraphTest {
         assertEquals(2, path.length());
     }
 
-    /**
+
+/**
      * Tests longer chains in DFS.
      * @author Alex Friedman (ahf)
      * @see Graph
      * @see Edge
      * @see Vertex
      */
+
     @Test
     public void testDFSGraphChain() {
         //This //No path should be able to be found here.
@@ -287,10 +315,12 @@ public class GraphTest {
     }
 
 
-    /**
+
+/**
      * As we know DFS works, we can simply test A* against it to verify that A* works.
      * @author Alex Friedman (ahf)
      */
+
     @Test
     public void testAStarWithDFS() {
         //tests every possibility b/c why not? we have a small dataset
@@ -321,10 +351,12 @@ public class GraphTest {
         }
     }
 
-    /**
+
+/**
      * Simple null test for A*
      * @author ZheCheng Song
      */
+
     @Test
     public void testAStarNullVertex() {
         final Edge e = edges.get(0);
@@ -336,7 +368,8 @@ public class GraphTest {
         assertNull(graph.getPath(null, null));
     }
 
-    /**
+
+/**
      * Runs a DFS test between start and end, verifies NullPointerException wasn't thrown
      *
      * @param start The start vertex
@@ -344,6 +377,7 @@ public class GraphTest {
      * @return The path between the two
      * @author Alex Friedman (ahf)
      */
+
     @Test
     private Path runDFS(Vertex start, Vertex end) //FIXME: DO BETTER, methodize better & use in more places?
     {
@@ -352,10 +386,12 @@ public class GraphTest {
         return graph.DFS(start, end);
     }
 
-    /**
+
+/**
      * Verifies that the DoublyLinkedHashSet correctly adds elements at specific indices
      * @author Tony Vuolo
      */
+
     @Test
     public void testDoublyLinkedHashMap() {
         Vertex v0 = new Vertex("CCONF", 3, 7, "");
@@ -375,3 +411,4 @@ public class GraphTest {
     }
 
 }
+
