@@ -10,6 +10,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
+/**
+ * Entity that represents the state of the Node Map and handles changes to it as well as the graphical component
+ * @author KD
+ */
 public class NodeMap {
 
     private JFXTreeTableView<NodeEntry> nodeTreeTable;
