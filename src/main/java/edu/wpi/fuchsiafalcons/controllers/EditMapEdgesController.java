@@ -162,18 +162,18 @@ public class EditMapEdgesController {
         int index = edgeTable.getSelectionModel().getSelectedIndex();
 
         // Check for a valid index (-1 = no selection)
-        if (index >= 0 && index <= edgeEntryObservableList.size() - 1) {
+        try{
             // Remove the edge, this will update the TableView automatically
             DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntryObservableList.get(index).getEdgeID());
             edgeEntryObservableList.remove(index);
-        } else {
+        } catch (ArrayIndexOutOfBoundsException e) {
             // Create an alert to inform the user there is no edge selected
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(null); // Appears on top of all other windows
             alert.setTitle("No Selection");
             alert.setHeaderText("No Edge Selected");
             alert.setContentText("Please select an edge from the list");
-
+            e.printStackTrace();
             alert.showAndWait();
         }
     }
@@ -186,7 +186,20 @@ public class EditMapEdgesController {
     @FXML
     private void handleEditEdge() throws IOException, SQLException {
         int index = edgeTable.getSelectionModel().getSelectedIndex();
-        EdgeEntry selectedEdge = edgeEntryObservableList.get(index);
+        EdgeEntry selectedEdge;
+        try {
+            selectedEdge = edgeEntryObservableList.get(index);
+        } catch (ArrayIndexOutOfBoundsException e){
+            // Create an alert to inform the user there is no edge selected
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(null); // Appears on top of all other windows
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Edge Selected");
+            alert.setContentText("Please select an edge from the list");
+            e.printStackTrace();
+            alert.showAndWait();
+            return;
+        }
         if (selectedEdge != null) {
             String oldID = selectedEdge.getEdgeID();
             String oldStartNode = selectedEdge.getStartNode();
