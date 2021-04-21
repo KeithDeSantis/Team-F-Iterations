@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import edu.wpi.fuchsiafalcons.uicomponents.MapPanel?>
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.EditMapNodeController">
    <children>
       <VBox alignment="CENTER" prefHeight="540.0" prefWidth="960.0" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -29,15 +30,7 @@
             <HBox alignment="CENTER" prefHeight="419.0" prefWidth="940.0">
                <children>
                   <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
-                  <ScrollPane fx:id="scroll" stylesheets="/stylesheets/NodeEditorScrollPaneStyle.css" prefHeight="442.0" prefWidth="521.0">
-                     <content>
-                        <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" onContextMenuRequested="#handleMapContextMenu" pickOnBounds="true" preserveRatio="true" />
-                           </children>
-                        </Pane>
-                     </content>
-                  </ScrollPane>
+                  <MapPanel fx:id="mapPanel"/>
                   <VBox alignment="CENTER" prefHeight="427.0" prefWidth="207.0" spacing="20.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
@@ -47,7 +40,7 @@
                                     <Font name="Tahoma" size="13.0" />
                                  </font>
                               </Label>
-                              <JFXComboBox fx:id="floorComboBox" onAction="#handleFloorBoxAction" />
+
                            </children>
                         </HBox>
                         <ImageView fx:id="logoView" fitHeight="168.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
@@ -90,26 +83,8 @@
                   <JFXButton fx:id="deleteButton" buttonType="RAISED" onAction="#handleDeletePushed" prefHeight="40.0" prefWidth="86.0" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="Delete" textFill="WHITE">
                      <font>
                         <Font name="Tahoma" size="18.0" />
-                     </font></JFXButton>
-                  <HBox alignment="CENTER" prefHeight="38.0" prefWidth="186.0" spacing="5.0">
-                     <children>
-                        <Label text="Zoom Level:">
-                           <font>
-                              <Font name="Tahoma" size="18.0" />
-                           </font>
-                        </Label>
-                        <JFXButton fx:id="zoomInButton" buttonType="RAISED" onAction="#handleZoom" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="+" textFill="WHITE">
-                           <font>
-                              <Font size="19.0" />
-                           </font>
-                        </JFXButton>
-                        <JFXButton fx:id="zoomOutButton" buttonType="RAISED" onAction="#handleZoom" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="-" textFill="WHITE">
-                           <font>
-                              <Font size="19.0" />
-                           </font>
-                        </JFXButton>
-                     </children>
-                  </HBox>
+                     </font>
+                  </JFXButton>
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" />

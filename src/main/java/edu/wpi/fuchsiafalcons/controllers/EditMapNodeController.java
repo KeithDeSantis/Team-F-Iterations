@@ -5,11 +5,9 @@ import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import edu.wpi.fuchsiafalcons.uicomponents.MapPanel;
 import edu.wpi.fuchsiafalcons.utils.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -50,24 +47,14 @@ public class EditMapNodeController {
     @FXML private JFXButton saveToFileButton;
     @FXML private JFXButton loadFromFileButton;
 
-    @FXML private ScrollPane scroll;
-    @FXML private ImageView map;
-    @FXML private Pane canvas;
+
     @FXML private ImageView logoView;
 
-    @FXML private ComboBox<String> floorComboBox;
+    @FXML private MapPanel mapPanel;
 
-    @FXML private JFXButton zoomInButton;
-    @FXML private JFXButton zoomOutButton;
-
-    private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
 
-    double zoomLevel = 5.0;
-    private String floor = "1";
-    private Circle selectedCircle = null;
 
-    private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
 
     /**
      * Overriding Initialize for testing and set up
@@ -75,20 +62,6 @@ public class EditMapNodeController {
      */
     @FXML
     private void initialize() {
-
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        map.setPreserveRatio(true);
-        F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-
-        final double width = F1Image.getWidth()/zoomLevel;
-        final double height = F1Image.getHeight()/zoomLevel;
-
-        canvas.setPrefSize(width,height);
-
-        map.setFitWidth(width);
-        map.setFitHeight(height);
-        map.setImage(F1Image); // Copied from A* Vis - KD
 
         final Image logo = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoView.setImage(logo);
@@ -101,7 +74,7 @@ public class EditMapNodeController {
             e.printStackTrace();
         }
 
-        data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(e -> nodeList.add(e));
+        data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(e -> mapPanel.getNodeList().add(e));
 
         // START OF JFX TREETABLE COLUMN SETUP
 
@@ -112,19 +85,14 @@ public class EditMapNodeController {
         JFXTreeTableColumn<NodeEntry, String> shortColumn = new JFXTreeTableColumn<>("Name");
         shortColumn.setPrefWidth(colWidth);
         shortColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getShortNameProperty());
-        final TreeItem<NodeEntry> root = new RecursiveTreeItem<NodeEntry>(nodeList, RecursiveTreeObject::getChildren);
+        final TreeItem<NodeEntry> root = new RecursiveTreeItem<>(mapPanel.getNodeList(), RecursiveTreeObject::getChildren);
         nodeTreeTable.setRoot(root);
         nodeTreeTable.setShowRoot(false);
         nodeTreeTable.getColumns().setAll(idColumn, shortColumn);
         //nodeTreeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue.getValue()));
         loadFromFileButton.setDisable(false);
 
-        // Set up floor comboBox and draw nodes on that floor
-        final ObservableList<String> floorName = FXCollections.observableArrayList();
-        floorName.addAll("1","2","3","L1","L2","G");
-        floorComboBox.setItems(floorName);
-        floorComboBox.setValue(floor);
-        drawNodeOnFloor();
+
 
         final ContextMenu contextMenu = new ContextMenu();
 
@@ -132,30 +100,27 @@ public class EditMapNodeController {
 
         contextMenu.getItems().addAll(createNodeMenuItem);
 
+        /*
+        mapPanel.getMap().setOnContextMenuRequested(event -> {
+            contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
-        map.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-            @Override
-            public void handle(ContextMenuEvent event) {
-                contextMenu.show(map, event.getScreenX(), event.getScreenY());
+            createNodeMenuItem.setOnAction((ActionEvent e) -> {
+                NodeEntry nodeEntry = new NodeEntry();
+                nodeEntry.setXcoord("" + (event.getX() * mapPanel.getZoomLevel()));
+                nodeEntry.setYcoord("" + (event.getY() * mapPanel.getZoomLevel()));
+                nodeEntry.setFloor(mapPanel.getFloor().get());
 
-                createNodeMenuItem.setOnAction((ActionEvent e) -> {
-                    NodeEntry nodeEntry = new NodeEntry();
-                    nodeEntry.setXcoord("" + (event.getX() * zoomLevel));
-                    nodeEntry.setYcoord("" + (event.getY() * zoomLevel));
-                    nodeEntry.setFloor(floorComboBox.valueProperty().get());
-
-                    try {
-                        openEditDialog(nodeEntry);
-                        if(!checkNodeEntryNotEmpty(nodeEntry)) return;
-                        nodeList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
-                        updateNodeEntry(nodeEntry);
-                    } catch (IOException | SQLException ioException) {
-                        ioException.printStackTrace();
-                    }
-                });
-            }
+                try {
+                    openEditDialog(nodeEntry);
+                    if(!checkNodeEntryNotEmpty(nodeEntry)) return;
+                    mapPanel.getNodeList().add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
+                    updateNodeEntry(nodeEntry);
+                } catch (IOException | SQLException ioException) {
+                    ioException.printStackTrace();
+                }
+            });
         });
-
+        */
         //contextMenu.show(map, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
     }
 
@@ -166,7 +131,7 @@ public class EditMapNodeController {
      * @author ZheCheng Song
      */
     @FXML
-    private void handleBackButtonPushed(ActionEvent actionEvent) throws IOException, SQLException {
+    private void handleBackButtonPushed(ActionEvent actionEvent) throws IOException {
 
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
         Stage stage;
@@ -184,20 +149,19 @@ public class EditMapNodeController {
 
     /**
      * Called when delete button is pressed
-     * @param actionEvent
      * @author KD
      */
     @FXML
-    private void handleDeletePushed(ActionEvent actionEvent) throws SQLException {
+    private void handleDeletePushed() throws SQLException {
         int selectedIndex = nodeTreeTable.getSelectionModel().getSelectedIndex(); // get index of table that is selected - KD
         if(selectedIndex<0) { return; }
 
         String targetID = nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID();
         DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
-        nodeList.remove(selectedIndex); // remove said index from table - KD
+        mapPanel.getNodeList().remove(selectedIndex); // remove said index from table - KD
 
-        selectedCircle = null;
-        drawNodeOnFloor(); // added to handle deletion without selection - KD
+        mapPanel.setSelectedCircle(null);
+        mapPanel.drawNodeOnFloor(); // added to handle deletion without selection - KD
     }
 
     /**
@@ -209,7 +173,7 @@ public class EditMapNodeController {
         NodeEntry newNode = new NodeEntry(); // create new node - KD
         openEditDialog(newNode); // allow editing of the new node - KD
         if(!checkNodeEntryNotEmpty(newNode)) return;
-        nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
+        mapPanel.getNodeList().add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
         updateNodeEntry(newNode);
     }
 
@@ -287,7 +251,7 @@ public class EditMapNodeController {
         dialogController.setDialogStage(dialogStage); // set the stage attribute - KD
         dialogController.setTheNode(editedNode); // inject the node attribute so that specific instance is the one edited - KD
 
-        dialogController.setNodeList(nodeList);
+        dialogController.setNodeList(mapPanel.getNodeList());
         dialogController.setCurrentIDIfEditing(editedNode.getNodeID());
         dialogStage.setTitle("Edit Node");
         dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
@@ -327,13 +291,13 @@ public class EditMapNodeController {
             e.printStackTrace();
             return;
         }
-        nodeList.clear();
+        mapPanel.getNodeList().clear();
 
         if(nodeData != null )
         {
             if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
             {
-                nodeList.addAll(nodeData.stream().map(line -> {
+                mapPanel.getNodeList().addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
 
@@ -352,7 +316,7 @@ public class EditMapNodeController {
         saveToFileButton.setDisable(true);
        // loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
 
-        drawNodeOnFloor();
+        mapPanel.drawNodeOnFloor();
     }
 
 
@@ -382,7 +346,7 @@ public class EditMapNodeController {
             final List<String[]> data = new LinkedList<String[]>();
             Collections.addAll(data, "nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName".split(","));
 
-            data.addAll(nodeList.stream().map(node -> {
+            data.addAll(mapPanel.getNodeList().stream().map(node -> {
                 return new String[] {
                         node.getNodeID(),
                         node.getXcoord(),
@@ -428,78 +392,7 @@ public class EditMapNodeController {
         saveToFileButton.setDisable(disableBtns);
 
     }
-/**
-     * Handle switching floor using combobox
-     * @param actionEvent
-     * @author ZheCheng
-     */
-    @FXML
-    public void handleFloorBoxAction(ActionEvent actionEvent) {
-        floor = floorComboBox.getValue().toString();
-        switchMap();
-    }
 
-    /**
-     * Handle switching floor map and redraw the nodes in new floor
-     * @author ZheCheng
-     */
-    private void switchMap(){
-        switch(floor){
-            case "1": if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
-            map.setImage(F1Image); break;
-            case "2": if (F2Image == null)F2Image = new Image("/maps/02_thesecondfloor.png");
-            map.setImage(F2Image); break;
-            case "3": if (F3Image == null)F3Image = new Image("/maps/03_thethirdfloor.png");
-            map.setImage(F3Image); break;
-            case "L1": if (L1Image == null)L1Image = new Image("/maps/00_thelowerlevel1.png");
-            map.setImage(L1Image); break;
-            case "L2": if (L2Image == null)L2Image = new Image("/maps/00_thelowerlevel2.png");
-            map.setImage(L2Image); break;
-            case "G": if (GImage == null)GImage = new Image("/maps/00_thegroundfloor.png");
-            map.setImage(GImage); break;
-            default: if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
-                map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
-        }
-        floorComboBox.setValue(floor);
-        drawNodeOnFloor();
-    }
-
-    /**
-     * Clear the canvas and draw nodes that are on current floor
-     * @author ZheCheng
-     */
-    private void drawNodeOnFloor(){
-        canvas.getChildren().removeIf(x -> {
-            return x instanceof Circle;
-        });
-        selectedCircle = null;
-        for(NodeEntry n : nodeList){
-            if(n.getFloor().equals(floor)) {
-                drawCircle(Double.parseDouble(n.getXcoord())/zoomLevel, Double.parseDouble(n.getYcoord())/zoomLevel, n.getNodeID());
-            }
-        }
-    }
-
-    /**
-     * Draw a single circle to represent the node
-     * @author ZheCheng
-     */
-    private void drawCircle(double x, double y, String nodeID){
-        Circle c = new Circle(x, y, UIConstants.NODE_RADIUS);
-        c.setFill(UIConstants.NODE_COLOR);
-        c.setId(nodeID);
-        c.setOnMouseEntered(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
-        c.setOnMouseExited(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR);});
-        c.setOnMouseClicked(e->{
-            if(selectedCircle != null)
-                selectedCircle.setFill(UIConstants.NODE_COLOR);
-            selectedCircle = c;
-            c.setFill(UIConstants.NODE_COLOR_SELECTED);
-            nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
-            nodeTreeTable.requestFocus();nodeTreeTable.scrollTo(findNode(nodeID));});
-
-        this.canvas.getChildren().add(c);
-    }
 
     /**
      * Find the index of a given node with nodeID in nodeList
@@ -507,7 +400,7 @@ public class EditMapNodeController {
      */
     private int findNode(String nodeID){
         int index = 0;
-        for(NodeEntry n: nodeList){
+        for(NodeEntry n: mapPanel.getNodeList()){
             if(n.getNodeID() == nodeID){
                 break;
             }
@@ -526,7 +419,7 @@ public class EditMapNodeController {
             return;
         }
         // FIXME: ADD TRY_CATCH
-        NodeEntry node = nodeList.get(nodeTreeTable.getSelectionModel().getSelectedIndex());
+        NodeEntry node = mapPanel.getNodeList().get(nodeTreeTable.getSelectionModel().getSelectedIndex());
 
         if(node == null){
             //FIXME Null Warning
@@ -534,44 +427,25 @@ public class EditMapNodeController {
         }
 
         // Check if need to switch map
-        if(node.getFloor().equals(floor)){
-            drawNodeOnFloor();
-            if(selectedCircle != null)
-                selectedCircle.setFill(UIConstants.NODE_COLOR);
+        if(node.getFloor().equals(mapPanel.getFloor().get())){
+            mapPanel.drawNodeOnFloor();
+            if(mapPanel.getSelectedCircle() != null)
+                mapPanel.getSelectedCircle().setFill(UIConstants.NODE_COLOR);
         }else{
-            floor = node.getFloor();
-            switchMap();
+            //floor = node.getFloor();
+            mapPanel.switchMap(node.getFloor());
         }
-        Circle c = (Circle) canvas.lookup("#"+node.getNodeID());
+        Circle c = (Circle) mapPanel.getCanvas().lookup("#"+node.getNodeID());
         if(c == null){
             //FIXME Null Warning
             return;
         }
-        selectedCircle = c;
+        mapPanel.setSelectedCircle(c);
         c.setFill(UIConstants.NODE_COLOR_SELECTED);
-        centerNode(c);
+        mapPanel.centerNode(c);
     }
 
-    /**
-     * Center the given node in scrollpane
-     * @param c The node to be centered
-     * @author ZheCheng
-     */
-    public void centerNode(Circle c){
 
-        double h = scroll.getContent().getBoundsInLocal().getHeight();
-        double y = (c.getBoundsInParent().getMaxY() +
-                c.getBoundsInParent().getMinY()) / 2.0;
-        double v = scroll.getViewportBounds().getHeight();
-        scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
-
-        double w = scroll.getContent().getBoundsInLocal().getWidth();
-        double x = (c.getBoundsInParent().getMaxX() +
-                c.getBoundsInParent().getMinX()) / 2.0;
-        double hw = scroll.getViewportBounds().getWidth();
-        scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
-
-    }
 
  /**
      * Resets the database
@@ -579,7 +453,7 @@ public class EditMapNodeController {
      */
     public void handleResetDatabase() throws Exception {
 
-        nodeList.clear();
+        mapPanel.getNodeList().clear();
 
         List<String[]> nodeData = null;
 
@@ -596,7 +470,7 @@ public class EditMapNodeController {
         {
             if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
             {
-                nodeList.addAll(nodeData.stream().map(line -> {
+                mapPanel.getNodeList().addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
 
@@ -613,7 +487,7 @@ public class EditMapNodeController {
 
         filenameField.setText("");
         saveToFileButton.setDisable(true);
-        drawNodeOnFloor();
+        mapPanel.drawNodeOnFloor();
     }
 
     /**
@@ -629,29 +503,5 @@ public class EditMapNodeController {
 
     }
 
-    /**
-     * Basic implementation of Zooming the map by changing the zoom level and reloading
-     * @param actionEvent the press of zoom in or zoom out
-     * @author KD
-     */
-    public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
-        JFXButton btn = (JFXButton) actionEvent.getSource();
-        if(btn == zoomInButton) {
-            if(zoomLevel > 1) {
-                zoomLevel--;
-            }
-        } else if (btn == zoomOutButton) {
-            if(zoomLevel < 8) {
-                zoomLevel++;
-            }
-        }
-        drawNodeOnFloor();
-        Image image = map.getImage();
-        double width = image.getWidth()/zoomLevel;
-        double height = image.getHeight()/zoomLevel;
-        canvas.setPrefSize(width,height);
-        map.setFitWidth(width);
-        map.setFitHeight(height);
-        map.setImage(image);
-    }
+
 }
