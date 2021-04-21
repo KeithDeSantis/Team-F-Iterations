@@ -534,7 +534,7 @@ public class EditMapNodeController {
             return;
         }
         // FIXME: ADD TRY_CATCH
-        NodeEntry node = nodeList.get(nodeTreeTable.getSelectionModel().getSelectedIndex());
+        NodeEntry node = nodeTreeTable.getSelectionModel().getSelectedItem().getValue(); //Changed for handling when the nodeTreeTable is being searched
 
         if(node == null){
             //FIXME Null Warning
@@ -680,7 +680,7 @@ public class EditMapNodeController {
                     case "Node ID":
                         return nodeEntryTreeItem.getValue().getNodeID().contains(searchField.getText());
                     case "Floor":
-                        return nodeEntryTreeItem.getValue().getFloor().contains(searchField.getText());
+                        return nodeEntryTreeItem.getValue().getFloor().equals(searchField.getText());
                     case "Building":
                         return nodeEntryTreeItem.getValue().getBuilding().contains(searchField.getText());
                     case "Node Type":
