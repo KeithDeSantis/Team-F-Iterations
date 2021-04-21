@@ -67,12 +67,9 @@ public class EditMapEdgesControllerTest extends ApplicationTest{
         clickOn("ADEPT00101");
         clickOn("#endNode");
         clickOn("AELEV00S01");
+
         clickOn("OK");
-        verifyThat("OK", Node::isVisible);
-        clickOn("#edgeID");
-        write("ADEPT00101_AELEV00S01");
-        clickOn("OK");
-        verifyThat("#ADEPT00101_AELEV00S01", Node::isVisible);
+//        verifyThat("#ADEPT00101_AELEV00S01", Node::isVisible);
 
         boolean hasTestClicking = false;
         for(EdgeEntry n : edgeList) {
@@ -91,8 +88,6 @@ public class EditMapEdgesControllerTest extends ApplicationTest{
         verifyThat("OK", Node::isVisible);
         clickOn("#endNode");
         clickOn("ACONF00103");
-        doubleClickOn("#edgeID");
-        write("ACONF00103");
         clickOn("OK");
         verifyThat("#AHALL00502_ACONF00103", Node::isVisible);
         verifyThat("2", Node::isVisible);
@@ -141,7 +136,7 @@ public class EditMapEdgesControllerTest extends ApplicationTest{
         clickOn("#AHALL00603");
         clickOn("#ACONF00103");
         verifyThat("OK", Node::isVisible);
-        verifyThat("AHALL00603_ACONF00103", Node::isVisible);
+        verifyThat("Edge ID: AHALL00603_ACONF00103", Node::isVisible);
         clickOn("OK");
         boolean hasTestClicking = false;
         for(EdgeEntry n : edgeList) {

@@ -45,8 +45,8 @@ public class GraphLoaderTest {
     {
         //ahf - tests the format of the files that we read.
 
-        final String edgesCSV = "MapfAlledges.csv";
-        final String nodesCSV = "MapfAllnodes.csv";
+        final String edgesCSV = "MapfAllEdges.csv";
+        final String nodesCSV = "MapfAllNodes.csv";
 
         //Here we provide incorrect file dimensions, but valid files
         assertThrows(Exception.class, () -> GraphLoader.load(edgesCSV, edgesCSV));

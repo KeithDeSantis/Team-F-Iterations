@@ -320,7 +320,7 @@ public class EditMapNodeController {
 
         //FIXME: METHODIZE THISS!!!!
         try {
-            nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllnodes.csv") : CSVManager.load(new File(fileName));
+            nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllNodes.csv") : CSVManager.load(new File(fileName));
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");
@@ -584,7 +584,7 @@ public class EditMapNodeController {
         List<String[]> nodeData = null;
 
         try {
-            nodeData = (CSVManager.load("MapfAllnodes.csv"));
+            nodeData = (CSVManager.load("MapfAllNodes.csv"));
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
             errorMessageLabel.setStyle("-fx-text-fill: red");

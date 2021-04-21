@@ -1,5 +1,7 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.fuchsiafalcons.database.ConnectionHandler;
 import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
@@ -12,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -23,9 +26,15 @@ import java.util.stream.Collectors;
  * @author Karen Hou
  */
 public class EditMapEdgeDialogueViewController {
-    @FXML private TextField edgeID;
+
     @FXML private ComboBox<String> startNode;
     @FXML private ComboBox<String> endNode;
+
+    @FXML
+    private Label edgeID;
+
+    @FXML
+    private JFXButton ok;
 
     private EdgeEntry edge = new EdgeEntry();
     private Stage dialogueStage;
@@ -50,6 +59,7 @@ public class EditMapEdgeDialogueViewController {
         nodeList.addAll(graph.getVertices().stream().map(Vertex::getID)
                 .sorted().collect(Collectors.toList()));
         this.startNode.setItems(nodeList);
+
         this.endNode.setItems(nodeList);
     }
 
@@ -61,9 +71,9 @@ public class EditMapEdgeDialogueViewController {
     @FXML
     private void handleOKClicked(ActionEvent e){
         if(formFilled()){
-            edge.setEdgeID(edgeID.getText());
             edge.setStartNode(startNode.getValue());
             edge.setEndNode(endNode.getValue());
+
             okClicked = true;
             dialogueStage.close();
         }
@@ -78,12 +88,14 @@ public class EditMapEdgeDialogueViewController {
         edgeID.setStyle("-fx-border-width: 0px");
         startNode.setStyle("-fx-border-width: 0px");
         endNode.setStyle("-fx-border-width: 0px");
-
+/*
         //check each field for filled out
         if(edgeID.getText().length() <=0 || !isUniqueNodeID(edgeID.getText())){
             edgeID.setStyle("-fx-border-widge: 2px");
             edgeID.setStyle("-fx-border-color: red");
         }
+
+ */
         if(startNode.getValue().length() <=0){
             startNode.setStyle("-fx-border-widge: 2px");
             startNode.setStyle("-fx-border-color: red");
@@ -105,9 +117,9 @@ public class EditMapEdgeDialogueViewController {
      */
     public void setEdge(EdgeEntry enteredEdge){
         edge = enteredEdge;
-        edgeID.setText(edge.edgeIDProperty().getValue());
         startNode.setValue(edge.startNodeProperty().getValue());
         endNode.setValue(edge.endNodeProperty().getValue());
+        updateEdgeIDLabel();
     }
 
     /**
@@ -116,7 +128,6 @@ public class EditMapEdgeDialogueViewController {
      * @author Keith DeSantis
      */
     public void setDialogueStage(Stage theStage) {dialogueStage = theStage;}
-
     public void setEdgeList(ObservableList<EdgeEntry> edgeList) { this.edgeList = edgeList; }
 
     public void setCurrentIDIfEditing(String currentIDIfEditing) {
@@ -137,4 +148,14 @@ public class EditMapEdgeDialogueViewController {
         }
         return true;
     }
+ /**
+     * Updates the label displaying a preview of the edge ID
+     * Called on key release of either text field and when the dialogue is opened
+     * @author Leo Morris
+     */
+    @FXML
+    private void updateEdgeIDLabel(){
+        edgeID.setText("Edge ID: " +startNode.getValue() + "_" + endNode.getValue());
+    }
+
 }

@@ -8,7 +8,6 @@ import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
 import edu.wpi.fuchsiafalcons.utils.UIConstants;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +18,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -27,9 +25,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
-import javafx.util.Callback;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -109,7 +105,6 @@ public class EditMapEdgesController {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
         final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-
         final double width = image.getWidth() / zoomLevel;
         final double height = image.getHeight() / zoomLevel;
 
@@ -132,9 +127,10 @@ public class EditMapEdgesController {
             DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1Edges");
             DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), sql);
 
-            List<String[]> edgeData = CSVManager.load("MapfAlledges.csv");
-            edgeList = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            List<String[]> edgeData = CSVManager.load("MapfAllEdges.csv");
             DatabaseAPI.getDatabaseAPI().populateEdges(edgeData);
+            edgeList = new ArrayList<>(); //DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+
             edgeEntryObservableList.addAll(edgeData.stream().map(line-> new EdgeEntry(line[0], line[1], line[2])).collect(Collectors.toList()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,16 +168,18 @@ public class EditMapEdgesController {
         EdgeEntry selectedEdge = null;
 
         // Check for a valid index (-1 = no selection)
-        if (index >= 0 && index <= edgeEntryObservableList.size() - 1) {
-            // Get the current selected edge
-            selectedEdge = edgeEntryObservableList.get(index);
-        } else {
+        try{
+            // Remove the edge, this will update the TableView automatically
+            DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntryObservableList.get(index).getEdgeID());
+            edgeEntryObservableList.remove(index);
+        } catch (ArrayIndexOutOfBoundsException e) {
             // Create an alert to inform the user there is no edge selected
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(null); // Appears on top of all other windows
             alert.setTitle("No Selection");
             alert.setHeaderText("No Edge Selected");
             alert.setContentText("Please select an edge from the list");
+            e.printStackTrace();
             alert.showAndWait();
         }
 
@@ -205,23 +203,20 @@ public class EditMapEdgesController {
     private void handleEditEdge() throws IOException, SQLException {
         // Get the current selected edge index
         int index = edgeTable.getSelectionModel().getSelectedIndex();
-        EdgeEntry selectedEdge = null;
-
-        // Check for a valid index (-1 = no selection)
-        if (index >= 0 && index <= edgeEntryObservableList.size() - 1) {
-            // Get the current selected edge
+        EdgeEntry selectedEdge;
+        try {
             selectedEdge = edgeEntryObservableList.get(index);
-        }else{
+        } catch (ArrayIndexOutOfBoundsException e){
             // Create an alert to inform the user there is no edge selected
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(null); // Appears on top of all other windows
             alert.setTitle("No Selection");
             alert.setHeaderText("No Edge Selected");
             alert.setContentText("Please select an edge from the list");
+            e.printStackTrace();
             alert.showAndWait();
             return;
         }
-
         if (selectedEdge != null) {
             String oldID = selectedEdge.getEdgeID();
             ArrayList<String> newValues = openEditDialogue(selectedEdge);
@@ -250,8 +245,6 @@ public class EditMapEdgesController {
         if(!checkEdgeEntryNotEmpty(newEdge)){return;}
         updateEdgeEntry(newEdge);
     }
-
-
     /**
      * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
      * @param edgeEntry the node entry
@@ -263,6 +256,9 @@ public class EditMapEdgesController {
     }
 
     private void updateEdgeEntry(EdgeEntry edgeEntry) throws SQLException {
+        if (edgeEntry.getEdgeID().isEmpty() || edgeEntry.getStartNode().isEmpty() || edgeEntry.getEndNode().isEmpty())
+            return; //FIXME: DO BETTER ERROR CHECKING, CHECK THAT WE ARE GETTING INTS
+
         edgeEntryObservableList.add(edgeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
         DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
 
@@ -317,6 +313,7 @@ public class EditMapEdgesController {
         dialogueStage.showAndWait();
 
         ArrayList<String> returnList = new ArrayList<>();
+
         returnList.add(editedEdge.getEdgeID());
         returnList.add(editedEdge.getStartNode());
         returnList.add(editedEdge.getEndNode());
@@ -391,7 +388,7 @@ public class EditMapEdgesController {
         List<String[]> edgeData = null;
 
         try {
-            edgeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAlledges.csv") : CSVManager.load(new File(fileName));
+            edgeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllEdges.csv") : CSVManager.load(new File(fileName));
         } catch (Exception e) {
             CSVErrorLabel.setStyle("-fx-text-fill: red");
             CSVErrorLabel.setText(e.getMessage());
@@ -527,6 +524,7 @@ public class EditMapEdgesController {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
+
             if(startNode == null || endNode == null) {
                 System.out.println("Edge with no actual Node");
                 //return;
