@@ -512,7 +512,7 @@ public class DatabaseAPI {
      */
     public boolean addServiceReq(String uuid, String name, String person, String completed) throws SQLException {
         boolean success = false;
-        String sql = "INSERT INTO SERVICE_REQUESTS values(?, ?, ?, ?)";
+        final String sql = "INSERT INTO SERVICE_REQUESTS values(?, ?, ?, ?)";
 
         return buildInsertServiceQuery(uuid, name, person, completed, success, sql);
     }
