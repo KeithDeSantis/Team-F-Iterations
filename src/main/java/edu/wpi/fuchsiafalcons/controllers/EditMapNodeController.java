@@ -140,8 +140,8 @@ public class EditMapNodeController {
 
                 createNodeMenuItem.setOnAction((ActionEvent e) -> {
                     NodeEntry nodeEntry = new NodeEntry();
-                    nodeEntry.setXcoord("" + (event.getX() * zoomLevel));
-                    nodeEntry.setYcoord("" + (event.getY() * zoomLevel));
+                    nodeEntry.setXcoord("" + (int) (event.getX() * zoomLevel));
+                    nodeEntry.setYcoord("" + (int) (event.getY() * zoomLevel));
                     nodeEntry.setFloor(floorComboBox.valueProperty().get());
 
                     try {
