@@ -30,6 +30,15 @@
                   <Insets />
                </VBox.margin>
             </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="1900.0" spacing="10.0">
+               <children>
+                  <JFXTextField fx:id="searchField" alignment="CENTER" onKeyReleased="#handleSearchNode" prefHeight="27.0" prefWidth="150.0" promptText="Search Node By:" />
+                  <JFXComboBox fx:id="searchComboBox" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="-50.0" />
+               </VBox.margin>
+            </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="694.0" prefWidth="1900.0">
                <children>
                   <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" prefHeight="694.0" prefWidth="216.0" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
@@ -131,8 +140,6 @@
          <font>
             <Font name="Tahoma" size="13.0" />
          </font></JFXButton>
-      <JFXTextField fx:id="searchField" alignment="CENTER" onKeyReleased="#handleSearchNode" prefHeight="27.0" prefWidth="150.0" promptText="Search Node By:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="150.0" />
-      <JFXComboBox fx:id="searchComboBox" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="150.0" />
    </children>
    <opaqueInsets>
       <Insets />
