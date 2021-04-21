@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -252,5 +253,78 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         assertTrue(hasTestClicking);
         clickOn("Reset Database");
     }
+
+    /*  Tests work but for some reason are causing that Java Heap space thing - KD
+    @Test
+    public void testFilteringByNodeID() {
+        clickOn("#searchComboBox");
+        clickOn("Node ID");
+        clickOn("#searchField");
+        write("fW");
+        sleep(500);
+        verifyThat("fWALK00101", Node::isVisible);
+        clickOn("#searchField");
+        write("@!$");
+        sleep(500);
+        verifyThat("No content in table", Node::isVisible);
+    }
+
+    @Test
+    public void testFilteringByFloor() {
+        clickOn("#searchComboBox");
+        clickOn("Floor");
+        clickOn("#searchField");
+        write("L2");
+        sleep(500);
+        verifyThat("AELEV00SL2", Node::isVisible);
+        clickOn("#searchField");
+        write("@!$");
+        sleep(500);
+        verifyThat("No content in table", Node::isVisible);
+    }
+
+    @Test
+    public void testFilteringByBuilding() {
+        clickOn("#searchComboBox");
+        clickOn("Building");
+        clickOn("#searchField");
+        write("Shapiro");
+        sleep(500);
+        verifyThat("GCONF02001", Node::isVisible);
+        clickOn("#searchField");
+        write("@!$");
+        sleep(500);
+        verifyThat("No content in table", Node::isVisible);
+    }
+
+    @Test
+    public void testFilteringByLongName() {
+        clickOn("#searchComboBox");
+        clickOn("Long Name");
+        clickOn("#searchField");
+        write("BTM Conference Center");
+        sleep(500);
+        verifyThat("ACONF00103", Node::isVisible);
+        clickOn("#searchField");
+        write("@!$");
+        sleep(500);
+        verifyThat("No content in table", Node::isVisible);
+    }
+
+    @Test
+    public void testFilteringByShortName() {
+        clickOn("#searchComboBox");
+        clickOn("Short Name");
+        clickOn("#searchField");
+        write("Hallway B2702");
+        sleep(500);
+        verifyThat("BHALL02702", Node::isVisible);
+        clickOn("#searchField");
+        write("@!$");
+        sleep(500);
+        verifyThat("No content in table", Node::isVisible);
+    }
+     */
+
 }
 

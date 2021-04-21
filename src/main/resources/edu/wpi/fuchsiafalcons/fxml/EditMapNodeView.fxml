@@ -20,9 +20,9 @@
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
                <children>
-                  <Label text="Map Vertex Editor">
+                  <Label text="BWH Admininstrator Map Vertex Editor">
                      <font>
-                        <Font name="Tahoma" size="24.0" />
+                        <Font name="Tahoma" size="36.0" />
                      </font>
                   </Label>
                </children>
@@ -41,7 +41,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="694.0" prefWidth="1900.0">
                <children>
-                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" prefHeight="694.0" prefWidth="216.0" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
+                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" prefHeight="694.0" prefWidth="261.0" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
                   <ScrollPane fx:id="scroll" prefHeight="694.0" prefWidth="1267.0" stylesheets="/stylesheets/NodeEditorScrollPaneStyle.css">
                      <content>
                         <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
@@ -53,9 +53,9 @@
                   </ScrollPane>
                   <VBox alignment="CENTER" prefHeight="427.0" prefWidth="207.0" spacing="20.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label text="Floor:" textAlignment="CENTER">
+                              <Label prefHeight="16.0" prefWidth="77.0" text="Floor:" textAlignment="CENTER">
                                  <font>
                                     <Font name="Tahoma" size="13.0" />
                                  </font>
@@ -63,7 +63,7 @@
                               <JFXComboBox fx:id="floorComboBox" onAction="#handleFloorBoxAction" />
                            </children>
                         </HBox>
-                        <ImageView fx:id="logoView" fitHeight="168.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="logoView" fitHeight="320.0" fitWidth="321.0" pickOnBounds="true" preserveRatio="true" />
                         <JFXTextField fx:id="filenameField" alignment="CENTER" focusColor="#1d26c2" onKeyReleased="#handleFileNameType" promptText="Filename Here" style="-fx-background-color: #ced7dd;">
                            <VBox.margin>
                               <Insets left="10.0" right="10.0" />
@@ -88,7 +88,7 @@
                         <Label fx:id="errorMessageLabel" />
                      </children>
                      <padding>
-                        <Insets left="100.0" />
+                        <Insets left="10.0" />
                      </padding>
                   </VBox>
                </children>

@@ -676,23 +676,25 @@ public class EditMapNodeController {
         nodeTreeTable.setPredicate(new Predicate<TreeItem<NodeEntry>>() {
             @Override
             public boolean test(TreeItem<NodeEntry> nodeEntryTreeItem) {
-                switch(searchComboBox.getValue()) {
-                    case "Node ID":
-                        return nodeEntryTreeItem.getValue().getNodeID().contains(searchField.getText());
-                    case "Floor":
-                        return nodeEntryTreeItem.getValue().getFloor().equals(searchField.getText());
-                    case "Building":
-                        return nodeEntryTreeItem.getValue().getBuilding().contains(searchField.getText());
-                    case "Node Type":
-                        return nodeEntryTreeItem.getValue().getNodeType().contains(searchField.getText());
-                    case "Long Name":
-                        return nodeEntryTreeItem.getValue().getLongName().contains(searchField.getText());
-                    case "Short Name":
-                        return nodeEntryTreeItem.getValue().getShortName().contains(searchField.getText());
-                    default:
-                        return true;
+                if(searchField.getText().length()>0) {
+                    switch (searchComboBox.getValue()) {
+                        case "Node ID":
+                            return nodeEntryTreeItem.getValue().getNodeID().contains(searchField.getText());
+                        case "Floor":
+                            return nodeEntryTreeItem.getValue().getFloor().equals(searchField.getText());
+                        case "Building":
+                            return nodeEntryTreeItem.getValue().getBuilding().contains(searchField.getText());
+                        case "Node Type":
+                            return nodeEntryTreeItem.getValue().getNodeType().contains(searchField.getText());
+                        case "Long Name":
+                            return nodeEntryTreeItem.getValue().getLongName().contains(searchField.getText());
+                        case "Short Name":
+                            return nodeEntryTreeItem.getValue().getShortName().contains(searchField.getText());
+                        default:
+                            return true;
+                    }
                 }
-
+                return true;
             }
         });
     }
