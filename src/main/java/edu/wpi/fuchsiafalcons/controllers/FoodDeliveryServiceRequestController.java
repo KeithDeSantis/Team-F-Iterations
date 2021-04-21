@@ -19,6 +19,8 @@ public class FoodDeliveryServiceRequestController {
 
     @FXML private Button xButton;
     @FXML private Button cancelButton;
+    @FXML private Button helpButton;
+    @FXML private Button helpXButton;
     @FXML private Button submitButton;
     @FXML private TextField deliveryLocationField;
     @FXML private TextField deliveryTimeField;
@@ -66,7 +68,7 @@ public class FoodDeliveryServiceRequestController {
 
 
     /**
-     * handles cancel and x button being pushed
+     * handles cancel,help and x button being pushed
      * @param e is the button being pressed
      * @throws IOException
      * @author KH
@@ -82,6 +84,18 @@ public class FoodDeliveryServiceRequestController {
             stage.setScene(scene);
             stage.setTitle("Service Requests");
             stage.show();
+        } else if (buttonPushed == helpButton){
+            Stage helpPopUpStage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FoodDeliveryHelpView.fxml"));
+            Scene helpPopUpScene = new Scene(root);
+            helpPopUpStage.setScene(helpPopUpScene);
+            helpPopUpStage.setTitle("Food Delivery Request Help Menu");
+            helpPopUpStage.initModality(Modality.APPLICATION_MODAL);
+            helpPopUpStage.initOwner(buttonPushed.getScene().getWindow());
+            helpPopUpStage.showAndWait();
+        } else if (buttonPushed == helpXButton){
+            Stage popUpStage = (Stage) helpXButton.getScene().getWindow();
+            popUpStage.close();
         }
     }
 

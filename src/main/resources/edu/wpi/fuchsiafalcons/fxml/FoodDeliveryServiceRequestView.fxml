@@ -22,7 +22,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Button minHeight="34.0" minWidth="34.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="37.0" text="?" />
+                  <Button fx:id="helpButton" minHeight="34.0" minWidth="34.0" mnemonicParsing="false" onAction="#handleButtonPushed" prefHeight="34.0" prefWidth="37.0" text="?" />
                </children>
                <VBox.margin>
                   <Insets top="10.0" />
