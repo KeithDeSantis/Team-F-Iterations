@@ -14,8 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -76,6 +75,24 @@ public class EditMapNodeController {
      */
     @FXML
     private void initialize() {
+
+        //Setting up dragging and dropping nodes - KD
+        map.setOnDragOver(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                if (event.getGestureSource() != map && event.getDragboard().hasString()) {
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                }
+                event.consume();
+            }
+        });
+        map.setOnDragDropped((DragEvent event) -> {
+            try {
+                dropCircle(event, (Circle) event.getGestureSource());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+
 
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -505,9 +522,54 @@ public class EditMapNodeController {
             c.setFill(UIConstants.NODE_COLOR_SELECTED);
             nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
             nodeTreeTable.requestFocus();nodeTreeTable.scrollTo(findNode(nodeID));});
+        c.setOnDragDetected((MouseEvent event) -> {
+            Dragboard db = c.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putString("Circle source text");
+            db.setContent(content);
+        });
+        c.setOnMouseDragged((MouseEvent event) -> {
+            event.setDragDetect(true);
+        });
+
 
         this.canvas.getChildren().add(c);
     }
+
+    /**
+     * Handles the dropping of a dragged node so its position is updated
+     * @param event The dropping of the node
+     * @param c The circle dropped
+     * @throws SQLException
+     * @author KD
+     */
+    public void dropCircle(DragEvent event, Circle c) throws SQLException {
+        Dragboard db = event.getDragboard();
+        if (db.hasString()) {
+            canvas.getChildren().remove(c);
+            NodeEntry movedNode = nodeList.get(findNode(c.getId()));
+            movedNode.setXcoord(String.valueOf((int) (event.getX()*zoomLevel)));
+            movedNode.setYcoord(String.valueOf((int) (event.getY()*zoomLevel)));
+            drawCircle(event.getX(),event.getY(),c.getId());
+
+
+            String nodeID = movedNode.getNodeID();
+            int xCoord = Integer.parseInt(movedNode.getXcoord());
+            int yCoord = Integer.parseInt(movedNode.getYcoord());
+            String nodeFloor = movedNode.getFloor();
+            String nodeBuilding = movedNode.getBuilding();
+            String nodeType = movedNode.getNodeType();
+            String longName = movedNode.getLongName();
+            String shortName = movedNode.getShortName();
+            DatabaseAPI.getDatabaseAPI().deleteNode(nodeID);
+            DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
+            event.setDropCompleted(true);
+        } else {
+            event.setDropCompleted(false);
+        }
+        event.consume();
+    }
+
 
     /**
      * Find the index of a given node with nodeID in nodeList
