@@ -1,8 +1,5 @@
 package edu.wpi.fuchsiafalcons.controllers;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.*;
@@ -28,6 +25,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import edu.wpi.fuchsiafalcons.database.*;
@@ -60,10 +58,13 @@ public class EditMapNodeController {
     @FXML private JFXButton zoomInButton;
     @FXML private JFXButton zoomOutButton;
 
+    @FXML private JFXTextField searchField;
+    @FXML private JFXComboBox<String> searchComboBox;
+
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
     private NodeEntry selectedNode;
 
-    double zoomLevel = 5.0;
+    double zoomLevel = 4.0;
     private String floor = "1";
     private Circle selectedCircle = null;
 
@@ -112,6 +113,8 @@ public class EditMapNodeController {
         JFXTreeTableColumn<NodeEntry, String> shortColumn = new JFXTreeTableColumn<>("Name");
         shortColumn.setPrefWidth(colWidth);
         shortColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getShortNameProperty());
+
+
         final TreeItem<NodeEntry> root = new RecursiveTreeItem<NodeEntry>(nodeList, RecursiveTreeObject::getChildren);
         nodeTreeTable.setRoot(root);
         nodeTreeTable.setShowRoot(false);
@@ -125,6 +128,11 @@ public class EditMapNodeController {
         floorComboBox.setItems(floorName);
         floorComboBox.setValue(floor);
         drawNodeOnFloor();
+
+        final ObservableList<String> searchName = FXCollections.observableArrayList();
+        searchName.addAll("Node ID","Floor","Building","Node Type","Long Name", "Short Name");
+        searchComboBox.setItems(searchName);
+        searchComboBox.setValue("Node ID");
 
         final ContextMenu contextMenu = new ContextMenu();
 
@@ -639,10 +647,15 @@ public class EditMapNodeController {
         if(btn == zoomInButton) {
             if(zoomLevel > 1) {
                 zoomLevel--;
+                zoomOutButton.setDisable(false);
+                if(zoomLevel==1) zoomInButton.setDisable(true);
             }
+
         } else if (btn == zoomOutButton) {
-            if(zoomLevel < 8) {
+            if(zoomLevel < 4) {
                 zoomLevel++;
+                zoomInButton.setDisable(false);
+                if(zoomLevel==4) zoomOutButton.setDisable(true);
             }
         }
         drawNodeOnFloor();
@@ -653,5 +666,34 @@ public class EditMapNodeController {
         map.setFitWidth(width);
         map.setFitHeight(height);
         map.setImage(image);
+    }
+
+    /**
+     * Filters the node list based on what the user is searching
+     * @author KD
+     */
+    public void handleSearchNode() {
+        nodeTreeTable.setPredicate(new Predicate<TreeItem<NodeEntry>>() {
+            @Override
+            public boolean test(TreeItem<NodeEntry> nodeEntryTreeItem) {
+                switch(searchComboBox.getValue()) {
+                    case "Node ID":
+                        return nodeEntryTreeItem.getValue().getNodeID().contains(searchField.getText());
+                    case "Floor":
+                        return nodeEntryTreeItem.getValue().getFloor().contains(searchField.getText());
+                    case "Building":
+                        return nodeEntryTreeItem.getValue().getBuilding().contains(searchField.getText());
+                    case "Node Type":
+                        return nodeEntryTreeItem.getValue().getNodeType().contains(searchField.getText());
+                    case "Long Name":
+                        return nodeEntryTreeItem.getValue().getLongName().contains(searchField.getText());
+                    case "Short Name":
+                        return nodeEntryTreeItem.getValue().getShortName().contains(searchField.getText());
+                    default:
+                        return true;
+                }
+
+            }
+        });
     }
 }
