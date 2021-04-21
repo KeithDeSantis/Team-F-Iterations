@@ -1,6 +1,7 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.fuchsiafalcons.database.ConnectionHandler;
 import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
@@ -27,8 +28,8 @@ import java.util.stream.Collectors;
  */
 public class EditMapEdgeDialogueViewController {
 
-    @FXML private ComboBox<String> startNode;
-    @FXML private ComboBox<String> endNode;
+    @FXML private JFXComboBox<String> startNode;
+    @FXML private JFXComboBox<String> endNode;
 
     @FXML
     private Label edgeID;
@@ -59,7 +60,6 @@ public class EditMapEdgeDialogueViewController {
         nodeList.addAll(graph.getVertices().stream().map(Vertex::getID)
                 .sorted().collect(Collectors.toList()));
         this.startNode.setItems(nodeList);
-
         this.endNode.setItems(nodeList);
     }
 
