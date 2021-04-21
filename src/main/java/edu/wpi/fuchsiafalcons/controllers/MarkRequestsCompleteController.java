@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -82,19 +83,14 @@ public class MarkRequestsCompleteController implements Initializable {
         Platform.exit();
     }
 
-    public void handleMarkAsComplete(ActionEvent actionEvent) throws SQLException {
-        //change status to complete
-        //isSelected(int rowIndex) is true if the row is selected
-
-//        int row = 0;
-//        for (int i=0; i< services.size(); i++)
-//        {
-//            if (isSelected()){row = i};
-//        }
+    public void handleMarkAsComplete(ActionEvent actionEvent) throws SQLException, IOException {
         ServiceEntry data = requestView.getSelectionModel().getSelectedItem().getValue();
-        //TreeItem<ServiceEntry> e = requestView.getTreeItem(row);
-        //ServiceEntry data = e.getValue();
-        DatabaseAPI.getDatabaseAPI().editServiceReq(data.getRequestType(), "completed", "true");
+        DatabaseAPI.getDatabaseAPI().editServiceReq(data.getUuid(), "completed", "true");
+        Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/MarkRequestsCompleteView.fxml"));
+        Scene homeScene = new Scene(root);
+        currentStage.setScene(homeScene);
+        currentStage.show();
     }
 
     public void handleHome(ActionEvent actionEvent) throws IOException {

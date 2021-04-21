@@ -476,27 +476,27 @@ public class DatabaseAPI {
     /**
      * method to edit a service request column in the database
      *
-     * @param name    name of the service request to be edited
+     * @param uuid    uuid of the service request to be edited
      * @param colName name of the column to be edited
      * @param newVal  new value for the column to have
      * @return true on success, false otherwise
      * @throws SQLException on error performing DB operations
      */
-    public boolean editServiceReq(String name, String colName, String newVal) throws SQLException {
+    public boolean editServiceReq(String uuid, String colName, String newVal) throws SQLException {
         String query = "";
         boolean success = false;
         switch (colName) {
             case "name":
-                query = "UPDATE SERVICE_REQUESTS SET NAME=(?) WHERE NAME=(?)";
+                query = "UPDATE SERVICE_REQUESTS SET NAME=(?) WHERE UUID=(?)";
                 break;
             case "person":
-                query = "UPDATE SERVICE_REQUESTS SET PERSON=(?) WHERE NAME=(?)";
+                query = "UPDATE SERVICE_REQUESTS SET PERSON=(?) WHERE UUID=(?)";
                 break;
             case "completed":
-                query = "UPDATE SERVICE_REQUESTS SET COMPLETED=(?) WHERE NAME=(?)";
+                query = "UPDATE SERVICE_REQUESTS SET COMPLETED=(?) WHERE UUID=(?)";
                 break;
         }
-        return genEditQuery(name, newVal, query, success);
+        return genEditQuery(uuid, newVal, query, success);
     }
 
     /**
