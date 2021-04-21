@@ -171,7 +171,7 @@ public class EditMapNodeController {
 
         canvas.setOnScroll(e -> {
 
-           // System.out.println("PRE: " + canvas.getBoundsInParent());
+            System.out.println("PRE: " + canvas.getBoundsInParent());
             if(e.isControlDown()) {
                 e.consume();
                 double zoom_fac = 1.08;
@@ -201,7 +201,7 @@ public class EditMapNodeController {
                 //maxX:5000.0, maxY:3400.0
 
                 System.out.println((zt < 0.1) + " " +  (bounds.getMinX()  > 0) + " " + (bounds.getMinY() > 0) + " " + (bounds.getMaxX() < 1000));
-                if(zt < 0.1 || bounds.getMinX()  > 0 || bounds.getMinY() > 0 || bounds.getMaxX() < 1170)/// || bounds.getMaxX() < 5000 || bounds.getMinY() < 3400)
+                if(zt < 0.1 || bounds.getMinX()  > 0 || bounds.getMinY() > 0 || bounds.getMaxX() < 1000)/// || bounds.getMaxX() < 5000 || bounds.getMinY() < 3400)
                 {
                     canvas.getTransforms().remove(newScale);
                     return;
@@ -215,6 +215,7 @@ public class EditMapNodeController {
                 // canvas.getTransforms().clear();
 
                 outerPane.setPrefSize(bounds.getWidth(), bounds.getHeight());
+              //  outerPane.setTranslateX(-100);
 
 //
 //                outerPane.setTranslateX(- bounds.getMinX());
