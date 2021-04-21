@@ -75,7 +75,10 @@ public class LanguageInterpretationRequestController implements Initializable {
      * @author Jay Yen
      */
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
-        String uuid = UUID.randomUUID().toString();
+        if(formFilledOut() != true) {
+
+        }else{
+              String uuid = UUID.randomUUID().toString();
         ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", name.getText(), "false");
         //services.add(newServiceRequest);
         //update service requests
@@ -83,10 +86,12 @@ public class LanguageInterpretationRequestController implements Initializable {
         DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                 newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus());
         Stage currentStage = (Stage)submit.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FormSubmittedView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/LanguageInterpretationSubmitView.fxml"));
         Scene homeScene = new Scene(root);
         currentStage.setScene(homeScene);
         currentStage.show();
+        }
+
     }
 
     /**
@@ -182,14 +187,24 @@ public class LanguageInterpretationRequestController implements Initializable {
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
     }
-
+    
     private boolean formFilledOut(){
-        //ObjectProperty<LocalTime> lt = time.valueProperty();
-        //ObjectProperty<LocalDate> ld = date.valueProperty();
-        boolean fullName = name.getText().length() > 0;
-        boolean properDate = date.getValue() != null;
-        boolean properTime = time.getValue() != null;
-        boolean lang = language.getText().length() > 0;
-        return fullName && properDate && properTime && lang;
+
+        if(name.getText().length() <= 0){
+            name.setStyle("-fx-border-color: red");
+        }
+        if(date.getValue() == null){
+            date.setStyle("-fx-border-color: red");
+        }
+        if(time.getValue() == null){
+            time.setStyle("-fx-border-color: red");
+        }
+        if(language.getText().length() <= 0){
+            language.setStyle("-fx-border-color: red");
+        }
+        if(name.getText().length() > 0 && language.getText().length() > 0){
+            return true;
+        }
+        return false;
     }
 }

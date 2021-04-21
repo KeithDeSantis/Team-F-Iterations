@@ -59,7 +59,7 @@ public class LanguageInterpretationRequestControllerTest extends ApplicationTest
     @Test
     public void handleSubmit() {
         clickOn("#submit");
-        verifyThat("Successfully submitted request!", Node::isVisible);
+        verifyThat("#submit", Node::isVisible);
     }
 
     @Test
