@@ -254,6 +254,38 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("Reset Database");
     }
 
+    /**
+     * Test that the drag node feature updates the node entry in nodelist
+     * @author KD
+     */
+    @Test
+    public void testDragNode() {
+        drag("#fWALK00201").dropBy(40,10);
+        for(NodeEntry nodeEntry : nodeList) {
+            if(nodeEntry.getNodeID().equals("fWALK00201")) {
+                assertEquals(Integer.parseInt(nodeEntry.getXcoord()), 845, 50); // Could do better, coordinates get a bit funky with the dropBy function but this is right - KD
+                assertEquals(Integer.parseInt(nodeEntry.getYcoord()), 1720, 50);
+            }
+        }
+        clickOn("Reset Database");
+    }
+
+    /**
+     * Make sure dropping on another node has no effect
+     * @author KD
+     */
+    @Test
+    public void testDragNodeOverNode() {
+        drag("#fWALK00201").dropTo("#fWALK00301");
+        for(NodeEntry nodeEntry : nodeList) {
+            if(nodeEntry.getNodeID().equals("fWALK00201")) {
+                assertTrue(Integer.parseInt(nodeEntry.getXcoord()) == 646); // Could do better, coordinates get a bit funky with the dropBy function but this is right - KD
+                assertTrue(Integer.parseInt(nodeEntry.getYcoord()) == 1674);
+            }
+        }
+        clickOn("Reset Database");
+    }
+
     /*  Tests work but for some reason are causing that Java Heap space thing - KD
     @Test
     public void testFilteringByNodeID() {
