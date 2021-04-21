@@ -57,7 +57,7 @@
                   <Font name="Tahoma" size="15.0" />
                </font>
             </JFXPasswordField>
-            <JFXButton fx:id="signIn" buttonType="RAISED" onAction="#handleSignIn" text="Sign in">
+            <JFXButton fx:id="signIn" buttonType="RAISED" defaultButton="true" onAction="#handleSignIn" text="Sign in">
                <VBox.margin>
                   <Insets bottom="25.0" top="25.0" />
                </VBox.margin>
