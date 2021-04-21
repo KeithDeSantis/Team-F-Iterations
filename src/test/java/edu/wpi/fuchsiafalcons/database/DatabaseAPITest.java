@@ -8,6 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import javax.swing.plaf.nimbus.State;
+import javax.xml.crypto.Data;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -39,6 +42,7 @@ class DatabaseAPITest {
                 "testlong", "testshort");
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("test"));
     }
+
 
     @DisplayName("Test for making sure can't add duplicate node")
     public void testAddDuplicate() throws SQLException
@@ -230,6 +234,7 @@ class DatabaseAPITest {
     public void testAddingAUser() throws SQLException{
         assertTrue(DatabaseAPI.getDatabaseAPI().addUser("Employee","user1","password"));
     }
+
 
     @Test
     @DisplayName("test edit a user")

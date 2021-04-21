@@ -8,6 +8,7 @@ import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
 import edu.wpi.fuchsiafalcons.utils.UIConstants;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -25,7 +27,9 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
+import javafx.util.Callback;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -147,6 +151,7 @@ public class EditMapEdgesController {
         edgeTable.setRoot(root);
         edgeTable.setShowRoot(false);
 
+        // Set up floor comboBox and draw the nodes and edges on current floor
         final ObservableList<String> floorName = FXCollections.observableArrayList();
         floorName.addAll("1","2","3","L1","L2","G");
         floorComboBox.setItems(floorName);
@@ -166,27 +171,32 @@ public class EditMapEdgesController {
     private void handleDelete() throws SQLException {
         // Get the current selected edge
         int index = edgeTable.getSelectionModel().getSelectedIndex();
+        EdgeEntry selectedEdge = null;
 
         // Check for a valid index (-1 = no selection)
-        if (index >= 0 && index <= edgeEntryObservableList.size() - 1) {
+        try{
             // Remove the edge, this will update the TableView automatically
             DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntryObservableList.get(index).getEdgeID());
             edgeEntryObservableList.remove(index);
-        } else {
+        } catch (ArrayIndexOutOfBoundsException e) {
             // Create an alert to inform the user there is no edge selected
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(null); // Appears on top of all other windows
             alert.setTitle("No Selection");
             alert.setHeaderText("No Edge Selected");
             alert.setContentText("Please select an edge from the list");
-
+            e.printStackTrace();
             alert.showAndWait();
         }
 
-        if(selectedLine!=null) {
-            canvas.getChildren().remove(selectedLine);
+        if(selectedEdge!=null){
+            // Remove the edge, this will update the TableView automatically
+            DatabaseAPI.getDatabaseAPI().deleteEdge(selectedEdge.getEdgeID());
+            edgeEntryObservableList.remove(index);
+
+            // Delete Selected edge and corresponding node on map
             selectedLine = null;
-            drawEdgeNodeOnFloor(); // added to handle deletion without selection - KD
+            drawEdgeNodeOnFloor();
         }
     }
 
@@ -197,21 +207,35 @@ public class EditMapEdgesController {
      */
     @FXML
     private void handleEditEdge() throws IOException, SQLException {
+        // Get the current selected edge index
         int index = edgeTable.getSelectionModel().getSelectedIndex();
-        EdgeEntry selectedEdge = edgeEntryObservableList.get(index);
+        EdgeEntry selectedEdge;
+        try {
+            selectedEdge = edgeEntryObservableList.get(index);
+        } catch (ArrayIndexOutOfBoundsException e){
+            // Create an alert to inform the user there is no edge selected
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(null); // Appears on top of all other windows
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Edge Selected");
+            alert.setContentText("Please select an edge from the list");
+            e.printStackTrace();
+            alert.showAndWait();
+            return;
+        }
         if (selectedEdge != null) {
             String oldID = selectedEdge.getEdgeID();
-            String oldStartNode = selectedEdge.getStartNode();
-            String oldEndNode = selectedEdge.getEndNode();
             ArrayList<String> newValues = openEditDialogue(selectedEdge);
 
             DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "startNode", newValues.get(1));
             DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "endNode", newValues.get(2));
             DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "id", newValues.get(0));
 
-            //DatabaseAPI.getDatabaseAPI().deleteEdge(selectedEdge.getEdgeID());
-            //updateEdgeEntry(selectedEdge);
-            drawEdgeNodeOnFloor();
+            // Focus on selected edge both on table and on map
+            edgeTable.requestFocus();
+            edgeTable.getSelectionModel().clearAndSelect(findEdge(newValues.get(0)));
+            edgeTable.scrollTo(findEdge(newValues.get(0)));
+            handleSelectEdge();
         }
     }
 
@@ -224,10 +248,17 @@ public class EditMapEdgesController {
     private void handleNewEdge() throws IOException, SQLException {
         EdgeEntry newEdge = new EdgeEntry();
         openEditDialogue(newEdge);
-        if (newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||
-                newEdge.endNodeProperty().getValue().isEmpty())
-            return; //FIXME: DO BETTER ERROR CHECKING
+        if(!checkEdgeEntryNotEmpty(newEdge)){return;}
         updateEdgeEntry(newEdge);
+    }
+    /**
+     * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
+     * @param edgeEntry the node entry
+     * @return true if the node has no empty fields
+     * @author KD
+     */
+    public boolean checkEdgeEntryNotEmpty(EdgeEntry edgeEntry) {
+        return!edgeEntry.getEdgeID().isEmpty() && !edgeEntry.getStartNode().isEmpty() && !edgeEntry.getEndNode().isEmpty();
     }
 
     private void updateEdgeEntry(EdgeEntry edgeEntry) throws SQLException {
@@ -235,16 +266,13 @@ public class EditMapEdgesController {
         if (edgeEntry.getEdgeID().isEmpty() || edgeEntry.getStartNode().isEmpty() || edgeEntry.getEndNode().isEmpty())
             return; //FIXME: DO BETTER ERROR CHECKING, CHECK THAT WE ARE GETTING INTS
 
-        String edgeID = edgeEntry.getEdgeID();
-        String startNode = edgeEntry.getStartNode();
-        String endNode = edgeEntry.getEndNode();
-
         edgeEntryObservableList.add(edgeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
-        DatabaseAPI.getDatabaseAPI().addEdge(edgeID, startNode, endNode);
+        DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
 
+        // Focus on selected edge both on table and on map
         edgeTable.requestFocus();
-        edgeTable.getSelectionModel().clearAndSelect(findEdge(edgeID));
-        edgeTable.scrollTo(findEdge(edgeID));
+        edgeTable.getSelectionModel().clearAndSelect(findEdge(edgeEntry.getEdgeID()));
+        edgeTable.scrollTo(findEdge(edgeEntry.getEdgeID()));
         handleSelectEdge();
     }
 
@@ -282,6 +310,8 @@ public class EditMapEdgesController {
         editDialogueController.setDialogueStage(dialogueStage);
         editDialogueController.setEdge(editedEdge);
 
+        editDialogueController.setEdgeList(edgeEntryObservableList);
+        editDialogueController.setCurrentIDIfEditing(editedEdge.getEdgeID());
         dialogueStage.setTitle("Edit Edge");
         dialogueStage.initModality(Modality.WINDOW_MODAL);
         dialogueStage.initOwner((Stage) goBack.getScene().getWindow());
@@ -389,11 +419,12 @@ public class EditMapEdgesController {
      * @author Alex Friedman & ZheCheng
      */
     public void handleSelectEdge() {
+        // Check for a valid index (-1 = no selection)
         if(edgeTable.getSelectionModel().getSelectedIndex() < 0){
             // FIXME Error Handling
             return;
         }
-        // FIXME: ADD TRY_CATCH
+        // Get selected Edge
         EdgeEntry node = edgeEntryObservableList.get(edgeTable.getSelectionModel().getSelectedIndex());
 
         if(node == null){
@@ -401,6 +432,7 @@ public class EditMapEdgesController {
             return;
         }
 
+        // Try to get startNode and endNode from database
         NodeEntry startNode = null;
         NodeEntry endNode = null;
         try {
@@ -409,6 +441,8 @@ public class EditMapEdgesController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+        // startNode or endNode not stored in database
         if(startNode == null || endNode == null) {
             System.out.println("Edge with no actual Node");
             return;
@@ -423,6 +457,8 @@ public class EditMapEdgesController {
             floor = startNode.getFloor();
             switchMap();
         }
+
+        // Get the line with edgeID
         Line l = (Line) canvas.lookup("#"+node.getEdgeID());
         if(l == null){
             //FIXME Null Warning
@@ -440,7 +476,7 @@ public class EditMapEdgesController {
      */
     @FXML
     public void handleFloorBoxAction(ActionEvent actionEvent) {
-        floor = floorComboBox.getValue().toString();
+        floor = floorComboBox.getValue();
         switchMap();
     }
 
@@ -474,6 +510,7 @@ public class EditMapEdgesController {
      * @author ZheCheng
      */
     private void drawEdgeNodeOnFloor() {
+        // Clear canvas
         canvas.getChildren().removeIf(x -> {
             return x instanceof Circle;
         });
@@ -481,11 +518,13 @@ public class EditMapEdgesController {
             return x instanceof Line;
         });
 
+        // Reset selections
         selectedLine = null;
         firstCircle = null;
         secondCircle = null;
         nodeList = new ArrayList<>();
 
+        // Draw all edges
         for(EdgeEntry e : edgeEntryObservableList){
             NodeEntry startNode = null;
             NodeEntry endNode = null;
@@ -511,7 +550,7 @@ public class EditMapEdgesController {
             }
         }
 
-        // Comment this to not show nodes
+        // Draw all corresponding nodes
         for(NodeEntry n : nodeList){
             drawCircle(Double.parseDouble(n.getXcoord()) / zoomLevel, Double.parseDouble(n.getYcoord()) / zoomLevel, n.getNodeID());
         }
@@ -537,6 +576,7 @@ public class EditMapEdgesController {
                 firstCircle = c;
             else {
                 secondCircle = c;
+                // Second node selected, create edge
                 try {
                     createNewEdge();
                 } catch (IOException ioException) {
@@ -568,7 +608,7 @@ public class EditMapEdgesController {
 
 
     /**
-     * Draw a single line to represent the node
+     * Draw a single line to represent the edge
      * @author ZheCheng
      */
     private void drawLine(double startX, double startY, double endX, double endY, String edgeID){

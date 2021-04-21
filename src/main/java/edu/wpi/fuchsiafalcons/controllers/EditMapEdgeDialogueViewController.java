@@ -1,28 +1,66 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
+import edu.wpi.fuchsiafalcons.database.ConnectionHandler;
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import edu.wpi.fuchsiafalcons.pathfinding.Graph;
+import edu.wpi.fuchsiafalcons.pathfinding.GraphLoader;
+import edu.wpi.fuchsiafalcons.pathfinding.Vertex;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller for new edge or edit edge pop-up in edge editor
  * @author Karen Hou
  */
 public class EditMapEdgeDialogueViewController {
-    @FXML private TextField edgeID;
-    @FXML private TextField startNode;
-    @FXML private TextField endNode;
+
+    @FXML private ComboBox<String> startNode;
+    @FXML private ComboBox<String> endNode;
+
+    @FXML
+    private Label edgeID;
+
+    @FXML
+    private JFXButton ok;
 
     private EdgeEntry edge = new EdgeEntry();
     private Stage dialogueStage;
     public boolean okClicked;
+    private ObservableList<EdgeEntry> edgeList;
+    private String currentIDIfEditing; //FIXME stupid way to fix making nodes with duplicate ID's, find better way
 
     public EditMapEdgeDialogueViewController(){}
     @FXML
     private void initialize(){
+        Graph graph = new Graph();
+        try {
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
 
+            graph = GraphLoader.load(nodeEntries, edgeEntries);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //return;
+        }
+        final ObservableList<String> nodeList = FXCollections.observableArrayList();
+        nodeList.addAll(graph.getVertices().stream().map(Vertex::getID)
+                .sorted().collect(Collectors.toList()));
+        this.startNode.setItems(nodeList);
+
+        this.endNode.setItems(nodeList);
     }
 
     /**
@@ -33,9 +71,9 @@ public class EditMapEdgeDialogueViewController {
     @FXML
     private void handleOKClicked(ActionEvent e){
         if(formFilled()){
-            edge.setEdgeID(edgeID.getText());
-            edge.setStartNode(startNode.getText());
-            edge.setEndNode(endNode.getText());
+            edge.setStartNode(startNode.getValue());
+            edge.setEndNode(endNode.getValue());
+
             okClicked = true;
             dialogueStage.close();
         }
@@ -50,24 +88,26 @@ public class EditMapEdgeDialogueViewController {
         edgeID.setStyle("-fx-border-width: 0px");
         startNode.setStyle("-fx-border-width: 0px");
         endNode.setStyle("-fx-border-width: 0px");
-
+/*
         //check each field for filled out
-        if(edgeID.getText().length() <=0){
+        if(edgeID.getText().length() <=0 || !isUniqueNodeID(edgeID.getText())){
             edgeID.setStyle("-fx-border-widge: 2px");
             edgeID.setStyle("-fx-border-color: red");
         }
-        if(startNode.getText().length() <=0){
+
+ */
+        if(startNode.getValue().length() <=0){
             startNode.setStyle("-fx-border-widge: 2px");
             startNode.setStyle("-fx-border-color: red");
         }
-        if(endNode.getText().length() <=0){
+        if(endNode.getValue().length() <=0){
             endNode.setStyle("-fx-border-widge: 2px");
             endNode.setStyle("-fx-border-color: red");
         }
-        if(edgeID.getText().length() > 0 && startNode.getText().length() > 0 && endNode.getText().length() > 0) {
-            return true;
-        }
-        return false;
+        return isUniqueNodeID(edgeID.getText()) &&
+                edgeID.getText().length() > 0 &&
+                startNode.getValue().length() > 0 &&
+                endNode.getValue().length() > 0;
     }
 
     /**
@@ -77,9 +117,9 @@ public class EditMapEdgeDialogueViewController {
      */
     public void setEdge(EdgeEntry enteredEdge){
         edge = enteredEdge;
-        edgeID.setText(edge.edgeIDProperty().getValue());
-        startNode.setText(edge.startNodeProperty().getValue());
-        endNode.setText(edge.endNodeProperty().getValue());
+        startNode.setValue(edge.startNodeProperty().getValue());
+        endNode.setValue(edge.endNodeProperty().getValue());
+        updateEdgeIDLabel();
     }
 
     /**
@@ -88,4 +128,34 @@ public class EditMapEdgeDialogueViewController {
      * @author Keith DeSantis
      */
     public void setDialogueStage(Stage theStage) {dialogueStage = theStage;}
+    public void setEdgeList(ObservableList<EdgeEntry> edgeList) { this.edgeList = edgeList; }
+
+    public void setCurrentIDIfEditing(String currentIDIfEditing) {
+        this.currentIDIfEditing = currentIDIfEditing;
+    }
+
+    /**
+     * Helper for isFilledOut() that ensures the nodeID given by the users isn't a duplicate to one
+     * that already exists.
+     * @param nodeID the nodeID given by the user
+     * @return true if the ID is unique
+     * @author KD
+     */
+    public boolean isUniqueNodeID(String nodeID) {
+        for(EdgeEntry n : edgeList) {
+            if(n.getEdgeID().equals(nodeID) && !(n.getEdgeID().equals(currentIDIfEditing)))
+                return false;
+        }
+        return true;
+    }
+ /**
+     * Updates the label displaying a preview of the edge ID
+     * Called on key release of either text field and when the dialogue is opened
+     * @author Leo Morris
+     */
+    @FXML
+    private void updateEdgeIDLabel(){
+        edgeID.setText("Edge ID: " +startNode.getValue() + "_" + endNode.getValue());
+    }
+
 }

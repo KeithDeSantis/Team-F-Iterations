@@ -4,7 +4,6 @@ import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
 
-import javax.xml.soap.Node;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,10 +48,12 @@ public class GraphLoader {
                 if(vertices.get(nodeID) != null)
                     throw new Exception("nodesCVS lists the same vertex twice: " + nodeID);
 
-                final int xCoord = Integer.parseInt(currLine[1]);
-                final int yCoord = Integer.parseInt(currLine[2]);
+                final int xCoordinate = Integer.parseInt(currLine[1]);
+                final int yCoordinate = Integer.parseInt(currLine[2]);
 
-                final Vertex currVertex = new Vertex(nodeID, xCoord, yCoord);
+                final String floor = currLine[3];
+
+                final Vertex currVertex = new Vertex(nodeID, xCoordinate, yCoordinate, floor);
                 vertices.put(nodeID, currVertex);
 
                 graph.addVertex(currVertex);
@@ -76,23 +77,27 @@ public class GraphLoader {
             final String startNode = currLine[1];
             final String endNode = currLine[2];
 
-            final Vertex startVertex = vertices.get(startNode);
-            if(startVertex == null)
-                throw new Exception("In edge: " + edgeID + ", start vertex (" + startNode + ") is undefined.");
-
-            final Vertex endVertex = vertices.get(endNode);
-            if(endVertex == null)
-                throw new Exception("In edge: " + edgeID + ", end vertex (" + endNode + ") is undefined.");
-
-            final Edge edge = new Edge(startVertex, endVertex); //Edge will automatically add itself to each of the verticies
-
-            graph.addEdge(edge);
+            addVertex(graph, vertices, edgeID, startNode, endNode);
         }
         return graph;
     }
 
+    private static void addVertex(Graph graph, HashMap<String, Vertex> vertices, String edgeID, String startNode, String endNode) throws Exception {
+        final Vertex startVertex = vertices.get(startNode);
+        if(startVertex == null)
+            throw new Exception("In edge: " + edgeID + ", start vertex (" + startNode + ") is undefined.");
+
+        final Vertex endVertex = vertices.get(endNode);
+        if(endVertex == null)
+            throw new Exception("In edge: " + edgeID + ", end vertex (" + endNode + ") is undefined.");
+
+        final Edge edge = new Edge(startVertex, endVertex); //Edge will automatically add itself to each of the vertices
+
+        graph.addEdge(edge);
+    }
+
     /**
-     * Loads from node/edge entries respectivley //FIXME: DO BETTER & METHODZIE
+     * Loads from node/edge entries respectively //FIXME: DO BETTER & METHODZIE
      * @return
      * @author Alex Friedman (ahf)
      * @throws Exception
@@ -121,7 +126,7 @@ public class GraphLoader {
                 final int xCoordinate = Integer.parseInt(nodeEntry.getXcoord());
                 final int yCoordinate = Integer.parseInt(nodeEntry.getYcoord());
 
-                final Vertex currVertex = new Vertex(nodeID, xCoordinate, yCoordinate);
+                final Vertex currVertex = new Vertex(nodeID, xCoordinate, yCoordinate, nodeEntry.getFloor());
                 vertices.put(nodeID, currVertex);
 
                 graph.addVertex(currVertex);
@@ -141,17 +146,7 @@ public class GraphLoader {
             final String startNode = edgeEntry.getStartNode();
             final String endNode = edgeEntry.getEndNode();
 
-            final Vertex startVertex = vertices.get(startNode);
-            if(startVertex == null)
-                throw new Exception("In edge: " + edgeID + ", start vertex (" + startNode + ") is undefined.");
-
-            final Vertex endVertex = vertices.get(endNode);
-            if(endVertex == null)
-                throw new Exception("In edge: " + edgeID + ", end vertex (" + endNode + ") is undefined.");
-
-            final Edge edge = new Edge(startVertex, endVertex); //Edge will automatically add itself to each of the verticies
-
-            graph.addEdge(edge);
+            addVertex(graph, vertices, edgeID, startNode, endNode);
         }
         return graph;
     }

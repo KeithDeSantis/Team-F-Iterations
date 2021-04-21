@@ -9,16 +9,25 @@ public class Vertex {
     private final List<Edge> edges;
     private final double x, y;
 
+    private final String floor;
+
     /**
      * Creates a new Vertex
      * @param ID the given ID String for the node
      * @author Tony Vuolo
      */
-    public Vertex(String ID, int x, int y) {
+    public Vertex(String ID, int x, int y, String floor) {
         this.ID = ID;
         this.x = x;
         this.y = y;
         this.edges = new LinkedList<>();
+
+        this.floor = floor;
+    }
+
+
+    public String getFloor() {
+        return floor;
     }
 
     /**

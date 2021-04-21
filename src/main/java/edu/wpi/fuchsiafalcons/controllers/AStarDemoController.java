@@ -23,6 +23,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
@@ -87,14 +90,14 @@ public class AStarDemoController implements Initializable {
 
         try {
             List<NodeEntry> allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
-            List<EdgeEntry> alleEgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
 
-//            final List<NodeEntry> nodeEntries = allNodeEntries.stream().filter(node -> node.getFloor().equals("1")
-//            && !node.getBuilding().equals("Shapiro") && !node.getBuilding().equals("BTM")).collect(Collectors.toList());
-//
-//            final List<EdgeEntry> edgeEntries = alleEgeEntries.stream().filter( node -> haveNode(nodeEntries, node.getStartNode())
-//                    && haveNode(nodeEntries, node.getEndNode()) ).collect(Collectors.toList());
-            this.graph = GraphLoader.load(allNodeEntries, alleEgeEntries);
+            final List<NodeEntry> nodeEntries = allNodeEntries.stream().filter(node -> node.getFloor().equals("1")
+            && !node.getBuilding().equals("Shapiro") && !node.getBuilding().equals("BTM")).collect(Collectors.toList());
+
+            final List<EdgeEntry> edgeEntries = allEdgeEntries.stream().filter( node -> hasNode(nodeEntries, node.getStartNode())
+                    && hasNode(nodeEntries, node.getEndNode()) ).collect(Collectors.toList());
+            this.graph = GraphLoader.load(nodeEntries, edgeEntries);
         } catch (Exception e) {
             this.graph = new Graph();
             e.printStackTrace();
@@ -110,7 +113,7 @@ public class AStarDemoController implements Initializable {
         pathfindButton.setDisable(true);
     }
 
-    private boolean haveNode(List<NodeEntry> nodeEntries, String nodeID){
+    private boolean hasNode(List<NodeEntry> nodeEntries, String nodeID){
         for(NodeEntry n : nodeEntries){
             if (n.getNodeID().equals(nodeID)) {
                 return true;
@@ -146,18 +149,17 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf), Tony Vuolo
      */
     @FXML
-    public void handlePathfindButtonClicked(ActionEvent actionEvent) {
+    public void handlePathfindButtonClicked() {
         clearPath();
         updatePath();
     }
 
     /**
      *
-     * @param actionEvent
      * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handleStartBoxAction(ActionEvent actionEvent) {
+    public void handleStartBoxAction() {
         checkInput();
         if(this.startNodeDisplay == null)
         {
@@ -178,11 +180,10 @@ public class AStarDemoController implements Initializable {
 
     /**
      *
-     * @param actionEvent
      * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handleEndBoxAction(ActionEvent actionEvent) {
+    public void handleEndBoxAction() {
         checkInput();
         if(this.endNodeDisplay == null)
         {
@@ -216,6 +217,10 @@ public class AStarDemoController implements Initializable {
      */
     private boolean updatePath()
     {
+        final String currentFloor = "1"; //FIXME: DO BETTER<
+
+        final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
+
         final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
         final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
 
@@ -232,7 +237,12 @@ public class AStarDemoController implements Initializable {
 
                     final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
                     line.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
-                    line.setStroke(Color.ORANGE);
+
+                    final LinearGradient lineGradient = new LinearGradient(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), false, CycleMethod.NO_CYCLE,
+                            new Stop(0, (start.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)),
+                            new Stop(1, (end.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)));
+
+                    line.setStroke(lineGradient);
 
                     canvas.getChildren().add(line);
                 }

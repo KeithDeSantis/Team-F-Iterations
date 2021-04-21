@@ -79,16 +79,16 @@ public class EditMapNodeController {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
-        final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+        F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
 
-        final double width = image.getWidth()/zoomLevel;
-        final double height = image.getHeight()/zoomLevel;
+        final double width = F1Image.getWidth()/zoomLevel;
+        final double height = F1Image.getHeight()/zoomLevel;
 
         canvas.setPrefSize(width,height);
 
         map.setFitWidth(width);
         map.setFitHeight(height);
-        map.setImage(image); // Copied from A* Vis - KD
+        map.setImage(F1Image); // Copied from A* Vis - KD
 
         final Image logo = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoView.setImage(logo);
@@ -119,20 +119,12 @@ public class EditMapNodeController {
         //nodeTreeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue.getValue()));
         loadFromFileButton.setDisable(false);
 
-        // END OF JFX TREETABLE COLUMN SETUP
-
-        //nodeTable.setItems(nodeList); // Put Observable list into TableView so that we can watch for changes in values - KD
-        //NodeIDColumn.setCellValueFactory(cellData -> cellData.getValue().getNodeIDProperty()); // Set first column to display first name property - KD
-        //ShortNameColumn.setCellValueFactory(cellData -> cellData.getValue().getShortNameProperty()); // Set second column to display second name property - KD
-        //nodeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue)); // Listener to watch for changes - KD
-        loadFromFileButton.setDisable(false);
-
+        // Set up floor comboBox and draw nodes on that floor
         final ObservableList<String> floorName = FXCollections.observableArrayList();
         floorName.addAll("1","2","3","L1","L2","G");
         floorComboBox.setItems(floorName);
         floorComboBox.setValue(floor);
         drawNodeOnFloor();
-
 
         final ContextMenu contextMenu = new ContextMenu();
 
@@ -161,8 +153,6 @@ public class EditMapNodeController {
                         ioException.printStackTrace();
                     }
                 });
-
-                //System.out.println(event.getX() + " " + event.getSceneX() + " " + event.getScreenX());
             }
         });
 
@@ -201,11 +191,11 @@ public class EditMapNodeController {
     private void handleDeletePushed(ActionEvent actionEvent) throws SQLException {
         int selectedIndex = nodeTreeTable.getSelectionModel().getSelectedIndex(); // get index of table that is selected - KD
         if(selectedIndex<0) { return; }
+
         String targetID = nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID();
         DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
         nodeList.remove(selectedIndex); // remove said index from table - KD
 
-        canvas.getChildren().remove(selectedCircle);
         selectedCircle = null;
         drawNodeOnFloor(); // added to handle deletion without selection - KD
     }
@@ -259,7 +249,7 @@ public class EditMapNodeController {
         nodeTreeTable.requestFocus();
         nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
         nodeTreeTable.scrollTo(findNode(nodeID));
-        selectNode();
+        handleSelectNode();
     }
 
 
@@ -293,8 +283,10 @@ public class EditMapNodeController {
         Stage dialogStage = new Stage();
         Parent root = dialogLoader.load();
         EditMapNodeDialogViewController dialogController = dialogLoader.getController(); // get edit dialog's controller - KD
+
         dialogController.setDialogStage(dialogStage); // set the stage attribute - KD
         dialogController.setTheNode(editedNode); // inject the node attribute so that specific instance is the one edited - KD
+
         dialogController.setNodeList(nodeList);
         dialogController.setCurrentIDIfEditing(editedNode.getNodeID());
         dialogStage.setTitle("Edit Node");
@@ -304,13 +296,6 @@ public class EditMapNodeController {
 
         dialogStage.showAndWait(); // open pop up - KD
     }
-
-    /**
-     * Setter for selected node
-     * @param node
-     * @author KD
-     */
-    public void setSelectedNode(NodeEntry node) { selectedNode = node; }
 
     @FXML
     /**
@@ -330,7 +315,6 @@ public class EditMapNodeController {
         File file = fileChooser.showOpenDialog(FileStage);
         final String fileName = String.valueOf(file);
 
-        nodeList.clear();
 
         List<String[]> nodeData = null;
 
@@ -343,6 +327,7 @@ public class EditMapNodeController {
             e.printStackTrace();
             return;
         }
+        nodeList.clear();
 
         if(nodeData != null )
         {
@@ -535,7 +520,7 @@ public class EditMapNodeController {
      * Select node based on selection in Table, focus on the node
      * @author ZheCheng
      */
-    public void selectNode() {
+    public void handleSelectNode() {
         if(nodeTreeTable.getSelectionModel().getSelectedIndex() < 0){
             // FIXME Error Handling
             return;

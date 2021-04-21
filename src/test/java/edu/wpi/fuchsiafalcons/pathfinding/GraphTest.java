@@ -117,7 +117,7 @@ public class GraphTest {
      */
     @Test
     public void testEdgeConnector() {
-        Vertex v0 = new Vertex("0", 0, 0), v1 = new Vertex("1", 3, 4);
+        Vertex v0 = new Vertex("0", 0, 0, ""), v1 = new Vertex("1", 3, 4, "");
 
         // asserts that the Vertices have no added Edges
         assertEquals(0, v0.getEdges().size());
@@ -226,9 +226,9 @@ public class GraphTest {
      */
     @Test
     public void testDFSPathShortest() {
-        final Vertex v0 = new Vertex("T0", 0, 0);
-        final Vertex v1 = new Vertex("T1", 0, 1);
-        final Vertex v2 = new Vertex("T2", 1, 0);
+        final Vertex v0 = new Vertex("T0", 0, 0, "");
+        final Vertex v1 = new Vertex("T1", 0, 1, "");
+        final Vertex v2 = new Vertex("T2", 1, 0, "");
         final Edge e0 = new Edge(v0, v1);
         final Edge e1 = new Edge(v1, v2);
         final Edge e2 = new Edge(v2, v0);
@@ -358,10 +358,10 @@ public class GraphTest {
      */
     @Test
     public void testDoublyLinkedHashMap() {
-        Vertex v0 = new Vertex("CCONF", 3, 7);
-        Vertex v1 = new Vertex("CDEPT", 3, 7);
-        Vertex v2 = new Vertex("CHALL", 3, 7);
-        Vertex v3 = new Vertex("CLABS", 3, 7);
+        Vertex v0 = new Vertex("CCONF", 3, 7, "");
+        Vertex v1 = new Vertex("CDEPT", 3, 7, "");
+        Vertex v2 = new Vertex("CHALL", 3, 7, "");
+        Vertex v3 = new Vertex("CLABS", 3, 7, "");
 
         DoublyLinkedHashSet<Vertex> map = new DoublyLinkedHashSet<>();
         map.insert(0, v0);
