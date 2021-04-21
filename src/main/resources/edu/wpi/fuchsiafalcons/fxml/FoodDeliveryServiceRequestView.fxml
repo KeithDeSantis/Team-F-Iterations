@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="690.0" prefWidth="425.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.FoodDeliveryServiceRequestController">
+<AnchorPane prefHeight="690.0" prefWidth="425.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.fuchsiafalcons.controllers.FoodDeliveryServiceRequestController">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="7.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
          <children>
@@ -29,55 +29,55 @@
                </VBox.margin>
             </HBox>
             <Label text="Delivery Location (Floor and Room Number)" />
-            <TextField />
+            <TextField fx:id="deliveryLocationField" />
             <Label text="Delivery Time (if not ASAP)" />
-            <TextField />
+            <TextField fx:id="deliveryTimeField" />
             <Label text="Select Meal" />
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="385.0" spacing="50.0">
                <children>
-                  <RadioButton mnemonicParsing="false" text="Steak and Veggies" />
-                  <RadioButton mnemonicParsing="false" text="Caesar Salad" />
+                  <RadioButton fx:id="rButtonFood1" mnemonicParsing="false" onAction="#handleRadialButtonPushed" text="Steak and Veggies" />
+                  <RadioButton fx:id="rButtonFood2" mnemonicParsing="false" onAction="#handleRadialButtonPushed" text="Caesar Salad" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="222.0" prefHeight="30.0" prefWidth="385.0" spacing="80.0">
                <children>
-                  <RadioButton mnemonicParsing="false" prefHeight="17.0" prefWidth="89.0" text="Beef Stir-Fry" />
-                  <RadioButton mnemonicParsing="false" prefHeight="17.0" prefWidth="99.0" text="Shrimp Paella" />
+                  <RadioButton fx:id="rButtonFood3" mnemonicParsing="false" onAction="#handleRadialButtonPushed" prefHeight="17.0" prefWidth="89.0" text="Beef Stir-Fry" />
+                  <RadioButton fx:id="rButtonFood4" mnemonicParsing="false" onAction="#handleRadialButtonPushed" prefHeight="17.0" prefWidth="99.0" text="Shrimp Paella" />
                </children>
             </HBox>
             <Label layoutX="10.0" layoutY="197.0" text="Select Side (up to two)" />
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="222.0" prefHeight="30.0" prefWidth="385.0" spacing="50.0">
                <children>
-                  <CheckBox mnemonicParsing="false" text="Potato Chips" />
-                  <CheckBox mnemonicParsing="false" text="Side Salad" />
+                  <CheckBox fx:id="cbSide1" mnemonicParsing="false" text="Potato Chips" />
+                  <CheckBox fx:id="cbSide2" mnemonicParsing="false" text="Side Salad" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="265.0" prefHeight="30.0" prefWidth="385.0" spacing="50.0">
                <children>
-                  <CheckBox mnemonicParsing="false" prefHeight="17.0" prefWidth="90.0" text="French Fries" />
-                  <CheckBox mnemonicParsing="false" text="Brownie" />
+                  <CheckBox fx:id="cbSide3" mnemonicParsing="false" prefHeight="17.0" prefWidth="90.0" text="French Fries" />
+                  <CheckBox fx:id="cbSide4" mnemonicParsing="false" text="Brownie" />
                </children>
             </HBox>
             <Label layoutX="10.0" layoutY="307.0" text="Select Drink" />
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="332.0" prefHeight="30.0" prefWidth="385.0" spacing="50.0">
                <children>
-                  <RadioButton mnemonicParsing="false" text="Bottled Water" />
-                  <RadioButton mnemonicParsing="false" text="Lemonade" />
+                  <RadioButton fx:id="rButtonDrink1" mnemonicParsing="false" onAction="#handleRadialButtonPushed" text="Bottled Water" />
+                  <RadioButton fx:id="rButtonDrink2" mnemonicParsing="false" onAction="#handleRadialButtonPushed" text="Lemonade" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="375.0" prefHeight="30.0" prefWidth="385.0" spacing="50.0">
                <children>
-                  <RadioButton mnemonicParsing="false" prefHeight="17.0" prefWidth="89.0" text="Iced Tea" />
-                  <RadioButton mnemonicParsing="false" prefHeight="17.0" prefWidth="104.0" text="Sprite" />
+                  <RadioButton fx:id="rButtonDrink3" mnemonicParsing="false" onAction="#handleRadialButtonPushed" prefHeight="17.0" prefWidth="89.0" text="Iced Tea" />
+                  <RadioButton fx:id="rButtonDrink4" mnemonicParsing="false" onAction="#handleRadialButtonPushed" prefHeight="17.0" prefWidth="104.0" text="Sprite" />
                </children>
             </HBox>
             <Label layoutX="10.0" layoutY="83.0" text="List Any Allergies" />
-            <TextField layoutX="10.0" layoutY="107.0" />
+            <TextField fx:id="allergyField" layoutX="10.0" layoutY="107.0" />
             <Label layoutX="10.0" layoutY="527.0" text="Special Instructions" />
-            <TextField layoutX="10.0" layoutY="552.0" />
+            <TextField fx:id="specialInstructionsField" layoutX="10.0" layoutY="552.0" />
             <HBox alignment="CENTER" prefHeight="41.0" prefWidth="200.0" spacing="100.0">
                <children>
-                  <Button mnemonicParsing="false" text="Submit" />
+                  <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmitPushed" text="Submit" />
                   <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleButtonPushed" text="Cancel" textFill="RED" />
                </children>
             </HBox>
