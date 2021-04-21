@@ -175,7 +175,7 @@ public class EditMapNodeController {
         if (buttonPushed == goBack) {
           //  ConnectionHandler.getConnection().close();
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageAdminView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("Default Page");
             stage.show();

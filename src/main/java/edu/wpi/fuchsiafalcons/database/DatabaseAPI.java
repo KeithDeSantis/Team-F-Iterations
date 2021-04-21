@@ -2,10 +2,7 @@ package edu.wpi.fuchsiafalcons.database;
 
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
-
-import javax.xml.transform.Result;
-import java.util.Base64;
-import java.util.Base64.*;
+import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 
 import java.sql.*;
 import java.lang.*;
@@ -459,59 +456,105 @@ public class DatabaseAPI {
         return success;
     }
 
+    public ArrayList<ServiceEntry> genServiceEntries() throws SQLException
+    {
+        ArrayList<ServiceEntry> data = new ArrayList<>();
+        String sql = "SELECT * FROM SERVICE_REQUESTS";
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        ResultSet rset;
+        rset = stmt.executeQuery(sql);
+
+        while (rset.next())
+        {
+            ServiceEntry entry = new ServiceEntry(rset.getString(1), rset.getString(2),
+                    rset.getString(3), rset.getString(4));
+            data.add(entry);
+        }
+        return data;
+    }
+
     /**
      * method to edit a service request column in the database
      *
-     * @param name    name of the service request to be edited
+     * @param uuid    uuid of the service request to be edited
      * @param colName name of the column to be edited
      * @param newVal  new value for the column to have
      * @return true on success, false otherwise
      * @throws SQLException on error performing DB operations
      */
-    public boolean editServiceReq(String name, String colName, String newVal) throws SQLException {
+    public boolean editServiceReq(String uuid, String colName, String newVal) throws SQLException {
         String query = "";
         boolean success = false;
         switch (colName) {
             case "name":
-                query = "UPDATE SERVICE_REQUESTS SET NAME=(?) WHERE NAME=(?)";
+                query = "UPDATE SERVICE_REQUESTS SET NAME=(?) WHERE UUID=(?)";
                 break;
             case "person":
-                query = "UPDATE SERVICE_REQUESTS SET PERSON=(?) WHERE NAME=(?)";
+                query = "UPDATE SERVICE_REQUESTS SET PERSON=(?) WHERE UUID=(?)";
                 break;
             case "completed":
-                query = "UPDATE SERVICE_REQUESTS SET COMPLETED=(?) WHERE NAME=(?)";
+                query = "UPDATE SERVICE_REQUESTS SET COMPLETED=(?) WHERE UUID=(?)";
                 break;
         }
-        return genEditQuery(name, newVal, query, success);
+        return genEditQuery(uuid, newVal, query, success);
     }
 
     /**
      * Method to add a single service request to the DB
      *
+     *
+     * @param uuid
      * @param name      name of the service request to be added
      * @param person    person assigned to the new service request
      * @param completed status of the service request either "true" or "false"
      * @return true on success, false otherwise
      * @throws SQLException on error performing DB operations
      */
-    public boolean addServiceReq(String name, String person, String completed) throws SQLException {
+    public boolean addServiceReq(String uuid, String name, String person, String completed) throws SQLException {
         boolean success = false;
-        String sql = "INSERT INTO SERVICE_REQUESTS values(?, ?, ?)";
+        final String sql = "INSERT INTO SERVICE_REQUESTS values(?, ?, ?, ?)";
 
-        return buildInsertQuery(name, person, completed, success, sql);
+
+        //FIXME: do better... eventually. Oh hi there Professor Wong!
+        try {
+            return buildInsertServiceQuery(uuid, name, person, completed, success, sql);
+        }
+        catch (SQLException e)
+        {
+            createTable(ConnectionHandler.getConnection(), "CREATE TABLE SERVICE_REQUESTS(uuid varchar(200), name varchar(200), " +
+                    "assignedPerson varchar(200), completed varchar(200), primary key(uuid))");
+
+            return buildInsertServiceQuery(uuid, name, person, completed, success, sql);
+        }
     }
 
-    /**
+    private boolean buildInsertServiceQuery(String uuid, String name, String person, String completed, boolean success, String sql) throws SQLException {
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, uuid);
+        stmt.setString(2, name);
+        stmt.setString(3, person);
+        stmt.setString(4, completed);
+
+        int result = stmt.executeUpdate();
+        if (result != 0) {
+            success = true;
+        }
+        return success;
+    }
+
+    /*
+
      * Method for adding multiple service requests to the DB at once if needed
      *
      * @param reqData list of strings containing the service request data
      * @throws SQLException on error performing DB operations
-     */
+
     public void populateReqs(List<String[]> reqData) throws SQLException {
         for (String[] arr : reqData) {
-            addServiceReq(arr[0], arr[1], arr[2]);
+            addServiceReq(newServiceRequest.getUuid(), arr[0], arr[1], arr[2]);
         }
     }
+    */
 
     public void populateUsers(Connection conn) throws Exception {
         final String initUserTable = "CREATE TABLE USERS(type varchar(200), " +
@@ -542,8 +585,8 @@ public class DatabaseAPI {
             createTable(conn, initEdgesTable);
             populateEdges(edgeData);
 
-            final String initServiceReqTable = "CREATE TABLE SERVICE_REQUESTS(name varchar(200), " +
-                    "assignedPerson varchar(200), completed varchar(200))";
+            final String initServiceReqTable = "CREATE TABLE SERVICE_REQUESTS(uuid varchar(200), name varchar(200), " +
+                    "assignedPerson varchar(200), completed varchar(200), primary key(uuid))";
             createTable(conn, initServiceReqTable);
 
         } catch (SQLException e) {

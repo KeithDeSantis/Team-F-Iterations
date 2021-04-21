@@ -1,7 +1,9 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
 import com.jfoenix.controls.*;
-import javafx.beans.property.ObjectProperty;
+import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
+import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,10 +18,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 
 public class LanguageInterpretationRequestController implements Initializable {
@@ -65,12 +69,19 @@ public class LanguageInterpretationRequestController implements Initializable {
     }
 
     /**
-     * Opens a window that shows a request received message
+     * Opens a window that shows a request received message, and adds a service request to the database
      * @param actionEvent
      * @throws IOException
      * @author Jay Yen
      */
-    public void handleSubmit(ActionEvent actionEvent) throws IOException{
+    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
+        String uuid = UUID.randomUUID().toString();
+        ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", name.getText(), "false");
+        //services.add(newServiceRequest);
+        //update service requests
+        //after this is updated, copy into the other service request submits
+        DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
+                newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus());
         Stage currentStage = (Stage)submit.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/FormSubmittedView.fxml"));
         Scene homeScene = new Scene(root);

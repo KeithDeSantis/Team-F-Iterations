@@ -132,7 +132,7 @@ public class AccountManagerController implements Initializable {
         Stage stage;
         Parent root;
         stage = (Stage) buttonPushed.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageAdminController.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/DefaultPageAdminView.fxml"));
         stage.getScene().setRoot(root);
         stage.setTitle("Admin Home");
         stage.show();
