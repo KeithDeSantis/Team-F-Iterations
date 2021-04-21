@@ -1,6 +1,7 @@
 package edu.wpi.fuchsiafalcons.controllers;
 
 import com.jfoenix.controls.*;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 
@@ -166,5 +170,15 @@ public class LanguageInterpretationRequestController implements Initializable {
         appointment.getItems().add("Weight Management");
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
+    }
+
+    private boolean formFilledOut(){
+        //ObjectProperty<LocalTime> lt = time.valueProperty();
+        //ObjectProperty<LocalDate> ld = date.valueProperty();
+        boolean fullName = name.getText().length() > 0;
+        boolean properDate = date.getValue() != null;
+        boolean properTime = time.getValue() != null;
+        boolean lang = language.getText().length() > 0;
+        return fullName && properDate && properTime && lang;
     }
 }
