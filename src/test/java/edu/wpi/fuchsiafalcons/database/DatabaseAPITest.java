@@ -217,7 +217,7 @@ class DatabaseAPITest {
     @DisplayName("test editing a service request")
     public void testEditRequest() throws SQLException{
         DatabaseAPI.getDatabaseAPI().addServiceReq("123", "test", "person", "false");
-        assertTrue(DatabaseAPI.getDatabaseAPI().editServiceReq("test", "completed", "true"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().editServiceReq("123", "completed", "true"));
     }
 
     @Test
