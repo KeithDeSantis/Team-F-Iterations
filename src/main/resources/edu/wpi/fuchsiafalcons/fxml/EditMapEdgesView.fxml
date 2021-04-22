@@ -53,5 +53,6 @@
       <JFXButton fx:id="goBack" layoutX="14.0" layoutY="14.0" onAction="#handleHomeButton" ripplerFill="BLACK" style="-fx-background-color: #cbcbcb;" text="HOME" textAlignment="CENTER" />
       <JFXTextField fx:id="CSVFile" layoutX="290.0" layoutY="480.0" onKeyReleased="#handleFileNameType" prefHeight="31.0" prefWidth="354.0" promptText="CSV File Location" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="290.0" />
       <JFXComboBox fx:id="floorComboBox" layoutX="890.0" layoutY="14.0" onAction="#handleFloorBoxAction" />
+      <JFXButton layoutX="290.0" layoutY="440.0" onAction="#handleResetDB" style="-fx-background-color: #cbcbcb;" text="Reset Data Base" />
    </children>
 </AnchorPane>

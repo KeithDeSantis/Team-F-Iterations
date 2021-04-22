@@ -24,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -343,32 +344,49 @@ public class EditMapEdgesController {
      * @author Leo Morris
      */
     public void handleSaveButton(ActionEvent actionEvent) {
+        //FIXME: NULL ERROR CHECK.
         final String fileName = CSVFile.getText();
 
-        final List<String[]> data = new LinkedList<String[]>();
-        Collections.addAll(data, "edgeID, startingNode, endingNode".split(","));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV File");
+        fileChooser.setInitialFileName(fileName);
 
-        data.addAll(edgeEntryObservableList.stream().map(edge -> {
-            return new String[]{
-                    edge.edgeIDProperty().getValue(),
-                    edge.startNodeProperty().getValue(),
-                    edge.endNodeProperty().getValue()
-            };
-        }).collect(Collectors.toList()));
-        try {
-            CSVManager.writeFile(fileName, data);
-        } catch (Exception e) {
-            CSVErrorLabel.setStyle("-fx-text-fill: red");
-            CSVErrorLabel.setText(e.getMessage());
-            e.printStackTrace();
-            return;
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        Stage FileStage = new Stage();
+        File file = fileChooser.showSaveDialog(FileStage);
+
+        if (file != null) {
+            //FIXME: DO BETTER!!!
+            final List<String[]> data = new LinkedList<String[]>();
+            Collections.addAll(data, "edgeID,startNode,endNode".split(","));
+
+            data.addAll(edgeEntryObservableList.stream().map(edge -> {
+                return new String[] {
+                        edge.getEdgeID(),
+                        edge.getStartNode(),
+                        edge.getEndNode()
+                };
+            }).collect(Collectors.toList()));
+
+            try {
+                CSVManager.writeToFile(file, data);
+            } catch (Exception e) {
+                CSVErrorLabel.setStyle("-fx-text-fill: red");
+                CSVErrorLabel.setText(e.getMessage());
+                e.printStackTrace();
+                return;
+            }
         }
 
+        CSVErrorLabel.setText("File successfully exported.");
         CSVErrorLabel.setStyle("-fx-text-fill: black");
-        CSVErrorLabel.setText("File successfully exported");
 
         CSVFile.setText("");
         saveCSV.setDisable(true);
+        //loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
     }
 
     /**
@@ -394,29 +412,53 @@ public class EditMapEdgesController {
      * @param actionEvent Pressing the Load CSV Button
      * @author Leo Morris
      */
-    public void handleLoadButtonClicked(ActionEvent actionEvent) {
-        final String fileName = CSVFile.getText();
+    public void handleLoadButtonClicked(ActionEvent actionEvent) throws SQLException { //FIXME: NULL ERROR CHECK.
+        //Maybe this should be methodized out of the controller? - ahf (yes I know I wrote this, I was being lazy)
 
-        edgeEntryObservableList.clear();
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setTitle("Choose CSV File");
+        Stage FileStage = new Stage();
+        File file = fileChooser.showOpenDialog(FileStage);
+        final String fileName = String.valueOf(file);
+
 
         List<String[]> edgeData = null;
 
+        //FIXME: METHODIZE THISS!!!!
         try {
             edgeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllEdges.csv") : CSVManager.load(new File(fileName));
         } catch (Exception e) {
-            CSVErrorLabel.setStyle("-fx-text-fill: red");
             CSVErrorLabel.setText(e.getMessage());
+            CSVErrorLabel.setStyle("-fx-text-fill: red");
             e.printStackTrace();
             return;
         }
+        edgeEntryObservableList.clear();
 
-        if (edgeData != null) {
-            if (!edgeData.isEmpty() && edgeData.get(0).length == 3) {
+        if(edgeData != null )
+        {
+            if(!edgeData.isEmpty() && edgeData.get(0).length == 8 )
+            {
                 edgeEntryObservableList.addAll(edgeData.stream().map(line -> {
                     return new EdgeEntry(line[0], line[1], line[2]);
-                }).collect(Collectors.toList()));
+                }).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
+
+                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
+                final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
+                    "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
+                DatabaseAPI.getDatabaseAPI().populateNodes(edgeData); //NOTE: now can specify CSV arguments
             }
         }
+
+        CSVErrorLabel.setText("File successfully read.");
+        CSVErrorLabel.setStyle("-fx-text-fill: black");
+        CSVFile.setText("");
+        saveCSV.setDisable(true);
+        // loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
 
         drawEdgeNodeOnFloor();
     }
@@ -671,5 +713,43 @@ public class EditMapEdgesController {
                 l.getBoundsInParent().getMinX()) / 2.0;
         double hw = scroll.getViewportBounds().getWidth();
         scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
+    }
+
+    public void handleResetDB(ActionEvent actionEvent) throws SQLException {
+
+        edgeEntryObservableList.clear();
+
+        List<String[]> edgeData = null;
+
+        try {
+            edgeData = (CSVManager.load("MapfAllEdges.csv"));
+        } catch (Exception e) {
+            CSVErrorLabel.setText(e.getMessage());
+            CSVErrorLabel.setStyle("-fx-text-fill: red");
+            e.printStackTrace();
+            return;
+        }
+
+        if(edgeData != null )
+        {
+            if(!edgeData.isEmpty() && edgeData.get(0).length == 8 )
+            {
+                nodeList.addAll(edgeData.stream().map(line -> {
+                    return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
+                }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
+
+                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
+                final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
+                        "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
+                DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
+            }
+        }
+        CSVErrorLabel.setText("");
+        CSVErrorLabel.setStyle("-fx-text-fill: black");
+
+        CSVFile.setText("");
+        saveCSV.setDisable(true);
+        drawEdgeNodeOnFloor();
     }
 }
