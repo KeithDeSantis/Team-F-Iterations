@@ -18,9 +18,9 @@
    <children>
       <VBox alignment="CENTER" prefHeight="540.0" prefWidth="960.0" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0" style="-fx-background-color: #03256C;">
                <children>
-                  <Label text="BWH Admininstrator Map Vertex Editor">
+                  <Label text="BWH Admininstrator Map Vertex Editor" textFill="WHITE">
                      <font>
                         <Font name="Tahoma" size="36.0" />
                      </font>
