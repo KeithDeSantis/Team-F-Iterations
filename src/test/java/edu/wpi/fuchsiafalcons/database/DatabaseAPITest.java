@@ -13,7 +13,11 @@ class DatabaseAPITest {
     public void setUp() throws Exception
     {
         DatabaseAPI1.getDatabaseAPI1().dropNodesTable();
+        DatabaseAPI1.getDatabaseAPI1().dropEdgesTable();
+
         DatabaseAPI1.getDatabaseAPI1().createNodesTable();
+        DatabaseAPI1.getDatabaseAPI1().createEdgesTable();
+
     }
 
     @Test()
@@ -23,6 +27,15 @@ class DatabaseAPITest {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
         assertTrue(DatabaseAPI1.getDatabaseAPI1().dropNodesTable());
         assertThrows(SQLException.class, () -> DatabaseAPI1.getDatabaseAPI1().addNode(newNode));
+    }
+
+    @Test()
+    @DisplayName("test dropping edges table")
+    public void testDropEdgesTable() throws SQLException
+    {
+        String[] newEdge = {"test", "start", "end"};
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().dropEdgesTable());
+        assertThrows(SQLException.class, () -> DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
     }
 
     @Test
@@ -36,6 +49,16 @@ class DatabaseAPITest {
     }
 
     @Test
+    @DisplayName("test adding edges table")
+    public void testAddEdgesTable() throws SQLException
+    {
+        String[] newEdge = {"test",  "start", "end"};
+        DatabaseAPI1.getDatabaseAPI1().dropEdgesTable();
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().createEdgesTable());
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
+    }
+
+    @Test
     @DisplayName("test adding a node")
     public void testAddNodeBasic() throws SQLException
     {
@@ -43,11 +66,30 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI1.getDatabaseAPI1().addNode(newNode));
     }
 
-    @Test()
+    @Test
+    @DisplayName("test adding a edge")
+    public void testAddEdgeBasic() throws SQLException
+    {
+        String[] newEdge = {"test", "start", "end"};
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
+    }
+
+    @Test
     @DisplayName("test invalid node add")
     public void testInvalidNodeAdd() throws SQLException
     {
         String[] newNode = {"test", "1234"};
         assertThrows(SQLException.class, () -> DatabaseAPI1.getDatabaseAPI1().addNode(newNode));
     }
+
+    @Test
+    @DisplayName("test invalid edge add")
+    public void testInvalidEdgeAdd() throws SQLException
+    {
+        String[] newEdge = {"test", "1234"};
+        assertThrows(SQLException.class, () -> DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
+    }
+
+
+
 }

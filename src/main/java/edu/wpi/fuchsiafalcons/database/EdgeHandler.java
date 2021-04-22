@@ -38,7 +38,7 @@ public class EdgeHandler implements DatabaseEntry {
     public boolean createTable() {
         boolean success = false;
         final String initNodesTable = "CREATE TABLE AllEdges(EdgeID varchar(200), " +
-                "startNode varchar(200), endNode varchar(200), primary key(NodeID))";
+                "startNode varchar(200), endNode varchar(200), primary key(EdgeID))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initNodesTable);
