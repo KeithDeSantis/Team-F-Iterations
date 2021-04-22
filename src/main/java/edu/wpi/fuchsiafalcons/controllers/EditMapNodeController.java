@@ -75,6 +75,8 @@ public class EditMapNodeController {
         }
 
         data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(e -> mapPanel.getNodeList().add(e));
+        mapPanel.drawNodeOnFloor();
+
 
         // START OF JFX TREETABLE COLUMN SETUP
 
@@ -100,7 +102,7 @@ public class EditMapNodeController {
 
         contextMenu.getItems().addAll(createNodeMenuItem);
 
-        /*
+
         mapPanel.getMap().setOnContextMenuRequested(event -> {
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
@@ -120,7 +122,7 @@ public class EditMapNodeController {
                 }
             });
         });
-        */
+
         //contextMenu.show(map, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
     }
 
