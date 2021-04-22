@@ -67,15 +67,7 @@
                            </children>
                         </HBox>
                         <ImageView fx:id="logoView" fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true" />
-                        <JFXTextField fx:id="filenameField" alignment="CENTER" focusColor="#1d26c2" onKeyReleased="#handleFileNameType" promptText="Filename Here" style="-fx-background-color: #ced7dd;">
-                           <VBox.margin>
-                              <Insets left="10.0" right="10.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Tahoma" size="13.0" />
-                           </font>
-                        </JFXTextField>
-                        <JFXButton fx:id="saveToFileButton" buttonType="RAISED" disable="true" onAction="#handleSaveButtonClicked" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="Save to File" textFill="WHITE">
+                        <JFXButton fx:id="saveToFileButton" buttonType="RAISED" onAction="#handleSaveButtonClicked" ripplerFill="WHITE" style="-fx-background-color: #1C77C3;" text="Save to File" textFill="WHITE">
                            <font>
                               <Font name="Tahoma" size="13.0" />
                            </font></JFXButton>
