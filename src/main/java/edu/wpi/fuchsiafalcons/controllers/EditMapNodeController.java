@@ -714,10 +714,10 @@ public class EditMapNodeController {
             }
 
         } else if (btn == zoomOutButton) {
-            if(zoomLevel < 4) {
+            if(zoomLevel < 8) {
                 zoomLevel++;
                 zoomInButton.setDisable(false);
-                if(zoomLevel==4) zoomOutButton.setDisable(true);
+                if(zoomLevel==8) zoomOutButton.setDisable(true);
             }
         }
         drawNodeOnFloor();
