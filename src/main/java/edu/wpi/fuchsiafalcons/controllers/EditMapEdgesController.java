@@ -322,27 +322,39 @@ public class EditMapEdgesController {
     public void handleSaveButton(ActionEvent actionEvent) {
         final String fileName = "Untitled";
 
-        final List<String[]> data = new LinkedList<String[]>();
-        Collections.addAll(data, "edgeID, startingNode, endingNode".split(","));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV File");
+        fileChooser.setInitialFileName(fileName);
 
-        data.addAll(edgeEntryObservableList.stream().map(edge -> {
-            return new String[]{
-                    edge.edgeIDProperty().getValue(),
-                    edge.startNodeProperty().getValue(),
-                    edge.endNodeProperty().getValue()
-            };
-        }).collect(Collectors.toList()));
-        try {
-            CSVManager.writeFile(fileName, data);
-        } catch (Exception e) {
-            CSVErrorLabel.setStyle("-fx-text-fill: red");
-            CSVErrorLabel.setText(e.getMessage());
-            e.printStackTrace();
-            return;
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        Stage FileStage = new Stage();
+        File file = fileChooser.showSaveDialog(FileStage);
+
+        if (file != null) {
+            //FIXME: DO BETTER!!!
+            final List<String[]> data = new LinkedList<String[]>();
+            Collections.addAll(data, "edgeID,startNode,endNode".split(","));
+
+            data.addAll(edgeEntryObservableList.stream().map(edge -> {
+                return new String[]{
+                        edge.getEdgeID(),
+                        edge.getStartNode(),
+                        edge.getEndNode()
+                };
+            }).collect(Collectors.toList()));
+
+            try {
+                CSVManager.writeToFile(file, data);
+            } catch (Exception e) {
+                CSVErrorLabel.setStyle("-fx-text-fill: red");
+                CSVErrorLabel.setText(e.getMessage());
+                e.printStackTrace();
+                return;
+            }
         }
-
-        CSVErrorLabel.setStyle("-fx-text-fill: black");
-        CSVErrorLabel.setText("File successfully exported");
     }
 
     /**
