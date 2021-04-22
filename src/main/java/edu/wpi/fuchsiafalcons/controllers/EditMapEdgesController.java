@@ -33,10 +33,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -122,6 +119,7 @@ public class EditMapEdgesController {
         // Set the save button to disabled by default (enabled by a valid file name being entered)
         saveCSV.setDisable(true);
 
+        /*
         //FIXME: do better, hook into db
 
         final String sql = "CREATE TABLE L1Edges(EdgeID varchar(200), " +
@@ -139,12 +137,21 @@ public class EditMapEdgesController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+         */
+
+        List <EdgeEntry> data = new ArrayList<>();
+        try {
+            data = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        data.stream().sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()).forEach(e -> edgeEntryObservableList.add(e));
 
         // Set up cell factory for the edge ID table
         JFXTreeTableColumn<EdgeEntry, String> edgeIDColumn = new JFXTreeTableColumn<>("Edge ID");
         edgeIDColumn.setPrefWidth(250);
         edgeIDColumn.setCellValueFactory(param -> param.getValue().getValue().edgeIDProperty());
-        edgeEntryObservableList.addAll(edgeList);
 
         final TreeItem<EdgeEntry> root = new RecursiveTreeItem<>(edgeEntryObservableList, RecursiveTreeObject::getChildren);
         edgeTable.getColumns().setAll(edgeIDColumn);
