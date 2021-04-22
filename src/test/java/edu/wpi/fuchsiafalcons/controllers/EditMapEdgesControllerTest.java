@@ -48,7 +48,7 @@ public class EditMapEdgesControllerTest extends ApplicationTest{
     @BeforeEach
     public void beforeTest()
     {
-        clickOn("Load CSV");
+        clickOn("Reset Database");
     }
 
     @Test
@@ -83,33 +83,25 @@ public class EditMapEdgesControllerTest extends ApplicationTest{
     @Test
     public void testEditEdgeFeature() {
         verifyThat("Edit...", Node::isVisible);
-        clickOn("AHALL00502_ADEPT00102");
+        clickOn("ADEPT00201_AHALL00601");
         clickOn("Edit...");
         verifyThat("OK", Node::isVisible);
         clickOn("#endNode");
         clickOn("ACONF00103");
         clickOn("OK");
-        verifyThat("#AHALL00502_ACONF00103", Node::isVisible);
-        verifyThat("2", Node::isVisible);
-    }
-
-    @Test
-    public void testSaveToFileDisable() {
-        verifyThat("Save to CSV", Node::isVisible);
-        clickOn("#CSVFile");
-        verifyThat("Save to CSV", Node::isDisable);
+        verifyThat("#ADEPT00201_ACONF00103", Node::isVisible);
     }
 
     @Test
     public void testDeleteEdgeOnMap() {
-        verifyThat("AHALL01001_ASTAI00101", Node::isVisible);
-        clickOn("AHALL01001_ASTAI00101");
-        verifyThat("#AHALL01001_ASTAI00101", Node::isVisible);
+        verifyThat("ADEPT00201_AHALL00601", Node::isVisible);
+        clickOn("ADEPT00201_AHALL00601");
+        verifyThat("#ADEPT00201_AHALL00601", Node::isVisible);
         clickOn("Delete");
 
         boolean hasTestClicking = true;
         for(EdgeEntry n : edgeList) {
-            if (n.getEdgeID().equals("AHALL01001_ASTAI00101")) {
+            if (n.getEdgeID().equals("ADEPT00201_AHALL00601")) {
                 hasTestClicking = false;
             }
         }
@@ -132,15 +124,15 @@ public class EditMapEdgesControllerTest extends ApplicationTest{
 
     @Test
     public void testClickToMakeEdge() {
-        clickOn("AREST00103_AHALL00603");
-        clickOn("#AHALL00603");
-        clickOn("#ACONF00103");
+        clickOn("ADEPT00201_AHALL00601");
+        clickOn("#AHALL00601");
+        clickOn("#AHALL00401");
         verifyThat("OK", Node::isVisible);
-        verifyThat("Edge ID: AHALL00603_ACONF00103", Node::isVisible);
+        verifyThat("Edge ID: AHALL00601_AHALL00401", Node::isVisible);
         clickOn("OK");
         boolean hasTestClicking = false;
         for(EdgeEntry n : edgeList) {
-            if (n.getEdgeID().equals("AHALL00603_ACONF00103")) {
+            if (n.getEdgeID().equals("AHALL00601_AHALL00401")) {
                 hasTestClicking = true;
             }
         }
