@@ -30,7 +30,6 @@ public class ConnectionHandler {
 
     private static class ConnectionSingletonHelper {
         private static final Connection connection = establishConnection(true);
-
     }
 
     public static Connection getConnection() {
