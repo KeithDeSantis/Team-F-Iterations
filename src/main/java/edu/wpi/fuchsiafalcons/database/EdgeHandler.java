@@ -1,14 +1,15 @@
 package edu.wpi.fuchsiafalcons.database;
 
-import javax.swing.plaf.nimbus.State;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NodeHandler implements DatabaseEntry {
+public class EdgeHandler implements DatabaseEntry {
     @Override
-    public boolean addEntry(String[] colValues) throws SQLException{
-        final String query = "INSERT INTO AllNodes values(?, ?, ?, ?, ?, ?, ?, ?)";
+    public boolean addEntry(String[] colValues) throws SQLException {
+        final String query = "INSERT INTO AllEdges values(?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
         int colCounter = 1;
         for (String s : colValues){
@@ -36,9 +37,8 @@ public class NodeHandler implements DatabaseEntry {
     @Override
     public boolean createTable() {
         boolean success = false;
-        final String initNodesTable = "CREATE TABLE AllNodes(NodeID varchar(200), " +
-                "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+        final String initNodesTable = "CREATE TABLE AllEdges(EdgeID varchar(200), " +
+                "startNode varchar(200), endNode varchar(200), primary key(NodeID))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initNodesTable);
@@ -55,7 +55,7 @@ public class NodeHandler implements DatabaseEntry {
     @Override
     public boolean dropTable() {
         boolean success = false;
-        String query = "DROP TABLE AllNodes";
+        String query = "DROP TABLE AllEdges";
         try {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(query);
