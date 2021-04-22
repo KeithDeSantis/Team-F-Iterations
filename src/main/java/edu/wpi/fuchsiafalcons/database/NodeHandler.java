@@ -25,7 +25,9 @@ public class NodeHandler implements DatabaseEntry {
 
     @Override
     public boolean deleteEntry(String id) {
-        return false;
+        boolean success = false;
+        String query = "DELETE FROM L1Nodes WHERE NODEID=("
+        return success;
     }
 
     @Override
