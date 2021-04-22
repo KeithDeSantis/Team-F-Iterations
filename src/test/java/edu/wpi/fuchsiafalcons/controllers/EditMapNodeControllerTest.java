@@ -173,13 +173,6 @@ public class EditMapNodeControllerTest extends ApplicationTest {
 
 
     @Test
-    public void testSaveToFileDisable() {
-        verifyThat("Save to File", Node::isVisible);
-        clickOn("#filenameField");
-        verifyThat("Save to File", Node::isDisable);
-    }
-
-    @Test
     public void testDeleteNodeOnMap() {
         //USed to get anything matching b/c we seem to have multiple now? //FIXME: IMPROVE
         List<NodeEntry> query = this.nodeList.stream().filter(node ->

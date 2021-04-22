@@ -44,7 +44,6 @@ public class EditMapNodeController {
 
     @FXML private JFXTreeTableView<NodeEntry> nodeTreeTable;
 
-    @FXML private TextField filenameField;
     @FXML private Label errorMessageLabel;
 
     @FXML private JFXButton saveToFileButton;
@@ -117,7 +116,7 @@ public class EditMapNodeController {
         nodeTreeTable.setShowRoot(false);
         nodeTreeTable.getColumns().setAll(idColumn, shortColumn);
         //nodeTreeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedNode(newValue.getValue()));
-        loadFromFileButton.setDisable(false);
+
 
         // Set up floor comboBox and draw nodes on that floor
         final ObservableList<String> floorName = FXCollections.observableArrayList();
@@ -348,9 +347,6 @@ public class EditMapNodeController {
 
         errorMessageLabel.setText("File successfully read.");
         errorMessageLabel.setStyle("-fx-text-fill: black");
-        filenameField.setText("");
-        saveToFileButton.setDisable(true);
-       // loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
 
         drawNodeOnFloor();
     }
@@ -363,8 +359,8 @@ public class EditMapNodeController {
      */
     public void handleSaveButtonClicked(ActionEvent actionEvent)
     {
-        //FIXME: NULL ERROR CHECK.
-        final String fileName = filenameField.getText();
+
+        final String fileName = "Untitled";
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save CSV File");
@@ -407,27 +403,8 @@ public class EditMapNodeController {
 
         errorMessageLabel.setText("File successfully exported.");
         errorMessageLabel.setStyle("-fx-text-fill: black");
-
-        filenameField.setText("");
-        saveToFileButton.setDisable(true);
-        //loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
     }
 
-    /**
-     * Used to make sure load and save buttons are only enabled when they should be
-     * @param keyEvent
-     * @author ahf, KD
-     */
-    @FXML
-    public void handleFileNameType(KeyEvent keyEvent) {
-        errorMessageLabel.setText("");
-        errorMessageLabel.setStyle("-fx-text-fill: black");
-
-        //TODO: better checking
-        final boolean disableBtns = filenameField.getText().isEmpty();
-        saveToFileButton.setDisable(disableBtns);
-
-    }
 /**
      * Handle switching floor using combobox
      * @param actionEvent
@@ -611,8 +588,6 @@ public class EditMapNodeController {
         errorMessageLabel.setText("");
         errorMessageLabel.setStyle("-fx-text-fill: black");
 
-        filenameField.setText("");
-        saveToFileButton.setDisable(true);
         drawNodeOnFloor();
     }
 

@@ -59,9 +59,6 @@ public class EditMapEdgesController {
     private JFXButton saveCSV;
 
     @FXML
-    private JFXTextField CSVFile;
-
-    @FXML
     private Label CSVErrorLabel;
 
     @FXML
@@ -118,7 +115,6 @@ public class EditMapEdgesController {
         map.setImage(image); // Copied from EditMapEdges - LM
 
         // Set the save button to disabled by default (enabled by a valid file name being entered)
-        saveCSV.setDisable(true);
 
         /*
         //FIXME: do better, hook into db
@@ -345,7 +341,7 @@ public class EditMapEdgesController {
      */
     public void handleSaveButton(ActionEvent actionEvent) {
         //FIXME: NULL ERROR CHECK.
-        final String fileName = CSVFile.getText();
+        final String fileName = "Untitled";
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save CSV File");
@@ -384,25 +380,8 @@ public class EditMapEdgesController {
         CSVErrorLabel.setText("File successfully exported.");
         CSVErrorLabel.setStyle("-fx-text-fill: black");
 
-        CSVFile.setText("");
-        saveCSV.setDisable(true);
+
         //loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
-    }
-
-    /**
-     * Disables the save and load buttons if the file name is invalid
-     *
-     * @param keyEvent Calls on key release in the CSVFile TextField
-     */
-    @FXML
-    public void handleFileNameType(KeyEvent keyEvent) {
-        CSVErrorLabel.setText("");
-        CSVErrorLabel.setStyle("-fx-text-fill: black");
-
-        final boolean disableBtns = !CSVFile.getText().endsWith(".csv");
-
-        saveCSV.setDisable(disableBtns);
-        loadCSV.setDisable(false); //FIXME: CHANGE CONDITION ONCE LOADING FROM JAR IS IMPLEMENTED
     }
 
     /**
@@ -440,7 +419,7 @@ public class EditMapEdgesController {
 
         if(edgeData != null )
         {
-            if(!edgeData.isEmpty() && edgeData.get(0).length == 8 )
+            if(!edgeData.isEmpty() && edgeData.get(0).length == 3 )
             {
                 edgeEntryObservableList.addAll(edgeData.stream().map(line -> {
                     return new EdgeEntry(line[0], line[1], line[2]);
@@ -450,14 +429,12 @@ public class EditMapEdgesController {
                 final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
                     "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
                 DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
-                DatabaseAPI.getDatabaseAPI().populateNodes(edgeData); //NOTE: now can specify CSV arguments
+                DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
             }
         }
 
         CSVErrorLabel.setText("File successfully read.");
         CSVErrorLabel.setStyle("-fx-text-fill: black");
-        CSVFile.setText("");
-        saveCSV.setDisable(true);
         // loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
 
         drawEdgeNodeOnFloor();
@@ -732,11 +709,11 @@ public class EditMapEdgesController {
 
         if(edgeData != null )
         {
-            if(!edgeData.isEmpty() && edgeData.get(0).length == 8 )
+            if(!edgeData.isEmpty() && edgeData.get(0).length == 3 )
             {
-                nodeList.addAll(edgeData.stream().map(line -> {
-                    return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
-                }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
+                edgeEntryObservableList.addAll(edgeData.stream().map(line -> {
+                    return new EdgeEntry(line[0], line[1], line[2]);
+                }).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
 
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
                 final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
@@ -748,8 +725,6 @@ public class EditMapEdgesController {
         CSVErrorLabel.setText("");
         CSVErrorLabel.setStyle("-fx-text-fill: black");
 
-        CSVFile.setText("");
-        saveCSV.setDisable(true);
         drawEdgeNodeOnFloor();
     }
 }
