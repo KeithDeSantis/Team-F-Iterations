@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
+import edu.wpi.fuchsiafalcons.utils.CSVManager;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseAPITest {
     @BeforeEach
@@ -17,6 +17,7 @@ class DatabaseAPITest {
 
         DatabaseAPI1.getDatabaseAPI1().createNodesTable();
         DatabaseAPI1.getDatabaseAPI1().createEdgesTable();
+
 
     }
 
@@ -90,6 +91,30 @@ class DatabaseAPITest {
         assertThrows(SQLException.class, () -> DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
     }
 
+    @Test
+    @DisplayName("test delete node")
+    public void testDeleteNode() throws SQLException
+    {
+        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
+        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteNode("test"));
+    }
 
+    @Test
+    @DisplayName("test delete invalid node")
+    public void testDeleteInvalidNode() throws SQLException
+    {
+        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
+        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
+        assertFalse(DatabaseAPI1.getDatabaseAPI1().deleteNode("notTest"));
+    }
+
+    @Test
+    @DisplayName("test populate nodes")
+    public void testPopulateNodes() throws Exception
+    {
+        DatabaseAPI1.getDatabaseAPI1().populateNodes(CSVManager.load("MapfAllNodes.csv"));
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteNode("ACONF00102"));
+    }
 
 }

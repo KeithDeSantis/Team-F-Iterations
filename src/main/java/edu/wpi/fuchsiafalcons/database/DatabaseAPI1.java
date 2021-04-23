@@ -1,6 +1,7 @@
 package edu.wpi.fuchsiafalcons.database;
 
 import java.sql.*;
+import java.util.List;
 
 public class DatabaseAPI1 {
     private static DatabaseAPI1 databaseAPI1;
@@ -17,24 +18,32 @@ public class DatabaseAPI1 {
         //this.userHandler = new UserHandler();
     }
 
+    public boolean createNodesTable() throws SQLException{
+        return nodeHandler.createTable();
+    }
+    public boolean dropNodesTable() throws SQLException{
+        return nodeHandler.dropTable();
+    }
+    public void populateNodes(List<String[]> entries) throws SQLException{
+        nodeHandler.populateTable(entries);
+    }
     public boolean addNode(String[] colVals) throws SQLException{
         return nodeHandler.addEntry(colVals);
     }
+    public boolean deleteNode(String nodeID) throws SQLException{
+        return nodeHandler.deleteEntry(nodeID);
+    }
+
+
+
+
     public boolean addEdge(String[] colVals) throws SQLException{
         return edgeHandler.addEntry(colVals);
     }
 
 
-    public boolean createNodesTable() throws SQLException{
-        return nodeHandler.createTable();
-    }
-
     public boolean createEdgesTable() throws SQLException{
         return edgeHandler.createTable();
-    }
-
-    public boolean dropNodesTable() throws SQLException{
-        return nodeHandler.dropTable();
     }
 
     public boolean dropEdgesTable() throws SQLException{

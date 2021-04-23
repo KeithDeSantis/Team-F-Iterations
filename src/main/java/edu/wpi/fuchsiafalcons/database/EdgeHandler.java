@@ -69,7 +69,6 @@ public class EdgeHandler implements DatabaseEntry {
     }
 
     @Override
-    public boolean populateTable(List<String[]> entries) {
-        return false;
+    public void populateTable(List<String[]> entries) {
     }
 }

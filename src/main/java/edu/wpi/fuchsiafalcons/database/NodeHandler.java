@@ -24,10 +24,11 @@ public class NodeHandler implements DatabaseEntry {
     }
 
     @Override
-    public boolean deleteEntry(String id) {
-        boolean success = false;
-        String query = "DELETE FROM L1Nodes WHERE NODEID=("
-        return success;
+    public boolean deleteEntry(String id) throws SQLException {
+        String query = "DELETE FROM AllNodes WHERE NODEID=(?)";
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+        stmt.setString(1, id);
+        return stmt.executeUpdate() != 0;
     }
 
     @Override
@@ -71,7 +72,12 @@ public class NodeHandler implements DatabaseEntry {
     }
 
     @Override
-    public boolean populateTable(List<String[]> entries) {
-        return false;
+    public void populateTable(List<String[]> entries) throws SQLException {
+
+        for (String[] arr : entries) {
+            final int x = Integer.parseInt(arr[1].trim());
+            final int y = Integer.parseInt(arr[2].trim());
+            DatabaseAPI1.getDatabaseAPI1().addNode(arr);
+        }
     }
 }
