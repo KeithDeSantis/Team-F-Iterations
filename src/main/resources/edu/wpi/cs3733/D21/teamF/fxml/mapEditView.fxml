@@ -18,12 +18,11 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MapEditViewController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="200.0" layoutX="716.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="1920.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <Line endX="100.0" endY="200.0" startX="2019.5" startY="200.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <JFXTabPane layoutX="25.0" layoutY="241.0" prefHeight="526.0" prefWidth="450.0" AnchorPane.bottomAnchor="225.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="228.0" stylesheets="/stylesheets/MapEditorTabViewStyle.css">
+      <JFXTabPane layoutX="25.0" layoutY="241.0" prefHeight="526.0" prefWidth="450.0" stylesheets="/stylesheets/MapEditorTabViewStyle.css" AnchorPane.bottomAnchor="225.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="228.0">
          <tabs>
             <Tab text="Nodes">
                <content>
@@ -48,7 +47,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <JFXButton prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Reset From Data Base" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
+            <JFXButton fx:id="resetFromDB" onAction="#handleReset" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Reset From Data Base" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -56,7 +55,7 @@
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
             </JFXButton>
-            <JFXButton prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Save CSV" textFill="WHITE" GridPane.rowIndex="1">
+            <JFXButton fx:id="saveButton" onAction="#handleSave" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Save CSV" textFill="WHITE" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -64,7 +63,7 @@
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
             </JFXButton>
-            <JFXButton prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Load CSV" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <JFXButton fx:id="loadButton" onAction="#handleLoad" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Load CSV" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -72,21 +71,21 @@
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
             </JFXButton>
-            <JFXTextField promptText="Search...">
+            <JFXTextField fx:id="searchBar" onKeyReleased="#handleSearch" promptText="Search...">
                <GridPane.margin>
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
             </JFXTextField>
-            <JFXComboBox prefWidth="2000.0" GridPane.columnIndex="1">
+            <JFXComboBox fx:id="searchComboBox" prefWidth="2000.0" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
             </JFXComboBox>
          </children>
       </GridPane>
-      <VBox alignment="CENTER" layoutX="1781.0" layoutY="497.0" prefHeight="124.0" prefWidth="109.0" AnchorPane.bottomAnchor="459.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="497.0">
+      <VBox alignment="CENTER" layoutX="1781.0" layoutY="497.0" onMouseEntered="#handleHoverOn" prefHeight="124.0" prefWidth="109.0" AnchorPane.bottomAnchor="459.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="497.0">
          <children>
-            <JFXButton prefWidth="100.0" style="-fx-background-color: #03256c;" text="New..." textFill="WHITE">
+            <JFXButton fx:id="newButton" onAction="#handleNew" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" text="New..." textFill="WHITE">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -94,7 +93,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </JFXButton>
-            <JFXButton layoutX="10.0" layoutY="10.0" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Edit..." textFill="WHITE">
+            <JFXButton fx:id="editButton" layoutX="10.0" layoutY="10.0" onAction="#handleEdit" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Edit..." textFill="WHITE">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -102,7 +101,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </JFXButton>
-            <JFXButton layoutX="10.0" layoutY="39.0" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Delete" textFill="WHITE">
+            <JFXButton fx:id="deleteButton" layoutX="10.0" layoutY="39.0" onAction="#handleDelete" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Delete" textFill="WHITE">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -112,7 +111,7 @@
             </JFXButton>
          </children>
       </VBox>
-      <ImageView fitHeight="181.0" fitWidth="153.0" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <ImageView fitHeight="181.0" fitWidth="153.0" onMouseClicked="#handleHome" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <image>
             <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
          </image>
