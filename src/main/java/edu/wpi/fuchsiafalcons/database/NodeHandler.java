@@ -46,7 +46,7 @@ public class NodeHandler implements DatabaseEntry {
         return stmt.executeUpdate() != 0;
     }
 
-    public ArrayList<NodeEntry> genNodeEntryObjects(String tableName) throws SQLException{
+    public ArrayList<NodeEntry> genNodeEntryObjects() throws SQLException{
         ArrayList<NodeEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM AllNodes";
         ResultSet rset;

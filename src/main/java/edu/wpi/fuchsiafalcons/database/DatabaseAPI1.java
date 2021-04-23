@@ -49,7 +49,7 @@ public class DatabaseAPI1 {
 
     public ArrayList<NodeEntry> genNodeEntries() throws SQLException{
         NodeHandler node = new NodeHandler();
-        ArrayList<NodeEntry> ret = node.genNodeEntryObjects("AllNodes");
+        ArrayList<NodeEntry> ret = node.genNodeEntryObjects();
         return ret;
     }
 

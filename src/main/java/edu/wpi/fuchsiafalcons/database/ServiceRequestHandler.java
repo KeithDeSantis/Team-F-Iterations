@@ -85,7 +85,6 @@ public class ServiceRequestHandler implements DatabaseEntry {
         for (String[] arr : entries) {
             DatabaseAPI1.getDatabaseAPI1().addServiceReq(arr);
         }
-
     }
 
     public ArrayList<ServiceEntry> genServiceRequestEntries() throws SQLException{
