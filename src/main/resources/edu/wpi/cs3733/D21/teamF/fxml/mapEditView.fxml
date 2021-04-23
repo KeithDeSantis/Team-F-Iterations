@@ -47,7 +47,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <JFXButton fx:id="resetFromDB" onAction="#handleReset" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Reset From Data Base" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
+            <JFXButton fx:id="resetFromDB" onAction="#handleReset" stylesheets="/stylesheets/DefaultButtonStyle.css" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Reset From Data Base" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -55,7 +55,7 @@
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
             </JFXButton>
-            <JFXButton fx:id="saveButton" onAction="#handleSave" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Save CSV" textFill="WHITE" GridPane.rowIndex="1">
+            <JFXButton fx:id="saveButton" onAction="#handleSave" stylesheets="/stylesheets/DefaultButtonStyle.css" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Save CSV" textFill="WHITE" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -63,7 +63,7 @@
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
             </JFXButton>
-            <JFXButton fx:id="loadButton" onAction="#handleLoad" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Load CSV" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <JFXButton fx:id="loadButton" onAction="#handleLoad" stylesheets="/stylesheets/DefaultButtonStyle.css" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Load CSV" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -83,9 +83,9 @@
             </JFXComboBox>
          </children>
       </GridPane>
-      <VBox alignment="CENTER" layoutX="1781.0" layoutY="497.0" onMouseEntered="#handleHoverOn" prefHeight="124.0" prefWidth="109.0" AnchorPane.bottomAnchor="459.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="497.0">
+      <VBox alignment="CENTER" layoutX="1781.0" layoutY="497.0" prefHeight="124.0" prefWidth="109.0" AnchorPane.bottomAnchor="459.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="497.0">
          <children>
-            <JFXButton fx:id="newButton" onAction="#handleNew" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" text="New..." textFill="WHITE">
+            <JFXButton fx:id="newButton" onAction="#handleNew" stylesheets="/stylesheets/DefaultButtonStyle.css" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" text="New..." textFill="WHITE">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -93,7 +93,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </JFXButton>
-            <JFXButton fx:id="editButton" layoutX="10.0" layoutY="10.0" onAction="#handleEdit" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Edit..." textFill="WHITE">
+            <JFXButton fx:id="editButton" layoutX="10.0" stylesheets="/stylesheets/DefaultButtonStyle.css" layoutY="10.0" onAction="#handleEdit" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Edit..." textFill="WHITE">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -101,7 +101,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </JFXButton>
-            <JFXButton fx:id="deleteButton" layoutX="10.0" layoutY="39.0" onAction="#handleDelete" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Delete" textFill="WHITE">
+            <JFXButton fx:id="deleteButton" layoutX="10.0" stylesheets="/stylesheets/DefaultButtonStyle.css" layoutY="39.0" onAction="#handleDelete" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Delete" textFill="WHITE">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
