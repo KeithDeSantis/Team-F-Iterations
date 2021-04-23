@@ -4,6 +4,8 @@ import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class DatabaseAPI1 {
         nodeHandler.populateTable(entries);
     }
 
-    public boolean addNode(String[] colVals) throws SQLException{
+    public boolean addNode(String[] colVals) throws SQLException {
         return nodeHandler.addEntry(colVals);
     }
 

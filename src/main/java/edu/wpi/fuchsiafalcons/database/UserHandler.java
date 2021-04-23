@@ -1,5 +1,10 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -7,10 +12,50 @@ import java.util.List;
 
 public class UserHandler implements DatabaseEntry{
 
+    private static byte[] getSalt() throws NoSuchAlgorithmException, NoSuchProviderException
+    {
+        SecureRandom sr =  SecureRandom.getInstance("SHA1PRNG", "SUN");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+        return salt;
+    }
+
+    private static String encryptPassword(String plainText, byte[] salt)
+    {
+        String cipherText = "";
+        try{
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(salt);
+            byte[] bytes = md.digest(plainText.getBytes());
+            StringBuilder builder = new StringBuilder();
+            for (int i=0; i<bytes.length; i++)
+            {
+                builder.append(Integer.toString((bytes[i] & 0xFF) + 0x100, 16).substring(1));
+            }
+            cipherText = builder.toString();
+        }
+        catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }
+        return cipherText;
+    }
+
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
         final String query = "INSERT INTO USERS values(?, ?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+
+        try {
+            byte[] salt = getSalt();
+            String encryptedPassword = encryptPassword(colValues[3], salt);
+            colValues[3] = encryptedPassword;
+            System.out.println(encryptedPassword);
+        }
+        catch (NoSuchAlgorithmException | NoSuchProviderException errTwo){
+            errTwo.printStackTrace();
+            errTwo.printStackTrace();
+        }
+
         int colCounter = 1;
         for (String s : colValues){
             stmt.setString(colCounter, s);

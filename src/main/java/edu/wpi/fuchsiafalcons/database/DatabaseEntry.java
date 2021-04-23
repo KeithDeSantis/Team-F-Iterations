@@ -2,6 +2,8 @@ package edu.wpi.fuchsiafalcons.database;
 
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
