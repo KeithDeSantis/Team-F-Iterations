@@ -88,7 +88,7 @@ public class ServiceRequestHandler implements DatabaseEntry {
 
     }
 
-    public ArrayList<ServiceEntry> genServiceEntryObjects() throws SQLException{
+    public ArrayList<ServiceEntry> genServiceRequestEntries() throws SQLException{
         ArrayList<ServiceEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM service_requests";
         ResultSet rset;

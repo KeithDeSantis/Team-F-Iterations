@@ -2,6 +2,7 @@ package edu.wpi.fuchsiafalcons.database;
 
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,10 +22,14 @@ class DatabaseAPITest {
         DatabaseAPI1.getDatabaseAPI1().dropNodesTable();
         DatabaseAPI1.getDatabaseAPI1().dropEdgesTable();
         DatabaseAPI1.getDatabaseAPI1().dropUsersTable();
+        DatabaseAPI1.getDatabaseAPI1().dropServiceRequestTable();
+
 
         DatabaseAPI1.getDatabaseAPI1().createNodesTable();
         DatabaseAPI1.getDatabaseAPI1().createEdgesTable();
         DatabaseAPI1.getDatabaseAPI1().createUserTable();
+        DatabaseAPI1.getDatabaseAPI1().createServiceRequestTable();
+
     }
 
     @Test()
@@ -240,4 +245,74 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteUser("testuser"));
         assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteUser("username"));
     }
+
+    @Test
+    @DisplayName("test adding a service request")
+    public void testAddServiceRequest() throws SQLException
+    {
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().addServiceReq(newServiceRequest));
+    }
+
+    @Test
+    @DisplayName("test deleting a serviceRequest")
+    public void testDeleteServiceRequest() throws SQLException
+    {
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        DatabaseAPI1.getDatabaseAPI1().addServiceReq(newServiceRequest);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteServiceRequest("1"));
+    }
+
+    @Test
+    @DisplayName("test editing a service request")
+    public void testEditServiceRequest() throws SQLException
+    {
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        DatabaseAPI1.getDatabaseAPI1().addServiceReq(newServiceRequest);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().editServiceRequest("1", "Declan", "assignedPerson"));
+    }
+
+    @Test
+    @DisplayName("test dropping service_request table")
+    public void testDropServiceReqTable() throws SQLException
+    {
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().dropServiceRequestTable());
+    }
+
+    @Test
+    @DisplayName("test adding service requests table")
+    public void testAddServiceReqTable() throws SQLException
+    {
+        DatabaseAPI1.getDatabaseAPI1().dropServiceRequestTable();
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().createServiceRequestTable());
+    }
+
+    @Test
+    @DisplayName("test populating service request table")
+    public void testPopulateServiceReqs() throws SQLException
+    {
+        ArrayList<String[]> sreqs = new ArrayList<>();
+        String[] sreq1 = {"1", "A task", "Ben", "false"};
+        String[] sreq2 = {"2", "Another task", "Declan", "true"};
+        sreqs.add(sreq1);
+        sreqs.add(sreq2);
+
+        DatabaseAPI1.getDatabaseAPI1().populateServiceRequestTable(sreqs);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteServiceRequest("1"));
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteServiceRequest("2"));
+    }
+
+    @Test
+    @DisplayName("test generating service request entry list")
+    public void testGenerateServiceRequestEntries() throws SQLException
+    {
+        ServiceEntry entry = new ServiceEntry("1", "a task", "Ben","true");
+        ArrayList<ServiceEntry> expected = new ArrayList<>();
+        expected.add(entry);
+        String[] newService = {"1", "a task", "Ben","true"};
+        DatabaseAPI1.getDatabaseAPI1().addServiceReq(newService);
+        ArrayList<ServiceEntry> actual = DatabaseAPI1.getDatabaseAPI1().genServiceRequestEntries("service_requests");
+        assertEquals(expected.get(0).getUuid(), actual.get(0).getUuid());
+    }
+
 }

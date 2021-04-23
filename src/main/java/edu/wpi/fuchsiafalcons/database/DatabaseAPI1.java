@@ -110,9 +110,9 @@ public class DatabaseAPI1 {
         serviceRequestHandler.populateTable(entries);
     }
 
-    public ArrayList<ServiceEntry> genServiceEntryObjects(String tableName) throws SQLException{
+    public ArrayList<ServiceEntry> genServiceRequestEntries(String tableName) throws SQLException{
         ServiceRequestHandler s = new ServiceRequestHandler();
-        return s.genServiceEntryObjects();
+        return s.genServiceRequestEntries();
     }
 
     public boolean addUser(String[] colValues) throws SQLException{
