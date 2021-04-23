@@ -2,6 +2,7 @@ package edu.wpi.fuchsiafalcons.entities;
 
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import edu.wpi.fuchsiafalcons.uicomponents.entities.DrawableNode;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -115,4 +116,13 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
         return shortName;
     }
 
+
+    public DrawableNode getDrawable() {
+        return new DrawableNode(
+                Integer.parseInt(xcoord),
+                Integer.parseInt(ycoord),
+                nodeID,
+                floor
+        );
+    }
 }

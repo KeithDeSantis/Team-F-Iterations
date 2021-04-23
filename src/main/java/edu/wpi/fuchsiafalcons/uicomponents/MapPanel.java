@@ -40,7 +40,7 @@ public class MapPanel extends AnchorPane {
 
     @FXML private JFXButton zoomOutButton;
 
-    private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
+    //private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
 
     private DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
 
@@ -49,12 +49,8 @@ public class MapPanel extends AnchorPane {
 
 
     private StringProperty floor = new SimpleStringProperty("1");
-   // double zoomLevel = 5.0;
-    //private String floor = "1";
 
     private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
-
-    private Circle selectedCircle = null;
 
     public MapPanel() {
         final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/uicomponents/MapPanel.fxml"));
@@ -99,7 +95,7 @@ public class MapPanel extends AnchorPane {
         floorName.addAll("1","2","3","L1","L2","G");
         floorComboBox.setItems(floorName);
         floorComboBox.valueProperty().bindBidirectional(this.floor);
-        drawNodeOnFloor();
+        //drawNodeOnFloor();
     }
 
 
@@ -136,37 +132,37 @@ public class MapPanel extends AnchorPane {
                 map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
         }
         floorComboBox.setValue(floor);
-        drawNodeOnFloor();
+        //drawNodeOnFloor();
     }
 
     /**
      * Clear the canvas and draw nodes that are on current floor
      * @author ZheCheng
      */
-    public void drawNodeOnFloor(){
-        canvas.getChildren().removeIf(x -> {
-            return x instanceof Circle;
-        });
-
-        selectedCircle = null;
-        for(NodeEntry n : nodeList){
-            if(n.getFloor().equals(floor.get())) {
-                drawCircle(Double.parseDouble(n.getXcoord()), Double.parseDouble(n.getYcoord()), n.getNodeID());
-            }
-        }
-    }
+//    public void drawNodeOnFloor(){
+//        canvas.getChildren().removeIf(x -> {
+//            return x instanceof Circle;
+//        });
+//
+//        selectedCircle = null;
+//        for(NodeEntry n : nodeList){
+//            if(n.getFloor().equals(floor.get())) {
+//                drawCircle(Double.parseDouble(n.getXcoord()), Double.parseDouble(n.getYcoord()), n.getNodeID());
+//            }
+//        }
+//    }
 
     public ImageView getMap() {
         return map;
     }
 
-    public Circle getSelectedCircle() {
-        return selectedCircle;
-    }
+//    public Circle getSelectedCircle() {
+//        return selectedCircle;
+//    }
 
-    public void setSelectedCircle(Circle selectedCircle) {
-        this.selectedCircle = selectedCircle;
-    }
+//    public void setSelectedCircle(Circle selectedCircle) {
+//        this.selectedCircle = selectedCircle;
+//    }
 
     public DoubleProperty getZoomLevel() {
         return zoomLevel;
@@ -180,9 +176,9 @@ public class MapPanel extends AnchorPane {
         return canvas;
     }
 
-    public ObservableList<NodeEntry> getNodeList() {
-        return nodeList;
-    }
+//    public ObservableList<NodeEntry> getNodeList() {
+//        return nodeList;
+//    }
 
     /**
      * Draw a single circle to represent the node
@@ -197,11 +193,12 @@ public class MapPanel extends AnchorPane {
         c.centerYProperty().bind(yProp);
         c.setRadius(UIConstants.NODE_RADIUS);
 
+        /*
         c.setFill(UIConstants.NODE_COLOR);
         c.setId(nodeID);
         c.setOnMouseEntered(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
         c.setOnMouseExited(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR);});
-        /*
+
         c.setOnMouseClicked(e->{
             if(selectedCircle != null)
                 selectedCircle.setFill(UIConstants.NODE_COLOR);
@@ -301,10 +298,32 @@ public class MapPanel extends AnchorPane {
     public <Element extends Node & IMapDrawable> Element draw(Element element)
     {
         element.bindLocation(zoomLevel);
-        this.canvas.getChildren().add(element);
+
 
         element.visibleProperty().bind(element.shouldDisplay().and(this.floor.isEqualTo(element.getFloor())));
 
+        this.canvas.getChildren().add(element);
         return element;
     }
+
+    public void unDraw(String ID)
+    {
+        canvas.getChildren().removeIf(x -> x.getId().equals(ID));
+    }
+
+    public <Element extends Node & IMapDrawable> Element getNode(String ID)
+    {
+        for (Node x : canvas.getChildren()) {
+            if (x.getId().equals(ID)) {
+                continue;
+            }
+        }
+        return null;
+    }
+
+    public void clearMap()
+    {
+        canvas.getChildren().removeIf(x -> x instanceof IMapDrawable);
+    }
+
 }

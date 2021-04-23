@@ -5,8 +5,12 @@ import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import edu.wpi.fuchsiafalcons.uicomponents.IMapDrawable;
 import edu.wpi.fuchsiafalcons.uicomponents.MapPanel;
+import edu.wpi.fuchsiafalcons.uicomponents.entities.DrawableNode;
 import edu.wpi.fuchsiafalcons.utils.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,6 +58,10 @@ public class EditMapNodeController {
 
     private NodeEntry selectedNode;
 
+    private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
+
+
+    private Circle selectedCircle = null;
 
 
     /**
@@ -74,8 +82,12 @@ public class EditMapNodeController {
             e.printStackTrace();
         }
 
-        data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(e -> mapPanel.getNodeList().add(e));
-        mapPanel.drawNodeOnFloor();
+        data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(node -> {
+            mapPanel.draw(getEditableNode(node));
+
+            nodeList.add(node);
+        });
+        //mapPanel.drawNodeOnFloor();
 
 
         // START OF JFX TREETABLE COLUMN SETUP
@@ -87,7 +99,7 @@ public class EditMapNodeController {
         JFXTreeTableColumn<NodeEntry, String> shortColumn = new JFXTreeTableColumn<>("Name");
         shortColumn.setPrefWidth(colWidth);
         shortColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getShortNameProperty());
-        final TreeItem<NodeEntry> root = new RecursiveTreeItem<>(mapPanel.getNodeList(), RecursiveTreeObject::getChildren);
+        final TreeItem<NodeEntry> root = new RecursiveTreeItem<>(nodeList, RecursiveTreeObject::getChildren);
         nodeTreeTable.setRoot(root);
         nodeTreeTable.setShowRoot(false);
         nodeTreeTable.getColumns().setAll(idColumn, shortColumn);
@@ -115,7 +127,10 @@ public class EditMapNodeController {
                 try {
                     openEditDialog(nodeEntry);
                     if(!checkNodeEntryNotEmpty(nodeEntry)) return;
-                    mapPanel.getNodeList().add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
+                    nodeList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
+
+                    mapPanel.draw(getEditableNode(nodeEntry));
+
                     updateNodeEntry(nodeEntry);
                 } catch (IOException | SQLException ioException) {
                     ioException.printStackTrace();
@@ -124,6 +139,25 @@ public class EditMapNodeController {
         });
 
         //contextMenu.show(map, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+    }
+
+    private DrawableNode getEditableNode(NodeEntry nodeEntry)
+    {
+        final DrawableNode drawableNode = nodeEntry.getDrawable();
+
+        drawableNode.setOnMouseEntered(e->{if(!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
+        drawableNode.setOnMouseExited(e->{if(!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR);});
+
+        drawableNode.setOnMouseClicked(e->{
+            if(selectedCircle != null)
+                selectedCircle.setFill(UIConstants.NODE_COLOR);
+            selectedCircle = drawableNode;
+            drawableNode.setFill(UIConstants.NODE_COLOR_SELECTED);
+            nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
+            nodeTreeTable.requestFocus();
+            nodeTreeTable.scrollTo(findNode(drawableNode.getId()));});
+
+        return drawableNode;
     }
 
     /**
@@ -160,10 +194,11 @@ public class EditMapNodeController {
 
         String targetID = nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID();
         DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
-        mapPanel.getNodeList().remove(selectedIndex); // remove said index from table - KD
+        nodeList.remove(selectedIndex); // remove said index from table - KD
 
-        mapPanel.setSelectedCircle(null);
-        mapPanel.drawNodeOnFloor(); // added to handle deletion without selection - KD
+        selectedCircle = null;
+        mapPanel.unDraw(targetID);
+        //mapPanel.drawNodeOnFloor(); // added to handle deletion without selection - KD
     }
 
     /**
@@ -175,7 +210,10 @@ public class EditMapNodeController {
         NodeEntry newNode = new NodeEntry(); // create new node - KD
         openEditDialog(newNode); // allow editing of the new node - KD
         if(!checkNodeEntryNotEmpty(newNode)) return;
-        mapPanel.getNodeList().add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
+        nodeList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
+
+        mapPanel.draw(getEditableNode(newNode));
+
         updateNodeEntry(newNode);
     }
 
@@ -253,7 +291,7 @@ public class EditMapNodeController {
         dialogController.setDialogStage(dialogStage); // set the stage attribute - KD
         dialogController.setTheNode(editedNode); // inject the node attribute so that specific instance is the one edited - KD
 
-        dialogController.setNodeList(mapPanel.getNodeList());
+        dialogController.setNodeList(nodeList);
         dialogController.setCurrentIDIfEditing(editedNode.getNodeID());
         dialogStage.setTitle("Edit Node");
         dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
@@ -293,15 +331,18 @@ public class EditMapNodeController {
             e.printStackTrace();
             return;
         }
-        mapPanel.getNodeList().clear();
+        nodeList.clear();
+        mapPanel.getChildren().removeIf(x -> x instanceof IMapDrawable);
 
         if(nodeData != null )
         {
             if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
             {
-                mapPanel.getNodeList().addAll(nodeData.stream().map(line -> {
+                nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
+
+                nodeList.forEach(n -> mapPanel.draw(getEditableNode(n)));
 
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
                 final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
@@ -318,7 +359,7 @@ public class EditMapNodeController {
         saveToFileButton.setDisable(true);
        // loadFromFileButton.setDisable(true); //FIXME: ENABLE WHEN WE ADD A WAY TO LOAD CSV FROM IN JAR
 
-        mapPanel.drawNodeOnFloor();
+       // mapPanel.drawNodeOnFloor();
     }
 
 
@@ -348,7 +389,7 @@ public class EditMapNodeController {
             final List<String[]> data = new LinkedList<String[]>();
             Collections.addAll(data, "nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName".split(","));
 
-            data.addAll(mapPanel.getNodeList().stream().map(node -> {
+            data.addAll(nodeList.stream().map(node -> {
                 return new String[] {
                         node.getNodeID(),
                         node.getXcoord(),
@@ -402,7 +443,7 @@ public class EditMapNodeController {
      */
     private int findNode(String nodeID){
         int index = 0;
-        for(NodeEntry n: mapPanel.getNodeList()){
+        for(NodeEntry n: nodeList){
             if(n.getNodeID() == nodeID){
                 break;
             }
@@ -421,7 +462,7 @@ public class EditMapNodeController {
             return;
         }
         // FIXME: ADD TRY_CATCH
-        NodeEntry node = mapPanel.getNodeList().get(nodeTreeTable.getSelectionModel().getSelectedIndex());
+        NodeEntry node = nodeList.get(nodeTreeTable.getSelectionModel().getSelectedIndex());
 
         if(node == null){
             //FIXME Null Warning
@@ -430,9 +471,9 @@ public class EditMapNodeController {
 
         // Check if need to switch map
         if(node.getFloor().equals(mapPanel.getFloor().get())){
-            mapPanel.drawNodeOnFloor();
-            if(mapPanel.getSelectedCircle() != null)
-                mapPanel.getSelectedCircle().setFill(UIConstants.NODE_COLOR);
+            //mapPanel.drawNodeOnFloor();
+            if(selectedCircle != null)
+               selectedCircle.setFill(UIConstants.NODE_COLOR);
         }else{
             //floor = node.getFloor();
             mapPanel.switchMap(node.getFloor());
@@ -442,7 +483,7 @@ public class EditMapNodeController {
             //FIXME Null Warning
             return;
         }
-        mapPanel.setSelectedCircle(c);
+        selectedCircle = c;
         c.setFill(UIConstants.NODE_COLOR_SELECTED);
         mapPanel.centerNode(c);
     }
@@ -455,7 +496,7 @@ public class EditMapNodeController {
      */
     public void handleResetDatabase() throws Exception {
 
-        mapPanel.getNodeList().clear();
+        mapPanel.clearMap();
 
         List<String[]> nodeData = null;
 
@@ -472,9 +513,11 @@ public class EditMapNodeController {
         {
             if(!nodeData.isEmpty() && nodeData.get(0).length == 8 )
             {
-                mapPanel.getNodeList().addAll(nodeData.stream().map(line -> {
+                nodeList.addAll(nodeData.stream().map(line -> {
                     return new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7]);
                 }).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
+
+                nodeList.forEach(x -> mapPanel.draw(getEditableNode(x)));
 
                 DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
                 final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
@@ -489,7 +532,7 @@ public class EditMapNodeController {
 
         filenameField.setText("");
         saveToFileButton.setDisable(true);
-        mapPanel.drawNodeOnFloor();
+        //mapPanel.drawNodeOnFloor();
     }
 
     /**

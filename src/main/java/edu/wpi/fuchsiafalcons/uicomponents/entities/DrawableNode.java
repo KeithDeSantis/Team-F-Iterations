@@ -1,6 +1,7 @@
 package edu.wpi.fuchsiafalcons.uicomponents.entities;
 
 import edu.wpi.fuchsiafalcons.uicomponents.IMapDrawable;
+import edu.wpi.fuchsiafalcons.utils.UIConstants;
 import javafx.beans.property.*;
 import javafx.scene.shape.Circle;
 
@@ -12,7 +13,8 @@ public class DrawableNode extends Circle implements IMapDrawable
 
     private SimpleBooleanProperty shouldDisplay;
 
-    public DrawableNode(int xCoordinate, int yCoordinate, String floor)
+
+    public DrawableNode(int xCoordinate, int yCoordinate, String ID, String floor)
     {
         this.xCoordinate = new SimpleIntegerProperty(xCoordinate);
         this.yCoordinate = new SimpleIntegerProperty(yCoordinate);
@@ -20,6 +22,12 @@ public class DrawableNode extends Circle implements IMapDrawable
         this.floor = new SimpleStringProperty(floor);
 
         this.shouldDisplay = new SimpleBooleanProperty(true); //FIXME: DO BETTER!
+
+        this.setId(ID);
+
+        this.setRadius(UIConstants.NODE_RADIUS);
+
+        this.setFill(UIConstants.NODE_COLOR);
     }
 
     @Override
