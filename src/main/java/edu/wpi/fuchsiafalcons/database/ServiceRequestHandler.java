@@ -1,10 +1,13 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceRequestHandler implements DatabaseEntry {
@@ -83,6 +86,27 @@ public class ServiceRequestHandler implements DatabaseEntry {
             DatabaseAPI1.getDatabaseAPI1().addServiceReq(arr);
         }
 
+    }
+
+    public ArrayList<ServiceEntry> genServiceEntryObjects() throws SQLException{
+        ArrayList<ServiceEntry> entries = new ArrayList<>();
+        String query = "SELECT * FROM service_requests";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+
+        while (rset.next())
+        {
+            String uuid = rset.getString(1);
+            String name = rset.getString(2);
+            String assignedPerson = rset.getString(3);
+            String completed = rset.getString(4);
+
+            ServiceEntry newEntry = new ServiceEntry(uuid, name, assignedPerson, completed);
+            entries.add(newEntry);
+        }
+
+        return entries;
     }
 }
 

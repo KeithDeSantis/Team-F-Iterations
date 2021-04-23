@@ -2,6 +2,7 @@ package edu.wpi.fuchsiafalcons.database;
 
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -84,8 +85,34 @@ public class DatabaseAPI1 {
         return ret;
     }
 
-    public void addServiceReq(String[] colValues) throws SQLException{
-        serviceRequestHandler.addEntry(colValues);
+    public boolean addServiceReq(String[] colValues) throws SQLException{
+        return serviceRequestHandler.addEntry(colValues);
+    }
+
+    public boolean editServiceRequest(String id, String newVal, String colName){
+        return serviceRequestHandler.editEntry(id, newVal, colName);
+    }
+
+    public boolean deleteServiceRequest(String id) throws SQLException {
+        return serviceRequestHandler.deleteEntry(id);
+
+    }
+
+    public boolean createServiceRequestTable(){
+        return serviceRequestHandler.createTable();
+    }
+
+    public boolean dropServiceRequestTable(){
+        return serviceRequestHandler.dropTable();
+    }
+
+    public void populateServiceRequestTable(List<String[]> entries) throws SQLException {
+        serviceRequestHandler.populateTable(entries);
+    }
+
+    public ArrayList<ServiceEntry> genServiceEntryObjects(String tableName) throws SQLException{
+        ServiceRequestHandler s = new ServiceRequestHandler();
+        return s.genServiceEntryObjects();
     }
 
     public boolean addUser(String[] colValues) throws SQLException{
