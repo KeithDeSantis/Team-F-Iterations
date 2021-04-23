@@ -250,6 +250,8 @@ public class EditMapNodeController {
 
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
 
+        mapPanel.draw(getEditableNode(nodeEntry));
+
         nodeTreeTable.requestFocus();
         nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
         nodeTreeTable.scrollTo(findNode(nodeID));
@@ -269,6 +271,7 @@ public class EditMapNodeController {
 
         String targetID = selectedNode.getNodeID();
         DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
+        mapPanel.unDraw(targetID);
 
         openEditDialog(selectedNode); // allow editing of selection - KD
 
@@ -497,6 +500,7 @@ public class EditMapNodeController {
     public void handleResetDatabase() throws Exception {
 
         mapPanel.clearMap();
+        nodeList.clear();
 
         List<String[]> nodeData = null;
 
