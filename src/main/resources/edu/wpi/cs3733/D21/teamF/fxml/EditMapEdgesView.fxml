@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="540.0" maxWidth="960.0" minHeight="540.0" minWidth="960.0" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.EditMapEdgesController">
+   <children>
+      <SplitPane dividerPositions="0.5" layoutX="380.0" layoutY="162.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+         <items>
+            <AnchorPane maxWidth="250.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <JFXTreeTableView fx:id="edgeTable" layoutX="-12.0" layoutY="-29.0" minWidth="250.0" onMouseClicked="#handleSelectEdge" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ScrollPane fx:id="scroll" prefHeight="358.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fx:id="map" fitHeight="284.0" fitWidth="532.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </Pane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+      <ButtonBar layoutX="14.0" layoutY="486.0" onDragDetected="#handleDelete" prefHeight="40.0" prefWidth="551.0" AnchorPane.bottomAnchor="65.0">
+        <buttons>
+            <JFXButton fx:id="newEdge" onAction="#handleNewEdge" style="-fx-background-color: #cbcbcb;" text="New..." />
+            <JFXButton fx:id="editEdge" onAction="#handleEditEdge" style="-fx-background-color: #cdcdcd;" text="Edit..." />
+            <JFXButton fx:id="deleteEdge" onAction="#handleDelete" style="-fx-background-color: #cbcbcb;" text="Delete" />
+            <JFXButton fx:id="resetDatabaseButton" onAction="#handleResetDB" prefHeight="27.0" style="-fx-background-color: #cbcbcb;" text="Reset Database" />
+        </buttons>
+      </ButtonBar>
+      <ButtonBar buttonMinWidth="118.0" layoutX="12.0" layoutY="535.0" prefHeight="40.0" prefWidth="265.0" AnchorPane.bottomAnchor="24.0">
+         <buttons>
+            <JFXButton fx:id="saveCSV" onAction="#handleSaveButton" style="-fx-background-color: #cbcbcb;" text="Save to CSV" />
+            <JFXButton fx:id="loadCSV" onAction="#handleLoadButtonClicked" style="-fx-background-color: #cbcbcb;" text="Load CSV" />
+         </buttons>
+      </ButtonBar>
+      <Label fx:id="CSVErrorLabel" layoutX="655.0" layoutY="545.0" text="CSV Error Label" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="655.0" />
+      <JFXButton fx:id="goBack" layoutX="14.0" layoutY="14.0" onAction="#handleHomeButton" ripplerFill="BLACK" style="-fx-background-color: #cbcbcb;" text="HOME" textAlignment="CENTER" />
+      <JFXComboBox fx:id="floorComboBox" layoutX="890.0" layoutY="14.0" onAction="#handleFloorBoxAction" />
+   </children>
+</AnchorPane>

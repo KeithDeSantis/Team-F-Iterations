@@ -1,0 +1,17 @@
+.tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #03256C;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-background-color: #F0C808;
+    -fx-text-fill: #000000;
+}

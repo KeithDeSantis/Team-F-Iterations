@@ -13,7 +13,7 @@ plugins {
     id 'java'
     id 'jacoco'
 }
-mainClassName = 'edu.wpi.fuchsiafalcons.Main'
+mainClassName = 'edu.wpi.cs3733.D21.teamF.Main'
 
 
 //These are the repositories where Gradle looks for dependencies.
@@ -67,7 +67,7 @@ test {
 // with the Main method you want run!
 jar {
     manifest {
-        attributes 'Main-Class': 'edu.wpi.fuchsiafalcons.Main'
+        attributes 'Main-Class': 'edu.wpi.cs3733.D21.teamF.Main'
     }
 }
 
