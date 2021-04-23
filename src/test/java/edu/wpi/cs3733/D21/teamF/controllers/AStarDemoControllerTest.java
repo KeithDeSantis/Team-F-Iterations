@@ -36,29 +36,13 @@ public class AStarDemoControllerTest extends ApplicationTest {
         verifyThat("#startComboBox", Node::isVisible);
         clickOn("#startComboBox");
         sleep(100);
-        verifyThat("EDEPT00101", Node::isVisible);
-        clickOn("EDEPT00101");
+        verifyThat("ACONF00102", Node::isVisible);
+        clickOn("ACONF00102");
         verifyThat("#endComboBox", Node::isVisible);
         clickOn("#endComboBox");
         sleep(100);
-        verifyThat("EDEPT00201", Node::isVisible);
-        clickOn("EDEPT00201");
+        verifyThat("ADEPT00301", Node::isVisible);
+        clickOn("ADEPT00301");
     }
-
-    @Test
-    public void testGoButtonWithoutInput() {
-        verifyThat("Go", Node::isDisable);
-    }
-
-    @Test
-    public void testGoButton() {
-        verifyThat("Go", Node::isDisable);
-        testComboBox();
-        verifyThat("Go", Node::isVisible);
-        clickOn("Go");
-    }
-
-
-
 }
 
