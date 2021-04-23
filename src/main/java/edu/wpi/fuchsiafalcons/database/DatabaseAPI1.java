@@ -82,6 +82,10 @@ public class DatabaseAPI1 {
         return ret;
     }
 
+    public void addServiceReq(String[] colValues) throws SQLException{
+        serviceRequestHandler.addEntry(colValues);
+    }
+
     private static class DatabaseSingletonHelper{
         private static final DatabaseAPI1 databaseAPI1 = new DatabaseAPI1();
     }
