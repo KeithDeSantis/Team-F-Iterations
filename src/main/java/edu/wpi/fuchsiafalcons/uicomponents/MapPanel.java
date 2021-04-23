@@ -3,7 +3,10 @@ package edu.wpi.fuchsiafalcons.uicomponents;
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.UIConstants;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,7 +18,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 import java.io.IOException;
 
@@ -37,7 +42,12 @@ public class MapPanel extends AnchorPane {
 
     private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
 
-    double zoomLevel = 5.0;
+    private DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
+
+    private final DoubleProperty INITIAL_WIDTH = new SimpleDoubleProperty();
+    private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
+
+   // double zoomLevel = 5.0;
     private String floor = "1";
 
     private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
@@ -65,13 +75,20 @@ public class MapPanel extends AnchorPane {
         F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
 
 
-        final double width = F1Image.getWidth()/zoomLevel;
-        final double height = F1Image.getHeight()/zoomLevel;
+        INITIAL_WIDTH.setValue(F1Image.getWidth());
+        INITIAL_HEIGHT.setValue(F1Image.getHeight());
+        //final double width = F1Image.getWidth()/zoomLevel;
+        //final double height = F1Image.getHeight()/zoomLevel;
 
-        canvas.setPrefSize(width,height);
 
-        map.setFitWidth(width);
-        map.setFitHeight(height);
+        //canvas.setPrefSize(width,height);
+        canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
+        canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
+
+        map.fitWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
+        //map.setFitWidth(width);
+        map.fitHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
+        //map.setFitHeight(height);
         map.setImage(F1Image); // Copied from A* Vis - KD
 
 
@@ -128,10 +145,11 @@ public class MapPanel extends AnchorPane {
         canvas.getChildren().removeIf(x -> {
             return x instanceof Circle;
         });
+
         selectedCircle = null;
         for(NodeEntry n : nodeList){
             if(n.getFloor().equals(floor)) {
-                drawCircle(Double.parseDouble(n.getXcoord())/zoomLevel, Double.parseDouble(n.getYcoord())/zoomLevel, n.getNodeID());
+                drawCircle(Double.parseDouble(n.getXcoord()), Double.parseDouble(n.getYcoord()), n.getNodeID());
             }
         }
     }
@@ -148,7 +166,7 @@ public class MapPanel extends AnchorPane {
         this.selectedCircle = selectedCircle;
     }
 
-    public double getZoomLevel() {
+    public DoubleProperty getZoomLevel() {
         return zoomLevel;
     }
 
@@ -169,7 +187,15 @@ public class MapPanel extends AnchorPane {
      * @author ZheCheng
      */
     private void drawCircle(double x, double y, String nodeID){
-        Circle c = new Circle(x, y, UIConstants.NODE_RADIUS);
+
+        final DoubleBinding xProp = (new SimpleDoubleProperty(x)).divide(zoomLevel);
+        final DoubleBinding yProp = (new SimpleDoubleProperty(y)).divide(zoomLevel);
+
+        Circle c = new Circle();//(x, y, UIConstants.NODE_RADIUS);
+        c.centerXProperty().bind(xProp);
+        c.centerYProperty().bind(yProp);
+        c.setRadius(UIConstants.NODE_RADIUS);
+
         c.setFill(UIConstants.NODE_COLOR);
         c.setId(nodeID);
         c.setOnMouseEntered(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
@@ -218,22 +244,63 @@ public class MapPanel extends AnchorPane {
     public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
         JFXButton btn = (JFXButton) actionEvent.getSource();
         if(btn == zoomInButton) {
-            if(zoomLevel > 1) {
-                zoomLevel--;
+            if(zoomLevel.get() > 1) {
+                zoomLevel.setValue(zoomLevel.get()  - 1);
             }
         } else if (btn == zoomOutButton) {
-            if(zoomLevel < 8) {
-                zoomLevel++;
+            if(zoomLevel.get() < 8) {
+                zoomLevel.setValue(zoomLevel.get() + 1);
             }
         }
-        drawNodeOnFloor();
+        //drawNodeOnFloor();
+
+
         Image image = map.getImage();
-        double width = image.getWidth()/zoomLevel;
-        double height = image.getHeight()/zoomLevel;
-        canvas.setPrefSize(width,height);
-        map.setFitWidth(width);
-        map.setFitHeight(height);
+        //double width = image.getWidth()/zoomLevel;
+        //double height = image.getHeight()/zoomLevel;
+        //canvas.setPrefSize(width,height);
+        //map.setFitWidth(width);
+        //map.setFitHeight(height);
         map.setImage(image);
+
     }
 
+    /**
+     * Center the given line in scrollpane
+     * @param l The line to be centered
+     * @author ZheCheng
+     */
+    public void centerNode(Line l){
+
+        double h = scroll.getContent().getBoundsInLocal().getHeight();
+        double y = (l.getBoundsInParent().getMaxY() +
+                l.getBoundsInParent().getMinY()) / 2.0;
+        double v = scroll.getViewportBounds().getHeight();
+        scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
+
+        double w = scroll.getContent().getBoundsInLocal().getWidth();
+        double x = (l.getBoundsInParent().getMaxX() +
+                l.getBoundsInParent().getMinX()) / 2.0;
+        double hw = scroll.getViewportBounds().getWidth();
+        scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
+    }
+
+    /**
+     * Draw a single line to represent the edge
+     * @author ZheCheng
+     */
+    public Line drawLine(double startX, double startY, double endX, double endY, String edgeID){
+        Line l = new Line();
+        l.startXProperty().bind((new SimpleDoubleProperty(startX)).divide(zoomLevel));
+        l.startYProperty().bind((new SimpleDoubleProperty(startY)).divide(zoomLevel));
+
+        l.endXProperty().bind((new SimpleDoubleProperty(endX)).divide(zoomLevel));
+        l.endYProperty().bind((new SimpleDoubleProperty(endY)).divide(zoomLevel));
+
+        l.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
+        l.setStroke(UIConstants.LINE_COLOR);
+        l.setId(edgeID);
+        this.canvas.getChildren().add(l);
+        return l;
+    }
 }

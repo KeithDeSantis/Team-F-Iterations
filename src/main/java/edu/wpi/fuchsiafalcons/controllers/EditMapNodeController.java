@@ -108,8 +108,8 @@ public class EditMapNodeController {
 
             createNodeMenuItem.setOnAction((ActionEvent e) -> {
                 NodeEntry nodeEntry = new NodeEntry();
-                nodeEntry.setXcoord("" + (event.getX() * mapPanel.getZoomLevel()));
-                nodeEntry.setYcoord("" + (event.getY() * mapPanel.getZoomLevel()));
+                nodeEntry.setXcoord("" + (event.getX() * mapPanel.getZoomLevel().get()));
+                nodeEntry.setYcoord("" + (event.getY() * mapPanel.getZoomLevel().get()));
                 nodeEntry.setFloor(mapPanel.getFloor().get());
 
                 try {
