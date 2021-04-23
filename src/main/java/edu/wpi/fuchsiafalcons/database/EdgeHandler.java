@@ -1,8 +1,10 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -22,18 +24,58 @@ public class EdgeHandler implements DatabaseEntry {
     }
 
     @Override
-    public boolean editEntry(String id, String newVal, String colName) {
-        return false;
+    public boolean editEntry(String id, String newVal, String colName)
+    {
+        boolean success = false;
+        String query = String.format("UPDATE AllEdges SET %s=(?) WHERE EDGEID=(?)", colName);
+        try {
+            PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+            stmt.setString(1, newVal);
+            stmt.setString(2, id);
+            stmt.executeUpdate();
+            stmt.close();
+            success = true;
+        }
+        catch (SQLException e) {
+            success = false;
+        }
+        return success;
     }
 
     @Override
     public boolean deleteEntry(String id) {
-        return false;
+        boolean success = false;
+        String query = "DELETE FROM AllEdges WHERE EDGEID=(?)";
+        try {
+            PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+            stmt.setString(1, id);
+            stmt.executeUpdate();
+            stmt.close();
+            success = true;
+        }
+        catch (SQLException e){
+            success = false;
+        }
+        return success;
     }
 
-    @Override
-    public ArrayList<NodeEntry> genEntryObjects(String tableName) {
-        return null;
+    public ArrayList<EdgeEntry> genEdgeEntryObjects(String tableName) throws SQLException {
+        ArrayList<EdgeEntry> entries = new ArrayList<>();
+        String query = "SELECT * FROM AllEdges";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+
+        while (rset.next())
+        {
+            String edgeID = rset.getString(1);
+            String startNode = rset.getString(2);
+            String endNode = rset.getString(3);
+
+            EdgeEntry newEntry = new EdgeEntry(edgeID, startNode, endNode);
+            entries.add(newEntry);
+        }
+        return entries;
     }
 
     @Override
@@ -71,6 +113,9 @@ public class EdgeHandler implements DatabaseEntry {
     }
 
     @Override
-    public void populateTable(List<String[]> entries) {
+    public void populateTable(List<String[]> entries) throws SQLException {
+        for (String[] arr : entries) {
+            DatabaseAPI1.getDatabaseAPI1().addEdge(arr);
+        }
     }
 }

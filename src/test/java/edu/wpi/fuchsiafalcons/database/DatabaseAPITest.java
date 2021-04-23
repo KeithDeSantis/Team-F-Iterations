@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,8 +23,6 @@ class DatabaseAPITest {
 
         DatabaseAPI1.getDatabaseAPI1().createNodesTable();
         DatabaseAPI1.getDatabaseAPI1().createEdgesTable();
-
-
     }
 
     @Test()
@@ -144,4 +143,43 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI1.getDatabaseAPI1().editNode("test", "test1", "nodeid"));
     }
 
+    @Test
+    @DisplayName("test editing a Edge")
+    public void testEditEdge() throws SQLException
+    {
+        String[] newEdge = {"test", "start", "end"};
+        DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().editEdge("test", "test1", "startnode"));
+    }
+
+    @Test
+    @DisplayName("test deleting an edge")
+    public void testDeleteEdge() throws SQLException
+    {
+        String[] newEdge = {"test", "start", "end"};
+        DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteEdge("test"));
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
+    }
+
+    @Test
+    @DisplayName("test populating edges table")
+    public void testPopulateEdges() throws SQLException, Exception
+    {
+        DatabaseAPI1.getDatabaseAPI1().populateEdges(CSVManager.load("MapfAllEdges.csv"));
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteEdge("AHALL00202_AHALL00302"));
+    }
+
+    @Test
+    @DisplayName("test generating edge entry list")
+    public void testGenerateEdgeEntries() throws SQLException
+    {
+        EdgeEntry entry = new EdgeEntry("test", "start", "end");
+        ArrayList<EdgeEntry> expected = new ArrayList<>();
+        expected.add(entry);
+        String[] newEdge = {"test", "start", "end"};
+        DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
+        ArrayList<EdgeEntry> actual = DatabaseAPI1.getDatabaseAPI1().genEdgeEntries("AllEdges");
+        assertEquals(expected.get(0).getEdgeID(), actual.get(0).getEdgeID());
+    }
 }

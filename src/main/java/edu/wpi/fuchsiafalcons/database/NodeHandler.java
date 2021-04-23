@@ -27,7 +27,7 @@ public class NodeHandler implements DatabaseEntry {
         try {
             PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
             stmt.setString(1, newVal);
-            stmt.setString(2, colName);
+            stmt.setString(2, id);
             stmt.executeUpdate();
             stmt.close();
             success = true;
@@ -46,8 +46,7 @@ public class NodeHandler implements DatabaseEntry {
         return stmt.executeUpdate() != 0;
     }
 
-    @Override
-    public ArrayList<NodeEntry> genEntryObjects(String tableName) throws SQLException{
+    public ArrayList<NodeEntry> genNodeEntryObjects(String tableName) throws SQLException{
         ArrayList<NodeEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM AllNodes";
         ResultSet rset;

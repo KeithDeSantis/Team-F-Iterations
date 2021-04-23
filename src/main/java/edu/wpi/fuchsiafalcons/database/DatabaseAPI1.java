@@ -1,5 +1,6 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 
 import java.sql.*;
@@ -44,13 +45,22 @@ public class DatabaseAPI1 {
     }
 
     public ArrayList<NodeEntry> genNodeEntries() throws SQLException{
-        return nodeHandler.genEntryObjects("ALlNodes");
+        NodeHandler node = new NodeHandler();
+        ArrayList<NodeEntry> ret = node.genNodeEntryObjects("AllNodes");
+        return ret;
     }
 
     public boolean addEdge(String[] colVals) throws SQLException{
         return edgeHandler.addEntry(colVals);
     }
 
+    public boolean editEdge(String id, String newVal, String colName){
+        return edgeHandler.editEntry(id, newVal, colName);
+    }
+
+    public boolean deleteEdge(String id) throws SQLException {
+        return edgeHandler.deleteEntry(id);
+    }
 
     public boolean createEdgesTable() throws SQLException{
         return edgeHandler.createTable();
@@ -60,6 +70,17 @@ public class DatabaseAPI1 {
         return edgeHandler.dropTable();
     }
 
+    public void populateEdges(List<String[]> data) throws SQLException{
+        edgeHandler.populateTable(data);
+    }
+
+    public ArrayList<EdgeEntry> genEdgeEntries(String tableName) throws SQLException
+    {
+        ArrayList<EdgeEntry> ret = new ArrayList<>();
+        EdgeHandler edge = new EdgeHandler();
+        ret = edge.genEdgeEntryObjects("AllEdges");
+        return ret;
+    }
 
     private static class DatabaseSingletonHelper{
         private static final DatabaseAPI1 databaseAPI1 = new DatabaseAPI1();
