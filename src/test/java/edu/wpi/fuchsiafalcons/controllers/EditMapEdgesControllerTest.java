@@ -89,7 +89,11 @@ public class EditMapEdgesControllerTest extends ApplicationTest{
         clickOn("#endNode");
         clickOn("ACONF00103");
         clickOn("OK");
-        verifyThat("#AHALL00502_ACONF00103", Node::isVisible);
+        verifyThat("#AHALL00502_ACONF00103", (x) -> {
+            System.out.println(x);
+            System.out.println(x.isVisible());
+            return x.isVisible();
+        });
         verifyThat("2", Node::isVisible);
     }
 

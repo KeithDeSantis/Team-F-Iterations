@@ -243,9 +243,10 @@ public class MapPanel extends AnchorPane {
 
     public <Element extends Node & IMapDrawable> Element getNode(String ID)
     {
-        for (Node x : canvas.getChildren()) {
+        for (Node x : canvas.getChildren())
+        {
             if (x.getId().equals(ID)) {
-                continue;
+                return (Element) x;
             }
         }
         return null;

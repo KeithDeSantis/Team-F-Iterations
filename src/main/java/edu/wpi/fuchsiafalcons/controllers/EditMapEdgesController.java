@@ -200,6 +200,13 @@ public class EditMapEdgesController {
             DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "endNode", newValues.get(2));
             DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "id", newValues.get(0));
 
+            final DrawableEdge drawableEdge = mapPanel.getNode(oldID);
+            drawableEdge.setId(newValues.get(0));
+            drawableEdge.getFloor().setValue(newValues.get(1));
+            drawableEdge.getEndFloor().setValue(newValues.get(2));
+
+            drawEdgeNodeOnFloor();
+
             // Focus on selected edge both on table and on map
             edgeTable.requestFocus();
             edgeTable.getSelectionModel().clearAndSelect(findEdge(newValues.get(0)));
@@ -238,6 +245,7 @@ public class EditMapEdgesController {
         edgeEntryObservableList.add(edgeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
         DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
 
+        drawEdgeNodeOnFloor();
         // Focus on selected edge both on table and on map
         edgeTable.requestFocus();
         edgeTable.getSelectionModel().clearAndSelect(findEdge(edgeEntry.getEdgeID()));
@@ -530,7 +538,7 @@ public class EditMapEdgesController {
                 secondCircle = node;
                 // Second node selected, create edge
                 try {
-                    createNewEdge();
+                    createNewEdgeFromNodes();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 } catch (SQLException throwables) {
@@ -558,47 +566,13 @@ public class EditMapEdgesController {
     }
 
     /**
-     * Draw a single circle to represent the node
-     * @author ZheCheng
-     */
-//    private void drawCircle(double x, double y, String nodeID){
-//        Circle c = new Circle(x, y, 4.0);
-//        c.setFill(UIConstants.NODE_COLOR);
-//        c.setId(nodeID);
-//        c.setOnMouseEntered(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
-//        c.setOnMouseExited(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(UIConstants.NODE_COLOR);});
-//        c.setOnMouseClicked(e->{
-//            if(c.equals(firstCircle)) {
-//                firstCircle = null;
-//                return;
-//            }
-//            c.setFill(UIConstants.NODE_COLOR_SELECTED);
-//            if(firstCircle == null)
-//                firstCircle = c;
-//            else {
-//                secondCircle = c;
-//                // Second node selected, create edge
-//                try {
-//                    createNewEdge();
-//                } catch (IOException ioException) {
-//                    ioException.printStackTrace();
-//                } catch (SQLException throwables) {
-//                    throwables.printStackTrace();
-//                }
-//            }
-//        });
-//
-//        this.canvas.getChildren().add(c);
-//    }
-
-    /**
      * Open window for user to create new edge with two node selected
      *
      * @throws IOException
      * @throws SQLException
      * @author ZheCheng
      */
-    private void createNewEdge() throws IOException, SQLException{
+    private void createNewEdgeFromNodes() throws IOException, SQLException{
         EdgeEntry newEdge = new EdgeEntry(firstCircle.getId()+"_"+secondCircle.getId(),firstCircle.getId(),secondCircle.getId());
         openEditDialogue(newEdge);
         if (newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||

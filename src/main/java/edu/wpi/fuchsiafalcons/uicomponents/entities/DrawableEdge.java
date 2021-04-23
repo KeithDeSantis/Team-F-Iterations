@@ -52,6 +52,17 @@ public class DrawableEdge extends Line implements IMapDrawable
 
     @Override
     public StringProperty getFloor() {
+        return this.startFloor; //FIXME: DO BETTER!!!!
+    }
+    public StringProperty getEndFloor() {
         return this.endFloor; //FIXME: DO BETTER!!!!
     }
+
+
+
+    public SimpleIntegerProperty getMapStartX() { return this.startX; }
+    public SimpleIntegerProperty getMapStartY() { return this.startY; }
+
+    public SimpleIntegerProperty getMapEndX() { return this.endX; }
+    public SimpleIntegerProperty getMapEndY() { return this.endY; }
 }
