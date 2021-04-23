@@ -20,9 +20,11 @@ class DatabaseAPITest {
     {
         DatabaseAPI1.getDatabaseAPI1().dropNodesTable();
         DatabaseAPI1.getDatabaseAPI1().dropEdgesTable();
+        DatabaseAPI1.getDatabaseAPI1().dropUsersTable();
 
         DatabaseAPI1.getDatabaseAPI1().createNodesTable();
         DatabaseAPI1.getDatabaseAPI1().createEdgesTable();
+        DatabaseAPI1.getDatabaseAPI1().createUserTable();
     }
 
     @Test()
@@ -181,5 +183,61 @@ class DatabaseAPITest {
         DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
         ArrayList<EdgeEntry> actual = DatabaseAPI1.getDatabaseAPI1().genEdgeEntries("AllEdges");
         assertEquals(expected.get(0).getEdgeID(), actual.get(0).getEdgeID());
+    }
+
+    @Test
+    @DisplayName("test adding a user")
+    public void testAddUser() throws SQLException
+    {
+        String[] newUser = {"1", "employee", "declan", "password"};
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().addUser(newUser));
+    }
+
+    @Test
+    @DisplayName("test deleting a user")
+    public void testDeleteUser() throws SQLException
+    {
+        String[] newUser = {"1", "employee", "declan", "password"};
+        DatabaseAPI1.getDatabaseAPI1().addUser(newUser);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteUser("declan"));
+    }
+
+    @Test
+    @DisplayName("test editing a user")
+    public void testEditUser() throws SQLException
+    {
+        String[] newUser = {"1", "employee", "declan", "password"};
+        DatabaseAPI1.getDatabaseAPI1().addUser(newUser);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().editUser("declan", "password123", "password"));
+    }
+
+    @Test
+    @DisplayName("test dropping users table")
+    public void testDropUsersTable() throws SQLException
+    {
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().dropUsersTable());
+    }
+
+    @Test
+    @DisplayName("test adding users table")
+    public void testAddUsersTable() throws SQLException
+    {
+        DatabaseAPI1.getDatabaseAPI1().dropUsersTable();
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().createUserTable());
+    }
+
+    @Test
+    @DisplayName("test populating users table")
+    public void testPopulateUsers() throws SQLException
+    {
+        ArrayList<String[]> users = new ArrayList<>();
+        String[] user1 = {"1", "admin", "username", "password"};
+        String[] user2 = {"2", "employee", "testuser", "testpass"};
+        users.add(user1);
+        users.add(user2);
+
+        DatabaseAPI1.getDatabaseAPI1().populateUsers(users);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteUser("testuser"));
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteUser("username"));
     }
 }

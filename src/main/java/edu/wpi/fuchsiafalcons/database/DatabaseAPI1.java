@@ -18,6 +18,8 @@ public class DatabaseAPI1 {
     public DatabaseAPI1() {
         this.nodeHandler = new NodeHandler();
         this.edgeHandler = new EdgeHandler();
+        this.userHandler = new UserHandler();
+        this.serviceRequestHandler = new ServiceRequestHandler();
     }
 
     public boolean createNodesTable() throws SQLException{
@@ -84,6 +86,30 @@ public class DatabaseAPI1 {
 
     public void addServiceReq(String[] colValues) throws SQLException{
         serviceRequestHandler.addEntry(colValues);
+    }
+
+    public boolean addUser(String[] colValues) throws SQLException{
+        return userHandler.addEntry(colValues);
+    }
+
+    public boolean editUser(String id, String newVal, String colName) throws SQLException{
+        return userHandler.editEntry(id, newVal, colName);
+    }
+
+    public boolean deleteUser(String username) throws SQLException{
+        return userHandler.deleteEntry(username);
+    }
+
+    public boolean createUserTable() throws SQLException{
+        return userHandler.createTable();
+    }
+
+    public boolean dropUsersTable() throws SQLException{
+        return userHandler.dropTable();
+    }
+
+    public void populateUsers(List<String[]> users) throws SQLException{
+        userHandler.populateTable(users);
     }
 
     private static class DatabaseSingletonHelper{

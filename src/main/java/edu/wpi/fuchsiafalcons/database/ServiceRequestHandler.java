@@ -40,7 +40,6 @@ public class ServiceRequestHandler implements DatabaseEntry {
 
     @Override
     public boolean deleteEntry(String id) throws SQLException {
-
         String query = "DELETE FROM service_requests WHERE uuid=(?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
         stmt.setString(1, id);
@@ -58,7 +57,6 @@ public class ServiceRequestHandler implements DatabaseEntry {
             stmt.close();
             success = true;
         } catch (SQLException e) {
-            System.out.println("here");
             success = false;
         }
         return success;
@@ -82,8 +80,6 @@ public class ServiceRequestHandler implements DatabaseEntry {
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {
-            final int x = Integer.parseInt(arr[1].trim());
-            final int y = Integer.parseInt(arr[2].trim());
             DatabaseAPI1.getDatabaseAPI1().addServiceReq(arr);
         }
 

@@ -20,13 +20,13 @@ public class UserHandler implements DatabaseEntry{
     }
 
     @Override
-    public boolean editEntry(String id, String val, String colName) {
+    public boolean editEntry(String username, String val, String colName) {
         boolean success = false;
-        String query = String.format("UPDATE USERS SET %s=(?) WHERE USERID=(?)", colName);
+        String query = String.format("UPDATE USERS SET %s=(?) WHERE USERNAME=(?)", colName);
         try {
             PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
             stmt.setString(1, val);
-            stmt.setString(2, id);
+            stmt.setString(2, username);
             stmt.executeUpdate();
             stmt.close();
             success = true;
@@ -38,17 +38,17 @@ public class UserHandler implements DatabaseEntry{
     }
 
     @Override
-    public boolean deleteEntry(String id) throws SQLException {
-        String query = "DELETE FROM USERS WHERE USERID=(?)";
+    public boolean deleteEntry(String username) throws SQLException {
+        String query = "DELETE FROM USERS WHERE USERNAME=(?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
-        stmt.setString(1, id);
+        stmt.setString(1, username);
         return stmt.executeUpdate() != 0;
     }
 
     @Override
     public boolean createTable() {
         boolean success = false;
-        final String initUserTable = "CREATE TABLE USERS(userid int auto_increment, type varchar(200), " +
+        final String initUserTable = "CREATE TABLE USERS(userid varchar(200), type varchar(200), " +
                 "username varchar(200), password varchar(200), primary key(userid))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();
