@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.fxml.MapEditView">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="200.0" layoutX="716.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="1920.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Line endX="100.0" endY="200.0" startX="2019.5" startY="200.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <JFXTabPane layoutX="25.0" layoutY="241.0" prefHeight="526.0" prefWidth="450.0" AnchorPane.bottomAnchor="225.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="228.0">
+         <tabs>
+            <Tab text="Nodes">
+               <content>
+                  <JFXTreeTableView />
+               </content>
+            </Tab>
+            <Tab text="Edges">
+               <content>
+                  <JFXTreeTableView />
+               </content>
+            </Tab>
+         </tabs>
+      </JFXTabPane>
+      <GridPane alignment="CENTER" layoutX="134.0" layoutY="849.0" prefHeight="150.0" prefWidth="450.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <JFXButton prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Reset From Data Base" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <JFXButton prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Save CSV" textFill="WHITE" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <JFXButton prefWidth="2000.0" style="-fx-background-color: #03256c;" text="Load CSV" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <JFXTextField promptText="Search...">
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </JFXTextField>
+            <JFXComboBox prefWidth="2000.0" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </JFXComboBox>
+         </children>
+      </GridPane>
+      <VBox alignment="CENTER" layoutX="1781.0" layoutY="497.0" prefHeight="124.0" prefWidth="109.0" AnchorPane.bottomAnchor="459.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="497.0">
+         <children>
+            <JFXButton prefWidth="100.0" style="-fx-background-color: #03256c;" text="New..." textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </JFXButton>
+            <JFXButton layoutX="10.0" layoutY="10.0" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Edit..." textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </JFXButton>
+            <JFXButton layoutX="10.0" layoutY="39.0" prefWidth="100.0" style="-fx-background-color: #03256c;" text="Delete" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </JFXButton>
+         </children>
+      </VBox>
+      <ImageView fitHeight="181.0" fitWidth="153.0" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <image>
+            <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
