@@ -1,5 +1,7 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,7 +22,7 @@ public class EdgeHandler implements DatabaseEntry {
     }
 
     @Override
-    public boolean editEntry(String id, String[] newVals) {
+    public boolean editEntry(String id, String newVal, String colName) {
         return false;
     }
 
@@ -30,7 +32,7 @@ public class EdgeHandler implements DatabaseEntry {
     }
 
     @Override
-    public ArrayList<Object> genEntryObjects(String tableName) {
+    public ArrayList<NodeEntry> genEntryObjects(String tableName) {
         return null;
     }
 

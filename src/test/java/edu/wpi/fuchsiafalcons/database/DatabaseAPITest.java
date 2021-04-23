@@ -1,10 +1,15 @@
 package edu.wpi.fuchsiafalcons.database;
 
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
+
+import javax.xml.soap.Node;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -115,6 +120,28 @@ class DatabaseAPITest {
     {
         DatabaseAPI1.getDatabaseAPI1().populateNodes(CSVManager.load("MapfAllNodes.csv"));
         assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteNode("ACONF00102"));
+    }
+
+    @Test
+    @DisplayName("test generating node entry list")
+    public void testGenerateNodeEntries() throws SQLException
+    {
+        NodeEntry entry = new NodeEntry("test", "1", "1", "f", "b", "t", "l", "s");
+        ArrayList<NodeEntry> expected = new ArrayList<>();
+        expected.add(entry);
+        String[] newNode = {"test", "1", "1", "f", "b", "t", "l", "s"};
+        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
+        ArrayList<NodeEntry> actual = DatabaseAPI1.getDatabaseAPI1().genNodeEntries();
+        assertEquals(expected.get(0).getNodeID(), actual.get(0).getNodeID());
+    }
+
+    @Test
+    @DisplayName("test editing a node")
+    public void testEditNode() throws SQLException
+    {
+        String[] newNode = {"test", "1", "2", "f", "b", "t", "l", "s"};
+        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().editNode("test", "test1", "nodeid"));
     }
 
 }

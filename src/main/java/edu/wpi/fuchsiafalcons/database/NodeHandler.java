@@ -1,6 +1,8 @@
 package edu.wpi.fuchsiafalcons.database;
 
-import javax.swing.plaf.nimbus.State;
+import edu.wpi.fuchsiafalcons.entities.NodeEntry;
+
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +21,21 @@ public class NodeHandler implements DatabaseEntry {
     }
 
     @Override
-    public boolean editEntry(String id, String[] newVals) {
-        return false;
+    public boolean editEntry(String id, String newVal, String colName) {
+        boolean success = false;
+        String query = String.format("UPDATE AllNodes SET %s=(?) WHERE NODEID=(?)", colName);
+        try {
+            PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+            stmt.setString(1, newVal);
+            stmt.setString(2, colName);
+            stmt.executeUpdate();
+            stmt.close();
+            success = true;
+        }
+        catch (SQLException e) {
+            success = false;
+        }
+        return success;
     }
 
     @Override
@@ -32,8 +47,29 @@ public class NodeHandler implements DatabaseEntry {
     }
 
     @Override
-    public ArrayList<Object> genEntryObjects(String tableName) {
-        return null;
+    public ArrayList<NodeEntry> genEntryObjects(String tableName) throws SQLException{
+        ArrayList<NodeEntry> entries = new ArrayList<>();
+        String query = "SELECT * FROM AllNodes";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+
+        while (rset.next())
+        {
+            String nodeID = rset.getString(1);
+            int xCoord = rset.getInt(2);
+            int yCoord = rset.getInt(3);
+            String floor = rset.getString(4);
+            String building = rset.getString(5);
+            String type = rset.getString(6);
+            String longName = rset.getString(7);
+            String shortName = rset.getString(8);
+
+            NodeEntry newEntry = new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
+            entries.add(newEntry);
+        }
+
+        return entries;
     }
 
     @Override
