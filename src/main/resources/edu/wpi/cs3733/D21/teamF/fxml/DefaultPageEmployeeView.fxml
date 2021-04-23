@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.DefaultPageEmployeeController">
+   <children>
+      <HBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="510.0" prefWidth="504.0" spacing="50.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="463.0" text="Welcome to Brigham and Women's Hospital!" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="Tahoma Bold" size="28.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="50.0" top="30.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ImageView fitHeight="321.0" fitWidth="278.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                     <image>
+                        <Image url="@../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets left="50.0" />
+                     </VBox.margin>
+                  </ImageView>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="540.0" prefWidth="498.0" spacing="35.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <GridPane alignment="CENTER" prefHeight="474.0" prefWidth="405.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="203.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="202.0" minWidth="10.0" prefWidth="202.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <JFXButton fx:id="editVertex" alignment="CENTER" contentDisplay="CENTER" onAction="#handleButtonPushed" prefHeight="91.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fx:id="mapNode" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="editEdges" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fx:id="mapEdge" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="serviceManager" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true" GridPane.rowIndex="4">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="serviceRequest" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true" GridPane.columnIndex="1">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fx:id="serviceButton" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="AStarDemo" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" text=" " wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fx:id="directionsImage" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="quit" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="WHITE" text=" " GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <graphic>
+                              <Ellipse fill="#ff1f1f" radiusX="50.0" radiusY="50.0" stroke="RED" strokeType="INSIDE" strokeWidth="0.0" />
+                           </graphic>
+                        </JFXButton>
+                        <Label text="Edit Map Nodes" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Service Request Menu" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Edit Map Edges" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Directions" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Manage Services" GridPane.rowIndex="5">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Quit App" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                           <font>
+                              <Font name="Tahoma" size="18.0" />
+                           </font>
+                        </Label>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="X" textAlignment="CENTER" wrappingWidth="50.41455078125" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                           <font>
+                              <Font name="Tahoma Bold" size="61.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="50.0" right="53.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <ImageView fx:id="manageServices" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
+                     </children>
+                     <VBox.margin>
+                        <Insets left="60.0" right="60.0" top="50.0" />
+                     </VBox.margin>
+                  </GridPane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
