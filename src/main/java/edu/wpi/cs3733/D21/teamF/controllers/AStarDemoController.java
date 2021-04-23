@@ -18,10 +18,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -36,6 +35,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -70,8 +70,9 @@ public class AStarDemoController implements Initializable {
 
         //ahf - yes this should be done better. At some point.
 
+        List<NodeEntry> allNodeEntries = new ArrayList<>();
         try {
-            List<NodeEntry> allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
             List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
 
             final List<NodeEntry> nodeEntries = allNodeEntries.stream().collect(Collectors.toList());
@@ -92,6 +93,63 @@ public class AStarDemoController implements Initializable {
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
 
+
+
+        final ContextMenu contextMenu = new ContextMenu();
+
+        //FIXME: CHANGE TEXT TO BE MORE ACCESSABLE
+        final MenuItem startPathfind = new MenuItem("Path from Here");
+        final MenuItem endPathfind = new MenuItem("Path end Here");
+
+
+        contextMenu.getItems().addAll(startPathfind, endPathfind);
+
+
+        List<NodeEntry> finalAllNodeEntries = allNodeEntries;
+
+        mapPanel.getMap().setOnContextMenuRequested(event -> {
+            contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
+
+            final double zoomLevel = mapPanel.getZoomLevel().getValue();
+
+            startPathfind.setOnAction((ActionEvent e) -> {
+                startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX()* zoomLevel , event.getY() * zoomLevel).getNodeID());
+            });
+
+            endPathfind.setOnAction(e -> {
+                endComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID());
+            });
+        });
+
+    }
+
+    /**
+     * Given a list of NodeEntries, returns the one closest to the current location
+     * @param entries The list of NodeEntries
+     * @param x the x coordinate of the mouse
+     * @param y the y cordinate
+     * @return the closest nodeentry
+     * @author Alex Friedman (ahf)
+     */
+    private final NodeEntry getClosest(List<NodeEntry> entries, double x, double y)
+    {
+        double minDist2 = Integer.MAX_VALUE;
+        NodeEntry closest = null;
+
+        for(NodeEntry nodeEntry : entries)
+        {
+            if(!nodeEntry.getFloor().equals(mapPanel.getFloor().getValue()))
+                continue;
+
+            final double currDist2 = Math.pow(x - Integer.parseInt(nodeEntry.getXcoord()), 2) + Math.pow(y - Integer.parseInt(nodeEntry.getYcoord()), 2);
+
+            if(currDist2 < minDist2)
+            {
+                minDist2 = currDist2;
+                closest = nodeEntry;
+            }
+        }
+        return closest;
     }
 
     private boolean hasNode(List<NodeEntry> nodeEntries, String nodeID){
