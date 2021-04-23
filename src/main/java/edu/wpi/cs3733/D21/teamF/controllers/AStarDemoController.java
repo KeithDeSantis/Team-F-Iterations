@@ -9,6 +9,9 @@ import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
+import edu.wpi.cs3733.uicomponents.MapPanel;
+import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
+import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +35,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -40,12 +44,6 @@ public class AStarDemoController implements Initializable {
 
     @FXML
     private Button goBack;
-    @FXML
-    private ImageView map;
-    @FXML
-    private ScrollPane scroll;
-    @FXML
-    private Pane canvas;
 
     @FXML
     private ComboBox<String> startComboBox;
@@ -53,47 +51,30 @@ public class AStarDemoController implements Initializable {
     @FXML
     private ComboBox<String> endComboBox;
 
-    @FXML
-    private Button pathfindButton;
-
     //FIXME: DO BETTER
     private Graph graph;
-    
-    private double zoomLevel = 4.0;
+
+    @FXML
+    private MapPanel mapPanel;
+
 
     /**
      * These are done for displaying the start & end nodes. This should be done better (eventually)
      * @author Alex Friedman (ahf)
      */
-    private Circle startNodeDisplay;
-    private Circle endNodeDisplay;
+    private DrawableNode startNodeDisplay;
+    private DrawableNode endNodeDisplay;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        map.setPreserveRatio(true);
-
-        final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-
-        final double width = image.getWidth()/zoomLevel;
-        final double height = image.getHeight()/zoomLevel;
-
-        canvas.setPrefSize(width,height);
-        map.setFitWidth(width);
-        map.setFitHeight(height);
-
-
-        map.setImage(image);
         //ahf - yes this should be done better. At some point.
 
         try {
             List<NodeEntry> allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
             List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
 
-            final List<NodeEntry> nodeEntries = allNodeEntries.stream().filter(node -> node.getFloor().equals("1")
-            && !node.getBuilding().equals("Shapiro") && !node.getBuilding().equals("BTM")).collect(Collectors.toList());
+            final List<NodeEntry> nodeEntries = allNodeEntries.stream().collect(Collectors.toList());
 
             final List<EdgeEntry> edgeEntries = allEdgeEntries.stream().filter( node -> hasNode(nodeEntries, node.getStartNode())
                     && hasNode(nodeEntries, node.getEndNode()) ).collect(Collectors.toList());
@@ -106,11 +87,11 @@ public class AStarDemoController implements Initializable {
 
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
         nodeList.addAll(this.graph.getVertices().stream().map(Vertex::getID)
-         .sorted().collect(Collectors.toList()));
+                .sorted().collect(Collectors.toList()));
 
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
-        pathfindButton.setDisable(true);
+
     }
 
     private boolean hasNode(List<NodeEntry> nodeEntries, String nodeID){
@@ -122,12 +103,12 @@ public class AStarDemoController implements Initializable {
         return false;
     }
 
-        /**
-         * Handles the pushing of a button on the screen
-         * @param actionEvent the button's push
-         * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
-         * @author ZheCheng Song
-         */
+    /**
+     * Handles the pushing of a button on the screen
+     * @param actionEvent the button's push
+     * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
+     * @author ZheCheng Song
+     */
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
@@ -145,13 +126,26 @@ public class AStarDemoController implements Initializable {
     }
 
     /**
-     * Handles the pathfind btn.
-     * @author Alex Friedman (ahf), Tony Vuolo
+     *
+     * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handlePathfindButtonClicked() {
-        clearPath();
-        updatePath();
+    public void handleStartBoxAction() throws SQLException {
+        checkInput();
+        if(this.startNodeDisplay != null)
+            mapPanel.unDraw(this.startNodeDisplay.getId());
+
+
+        final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),startComboBox.getValue());
+        if(startNode != null)
+        {
+            final DrawableNode drawableNode = startNode.getDrawable();
+            drawableNode.setFill(UIConstants.NODE_COLOR);
+            drawableNode.setRadius(10);
+
+            mapPanel.draw(drawableNode);
+            this.startNodeDisplay = drawableNode;
+        }
     }
 
     /**
@@ -159,47 +153,23 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handleStartBoxAction() {
+    public void handleEndBoxAction() throws SQLException {
         checkInput();
-        if(this.startNodeDisplay == null)
+        if(this.endNodeDisplay != null)
+            mapPanel.unDraw(this.endNodeDisplay.getId());
+
+
+        final NodeEntry endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),endComboBox.getValue());
+        if(endNode != null)
         {
-            this.startNodeDisplay = new Circle();
-            this.startNodeDisplay.setFill(UIConstants.NODE_COLOR);
-            this.startNodeDisplay.setRadius(UIConstants.NODE_RADIUS);
+            final DrawableNode drawableNode = endNode.getDrawable();
+            drawableNode.setFill(Color.GREEN);
+            drawableNode.setRadius(10);
 
-            this.canvas.getChildren().add(this.startNodeDisplay);
+            mapPanel.draw(drawableNode);
+
+            this.endNodeDisplay = drawableNode;
         }
-
-        final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
-        if(startVertex != null) {
-            this.startNodeDisplay.setCenterX(startVertex.getX() / this.zoomLevel);
-            this.startNodeDisplay.setCenterY(startVertex.getY() / this.zoomLevel);
-        }
-
-    }
-
-    /**
-     *
-     * @author Alex Friedman (ahf)
-     */
-    @FXML
-    public void handleEndBoxAction() {
-        checkInput();
-        if(this.endNodeDisplay == null)
-        {
-            this.endNodeDisplay = new Circle();
-            this.endNodeDisplay.setFill(Color.GREEN); //FIXME: Choose different colors b/c of colorblindness
-            this.endNodeDisplay.setRadius(10.0);
-
-            this.canvas.getChildren().add(this.endNodeDisplay);
-        }
-
-        final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
-        if(endVertex != null) {
-            this.endNodeDisplay.setCenterX(endVertex.getX() / this.zoomLevel);
-            this.endNodeDisplay.setCenterY(endVertex.getY() / this.zoomLevel);
-        }
-
     }
 
     /**
@@ -208,7 +178,7 @@ public class AStarDemoController implements Initializable {
      */
     private void clearPath()
     {
-        canvas.getChildren().removeIf(x -> x instanceof Line);
+        mapPanel.clearMap();
     }
 
     /**
@@ -217,7 +187,13 @@ public class AStarDemoController implements Initializable {
      */
     private boolean updatePath()
     {
-        final String currentFloor = "1"; //FIXME: DO BETTER<
+
+        if(this.startNodeDisplay != null)
+            mapPanel.draw(this.startNodeDisplay);
+        if(this.endNodeDisplay != null)
+            mapPanel.draw(this.endNodeDisplay);
+
+        final String currentFloor = mapPanel.getFloor().getValue();
 
         final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
 
@@ -235,16 +211,19 @@ public class AStarDemoController implements Initializable {
                     final Vertex start = pathData.get(i);
                     final Vertex end = pathData.get(i + 1);
 
-                    final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
-                    line.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
+                    //int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor
+                    //FIXME: DO BETTER ID WHEN WE HAVE MULTIPLE PATH DIRECTIONS!!!
+                    final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor());
+                   // final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
+                    edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
-                    final LinearGradient lineGradient = new LinearGradient(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), false, CycleMethod.NO_CYCLE,
+                    final LinearGradient lineGradient = new LinearGradient(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY(), false, CycleMethod.NO_CYCLE,
                             new Stop(0, (start.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)),
                             new Stop(1, (end.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)));
 
-                    line.setStroke(lineGradient);
+                    edge.setStroke(lineGradient);
 
-                    canvas.getChildren().add(line);
+                    mapPanel.draw(edge);
                 }
                 return true;
             }
@@ -264,12 +243,9 @@ public class AStarDemoController implements Initializable {
     private void checkInput() {
         if (startComboBox.getValue() == null ||
                 endComboBox.getValue() == null){
-            pathfindButton.setDisable(true);
             clearPath();
 
         }else{
-            pathfindButton.setDisable(false);
-
             clearPath();
             updatePath();
         }
