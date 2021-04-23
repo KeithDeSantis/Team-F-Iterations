@@ -1,12 +1,19 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 public class MapEditViewController {
+
+
+    @FXML
+    private void initialize() {
+
+    }
 
     public void handleHoverOn(MouseEvent mouseEvent) {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
