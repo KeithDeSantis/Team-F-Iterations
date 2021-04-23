@@ -6,13 +6,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
 public class UserHandler implements DatabaseEntry{
 
-    private static byte[] getSalt() throws NoSuchAlgorithmException, NoSuchProviderException
+    public static byte[] getSalt() throws NoSuchAlgorithmException, NoSuchProviderException
     {
         SecureRandom sr =  SecureRandom.getInstance("SHA1PRNG", "SUN");
         byte[] salt = new byte[16];
@@ -40,13 +41,33 @@ public class UserHandler implements DatabaseEntry{
         return cipherText;
     }
 
+    public boolean authenticate(String username, String password) throws SQLException
+    {
+        boolean authenticated = false;
+        String query = "SELECT * FROM USERS WHERE USERNAME=(?)";
+        ResultSet rset;
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+        stmt.setString(1, username);
+        rset = stmt.executeQuery();
+
+        byte[] salt;
+        if (rset.next()) {
+            salt = rset.getBytes(5);
+            if (encryptPassword(password, salt).equals(rset.getString(4))) {
+                authenticated = true;
+            }
+        }
+        return authenticated;
+    }
+
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
-        final String query = "INSERT INTO USERS values(?, ?, ?, ?)";
+        final String query = "INSERT INTO USERS values(?, ?, ?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
 
+        byte[] salt = null;
         try {
-            byte[] salt = getSalt();
+            salt = getSalt();
             String encryptedPassword = encryptPassword(colValues[3], salt);
             colValues[3] = encryptedPassword;
             System.out.println(encryptedPassword);
@@ -61,6 +82,7 @@ public class UserHandler implements DatabaseEntry{
             stmt.setString(colCounter, s);
             colCounter = colCounter + 1;
         }
+        stmt.setBytes(5, salt);
         return stmt.executeUpdate() != 0;
     }
 
@@ -94,7 +116,7 @@ public class UserHandler implements DatabaseEntry{
     public boolean createTable() {
         boolean success = false;
         final String initUserTable = "CREATE TABLE USERS(userid varchar(200), type varchar(200), " +
-                "username varchar(200), password varchar(200), primary key(userid))";
+                "username varchar(200), password varchar(200), salt blob(20), primary key(username))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initUserTable);

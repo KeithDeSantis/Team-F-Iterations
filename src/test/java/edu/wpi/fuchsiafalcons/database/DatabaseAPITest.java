@@ -315,4 +315,13 @@ class DatabaseAPITest {
         assertEquals(expected.get(0).getUuid(), actual.get(0).getUuid());
     }
 
+    @Test
+    @DisplayName("Test authentication and encryption")
+    public void testAuthentication() throws SQLException{
+        String[] newUser = {"1", "admin", "declan", "password"};
+        DatabaseAPI1.getDatabaseAPI1().addUser(newUser);
+        UserHandler handler = new UserHandler();
+        assertTrue(handler.authenticate("declan", "password"));
+    }
+
 }
