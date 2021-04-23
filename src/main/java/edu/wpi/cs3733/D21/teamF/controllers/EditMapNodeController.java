@@ -4,8 +4,8 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.uicomponents.MapPanel;
-import edu.wpi.cs3733.D21.teamF.uicomponents.entities.DrawableNode;
+import edu.wpi.cs3733.uicomponents.MapPanel;
+import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import javafx.collections.FXCollections;
@@ -120,8 +120,8 @@ public class EditMapNodeController {
 
             createNodeMenuItem.setOnAction((ActionEvent e) -> {
                 NodeEntry nodeEntry = new NodeEntry();
-                nodeEntry.setXcoord("" + (event.getX() * mapPanel.getZoomLevel().get()));
-                nodeEntry.setYcoord("" + (event.getY() * mapPanel.getZoomLevel().get()));
+                nodeEntry.setXcoord("" + (int)(event.getX() * mapPanel.getZoomLevel().get()));
+                nodeEntry.setYcoord("" + (int)(event.getY() * mapPanel.getZoomLevel().get()));
                 nodeEntry.setFloor(mapPanel.getFloor().get());
 
                 try {

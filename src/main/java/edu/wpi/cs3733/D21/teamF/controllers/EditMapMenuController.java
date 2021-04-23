@@ -55,7 +55,7 @@ public class EditMapMenuController {
             stage.show();
         } else if (buttonPushed == editEdges) {
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/uicomponents/MapPanel.fxml"));//"/edu/wpi/cs3733/D21/teamF/fxml/EditMapEdgesView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditMapEdgesView.fxml"));
             stage.getScene().setRoot(root);  //Changing the stage
             stage.setTitle("Edit Map Edges");
             stage.show();

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import edu.wpi.cs3733.D21.teamF.uicomponents.MapPanel?>
+<?import edu.wpi.cs3733.uicomponents.MapPanel?>
 <AnchorPane minHeight="540.0" minWidth="960.0" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.EditMapNodeController">
    <children>
       <VBox alignment="CENTER" prefHeight="540.0" prefWidth="960.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

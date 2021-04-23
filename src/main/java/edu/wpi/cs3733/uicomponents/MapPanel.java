@@ -1,4 +1,4 @@
-package edu.wpi.cs3733.D21.teamF.uicomponents;
+package edu.wpi.cs3733.uicomponents;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.*;

@@ -1,7 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.entities;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import edu.wpi.cs3733.D21.teamF.uicomponents.entities.DrawableNode;
+import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import javafx.beans.property.SimpleStringProperty;
 
 /**

@@ -1,9 +1,8 @@
-package edu.wpi.cs3733.D21.teamF.uicomponents;
+package edu.wpi.cs3733.uicomponents;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.Node;
 
 public interface IMapDrawable {
 
