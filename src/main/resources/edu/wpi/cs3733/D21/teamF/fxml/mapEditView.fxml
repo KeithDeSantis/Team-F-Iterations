@@ -27,7 +27,7 @@
          <tabs>
             <Tab fx:id="nodesTab" text="Nodes">
                <content>
-                  <JFXTreeTableView fx:id="nodeTreeTable" />
+                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" />
                </content>
             </Tab>
             <Tab fx:id="edgesTab" text="Edges">
