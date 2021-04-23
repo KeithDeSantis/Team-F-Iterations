@@ -1,9 +1,7 @@
 package edu.wpi.fuchsiafalcons.uicomponents;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.UIConstants;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,12 +15,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * This class is a JavaFX Component that acts as our map viewer
@@ -39,8 +35,6 @@ public class MapPanel extends AnchorPane {
     @FXML private JFXButton zoomInButton;
 
     @FXML private JFXButton zoomOutButton;
-
-    //private ObservableList<NodeEntry> nodeList = FXCollections.observableArrayList();
 
     private DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
 
@@ -75,18 +69,12 @@ public class MapPanel extends AnchorPane {
 
         INITIAL_WIDTH.setValue(F1Image.getWidth());
         INITIAL_HEIGHT.setValue(F1Image.getHeight());
-        //final double width = F1Image.getWidth()/zoomLevel;
-        //final double height = F1Image.getHeight()/zoomLevel;
 
-
-        //canvas.setPrefSize(width,height);
         canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
         canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
 
         map.fitWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
-        //map.setFitWidth(width);
         map.fitHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
-        //map.setFitHeight(height);
         map.setImage(F1Image); // Copied from A* Vis - KD
 
 
@@ -95,7 +83,6 @@ public class MapPanel extends AnchorPane {
         floorName.addAll("1","2","3","L1","L2","G");
         floorComboBox.setItems(floorName);
         floorComboBox.valueProperty().bindBidirectional(this.floor);
-        //drawNodeOnFloor();
     }
 
 
@@ -135,34 +122,12 @@ public class MapPanel extends AnchorPane {
         //drawNodeOnFloor();
     }
 
-    /**
-     * Clear the canvas and draw nodes that are on current floor
-     * @author ZheCheng
-     */
-//    public void drawNodeOnFloor(){
-//        canvas.getChildren().removeIf(x -> {
-//            return x instanceof Circle;
-//        });
-//
-//        selectedCircle = null;
-//        for(NodeEntry n : nodeList){
-//            if(n.getFloor().equals(floor.get())) {
-//                drawCircle(Double.parseDouble(n.getXcoord()), Double.parseDouble(n.getYcoord()), n.getNodeID());
-//            }
-//        }
-//    }
+
 
     public ImageView getMap() {
         return map;
     }
 
-//    public Circle getSelectedCircle() {
-//        return selectedCircle;
-//    }
-
-//    public void setSelectedCircle(Circle selectedCircle) {
-//        this.selectedCircle = selectedCircle;
-//    }
 
     public DoubleProperty getZoomLevel() {
         return zoomLevel;
@@ -176,42 +141,7 @@ public class MapPanel extends AnchorPane {
         return canvas;
     }
 
-//    public ObservableList<NodeEntry> getNodeList() {
-//        return nodeList;
-//    }
 
-    /**
-     * Draw a single circle to represent the node
-     * @author ZheCheng
-     */
-    private void drawCircle(double x, double y, String nodeID){
-        final DoubleBinding xProp = (new SimpleDoubleProperty(x)).divide(zoomLevel);
-        final DoubleBinding yProp = (new SimpleDoubleProperty(y)).divide(zoomLevel);
-
-        Circle c = new Circle();//(x, y, UIConstants.NODE_RADIUS);
-        c.centerXProperty().bind(xProp);
-        c.centerYProperty().bind(yProp);
-        c.setRadius(UIConstants.NODE_RADIUS);
-
-        /*
-        c.setFill(UIConstants.NODE_COLOR);
-        c.setId(nodeID);
-        c.setOnMouseEntered(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
-        c.setOnMouseExited(e->{if(!c.equals(selectedCircle))c.setFill(UIConstants.NODE_COLOR);});
-
-        c.setOnMouseClicked(e->{
-            if(selectedCircle != null)
-                selectedCircle.setFill(UIConstants.NODE_COLOR);
-            selectedCircle = c;
-            c.setFill(UIConstants.NODE_COLOR_SELECTED);
-            nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
-            nodeTreeTable.requestFocus();
-            nodeTreeTable.scrollTo(findNode(nodeID));});
-
-
-         */
-        this.canvas.getChildren().add(c);
-    }
 
     /**
      * Center the given node in scrollpane
