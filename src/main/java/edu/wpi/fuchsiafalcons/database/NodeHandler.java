@@ -108,7 +108,6 @@ public class NodeHandler implements DatabaseEntry {
 
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
-
         for (String[] arr : entries) {
             final int x = Integer.parseInt(arr[1].trim());
             final int y = Integer.parseInt(arr[2].trim());
