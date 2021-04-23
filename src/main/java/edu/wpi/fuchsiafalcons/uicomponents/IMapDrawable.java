@@ -1,14 +1,23 @@
 package edu.wpi.fuchsiafalcons.uicomponents;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 
-public abstract class IMapDrawable {
+public interface IMapDrawable {
 
-    private Node component;
-    private int xCoordinate;
-    private int yCoordinate;
+    /*
+    private IMouseClickedBehavior mouseClickedBehavior;
+    private IMouseEnteredBehavior mouseEnteredBehavior;
+    private IMouseExitBehavior mouseExitBehavior;
+    */
 
-    //public
+    void bindLocation(DoubleProperty zoomLevel);
+
+    BooleanProperty shouldDisplay();
+
+    StringProperty getFloor();
 
 
 }

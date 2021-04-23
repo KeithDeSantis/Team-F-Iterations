@@ -4,14 +4,13 @@ import com.jfoenix.controls.JFXButton;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.utils.UIConstants;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -23,6 +22,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This class is a JavaFX Component that acts as our map viewer
@@ -47,8 +47,10 @@ public class MapPanel extends AnchorPane {
     private final DoubleProperty INITIAL_WIDTH = new SimpleDoubleProperty();
     private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
 
+
+    private StringProperty floor = new SimpleStringProperty("1");
    // double zoomLevel = 5.0;
-    private String floor = "1";
+    //private String floor = "1";
 
     private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
 
@@ -96,7 +98,7 @@ public class MapPanel extends AnchorPane {
         final ObservableList<String> floorName = FXCollections.observableArrayList();
         floorName.addAll("1","2","3","L1","L2","G");
         floorComboBox.setItems(floorName);
-        floorComboBox.setValue(floor);
+        floorComboBox.valueProperty().bindBidirectional(this.floor);
         drawNodeOnFloor();
     }
 
@@ -116,7 +118,7 @@ public class MapPanel extends AnchorPane {
      * @author ZheCheng
      */
     public void switchMap(String floor){
-        this.floor = floor;
+        this.floor.setValue(floor);
         switch(floor){
             case "1": if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
                 map.setImage(F1Image); break;
@@ -148,7 +150,7 @@ public class MapPanel extends AnchorPane {
 
         selectedCircle = null;
         for(NodeEntry n : nodeList){
-            if(n.getFloor().equals(floor)) {
+            if(n.getFloor().equals(floor.get())) {
                 drawCircle(Double.parseDouble(n.getXcoord()), Double.parseDouble(n.getYcoord()), n.getNodeID());
             }
         }
@@ -187,7 +189,6 @@ public class MapPanel extends AnchorPane {
      * @author ZheCheng
      */
     private void drawCircle(double x, double y, String nodeID){
-
         final DoubleBinding xProp = (new SimpleDoubleProperty(x)).divide(zoomLevel);
         final DoubleBinding yProp = (new SimpleDoubleProperty(y)).divide(zoomLevel);
 
@@ -252,17 +253,9 @@ public class MapPanel extends AnchorPane {
                 zoomLevel.setValue(zoomLevel.get() + 1);
             }
         }
-        //drawNodeOnFloor();
-
 
         Image image = map.getImage();
-        //double width = image.getWidth()/zoomLevel;
-        //double height = image.getHeight()/zoomLevel;
-        //canvas.setPrefSize(width,height);
-        //map.setFitWidth(width);
-        //map.setFitHeight(height);
         map.setImage(image);
-
     }
 
     /**
@@ -301,6 +294,17 @@ public class MapPanel extends AnchorPane {
         l.setStroke(UIConstants.LINE_COLOR);
         l.setId(edgeID);
         this.canvas.getChildren().add(l);
+
         return l;
+    }
+
+    public <Element extends Node & IMapDrawable> Element draw(Element element)
+    {
+        element.bindLocation(zoomLevel);
+        this.canvas.getChildren().add(element);
+
+        element.visibleProperty().bind(element.shouldDisplay().and(this.floor.isEqualTo(element.getFloor())));
+
+        return element;
     }
 }
