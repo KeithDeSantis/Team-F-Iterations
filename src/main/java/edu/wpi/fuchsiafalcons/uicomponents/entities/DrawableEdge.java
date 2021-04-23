@@ -12,12 +12,13 @@ public class DrawableEdge extends Line implements IMapDrawable
     private final SimpleIntegerProperty endX;
     private final SimpleIntegerProperty endY;
 
-    private StringProperty floor;
+    private StringProperty startFloor;
+    private StringProperty endFloor;
 
     private SimpleBooleanProperty shouldDisplay;
 
 
-    public DrawableEdge(int startX, int startY, int endX, int endY, String ID, String floor)
+    public DrawableEdge(int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor)
     {
         this.startX = new SimpleIntegerProperty(startX);
         this.startY = new SimpleIntegerProperty(startY);
@@ -25,7 +26,8 @@ public class DrawableEdge extends Line implements IMapDrawable
         this.endX = new SimpleIntegerProperty(endX);
         this.endY = new SimpleIntegerProperty(endY);
 
-        this.floor = new SimpleStringProperty(floor);
+        this.startFloor = new SimpleStringProperty(startFloor);
+        this.endFloor = new SimpleStringProperty(endFloor);
 
         this.shouldDisplay = new SimpleBooleanProperty(true); //FIXME: DO BETTER!
 
@@ -50,6 +52,6 @@ public class DrawableEdge extends Line implements IMapDrawable
 
     @Override
     public StringProperty getFloor() {
-        return this.floor;
+        return this.endFloor; //FIXME: DO BETTER!!!!
     }
 }

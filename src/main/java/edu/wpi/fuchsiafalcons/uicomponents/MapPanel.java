@@ -209,21 +209,21 @@ public class MapPanel extends AnchorPane {
      * Draw a single line to represent the edge
      * @author ZheCheng
      */
-    public Line drawLine(double startX, double startY, double endX, double endY, String edgeID){
-        Line l = new Line();
-        l.startXProperty().bind((new SimpleDoubleProperty(startX)).divide(zoomLevel));
-        l.startYProperty().bind((new SimpleDoubleProperty(startY)).divide(zoomLevel));
-
-        l.endXProperty().bind((new SimpleDoubleProperty(endX)).divide(zoomLevel));
-        l.endYProperty().bind((new SimpleDoubleProperty(endY)).divide(zoomLevel));
-
-        l.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
-        l.setStroke(UIConstants.LINE_COLOR);
-        l.setId(edgeID);
-        this.canvas.getChildren().add(l);
-
-        return l;
-    }
+//    public Line drawLine(double startX, double startY, double endX, double endY, String edgeID){
+//        Line l = new Line();
+//        l.startXProperty().bind((new SimpleDoubleProperty(startX)).divide(zoomLevel));
+//        l.startYProperty().bind((new SimpleDoubleProperty(startY)).divide(zoomLevel));
+//
+//        l.endXProperty().bind((new SimpleDoubleProperty(endX)).divide(zoomLevel));
+//        l.endYProperty().bind((new SimpleDoubleProperty(endY)).divide(zoomLevel));
+//
+//        l.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
+//        l.setStroke(UIConstants.LINE_COLOR);
+//        l.setId(edgeID);
+//        this.canvas.getChildren().add(l);
+//
+//        return l;
+//    }
 
     public <Element extends Node & IMapDrawable> Element draw(Element element)
     {

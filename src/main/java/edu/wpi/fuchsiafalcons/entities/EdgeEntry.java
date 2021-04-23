@@ -1,6 +1,8 @@
 package edu.wpi.fuchsiafalcons.entities;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import edu.wpi.fuchsiafalcons.uicomponents.entities.DrawableEdge;
+import edu.wpi.fuchsiafalcons.uicomponents.entities.DrawableNode;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

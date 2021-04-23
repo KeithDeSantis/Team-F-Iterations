@@ -7,9 +7,10 @@ import edu.wpi.fuchsiafalcons.database.DatabaseAPI;
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.uicomponents.MapPanel;
+import edu.wpi.fuchsiafalcons.uicomponents.entities.DrawableEdge;
+import edu.wpi.fuchsiafalcons.uicomponents.entities.DrawableNode;
 import edu.wpi.fuchsiafalcons.utils.CSVManager;
 import edu.wpi.fuchsiafalcons.utils.UIConstants;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,20 +18,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
-import javafx.util.Callback;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -170,7 +165,7 @@ public class EditMapEdgesController {
 
             // Delete Selected edge and corresponding node on map
             selectedLine = null;
-            drawEdgeNodeOnFloor();
+            mapPanel.unDraw(selectedEdge.getEdgeID());
         }
     }
 
@@ -365,6 +360,7 @@ public class EditMapEdgesController {
         final String fileName = CSVFile.getText();
 
         edgeEntryObservableList.clear();
+        mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge); //FIXME: CHANGE TO CLEAR & RELOAD NODES
 
         List<String[]> edgeData = null;
 
@@ -382,10 +378,25 @@ public class EditMapEdgesController {
                 edgeEntryObservableList.addAll(edgeData.stream().map(line -> {
                     return new EdgeEntry(line[0], line[1], line[2]);
                 }).collect(Collectors.toList()));
+
+                drawEdgeNodeOnFloor();
+                /*
+                edgeEntryObservableList.forEach(x -> {
+                    try {
+                        mapPanel.draw(getEditableEdge(x,
+                                DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), x.getStartNode()),
+                                DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), x.getEndNode())
+                                ));
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                });
+
+                 */
             }
         }
 
-        drawEdgeNodeOnFloor();
+
     }
 
     /**
@@ -424,12 +435,11 @@ public class EditMapEdgesController {
 
         // Check if need to switch map
         if(startNode.getFloor().equals(mapPanel.getFloor().get()) || endNode.getFloor().equals(mapPanel.getFloor().get())) {
-            drawEdgeNodeOnFloor();
+            //drawEdgeNodeOnFloor();
             if(selectedLine != null)
                 selectedLine.setStroke(UIConstants.LINE_COLOR);
         }else{
             mapPanel.switchMap(startNode.getFloor());
-            switchMap();
         }
 
         // Get the line with edgeID
@@ -444,22 +454,12 @@ public class EditMapEdgesController {
     }
 
     /**
-     * Handle switching floor map and redraw the nodes in new floor
-     * @author ZheCheng
-     */
-    private void switchMap(){
-
-        drawEdgeNodeOnFloor();
-    }
-
-    /**
      * Clear the canvas and draw edges and nodes that are on current floor
      * @author ZheCheng
      */
     private void drawEdgeNodeOnFloor() {
         // Clear canvas
-        mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof Circle);
-        mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof Line);
+        mapPanel.clearMap();
 
         // Reset selections
         selectedLine = null;
@@ -481,17 +481,15 @@ public class EditMapEdgesController {
             if(startNode == null || endNode == null) {
                 System.out.println("Edge with no actual Node");
                 //return;
-            }else if(startNode.getFloor().equals(mapPanel.getFloor().get()) || endNode.getFloor().equals(mapPanel.getFloor().get())) {
+            }
+            else
+            {
                 if(!nodeList.contains(startNode))
                     nodeList.add(startNode);
                 if(!nodeList.contains(endNode))
                     nodeList.add(endNode);
 
-                Line l = mapPanel.drawLine(Double.parseDouble(startNode.getXcoord()),
-                        Double.parseDouble(startNode.getYcoord()),
-                        Double.parseDouble(endNode.getXcoord()),
-                        Double.parseDouble(endNode.getYcoord()),
-                        e.getEdgeID());
+                Line l = mapPanel.draw(getEditableEdge(e, startNode, endNode));
 
                 l.setOnMouseEntered(event->{if(!l.equals(selectedLine))l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);});
                 l.setOnMouseExited(event->{if(!l.equals(selectedLine))l.setStroke(UIConstants.LINE_COLOR);});
@@ -509,8 +507,54 @@ public class EditMapEdgesController {
 
         // Draw all corresponding nodes
         for(NodeEntry n : nodeList){
+            mapPanel.draw(getEditableNode(n));
            // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
         }
+    }
+
+
+    private DrawableNode getEditableNode(NodeEntry e)
+    {
+        final DrawableNode node = e.getDrawable();
+        node.setOnMouseEntered(event->{if(!node.equals(firstCircle) && !node.equals(secondCircle))node.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
+        node.setOnMouseExited(event->{if(!node.equals(firstCircle) && !node.equals(secondCircle))node.setFill(UIConstants.NODE_COLOR);});
+        node.setOnMouseClicked(event->{
+            if(node.equals(firstCircle)) {
+                firstCircle = null;
+                return;
+            }
+            node.setFill(UIConstants.NODE_COLOR_SELECTED);
+            if(firstCircle == null)
+                firstCircle = node;
+            else {
+                secondCircle = node;
+                // Second node selected, create edge
+                try {
+                    createNewEdge();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
+
+        return node;
+    }
+
+    private DrawableEdge getEditableEdge(EdgeEntry edge, NodeEntry startNode, NodeEntry endNode)
+    {
+        final DrawableEdge drawableEdge = new DrawableEdge(
+                Integer.parseInt(startNode.getXcoord()),
+                Integer.parseInt(startNode.getYcoord()),
+                Integer.parseInt(endNode.getXcoord()),
+                Integer.parseInt(endNode.getYcoord()),
+                edge.getEdgeID(),
+                startNode.getFloor(),
+                endNode.getFloor()
+        );
+
+        return drawableEdge;
     }
 
     /**
