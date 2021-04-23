@@ -46,7 +46,7 @@ public class MapPanel extends AnchorPane {
     private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
 
     public MapPanel() {
-        final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/fxml/uicomponents/MapPanel.fxml"));
+        final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/uicomponents/MapPanel.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 

@@ -18,9 +18,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -28,9 +25,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
-import javafx.util.Callback;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -588,6 +583,49 @@ public class EditMapEdgesController {
             index++;
         }
         return index;
+    }
+
+    /**
+     * Resets the database
+     * @param actionEvent
+     * @throws SQLException
+     * @author Leo Morris and KD
+     */
+    public void handleResetDB(ActionEvent actionEvent) throws SQLException {
+
+        edgeEntryObservableList.clear();
+        mapPanel.clearMap();
+
+        List<String[]> edgeData = null;
+
+        try {
+            edgeData = (CSVManager.load("MapfAllEdges.csv"));
+        } catch (Exception e) {
+            CSVErrorLabel.setText(e.getMessage());
+            CSVErrorLabel.setStyle("-fx-text-fill: red");
+            e.printStackTrace();
+            return;
+        }
+
+        if(edgeData != null )
+        {
+            if(!edgeData.isEmpty() && edgeData.get(0).length == 3 )
+            {
+                edgeEntryObservableList.addAll(edgeData.stream().map(line -> {
+                    return new EdgeEntry(line[0], line[1], line[2]);
+                }).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
+
+                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
+                final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
+                        "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
+                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
+                DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
+            }
+        }
+        CSVErrorLabel.setText("");
+        CSVErrorLabel.setStyle("-fx-text-fill: black");
+
+        drawEdgeNodeOnFloor();
     }
 
 }
