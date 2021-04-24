@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -52,8 +53,8 @@ public class MapEditViewControllerTest extends ApplicationTest {
         primaryStage.show();
     }
 
-    @BeforeEach
-    public void beforeTest()
+    @AfterEach
+    public void afterTest()
     {
         clickOn("Reset From Database");
     }
@@ -62,12 +63,6 @@ public class MapEditViewControllerTest extends ApplicationTest {
     public void clickOnNodeTest() {
         clickOn("#FEXIT00201");
         verifyThat("FEXIT00201", Node::isVisible);
-    }
-
-    @Test
-    public void clickOnEdgeTest() {
-        clickOn("#fWALK00501_FEXIT00301");
-        verifyThat("fWALK00501_FEXIT00301", Node::isVisible);
     }
 
     @Test
@@ -83,5 +78,120 @@ public class MapEditViewControllerTest extends ApplicationTest {
             if(edgeEntryObservableList.get(index).getEndNode().equals("FEXIT00201"))
                 assertFalse(edgeEntryObservableList.get(index).getEndNode().equals("FEXIT00201"));
         }
+    }
+
+    @Test
+    public void newNodeTest() {
+        clickOn("#nodesTab");
+        clickOn("New...");
+        clickOn("#nodeIDField");
+        write("TestNode");
+        clickOn("#xCoordField");
+        write("100");
+        clickOn("#yCoordField");
+        write("200");
+        clickOn("#floorField");
+        write("bad");
+        clickOn("#buildingField");
+        write("TestBuilding");
+        clickOn("#nodeTypeField");
+        write("TestType");
+        clickOn("#longNameField");
+        write("Testing Node one");
+        clickOn("#shortNameField");
+        write("Testing1");
+        clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#floorField");
+        write("1");
+        clickOn("OK");
+        verifyThat("#TestNode", Node::isVisible);
+        boolean isMade = false;
+        for(int index = 0; index<nodeEntryObservableList.size(); index++) {
+            if(nodeEntryObservableList.get(index).getNodeID().equals("TestNode")) isMade = true;
+        }
+        assertTrue(isMade);
+    }
+
+    @Test
+    public void rightClickNewNodeTest() {
+        rightClickOn("#mapPanel");
+        verifyThat("Create Node Here", Node::isVisible);
+        clickOn("Create Node Here");
+        clickOn("#nodeIDField");
+        write("testRightClick");
+        clickOn("#buildingField");
+        write(".");
+        clickOn("#nodeTypeField");
+        write(".");
+        clickOn("#longNameField");
+        write(".");
+        clickOn("#shortNameField");
+        write(".");
+        clickOn("OK");
+        verifyThat("#testRightClick", Node::isVisible);
+    }
+
+    @Test
+    public void editNodeTest() {
+        clickOn("#nodesTab");
+        clickOn("Edit...");
+        clickOn("#FEXIT00201");
+        clickOn("Edit...");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#nodeIDField");
+        write("ACONF00103");
+        clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#nodeIDField");
+        write("FEXIT00201");
+        doubleClickOn("#floorField");
+        write("f");
+        clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#floorField");
+        write("G");
+        clickOn("OK");
+        verifyThat("#FEXIT00201", Node::isVisible);
+        verifyThat("G", Node::isVisible);
+
+    }
+
+    @Test
+    public void editNodeValidityTest() {
+        clickOn("#nodesTab");
+        clickOn("#FEXIT00201");
+        clickOn("Edit...");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#xCoordField");
+        write("-1");
+        doubleClickOn("#yCoordField");
+        write("-1");
+        clickOn("OK");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#xCoordField");
+        write("0");
+        doubleClickOn("#yCoordField");
+        write("0");
+        clickOn("OK");
+        verifyThat("#FEXIT00201", Node::isVisible); // Testing changing position
+        boolean oneFEXIT00201 = false;
+        for(NodeEntry n : nodeEntryObservableList) { if(n.getNodeID().equals("FEXIT00201")) oneFEXIT00201 = !oneFEXIT00201; }
+        assertTrue(oneFEXIT00201);
+
+        clickOn("#FEXIT00201");
+        clickOn("Edit...");
+        verifyThat("OK", Node::isVisible);
+        doubleClickOn("#nodeIDField");
+        write("testID");
+        clickOn("OK");
+        verifyThat("#testID", Node::isVisible);
+        verifyThat("testID", Node::isVisible);
+    }
+
+    @Test
+    public void clickOnEdgeTest() {
+        clickOn("#fWALK00501_FEXIT00301");
+        verifyThat("fWALK00501_FEXIT00301", Node::isVisible);
     }
 }

@@ -639,9 +639,10 @@ public class MapEditViewController {
             DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
             mapPanel.unDraw(targetID);
 
+            String previousID = selectedNode.getNodeID();
             openEditNodeDialog(selectedNode); // allow editing of selection - KD
-
             updateNodeEntry(selectedNode);
+            reassignAssociatedEdges(previousID, selectedNode.getNodeID());
 
             drawEdgeNodeOnFloor();
         }
@@ -727,6 +728,29 @@ public class MapEditViewController {
                 alert.setContentText("Please select an edge from the list");
                 e.printStackTrace();
                 alert.showAndWait();
+            }
+        }
+    }
+
+    /**
+     * Helper for when a node's ID is changed, needs to update all Edge entries that are associated with it in both the observable list and the database
+     * @param previousID the previous ID
+     * @param newID the new ID
+     * @author KD
+     */
+    public void reassignAssociatedEdges(String previousID, String newID) throws SQLException {
+        for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+
+            if (edgeEntry.getStartNode().equals(previousID)) {
+                edgeEntry.setStartNode(newID);
+                DatabaseAPI.getDatabaseAPI().deleteEdge(previousID + "_" + edgeEntry.getEndNode());
+                DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
+            }
+
+            if (edgeEntry.getEndNode().equals(previousID)) {
+                edgeEntry.setEndNode(newID);
+                DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntry.getStartNode() + "_" + previousID);
+                DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
             }
         }
     }
