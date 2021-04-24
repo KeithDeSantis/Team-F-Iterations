@@ -194,4 +194,42 @@ public class MapEditViewControllerTest extends ApplicationTest {
         clickOn("#fWALK00501_FEXIT00301");
         verifyThat("fWALK00501_FEXIT00301", Node::isVisible);
     }
+
+    /*
+    @Test
+    public void searchByNodesTest() {
+        clickOn("#nodesTab");
+        clickOn("#searchComboBox");
+        clickOn("Node ID");
+        clickOn("#searchField");
+        write("BREST00402");
+        verifyThat("BREST00402", Node::isVisible);
+        clickOn("#searchComboBox");
+        clickOn("Floor");
+        doubleClickOn("#searchField");
+        write("L2");
+        verifyThat("AELEV00SL2", Node::isVisible);
+        clickOn("#searchComboBox");
+        clickOn("Building");
+        doubleClickOn("#searchField");
+        write("Shapiro");
+        verifyThat("GCONF02001", Node::isVisible);
+        clickOn("#searchComboBox");
+        clickOn("Node Type");
+        doubleClickOn("#searchField");
+        write("REST");
+        verifyThat("AREST00101", Node::isVisible);
+        clickOn("#searchComboBox");
+        clickOn("Long Name");
+        doubleClickOn("#searchField");
+        write("CART Waiting");
+        verifyThat("ADEPT00301", Node::isVisible);
+        clickOn("#searchComboBox");
+        clickOn("Short Name");
+        doubleClickOn("#searchField");
+        write("MS");
+        verifyThat("ADEPT00201", Node::isVisible);
+    }
+
+     */
 }

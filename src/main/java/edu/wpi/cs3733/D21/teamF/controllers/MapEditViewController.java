@@ -313,7 +313,7 @@ public class MapEditViewController {
         }
 
         // Draw all corresponding nodes
-        for(NodeEntry n : nodeList){
+        for(NodeEntry n : nodeEntryObservableList){
             mapPanel.draw(getEditableNode(n));
             // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
         }
@@ -685,7 +685,7 @@ public class MapEditViewController {
                 handleSelectEdge();
             }
         }
-    }
+    } //FIXME edited node and node disappeared?
 
     /**
      * Deletes the selected item based on the tab open
@@ -950,7 +950,7 @@ public class MapEditViewController {
             }
             drawEdgeNodeOnFloor(); // TODO this is interesting, if two incompatible CSVs are loaded what will happen?
         }
-    } //FIXME issues with loading CSVs, specifically how they are loaded in.  Is there a way to load in two at once? - KD
+    } //FIXME issues with loading CSVs, specifically how they are loaded in.  Eventually check to make sure loading proper CSV, or do two different buttons - KD
 
     public void handleReset(ActionEvent actionEvent) throws SQLException {
         mapPanel.clearMap();
@@ -998,7 +998,12 @@ public class MapEditViewController {
 
     } //FIXME sometimes error 'L1NODES' already exists in Schema 'APP' happens and the map isnt drawn
 
-    public void handleHome(MouseEvent mouseEvent) {
+    public void handleHome(MouseEvent mouseEvent) throws IOException {
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Admin Home");
+        stage.show();
     }
 
     public void handleHoverOn(MouseEvent mouseEvent) {
