@@ -25,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -51,6 +52,7 @@ public class MapEditViewController {
     @FXML private JFXTreeTableView<NodeEntry> nodeTreeTable;
     @FXML private JFXTreeTableView<EdgeEntry> edgeTreeTable;
     @FXML private MapPanel mapPanel;
+    @FXML private Text title;
 
     private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
     private ObservableList<NodeEntry> nodeEntryObservableList = FXCollections.observableArrayList();
@@ -73,6 +75,9 @@ public class MapEditViewController {
         editButton.setFont(buttonDefault);
         deleteButton.setFont(buttonDefault);
 
+        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 60);
+        title.setFont(titleFont);
+
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
         try {
@@ -88,7 +93,7 @@ public class MapEditViewController {
             nodeEntryObservableList.add(node);
         });
 
-        int colWidth = 120;
+        int colWidth = 150;
         JFXTreeTableColumn<NodeEntry, String> idColumn = new JFXTreeTableColumn<>("Node ID");
         idColumn.setPrefWidth(colWidth);
         idColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getNodeIDProperty());
@@ -155,7 +160,7 @@ public class MapEditViewController {
 
         // Set up cell factory for the edge ID table
         JFXTreeTableColumn<EdgeEntry, String> edgeIDColumn = new JFXTreeTableColumn<>("Edge ID");
-        edgeIDColumn.setPrefWidth(250);
+        edgeIDColumn.setPrefWidth(300);
         edgeIDColumn.setCellValueFactory(param -> param.getValue().getValue().edgeIDProperty());
 
         final TreeItem<EdgeEntry> edgeRoot = new RecursiveTreeItem<>(edgeEntryObservableList, RecursiveTreeObject::getChildren);
