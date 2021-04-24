@@ -99,6 +99,7 @@ public class NodeHandler implements DatabaseEntry {
             success = true;
         }
         catch (SQLException e){
+            e.printStackTrace();
             success = false;
         }
         return success;
