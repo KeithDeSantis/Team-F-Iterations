@@ -70,30 +70,6 @@ public class EdgeHandler implements DatabaseEntry {
     }
 
     /**
-     * Genereates EdgeEntry objects from all rows currently in the database
-     * @return ArrayList of EdgeEntry objects
-     * @throws SQLException on error performing DB operations
-     */
-    public ArrayList<EdgeEntry> genEdgeEntryObjects() throws SQLException {
-        ArrayList<EdgeEntry> entries = new ArrayList<>();
-        String query = "SELECT * FROM AllEdges";
-        ResultSet rset;
-        Statement stmt = ConnectionHandler.getConnection().createStatement();
-        rset = stmt.executeQuery(query);
-
-        while (rset.next())
-        {
-            String edgeID = rset.getString(1);
-            String startNode = rset.getString(2);
-            String endNode = rset.getString(3);
-
-            EdgeEntry newEntry = new EdgeEntry(edgeID, startNode, endNode);
-            entries.add(newEntry);
-        }
-        return entries;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -141,5 +117,61 @@ public class EdgeHandler implements DatabaseEntry {
         for (String[] arr : entries) {
             DatabaseAPI1.getDatabaseAPI1().addEdge(arr);
         }
+    }
+
+    /**
+     * Genereates EdgeEntry objects from all rows currently in the database
+     * @return ArrayList of EdgeEntry objects
+     * @throws SQLException on error performing DB operations
+     */
+    public ArrayList<EdgeEntry> genEdgeEntryObjects() throws SQLException {
+        ArrayList<EdgeEntry> entries = new ArrayList<>();
+        String query = "SELECT * FROM AllEdges";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+
+        while (rset.next())
+        {
+            String edgeID = rset.getString(1);
+            String startNode = rset.getString(2);
+            String endNode = rset.getString(3);
+
+            EdgeEntry newEntry = new EdgeEntry(edgeID, startNode, endNode);
+            entries.add(newEntry);
+        }
+        return entries;
+    }
+
+    /**
+     * Get a specific edge and EdgeEntry object from the database given the ID
+     * @param id the ID of the edge to get
+     * @return an EdgeEntry object
+     * @throws SQLException on error performing DB operations
+     */
+    public EdgeEntry getEdge(String id) throws SQLException
+    {
+        final String sql = "SELECT * FROM AllEdges WHERE edgeID=(?)";
+        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, id);
+
+        ResultSet rset;
+        try {
+            rset = stmt.executeQuery();
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Table/View 'L1NODES' does not exist."))
+                return null;
+            else
+                e.printStackTrace();
+            return null;
+        }
+        while (rset.next()) {
+            final String edgeID = rset.getString(1);
+            final String start = rset.getString(2);
+            final String end = rset.getString(3);
+
+            return new EdgeEntry(edgeID, start, end);
+        }
+        return null;
     }
 }

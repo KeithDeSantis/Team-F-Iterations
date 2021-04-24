@@ -57,36 +57,6 @@ public class NodeHandler implements DatabaseEntry {
     }
 
     /**
-     * Generates a list of NodeEntry objects based on current entries in the database
-     * @return ArrayList of NodeEntry objects
-     * @throws SQLException on error performing DB operations
-     */
-    public ArrayList<NodeEntry> genNodeEntryObjects() throws SQLException{
-        ArrayList<NodeEntry> entries = new ArrayList<>();
-        String query = "SELECT * FROM AllNodes";
-        ResultSet rset;
-        Statement stmt = ConnectionHandler.getConnection().createStatement();
-        rset = stmt.executeQuery(query);
-
-        while (rset.next())
-        {
-            String nodeID = rset.getString(1);
-            int xCoord = rset.getInt(2);
-            int yCoord = rset.getInt(3);
-            String floor = rset.getString(4);
-            String building = rset.getString(5);
-            String type = rset.getString(6);
-            String longName = rset.getString(7);
-            String shortName = rset.getString(8);
-
-            NodeEntry newEntry = new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
-            entries.add(newEntry);
-        }
-
-        return entries;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -137,5 +107,72 @@ public class NodeHandler implements DatabaseEntry {
             final int y = Integer.parseInt(arr[2].trim());
             DatabaseAPI1.getDatabaseAPI1().addNode(arr);
         }
+    }
+
+    /**
+     * Generates a list of NodeEntry objects based on current entries in the database
+     * @return ArrayList of NodeEntry objects
+     * @throws SQLException on error performing DB operations
+     */
+    public ArrayList<NodeEntry> genNodeEntryObjects() throws SQLException{
+        ArrayList<NodeEntry> entries = new ArrayList<>();
+        String query = "SELECT * FROM AllNodes";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+
+        while (rset.next())
+        {
+            String nodeID = rset.getString(1);
+            int xCoord = rset.getInt(2);
+            int yCoord = rset.getInt(3);
+            String floor = rset.getString(4);
+            String building = rset.getString(5);
+            String type = rset.getString(6);
+            String longName = rset.getString(7);
+            String shortName = rset.getString(8);
+
+            NodeEntry newEntry = new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
+            entries.add(newEntry);
+        }
+
+        return entries;
+    }
+
+    /**
+     * get a specific node from the database given the id
+     * @param id the id of the node to fetch
+     * @return a NodeEntry object for the corresponding database row
+     * @throws SQLException on error performing DB operations
+     */
+    public NodeEntry getNode(String id) throws SQLException
+    {
+        final String sql = "SELECT * FROM AllNodes WHERE nodeID=(?)";
+        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, id);
+
+        ResultSet rset;
+        try {
+            rset = stmt.executeQuery();
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Table/View 'L1NODES' does not exist."))
+                return null;
+            else
+                e.printStackTrace();
+            return null;
+        }
+        while (rset.next()) {
+            final String nodeID = rset.getString(1);
+            final int xCoord = rset.getInt(2);
+            final int yCoord = rset.getInt(3);
+            final String floor = rset.getString(4);
+            final String building = rset.getString(5);
+            final String type = rset.getString(6);
+            final String longName = rset.getString(7);
+            final String shortName = rset.getString(8);
+
+            return new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
+        }
+        return null;
     }
 }

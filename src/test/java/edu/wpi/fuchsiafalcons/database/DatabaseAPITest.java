@@ -324,4 +324,25 @@ class DatabaseAPITest {
         assertTrue(handler.authenticate("declan", "password"));
     }
 
+    @Test
+    @DisplayName("test getting a single node")
+    public void testGetNode() throws SQLException{
+        NodeEntry expected = new NodeEntry("id", "1", "2", "f", "b", "t", "l", "s");
+        String[] newNode = {"id", "1", "2", "f", "b", "t", "l", "s"};
+        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
+        NodeEntry actual = DatabaseAPI1.getDatabaseAPI1().getNode("id");
+        assertEquals(expected.getNodeID(), actual.getNodeID());
+        assertEquals(expected.getFloor(), actual.getFloor());
+    }
+
+    @Test
+    @DisplayName("test getting a single edge")
+    public void testGetEdge() throws SQLException{
+        EdgeEntry expected = new EdgeEntry("test", "start", "end");
+        String[] newEdge = {"test", "start", "end"};
+        DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
+        EdgeEntry actual = DatabaseAPI1.getDatabaseAPI1().getEdge("test");
+        assertEquals(expected.getEdgeID(), actual.getEdgeID());
+        assertEquals(expected.getStartNode(), actual.getStartNode());
+    }
 }

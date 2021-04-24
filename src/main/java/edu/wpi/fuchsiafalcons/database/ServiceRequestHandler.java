@@ -11,6 +11,9 @@ import java.util.List;
 
 public class ServiceRequestHandler implements DatabaseEntry {
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
         final String query = "INSERT INTO service_requests values(?, ?, ?, ?)";
@@ -23,6 +26,9 @@ public class ServiceRequestHandler implements DatabaseEntry {
         return stmt.executeUpdate() != 0;
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public boolean editEntry(String id, String newVal, String colName) {
         boolean success = false;
@@ -40,6 +46,9 @@ public class ServiceRequestHandler implements DatabaseEntry {
         return success;
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public boolean deleteEntry(String id) throws SQLException {
         String query = "DELETE FROM service_requests WHERE uuid=(?)";
@@ -48,6 +57,9 @@ public class ServiceRequestHandler implements DatabaseEntry {
         return stmt.executeUpdate() != 0;
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public boolean createTable() {
         boolean success = false;
@@ -64,6 +76,9 @@ public class ServiceRequestHandler implements DatabaseEntry {
         return success;
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public boolean dropTable() {
         boolean success = false;
@@ -79,6 +94,9 @@ public class ServiceRequestHandler implements DatabaseEntry {
         return success;
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {
@@ -86,6 +104,11 @@ public class ServiceRequestHandler implements DatabaseEntry {
         }
     }
 
+    /**
+     * Generate a list of ServiceEntry objects based on current database entries
+     * @return ArrayList of ServiceEntry objects
+     * @throws SQLException on error performing DB operations
+     */
     public ArrayList<ServiceEntry> genServiceRequestEntries() throws SQLException{
         ArrayList<ServiceEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM service_requests";

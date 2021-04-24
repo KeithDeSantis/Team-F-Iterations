@@ -53,6 +53,11 @@ public class DatabaseAPI1 {
         return ret;
     }
 
+    public NodeEntry getNode(String id) throws SQLException{
+        NodeHandler node = new NodeHandler();
+        return node.getNode(id);
+    }
+
     public boolean addEdge(String[] colVals) throws SQLException{
         return edgeHandler.addEntry(colVals);
     }
@@ -85,6 +90,11 @@ public class DatabaseAPI1 {
         return ret;
     }
 
+    public EdgeEntry getEdge(String id) throws SQLException{
+        EdgeHandler edge = new EdgeHandler();
+        return edge.getEdge(id);
+    }
+
     public boolean addServiceReq(String[] colValues) throws SQLException{
         return serviceRequestHandler.addEntry(colValues);
     }
@@ -95,7 +105,6 @@ public class DatabaseAPI1 {
 
     public boolean deleteServiceRequest(String id) throws SQLException {
         return serviceRequestHandler.deleteEntry(id);
-
     }
 
     public boolean createServiceRequestTable(){

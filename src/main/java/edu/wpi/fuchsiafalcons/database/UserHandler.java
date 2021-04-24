@@ -92,7 +92,6 @@ public class UserHandler implements DatabaseEntry{
             salt = getSalt();
             String encryptedPassword = encryptPassword(colValues[3], salt);
             colValues[3] = encryptedPassword;
-            System.out.println(encryptedPassword);
         }
         catch (NoSuchAlgorithmException | NoSuchProviderException errTwo){
             errTwo.printStackTrace();
