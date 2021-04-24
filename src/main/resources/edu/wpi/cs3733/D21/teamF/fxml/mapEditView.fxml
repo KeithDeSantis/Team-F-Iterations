@@ -36,12 +36,12 @@
                <children>
                   <JFXTabPane fx:id="tabPane" prefHeight="526.0" prefWidth="240.0" stylesheets="/stylesheets/MapEditorTabViewStyle.css" VBox.vgrow="ALWAYS">
                      <tabs>
-                        <Tab fx:id="nodesTab" text="Nodes">
+                        <Tab fx:id="nodesTab" onSelectionChanged="#handleTabChange" text="Nodes">
                            <content>
                               <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
                            </content>
                         </Tab>
-                        <Tab fx:id="edgesTab" text="Edges">
+                        <Tab fx:id="edgesTab" onSelectionChanged="#handleTabChange" text="Edges">
                            <content>
                               <JFXTreeTableView fx:id="edgeTreeTable" onMouseClicked="#handleSelectEdge" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
                            </content>
@@ -83,7 +83,7 @@
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </JFXButton>
-                        <JFXTextField fx:id="searchBar" onKeyReleased="#handleSearch" promptText="Search...">
+                        <JFXTextField fx:id="searchField" onKeyReleased="#handleSearch" promptText="Search...">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
@@ -138,7 +138,7 @@
             <Insets left="25.0" right="25.0" />
          </padding>
       </HBox>
-      <Text fx:id="title" fill="#03256c" layoutX="173.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL" wrappingWidth="663.3173828125" AnchorPane.leftAnchor="173.0" AnchorPane.topAnchor="16.740001678466797">
+      <Text fx:id="title" fill="#03256c" layoutX="173.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL MAP EDITOR" wrappingWidth="990.3173828125" AnchorPane.leftAnchor="173.0" AnchorPane.topAnchor="17.0">
          <font>
             <Font name="Volkhov Regular" size="60.0" />
          </font>
