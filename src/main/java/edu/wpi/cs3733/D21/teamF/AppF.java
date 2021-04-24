@@ -24,12 +24,12 @@ public class  AppF extends Application {
   }
 
   @Override
-  public void start(Stage primaryStage) {
+  public void start(Stage primaryStage) throws SQLException {
     DatabaseAPI.getDatabaseAPI().createNodesTable();
     DatabaseAPI.getDatabaseAPI().createEdgesTable();
     DatabaseAPI.getDatabaseAPI().createUserTable();
     DatabaseAPI.getDatabaseAPI().createServiceRequestTable(); //FIXME: DO BETTER
-
+    DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
 
     AppF.primaryStage = primaryStage;
 

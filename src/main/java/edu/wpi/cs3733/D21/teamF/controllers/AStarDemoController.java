@@ -87,14 +87,11 @@ public class AStarDemoController implements Initializable {
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
 
-
-
         final ContextMenu contextMenu = new ContextMenu();
 
         //FIXME: CHANGE TEXT TO BE MORE ACCESSABLE
         final MenuItem startPathfind = new MenuItem("Path from Here");
         final MenuItem endPathfind = new MenuItem("Path end Here");
-
 
         contextMenu.getItems().addAll(startPathfind, endPathfind);
 

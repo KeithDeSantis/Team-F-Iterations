@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
 
 public class LoginController {
 
@@ -42,6 +44,20 @@ public class LoginController {
      * @author Jay Yen
      */
     public void handleSignIn(ActionEvent actionEvent) throws Exception {
+        //TODO: test and see if this verifies DB existence
+        ResultSet rset = ConnectionHandler.getConnection().getMetaData().getCatalogs();
+        String databaseName = "";
+        while(rset.next()){
+            databaseName = rset.getString(1);
+        }
+
+        if (databaseName.equals("projectC1")){
+            DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
+        }
+        else {
+            //TODO: DB doesnt exist, what goes here?
+        }
+
         boolean authenticated = false;
         String user = username.getText();
         String pass = password.getText();
