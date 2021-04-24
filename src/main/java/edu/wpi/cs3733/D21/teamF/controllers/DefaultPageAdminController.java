@@ -64,7 +64,7 @@ public class DefaultPageAdminController {
 
         if (buttonPushed == editMap) {
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditMapMenuView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("Edit Map Menu");
             stage.show();

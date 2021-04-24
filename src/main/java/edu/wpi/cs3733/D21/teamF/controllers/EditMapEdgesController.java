@@ -90,9 +90,6 @@ public class EditMapEdgesController {
         CSVErrorLabel.setText("");
 
 
-        // Set the save button to disabled by default (enabled by a valid file name being entered)
-        saveCSV.setDisable(true);
-
         List <EdgeEntry> data = new ArrayList<>();
         try {
             data = DatabaseAPI.getDatabaseAPI().genEdgeEntries();

@@ -12,11 +12,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -60,6 +63,11 @@ public class MapPanel extends AnchorPane {
 
     @FXML
     public void initialize(){
+        // Set button fonts - LM
+        Font font = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
+        zoomInButton.setFont(font);
+        zoomOutButton.setFont(font);
+
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
@@ -256,4 +264,14 @@ public class MapPanel extends AnchorPane {
         canvas.getChildren().removeIf(x -> x instanceof IMapDrawable);
     }
 
+    // Added by LM
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
 }
