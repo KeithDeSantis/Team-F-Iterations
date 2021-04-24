@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserHandler implements DatabaseEntry {
@@ -50,6 +51,23 @@ public class UserHandler implements DatabaseEntry {
             e.printStackTrace();
         }
         return cipherText;
+    }
+
+    /**
+     * Get a list of all the usernames in the DB
+     * @return List of strings for usernames
+     * @throws SQLException on error with DB operations
+     */
+    public List<String> listAllUsers() throws SQLException {
+        List<String> allUsernames = new ArrayList<>();
+        String query = "SELECT * FROM USERS";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+        while (rset.next()) {
+            allUsernames.add(rset.getString(3));
+        }
+        return allUsernames;
     }
 
     /**

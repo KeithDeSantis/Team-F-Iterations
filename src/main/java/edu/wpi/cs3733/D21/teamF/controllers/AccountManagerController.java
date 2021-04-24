@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
+import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,7 +54,8 @@ public class AccountManagerController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         List<String> allUsers = new ArrayList<>();
         try {
-            allUsers = DatabaseAPI.getDatabaseAPI().listAllUsers(); //FIXME: REPLACE THIS
+            UserHandler userHandler = new UserHandler();
+            allUsers = userHandler.listAllUsers();
 
         }
         catch (SQLException e)
