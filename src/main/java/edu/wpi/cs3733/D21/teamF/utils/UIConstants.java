@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
  * @author Alex Friedman (ahf)
  */
 public class UIConstants {
-    public static final Color NODE_COLOR = new Color(0,0,1, 0.5);
+    public static final Color NODE_COLOR = Color.BLUE;
 
     public static final Color NODE_COLOR_HIGHLIGHT = Color.RED;
 

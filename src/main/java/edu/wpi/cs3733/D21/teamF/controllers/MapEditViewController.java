@@ -237,10 +237,33 @@ public class MapEditViewController {
             }
             else
             {
+                /*
                 if(!nodeList.contains(startNode))
                     nodeList.add(startNode);
                 if(!nodeList.contains(endNode))
                     nodeList.add(endNode);
+                 */
+
+                boolean duplicate = false;
+                for (NodeEntry n: nodeList) {
+                    if(n.getNodeID().equals(startNode.getNodeID())){
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if(!duplicate){
+                    nodeList.add(startNode);
+                }
+                duplicate = false;
+                for (NodeEntry n: nodeList) {
+                    if(n.getNodeID().equals(endNode.getNodeID())){
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if(!duplicate){
+                    nodeList.add(endNode);
+                }
 
 
                 Line l = mapPanel.draw(getEditableEdge(e, startNode, endNode));
@@ -581,6 +604,6 @@ public class MapEditViewController {
         selectedCircle = c;
         c.setFill(UIConstants.NODE_COLOR_SELECTED);
         mapPanel.centerNode(c);
-    } //FIXME being weird
+    }
 }
 
