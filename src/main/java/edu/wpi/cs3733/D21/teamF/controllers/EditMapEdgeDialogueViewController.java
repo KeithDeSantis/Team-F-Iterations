@@ -2,10 +2,10 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
-import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
@@ -45,8 +45,8 @@ public class EditMapEdgeDialogueViewController {
     private void initialize(){
         Graph graph = new Graph();
         try {
-            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
-            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
 
             graph = GraphLoader.load(nodeEntries, edgeEntries);
         } catch (Exception e) {

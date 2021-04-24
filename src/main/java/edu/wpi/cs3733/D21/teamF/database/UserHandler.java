@@ -1,7 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
-import edu.wpi.cs3733.D21.teamF.database.DatabaseEntry;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -189,7 +187,7 @@ public class UserHandler implements DatabaseEntry {
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {
-            DatabaseAPI1.getDatabaseAPI1().addUser(arr);
+            DatabaseAPI.getDatabaseAPI().addUser(arr);
         }
     }
 }

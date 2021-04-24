@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AccountManagerController implements Initializable {
@@ -49,14 +50,18 @@ public class AccountManagerController implements Initializable {
     private String fieldChanged = "";
 
     public void initialize(URL location, ResourceBundle resources) {
-        ArrayList<String> allUsers = new ArrayList<>();
+        List<String> allUsers = new ArrayList<>();
         try {
-            allUsers = DatabaseAPI.getDatabaseAPI().listAllUsers();
+            allUsers = DatabaseAPI.getDatabaseAPI().listAllUsers(); //FIXME: REPLACE THIS
+
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
+
+        System.out.println(allUsers);
+
         for (String s : allUsers)
         {
             selectUser.getItems().add(s);
@@ -83,33 +88,33 @@ public class AccountManagerController implements Initializable {
         refreshPage(actionEvent);
     }
 
-    public void handleAddUser(ActionEvent actionEvent) throws SQLException, IOException {
+    public void handleAddUser(ActionEvent actionEvent) throws IOException, SQLException {
         String user = addUsername.getText();
         String pass = addPassword.getText();
         String type = (String) newUserType.getValue();
 
-        DatabaseAPI.getDatabaseAPI().addUser(type, user, pass);
+        DatabaseAPI.getDatabaseAPI().addUser(user, type, user, pass);
 
         refreshPage(actionEvent);
     }
 
-    public void handleSaveChanges(ActionEvent actionEvent) throws SQLException, IOException {
+    public void handleSaveChanges(ActionEvent actionEvent) throws Exception {
         String targetUser = "";
         String newVal = "";
         if (fieldChanged.equals("username")){
             targetUser = (String) selectUser.getValue();
             newVal = username.getText();
-            DatabaseAPI.getDatabaseAPI().editUser(targetUser, "username", newVal);
+            DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "username");
         }
         else if (fieldChanged.equals("password")){
             targetUser = (String) selectUser.getValue();
             newVal = password.getText();
-            DatabaseAPI.getDatabaseAPI().editUser(targetUser, "password", newVal);
+            DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal,"password");
         }
         else if (fieldChanged.equals("type")){
             targetUser = (String) selectUser.getValue();
             newVal = (String) changeUserType.getValue();
-            DatabaseAPI.getDatabaseAPI().editUser(targetUser, "type", newVal);
+            DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "type");
         }
         fieldChanged = "";
 

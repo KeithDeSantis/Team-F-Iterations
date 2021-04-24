@@ -112,7 +112,7 @@ public class NodeHandler implements DatabaseEntry {
         for (String[] arr : entries) {
             final int x = Integer.parseInt(arr[1].trim());
             final int y = Integer.parseInt(arr[2].trim());
-            DatabaseAPI1.getDatabaseAPI1().addNode(arr);
+            DatabaseAPI.getDatabaseAPI().addNode(arr);
         }
     }
 
@@ -121,8 +121,8 @@ public class NodeHandler implements DatabaseEntry {
      * @return ArrayList of NodeEntry objects
      * @throws SQLException on error performing DB operations
      */
-    public ArrayList<NodeEntry> genNodeEntryObjects() throws SQLException{
-        ArrayList<NodeEntry> entries = new ArrayList<>();
+    public List<NodeEntry> genNodeEntryObjects() throws SQLException{
+        List<NodeEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM AllNodes";
         ResultSet rset;
         Statement stmt = ConnectionHandler.getConnection().createStatement();

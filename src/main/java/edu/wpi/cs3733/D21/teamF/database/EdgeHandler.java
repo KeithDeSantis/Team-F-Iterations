@@ -114,7 +114,7 @@ public class EdgeHandler implements DatabaseEntry {
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {
-            DatabaseAPI1.getDatabaseAPI1().addEdge(arr);
+            DatabaseAPI.getDatabaseAPI().addEdge(arr);
         }
     }
 
@@ -123,8 +123,8 @@ public class EdgeHandler implements DatabaseEntry {
      * @return ArrayList of EdgeEntry objects
      * @throws SQLException on error performing DB operations
      */
-    public ArrayList<EdgeEntry> genEdgeEntryObjects() throws SQLException {
-        ArrayList<EdgeEntry> entries = new ArrayList<>();
+    public List<EdgeEntry> genEdgeEntryObjects() throws SQLException {
+        List<EdgeEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM AllEdges";
         ResultSet rset;
         Statement stmt = ConnectionHandler.getConnection().createStatement();

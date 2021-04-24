@@ -1,9 +1,9 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
-import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
@@ -18,18 +18,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -72,8 +66,8 @@ public class AStarDemoController implements Initializable {
 
         List<NodeEntry> allNodeEntries = new ArrayList<>();
         try {
-            allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
-            List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+            List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
 
             final List<NodeEntry> nodeEntries = allNodeEntries.stream().collect(Collectors.toList());
 
@@ -194,7 +188,7 @@ public class AStarDemoController implements Initializable {
             mapPanel.unDraw(this.startNodeDisplay.getId());
 
 
-        final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),startComboBox.getValue());
+        final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(startComboBox.getValue());
         if(startNode != null)
         {
             final DrawableNode drawableNode = startNode.getDrawable();
@@ -217,7 +211,7 @@ public class AStarDemoController implements Initializable {
             mapPanel.unDraw(this.endNodeDisplay.getId());
 
 
-        final NodeEntry endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),endComboBox.getValue());
+        final NodeEntry endNode = DatabaseAPI.getDatabaseAPI().getNode(endComboBox.getValue());
         if(endNode != null)
         {
             final DrawableNode drawableNode = endNode.getDrawable();
