@@ -4,18 +4,18 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="550.0" prefWidth="425.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.fxml.JDServiceRequest">
+<AnchorPane prefHeight="715.0" prefWidth="100.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.fxml.JDServiceRequest">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="200.0" layoutX="716.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="1920.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Line endX="100.0" endY="200.0" fill="#03256c" startX="2019.5" startY="200.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="200.0" layoutX="716.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Line endX="100.0" endY="200.0" fill="#03256c" startX="1100.0" startY="200.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       <ImageView fitHeight="181.0" fitWidth="153.0" pickOnBounds="true" preserveRatio="true" />
-      <Text layoutX="446.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1026.13671875" />
-      <Text layoutX="723.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee name" wrappingWidth="899.13671875">
+      <Text layoutX="723.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee name" wrappingWidth="354.13671875">
          <font>
             <Font size="18.0" />
          </font>
@@ -45,5 +45,6 @@
          </font>
       </Text>
       <JFXButton fx:id="Submit" contentDisplay="CENTER" layoutX="851.0" layoutY="585.0" onAction="#buttonPushed" ripplerFill="#092f7c" style="-fx-background-color: #03256c;" text="Submit" textFill="WHITE" />
+      <VBox layoutX="153.0" layoutY="258.0" prefHeight="200.0" prefWidth="304.0" />
    </children>
 </AnchorPane>
