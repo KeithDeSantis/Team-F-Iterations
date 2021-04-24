@@ -190,46 +190,76 @@ public class MapEditViewControllerTest extends ApplicationTest {
     }
 
     @Test
+    public void searchByNodesTest() {
+        clickOn("#nodesTab");
+        clickOn("#searchField");
+        write("BREST00402");
+        clickOn("#searchComboBox");
+        clickOn("Floor");
+        doubleClickOn("#searchField");
+        write("3");
+        clickOn("#searchComboBox");
+        clickOn("Building");
+        doubleClickOn("#searchField");
+        write("Shapiro");
+        clickOn("#searchComboBox");
+        clickOn("Node Type");
+        doubleClickOn("#searchField");
+        write("REST");
+        clickOn("#searchComboBox");
+        clickOn("Long Name");
+        doubleClickOn("#searchField");
+        write("CART Waiting");
+        clickOn("#searchComboBox");
+        clickOn("Short Name");
+        doubleClickOn("#searchField");
+        write("MS");
+    }
+
+    @Test
     public void clickOnEdgeTest() {
         clickOn("#fWALK00501_FEXIT00301");
         verifyThat("fWALK00501_FEXIT00301", Node::isVisible);
     }
 
-    /*
     @Test
-    public void searchByNodesTest() {
-        clickOn("#nodesTab");
-        clickOn("#searchComboBox");
-        clickOn("Node ID");
-        clickOn("#searchField");
-        write("BREST00402");
-        verifyThat("BREST00402", Node::isVisible);
-        clickOn("#searchComboBox");
-        clickOn("Floor");
-        doubleClickOn("#searchField");
-        write("L2");
-        verifyThat("AELEV00SL2", Node::isVisible);
-        clickOn("#searchComboBox");
-        clickOn("Building");
-        doubleClickOn("#searchField");
-        write("Shapiro");
-        verifyThat("GCONF02001", Node::isVisible);
-        clickOn("#searchComboBox");
-        clickOn("Node Type");
-        doubleClickOn("#searchField");
-        write("REST");
-        verifyThat("AREST00101", Node::isVisible);
-        clickOn("#searchComboBox");
-        clickOn("Long Name");
-        doubleClickOn("#searchField");
-        write("CART Waiting");
-        verifyThat("ADEPT00301", Node::isVisible);
-        clickOn("#searchComboBox");
-        clickOn("Short Name");
-        doubleClickOn("#searchField");
-        write("MS");
-        verifyThat("ADEPT00201", Node::isVisible);
+    public void deleteEdgeTest() {
+        clickOn("#FHALL01401_FHALL01101");
+        clickOn("Delete");
+        for (int index = 0; index < edgeEntryObservableList.size(); index++) {
+            assertFalse(edgeEntryObservableList.get(index).getEdgeID().equals("FHALL01401_FHALL01101"));
+        }
     }
 
-     */
+    @Test
+    public void newEdgeTest() {
+        clickOn("#edgesTab");
+        clickOn("New...");
+        clickOn("#startNode");
+        clickOn("ACONF00102");
+        clickOn("#endNode");
+        clickOn("ACONF00103");
+        clickOn("OK");
+        boolean wasAdded = false;
+        for (int index = 0; index < edgeEntryObservableList.size(); index++) {
+            if(edgeEntryObservableList.get(index).getEdgeID().equals("ACONF00102_ACONF00103")) wasAdded = true;
+        }
+        assertTrue(wasAdded);
+    }
+
+    @Test
+    public void editEdgeTest() {
+        clickOn("#edgesTab");
+        clickOn("Edit...");
+        clickOn("ADEPT00301_AHALL00701");
+        clickOn("Edit...");
+        clickOn("#endNode");
+        clickOn("ADEPT00101");
+        clickOn("OK");
+        boolean wasEdited = false;
+        for (int index = 0; index < edgeEntryObservableList.size(); index++) {
+            if(edgeEntryObservableList.get(index).getEdgeID().equals("ADEPT00301_ADEPT00101")) wasEdited = true;
+        }
+        assertTrue(wasEdited);
+    }
 }

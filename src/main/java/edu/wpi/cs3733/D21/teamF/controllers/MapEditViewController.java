@@ -634,28 +634,9 @@ public class MapEditViewController {
         if(nodesTab.isSelected()) {
             try{
                 selectedNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue(); // get item the is selected - KD
-            } catch (ArrayIndexOutOfBoundsException e){
-                // Create an alert to inform the user there is no node selected - LM
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.initOwner(null); // Appears on top of all other windows
-                alert.setTitle("No Selection");
-                alert.setHeaderText("No Node Selected");
-                alert.setContentText("Please select an node from the list");
-                alert.showAndWait();
+            } catch (NullPointerException e){
                 return;
             }
-            /*
-            if(selectedNode == null) { // ensure there is a selection - KD
-                // Create an alert to inform the user there is no node selected - LM
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.initOwner(null); // Appears on top of all other windows
-                alert.setTitle("No Selection");
-                alert.setHeaderText("No Node Selected");
-                alert.setContentText("Please select an node from the list");
-                alert.showAndWait();
-                return;
-            }
-             */
 
             String targetID = selectedNode.getNodeID();
             DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
@@ -675,14 +656,6 @@ public class MapEditViewController {
             try {
                 selectedEdge = edgeEntryObservableList.get(index);
             } catch (ArrayIndexOutOfBoundsException e){
-                // Create an alert to inform the user there is no edge selected
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.initOwner(null); // Appears on top of all other windows
-                alert.setTitle("No Selection");
-                alert.setHeaderText("No Edge Selected");
-                alert.setContentText("Please select an edge from the list");
-                e.printStackTrace();
-                alert.showAndWait();
                 return;
             }
             if (selectedEdge != null) {
