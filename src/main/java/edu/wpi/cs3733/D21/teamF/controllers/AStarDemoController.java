@@ -85,6 +85,8 @@ public class AStarDemoController implements Initializable {
     List<NodeEntry> allNodeEntries = new ArrayList<>();
     List<EdgeEntry> allEdgeEntries = new ArrayList<>();
 
+    boolean pathFinding;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -112,7 +114,7 @@ public class AStarDemoController implements Initializable {
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
 
-
+        pathFinding = false;
 
         final ContextMenu contextMenu = new ContextMenu();
 
@@ -125,6 +127,9 @@ public class AStarDemoController implements Initializable {
         List<NodeEntry> finalAllNodeEntries = allNodeEntries;
 
         mapPanel.getMap().setOnContextMenuRequested(event -> {
+            if(pathFinding){
+                return;
+            }
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
@@ -453,6 +458,7 @@ public class AStarDemoController implements Initializable {
         End.setDisable(false);
         Instruction.setVisible(true);
         curStep = 0;
+        pathFinding = true;
 
         parseRoute();
         mapPanel.switchMap(pathVertex.get(0).getFloor());
@@ -516,6 +522,7 @@ public class AStarDemoController implements Initializable {
         End.setDisable(true);
         Instruction.setVisible(false);
         curStep = 0;
+        pathFinding = false;
 
         mapPanel.switchMap(pathVertex.get(0).getFloor());
         clearPath();
