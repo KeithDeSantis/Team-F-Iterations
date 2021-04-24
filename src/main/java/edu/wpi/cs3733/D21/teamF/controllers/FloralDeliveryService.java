@@ -10,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -28,6 +30,7 @@ public class FloralDeliveryService {
     @FXML private JFXButton clearButton;
     @FXML private JFXButton submitButton;
     @FXML private JFXTextField deliveryField;
+    @FXML private JFXTextField dateField;
     @FXML private JFXTextField cardNumberField;
     @FXML private JFXTextField cardCVCField;
     @FXML private JFXTextField cardExpField;
@@ -38,8 +41,14 @@ public class FloralDeliveryService {
     @FXML private JFXCheckBox orchidCheckBox;
     @FXML private JFXCheckBox daisyCheckBox;
     @FXML private Label successField;
+    @FXML private ImageView logoHome;
 
 
+    @FXML
+    public void initialize() {
+        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
+        logoHome.setImage(img);
+    }
 
     /**
      * Handles the push of a radio button (sets up Toggle Groups)
@@ -71,7 +80,11 @@ public class FloralDeliveryService {
      * @param mouseEvent
      * @author KD
      */
-    public void handleHome(MouseEvent mouseEvent) {}
+    public void handleHome(MouseEvent mouseEvent) throws IOException {
+        Stage stage = (Stage) submitButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+        stage.getScene().setRoot(root);
+    }
 
     /**
      * Will eventually save the request to DB
@@ -88,36 +101,96 @@ public class FloralDeliveryService {
         boolean isFilled = true;
         if(!(bouquetButton.isSelected() || vaseButton.isSelected() || potButton.isSelected())) {
             isFilled = false;
-            bouquetButton.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
-            vaseButton.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
-            potButton.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
+            bouquetButton.setStyle("-fx-text-fill: #e8321e");
+            vaseButton.setStyle("-fx-text-fill: #e8321e");
+            potButton.setStyle("-fx-text-fill: #e8321e");
+        }
+        else {
+            bouquetButton.setStyle("-fx-text-fill: #000000");
+            vaseButton.setStyle("-fx-text-fill: #000000");
+            potButton.setStyle("-fx-text-fill: #000000");
         }
         if(!(roseCheckBox.isSelected() || tulipCheckBox.isSelected() || violetCheckBox.isSelected() || sunflowerCheckBox.isSelected() || orchidCheckBox.isSelected() || daisyCheckBox.isSelected())) {
             isFilled = false;
-            roseCheckBox.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
-            tulipCheckBox.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
-            violetCheckBox.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
-            sunflowerCheckBox.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
-            orchidCheckBox.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
-            daisyCheckBox.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
+            roseCheckBox.setStyle("-fx-text-fill: #e8321e");
+            tulipCheckBox.setStyle("-fx-text-fill: #e8321e");
+            violetCheckBox.setStyle("-fx-text-fill: #e8321e");
+            sunflowerCheckBox.setStyle("-fx-text-fill: #e8321e");
+            orchidCheckBox.setStyle("-fx-text-fill: #e8321e");
+            daisyCheckBox.setStyle("-fx-text-fill: #e8321e");
+        }
+        else {
+            roseCheckBox.setStyle("-fx-text-fill: #000000");
+            tulipCheckBox.setStyle("-fx-text-fill: #000000");
+            violetCheckBox.setStyle("-fx-text-fill: #000000");
+            sunflowerCheckBox.setStyle("-fx-text-fill: #000000");
+            orchidCheckBox.setStyle("-fx-text-fill: #000000");
+            daisyCheckBox.setStyle("-fx-text-fill: #000000");
         }
         if(deliveryField.getText().length() == 0) {
             isFilled = false;
-            deliveryField.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
+            deliveryField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            deliveryField.setStyle("-fx-background-color: transparent;");
         }
         if(cardNumberField.getText().length() == 0) {
             isFilled = false;
-            cardNumberField.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
+            cardNumberField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            cardNumberField.setStyle("-fx-background-color: transparent;");
         }
         if(cardCVCField.getText().length() == 0) {
             isFilled = false;
-            cardCVCField.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
+            cardCVCField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            cardCVCField.setStyle("-fx-background-color: transparent;");
         }
         if(cardExpField.getText().length() == 0) {
             isFilled = false;
-            cardExpField.setStyle("-fx-border-color: #F0C808; -fx-border-width: 2px");
+            cardExpField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            cardExpField.setStyle("-fx-background-color: transparent;");
+        }
+        if(dateField.getText().length() == 0) {
+            isFilled = false;
+            dateField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            dateField.setStyle("-fx-background-color: transparent;");
         }
         return isFilled;
+    }
+
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF");
+    }
+
+    public void handleClear() {
+        bouquetButton.setSelected(false);
+        vaseButton.setSelected(false);
+        potButton.setSelected(false);
+        roseCheckBox.setSelected(false);
+        tulipCheckBox.setSelected(false);
+        violetCheckBox.setSelected(false);
+        sunflowerCheckBox.setSelected(false);
+        orchidCheckBox.setSelected(false);
+        daisyCheckBox.setSelected(false);
+        deliveryField.setText("");
+        cardNumberField.setText("");
+        cardExpField.setText("");
+        cardCVCField.setText("");
+        dateField.setText("");
+
     }
 }
 

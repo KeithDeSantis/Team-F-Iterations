@@ -62,7 +62,7 @@
                   <Font size="14.0" />
                </font>
             </JFXCheckBox>
-            <JFXCheckBox fx:id="violetCheckBox" text="Violets" unCheckedColor="#03256c" GridPane.columnIndex="6">
+            <JFXCheckBox fx:id="violetCheckBox" checkedColor="#f0c808" text="Violets" unCheckedColor="#03256c" GridPane.columnIndex="6">
                <font>
                   <Font size="14.0" />
                </font>
@@ -167,7 +167,7 @@
             </JFXButton>
         </buttons>
       </ButtonBar>
-      <Label fx:id="successField" alignment="CENTER" layoutX="200.0" layoutY="463.0" prefHeight="33.0" prefWidth="99.0" AnchorPane.bottomAnchor="44.0" AnchorPane.topAnchor="463.0">
+      <Label fx:id="successField" alignment="CENTER" layoutX="141.0" layoutY="463.0" prefHeight="33.0" prefWidth="158.0" AnchorPane.bottomAnchor="44.0" AnchorPane.topAnchor="463.0">
          <font>
             <Font size="14.0" />
          </font>
