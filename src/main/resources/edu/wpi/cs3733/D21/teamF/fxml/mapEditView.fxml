@@ -32,7 +32,7 @@
             </Tab>
             <Tab fx:id="edgesTab" text="Edges">
                <content>
-                  <JFXTreeTableView fx:id="edgeTreeTable" />
+                  <JFXTreeTableView fx:id="edgeTreeTable" onMouseClicked="#handleSelectEdge"/>
                </content>
             </Tab>
          </tabs>

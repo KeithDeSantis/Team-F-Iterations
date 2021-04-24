@@ -178,8 +178,13 @@ public class MapEditViewController {
         drawableNode.setOnMouseClicked(e->{
             if(selectedCircle != null)
                 selectedCircle.setFill(UIConstants.NODE_COLOR);
+            if(selectedLine != null)
+                selectedLine.setStroke(UIConstants.LINE_COLOR);
+
             selectedCircle = drawableNode;
             drawableNode.setFill(UIConstants.NODE_COLOR_SELECTED);
+            // Automagically change to nodes tab
+            tabPane.getSelectionModel().select(nodesTab);
             nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
             nodeTreeTable.requestFocus();
             nodeTreeTable.scrollTo(findNode(drawableNode.getId()));});
@@ -194,12 +199,12 @@ public class MapEditViewController {
     private int findNode(String nodeID){
         int index = 0;
         for(NodeEntry n: nodeEntryObservableList){
-            if(n.getNodeID() == nodeID){
-                break;
+            if(n.getNodeID().equals(nodeID)){
+                return index;
             }
             index++;
         }
-        return index;
+        return -1; // FIXME handle this error
     }
 
     /**
@@ -214,7 +219,7 @@ public class MapEditViewController {
         selectedLine = null;
         firstCircle = null;
         secondCircle = null;
-        nodeList = new ArrayList<>();
+        nodeList = new ArrayList<NodeEntry>();
 
         // Draw all edges
         for(EdgeEntry e : edgeEntryObservableList){
@@ -245,7 +250,11 @@ public class MapEditViewController {
                 l.setOnMouseClicked(event->{
                     if(selectedLine != null)
                         selectedLine.setStroke(UIConstants.LINE_COLOR);
+                    if(selectedCircle != null)
+                        selectedCircle.setFill(UIConstants.NODE_COLOR);
                     selectedLine = l;
+                    // Automagically change to edges tab
+                    tabPane.getSelectionModel().select(edgesTab);
                     l.setStroke(Color.GREEN);
                     edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(e.getEdgeID()));
                     edgeTreeTable.requestFocus();
@@ -364,17 +373,57 @@ public class MapEditViewController {
      */
     public void handleSelectEdge() {
         // Check for a valid index (-1 = no selection)
-        if (edgeTreeTable.getSelectionModel().getSelectedIndex() < 0) {
+        if(edgeTreeTable.getSelectionModel().getSelectedIndex() < 0){
             // FIXME Error Handling
             return;
         }
         // Get selected Edge
-        EdgeEntry node = edgeEntryObservableList.get(edgeTreeTable.getSelectionModel().getSelectedIndex());
+        EdgeEntry edge = edgeEntryObservableList.get(edgeTreeTable.getSelectionModel().getSelectedIndex());
 
-        if (node == null) {
+        if(edge == null){
             //FIXME Null Warning
             return;
         }
+
+        // Try to get startNode and endNode from database
+        NodeEntry startNode = null;
+        NodeEntry endNode = null;
+        try {
+            startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), edge.getStartNode());
+            endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), edge.getEndNode());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        // startNode or endNode not stored in database
+        if(startNode == null || endNode == null) {
+            System.out.println("Edge with no actual Node");
+            return;
+        }
+
+        // Check if need to switch map
+        if(startNode.getFloor().equals(mapPanel.getFloor().get()) || endNode.getFloor().equals(mapPanel.getFloor().get())) {
+            //drawEdgeNodeOnFloor();
+
+        }else{
+            mapPanel.switchMap(startNode.getFloor());
+        }
+
+        // Clear highlight on previously selected line or node
+        if(selectedLine != null)
+            selectedLine.setStroke(UIConstants.LINE_COLOR);
+        if(selectedCircle != null)
+            selectedCircle.setFill(UIConstants.NODE_COLOR);
+
+        // Get the line with edgeID
+        Line l = (Line) mapPanel.getCanvas().lookup("#"+edge.getEdgeID());
+        if(l == null){
+            //FIXME Null Warning
+            return;
+        }
+        selectedLine = l;
+        l.setStroke(Color.GREEN);
+        mapPanel.centerNode(l);
     }
 
     public void handleSearch(KeyEvent keyEvent) {
@@ -516,6 +565,13 @@ public class MapEditViewController {
             //floor = node.getFloor();
             mapPanel.switchMap(node.getFloor());
         }
+
+        // Clear highlight on edges
+        if(selectedLine != null)
+            selectedLine.setStroke(UIConstants.LINE_COLOR);
+
+
+
         Circle c = (Circle) mapPanel.getCanvas().lookup("#"+node.getNodeID());
         if(c == null){
             //FIXME Null Warning
@@ -526,3 +582,4 @@ public class MapEditViewController {
         mapPanel.centerNode(c);
     } //FIXME being weird
 }
+
