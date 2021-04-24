@@ -143,7 +143,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test editing a node")
-    public void testEditNode() throws SQLException
+    public void testEditNode() throws SQLException, Exception
     {
         String[] newNode = {"test", "1", "2", "f", "b", "t", "l", "s"};
         DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
@@ -152,7 +152,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test editing a Edge")
-    public void testEditEdge() throws SQLException
+    public void testEditEdge() throws SQLException, Exception
     {
         String[] newEdge = {"test", "start", "end"};
         DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
@@ -209,7 +209,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test editing a user")
-    public void testEditUser() throws SQLException
+    public void testEditUser() throws SQLException, Exception
     {
         String[] newUser = {"1", "employee", "declan", "password"};
         DatabaseAPI1.getDatabaseAPI1().addUser(newUser);
@@ -265,11 +265,11 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test editing a service request")
-    public void testEditServiceRequest() throws SQLException
+    public void testEditServiceRequest() throws SQLException, Exception
     {
         String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
         DatabaseAPI1.getDatabaseAPI1().addServiceReq(newServiceRequest);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().editServiceRequest("1", "Declan", "assignedPerson"));
+        assertTrue(DatabaseAPI1.getDatabaseAPI1().editServiceRequest("1", "Declan", "assignedperson"));
     }
 
     @Test

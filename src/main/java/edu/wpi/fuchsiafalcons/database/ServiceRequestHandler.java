@@ -30,18 +30,23 @@ public class ServiceRequestHandler implements DatabaseEntry {
      * @{inheritDoc}
      */
     @Override
-    public boolean editEntry(String id, String newVal, String colName) {
+    public boolean editEntry(String id, String newVal, String colName) throws Exception{
         boolean success = false;
-        String query = String.format("UPDATE service_requests SET %s=(?) WHERE uuid=(?)", colName);
-        try {
-            PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
-            stmt.setString(1, newVal);
-            stmt.setString(2, id);
-            stmt.executeUpdate();
-            stmt.close();
-            success = true;
-        } catch (SQLException e) {
-            success = false;
+        if (colName.equals("name") || colName.equals("assignedperson") || colName.equals("completed")) {
+            String query = String.format("UPDATE service_requests SET %s=(?) WHERE uuid=(?)", colName);
+            try {
+                PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+                stmt.setString(1, newVal);
+                stmt.setString(2, id);
+                stmt.executeUpdate();
+                stmt.close();
+                success = true;
+            } catch (SQLException e) {
+                success = false;
+            }
+        }
+        else{
+            throw new Exception("Invalid column name");
         }
         return success;
     }

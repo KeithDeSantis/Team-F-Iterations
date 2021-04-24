@@ -111,19 +111,23 @@ public class UserHandler implements DatabaseEntry{
      * {@inheritDoc}
      */
     @Override
-    public boolean editEntry(String username, String val, String colName) {
+    public boolean editEntry(String username, String val, String colName) throws Exception{
         boolean success = false;
-        String query = String.format("UPDATE USERS SET %s=(?) WHERE USERNAME=(?)", colName);
-        try {
-            PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
-            stmt.setString(1, val);
-            stmt.setString(2, username);
-            stmt.executeUpdate();
-            stmt.close();
-            success = true;
+        if (colName.equals("username") || colName.equals("type") || colName.equals("password")) {
+            String query = String.format("UPDATE USERS SET %s=(?) WHERE USERNAME=(?)", colName);
+            try {
+                PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+                stmt.setString(1, val);
+                stmt.setString(2, username);
+                stmt.executeUpdate();
+                stmt.close();
+                success = true;
+            } catch (SQLException e) {
+                success = false;
+            }
         }
-        catch (SQLException e) {
-            success = false;
+        else{
+            throw new Exception("invalid column name");
         }
         return success;
     }

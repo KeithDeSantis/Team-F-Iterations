@@ -39,7 +39,7 @@ public class DatabaseAPI1 {
         return nodeHandler.addEntry(colVals);
     }
 
-    public boolean editNode(String id, String newVal, String colName) {
+    public boolean editNode(String id, String newVal, String colName) throws Exception{
         return nodeHandler.editEntry(id, newVal, colName);
     }
 
@@ -62,7 +62,7 @@ public class DatabaseAPI1 {
         return edgeHandler.addEntry(colVals);
     }
 
-    public boolean editEdge(String id, String newVal, String colName){
+    public boolean editEdge(String id, String newVal, String colName) throws Exception{
         return edgeHandler.editEntry(id, newVal, colName);
     }
 
@@ -99,7 +99,7 @@ public class DatabaseAPI1 {
         return serviceRequestHandler.addEntry(colValues);
     }
 
-    public boolean editServiceRequest(String id, String newVal, String colName){
+    public boolean editServiceRequest(String id, String newVal, String colName) throws Exception{
         return serviceRequestHandler.editEntry(id, newVal, colName);
     }
 
@@ -128,7 +128,7 @@ public class DatabaseAPI1 {
         return userHandler.addEntry(colValues);
     }
 
-    public boolean editUser(String id, String newVal, String colName) {
+    public boolean editUser(String id, String newVal, String colName) throws Exception {
         return userHandler.editEntry(id, newVal, colName);
     }
 

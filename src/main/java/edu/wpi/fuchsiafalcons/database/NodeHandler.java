@@ -28,19 +28,24 @@ public class NodeHandler implements DatabaseEntry {
      * {@inheritDoc}
      */
     @Override
-    public boolean editEntry(String id, String newVal, String colName) {
+    public boolean editEntry(String id, String newVal, String colName) throws Exception{
         boolean success = false;
-        String query = String.format("UPDATE AllNodes SET %s=(?) WHERE NODEID=(?)", colName);
-        try {
-            PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
-            stmt.setString(1, newVal);
-            stmt.setString(2, id);
-            stmt.executeUpdate();
-            stmt.close();
-            success = true;
+        if (colName.equals("nodeid") || colName.equals("xcoord") || colName.equals("ycoord") || colName.equals("floor")
+        || colName.equals("building") || colName.equals("nodetype") || colName.equals("longname") || colName.equals("shortname")) {
+            String query = String.format("UPDATE AllNodes SET %s=(?) WHERE NODEID=(?)", colName);
+            try {
+                PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+                stmt.setString(1, newVal);
+                stmt.setString(2, id);
+                stmt.executeUpdate();
+                stmt.close();
+                success = true;
+            } catch (SQLException e) {
+                success = false;
+            }
         }
-        catch (SQLException e) {
-            success = false;
+        else{
+            throw new Exception("Invalid column name");
         }
         return success;
     }

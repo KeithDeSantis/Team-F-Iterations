@@ -24,7 +24,7 @@ public interface DatabaseEntry {
      * @param colName the column name to update
      * @return true on success, false otherwise
      */
-    boolean editEntry(String id, String val, String colName);
+    boolean editEntry(String id, String val, String colName) throws Exception;
 
     /**
      * Deletes an entry in the table of the corresponding concrete class
