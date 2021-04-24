@@ -136,7 +136,7 @@ public class MapEditViewControllerTest extends ApplicationTest {
     public void editNodeTest() {
         clickOn("#nodesTab");
         clickOn("Edit...");
-        clickOn("#FEXIT00201");
+        clickOn("#FDEPT00201");
         clickOn("Edit...");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#nodeIDField");
@@ -144,7 +144,7 @@ public class MapEditViewControllerTest extends ApplicationTest {
         clickOn("OK");
         verifyThat("OK", Node::isVisible);
         doubleClickOn("#nodeIDField");
-        write("FEXIT00201");
+        write("FDEPT00201");
         doubleClickOn("#floorField");
         write("f");
         clickOn("OK");
@@ -152,7 +152,7 @@ public class MapEditViewControllerTest extends ApplicationTest {
         doubleClickOn("#floorField");
         write("G");
         clickOn("OK");
-        verifyThat("#FEXIT00201", Node::isVisible);
+        verifyThat("#FDEPT00201", Node::isVisible);
         verifyThat("G", Node::isVisible);
 
     }
