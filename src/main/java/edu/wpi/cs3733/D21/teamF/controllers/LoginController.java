@@ -54,9 +54,7 @@ public class LoginController {
         if (databaseName.equals("projectC1")){
             DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
         }
-        else {
-            //TODO: DB doesnt exist, what goes here?
-        }
+        rset.close();
 
         boolean authenticated = false;
         String user = username.getText();
