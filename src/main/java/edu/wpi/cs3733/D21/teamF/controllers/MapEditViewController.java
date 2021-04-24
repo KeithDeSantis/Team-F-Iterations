@@ -175,453 +175,6 @@ public class MapEditViewController {
 
     }
 
-    private DrawableNode getEditableNode(NodeEntry nodeEntry)
-    {
-        final DrawableNode drawableNode = nodeEntry.getDrawable();
-
-        drawableNode.setOnMouseEntered(e->{if(!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
-        drawableNode.setOnMouseExited(e->{if(!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR);});
-
-        drawableNode.setOnMouseClicked(e-> {
-            if (selectedCircle != null)
-                selectedCircle.setFill(UIConstants.NODE_COLOR);
-            if (selectedLine != null)
-                selectedLine.setStroke(UIConstants.LINE_COLOR);
-
-            selectedCircle = drawableNode;
-            drawableNode.setFill(UIConstants.NODE_COLOR_SELECTED);
-
-            /* TODO this section allows for "clicking any two nodes and prompting a new edge"  Not sure if we want it implemented since its kind of an inconvenience when
-            // TODO clicking around nodes, if we do we'll have to work out some issue with it - KD
-            if (firstCircle == null) {
-                firstCircle = drawableNode;
-                tabPane.getSelectionModel().select(nodesTab);
-                nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
-                nodeTreeTable.requestFocus();
-                nodeTreeTable.scrollTo(findNode(drawableNode.getId()));
-            } else {
-                secondCircle = drawableNode;
-                // Second node selected, create edge
-                try {
-                    createNewEdgeFromNodes();
-                    tabPane.getSelectionModel().select(edgesTab);
-                    edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(firstCircle.getId()+"_"+secondCircle.getId()));
-                    edgeTreeTable.requestFocus();
-                    edgeTreeTable.scrollTo(findEdge(firstCircle.getId()+"_"+secondCircle.getId()));
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
-             */
-            // Automagically change to nodes tab
-            tabPane.getSelectionModel().select(nodesTab);
-            nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
-            nodeTreeTable.requestFocus();
-            nodeTreeTable.scrollTo(findNode(drawableNode.getId()));});
-
-
-        return drawableNode;
-    }
-
-    /**
-     * Find the index of a given node with nodeID in nodeList
-     * @author ZheCheng
-     */
-    private int findNode(String nodeID){
-        int index = 0;
-        for(NodeEntry n: nodeEntryObservableList){
-            if(n.getNodeID().equals(nodeID)){
-                return index;
-            }
-            index++;
-        }
-        return -1; // FIXME handle this error
-    }
-
-    /**
-     * Clear the canvas and draw edges and nodes that are on current floor
-     * @author ZheCheng
-     */
-    private void drawEdgeNodeOnFloor() {
-        // Clear canvas
-        mapPanel.clearMap();
-
-        // Reset selections
-        selectedLine = null;
-        firstCircle = null;
-        secondCircle = null;
-        nodeList = new ArrayList<NodeEntry>();
-
-        // Draw all edges
-        for(EdgeEntry e : edgeEntryObservableList){
-            NodeEntry startNode = null;
-            NodeEntry endNode = null;
-            try {
-                startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getStartNode());
-                endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getEndNode());
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-            if(startNode == null || endNode == null) {
-                System.out.println("Edge with no actual Node");
-                //return;
-            }
-            else
-            {
-                boolean duplicate = false;
-                for (NodeEntry n: nodeList) {
-                    if(n.getNodeID().equals(startNode.getNodeID())){
-                        duplicate = true;
-                        break;
-                    }
-                }
-                if(!duplicate){
-                    nodeList.add(startNode);
-                }
-                duplicate = false;
-                for (NodeEntry n: nodeList) {
-                    if(n.getNodeID().equals(endNode.getNodeID())){
-                        duplicate = true;
-                        break;
-                    }
-                }
-                if(!duplicate){
-                    nodeList.add(endNode);
-                }
-
-
-                Line l = mapPanel.draw(getEditableEdge(e, startNode, endNode));
-
-                l.setOnMouseEntered(event->{if(!l.equals(selectedLine))l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);});
-                l.setOnMouseExited(event->{if(!l.equals(selectedLine))l.setStroke(UIConstants.LINE_COLOR);});
-                l.setOnMouseClicked(event->{
-                    if(selectedLine != null)
-                        selectedLine.setStroke(UIConstants.LINE_COLOR);
-                    if(selectedCircle != null)
-                        selectedCircle.setFill(UIConstants.NODE_COLOR);
-                    selectedLine = l;
-                    // Automagically change to edges tab
-                    tabPane.getSelectionModel().select(edgesTab);
-                    l.setStroke(Color.GREEN);
-                    edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(e.getEdgeID()));
-                    edgeTreeTable.requestFocus();
-                    edgeTreeTable.scrollTo(findEdge(e.getEdgeID()));
-                });
-            }
-        }
-
-        // Draw all corresponding nodes
-        for(NodeEntry n : nodeEntryObservableList){
-            mapPanel.draw(getEditableNode(n));
-            // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
-        }
-    }
-
-    /**
-     * Find the index of a given node with nodeID in nodeList
-     * @author ZheCheng
-     */
-    private int findEdge(String nodeID){
-        int index = 0;
-        for(EdgeEntry e: edgeEntryObservableList){
-            if(e.getEdgeID() == nodeID){
-                break;
-            }
-            index++;
-        }
-        return index;
-    }
-
-    private DrawableEdge getEditableEdge(EdgeEntry edge, NodeEntry startNode, NodeEntry endNode)
-    {
-        final DrawableEdge drawableEdge = new DrawableEdge(
-                Integer.parseInt(startNode.getXcoord()),
-                Integer.parseInt(startNode.getYcoord()),
-                Integer.parseInt(endNode.getXcoord()),
-                Integer.parseInt(endNode.getYcoord()),
-                edge.getEdgeID(),
-                startNode.getFloor(),
-                endNode.getFloor()
-        );
-
-        return drawableEdge;
-    }
-
-    /**
-     * Open window for user to create new edge with two node selected
-     *
-     * @throws IOException
-     * @throws SQLException
-     * @author ZheCheng
-     */
-    private void createNewEdgeFromNodes() throws IOException, SQLException{
-        EdgeEntry newEdge = new EdgeEntry(firstCircle.getId()+"_"+secondCircle.getId(),firstCircle.getId(),secondCircle.getId());
-        openEditEdgeDialog(newEdge);
-        if (newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||
-                newEdge.endNodeProperty().getValue().isEmpty())
-            return; //FIXME: DO BETTER ERROR CHECKING
-        updateEdgeEntry(newEdge);
-    } //FIXME implement if we decide we should, a discussion to be had - KD
-
-    /**
-     * Opens edit dialogue to edit edge
-     * Written with code from KD
-     *
-     * @param editedEdge is the edge being edited
-     * @author Karen Hou
-     */
-    private ArrayList<String> openEditEdgeDialog(EdgeEntry editedEdge) throws IOException {
-        FXMLLoader editDialogueLoader = new FXMLLoader();
-        editDialogueLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditMapEdgeDialogueView.fxml"));
-        Stage dialogueStage = new Stage();
-        Parent root = editDialogueLoader.load();
-        EditMapEdgeDialogueViewController editDialogueController = editDialogueLoader.getController();
-        editDialogueController.setDialogueStage(dialogueStage);
-        editDialogueController.setEdge(editedEdge);
-        editDialogueController.setEdgeList(edgeEntryObservableList);
-        editDialogueController.setCurrentIDIfEditing(editedEdge.getEdgeID());
-        dialogueStage.setTitle("Edit Edge");
-        dialogueStage.initModality(Modality.WINDOW_MODAL);
-        dialogueStage.initOwner((Stage) newButton.getScene().getWindow());
-        dialogueStage.setScene(new Scene(root));
-        dialogueStage.showAndWait();
-        ArrayList<String> returnList = new ArrayList<>();
-        returnList.add(editedEdge.getEdgeID());
-        returnList.add(editedEdge.getStartNode());
-        returnList.add(editedEdge.getEndNode());
-        return returnList;
-    }
-
-    /**
-     * Opens the edit dialog to edit a particular node
-     * @param editedNode the node being edited
-     * @author KD
-     */
-    private void openEditNodeDialog(NodeEntry editedNode) throws IOException {
-
-        FXMLLoader dialogLoader = new FXMLLoader();
-        dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditMapNodeDialogView.fxml")); // load in Edit Dialog - KD
-        Stage dialogStage = new Stage();
-        Parent root = dialogLoader.load();
-        EditMapNodeDialogViewController dialogController = dialogLoader.getController(); // get edit dialog's controller - KD
-
-        dialogController.setDialogStage(dialogStage); // set the stage attribute - KD
-        dialogController.setTheNode(editedNode); // inject the node attribute so that specific instance is the one edited - KD
-
-        dialogController.setNodeList(nodeEntryObservableList);
-        dialogController.setCurrentIDIfEditing(editedNode.getNodeID());
-        dialogStage.setTitle("Edit Node");
-        dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
-        dialogStage.initOwner((Stage) newButton.getScene().getWindow());
-        dialogStage.setScene(new Scene(root)); // set scene - KD
-
-        dialogStage.showAndWait(); // open pop up - KD
-    }
-
-    private void updateEdgeEntry(EdgeEntry edgeEntry) throws SQLException {
-
-        if (edgeEntry.getEdgeID().isEmpty() || edgeEntry.getStartNode().isEmpty() || edgeEntry.getEndNode().isEmpty())
-            return; //FIXME: DO BETTER ERROR CHECKING, CHECK THAT WE ARE GETTING INTS
-
-        edgeEntryObservableList.add(edgeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
-        DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
-
-        drawEdgeNodeOnFloor();
-        // Focus on selected edge both on table and on map
-        edgeTreeTable.requestFocus();
-        edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(edgeEntry.getEdgeID()));
-        edgeTreeTable.scrollTo(findEdge(edgeEntry.getEdgeID()));
-        handleSelectEdge();
-    }
-
-    /**
-     * Used to update a node entry in the UI and database //FIXME: Add delete if we already had the node
-     * @param nodeEntry
-     */
-    private void updateNodeEntry(NodeEntry nodeEntry) throws SQLException {
-
-        if(!checkNodeEntryNotEmpty(nodeEntry))
-            return;
-
-        String nodeID = nodeEntry.getNodeID();
-        int xCoord = Integer.parseInt(nodeEntry.getXcoord());
-        int yCoord = Integer.parseInt(nodeEntry.getYcoord());
-        String nodeFloor = nodeEntry.getFloor();
-        String nodeBuilding = nodeEntry.getBuilding();
-        String nodeType = nodeEntry.getNodeType();
-        String longName = nodeEntry.getLongName();
-        String shortName = nodeEntry.getShortName();
-
-
-        DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
-
-        mapPanel.draw(getEditableNode(nodeEntry));
-
-        nodeTreeTable.requestFocus();
-        nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
-        nodeTreeTable.scrollTo(findNode(nodeID));
-        handleSelectNode();
-    }
-
-    /**
-     * Used to highlight selected edges
-     * @author Alex Friedman & ZheCheng
-     */
-    public void handleSelectEdge() {
-        // Check for a valid index (-1 = no selection)
-        if(edgeTreeTable.getSelectionModel().getSelectedIndex() < 0){
-            // FIXME Error Handling
-            return;
-        }
-        // Get selected Edge
-        EdgeEntry edge = edgeEntryObservableList.get(edgeTreeTable.getSelectionModel().getSelectedIndex());
-
-        if(edge == null){
-            //FIXME Null Warning
-            return;
-        }
-
-        // Try to get startNode and endNode from database
-        NodeEntry startNode = null;
-        NodeEntry endNode = null;
-        try {
-            startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), edge.getStartNode());
-            endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), edge.getEndNode());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        // startNode or endNode not stored in database
-        if(startNode == null || endNode == null) {
-            System.out.println("Edge with no actual Node");
-            return;
-        }
-
-        // Check if need to switch map
-        if(startNode.getFloor().equals(mapPanel.getFloor().get()) || endNode.getFloor().equals(mapPanel.getFloor().get())) {
-            //drawEdgeNodeOnFloor();
-
-        }else{
-            mapPanel.switchMap(startNode.getFloor());
-        }
-
-        // Clear highlight on previously selected line or node
-        if(selectedLine != null)
-            selectedLine.setStroke(UIConstants.LINE_COLOR);
-        if(selectedCircle != null)
-            selectedCircle.setFill(UIConstants.NODE_COLOR);
-
-        // Get the line with edgeID
-        Line l = (Line) mapPanel.getCanvas().lookup("#"+edge.getEdgeID());
-        if(l == null){
-            //FIXME Null Warning
-            return;
-        }
-        selectedLine = l;
-        l.setStroke(Color.GREEN);
-        mapPanel.centerNode(l);
-    }
-
-    /**
-     * Search filters tree table based on which tab is open
-     * @param keyEvent
-     * @author KD
-     */
-    public void handleSearch(KeyEvent keyEvent) {
-        if(nodesTab.isSelected()) {
-            nodeTreeTable.setPredicate(new Predicate<TreeItem<NodeEntry>>() {
-                @Override
-                public boolean test(TreeItem<NodeEntry> nodeEntryTreeItem) {
-                    if(searchField.getText().length()>0) {
-                        switch (searchComboBox.getValue()) {
-                            case "Node ID":
-                                return nodeEntryTreeItem.getValue().getNodeID().contains(searchField.getText());
-                            case "Floor":
-                                return nodeEntryTreeItem.getValue().getFloor().equals(searchField.getText());
-                            case "Building":
-                                return nodeEntryTreeItem.getValue().getBuilding().contains(searchField.getText());
-                            case "Node Type":
-                                return nodeEntryTreeItem.getValue().getNodeType().contains(searchField.getText());
-                            case "Long Name":
-                                return nodeEntryTreeItem.getValue().getLongName().contains(searchField.getText());
-                            case "Short Name":
-                                return nodeEntryTreeItem.getValue().getShortName().contains(searchField.getText());
-                            default:
-                                return true;
-                        }
-                    }
-                    return true;
-                }
-            });
-        }
-        else if(edgesTab.isSelected()) {
-            edgeTreeTable.setPredicate(new Predicate<TreeItem<EdgeEntry>>() {
-                @Override
-                public boolean test(TreeItem<EdgeEntry> edgeEntryTreeItem) {
-                    if(searchField.getText().length()>0) {
-                        switch (searchComboBox.getValue()) {
-                            case "Edge ID":
-                                return edgeEntryTreeItem.getValue().getEdgeID().contains(searchField.getText());
-                            case "Start Node":
-                                return edgeEntryTreeItem.getValue().getStartNode().contains(searchField.getText());
-                            case "End Node":
-                                return edgeEntryTreeItem.getValue().getEndNode().contains(searchField.getText());
-                            default:
-                                return true;
-                        }
-                    }
-                    return true;
-                }
-            });
-        }
-    }
-
-    /**
-     * When new button is clicked, open appropriate dialog
-     * @param actionEvent
-     * @author KD and LM
-     */
-    public void handleNew(ActionEvent actionEvent) throws IOException, SQLException {
-        if(nodesTab.isSelected()) {
-            NodeEntry newNode = new NodeEntry(); // create new node - KD
-            openEditNodeDialog(newNode); // allow editing of the new node - KD
-            if(!checkNodeEntryNotEmpty(newNode)) return;
-            nodeEntryObservableList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
-
-            updateNodeEntry(newNode);
-        }
-        else if(edgesTab.isSelected()) {
-            EdgeEntry newEdge = new EdgeEntry();
-            openEditEdgeDialog(newEdge);
-            if(!checkEdgeEntryNotEmpty(newEdge)){return;}
-            updateEdgeEntry(newEdge);
-        }
-    }
-
-    /**
-     * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
-     * @param edgeEntry the node entry
-     * @return true if the node has no empty fields
-     * @author KD
-     */
-    public boolean checkEdgeEntryNotEmpty(EdgeEntry edgeEntry) {
-        return!edgeEntry.getEdgeID().isEmpty() && !edgeEntry.getStartNode().isEmpty() && !edgeEntry.getEndNode().isEmpty();
-    }
-
-    /**
-     * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
-     * @param nodeEntry the node entry
-     * @return true if the node has no empty fields
-     * @author KD
-     */
-    public boolean checkNodeEntryNotEmpty(NodeEntry nodeEntry) {
-        return!nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXcoord().isEmpty() && !nodeEntry.getYcoord().isEmpty() &&
-                !nodeEntry.getFloor().isEmpty() && !nodeEntry.getBuilding().isEmpty() && !nodeEntry.getNodeType().isEmpty() &&
-                !nodeEntry.getLongName().isEmpty() && !nodeEntry.getShortName().isEmpty();
-    }
-
     /**
      * Opens an edit dialog based on the tab opened
      * @param actionEvent
@@ -728,49 +281,78 @@ public class MapEditViewController {
     }
 
     /**
-     * Helper for when a node's ID is changed, needs to update all Edge entries that are associated with it in both the observable list and the database
-     * @param previousID the previous ID
-     * @param newID the new ID
-     * @author KD
+     * When new button is clicked, open appropriate dialog
+     * @param actionEvent
+     * @author KD and LM
      */
-    public void reassignAssociatedEdges(String previousID, String newID) throws SQLException {
-        for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+    public void handleNew(ActionEvent actionEvent) throws IOException, SQLException {
+        if(nodesTab.isSelected()) {
+            NodeEntry newNode = new NodeEntry(); // create new node - KD
+            openEditNodeDialog(newNode); // allow editing of the new node - KD
+            if(!checkNodeEntryNotEmpty(newNode)) return;
+            nodeEntryObservableList.add(newNode); // add the new node to the Observable list (which is linked to table and updates) - KD
 
-            if (edgeEntry.getStartNode().equals(previousID)) {
-                edgeEntry.setStartNode(newID);
-                DatabaseAPI.getDatabaseAPI().deleteEdge(previousID + "_" + edgeEntry.getEndNode());
-                DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
-            }
-
-            if (edgeEntry.getEndNode().equals(previousID)) {
-                edgeEntry.setEndNode(newID);
-                DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntry.getStartNode() + "_" + previousID);
-                DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
-            }
+            updateNodeEntry(newNode);
+        }
+        else if(edgesTab.isSelected()) {
+            EdgeEntry newEdge = new EdgeEntry();
+            openEditEdgeDialog(newEdge);
+            if(!checkEdgeEntryNotEmpty(newEdge)){return;}
+            updateEdgeEntry(newEdge);
         }
     }
 
     /**
-     * Helper that deletes all edges a node is connected to when a node is deleted
-     * @param nodeID
+     * Search filters tree table based on which tab is open
+     * @param keyEvent
      * @author KD
      */
-    public void deleteAssociatedEdges(String nodeID) throws SQLException {
-
-        List<Integer> indicesToRemove = new ArrayList<Integer>();
-
-        for (int index = 0; index < edgeEntryObservableList.size(); index++) {
-            if (edgeEntryObservableList.get(index).getStartNode().equals(nodeID) || edgeEntryObservableList.get(index).getEndNode().equals(nodeID)) { // if an edge is connected to said node
-                DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntryObservableList.get(index).getEdgeID());
-                mapPanel.unDraw(edgeEntryObservableList.get(index).getEdgeID());
-                indicesToRemove.add(index); // This is needed, since removing the elements while going through this for loop can cause the loop to skip entries (as the indices of elements are dynamically updated) - KD
-            }
+    public void handleSearch(KeyEvent keyEvent) {
+        if(nodesTab.isSelected()) {
+            nodeTreeTable.setPredicate(new Predicate<TreeItem<NodeEntry>>() {
+                @Override
+                public boolean test(TreeItem<NodeEntry> nodeEntryTreeItem) {
+                    if(searchField.getText().length()>0) {
+                        switch (searchComboBox.getValue()) {
+                            case "Node ID":
+                                return nodeEntryTreeItem.getValue().getNodeID().contains(searchField.getText());
+                            case "Floor":
+                                return nodeEntryTreeItem.getValue().getFloor().equals(searchField.getText());
+                            case "Building":
+                                return nodeEntryTreeItem.getValue().getBuilding().contains(searchField.getText());
+                            case "Node Type":
+                                return nodeEntryTreeItem.getValue().getNodeType().contains(searchField.getText());
+                            case "Long Name":
+                                return nodeEntryTreeItem.getValue().getLongName().contains(searchField.getText());
+                            case "Short Name":
+                                return nodeEntryTreeItem.getValue().getShortName().contains(searchField.getText());
+                            default:
+                                return true;
+                        }
+                    }
+                    return true;
+                }
+            });
         }
-        for(Integer i : indicesToRemove) {
-            edgeEntryObservableList.remove(edgeEntryObservableList.get(i));
-            for(int index = 0; index<indicesToRemove.size(); index++) {
-                indicesToRemove.set(index, indicesToRemove.get(index) - 1); // to accomodate the changing indices of edgeEntryObservableList
-            }
+        else if(edgesTab.isSelected()) {
+            edgeTreeTable.setPredicate(new Predicate<TreeItem<EdgeEntry>>() {
+                @Override
+                public boolean test(TreeItem<EdgeEntry> edgeEntryTreeItem) {
+                    if(searchField.getText().length()>0) {
+                        switch (searchComboBox.getValue()) {
+                            case "Edge ID":
+                                return edgeEntryTreeItem.getValue().getEdgeID().contains(searchField.getText());
+                            case "Start Node":
+                                return edgeEntryTreeItem.getValue().getStartNode().contains(searchField.getText());
+                            case "End Node":
+                                return edgeEntryTreeItem.getValue().getEndNode().contains(searchField.getText());
+                            default:
+                                return true;
+                        }
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -1018,22 +600,144 @@ public class MapEditViewController {
 
     } //FIXME sometimes error 'L1NODES' already exists in Schema 'APP' happens and the map isnt drawn
 
-    public void handleHome(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) saveButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Admin Home");
-        stage.show();
+    private DrawableNode getEditableNode(NodeEntry nodeEntry)
+    {
+        final DrawableNode drawableNode = nodeEntry.getDrawable();
+
+        drawableNode.setOnMouseEntered(e->{if(!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
+        drawableNode.setOnMouseExited(e->{if(!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR);});
+
+        drawableNode.setOnMouseClicked(e-> {
+            if (selectedCircle != null)
+                selectedCircle.setFill(UIConstants.NODE_COLOR);
+            if (selectedLine != null)
+                selectedLine.setStroke(UIConstants.LINE_COLOR);
+
+            selectedCircle = drawableNode;
+            drawableNode.setFill(UIConstants.NODE_COLOR_SELECTED);
+
+            /* TODO this section allows for "clicking any two nodes and prompting a new edge"  Not sure if we want it implemented since its kind of an inconvenience when
+            // TODO clicking around nodes, if we do we'll have to work out some issue with it - KD
+            if (firstCircle == null) {
+                firstCircle = drawableNode;
+                tabPane.getSelectionModel().select(nodesTab);
+                nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
+                nodeTreeTable.requestFocus();
+                nodeTreeTable.scrollTo(findNode(drawableNode.getId()));
+            } else {
+                secondCircle = drawableNode;
+                // Second node selected, create edge
+                try {
+                    createNewEdgeFromNodes();
+                    tabPane.getSelectionModel().select(edgesTab);
+                    edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(firstCircle.getId()+"_"+secondCircle.getId()));
+                    edgeTreeTable.requestFocus();
+                    edgeTreeTable.scrollTo(findEdge(firstCircle.getId()+"_"+secondCircle.getId()));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+             */
+            // Automagically change to nodes tab
+            tabPane.getSelectionModel().select(nodesTab);
+            nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
+            nodeTreeTable.requestFocus();
+            nodeTreeTable.scrollTo(findNode(drawableNode.getId()));});
+
+
+        return drawableNode;
     }
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    private DrawableEdge getEditableEdge(EdgeEntry edge, NodeEntry startNode, NodeEntry endNode)
+    {
+        final DrawableEdge drawableEdge = new DrawableEdge(
+                Integer.parseInt(startNode.getXcoord()),
+                Integer.parseInt(startNode.getYcoord()),
+                Integer.parseInt(endNode.getXcoord()),
+                Integer.parseInt(endNode.getYcoord()),
+                edge.getEdgeID(),
+                startNode.getFloor(),
+                endNode.getFloor()
+        );
+
+        return drawableEdge;
     }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    /**
+     * Find the index of a given node with nodeID in nodeList
+     * @author ZheCheng
+     */
+    private int findNode(String nodeID){
+        int index = 0;
+        for(NodeEntry n: nodeEntryObservableList){
+            if(n.getNodeID().equals(nodeID)){
+                return index;
+            }
+            index++;
+        }
+        return -1; // FIXME handle this error
+    }
+
+    /**
+     * Find the index of a given node with nodeID in nodeList
+     * @author ZheCheng
+     */
+    private int findEdge(String nodeID){
+        int index = 0;
+        for(EdgeEntry e: edgeEntryObservableList){
+            if(e.getEdgeID() == nodeID){
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    /**
+     * Used to update a node entry in the UI and database //FIXME: Add delete if we already had the node
+     * @param nodeEntry
+     */
+    private void updateNodeEntry(NodeEntry nodeEntry) throws SQLException {
+
+        if(!checkNodeEntryNotEmpty(nodeEntry))
+            return;
+
+        String nodeID = nodeEntry.getNodeID();
+        int xCoord = Integer.parseInt(nodeEntry.getXcoord());
+        int yCoord = Integer.parseInt(nodeEntry.getYcoord());
+        String nodeFloor = nodeEntry.getFloor();
+        String nodeBuilding = nodeEntry.getBuilding();
+        String nodeType = nodeEntry.getNodeType();
+        String longName = nodeEntry.getLongName();
+        String shortName = nodeEntry.getShortName();
+
+
+        DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
+
+        mapPanel.draw(getEditableNode(nodeEntry));
+
+        nodeTreeTable.requestFocus();
+        nodeTreeTable.getSelectionModel().clearAndSelect(findNode(nodeID));
+        nodeTreeTable.scrollTo(findNode(nodeID));
+        handleSelectNode();
+    }
+
+    private void updateEdgeEntry(EdgeEntry edgeEntry) throws SQLException {
+
+        if (edgeEntry.getEdgeID().isEmpty() || edgeEntry.getStartNode().isEmpty() || edgeEntry.getEndNode().isEmpty())
+            return; //FIXME: DO BETTER ERROR CHECKING, CHECK THAT WE ARE GETTING INTS
+
+        edgeEntryObservableList.add(edgeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
+        DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
+
+        drawEdgeNodeOnFloor();
+        // Focus on selected edge both on table and on map
+        edgeTreeTable.requestFocus();
+        edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(edgeEntry.getEdgeID()));
+        edgeTreeTable.scrollTo(findEdge(edgeEntry.getEdgeID()));
+        handleSelectEdge();
     }
 
     /**
@@ -1077,6 +781,302 @@ public class MapEditViewController {
         selectedCircle = c;
         c.setFill(UIConstants.NODE_COLOR_SELECTED);
         mapPanel.centerNode(c);
+    }
+
+    /**
+     * Used to highlight selected edges
+     * @author Alex Friedman & ZheCheng
+     */
+    public void handleSelectEdge() {
+        // Check for a valid index (-1 = no selection)
+        if(edgeTreeTable.getSelectionModel().getSelectedIndex() < 0){
+            // FIXME Error Handling
+            return;
+        }
+        // Get selected Edge
+        EdgeEntry edge = edgeEntryObservableList.get(edgeTreeTable.getSelectionModel().getSelectedIndex());
+
+        if(edge == null){
+            //FIXME Null Warning
+            return;
+        }
+
+        // Try to get startNode and endNode from database
+        NodeEntry startNode = null;
+        NodeEntry endNode = null;
+        try {
+            startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), edge.getStartNode());
+            endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), edge.getEndNode());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        // startNode or endNode not stored in database
+        if(startNode == null || endNode == null) {
+            System.out.println("Edge with no actual Node");
+            return;
+        }
+
+        // Check if need to switch map
+        if(startNode.getFloor().equals(mapPanel.getFloor().get()) || endNode.getFloor().equals(mapPanel.getFloor().get())) {
+            //drawEdgeNodeOnFloor();
+
+        }else{
+            mapPanel.switchMap(startNode.getFloor());
+        }
+
+        // Clear highlight on previously selected line or node
+        if(selectedLine != null)
+            selectedLine.setStroke(UIConstants.LINE_COLOR);
+        if(selectedCircle != null)
+            selectedCircle.setFill(UIConstants.NODE_COLOR);
+
+        // Get the line with edgeID
+        Line l = (Line) mapPanel.getCanvas().lookup("#"+edge.getEdgeID());
+        if(l == null){
+            //FIXME Null Warning
+            return;
+        }
+        selectedLine = l;
+        l.setStroke(Color.GREEN);
+        mapPanel.centerNode(l);
+    }
+
+    /**
+     * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
+     * @param nodeEntry the node entry
+     * @return true if the node has no empty fields
+     * @author KD
+     */
+    public boolean checkNodeEntryNotEmpty(NodeEntry nodeEntry) {
+        return!nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXcoord().isEmpty() && !nodeEntry.getYcoord().isEmpty() &&
+                !nodeEntry.getFloor().isEmpty() && !nodeEntry.getBuilding().isEmpty() && !nodeEntry.getNodeType().isEmpty() &&
+                !nodeEntry.getLongName().isEmpty() && !nodeEntry.getShortName().isEmpty();
+    }
+
+    /**
+     * Helper for adding node that makes sure the node doesn't have empty fields (like when the edit dialog is opened but then closed externally)
+     * @param edgeEntry the node entry
+     * @return true if the node has no empty fields
+     * @author KD
+     */
+    public boolean checkEdgeEntryNotEmpty(EdgeEntry edgeEntry) {
+        return!edgeEntry.getEdgeID().isEmpty() && !edgeEntry.getStartNode().isEmpty() && !edgeEntry.getEndNode().isEmpty();
+    }
+
+    /**
+     * Opens the edit dialog to edit a particular node
+     * @param editedNode the node being edited
+     * @author KD
+     */
+    private void openEditNodeDialog(NodeEntry editedNode) throws IOException {
+
+        FXMLLoader dialogLoader = new FXMLLoader();
+        dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditMapNodeDialogView.fxml")); // load in Edit Dialog - KD
+        Stage dialogStage = new Stage();
+        Parent root = dialogLoader.load();
+        EditMapNodeDialogViewController dialogController = dialogLoader.getController(); // get edit dialog's controller - KD
+
+        dialogController.setDialogStage(dialogStage); // set the stage attribute - KD
+        dialogController.setTheNode(editedNode); // inject the node attribute so that specific instance is the one edited - KD
+
+        dialogController.setNodeList(nodeEntryObservableList);
+        dialogController.setCurrentIDIfEditing(editedNode.getNodeID());
+        dialogStage.setTitle("Edit Node");
+        dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
+        dialogStage.initOwner((Stage) newButton.getScene().getWindow());
+        dialogStage.setScene(new Scene(root)); // set scene - KD
+
+        dialogStage.showAndWait(); // open pop up - KD
+    }
+
+    /**
+     * Opens edit dialogue to edit edge
+     * Written with code from KD
+     *
+     * @param editedEdge is the edge being edited
+     * @author Karen Hou
+     */
+    private ArrayList<String> openEditEdgeDialog(EdgeEntry editedEdge) throws IOException {
+        FXMLLoader editDialogueLoader = new FXMLLoader();
+        editDialogueLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditMapEdgeDialogueView.fxml"));
+        Stage dialogueStage = new Stage();
+        Parent root = editDialogueLoader.load();
+        EditMapEdgeDialogueViewController editDialogueController = editDialogueLoader.getController();
+        editDialogueController.setDialogueStage(dialogueStage);
+        editDialogueController.setEdge(editedEdge);
+        editDialogueController.setEdgeList(edgeEntryObservableList);
+        editDialogueController.setCurrentIDIfEditing(editedEdge.getEdgeID());
+        dialogueStage.setTitle("Edit Edge");
+        dialogueStage.initModality(Modality.WINDOW_MODAL);
+        dialogueStage.initOwner((Stage) newButton.getScene().getWindow());
+        dialogueStage.setScene(new Scene(root));
+        dialogueStage.showAndWait();
+        ArrayList<String> returnList = new ArrayList<>();
+        returnList.add(editedEdge.getEdgeID());
+        returnList.add(editedEdge.getStartNode());
+        returnList.add(editedEdge.getEndNode());
+        return returnList;
+    }
+
+    /**
+     * Clear the canvas and draw edges and nodes that are on current floor
+     * @author ZheCheng
+     */
+    private void drawEdgeNodeOnFloor() {
+        // Clear canvas
+        mapPanel.clearMap();
+
+        // Reset selections
+        selectedLine = null;
+        firstCircle = null;
+        secondCircle = null;
+        nodeList = new ArrayList<NodeEntry>();
+
+        // Draw all edges
+        for(EdgeEntry e : edgeEntryObservableList){
+            NodeEntry startNode = null;
+            NodeEntry endNode = null;
+            try {
+                startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getStartNode());
+                endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getEndNode());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            if(startNode == null || endNode == null) {
+                System.out.println("Edge with no actual Node");
+                //return;
+            }
+            else
+            {
+                boolean duplicate = false;
+                for (NodeEntry n: nodeList) {
+                    if(n.getNodeID().equals(startNode.getNodeID())){
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if(!duplicate){
+                    nodeList.add(startNode);
+                }
+                duplicate = false;
+                for (NodeEntry n: nodeList) {
+                    if(n.getNodeID().equals(endNode.getNodeID())){
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if(!duplicate){
+                    nodeList.add(endNode);
+                }
+
+
+                Line l = mapPanel.draw(getEditableEdge(e, startNode, endNode));
+
+                l.setOnMouseEntered(event->{if(!l.equals(selectedLine))l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);});
+                l.setOnMouseExited(event->{if(!l.equals(selectedLine))l.setStroke(UIConstants.LINE_COLOR);});
+                l.setOnMouseClicked(event->{
+                    if(selectedLine != null)
+                        selectedLine.setStroke(UIConstants.LINE_COLOR);
+                    if(selectedCircle != null)
+                        selectedCircle.setFill(UIConstants.NODE_COLOR);
+                    selectedLine = l;
+                    // Automagically change to edges tab
+                    tabPane.getSelectionModel().select(edgesTab);
+                    l.setStroke(Color.GREEN);
+                    edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(e.getEdgeID()));
+                    edgeTreeTable.requestFocus();
+                    edgeTreeTable.scrollTo(findEdge(e.getEdgeID()));
+                });
+            }
+        }
+
+        // Draw all corresponding nodes
+        for(NodeEntry n : nodeEntryObservableList){
+            mapPanel.draw(getEditableNode(n));
+            // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
+        }
+    }
+
+    /**
+     * Open window for user to create new edge with two node selected
+     *
+     * @throws IOException
+     * @throws SQLException
+     * @author ZheCheng
+     */
+    private void createNewEdgeFromNodes() throws IOException, SQLException{
+        EdgeEntry newEdge = new EdgeEntry(firstCircle.getId()+"_"+secondCircle.getId(),firstCircle.getId(),secondCircle.getId());
+        openEditEdgeDialog(newEdge);
+        if (newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||
+                newEdge.endNodeProperty().getValue().isEmpty())
+            return; //FIXME: DO BETTER ERROR CHECKING
+        updateEdgeEntry(newEdge);
+    } //FIXME implement if we decide we should, a discussion to be had - KD
+
+    /**
+     * Helper for when a node's ID is changed, needs to update all Edge entries that are associated with it in both the observable list and the database
+     * @param previousID the previous ID
+     * @param newID the new ID
+     * @author KD
+     */
+    public void reassignAssociatedEdges(String previousID, String newID) throws SQLException {
+        for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+
+            if (edgeEntry.getStartNode().equals(previousID)) {
+                edgeEntry.setStartNode(newID);
+                DatabaseAPI.getDatabaseAPI().deleteEdge(previousID + "_" + edgeEntry.getEndNode());
+                DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
+            }
+
+            if (edgeEntry.getEndNode().equals(previousID)) {
+                edgeEntry.setEndNode(newID);
+                DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntry.getStartNode() + "_" + previousID);
+                DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
+            }
+        }
+    }
+
+    /**
+     * Helper that deletes all edges a node is connected to when a node is deleted
+     * @param nodeID
+     * @author KD
+     */
+    public void deleteAssociatedEdges(String nodeID) throws SQLException {
+
+        List<Integer> indicesToRemove = new ArrayList<Integer>();
+
+        for (int index = 0; index < edgeEntryObservableList.size(); index++) {
+            if (edgeEntryObservableList.get(index).getStartNode().equals(nodeID) || edgeEntryObservableList.get(index).getEndNode().equals(nodeID)) { // if an edge is connected to said node
+                DatabaseAPI.getDatabaseAPI().deleteEdge(edgeEntryObservableList.get(index).getEdgeID());
+                mapPanel.unDraw(edgeEntryObservableList.get(index).getEdgeID());
+                indicesToRemove.add(index); // This is needed, since removing the elements while going through this for loop can cause the loop to skip entries (as the indices of elements are dynamically updated) - KD
+            }
+        }
+        for(Integer i : indicesToRemove) {
+            edgeEntryObservableList.remove(edgeEntryObservableList.get(i));
+            for(int index = 0; index<indicesToRemove.size(); index++) {
+                indicesToRemove.set(index, indicesToRemove.get(index) - 1); // to accomodate the changing indices of edgeEntryObservableList
+            }
+        }
+    }
+
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
+
+    public void handleHome(MouseEvent mouseEvent) throws IOException {
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Admin Home");
+        stage.show();
     }
 
     public void handleTabChange(Event event) {

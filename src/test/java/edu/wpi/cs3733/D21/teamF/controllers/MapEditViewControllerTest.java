@@ -262,4 +262,19 @@ public class MapEditViewControllerTest extends ApplicationTest {
         }
         assertTrue(wasEdited);
     }
+
+    @Test
+    public void searchByEdgesTest() {
+        clickOn("#edgesTab");
+        clickOn("#searchField");
+        write("ACONF");
+        clickOn("#searchComboBox");
+        clickOn("Start Node");
+        doubleClickOn("#searchField");
+        write("ELEV");
+        clickOn("#searchComboBox");
+        clickOn("End Node");
+        doubleClickOn("#searchField");
+        write("DEPT");
+    }
 }
