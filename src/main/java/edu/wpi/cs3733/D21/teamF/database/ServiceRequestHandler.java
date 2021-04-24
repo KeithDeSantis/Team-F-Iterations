@@ -131,7 +131,7 @@ public class ServiceRequestHandler implements DatabaseEntry {
             ServiceEntry newEntry = new ServiceEntry(uuid, name, assignedPerson, completed);
             entries.add(newEntry);
         }
-
+        rset.close();
         return entries;
     }
 }

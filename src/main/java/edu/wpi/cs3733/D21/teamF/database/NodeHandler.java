@@ -143,7 +143,7 @@ public class NodeHandler implements DatabaseEntry {
             NodeEntry newEntry = new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
             entries.add(newEntry);
         }
-
+        rset.close();
         return entries;
     }
 
@@ -181,6 +181,7 @@ public class NodeHandler implements DatabaseEntry {
 
             return new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
         }
+        rset.close();
         return null;
     }
 }

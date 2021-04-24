@@ -67,6 +67,7 @@ public class UserHandler implements DatabaseEntry {
         while (rset.next()) {
             allUsernames.add(rset.getString(3));
         }
+        rset.close();
         return allUsernames;
     }
 
@@ -93,6 +94,7 @@ public class UserHandler implements DatabaseEntry {
                 authenticated = true;
             }
         }
+        rset.close();
         return authenticated;
     }
 

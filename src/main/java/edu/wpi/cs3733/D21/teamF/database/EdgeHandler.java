@@ -139,6 +139,7 @@ public class EdgeHandler implements DatabaseEntry {
             EdgeEntry newEntry = new EdgeEntry(edgeID, startNode, endNode);
             entries.add(newEntry);
         }
+        rset.close();
         return entries;
     }
 
@@ -171,6 +172,7 @@ public class EdgeHandler implements DatabaseEntry {
 
             return new EdgeEntry(edgeID, start, end);
         }
+        rset.close();
         return null;
     }
 }
