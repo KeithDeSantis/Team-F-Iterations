@@ -12,111 +12,130 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
+
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MapEditViewController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="200.0" layoutX="716.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="1920.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <Line endX="100.0" endY="200.0" startX="2019.5" startY="200.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <JFXTabPane fx:id="tabPane" layoutX="25.0" layoutY="241.0" prefHeight="526.0" prefWidth="450.0" stylesheets="/stylesheets/MapEditorTabViewStyle.css" AnchorPane.bottomAnchor="225.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="228.0">
-         <tabs>
-            <Tab fx:id="nodesTab" text="Nodes">
-               <content>
-                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" />
-               </content>
-            </Tab>
-            <Tab fx:id="edgesTab" text="Edges">
-               <content>
-                  <JFXTreeTableView fx:id="edgeTreeTable" onMouseClicked="#handleSelectEdge"/>
-               </content>
-            </Tab>
-         </tabs>
-      </JFXTabPane>
-      <GridPane alignment="CENTER" layoutX="134.0" layoutY="849.0" prefHeight="150.0" prefWidth="450.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0">
-        <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <JFXButton fx:id="resetFromDB" onAction="#handleReset" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Reset From Data Base" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="5.0" right="5.0" />
-               </GridPane.margin>
-            </JFXButton>
-            <JFXButton fx:id="saveButton" onAction="#handleSave" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Save CSV" textFill="WHITE" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="5.0" right="5.0" />
-               </GridPane.margin>
-            </JFXButton>
-            <JFXButton fx:id="loadButton" onAction="#handleLoad" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Load CSV" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="5.0" right="5.0" />
-               </GridPane.margin>
-            </JFXButton>
-            <JFXTextField fx:id="searchBar" onKeyReleased="#handleSearch" promptText="Search...">
-               <GridPane.margin>
-                  <Insets left="5.0" right="5.0" />
-               </GridPane.margin>
-            </JFXTextField>
-            <JFXComboBox fx:id="searchComboBox" prefWidth="2000.0" GridPane.columnIndex="1">
-               <GridPane.margin>
-                  <Insets left="5.0" right="5.0" />
-               </GridPane.margin>
-            </JFXComboBox>
-         </children>
-      </GridPane>
-      <VBox alignment="CENTER" layoutX="1781.0" layoutY="497.0" prefHeight="124.0" prefWidth="109.0" AnchorPane.bottomAnchor="459.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="497.0">
-         <children>
-            <JFXButton fx:id="newButton" onAction="#handleNew" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="New..." textFill="WHITE">
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </VBox.margin>
-            </JFXButton>
-            <JFXButton fx:id="editButton" layoutX="10.0" layoutY="10.0" onAction="#handleEdit" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Edit..." textFill="WHITE">
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </VBox.margin>
-            </JFXButton>
-            <JFXButton fx:id="deleteButton" layoutX="10.0" layoutY="39.0" onAction="#handleDelete" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete" textFill="WHITE">
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </VBox.margin>
-            </JFXButton>
-         </children>
-      </VBox>
       <ImageView fitHeight="181.0" fitWidth="153.0" onMouseClicked="#handleHome" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <image>
             <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
          </image>
       </ImageView>
-      <MapPanel fx:id="mapPanel" layoutX="486.0" layoutY="236.0" prefHeight="813.0" prefWidth="1198.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="486.0" AnchorPane.rightAnchor="236.0" AnchorPane.topAnchor="236.0" />
+      <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="60.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="240.0">
+               <children>
+                  <JFXTabPane fx:id="tabPane" prefHeight="526.0" prefWidth="240.0" stylesheets="/stylesheets/MapEditorTabViewStyle.css" VBox.vgrow="ALWAYS">
+                     <tabs>
+                        <Tab fx:id="nodesTab" text="Nodes">
+                           <content>
+                              <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css"/>
+                           </content>
+                        </Tab>
+                        <Tab fx:id="edgesTab" text="Edges">
+                           <content>
+                              <JFXTreeTableView fx:id="edgeTreeTable" onMouseClicked="#handleSelectEdge" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css"/>
+                           </content>
+                        </Tab>
+                     </tabs>
+                  </JFXTabPane>
+                  <GridPane alignment="CENTER" minHeight="130.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <JFXButton fx:id="resetFromDB" onAction="#handleReset" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Reset From Database" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="Montserrat Regular" size="15.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="saveButton" onAction="#handleSave" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Save CSV" textFill="WHITE" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Montserrat Regular" size="15.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="loadButton" onAction="#handleLoad" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Load CSV" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Montserrat Regular" size="15.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </JFXButton>
+                        <JFXTextField fx:id="searchBar" onKeyReleased="#handleSearch" promptText="Search...">
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </JFXTextField>
+                        <JFXComboBox fx:id="searchComboBox" prefWidth="2000.0" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </JFXComboBox>
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
+            <MapPanel fx:id="mapPanel" minHeight="500.0" minWidth="500.0" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets left="25.0" right="25.0" />
+               </HBox.margin>
+            </MapPanel>
+            <VBox alignment="CENTER" minHeight="120.0" minWidth="120.0" prefWidth="120.0" spacing="5.0">
+               <children>
+                  <JFXButton fx:id="newButton" onAction="#handleNew" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="New..." textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="editButton" layoutX="10.0" layoutY="10.0" onAction="#handleEdit" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Edit..." textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="deleteButton" layoutX="10.0" layoutY="39.0" onAction="#handleDelete" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </JFXButton>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="25.0" right="25.0" />
+         </padding>
+      </HBox>
    </children>
 </AnchorPane>

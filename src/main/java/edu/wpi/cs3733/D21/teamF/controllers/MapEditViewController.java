@@ -237,13 +237,6 @@ public class MapEditViewController {
             }
             else
             {
-                /*
-                if(!nodeList.contains(startNode))
-                    nodeList.add(startNode);
-                if(!nodeList.contains(endNode))
-                    nodeList.add(endNode);
-                 */
-
                 boolean duplicate = false;
                 for (NodeEntry n: nodeList) {
                     if(n.getNodeID().equals(startNode.getNodeID())){

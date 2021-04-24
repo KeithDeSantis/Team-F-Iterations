@@ -13,10 +13,10 @@
     -fx-padding : 16 0 16 0 ;
 }
 .tree-table-view .column-header-background{
-    -fx-background-color: #1C77C3;
+    -fx-background-color: #03256c;
 }
 .tree-table-view .scroll-bar {
-    -fx-background-color: #1C77C3;
+    -fx-background-color: #03256c;
 }
 .tree-table-view .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb,
