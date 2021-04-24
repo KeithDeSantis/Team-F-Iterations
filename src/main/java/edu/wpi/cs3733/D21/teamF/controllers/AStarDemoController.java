@@ -393,16 +393,15 @@ public class AStarDemoController implements Initializable {
 
                 // small angle (45) alternation ignored
                 if (angle <= 45 || angle >= 315) {
-                    distance += curV.EuclideanDistance(nexV);
+                    // Skip
                 } else {
                     // Finished calculating distance after last turn
+                    stops.add(i);
                     if(!prevDiret.equals("")){
+                        distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
                         instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
                         distance = 0.0;
                     }
-
-                    distance += curV.EuclideanDistance(nexV);
-                    stops.add(i);
 
                     if (Math.abs(Math.abs(curAngle - prevAngle) - 180) <= 45) {
                         prevDiret = "Turn around";
@@ -438,11 +437,11 @@ public class AStarDemoController implements Initializable {
             if (!SEsearch && (curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV"))) {
                 SEsearch = true;
                 type = curN.getNodeType();
-                distance += curV.EuclideanDistance(nexV);
             }
         }
-        if(!prevDiret.equals("")) instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
         stops.add(pathVertex.size() - 1);
+        distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
+        if(!prevDiret.equals("")) instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
         instructions.add("Reach Destination!");
     }
 
@@ -532,5 +531,13 @@ public class AStarDemoController implements Initializable {
             }
             System.out.println(Math.round(sumDist));
         }
+    }
+
+    private double calculateDistance(List<Vertex> path, int start, int end) {
+        double sumDist = 0.0;
+        for (int i = start; i < end; i++) {
+            sumDist += path.get(i).EuclideanDistance(path.get(i + 1));
+        }
+        return sumDist;
     }
 }
