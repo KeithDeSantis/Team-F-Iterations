@@ -2,8 +2,7 @@ package edu.wpi.cs3733.D21.teamF.database;
 
 import java.sql.*;
 
-//Only needed by DB, so this can be package private
-class ConnectionHandler {
+public class ConnectionHandler {
 
     private ConnectionHandler() {}
 

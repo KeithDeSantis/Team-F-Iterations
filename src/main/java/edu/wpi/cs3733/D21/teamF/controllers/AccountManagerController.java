@@ -62,9 +62,7 @@ public class AccountManagerController implements Initializable {
         {
             e.printStackTrace();
         }
-
-        System.out.println(allUsers);
-
+        
         for (String s : allUsers)
         {
             selectUser.getItems().add(s);

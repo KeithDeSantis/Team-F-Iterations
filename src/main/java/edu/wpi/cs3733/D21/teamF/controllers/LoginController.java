@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,8 +46,6 @@ public class LoginController {
         String user = username.getText();
         String pass = password.getText();
 
-        DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "USERS");
-        DatabaseAPI.getDatabaseAPI().populateUsers(ConnectionHandler.getConnection());
         authenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
         if (authenticated){
 

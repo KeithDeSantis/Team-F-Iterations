@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,8 +27,9 @@ class DatabaseAPITest {
 
         DatabaseAPI.getDatabaseAPI().createNodesTable();
         DatabaseAPI.getDatabaseAPI().createEdgesTable();
-        DatabaseAPI.getDatabaseAPI().createUserTable(); //How?
+        DatabaseAPI.getDatabaseAPI().createUserTable();
 
+        //FIXME: DO BETTER!
         try {
             DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
         } catch (SQLException throwables) {

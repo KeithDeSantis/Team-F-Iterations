@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -74,6 +75,7 @@ public class LanguageInterpretationRequestController implements Initializable {
         //services.add(newServiceRequest);
         //update service requests
         //after this is updated, copy into the other service request submits
+
         DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                 newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus());
         Stage currentStage = (Stage)submit.getScene().getWindow();

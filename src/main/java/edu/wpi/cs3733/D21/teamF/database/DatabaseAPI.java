@@ -94,7 +94,7 @@ public class DatabaseAPI {
         return edge.getEdge(id);
     }
 
-    public boolean addServiceReq(String[] colValues) throws SQLException{
+    public boolean addServiceReq(String...colValues) throws SQLException{
         return serviceRequestHandler.addEntry(colValues);
     }
 
@@ -147,9 +147,14 @@ public class DatabaseAPI {
         userHandler.populateTable(users);
     }
 
+    public boolean authenticate(String username, String pass) throws SQLException {
+        return ((UserHandler)this.userHandler).authenticate(username, pass);
+    }
     private static class DatabaseSingletonHelper{
         private static final DatabaseAPI databaseAPI1 = new DatabaseAPI();
     }
+
+
     public static DatabaseAPI getDatabaseAPI(){
         return DatabaseSingletonHelper.databaseAPI1;
     }
