@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.entities;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -114,4 +115,13 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
         return shortName;
     }
 
+
+    public DrawableNode getDrawable() {
+        return new DrawableNode(
+                Integer.parseInt(xcoord),
+                Integer.parseInt(ycoord),
+                nodeID,
+                floor
+        );
+    }
 }

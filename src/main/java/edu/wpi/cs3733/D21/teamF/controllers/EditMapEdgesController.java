@@ -6,6 +6,9 @@ import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.uicomponents.MapPanel;
+import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
+import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import javafx.collections.FXCollections;
@@ -15,9 +18,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -54,32 +54,27 @@ public class EditMapEdgesController {
     private JFXButton saveCSV;
 
     @FXML
+    private JFXTextField CSVFile;
+
+    @FXML
     private Label CSVErrorLabel;
 
     @FXML
     private JFXTreeTableView<EdgeEntry> edgeTable;
 
     @FXML
-    private Pane canvas;
+    private MapPanel mapPanel;
+
 
     // Create an observable list of edges
     private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
 
-    @FXML
-    private ScrollPane scroll;
-    @FXML
-    private ImageView map;
 
-    @FXML private ComboBox<String> floorComboBox;
-
-    private double zoomLevel = 3.0;
-    private String floor = "1";
     private Line selectedLine = null;
 
     private Circle firstCircle = null;
     private Circle secondCircle = null;
 
-    private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
 
     List<NodeEntry> nodeList = new ArrayList<>();
     /**
@@ -94,25 +89,13 @@ public class EditMapEdgesController {
         CSVErrorLabel.setStyle("-fx-text-fill: black");
         CSVErrorLabel.setText("");
 
-        // setup the map view
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        map.setPreserveRatio(true);
-        final Image image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
 
-        final double width = image.getWidth() / zoomLevel;
-        final double height = image.getHeight() / zoomLevel;
-
-        canvas.setPrefSize(width,height);
-
-        map.setFitWidth(width);
-        map.setFitHeight(height);
-        map.setImage(image); // Copied from EditMapEdges - LM
-
+        // Set the save button to disabled by default (enabled by a valid file name being entered)
+        saveCSV.setDisable(true);
 
         List <EdgeEntry> data = new ArrayList<>();
         try {
-            data = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            data = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -131,10 +114,6 @@ public class EditMapEdgesController {
         edgeTable.setShowRoot(false);
 
         // Set up floor comboBox and draw the nodes and edges on current floor
-        final ObservableList<String> floorName = FXCollections.observableArrayList();
-        floorName.addAll("1","2","3","L1","L2","G");
-        floorComboBox.setItems(floorName);
-        floorComboBox.setValue(floor);
         drawEdgeNodeOnFloor();
         // Listen for selection changes on the table view
         //edgeTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showSelectedEdge(newVwalue)));
@@ -175,7 +154,7 @@ public class EditMapEdgesController {
 
             // Delete Selected edge and corresponding node on map
             selectedLine = null;
-            drawEdgeNodeOnFloor();
+            mapPanel.unDraw(selectedEdge.getEdgeID());
         }
     }
 
@@ -185,7 +164,7 @@ public class EditMapEdgesController {
      * @author Karen Hou
      */
     @FXML
-    private void handleEditEdge() throws IOException, SQLException {
+    private void handleEditEdge() throws Exception {
         // Get the current selected edge index
         int index = edgeTable.getSelectionModel().getSelectedIndex();
         EdgeEntry selectedEdge;
@@ -206,9 +185,17 @@ public class EditMapEdgesController {
             String oldID = selectedEdge.getEdgeID();
             ArrayList<String> newValues = openEditDialogue(selectedEdge);
 
-            DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "startNode", newValues.get(1));
-            DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "endNode", newValues.get(2));
-            DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "id", newValues.get(0));
+            //Like that or?
+            DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(1), "startNode");
+            DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(2), "endNode");
+            DatabaseAPI.getDatabaseAPI().editEdge(oldID,  newValues.get(0), "edgeID");
+
+            final DrawableEdge drawableEdge = mapPanel.getNode(oldID);
+            drawableEdge.setId(newValues.get(0));
+            drawableEdge.getFloor().setValue(newValues.get(1));
+            drawableEdge.getEndFloor().setValue(newValues.get(2));
+
+            drawEdgeNodeOnFloor();
 
             // Focus on selected edge both on table and on map
             edgeTable.requestFocus();
@@ -248,6 +235,7 @@ public class EditMapEdgesController {
         edgeEntryObservableList.add(edgeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
         DatabaseAPI.getDatabaseAPI().addEdge(edgeEntry.getEdgeID(), edgeEntry.getStartNode(), edgeEntry.getEndNode());
 
+        drawEdgeNodeOnFloor();
         // Focus on selected edge both on table and on map
         edgeTable.requestFocus();
         edgeTable.getSelectionModel().clearAndSelect(findEdge(edgeEntry.getEdgeID()));
@@ -393,10 +381,8 @@ public class EditMapEdgesController {
                     return new EdgeEntry(line[0], line[1], line[2]);
                 }).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
 
-                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
-                final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
-                        "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
+                DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+                DatabaseAPI.getDatabaseAPI().createEdgesTable();
                 DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
             }
         }
@@ -405,7 +391,6 @@ public class EditMapEdgesController {
         CSVErrorLabel.setStyle("-fx-text-fill: black");
 
         drawEdgeNodeOnFloor();
-
     }
 
     /**
@@ -430,8 +415,8 @@ public class EditMapEdgesController {
         NodeEntry startNode = null;
         NodeEntry endNode = null;
         try {
-            startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), node.getStartNode());
-            endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), node.getEndNode());
+            startNode = DatabaseAPI.getDatabaseAPI().getNode(node.getStartNode());
+            endNode = DatabaseAPI.getDatabaseAPI().getNode(node.getEndNode());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -443,60 +428,23 @@ public class EditMapEdgesController {
         }
 
         // Check if need to switch map
-        if(startNode.getFloor().equals(floor) || endNode.getFloor().equals(floor)) {
-            drawEdgeNodeOnFloor();
+        if(startNode.getFloor().equals(mapPanel.getFloor().get()) || endNode.getFloor().equals(mapPanel.getFloor().get())) {
+            //drawEdgeNodeOnFloor();
             if(selectedLine != null)
                 selectedLine.setStroke(UIConstants.LINE_COLOR);
         }else{
-            floor = startNode.getFloor();
-            switchMap();
+            mapPanel.switchMap(startNode.getFloor());
         }
 
         // Get the line with edgeID
-        Line l = (Line) canvas.lookup("#"+node.getEdgeID());
+        Line l = (Line) mapPanel.getCanvas().lookup("#"+node.getEdgeID());
         if(l == null){
             //FIXME Null Warning
             return;
         }
         selectedLine = l;
         l.setStroke(Color.GREEN);
-        centerNode(l);
-    }
-
-    /**
-     * Handle switching floor using combobox
-     * @param actionEvent
-     * @author ZheCheng
-     */
-    @FXML
-    public void handleFloorBoxAction(ActionEvent actionEvent) {
-        floor = floorComboBox.getValue();
-        switchMap();
-    }
-
-    /**
-     * Handle switching floor map and redraw the nodes in new floor
-     * @author ZheCheng
-     */
-    private void switchMap(){
-        switch(floor){
-            case "1": if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
-                map.setImage(F1Image); break;
-            case "2": if (F2Image == null)F2Image = new Image("/maps/02_thesecondfloor.png");
-                map.setImage(F2Image); break;
-            case "3": if (F3Image == null)F3Image = new Image("/maps/03_thethirdfloor.png");
-                map.setImage(F3Image); break;
-            case "L1": if (L1Image == null)L1Image = new Image("/maps/00_thelowerlevel1.png");
-                map.setImage(L1Image); break;
-            case "L2": if (L2Image == null)L2Image = new Image("/maps/00_thelowerlevel2.png");
-                map.setImage(L2Image); break;
-            case "G": if (GImage == null)GImage = new Image("/maps/00_thegroundfloor.png");
-                map.setImage(GImage); break;
-            default: if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
-                map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
-        }
-        floorComboBox.setValue(floor);
-        drawEdgeNodeOnFloor();
+        mapPanel.centerNode(l);
     }
 
     /**
@@ -505,12 +453,7 @@ public class EditMapEdgesController {
      */
     private void drawEdgeNodeOnFloor() {
         // Clear canvas
-        canvas.getChildren().removeIf(x -> {
-            return x instanceof Circle;
-        });
-        canvas.getChildren().removeIf(x -> {
-            return x instanceof Line;
-        });
+        mapPanel.clearMap();
 
         // Reset selections
         selectedLine = null;
@@ -523,56 +466,65 @@ public class EditMapEdgesController {
             NodeEntry startNode = null;
             NodeEntry endNode = null;
             try {
-                startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getStartNode());
-                endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getEndNode());
+                startNode = DatabaseAPI.getDatabaseAPI().getNode(e.getStartNode());
+                endNode = DatabaseAPI.getDatabaseAPI().getNode(e.getEndNode());
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
             if(startNode == null || endNode == null) {
                 System.out.println("Edge with no actual Node");
                 //return;
-            }else if(startNode.getFloor().equals(floor) || endNode.getFloor().equals(floor)) {
+            }
+            else
+            {
                 if(!nodeList.contains(startNode))
                     nodeList.add(startNode);
                 if(!nodeList.contains(endNode))
                     nodeList.add(endNode);
-                drawLine(Double.parseDouble(startNode.getXcoord())/zoomLevel,
-                        Double.parseDouble(startNode.getYcoord())/zoomLevel,
-                        Double.parseDouble(endNode.getXcoord())/zoomLevel,
-                        Double.parseDouble(endNode.getYcoord())/zoomLevel,
-                        e.getEdgeID());
+
+
+                Line l = mapPanel.draw(getEditableEdge(e, startNode, endNode));
+
+                l.setOnMouseEntered(event->{if(!l.equals(selectedLine))l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);});
+                l.setOnMouseExited(event->{if(!l.equals(selectedLine))l.setStroke(UIConstants.LINE_COLOR);});
+                l.setOnMouseClicked(event->{
+                    if(selectedLine != null)
+                        selectedLine.setStroke(UIConstants.LINE_COLOR);
+                    selectedLine = l;
+                    l.setStroke(Color.GREEN);
+                    edgeTable.getSelectionModel().clearAndSelect(findEdge(e.getEdgeID()));
+                    edgeTable.requestFocus();
+                    edgeTable.scrollTo(findEdge(e.getEdgeID()));
+                });
             }
         }
 
         // Draw all corresponding nodes
         for(NodeEntry n : nodeList){
-            drawCircle(Double.parseDouble(n.getXcoord()) / zoomLevel, Double.parseDouble(n.getYcoord()) / zoomLevel, n.getNodeID());
+            mapPanel.draw(getEditableNode(n));
+           // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
         }
     }
 
-    /**
-     * Draw a single circle to represent the node
-     * @author ZheCheng
-     */
-    private void drawCircle(double x, double y, String nodeID){
-        Circle c = new Circle(x, y, 4.0);
-        c.setFill(UIConstants.NODE_COLOR);
-        c.setId(nodeID);
-        c.setOnMouseEntered(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
-        c.setOnMouseExited(e->{if(!c.equals(firstCircle)&&!c.equals(secondCircle))c.setFill(UIConstants.NODE_COLOR);});
-        c.setOnMouseClicked(e->{
-            if(c.equals(firstCircle)) {
+
+    private DrawableNode getEditableNode(NodeEntry e)
+    {
+        final DrawableNode node = e.getDrawable();
+        node.setOnMouseEntered(event->{if(!node.equals(firstCircle) && !node.equals(secondCircle))node.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
+        node.setOnMouseExited(event->{if(!node.equals(firstCircle) && !node.equals(secondCircle))node.setFill(UIConstants.NODE_COLOR);});
+        node.setOnMouseClicked(event->{
+            if(node.equals(firstCircle)) {
                 firstCircle = null;
                 return;
             }
-            c.setFill(UIConstants.NODE_COLOR_SELECTED);
+            node.setFill(UIConstants.NODE_COLOR_SELECTED);
             if(firstCircle == null)
-                firstCircle = c;
+                firstCircle = node;
             else {
-                secondCircle = c;
+                secondCircle = node;
                 // Second node selected, create edge
                 try {
-                    createNewEdge();
+                    createNewEdgeFromNodes();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 } catch (SQLException throwables) {
@@ -581,7 +533,22 @@ public class EditMapEdgesController {
             }
         });
 
-        this.canvas.getChildren().add(c);
+        return node;
+    }
+
+    private DrawableEdge getEditableEdge(EdgeEntry edge, NodeEntry startNode, NodeEntry endNode)
+    {
+        final DrawableEdge drawableEdge = new DrawableEdge(
+                Integer.parseInt(startNode.getXcoord()),
+                Integer.parseInt(startNode.getYcoord()),
+                Integer.parseInt(endNode.getXcoord()),
+                Integer.parseInt(endNode.getYcoord()),
+                edge.getEdgeID(),
+                startNode.getFloor(),
+                endNode.getFloor()
+        );
+
+        return drawableEdge;
     }
 
     /**
@@ -591,7 +558,7 @@ public class EditMapEdgesController {
      * @throws SQLException
      * @author ZheCheng
      */
-    private void createNewEdge() throws IOException, SQLException{
+    private void createNewEdgeFromNodes() throws IOException, SQLException{
         EdgeEntry newEdge = new EdgeEntry(firstCircle.getId()+"_"+secondCircle.getId(),firstCircle.getId(),secondCircle.getId());
         openEditDialogue(newEdge);
         if (newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||
@@ -601,29 +568,6 @@ public class EditMapEdgesController {
     }
 
 
-    /**
-     * Draw a single line to represent the edge
-     * @author ZheCheng
-     */
-    private void drawLine(double startX, double startY, double endX, double endY, String edgeID){
-        Line l = new Line(startX, startY, endX, endY);
-        l.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
-        l.setStroke(UIConstants.LINE_COLOR);
-        l.setId(edgeID);
-        l.setOnMouseEntered(e->{if(!l.equals(selectedLine))l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);});
-        l.setOnMouseExited(e->{if(!l.equals(selectedLine))l.setStroke(UIConstants.LINE_COLOR);});
-        l.setOnMouseClicked(e->{
-            if(selectedLine != null)
-                selectedLine.setStroke(UIConstants.LINE_COLOR);
-            selectedLine = l;
-            l.setStroke(Color.GREEN);
-            edgeTable.getSelectionModel().clearAndSelect(findEdge(edgeID));
-            edgeTable.requestFocus();
-            edgeTable.scrollTo(findEdge(edgeID));
-        });
-
-        this.canvas.getChildren().add(l);
-    }
 
     /**
      * Find the index of a given node with nodeID in nodeList
@@ -641,26 +585,6 @@ public class EditMapEdgesController {
     }
 
     /**
-     * Center the given line in scrollpane
-     * @param l The line to be centered
-     * @author ZheCheng
-     */
-    public void centerNode(Line l){
-
-        double h = scroll.getContent().getBoundsInLocal().getHeight();
-        double y = (l.getBoundsInParent().getMaxY() +
-                l.getBoundsInParent().getMinY()) / 2.0;
-        double v = scroll.getViewportBounds().getHeight();
-        scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
-
-        double w = scroll.getContent().getBoundsInLocal().getWidth();
-        double x = (l.getBoundsInParent().getMaxX() +
-                l.getBoundsInParent().getMinX()) / 2.0;
-        double hw = scroll.getViewportBounds().getWidth();
-        scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
-    }
-
-    /**
      * Resets the database
      * @param actionEvent
      * @throws SQLException
@@ -669,6 +593,7 @@ public class EditMapEdgesController {
     public void handleResetDB(ActionEvent actionEvent) throws SQLException {
 
         edgeEntryObservableList.clear();
+        mapPanel.clearMap();
 
         List<String[]> edgeData = null;
 
@@ -689,10 +614,8 @@ public class EditMapEdgesController {
                     return new EdgeEntry(line[0], line[1], line[2]);
                 }).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
 
-                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
-                final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
-                        "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
+                DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+                DatabaseAPI.getDatabaseAPI().createEdgesTable();
                 DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
             }
         }

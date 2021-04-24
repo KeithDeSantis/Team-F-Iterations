@@ -15,7 +15,7 @@ public class UIConstants {
 
     public static final Color NODE_COLOR_SELECTED = Color.GREEN; //FIXME: DO better for colorblindness
 
-    public static final double NODE_RADIUS = 7.0;
+    public static final double NODE_RADIUS = 3.0;
 
 
 
