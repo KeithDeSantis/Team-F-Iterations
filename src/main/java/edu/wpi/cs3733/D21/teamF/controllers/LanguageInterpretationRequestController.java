@@ -9,6 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -50,11 +53,15 @@ public class LanguageInterpretationRequestController implements Initializable {
      * @author Jay Yen
      */
     public void handleHelp(ActionEvent actionEvent) throws IOException {
-        Stage currentStage = (Stage)help.getScene().getWindow();
+
+        Stage submittedStage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationHelpView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+        Scene helpPopUp = new Scene(root);
+        submittedStage.setScene(helpPopUp);
+        submittedStage.setTitle("Language Interpretation Help");
+        submittedStage.initModality(Modality.APPLICATION_MODAL);
+        submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
+        submittedStage.showAndWait();
     }
 
     public void handleTranslate(ActionEvent actionEvent) throws IOException{
@@ -67,8 +74,14 @@ public class LanguageInterpretationRequestController implements Initializable {
      * @author Jay Yen
      */
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
-        if(formFilledOut() != true) {
 
+        if(formFilledOut() != true) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner((Stage) ((Button) actionEvent.getSource()).getScene().getWindow());
+            alert.setTitle("Form not filled.");
+            alert.setHeaderText("Form incomplete");
+            alert.setContentText("Please fill out the location, type of food, drink, and side.");
+            alert.showAndWait();
         }else{
               String uuid = UUID.randomUUID().toString();
         ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", name.getText(), "false");
@@ -77,11 +90,14 @@ public class LanguageInterpretationRequestController implements Initializable {
         //after this is updated, copy into the other service request submits
         DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                 newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus());
-        Stage currentStage = (Stage)submit.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationSubmitView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+            Stage submittedStage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
+            Scene submitScene = new Scene(root);
+            submittedStage.setScene(submitScene);
+            submittedStage.setTitle("Submission Complete");
+            submittedStage.initModality(Modality.APPLICATION_MODAL);
+            submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
+            submittedStage.showAndWait();
         }
 
     }
