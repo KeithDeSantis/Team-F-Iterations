@@ -57,6 +57,20 @@ public class AStarDemoController implements Initializable {
     @FXML
     private MapPanel mapPanel;
 
+    @FXML
+    private Button Go;
+
+    @FXML
+    private Button End;
+
+    @FXML
+    private Button Prev;
+
+    @FXML
+    private Button Next;
+
+    @FXML
+    private Label Instruction;
 
     /**
      * These are done for displaying the start & end nodes. This should be done better (eventually)
@@ -65,15 +79,19 @@ public class AStarDemoController implements Initializable {
     private DrawableNode startNodeDisplay;
     private DrawableNode endNodeDisplay;
 
+    private List<Vertex> pathVertex;
+
+    List<NodeEntry> allNodeEntries = new ArrayList<>();
+    List<EdgeEntry> allEdgeEntries = new ArrayList<>();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         //ahf - yes this should be done better. At some point.
 
-        List<NodeEntry> allNodeEntries = new ArrayList<>();
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
-            List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
 
             final List<NodeEntry> nodeEntries = allNodeEntries.stream().collect(Collectors.toList());
 
@@ -121,6 +139,12 @@ public class AStarDemoController implements Initializable {
             });
         });
 
+        Go.setDisable(true);
+        End.setDisable(true);
+        Prev.setDisable(true);
+        Next.setDisable(true);
+        pathVertex = null;
+        Instruction.setVisible(false);
     }
 
     /**
@@ -192,9 +216,11 @@ public class AStarDemoController implements Initializable {
         checkInput();
         if(this.startNodeDisplay != null)
             mapPanel.unDraw(this.startNodeDisplay.getId());
+        drawStartNode(startComboBox.getValue());
+    }
 
-
-        final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),startComboBox.getValue());
+    private void drawStartNode(String nodeID) throws SQLException{
+        final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),nodeID);
         if(startNode != null)
         {
             final DrawableNode drawableNode = startNode.getDrawable();
@@ -203,6 +229,8 @@ public class AStarDemoController implements Initializable {
 
             mapPanel.draw(drawableNode);
             this.startNodeDisplay = drawableNode;
+        }else {
+            System.out.println("Can't find node!");
         }
     }
 
@@ -215,9 +243,11 @@ public class AStarDemoController implements Initializable {
         checkInput();
         if(this.endNodeDisplay != null)
             mapPanel.unDraw(this.endNodeDisplay.getId());
+        drawEndNode(endComboBox.getValue());
+    }
 
-
-        final NodeEntry endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),endComboBox.getValue());
+    private void drawEndNode(String nodeID) throws SQLException{
+        final NodeEntry endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),nodeID);
         if(endNode != null)
         {
             final DrawableNode drawableNode = endNode.getDrawable();
@@ -251,9 +281,6 @@ public class AStarDemoController implements Initializable {
         if(this.endNodeDisplay != null)
             mapPanel.draw(this.endNodeDisplay);
 
-        final String currentFloor = mapPanel.getFloor().getValue();
-
-        final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
 
         final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
         final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
@@ -261,28 +288,11 @@ public class AStarDemoController implements Initializable {
         if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
         {
             final Path path = this.graph.getPath(startVertex, endVertex);
+            pathVertex = null;
             if(path != null)
             {
-                final List<Vertex> pathData = path.asList();
-                for (int i = 0; i < pathData.size() - 1; i++)
-                {
-                    final Vertex start = pathData.get(i);
-                    final Vertex end = pathData.get(i + 1);
-
-                    //int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor
-                    //FIXME: DO BETTER ID WHEN WE HAVE MULTIPLE PATH DIRECTIONS!!!
-                    final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor());
-                   // final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
-                    edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
-
-                    final LinearGradient lineGradient = new LinearGradient(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY(), false, CycleMethod.NO_CYCLE,
-                            new Stop(0, (start.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)),
-                            new Stop(1, (end.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)));
-
-                    edge.setStroke(lineGradient);
-
-                    mapPanel.draw(edge);
-                }
+                pathVertex = path.asList();
+                drawPathFromIndex(0);
                 return true;
             }
         }
@@ -294,6 +304,33 @@ public class AStarDemoController implements Initializable {
         return false; //We had an error
     }
 
+    private void drawPathFromIndex(int index){
+        final String currentFloor = mapPanel.getFloor().getValue();
+
+        final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
+
+
+        for (int i = index; i < pathVertex.size() - 1; i++)
+        {
+            final Vertex start = pathVertex.get(i);
+            final Vertex end = pathVertex.get(i + 1);
+
+            //int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor
+            //FIXME: DO BETTER ID WHEN WE HAVE MULTIPLE PATH DIRECTIONS!!!
+            final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor());
+            // final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
+            edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
+
+            final LinearGradient lineGradient = new LinearGradient(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY(), false, CycleMethod.NO_CYCLE,
+                    new Stop(0, (start.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)),
+                    new Stop(1, (end.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)));
+
+            edge.setStroke(lineGradient);
+
+            mapPanel.draw(edge);
+        }
+    }
+
     /**
      * Used to check if our input is valid to run the pathfinding algorithm or not
      * @author Alex Friedman (ahf)
@@ -302,10 +339,196 @@ public class AStarDemoController implements Initializable {
         if (startComboBox.getValue() == null ||
                 endComboBox.getValue() == null){
             clearPath();
-
         }else{
             clearPath();
             updatePath();
+            Go.setDisable(false);
         }
+    }
+
+    private NodeEntry findNodeEntry(String nodeID){
+        for(NodeEntry n : allNodeEntries){
+            if (n.getNodeID().equals(nodeID)) {
+                return n;
+            }
+        }
+        return null;
+    }
+
+    List<Integer> stops;
+    List<String> instructions;
+    int curStep;
+    String curFloor;
+
+    private void parseRoute(){
+        stops = new ArrayList<>();
+        instructions = new ArrayList<>();
+        if(this.pathVertex == null) return;
+
+        String floor = "";
+        String type = "";
+
+        // Assert "Up" is forward for start
+        double prevAngle = Math.toDegrees(Math.atan2(-1.0,0.0)) + 180;
+
+        // Stair or Elevator search
+        double distance = 0.0;
+        boolean SEsearch = false;
+        String prevDiret = "";
+        String curF = pathVertex.get(0).getFloor();
+
+        for(int i = 0; i < pathVertex.size() - 1; i++) {
+            Vertex curV = pathVertex.get(i);
+            Vertex nexV = pathVertex.get(i + 1);
+            NodeEntry curN = findNodeEntry(curV.getID());
+            if (curN == null) return;
+
+            // Searching through sequence of Stair or Elevator
+            if(SEsearch) {
+                if ((curN.getNodeType().equals("STAI")) || curN.getNodeType().equals("ELEV")) {
+                    if(!curN.getNodeType().equals(type))
+                        SEsearch = false;
+                } else {
+                    // Jumped to different floor by Stair or Elevator
+                    if (!curF.equals(nexV.getFloor())) {
+                        if (type.equals("STAI"))
+                            type = "Stair";
+                        else
+                            type = "Elevator";
+                        floor = nexV.getFloor();
+                        stops.add(i);
+                        instructions.add("Take " + type + " to Floor " + floor);
+                    }
+                    SEsearch = false;
+                }
+            }
+            // current node is stair or elevator
+            if (!SEsearch && (curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV"))) {
+                SEsearch = true;
+                type = curN.getNodeType();
+                distance += curV.heuristic(nexV);
+            }
+
+            // Separate nodes on same floor
+            if(!SEsearch) {
+                curF = curV.getFloor();
+
+                double curAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+                double angle = curAngle + (360 - prevAngle);
+                if (angle >= 360)
+                    angle -= 360;
+
+                // small angle (45) alternation ignored
+                if (angle <= 60 || angle >= 300) {
+                    distance += curV.heuristic(nexV);
+                } else {
+                    // Finished calculating distance after last turn
+                    if(!prevDiret.equals("")){
+                        instructions.add(prevDiret + " and walk " + distance + " m");
+                        distance = 0.0;
+                    }
+
+                    distance += curV.heuristic(nexV);
+                    stops.add(i);
+
+                    if (Math.abs(Math.abs(curAngle - prevAngle) - 180) <= 45) {
+                        prevDiret = "Turn around";
+                    } else if (angle < 180) {
+                        prevDiret = "Turn right";
+                    } else {
+                        prevDiret = "Turn left";
+                    }
+
+                    prevAngle = curAngle;
+                }
+            }
+
+
+        }
+        if(!prevDiret.equals("")) instructions.add(prevDiret + " and walk " + distance + " m");
+        stops.add(pathVertex.size() - 1);
+        instructions.add("Reach Destination!");
+
+        System.out.println(instructions);
+        System.out.println(stops);
+        System.out.println(instructions.size() + " " + stops.size());
+    }
+
+    public void startNavigation(ActionEvent actionEvent) throws SQLException {
+        startComboBox.setDisable(true);
+        endComboBox.setDisable(true);
+        Go.setDisable(true);
+        Next.setDisable(false);
+        End.setDisable(false);
+        Instruction.setVisible(true);
+        curStep = 0;
+
+        parseRoute();
+        mapPanel.switchMap(pathVertex.get(0).getFloor());
+        clearPath();
+        drawStartNode(pathVertex.get(0).getID());
+        drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
+        drawPathFromIndex(curStep);
+        Instruction.setText(instructions.get(curStep));
+
+        curFloor = pathVertex.get(0).getFloor();
+    }
+
+    public void goToPrevNode(ActionEvent actionEvent) throws SQLException {
+        clearPath();
+        curStep--;
+        if(curStep == 0){
+            Prev.setDisable(true);
+        }
+        else {
+            Prev.setDisable(false);
+            Next.setDisable(false);
+        }
+        if(!pathVertex.get(curStep).getFloor().equals(curFloor)){
+            mapPanel.switchMap(pathVertex.get(stops.get(curStep)).getFloor());
+        }
+        curFloor = pathVertex.get(stops.get(curStep)).getFloor();
+        drawStartNode(pathVertex.get(stops.get(curStep)).getID());
+        drawEndNode(pathVertex.get(pathVertex.size() - 1).getID());
+        drawPathFromIndex(stops.get(curStep));
+        Instruction.setText(instructions.get(curStep));
+    }
+
+    public void goToNextNode(ActionEvent actionEvent) throws SQLException {
+        clearPath();
+        System.out.println(pathVertex.get(stops.get(curStep)).getID() + " " + pathVertex.get(stops.get(curStep)).getFloor());
+        curStep++;
+        if(curStep == Math.min(stops.size() - 1, instructions.size() - 1)){
+            Next.setDisable(true);
+        }
+        else {
+            drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
+            Prev.setDisable(false);
+            Next.setDisable(false);
+        }
+        if(!pathVertex.get(stops.get(curStep)).getFloor().equals(curFloor)){
+            mapPanel.switchMap(pathVertex.get(stops.get(curStep)).getFloor());
+        }
+        curFloor = pathVertex.get(stops.get(curStep)).getFloor();
+        drawStartNode(pathVertex.get(stops.get(curStep)).getID());
+        drawPathFromIndex(stops.get(curStep));
+        Instruction.setText(instructions.get(curStep));
+    }
+
+    public void endNavigation(ActionEvent actionEvent) throws SQLException {
+        startComboBox.setDisable(false);
+        endComboBox.setDisable(false);
+        Go.setDisable(false);
+        Prev.setDisable(true);
+        Next.setDisable(true);
+        End.setDisable(true);
+        Instruction.setVisible(false);
+        curStep = 0;
+
+        mapPanel.switchMap(pathVertex.get(0).getFloor());
+        clearPath();
+        drawStartNode(pathVertex.get(0).getID());
+        drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
+        drawPathFromIndex(curStep);
     }
 }

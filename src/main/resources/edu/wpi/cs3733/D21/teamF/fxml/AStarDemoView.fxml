@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<!--<?import edu.wpi.cs3733.uicomponents.MapPanel?>-->
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
 <AnchorPane fx:id="anchor" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
@@ -23,6 +22,7 @@
                </font>
             </Label>
             <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" />
+            <!--<AnchorPane />-->
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <ComboBox fx:id="startComboBox" onAction="#handleStartBoxAction" prefWidth="150.0" promptText="Select Start Location" />
@@ -31,6 +31,11 @@
                         <Insets left="16.0" />
                      </padding>
                   </ComboBox>
+                  <JFXButton fx:id="Go" onAction="#startNavigation" text="Start Navigation" />
+                  <JFXButton fx:id="End" onAction="#endNavigation" text="End Navigation" />
+                  <JFXButton fx:id="Prev" onAction="#goToPrevNode" text="Prev" />
+                  <JFXButton fx:id="Next" onAction="#goToNextNode" text="Next" />
+                  <Label fx:id="Instruction" text="Instructions" />
                </children>
             </HBox>
          </children></VBox>
