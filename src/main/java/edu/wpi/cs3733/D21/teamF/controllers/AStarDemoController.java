@@ -80,12 +80,18 @@ public class AStarDemoController implements Initializable {
     private DrawableNode startNodeDisplay;
     private DrawableNode endNodeDisplay;
 
+
+    // Global variables for the stepper
     private List<Vertex> pathVertex;
 
     List<NodeEntry> allNodeEntries = new ArrayList<>();
     List<EdgeEntry> allEdgeEntries = new ArrayList<>();
 
     boolean pathFinding;
+    List<Integer> stops;
+    List<String> instructions;
+    int curStep;
+    String curFloor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -180,6 +186,13 @@ public class AStarDemoController implements Initializable {
         return closest;
     }
 
+    /**
+     * Search a list of node and see if exist node with given ID
+     * @param nodeEntries the list to be searched
+     * @param nodeID the ID to be used in search
+     * @return true if node exist in list, false otherwise
+     * @author ZheCheng Song
+     */
     private boolean hasNode(List<NodeEntry> nodeEntries, String nodeID){
         for(NodeEntry n : nodeEntries){
             if (n.getNodeID().equals(nodeID)) {
@@ -223,6 +236,11 @@ public class AStarDemoController implements Initializable {
         drawStartNode(startComboBox.getValue());
     }
 
+    /**
+     * Helper function used to draw the startNode with given ID, snatched from handleStartBoxAction()
+     * @param nodeID the ID of the Node
+     * @author Alex Friedman (ahf) / ZheCheng Song
+     */
     private void drawStartNode(String nodeID) throws SQLException{
         final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),nodeID);
         if(startNode != null)
@@ -250,6 +268,11 @@ public class AStarDemoController implements Initializable {
         drawEndNode(endComboBox.getValue());
     }
 
+    /**
+     * Helper function used to draw the endNode with given ID, snatched from handleEndBoxAction()
+     * @param nodeID the ID of the Node
+     * @author Alex Friedman (ahf) / ZheCheng Song
+     */
     private void drawEndNode(String nodeID) throws SQLException{
         final NodeEntry endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),nodeID);
         if(endNode != null)
@@ -308,6 +331,12 @@ public class AStarDemoController implements Initializable {
         return false; //We had an error
     }
 
+    /**
+     * Helper function to draw the path starting from given index, input 0 as index to draw the whole path
+     * snatched from updatePath()
+     * @param index starting index
+     * @author Alex Friedman (ahf) / ZheCheng Song
+     */
     private void drawPathFromIndex(int index){
         final String currentFloor = mapPanel.getFloor().getValue();
 
@@ -350,6 +379,12 @@ public class AStarDemoController implements Initializable {
         }
     }
 
+    /**
+     * Helper function used to find the corresponding NodeEntry with nodeID
+     * @param nodeID the ID used to get the corresponding NodeEntry
+     * @return a NodeEntry with given ID
+     * @author ZheCheng Song
+     */
     private NodeEntry findNodeEntry(String nodeID){
         for(NodeEntry n : allNodeEntries){
             if (n.getNodeID().equals(nodeID)) {
@@ -359,11 +394,10 @@ public class AStarDemoController implements Initializable {
         return null;
     }
 
-    List<Integer> stops;
-    List<String> instructions;
-    int curStep;
-    String curFloor;
-
+    /**
+     * Function to parse through the path list and extract potential stops(turn, change floor) and instructions
+     * @author ZheCheng Song
+     */
     private void parseRoute(){
         stops = new ArrayList<>();
         instructions = new ArrayList<>();
@@ -398,6 +432,10 @@ public class AStarDemoController implements Initializable {
 
                 // small angle (45) alternation ignored
                 if (angle <= 45 || angle >= 315) {
+                    if(i == 0){
+                        prevDiret = "Look Forward";
+                        stops.add(i);
+                    }
                     // Skip
                 } else {
                     // Finished calculating distance after last turn
@@ -448,8 +486,17 @@ public class AStarDemoController implements Initializable {
         distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
         if(!prevDiret.equals("")) instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
         instructions.add("Reach Destination!");
+
+        //System.out.println(instructions);
+        //System.out.println(stops);
     }
 
+    /**
+     * Function to react to 'Start Navigation' button being pressed and start the route stepper
+     * @param actionEvent
+     * @throws SQLException
+     * @author ZheCheng Song
+     */
     public void startNavigation(ActionEvent actionEvent) throws SQLException {
         startComboBox.setDisable(true);
         endComboBox.setDisable(true);
@@ -471,6 +518,12 @@ public class AStarDemoController implements Initializable {
         curFloor = pathVertex.get(0).getFloor();
     }
 
+    /**
+     * Function to react to 'Prev' button being pressed and go to the previous point with stepper
+     * @param actionEvent
+     * @throws SQLException
+     * @author ZheCheng Song
+     */
     public void goToPrevNode(ActionEvent actionEvent) throws SQLException {
         clearPath();
         curStep--;
@@ -492,6 +545,12 @@ public class AStarDemoController implements Initializable {
         mapPanel.centerNode(startNodeDisplay);
     }
 
+    /**
+     * Function to react to 'Next' button being pressed and go to the next point with stepper
+     * @param actionEvent
+     * @throws SQLException
+     * @author ZheCheng Song
+     */
     public void goToNextNode(ActionEvent actionEvent) throws SQLException {
         clearPath();
         curStep++;
@@ -513,6 +572,12 @@ public class AStarDemoController implements Initializable {
         mapPanel.centerNode(startNodeDisplay);
     }
 
+    /**
+     * Function to react to 'End Navigation' button being pressed and stop the stepper
+     * @param actionEvent
+     * @throws SQLException
+     * @author ZheCheng Song
+     */
     public void endNavigation(ActionEvent actionEvent) throws SQLException {
         startComboBox.setDisable(false);
         endComboBox.setDisable(false);
@@ -530,16 +595,15 @@ public class AStarDemoController implements Initializable {
         drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
         drawPathFromIndex(curStep);
         mapPanel.centerNode(startNodeDisplay);
-
-        for(int i = 0; i < stops.size()-1; i++){
-            double sumDist = 0.0;
-            for(int j = stops.get(i); j < stops.get(i+1); j++){
-                sumDist += pathVertex.get(j).EuclideanDistance(pathVertex.get(j+1));
-            }
-            System.out.println(Math.round(sumDist));
-        }
     }
 
+    /**
+     * Helper function to calculate total distance from start index to end index of a list of vertex
+     * @param path List of Vertex to be used
+     * @param start Start index represent the starting node in list
+     * @param end End index represent the ending node in list
+     * @return sumDist the total distance from start Vertex to end Vertex
+     */
     private double calculateDistance(List<Vertex> path, int start, int end) {
         double sumDist = 0.0;
         for (int i = start; i < end; i++) {
