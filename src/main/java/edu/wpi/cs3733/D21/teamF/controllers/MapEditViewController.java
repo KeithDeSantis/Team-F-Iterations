@@ -4,6 +4,8 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.database.EdgeHandler;
+import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
@@ -83,7 +85,8 @@ public class MapEditViewController {
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
         try {
-            data = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            NodeHandler newNodeHandler = new NodeHandler();
+            data = newNodeHandler.genNodeEntryObjects();
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -152,7 +155,8 @@ public class MapEditViewController {
         // Edge initialization
         List <EdgeEntry> edgeData = new ArrayList<>();
         try {
-            edgeData = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            EdgeHandler newEdgeHandler = new EdgeHandler();
+            edgeData = newEdgeHandler.genEdgeEntryObjects();
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -182,7 +186,7 @@ public class MapEditViewController {
      * @throws IOException
      * @author KD, LM, KH
      */
-    public void handleEdit(ActionEvent actionEvent) throws SQLException, IOException {
+    public void handleEdit(ActionEvent actionEvent) throws Exception {
         NodeEntry selectedNode;
         if(nodesTab.isSelected()) {
             try{
@@ -215,9 +219,9 @@ public class MapEditViewController {
                 String oldID = selectedEdge.getEdgeID();
                 ArrayList<String> newValues = openEditEdgeDialog(selectedEdge);
 
-                DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "startNode", newValues.get(1));
-                DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "endNode", newValues.get(2));
-                DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "id", newValues.get(0));
+                DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(1), "startNode");
+                DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(2), "endNode");
+                DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(0), "edgeId");
 
                 final DrawableEdge drawableEdge = mapPanel.getNode(oldID);
                 drawableEdge.setId(newValues.get(0));
@@ -492,11 +496,8 @@ public class MapEditViewController {
 
                     nodeEntryObservableList.forEach(n -> mapPanel.draw(getEditableNode(n)));
 
-                    DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
-                    final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
-                            "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                            "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
-                    DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable);
+                    DatabaseAPI.getDatabaseAPI().dropNodesTable();
+                    DatabaseAPI.getDatabaseAPI().createNodesTable();
                     DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
                 }
             }
@@ -543,10 +544,8 @@ public class MapEditViewController {
                         return new EdgeEntry(line[0], line[1], line[2]);
                     }).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
 
-                    DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
-                    final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
-                            "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
-                    DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
+                    DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+                    DatabaseAPI.getDatabaseAPI().createEdgesTable();
                     DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
                 }
             }
@@ -581,17 +580,12 @@ public class MapEditViewController {
                     return new EdgeEntry(line[0], line[1], line[2]);
                 }).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
 
-                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES"); //FIXME Sometimes when resetting there is an error on line 853 since it says 'L1NODES' already exists in schema.  Makes me think sometimes this line isn't working?? - KD
-                final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
-                        "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                        "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable); //FIXME there error is thrown here for reference - KD
+                DatabaseAPI.getDatabaseAPI().dropNodesTable();
+                DatabaseAPI.getDatabaseAPI().createNodesTable();
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
 
-                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
-                final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
-                        "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
+                DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+                DatabaseAPI.getDatabaseAPI().createEdgesTable();
                 DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
 
                 drawEdgeNodeOnFloor(); //FIXME do better with queries
@@ -713,8 +707,8 @@ public class MapEditViewController {
         String longName = nodeEntry.getLongName();
         String shortName = nodeEntry.getShortName();
 
-
-        DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
+        DatabaseAPI.getDatabaseAPI().addNode(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), nodeFloor,
+                nodeBuilding, nodeType, longName, shortName);
 
         mapPanel.draw(getEditableNode(nodeEntry));
 
@@ -805,8 +799,8 @@ public class MapEditViewController {
         NodeEntry startNode = null;
         NodeEntry endNode = null;
         try {
-            startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), edge.getStartNode());
-            endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), edge.getEndNode());
+            startNode = DatabaseAPI.getDatabaseAPI().getNode(edge.getStartNode());
+            endNode = DatabaseAPI.getDatabaseAPI().getNode(edge.getEndNode());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -938,8 +932,8 @@ public class MapEditViewController {
             NodeEntry startNode = null;
             NodeEntry endNode = null;
             try {
-                startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getStartNode());
-                endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getEndNode());
+                startNode = DatabaseAPI.getDatabaseAPI().getNode(e.getStartNode());
+                endNode = DatabaseAPI.getDatabaseAPI().getNode(e.getEndNode());
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
