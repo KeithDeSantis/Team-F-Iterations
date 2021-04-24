@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NodeHandler implements DatabaseEntry {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addEntry(String[] colValues) throws SQLException{
         final String query = "INSERT INTO AllNodes values(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -20,6 +24,9 @@ public class NodeHandler implements DatabaseEntry {
         return stmt.executeUpdate() != 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean editEntry(String id, String newVal, String colName) {
         boolean success = false;
@@ -38,6 +45,9 @@ public class NodeHandler implements DatabaseEntry {
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteEntry(String id) throws SQLException {
         String query = "DELETE FROM AllNodes WHERE NODEID=(?)";
@@ -46,6 +56,11 @@ public class NodeHandler implements DatabaseEntry {
         return stmt.executeUpdate() != 0;
     }
 
+    /**
+     * Generates a list of NodeEntry objects based on current entries in the database
+     * @return ArrayList of NodeEntry objects
+     * @throws SQLException on error performing DB operations
+     */
     public ArrayList<NodeEntry> genNodeEntryObjects() throws SQLException{
         ArrayList<NodeEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM AllNodes";
@@ -71,6 +86,9 @@ public class NodeHandler implements DatabaseEntry {
         return entries;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean createTable() {
         boolean success = false;
@@ -90,6 +108,9 @@ public class NodeHandler implements DatabaseEntry {
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean dropTable() {
         boolean success = false;
@@ -106,6 +127,9 @@ public class NodeHandler implements DatabaseEntry {
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {

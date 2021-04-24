@@ -1,7 +1,6 @@
 package edu.wpi.fuchsiafalcons.database;
 
-import edu.wpi.fuchsiafalcons.entities.NodeEntry;
-import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
+import edu.wpi.fuchsiafalcons.entities.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

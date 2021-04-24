@@ -4,8 +4,6 @@ import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
 import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +11,10 @@ import java.util.List;
 public class DatabaseAPI1 {
     private static DatabaseAPI1 databaseAPI1;
 
-    private DatabaseEntry nodeHandler;
-    private DatabaseEntry edgeHandler;
-    private DatabaseEntry serviceRequestHandler;
-    private DatabaseEntry userHandler;
+    private final DatabaseEntry nodeHandler;
+    private final DatabaseEntry edgeHandler;
+    private final DatabaseEntry serviceRequestHandler;
+    private final DatabaseEntry userHandler;
 
     public DatabaseAPI1() {
         this.nodeHandler = new NodeHandler();
@@ -25,11 +23,11 @@ public class DatabaseAPI1 {
         this.serviceRequestHandler = new ServiceRequestHandler();
     }
 
-    public boolean createNodesTable() throws SQLException{
+    public boolean createNodesTable() {
         return nodeHandler.createTable();
     }
 
-    public boolean dropNodesTable() throws SQLException{
+    public boolean dropNodesTable() {
         return nodeHandler.dropTable();
     }
 
@@ -67,11 +65,11 @@ public class DatabaseAPI1 {
         return edgeHandler.deleteEntry(id);
     }
 
-    public boolean createEdgesTable() throws SQLException{
+    public boolean createEdgesTable() {
         return edgeHandler.createTable();
     }
 
-    public boolean dropEdgesTable() throws SQLException{
+    public boolean dropEdgesTable() {
         return edgeHandler.dropTable();
     }
 
@@ -79,11 +77,11 @@ public class DatabaseAPI1 {
         edgeHandler.populateTable(data);
     }
 
-    public ArrayList<EdgeEntry> genEdgeEntries(String tableName) throws SQLException
+    public ArrayList<EdgeEntry> genEdgeEntries() throws SQLException
     {
-        ArrayList<EdgeEntry> ret = new ArrayList<>();
+        ArrayList<EdgeEntry> ret;
         EdgeHandler edge = new EdgeHandler();
-        ret = edge.genEdgeEntryObjects("AllEdges");
+        ret = edge.genEdgeEntryObjects();
         return ret;
     }
 
@@ -112,7 +110,7 @@ public class DatabaseAPI1 {
         serviceRequestHandler.populateTable(entries);
     }
 
-    public ArrayList<ServiceEntry> genServiceRequestEntries(String tableName) throws SQLException{
+    public ArrayList<ServiceEntry> genServiceRequestEntries() throws SQLException{
         ServiceRequestHandler s = new ServiceRequestHandler();
         return s.genServiceRequestEntries();
     }
@@ -121,7 +119,7 @@ public class DatabaseAPI1 {
         return userHandler.addEntry(colValues);
     }
 
-    public boolean editUser(String id, String newVal, String colName) throws SQLException{
+    public boolean editUser(String id, String newVal, String colName) {
         return userHandler.editEntry(id, newVal, colName);
     }
 
@@ -129,11 +127,11 @@ public class DatabaseAPI1 {
         return userHandler.deleteEntry(username);
     }
 
-    public boolean createUserTable() throws SQLException{
+    public boolean createUserTable() {
         return userHandler.createTable();
     }
 
-    public boolean dropUsersTable() throws SQLException{
+    public boolean dropUsersTable() {
         return userHandler.dropTable();
     }
 

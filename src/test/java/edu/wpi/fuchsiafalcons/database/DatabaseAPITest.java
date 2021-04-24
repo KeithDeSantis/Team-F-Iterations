@@ -2,7 +2,7 @@ package edu.wpi.fuchsiafalcons.database;
 
 import edu.wpi.fuchsiafalcons.entities.EdgeEntry;
 import edu.wpi.fuchsiafalcons.entities.NodeEntry;
-import edu.wpi.fuchsiafalcons.entities.ServiceEntry;
+import edu.wpi.fuchsiafalcons.entities.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -186,7 +186,7 @@ class DatabaseAPITest {
         expected.add(entry);
         String[] newEdge = {"test", "start", "end"};
         DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
-        ArrayList<EdgeEntry> actual = DatabaseAPI1.getDatabaseAPI1().genEdgeEntries("AllEdges");
+        ArrayList<EdgeEntry> actual = DatabaseAPI1.getDatabaseAPI1().genEdgeEntries();
         assertEquals(expected.get(0).getEdgeID(), actual.get(0).getEdgeID());
     }
 
@@ -311,7 +311,7 @@ class DatabaseAPITest {
         expected.add(entry);
         String[] newService = {"1", "a task", "Ben","true"};
         DatabaseAPI1.getDatabaseAPI1().addServiceReq(newService);
-        ArrayList<ServiceEntry> actual = DatabaseAPI1.getDatabaseAPI1().genServiceRequestEntries("service_requests");
+        ArrayList<ServiceEntry> actual = DatabaseAPI1.getDatabaseAPI1().genServiceRequestEntries();
         assertEquals(expected.get(0).getUuid(), actual.get(0).getUuid());
     }
 

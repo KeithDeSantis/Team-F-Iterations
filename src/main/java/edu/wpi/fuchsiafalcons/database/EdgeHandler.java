@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EdgeHandler implements DatabaseEntry {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
         final String query = "INSERT INTO AllEdges values(?, ?, ?)";
@@ -23,6 +27,9 @@ public class EdgeHandler implements DatabaseEntry {
         return stmt.executeUpdate() != 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean editEntry(String id, String newVal, String colName)
     {
@@ -42,6 +49,9 @@ public class EdgeHandler implements DatabaseEntry {
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteEntry(String id) {
         boolean success = false;
@@ -59,7 +69,12 @@ public class EdgeHandler implements DatabaseEntry {
         return success;
     }
 
-    public ArrayList<EdgeEntry> genEdgeEntryObjects(String tableName) throws SQLException {
+    /**
+     * Genereates EdgeEntry objects from all rows currently in the database
+     * @return ArrayList of EdgeEntry objects
+     * @throws SQLException on error performing DB operations
+     */
+    public ArrayList<EdgeEntry> genEdgeEntryObjects() throws SQLException {
         ArrayList<EdgeEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM AllEdges";
         ResultSet rset;
@@ -78,6 +93,9 @@ public class EdgeHandler implements DatabaseEntry {
         return entries;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean createTable() {
         boolean success = false;
@@ -96,6 +114,9 @@ public class EdgeHandler implements DatabaseEntry {
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean dropTable() {
         boolean success = false;
@@ -112,6 +133,9 @@ public class EdgeHandler implements DatabaseEntry {
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {

@@ -13,6 +13,12 @@ import java.util.List;
 
 public class UserHandler implements DatabaseEntry{
 
+    /**
+     * method to generate random salt, stored in user's DB row entry
+     * @return byte array representation of the salt
+     * @throws NoSuchAlgorithmException if algorithm specified is not found
+     * @throws NoSuchProviderException if no provider
+     */
     public static byte[] getSalt() throws NoSuchAlgorithmException, NoSuchProviderException
     {
         SecureRandom sr =  SecureRandom.getInstance("SHA1PRNG", "SUN");
@@ -21,6 +27,12 @@ public class UserHandler implements DatabaseEntry{
         return salt;
     }
 
+    /**
+     * encrypts the plaintext password provided, MD5 and salt
+     * @param plainText the plaintext password to encrypt
+     * @param salt the salt bytearray to append to the plaintext and hash
+     * @return returns a string representation of the encrypted password
+     */
     private static String encryptPassword(String plainText, byte[] salt)
     {
         String cipherText = "";
@@ -41,6 +53,13 @@ public class UserHandler implements DatabaseEntry{
         return cipherText;
     }
 
+    /**
+     * Query the database and ensure the username and password given match the DB (hash matching)
+     * @param username the string username supplied from the user
+     * @param password the string password supplied from the user
+     * @return true if the credentials match, false otherwise
+     * @throws SQLException on error performing DB operations
+     */
     public boolean authenticate(String username, String password) throws SQLException
     {
         boolean authenticated = false;
@@ -60,6 +79,9 @@ public class UserHandler implements DatabaseEntry{
         return authenticated;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
         final String query = "INSERT INTO USERS values(?, ?, ?, ?, ?)";
@@ -86,6 +108,9 @@ public class UserHandler implements DatabaseEntry{
         return stmt.executeUpdate() != 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean editEntry(String username, String val, String colName) {
         boolean success = false;
@@ -104,6 +129,9 @@ public class UserHandler implements DatabaseEntry{
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteEntry(String username) throws SQLException {
         String query = "DELETE FROM USERS WHERE USERNAME=(?)";
@@ -112,6 +140,9 @@ public class UserHandler implements DatabaseEntry{
         return stmt.executeUpdate() != 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean createTable() {
         boolean success = false;
@@ -129,6 +160,9 @@ public class UserHandler implements DatabaseEntry{
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean dropTable() {
         boolean success = false;
@@ -145,6 +179,9 @@ public class UserHandler implements DatabaseEntry{
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {
