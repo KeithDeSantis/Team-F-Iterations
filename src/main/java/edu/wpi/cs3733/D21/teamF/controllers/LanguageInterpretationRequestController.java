@@ -9,13 +9,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
+
+import java.util.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
-import java.util.UUID;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 
 
 public class LanguageInterpretationRequestController implements Initializable {
@@ -24,10 +29,14 @@ public class LanguageInterpretationRequestController implements Initializable {
     @FXML private JFXDatePicker date;
     @FXML private JFXTimePicker time;
     @FXML private JFXComboBox<String> appointment;
-    @FXML private JFXTextField language;
+    @FXML private JFXComboBox<String> language;
     @FXML private JFXButton help;
     @FXML private JFXButton translate;
     @FXML private JFXButton submit;
+    @FXML private Label nameLabel;
+    @FXML private Label dtLabel;
+    @FXML private Label appointmentLabel;
+    @FXML private Label languageLabel;
 
     /**
      * closes the Language Interpretation Request form and returns to home
@@ -58,6 +67,22 @@ public class LanguageInterpretationRequestController implements Initializable {
     }
 
     public void handleTranslate(ActionEvent actionEvent) throws IOException{
+        List<Label> labelList = new ArrayList<Label>();
+        labelList.add(nameLabel);
+        labelList.add(dtLabel);
+        labelList.add(appointmentLabel);
+        labelList.add(languageLabel);
+
+        HashMap<String, String> codes = codeMap();
+        String src = "";
+        String target = codes.get(language.getValue());
+        String text = "";
+        String transText = "";
+        for(Label aLabel : labelList){
+            text = aLabel.getText();
+            transText = translate(src, target, text);
+            aLabel.setText(transText);
+        }
     }
 
     /**
@@ -178,9 +203,25 @@ public class LanguageInterpretationRequestController implements Initializable {
         appointment.getItems().add("Weight Management");
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
+
+        language.getItems().add("Arabic");
+        language.getItems().add("Dutch");
+        language.getItems().add("English");
+        language.getItems().add("French");
+        language.getItems().add("German");
+        language.getItems().add("Greek");
+        language.getItems().add("Haitian Creole");
+        language.getItems().add("Italian");
+        language.getItems().add("Japanese");
+        language.getItems().add("Korean");
+        language.getItems().add("Portuguese");
+        language.getItems().add("Russian");
+        language.getItems().add("Spanish");
+        language.getItems().add("Vietnamese");
     }
-    
-    private boolean formFilledOut(){
+
+
+    public boolean formFilledOut(){
 
         if(name.getText().length() <= 0){
             name.setStyle("-fx-border-color: red");
@@ -191,12 +232,57 @@ public class LanguageInterpretationRequestController implements Initializable {
         if(time.getValue() == null){
             time.setStyle("-fx-border-color: red");
         }
-        if(language.getText().length() <= 0){
+        if(language.getId().length() <= 0){
             language.setStyle("-fx-border-color: red");
         }
-        if(name.getText().length() > 0 && language.getText().length() > 0){
+        if(name.getText().length() > 0 && date.getValue() != null && time.getValue() != null&& language.getId().length() > 0){
             return true;
         }
         return false;
+    }
+
+    public static HashMap<String, String> codeMap(){
+        HashMap<String, String> langCodes = new HashMap<String, String>();
+
+        langCodes.put("Arabic", "ar");
+        langCodes.put("Dutch", "nl");
+        langCodes.put("English", "en");
+        langCodes.put("French", "fr");
+        langCodes.put("German", "de");
+        langCodes.put("Greek", "el");
+        langCodes.put("Haitian Creole", "ht");
+        langCodes.put("Italian", "it");
+        langCodes.put("Japanese", "ja");
+        langCodes.put("Korean", "ko");
+        langCodes.put("Portuguese", "pt");
+        langCodes.put("Russian", "ru");
+        langCodes.put("Spanish", "es");
+        langCodes.put("Vietnamese", "vi");
+
+        return langCodes;
+    }
+
+
+    public String translate(String src, String target, String text) throws IOException {
+
+        if(language.getValue() != null){
+            String urlStr = "https://script.google.com/macros/s/AKfycbzk_1ZP98MqQNuWvs_Yo3UamuN7WCABIG3UiUUighYgCeqIf4ha4qUzubb2jxopuTP7/exec"
+                    + "?q=" + URLEncoder.encode(text, "UTF-8") +
+                    "&target=" + target +
+                    "&source=" + src;
+            URL url = new URL(urlStr);
+            StringBuilder response = new StringBuilder();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputline;
+            while((inputline = in.readLine()) != null){
+                response.append(inputline);
+            }
+            in.close();
+            return response.toString();
+        }else{
+            return text;
+        }
     }
 }
