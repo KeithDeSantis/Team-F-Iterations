@@ -863,7 +863,7 @@ public class MapEditViewController {
      * @param actionEvent
      * @author KD ahf LM
      */
-    public void handleLoad(ActionEvent actionEvent) throws SQLException {
+    public void handleLoad(ActionEvent actionEvent) throws SQLException, IOException {
         if(nodesTab.isSelected()) {
             FileChooser fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter =
@@ -884,6 +884,19 @@ public class MapEditViewController {
                 e.printStackTrace();
                 return;
             }
+
+            if(nodeData.get(0).length != 8) {
+                FXMLLoader dialogLoader = new FXMLLoader();
+                dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/editorBadCSVView.fxml")); // load in Edit Dialog - KD
+                Stage dialogStage = new Stage();
+                Parent root = dialogLoader.load();
+                dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
+                dialogStage.initOwner((Stage) newButton.getScene().getWindow());
+                dialogStage.setScene(new Scene(root)); // set scene - KD
+                dialogStage.showAndWait();
+                return; //TODO This is Keith's bad attempt to make sure the user doesn't try to load in an edge CSV
+            }
+
             nodeEntryObservableList.clear();
             mapPanel.clearMap();
 
@@ -926,6 +939,18 @@ public class MapEditViewController {
                 e.printStackTrace();
                 return;
             }
+            if(edgeData.get(0).length != 3) {
+                FXMLLoader dialogLoader = new FXMLLoader();
+                dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/editorBadCSVView.fxml")); // load in Edit Dialog - KD
+                Stage dialogStage = new Stage();
+                Parent root = dialogLoader.load();
+                dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
+                dialogStage.initOwner((Stage) newButton.getScene().getWindow());
+                dialogStage.setScene(new Scene(root)); // set scene - KD
+                dialogStage.showAndWait();
+                return; //TODO This is Keith's bad attempt to make sure the user doesn't try to load in an node CSV
+            }
+
             edgeEntryObservableList.clear();
 
             if(edgeData != null )
