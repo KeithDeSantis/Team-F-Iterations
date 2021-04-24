@@ -38,7 +38,7 @@ public class  AppF extends Application {
       Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml"));//DefaultPageView.fxml"));
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);
-      primaryStage.setMaximized(true);
+      //primaryStage.setMaximized(true);
       primaryStage.show();
     } catch (IOException e) {
       e.printStackTrace();
