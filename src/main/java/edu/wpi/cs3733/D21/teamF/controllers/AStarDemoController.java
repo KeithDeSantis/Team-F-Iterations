@@ -15,6 +15,7 @@ import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -119,9 +120,7 @@ public class AStarDemoController implements Initializable {
         final MenuItem startPathfind = new MenuItem("Path from Here");
         final MenuItem endPathfind = new MenuItem("Path end Here");
 
-
         contextMenu.getItems().addAll(startPathfind, endPathfind);
-
 
         List<NodeEntry> finalAllNodeEntries = allNodeEntries;
 
@@ -393,16 +392,16 @@ public class AStarDemoController implements Initializable {
                     angle -= 360;
 
                 // small angle (45) alternation ignored
-                if (angle <= 60 || angle >= 300) {
-                    distance += curV.heuristic(nexV);
+                if (angle <= 45 || angle >= 315) {
+                    distance += curV.EuclideanDistance(nexV);
                 } else {
                     // Finished calculating distance after last turn
                     if(!prevDiret.equals("")){
-                        instructions.add(prevDiret + " and walk " + distance + " m");
+                        instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
                         distance = 0.0;
                     }
 
-                    distance += curV.heuristic(nexV);
+                    distance += curV.EuclideanDistance(nexV);
                     stops.add(i);
 
                     if (Math.abs(Math.abs(curAngle - prevAngle) - 180) <= 45) {
@@ -412,7 +411,6 @@ public class AStarDemoController implements Initializable {
                     } else {
                         prevDiret = "Turn left";
                     }
-
                     prevAngle = curAngle;
                 }
             }
@@ -440,16 +438,12 @@ public class AStarDemoController implements Initializable {
             if (!SEsearch && (curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV"))) {
                 SEsearch = true;
                 type = curN.getNodeType();
-                distance += curV.heuristic(nexV);
+                distance += curV.EuclideanDistance(nexV);
             }
         }
-        if(!prevDiret.equals("")) instructions.add(prevDiret + " and walk " + distance + " m");
+        if(!prevDiret.equals("")) instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
         stops.add(pathVertex.size() - 1);
         instructions.add("Reach Destination!");
-
-        System.out.println(instructions);
-        System.out.println(stops);
-        System.out.println(instructions.size() + " " + stops.size());
     }
 
     public void startNavigation(ActionEvent actionEvent) throws SQLException {
@@ -495,7 +489,6 @@ public class AStarDemoController implements Initializable {
 
     public void goToNextNode(ActionEvent actionEvent) throws SQLException {
         clearPath();
-        System.out.println(pathVertex.get(stops.get(curStep)).getID() + " " + pathVertex.get(stops.get(curStep)).getFloor());
         curStep++;
         if(curStep == Math.min(stops.size() - 1, instructions.size() - 1)){
             Next.setDisable(true);
@@ -531,5 +524,13 @@ public class AStarDemoController implements Initializable {
         drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
         drawPathFromIndex(curStep);
         mapPanel.centerNode(startNodeDisplay);
+
+        for(int i = 0; i < stops.size()-1; i++){
+            double sumDist = 0.0;
+            for(int j = stops.get(i); j < stops.get(i+1); j++){
+                sumDist += pathVertex.get(j).EuclideanDistance(pathVertex.get(j+1));
+            }
+            System.out.println(Math.round(sumDist));
+        }
     }
 }
