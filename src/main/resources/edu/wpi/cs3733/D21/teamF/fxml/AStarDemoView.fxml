@@ -21,23 +21,27 @@
                   <Font size="25.0" />
                </font>
             </Label>
+            <!--<MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" />-->
             <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" />
-            <!--<AnchorPane />-->
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <ComboBox fx:id="startComboBox" onAction="#handleStartBoxAction" prefWidth="150.0" promptText="Select Start Location" />
-                  <ComboBox fx:id="endComboBox" onAction="#handleEndBoxAction" prefWidth="150.0" promptText="Select End Location">
-                     <padding>
-                        <Insets left="16.0" />
-                     </padding>
-                  </ComboBox>
-                  <JFXButton fx:id="Go" onAction="#startNavigation" text="Start Navigation" />
-                  <JFXButton fx:id="End" onAction="#endNavigation" text="End Navigation" />
-                  <JFXButton fx:id="Prev" onAction="#goToPrevNode" text="Prev" />
-                  <JFXButton fx:id="Next" onAction="#goToNextNode" text="Next" />
+                  <HBox prefHeight="34.0" prefWidth="896.0">
+                     <children>
+                        <ComboBox fx:id="startComboBox" onAction="#handleStartBoxAction" prefWidth="150.0" promptText="Select Start Location" />
+                        <ComboBox fx:id="endComboBox" onAction="#handleEndBoxAction" prefWidth="150.0" promptText="Select End Location">
+                           <padding>
+                              <Insets left="16.0" />
+                           </padding>
+                        </ComboBox>
+                        <JFXButton fx:id="Go" onAction="#startNavigation" text="Start Navigation" />
+                        <JFXButton fx:id="End" onAction="#endNavigation" text="End Navigation" />
+                        <JFXButton fx:id="Prev" onAction="#goToPrevNode" text="Prev" />
+                        <JFXButton fx:id="Next" onAction="#goToNextNode" text="Next" />
+                     </children>
+                  </HBox>
                   <Label fx:id="Instruction" text="Instructions" />
                </children>
-            </HBox>
+            </VBox>
          </children></VBox>
       <Button fx:id="goBack" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleButtonPushed" text="X">
          <font>

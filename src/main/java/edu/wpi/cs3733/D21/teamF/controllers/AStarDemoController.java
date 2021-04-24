@@ -383,32 +383,6 @@ public class AStarDemoController implements Initializable {
             NodeEntry curN = findNodeEntry(curV.getID());
             if (curN == null) return;
 
-            // Searching through sequence of Stair or Elevator
-            if(SEsearch) {
-                if ((curN.getNodeType().equals("STAI")) || curN.getNodeType().equals("ELEV")) {
-                    if(!curN.getNodeType().equals(type))
-                        SEsearch = false;
-                } else {
-                    // Jumped to different floor by Stair or Elevator
-                    if (!curF.equals(nexV.getFloor())) {
-                        if (type.equals("STAI"))
-                            type = "Stair";
-                        else
-                            type = "Elevator";
-                        floor = nexV.getFloor();
-                        stops.add(i);
-                        instructions.add("Take " + type + " to Floor " + floor);
-                    }
-                    SEsearch = false;
-                }
-            }
-            // current node is stair or elevator
-            if (!SEsearch && (curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV"))) {
-                SEsearch = true;
-                type = curN.getNodeType();
-                distance += curV.heuristic(nexV);
-            }
-
             // Separate nodes on same floor
             if(!SEsearch) {
                 curF = curV.getFloor();
@@ -443,7 +417,31 @@ public class AStarDemoController implements Initializable {
                 }
             }
 
-
+            // Searching through sequence of Stair or Elevator
+            if(SEsearch) {
+                if ((curN.getNodeType().equals("STAI")) || curN.getNodeType().equals("ELEV")) {
+                    if(!curN.getNodeType().equals(type))
+                        SEsearch = false;
+                } else {
+                    // Jumped to different floor by Stair or Elevator
+                    if (!curF.equals(nexV.getFloor())) {
+                        if (type.equals("STAI"))
+                            type = "Stair";
+                        else
+                            type = "Elevator";
+                        floor = nexV.getFloor();
+                        stops.add(i);
+                        instructions.add("Take " + type + " to Floor " + floor);
+                    }
+                    SEsearch = false;
+                }
+            }
+            // current node is stair or elevator
+            if (!SEsearch && (curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV"))) {
+                SEsearch = true;
+                type = curN.getNodeType();
+                distance += curV.heuristic(nexV);
+            }
         }
         if(!prevDiret.equals("")) instructions.add(prevDiret + " and walk " + distance + " m");
         stops.add(pathVertex.size() - 1);
@@ -470,7 +468,7 @@ public class AStarDemoController implements Initializable {
         drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
         drawPathFromIndex(curStep);
         Instruction.setText(instructions.get(curStep));
-
+        mapPanel.centerNode(startNodeDisplay);
         curFloor = pathVertex.get(0).getFloor();
     }
 
@@ -492,6 +490,7 @@ public class AStarDemoController implements Initializable {
         drawEndNode(pathVertex.get(pathVertex.size() - 1).getID());
         drawPathFromIndex(stops.get(curStep));
         Instruction.setText(instructions.get(curStep));
+        mapPanel.centerNode(startNodeDisplay);
     }
 
     public void goToNextNode(ActionEvent actionEvent) throws SQLException {
@@ -513,6 +512,7 @@ public class AStarDemoController implements Initializable {
         drawStartNode(pathVertex.get(stops.get(curStep)).getID());
         drawPathFromIndex(stops.get(curStep));
         Instruction.setText(instructions.get(curStep));
+        mapPanel.centerNode(startNodeDisplay);
     }
 
     public void endNavigation(ActionEvent actionEvent) throws SQLException {
@@ -530,5 +530,6 @@ public class AStarDemoController implements Initializable {
         drawStartNode(pathVertex.get(0).getID());
         drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
         drawPathFromIndex(curStep);
+        mapPanel.centerNode(startNodeDisplay);
     }
 }
