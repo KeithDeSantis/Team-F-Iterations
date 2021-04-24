@@ -266,6 +266,7 @@ public class MapEditViewController {
         // Draw all corresponding nodes
         for(NodeEntry n : nodeList){
             mapPanel.draw(getEditableNode(n));
+            System.out.println(nodeList);
             // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
         }
     }
