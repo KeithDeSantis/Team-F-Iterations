@@ -24,7 +24,7 @@
                   <Font name="Montserrat Regular" size="18.0" />
                </font>
             </Label>
-            <JFXButton fx:id="okButton" buttonType="RAISED" onAction="#okButtonPushed" style="-fx-background-color: #03256C;" text="OK" textFill="WHITE" GridPane.rowIndex="1">
+            <JFXButton fx:id="okButton" buttonType="RAISED" onAction="#okButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="OK" textFill="WHITE" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

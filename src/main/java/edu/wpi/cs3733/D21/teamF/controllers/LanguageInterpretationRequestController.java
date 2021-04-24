@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -32,6 +33,15 @@ public class LanguageInterpretationRequestController implements Initializable {
     @FXML private JFXButton translate;
     @FXML private JFXButton submit;
 
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
     /**
      * closes the Language Interpretation Request form and returns to home
      * @param actionEvent
