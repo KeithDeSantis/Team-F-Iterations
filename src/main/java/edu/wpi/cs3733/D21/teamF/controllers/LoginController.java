@@ -54,6 +54,15 @@ public class LoginController {
         if (databaseName.equals("projectC1")){
             DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
         }
+        else{
+            System.out.println("here1");
+            ConnectionHandler.getConnection();
+            DatabaseAPI.getDatabaseAPI().createNodesTable();
+            DatabaseAPI.getDatabaseAPI().createEdgesTable();
+            DatabaseAPI.getDatabaseAPI().createUserTable();
+            DatabaseAPI.getDatabaseAPI().createServiceRequestTable(); //TODO: make this better
+            DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
+        }
         rset.close();
 
         boolean authenticated = false;
