@@ -94,7 +94,7 @@ public class LanguageInterpretationRequestController implements Initializable {
             alert.showAndWait();
         }else{
               String uuid = UUID.randomUUID().toString();
-        ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", name.getText(), "false");
+        ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", date.getValue(), time.getValue(), name.getText(), (String) appointment.getValue(), language.getText());
         //services.add(newServiceRequest);
         //update service requests
         //after this is updated, copy into the other service request submits

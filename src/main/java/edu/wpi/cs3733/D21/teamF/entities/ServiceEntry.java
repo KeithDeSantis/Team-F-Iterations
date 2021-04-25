@@ -3,6 +3,9 @@ package edu.wpi.cs3733.D21.teamF.entities;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 
 public class ServiceEntry extends RecursiveTreeObject<ServiceEntry> {
     final String uuid;
@@ -136,7 +139,7 @@ public class ServiceEntry extends RecursiveTreeObject<ServiceEntry> {
     }
 
 
-    public ServiceEntry(String uuid, String requestType, String assignedTo, String completeStatus, String date, String time, String name, String appointment, String language, SimpleStringProperty requestTypeProperty, SimpleStringProperty assignedToProperty, SimpleStringProperty completeStatusProperty, SimpleStringProperty dateProperty, SimpleStringProperty timeProperty, SimpleStringProperty nameProperty, SimpleStringProperty appointmentProperty, SimpleStringProperty languageProperty) {
+    public ServiceEntry(String uuid, String requestType, String assignedTo, String completeStatus, String date, String time, String name, String appointment, String language) {
         this.uuid = uuid;
         this.requestType = requestType;
         this.assignedTo = assignedTo;
@@ -156,7 +159,7 @@ public class ServiceEntry extends RecursiveTreeObject<ServiceEntry> {
         languageProperty = new SimpleStringProperty(language);
     }
 
-    public ServiceEntry(String uuid, String requestType, String assignedTo, String completeStatus) {
+    public ServiceEntry(String uuid1, String language_interpretation_request, String s, String uuid, LocalDate dateValue, LocalTime value, String requestType, String assignedTo, String completeStatus) {
         this.uuid = uuid;
         this.requestType = requestType;
         this.assignedTo = assignedTo;

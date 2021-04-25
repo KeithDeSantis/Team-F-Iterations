@@ -144,6 +144,7 @@ public class AccountManagerController implements Initializable{
             refreshPage(actionEvent);
         }
         else if (buttonPushed == addUser){
+            //AccountEntry newUser = new AccountEntry(addUser.getText(), addPassword.getText(), (String) newUserType.getValue());
             String user = addUsername.getText();
             String pass = addPassword.getText();
             String type = (String) newUserType.getValue();
