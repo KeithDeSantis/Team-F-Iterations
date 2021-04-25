@@ -22,7 +22,7 @@
       </ImageView>
       <Text fill="#03256c" layoutX="173.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL SERVICE REQUEAST SYSTEMS " wrappingWidth="785.13671875" AnchorPane.leftAnchor="173.0" AnchorPane.topAnchor="45.0">
          <font>
-            <Font size="36.0" />
+            <Font size="45.0" />
          </font>
       </Text>
       <GridPane layoutY="210.0" prefHeight="326.0" prefWidth="960.0" style="-fx-border-color: #FFFFFF; -fx-grid-lines-visible: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="210.0">
@@ -48,7 +48,7 @@
                <graphic>
                   <ImageView fitHeight="67.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/HomeBlue.png" />
+                        <Image url="@../../../../../../imagesAndLogos/homeWhiteText.png" />
                      </image></ImageView>
                </graphic>
             </JFXButton>
@@ -159,7 +159,10 @@
                   <Font size="15.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="87.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/IntPatientTransportWhiteText.png" />
+                     </image></ImageView>
                </graphic>
             </JFXButton>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -185,7 +188,7 @@
                <font>
                   <Font size="13.0" />
                </font></Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ZheCheng" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                <font>
                   <Font name="Montserrat Regular" size="13.0" />
                </font></Text>
