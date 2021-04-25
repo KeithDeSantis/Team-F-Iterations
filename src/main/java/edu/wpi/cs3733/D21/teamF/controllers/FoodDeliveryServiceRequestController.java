@@ -59,7 +59,7 @@ public class FoodDeliveryServiceRequestController {
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner((Stage) ((Button) e.getSource()).getScene().getWindow());
-            alert.setTitle("Form not filled.");
+            alert.setTitle("Form not filled");
             alert.setHeaderText("Form incomplete");
             alert.setContentText("Please fill out the location, type of food, drink, and side.");
             alert.showAndWait();

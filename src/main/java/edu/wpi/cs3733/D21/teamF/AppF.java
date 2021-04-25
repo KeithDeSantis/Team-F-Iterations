@@ -1,8 +1,5 @@
 package edu.wpi.cs3733.D21.teamF;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -10,6 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.sql.SQLException;
 public class  AppF extends Application {
 
   private static Stage primaryStage;
@@ -35,7 +35,7 @@ public class  AppF extends Application {
       }
     });
     try {
-      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
+      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml"));
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);
       primaryStage.setMaximized(true);

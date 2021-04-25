@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,6 +22,8 @@ public class LoginController {
     @FXML private JFXTextField username;
     @FXML private JFXPasswordField password;
     @FXML private JFXButton signIn;
+    @FXML private Text errorMessage;
+    @FXML private JFXButton skipSignIn;
 
     /**
      * closes the login screen and goes back to the default page
@@ -42,6 +46,7 @@ public class LoginController {
      * @author Jay Yen
      */
     public void handleSignIn(ActionEvent actionEvent) throws Exception {
+        Button buttonPushed = (JFXButton) actionEvent.getSource();  //Getting current stage
         boolean authenticated = false;
         String user = username.getText();
         String pass = password.getText();
@@ -50,21 +55,45 @@ public class LoginController {
         DatabaseAPI.getDatabaseAPI().populateUsers(ConnectionHandler.getConnection());
         authenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
         if (authenticated){
+            errorMessage.setStyle("-fx-text-fill: #e6e6e6;");
+            if(/*user.userType == "admin"*/){
 
+                Stage currentStage = (Stage)signIn.getScene().getWindow();
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
+                Scene homeScene = new Scene(root);
+                currentStage.setScene(homeScene);
+                currentStage.setTitle("Admin Home");
+                currentStage.show();
+            // set user privileges to patient, employee or admin
+        }
+            else if (/*user.userType == "employee"*/){
+                Stage currentStage = (Stage)signIn.getScene().getWindow();
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml"));
+                Scene homeScene = new Scene(root);
+                currentStage.setScene(homeScene);
+                currentStage.setTitle("Employee Home");
+                currentStage.show();
+            }
+            else{
+                Stage currentStage = (Stage)signIn.getScene().getWindow();
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
+                Scene homeScene = new Scene(root);
+                currentStage.setScene(homeScene);
+                currentStage.setTitle("Home");
+                currentStage.show();
+            }
+        }
+        else if (buttonPushed == skipSignIn){
             Stage currentStage = (Stage)signIn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
+            currentStage.setTitle("Home");
             currentStage.show();
-            // set user privileges to patient, employee or admin
         }
         //displays error message
         else{
-            Stage currentStage = (Stage)signIn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LoginFail.fxml"));
-            Scene homeScene = new Scene(root);
-            currentStage.setScene(homeScene);
-            currentStage.show();
+            errorMessage.setStyle("-fx-text-fill: #c60000;");
         }
     }
 }

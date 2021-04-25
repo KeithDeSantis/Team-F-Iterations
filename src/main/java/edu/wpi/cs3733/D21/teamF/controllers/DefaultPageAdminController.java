@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class DefaultPageAdminController {
+    private String address = "/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml";
+    private String title = "Admin Home";
 
     @FXML
     private JFXButton editMap;
@@ -37,6 +39,7 @@ public class DefaultPageAdminController {
     private ImageView mapIcon;
     @FXML
     private ImageView serviceManageIcon;
+
     @FXML
     private void initialize(){
         final Image directions = new Image(getClass().getResourceAsStream("/imagesAndLogos/directionsArrow.png"));

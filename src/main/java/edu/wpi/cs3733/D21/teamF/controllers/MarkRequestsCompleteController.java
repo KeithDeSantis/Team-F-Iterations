@@ -51,11 +51,31 @@ public class MarkRequestsCompleteController implements Initializable {
         status.setPrefWidth(colWidth);
         status.setCellValueFactory(cellData -> cellData.getValue().getValue().getCompleteStatusProperty());
 
+        JFXTreeTableColumn<ServiceEntry, String> name = new JFXTreeTableColumn<>("Name");
+        request.setPrefWidth(colWidth);
+        request.setCellValueFactory(cellData -> cellData.getValue().getValue().getNameProperty());
+
+        JFXTreeTableColumn<ServiceEntry, String> date = new JFXTreeTableColumn<>("Date");
+        request.setPrefWidth(colWidth);
+        request.setCellValueFactory(cellData -> cellData.getValue().getValue().getDateProperty());
+
+        JFXTreeTableColumn<ServiceEntry, String> time = new JFXTreeTableColumn<>("Time");
+        request.setPrefWidth(colWidth);
+        request.setCellValueFactory(cellData -> cellData.getValue().getValue().getTimeProperty());
+
+        JFXTreeTableColumn<ServiceEntry, String> appointmentType = new JFXTreeTableColumn<>("Appointment Type");
+        request.setPrefWidth(colWidth);
+        request.setCellValueFactory(cellData -> cellData.getValue().getValue().getAppointmentProperty());
+
+        JFXTreeTableColumn<ServiceEntry, String> language = new JFXTreeTableColumn<>("Language");
+        request.setPrefWidth(colWidth);
+        request.setCellValueFactory(cellData -> cellData.getValue().getValue().getLanguageProperty());
+
         final TreeItem<ServiceEntry> root = new RecursiveTreeItem<ServiceEntry>(services, RecursiveTreeObject::getChildren);
         //JFXTreeTableView<ServiceEntry> requestView = new JFXTreeTableView<ServiceEntry>(root);
         requestView.setRoot(root);
         requestView.setShowRoot(false);
-        requestView.getColumns().setAll(request, assign, status);
+        requestView.getColumns().setAll(request, date, time, name, appointmentType, language, assign, status);
 
         ArrayList<ServiceEntry> data;
         try {

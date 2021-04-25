@@ -88,9 +88,9 @@ public class LanguageInterpretationRequestController implements Initializable {
         if(formFilledOut() != true) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner((Stage) ((Button) actionEvent.getSource()).getScene().getWindow());
-            alert.setTitle("Form not filled.");
+            alert.setTitle("Form not filled");
             alert.setHeaderText("Form incomplete");
-            alert.setContentText("Please fill out the location, type of food, drink, and side.");
+            alert.setContentText("Please fill out the fields marked in red.");
             alert.showAndWait();
         }else{
               String uuid = UUID.randomUUID().toString();
