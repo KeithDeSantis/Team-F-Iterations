@@ -36,7 +36,6 @@ public class FloralDeliveryServiceTest extends ApplicationTest {
         clickOn("#bouquetButton");
         clickOn("#sunflowerCheckBox");
         clickOn("#submitButton");
-        verifyThat("Request Submitted!", Node::isVisible);
     }
 
     @Test
