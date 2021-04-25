@@ -60,6 +60,7 @@ dependencies {
 
 //This tells your verification Tasks to use JUnit. You shouldn't need to change this
 test {
+    maxHeapSize = "1024m"
     useJUnitPlatform()
 }
 

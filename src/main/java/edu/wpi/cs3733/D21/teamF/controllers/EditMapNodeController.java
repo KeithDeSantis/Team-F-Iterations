@@ -137,6 +137,16 @@ public class EditMapNodeController {
             });
         });
 
+        ObservableList<String> searchables = FXCollections.observableArrayList();
+        searchables.add("Node ID");
+        searchables.add("Floor");
+        searchables.add("Building");
+        searchables.add("Node Type");
+        searchables.add("Long Name");
+        searchables.add("Short Name");
+        searchComboBox.setItems(searchables);
+        searchComboBox.setValue("Node ID");
+
         //contextMenu.show(map, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
     }
 

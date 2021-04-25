@@ -83,7 +83,6 @@ public class EdgeHandler implements DatabaseEntry {
             success = true;
         }
         catch (SQLException e){
-            System.out.println("here");
             success = false;
         }
         return success;
