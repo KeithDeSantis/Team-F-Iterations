@@ -9,6 +9,7 @@ import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
+import edu.wpi.cs3733.uicomponents.IMapDrawable;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
@@ -93,6 +94,8 @@ public class AStarDemoController implements Initializable {
     int curStep;
     String curFloor;
 
+    DrawableNode direction;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -155,6 +158,8 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         pathVertex = null;
         Instruction.setVisible(false);
+
+        direction = null;
     }
 
     /**
@@ -405,6 +410,7 @@ public class AStarDemoController implements Initializable {
 
         String floor = "";
         String type = "";
+        String SEid = "";
 
         // Assert "Up" is forward for start
         double prevAngle = Math.toDegrees(Math.atan2(-1.0,0.0)) + 180;
@@ -413,73 +419,80 @@ public class AStarDemoController implements Initializable {
         double distance = 0.0;
         boolean SEsearch = false;
         String prevDiret = "";
-        String curF = pathVertex.get(0).getFloor();
 
         for(int i = 0; i < pathVertex.size() - 1; i++) {
             Vertex curV = pathVertex.get(i);
             Vertex nexV = pathVertex.get(i + 1);
+
             NodeEntry curN = findNodeEntry(curV.getID());
             if (curN == null) return;
 
-            // Separate nodes on same floor
-            if(!SEsearch) {
-                curF = curV.getFloor();
-
-                double curAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
-                double angle = curAngle + (360 - prevAngle);
-                if (angle >= 360)
-                    angle -= 360;
-
-                // small angle (45) alternation ignored
-                if (angle <= 45 || angle >= 315) {
-                    if(i == 0){
-                        prevDiret = "Look Forward";
-                        stops.add(i);
-                    }
-                    // Skip
-                } else {
-                    // Finished calculating distance after last turn
-                    stops.add(i);
-                    if(!prevDiret.equals("")){
-                        distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
-                        instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
-                        distance = 0.0;
-                    }
-
-                    if (Math.abs(Math.abs(curAngle - prevAngle) - 180) <= 45) {
-                        prevDiret = "Turn around";
-                    } else if (angle < 180) {
-                        prevDiret = "Turn right";
-                    } else {
-                        prevDiret = "Turn left";
-                    }
-                    prevAngle = curAngle;
-                }
-            }
-
-            // Searching through sequence of Stair or Elevator
-            if(SEsearch) {
-                if ((curN.getNodeType().equals("STAI")) || curN.getNodeType().equals("ELEV")) {
-                    if(!curN.getNodeType().equals(type))
-                        SEsearch = false;
-                } else {
-                    // Jumped to different floor by Stair or Elevator
-                    if (!curF.equals(nexV.getFloor())) {
-                        if (type.equals("STAI"))
-                            type = "Stair";
-                        else
-                            type = "Elevator";
-                        floor = nexV.getFloor();
-                        stops.add(i);
-                        instructions.add("Take " + type + " to Floor " + floor);
-                    }
-                    SEsearch = false;
-                }
-            }
             // current node is stair or elevator
-            if (!SEsearch && (curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV"))) {
-                SEsearch = true;
-                type = curN.getNodeType();
+            if (curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV")) {
+                // If have sequence of ELEV/STAI in a row
+                if (curV.getID().substring(0,curV.getID().length()-1).equals(nexV.getID().substring(0,nexV.getID().length()-1))){
+                    stops.add(i);
+                    distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
+                    instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
+
+                    for (int j = i + 1 ; j < pathVertex.size() - 1; j++){
+                        curV = pathVertex.get(j);
+                        nexV = pathVertex.get(j + 1);
+
+                        if (!curV.getID().substring(0,curV.getID().length()-1).equals(nexV.getID().substring(0,nexV.getID().length()-1))){
+                            // Jumped to different floor by Stair or Elevator
+                            curN = findNodeEntry(curV.getID());
+                            if (curN == null) return;
+
+                            if (curN.getNodeType().equals("STAI"))
+                                type = "Stair";
+                            else
+                                type = "Elevator";
+
+                            i = j + 1;
+                            stops.add(i);
+                            instructions.add("Take " + type + " to Floor " + nexV.getFloor());
+
+                            curV = pathVertex.get(i);
+                            nexV = pathVertex.get(i + 1);
+                            prevAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if( i == pathVertex.size() - 1)
+                break;
+
+            // Search Straight line on same floor
+            double curAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+            double angle = curAngle + (360 - prevAngle);
+            if (angle >= 360)
+                angle -= 360;
+             // small angle (45) alternation ignored
+            if (angle <= 45 || angle >= 315) {
+                if(i == 0){
+                    prevDiret = "Look Forward";
+                    stops.add(i);
+                }
+                // Skip
+            } else {
+                // Finished calculating distance after last turn
+                stops.add(i);
+                if(!prevDiret.equals("")){
+                    distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
+                    instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
+                }
+
+                if (Math.abs(Math.abs(curAngle - prevAngle) - 180) <= 30) {
+                    prevDiret = "Turn around";
+                } else if (angle < 180) {
+                    prevDiret = "Turn right";
+                } else {
+                    prevDiret = "Turn left";
+                }
+                prevAngle = curAngle;
             }
         }
         stops.add(pathVertex.size() - 1);
@@ -487,8 +500,64 @@ public class AStarDemoController implements Initializable {
         if(!prevDiret.equals("")) instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
         instructions.add("Reach Destination!");
 
-        //System.out.println(instructions);
-        //System.out.println(stops);
+        System.out.println(pathVertex);
+        System.out.println(instructions);
+        System.out.println(stops);
+    }
+
+    String curD;
+    private void drawDirection() throws SQLException {
+        if(direction != null)
+            mapPanel.unDraw(this.direction.getId());
+        Vertex curV = pathVertex.get(stops.get(curStep));
+        //DrawableNode node = new DrawableNode(Integer.parseInt(curV.getX()), curV.getY(), curV.getID(), curV.getFloor());
+        //if(curN == null)
+        //    return;
+        //direction = curN.getDrawable();
+        direction.setId("direction");
+        if(curD.equals("UP")){
+            double Y = direction.getCenterY() - 10.0;
+            direction.setCenterY(Y);
+        }else if(curD.equals("LEFT")){
+            direction.setCenterX(direction.getCenterX() - 10.0);
+        }else if(curD.equals("RIGHT")){
+            direction.setCenterX(direction.getCenterX() + 10.0);
+        }else if(curD.equals("DOWN")){
+            direction.setCenterY(direction.getCenterY() + 10.0);
+        }
+        direction.setFill(Color.RED);
+        direction.setRadius(5);
+
+        mapPanel.draw(direction);
+    }
+
+    private void changeDirection(String inst){
+        String instruction[] = inst.split(" ");
+        System.out.println(instruction);
+        if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
+            if(instruction[1].equals("around")){
+                switch (curD) {
+                    case "UP" : curD = "DOWN"; break;
+                    case "LEFT" : curD = "RIGHT"; break;
+                    case "RIGHT" : curD = "LEFT"; break;
+                    case "DOWN" : curD = "UP"; break;
+                }
+            }else if(instruction[1].equals("left")){
+                switch (curD) {
+                    case "UP" : curD = "LEFT"; break;
+                    case "LEFT" : curD = "DOWN"; break;
+                    case "RIGHT" : curD = "UP"; break;
+                    case "DOWN" : curD = "RIGHT"; break;
+                }
+            }else if(instruction[1].equals("right")){
+                switch (curD) {
+                    case "UP" : curD = "RIGHT"; break;
+                    case "LEFT" : curD = "UP"; break;
+                    case "RIGHT" : curD = "DOWN"; break;
+                    case "DOWN" : curD = "LEFT"; break;
+                }
+            }
+        }
     }
 
     /**
@@ -516,6 +585,9 @@ public class AStarDemoController implements Initializable {
         Instruction.setText(instructions.get(curStep));
         mapPanel.centerNode(startNodeDisplay);
         curFloor = pathVertex.get(0).getFloor();
+
+        //curD = "UP";
+        //drawDirection();
     }
 
     /**
