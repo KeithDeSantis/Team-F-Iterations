@@ -9,18 +9,43 @@ public class ServiceEntry extends RecursiveTreeObject<ServiceEntry> {
     String requestType;
     String assignedTo;
     String completeStatus;
+    String additionalInstructions;
     SimpleStringProperty requestTypeProperty;
     SimpleStringProperty assignedToProperty;
     SimpleStringProperty completeStatusProperty;
 
-    public ServiceEntry(String uuid, String requestType, String assignedTo, String completeStatus) {
+    public String getAdditionalInstructions() {
+        return additionalInstructions;
+    }
+
+    public void setAdditionalInstructions(String additionalInstructions) {
+        this.additionalInstructions = additionalInstructions;
+    }
+
+    public SimpleStringProperty getAdditionalInstructionsProperty() {
+        return additionalInstructionsProperty;
+    }
+
+    public SimpleStringProperty additionalInstructionsPropertyProperty() {
+        return additionalInstructionsProperty;
+    }
+
+    public void setAdditionalInstructionsProperty(String additionalInstructionsProperty) {
+        this.additionalInstructionsProperty.set(additionalInstructionsProperty);
+    }
+
+    SimpleStringProperty additionalInstructionsProperty;
+
+    public ServiceEntry(String uuid, String requestType, String assignedTo, String completeStatus, String additionalInstructions) {
         this.uuid = uuid;
         this.requestType = requestType;
         this.assignedTo = assignedTo;
         this.completeStatus = completeStatus;
+        this.additionalInstructions = additionalInstructions;
         requestTypeProperty = new SimpleStringProperty(requestType);
         assignedToProperty = new SimpleStringProperty(assignedTo);
         completeStatusProperty = new SimpleStringProperty(completeStatus);
+        additionalInstructionsProperty = new SimpleStringProperty(additionalInstructions);
     }
 
     public String getRequestType() {

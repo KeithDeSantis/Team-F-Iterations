@@ -52,11 +52,15 @@ public class MarkRequestsCompleteController implements Initializable {
         status.setPrefWidth(colWidth);
         status.setCellValueFactory(cellData -> cellData.getValue().getValue().getCompleteStatusProperty());
 
+        JFXTreeTableColumn<ServiceEntry, String> additionalInstructions = new JFXTreeTableColumn<>("Additional Details");
+        status.setPrefWidth(colWidth);
+        status.setCellValueFactory(cellData -> cellData.getValue().getValue().getAdditionalInstructionsProperty());
+
         final TreeItem<ServiceEntry> root = new RecursiveTreeItem<ServiceEntry>(services, RecursiveTreeObject::getChildren);
         //JFXTreeTableView<ServiceEntry> requestView = new JFXTreeTableView<ServiceEntry>(root);
         requestView.setRoot(root);
         requestView.setShowRoot(false);
-        requestView.getColumns().setAll(request, assign, status);
+        requestView.getColumns().setAll(request, assign, status, additionalInstructions);
 
         List<ServiceEntry> data;
         try {

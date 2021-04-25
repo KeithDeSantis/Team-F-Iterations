@@ -250,7 +250,7 @@ class DatabaseAPITest {
     @DisplayName("test adding a service request")
     public void testAddServiceRequest() throws SQLException
     {
-        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false", "extra instructions"};
         assertTrue(DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest));
     }
 
@@ -304,7 +304,7 @@ class DatabaseAPITest {
     @DisplayName("test generating service request entry list")
     public void testGenerateServiceRequestEntries() throws SQLException
     {
-        ServiceEntry entry = new ServiceEntry("1", "a task", "Ben","true");
+        ServiceEntry entry = new ServiceEntry("1", "a task", "Ben","true", "instructions");
         ArrayList<ServiceEntry> expected = new ArrayList<>();
         expected.add(entry);
         String[] newService = {"1", "a task", "Ben","true"};
