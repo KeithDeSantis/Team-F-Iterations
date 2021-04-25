@@ -177,6 +177,7 @@ public class NodeHandler implements DatabaseEntry {
             final String type = rset.getString(6);
             final String longName = rset.getString(7);
             final String shortName = rset.getString(8);
+            rset.close();
 
             return new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
         }

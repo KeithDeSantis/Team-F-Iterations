@@ -168,7 +168,7 @@ public class EdgeHandler implements DatabaseEntry {
             final String edgeID = rset.getString(1);
             final String start = rset.getString(2);
             final String end = rset.getString(3);
-
+            rset.close();
             return new EdgeEntry(edgeID, start, end);
         }
         rset.close();
