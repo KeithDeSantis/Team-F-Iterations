@@ -75,6 +75,7 @@ public class LanguageInterpretationRequestController implements Initializable {
         //services.add(newServiceRequest);
         //update service requests
         //after this is updated, copy into the other service request submits
+
         DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                 newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus());
         Stage currentStage = (Stage)submit.getScene().getWindow();

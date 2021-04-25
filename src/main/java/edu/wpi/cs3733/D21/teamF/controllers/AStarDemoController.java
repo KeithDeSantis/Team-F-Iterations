@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
@@ -101,9 +102,10 @@ public class AStarDemoController implements Initializable {
 
         //ahf - yes this should be done better. At some point.
 
+        List<NodeEntry> allNodeEntries = new ArrayList<>();
         try {
-            allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
-            allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+            List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
 
             final List<NodeEntry> nodeEntries = allNodeEntries.stream().collect(Collectors.toList());
 
@@ -131,7 +133,9 @@ public class AStarDemoController implements Initializable {
         final MenuItem startPathfind = new MenuItem("Path from Here");
         final MenuItem endPathfind = new MenuItem("Path end Here");
 
+
         contextMenu.getItems().addAll(startPathfind, endPathfind);
+
 
         List<NodeEntry> finalAllNodeEntries = allNodeEntries;
 
@@ -247,7 +251,7 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
     private void drawStartNode(String nodeID) throws SQLException{
-        final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),nodeID);
+        final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(nodeID);
         if(startNode != null)
         {
             final DrawableNode drawableNode = startNode.getDrawable();
@@ -279,7 +283,7 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
     private void drawEndNode(String nodeID) throws SQLException{
-        final NodeEntry endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(),nodeID);
+        final NodeEntry endNode = DatabaseAPI.getDatabaseAPI().getNode(nodeID);
         if(endNode != null)
         {
             final DrawableNode drawableNode = endNode.getDrawable();
@@ -313,6 +317,9 @@ public class AStarDemoController implements Initializable {
         if(this.endNodeDisplay != null)
             mapPanel.draw(this.endNodeDisplay);
 
+        final String currentFloor = mapPanel.getFloor().getValue();
+
+        final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
 
         final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
         final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
@@ -377,6 +384,7 @@ public class AStarDemoController implements Initializable {
         if (startComboBox.getValue() == null ||
                 endComboBox.getValue() == null){
             clearPath();
+
         }else{
             clearPath();
             updatePath();
