@@ -109,7 +109,7 @@ public class AStarDemoController implements Initializable {
 
         //ahf - yes this should be done better. At some point.
 
-        List<NodeEntry> allNodeEntries = new ArrayList<>();
+        allNodeEntries = new ArrayList<>();
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
             List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
@@ -488,16 +488,20 @@ public class AStarDemoController implements Initializable {
             // current node is stair or elevator
             if (curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV")) {
                 // If have sequence of ELEV/STAI in a row
-                if (curV.getID().substring(0,curV.getID().length()-1).equals(nexV.getID().substring(0,nexV.getID().length()-1))){
-                    stops.add(i);
-                    distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
-                    instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
-
+                if (curV.getID().substring(0,curV.getID().length()-2).equals(nexV.getID().substring(0,nexV.getID().length()-2))){
+                    if(i!=0) {
+                        stops.add(i);
+                        distance = calculateDistance(pathVertex, stops.get(stops.size() - 2), stops.get(stops.size() - 1));
+                        instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
+                    }else{
+                        stops.add(i);
+                        prevDiret = "Turn around";
+                    }
                     for (int j = i + 1 ; j < pathVertex.size() - 1; j++){
                         curV = pathVertex.get(j);
                         nexV = pathVertex.get(j + 1);
 
-                        if (!curV.getID().substring(0,curV.getID().length()-1).equals(nexV.getID().substring(0,nexV.getID().length()-1))){
+                        if (!curV.getID().substring(0,curV.getID().length()-2).equals(nexV.getID().substring(0,nexV.getID().length()-2))){
                             // Jumped to different floor by Stair or Elevator
                             curN = findNodeEntry(curV.getID());
                             if (curN == null) return;
