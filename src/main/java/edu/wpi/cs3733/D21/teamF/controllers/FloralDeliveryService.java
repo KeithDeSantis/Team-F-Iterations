@@ -50,6 +50,8 @@ public class FloralDeliveryService {
         logoHome.setImage(img);
     }
 
+    private int idCounter = 0; //counter for making service request IDs
+
     /**
      * Handles the push of a radio button (sets up Toggle Groups)
      * @param actionEvent button being pushed
@@ -95,7 +97,8 @@ public class FloralDeliveryService {
         if(isFilledOut()) {
             String type = "Flower Delivery";
             String name = nameField.getText();
-            DatabaseAPI.getDatabaseAPI().addServiceReq("id", type, name, "false");
+            DatabaseAPI.getDatabaseAPI().addServiceReq(Integer.toString(idCounter), type, name, "false");
+            idCounter++;
             successField.setText("Request Submitted!");
         } else { successField.setText(""); }
     }
