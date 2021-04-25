@@ -16,31 +16,20 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
-<AnchorPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MapEditViewController">
+<AnchorPane prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MapEditViewController">
    <children>
-      <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="181.0" fitWidth="153.0" onMouseClicked="#handleHome" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
-                     </image>
-                  </ImageView>
-                  <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL MAP EDITOR" wrappingWidth="990.3173828125">
-                     <font>
-                        <Font name="Volkhov Regular" size="60.0" />
-                     </font>
-                  </Text>
-               </children>
-            </HBox>
-            <Line endX="100.0" endY="200.0" startX="1240.0" startY="200.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" />
-         </children>
-      </VBox>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="200.0" layoutX="716.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="1174.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Line endX="90.0" endY="200.00001525878906" startX="1263.9998779296875" startY="200.00001525878906" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <ImageView fitHeight="181.0" fitWidth="153.0" onMouseClicked="#handleHome" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <image>
+            <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+         </image>
+      </ImageView>
       <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="60.0" prefHeight="100.0" prefWidth="450.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0">
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="240.0">
@@ -60,15 +49,15 @@
                      </tabs>
                   </JFXTabPane>
                   <GridPane alignment="CENTER" minHeight="130.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0">
-                    <columnConstraints>
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                     <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
                         <JFXButton fx:id="resetFromDB" buttonType="RAISED" onAction="#handleReset" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Reset From Database" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
                            <font>
@@ -149,5 +138,11 @@
             <Insets left="25.0" right="25.0" />
          </padding>
       </HBox>
+      <Text fx:id="title" fill="#03256c" layoutX="173.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL MAP EDITOR" wrappingWidth="990.3173828125" AnchorPane.leftAnchor="173.0" AnchorPane.topAnchor="17.0">
+         <font>
+            <Font name="Volkhov Regular" size="60.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
+

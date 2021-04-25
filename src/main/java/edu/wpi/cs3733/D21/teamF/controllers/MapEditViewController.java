@@ -604,6 +604,45 @@ public class MapEditViewController {
         final List<DrawableEdge> startEdges = new ArrayList<>();
         final List<DrawableEdge> endEdges = new ArrayList<>();
         drawableNode.setOnMousePressed(e -> {
+
+            if (selectedCircle != null)
+                selectedCircle.setFill(UIConstants.NODE_COLOR);
+            if (selectedLine != null)
+                selectedLine.setStroke(UIConstants.LINE_COLOR);
+
+            selectedCircle = drawableNode;
+            drawableNode.setFill(UIConstants.NODE_COLOR_SELECTED);
+
+            /* TODO this section allows for "clicking any two nodes and prompting a new edge"  Not sure if we want it implemented since its kind of an inconvenience when
+            // TODO clicking around nodes, if we do we'll have to work out some issue with it - KD
+            if (firstCircle == null) {
+                firstCircle = drawableNode;
+                tabPane.getSelectionModel().select(nodesTab);
+                nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
+                nodeTreeTable.requestFocus();
+                nodeTreeTable.scrollTo(findNode(drawableNode.getId()));
+            } else {
+                secondCircle = drawableNode;
+                // Second node selected, create edge
+                try {
+                    createNewEdgeFromNodes();
+                    tabPane.getSelectionModel().select(edgesTab);
+                    edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(firstCircle.getId()+"_"+secondCircle.getId()));
+                    edgeTreeTable.requestFocus();
+                    edgeTreeTable.scrollTo(findEdge(firstCircle.getId()+"_"+secondCircle.getId()));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+             */
+            // Automagically change to nodes tab
+            tabPane.getSelectionModel().select(nodesTab);
+            nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
+            nodeTreeTable.requestFocus();
+            nodeTreeTable.scrollTo(findNode(drawableNode.getId()));
+
             startEdges.clear();
             endEdges.clear();
 
@@ -661,13 +700,13 @@ public class MapEditViewController {
                     }
                 }
 
-                drawEdgeNodeOnFloor();
+
 
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
         });
-
+/*
         drawableNode.setOnMouseClicked(e-> {
             if (selectedCircle != null)
                 selectedCircle.setFill(UIConstants.NODE_COLOR);
@@ -701,11 +740,15 @@ public class MapEditViewController {
                 }
             }
              */
+        /*
             // Automagically change to nodes tab
             tabPane.getSelectionModel().select(nodesTab);
             nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
             nodeTreeTable.requestFocus();
             nodeTreeTable.scrollTo(findNode(drawableNode.getId()));});
+
+         */
+
 
 
         return drawableNode;
