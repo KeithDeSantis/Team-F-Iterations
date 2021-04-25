@@ -22,6 +22,7 @@
                </font>
             </Label>
             <!--<MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" />-->
+            <!--<AnchorPane />-->
             <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" />
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
@@ -33,13 +34,13 @@
                               <Insets left="16.0" />
                            </padding>
                         </ComboBox>
-                        <JFXButton fx:id="Go" onAction="#startNavigation" text="Start Navigation" />
-                        <JFXButton fx:id="End" onAction="#endNavigation" text="End Navigation" />
-                        <JFXButton fx:id="Prev" onAction="#goToPrevNode" text="Prev" />
-                        <JFXButton fx:id="Next" onAction="#goToNextNode" text="Next" />
+                        <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Start Navigation" textFill="WHITE" />
+                        <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="End Navigation" textFill="WHITE" />
+                        <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Prev" textFill="WHITE" />
+                        <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Next" textFill="WHITE" />
                      </children>
                   </HBox>
-                  <Label fx:id="Instruction" text="Instructions" />
+                  <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="500.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="WHITE" />
                </children>
             </VBox>
          </children></VBox>
