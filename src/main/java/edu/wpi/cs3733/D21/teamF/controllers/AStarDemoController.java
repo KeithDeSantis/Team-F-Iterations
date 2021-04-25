@@ -466,105 +466,107 @@ public class AStarDemoController implements Initializable {
         instructions = new ArrayList<>();
         if(this.pathVertex == null) return;
 
-        String floor = "";
-        String type = "";
-        String SEid = "";
-
         // Assert "Up" is forward for start
         double prevAngle = Math.toDegrees(Math.atan2(-1.0,0.0)) + 180;
+        double currAngle;
+        String prevDirect = "Look forward";
+        String currDirect = "";
+        double distance;
+        boolean lastSE = false;
 
-        // Stair or Elevator search
-        double distance = 0.0;
-        boolean SEsearch = false;
-        String prevDiret = "";
+        stops.add(0);
 
-        for(int i = 0; i < pathVertex.size() - 1; i++) {
+        for(int i = 0; i < pathVertex.size() -1; i++){
             Vertex curV = pathVertex.get(i);
             Vertex nexV = pathVertex.get(i + 1);
 
             NodeEntry curN = findNodeEntry(curV.getID());
             if (curN == null) return;
 
-            // current node is stair or elevator
-            if (curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV")) {
-                // If have sequence of ELEV/STAI in a row
-                if (curV.getID().substring(0,curV.getID().length()-2).equals(nexV.getID().substring(0,nexV.getID().length()-2))){
-                    if(i!=0) {
-                        stops.add(i);
-                        distance = calculateDistance(pathVertex, stops.get(stops.size() - 2), stops.get(stops.size() - 1));
-                        instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
-                    }else{
-                        stops.add(i);
-                        prevDiret = "Turn around";
-                    }
-                    for (int j = i + 1 ; j < pathVertex.size() - 1; j++){
-                        curV = pathVertex.get(j);
-                        nexV = pathVertex.get(j + 1);
-
-                        if (!curV.getID().substring(0,curV.getID().length()-2).equals(nexV.getID().substring(0,nexV.getID().length()-2))){
-                            // Jumped to different floor by Stair or Elevator
-                            curN = findNodeEntry(curV.getID());
-                            if (curN == null) return;
-
-                            if (curN.getNodeType().equals("STAI"))
-                                type = "Stair";
-                            else
-                                type = "Elevator";
-
-                            i = j + 1;
-                            stops.add(i);
-                            instructions.add("Take " + type + " to Floor " + nexV.getFloor());
-
-                            curV = pathVertex.get(i);
-                            nexV = pathVertex.get(i + 1);
-                            prevAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
-                            break;
-                        }
-                    }
+            // Stair or Elevator found
+            if ((curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV"))
+            && curV.getID().substring(0, 5).equals(nexV.getID().substring(0, 5))){
+                // Not first node, finish line search
+                if(i!=0){
+                    stops.add(i);
+                    distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
+                    instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
                 }
+                i = searchSE(i);
+                if(i == pathVertex.size() - 1) {
+                    lastSE = true;
+                    break;
+                }
+                curV = pathVertex.get(i);
+                nexV = pathVertex.get(i + 1);
+                // do better
+                prevAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+                stops.add(i);
             }
 
-            if( i == pathVertex.size() - 1)
-                break;
-
-            // Search Straight line on same floor
-            double curAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
-            double angle = curAngle + (360 - prevAngle);
-            if (angle >= 360)
-                angle -= 360;
-             // small angle (45) alternation ignored
-            if (angle <= 45 || angle >= 315) {
-                if(i == 0){
-                    prevDiret = "Look Forward";
-                    stops.add(i);
-                }
-                // Skip
-            } else {
-                // Finished calculating distance after last turn
+            currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+            currDirect = calculateDirection(prevAngle, currAngle);
+            prevAngle = currAngle;
+            if(!currDirect.equals("Look forward") && i != 0){
                 stops.add(i);
-                if(!prevDiret.equals("")){
-                    distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
-                    instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
-                }
-
-                if (Math.abs(Math.abs(curAngle - prevAngle) - 180) <= 30) {
-                    prevDiret = "Turn around";
-                } else if (angle < 180) {
-                    prevDiret = "Turn right";
-                } else {
-                    prevDiret = "Turn left";
-                }
-                prevAngle = curAngle;
+                distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
+                instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
+                prevDirect = currDirect;
             }
         }
         stops.add(pathVertex.size() - 1);
-        distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
-        if(!prevDiret.equals("")) instructions.add(prevDiret + " and walk " + Math.round(distance) + " m");
+        if(!lastSE) {
+            distance = calculateDistance(pathVertex, stops.get(stops.size() - 2), stops.get(stops.size() - 1));
+            instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
+        }
         instructions.add("Reach Destination!");
 
         System.out.println(pathVertex);
         System.out.println(instructions);
         System.out.println(stops);
+    }
+
+    private int searchSE(int startIndex){
+        NodeEntry curN;
+        Vertex preV = pathVertex.get(startIndex);
+        Vertex curV;
+        for(int i = startIndex + 1; i < pathVertex.size(); i++){
+            curV = pathVertex.get(i);
+            if(!curV.getID().substring(0, 5).equals(preV.getID().substring(0, 5)) || i == pathVertex.size() - 1){
+                curN = findNodeEntry(curV.getID());
+                if (curN == null) return -1;
+                String type = curN.getNodeType();
+                if (type.equals("STAI"))
+                    type = "Stair";
+                else
+                    type = "Elevator";
+                instructions.add("Take " + type + " to Floor " + preV.getFloor());
+                if(i == pathVertex.size() - 1)
+                    return pathVertex.size() - 1;
+                else
+                    return i - 1;
+            }
+            preV = curV;
+        }
+        // Error
+        return -1;
+    }
+
+    private String calculateDirection(double prevAngle, double curAngle){
+        double angle = (curAngle + (360 - prevAngle)) % 360;
+        System.out.println(prevAngle + " " + curAngle + " " + angle);
+        // small angle (45) alternation ignored
+        if (angle <= 45 || angle >= 315) {
+            return "Look forward";
+        } else {
+            if (Math.abs(Math.abs(curAngle - prevAngle) - 180) <= 15) {
+                return "Turn around";
+            } else if (angle < 180) {
+                return "Turn right";
+            } else {
+                return "Turn left";
+            }
+        }
     }
 
     String curD;
