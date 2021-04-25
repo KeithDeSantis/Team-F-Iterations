@@ -110,6 +110,7 @@ public class AStarDemoController implements Initializable {
         //ahf - yes this should be done better. At some point.
 
         List<NodeEntry> allNodeEntries = new ArrayList<>();
+
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
             List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
