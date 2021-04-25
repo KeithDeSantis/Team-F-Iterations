@@ -6,6 +6,7 @@ import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
+import edu.wpi.cs3733.D21.teamF.pathfinding.AStarGraph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;

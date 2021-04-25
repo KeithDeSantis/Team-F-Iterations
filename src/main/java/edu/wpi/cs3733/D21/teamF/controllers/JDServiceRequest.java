@@ -44,7 +44,7 @@ public class JDServiceRequest {
 
     @FXML
     private void handleButtonPushed(javafx.event.ActionEvent e) throws IOException {
-
+/*
         Button buttonPushed = (Button) e.getSource();
 
         if (buttonPushed == xButton || buttonPushed == cancelButton) { // is x button
@@ -55,5 +55,8 @@ public class JDServiceRequest {
             stage.setTitle("Service Requests");
             stage.show();
         }
+ */
     }
+
+
 }

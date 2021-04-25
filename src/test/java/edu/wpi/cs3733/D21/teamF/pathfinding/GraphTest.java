@@ -20,7 +20,11 @@ public class GraphTest {
      * Created by Alex Friedman
      * @see Graph
      */
-    private Graph graph;
+    private Graph AstarGraph;
+
+    private Graph BFSGraph;
+
+    private Graph DFSGraph;
 
     /**
      * Stores the edges in the graph.
@@ -53,17 +57,20 @@ public class GraphTest {
          */
         final String edgesCSV = "DFSEdges.csv";
         final String nodesCSV = "DFSNodes.csv";
-        graph = GraphLoader.load(nodesCSV, edgesCSV);
+
+        AstarGraph = GraphLoader.load(nodesCSV, edgesCSV);
+        DFSGraph = GraphLoader.load(nodesCSV, edgesCSV);
+        BFSGraph = GraphLoader.load(nodesCSV, edgesCSV);
 
         //Uses JavaReflection to access classes so that we don't have to change their actual accessibility
-        final Field edgesField = graph.getClass().getDeclaredField("edges");
-        final Field verticesField = graph.getClass().getDeclaredField("vertices");
+        final Field edgesField = AstarGraph.getClass().getDeclaredField("edges");
+        final Field verticesField = AstarGraph.getClass().getDeclaredField("vertices");
         //Set the fields to be accessible
         edgesField.setAccessible(true);
         verticesField.setAccessible(true);
         //Initialize our local lists
-        edges = (List<Edge>) edgesField.get(graph);
-        vertices = (HashMap<String, Vertex>) verticesField.get(graph);
+        edges = (List<Edge>) edgesField.get(AstarGraph);
+        vertices = (HashMap<String, Vertex>) verticesField.get(AstarGraph);
 
     }
 
@@ -88,7 +95,7 @@ public class GraphTest {
          * contains them all (as we know the graph does).
          */
         for (Vertex v : vertices.values()) {
-            assertTrue(graph.contains(v));
+            assertTrue(AstarGraph.contains(v));
         }
     }
 
@@ -105,7 +112,7 @@ public class GraphTest {
          * make sure that Graph.contains(Edge) correctly identifies them.
          */
         for (Edge e : edges) {
-            assertTrue(graph.contains(e));
+            assertTrue(AstarGraph.contains(e));
         }
     }
 
@@ -183,9 +190,9 @@ public class GraphTest {
             final Vertex v0 = e.getVertices()[0];
             final Vertex v1 = e.getVertices()[1];
 
-            assertDoesNotThrow(() -> graph.DFS(v0, v1));
+            assertDoesNotThrow(() -> BFSGraph.getPath(v0, v1));
 
-            final Path path = graph.DFS(v0, v1);
+            final Path path = BFSGraph.getPath(v0, v1);
 
             assertNotNull(path);
 
@@ -210,9 +217,9 @@ public class GraphTest {
         final Vertex v0 = e.getVertices()[0];
         final Vertex v1 = e.getVertices()[1];
 
-        assertNull(graph.DFS(null, v1));
-        assertNull(graph.DFS(v0, null));
-        assertNull(graph.DFS(null, null));
+        assertNull(BFSGraph.getPath(null, v1));
+        assertNull(BFSGraph.getPath(v0, null));
+        assertNull(BFSGraph.getPath(null, null));
     }
 
     /**
@@ -232,26 +239,26 @@ public class GraphTest {
         final Edge e1 = new Edge(v1, v2);
         final Edge e2 = new Edge(v2, v0);
 
-        graph.addVertex(v0);
-        graph.addVertex(v1);
-        graph.addVertex(v2);
-        graph.addEdge(e0);
-        graph.addEdge(e1);
-        graph.addEdge(e2);
+        DFSGraph.addVertex(v0);
+        DFSGraph.addVertex(v1);
+        DFSGraph.addVertex(v2);
+        DFSGraph.addEdge(e0);
+        DFSGraph.addEdge(e1);
+        DFSGraph.addEdge(e2);
 
         Path path;
 
-        path = graph.DFS(v0, v1);
+        path = DFSGraph.getPath(v0, v1);
         assertEquals(2, path.length());
-        path = graph.DFS(v1, v0);
+        path = DFSGraph.getPath(v1, v0);
         assertEquals(2, path.length());
-        path = graph.DFS(v1, v2);
+        path = DFSGraph.getPath(v1, v2);
         assertEquals(2, path.length());
-        path = graph.DFS(v2, v1);
+        path = DFSGraph.getPath(v2, v1);
         assertEquals(2, path.length());
-        path = graph.DFS(v0, v2);
+        path = DFSGraph.getPath(v0, v2);
         assertEquals(2, path.length());
-        path = graph.DFS(v2, v0);
+        path = DFSGraph.getPath(v2, v0);
         assertEquals(2, path.length());
     }
 
@@ -273,14 +280,14 @@ public class GraphTest {
         assertNotNull(path);
         assertEquals(8, path.length());
 
-        assertEquals(vertices.get("CHALL007L1"), path.get(0));
-        assertEquals(vertices.get("CHALL008L1"), path.get(1));
-        assertEquals(vertices.get("WELEV00KL1"), path.get(2));
-        assertEquals(vertices.get("CHALL009L1"), path.get(3));
-        assertEquals(vertices.get("CHALL010L1"), path.get(4));
-        assertEquals(vertices.get("CREST003L1"), path.get(5));
-        assertEquals(vertices.get("CHALL015L1"), path.get(6));
-        assertEquals(vertices.get("CCONF001L1"), path.get(7));
+        assertEquals(vertices.get("CHALL007L1").getID(), path.get(0).getID());
+        assertEquals(vertices.get("CHALL008L1").getID(), path.get(1).getID());
+        assertEquals(vertices.get("WELEV00KL1").getID(), path.get(2).getID());
+        assertEquals(vertices.get("CHALL009L1").getID(), path.get(3).getID());
+        assertEquals(vertices.get("CHALL010L1").getID(), path.get(4).getID());
+        assertEquals(vertices.get("CREST003L1").getID(), path.get(5).getID());
+        assertEquals(vertices.get("CHALL015L1").getID(), path.get(6).getID());
+        assertEquals(vertices.get("CCONF001L1").getID(), path.get(7).getID());
 
         //FIXME: CHECK HEURISTIC!!!!
     }
@@ -298,11 +305,11 @@ public class GraphTest {
             for (Vertex end : vertices.values()) {
                 if (! start.equals(end)) {
 
-                    assertDoesNotThrow(() -> graph.DFS(start, end));
-                    final Path dfs = graph.DFS(start, end);
+                    assertDoesNotThrow(() -> DFSGraph.getPath(start, end));
+                    final Path dfs = DFSGraph.getPath(start, end);
 
-                    assertDoesNotThrow(() -> graph.getPath(start, end));
-                    final Path aStar = graph.getPath(start, end);//.asList();
+                    assertDoesNotThrow(() -> AstarGraph.getPath(start, end));
+                    final Path aStar = AstarGraph.getPath(start, end);//.asList();
 
                     if(dfs != null && aStar != null) {
                         Iterator<Vertex> dfsListIterator = dfs.iterator(),
@@ -330,9 +337,9 @@ public class GraphTest {
         final Vertex v0 = e.getVertices()[0];
         final Vertex v1 = e.getVertices()[1];
 
-        assertNull(graph.getPath(null, v1));
-        assertNull(graph.getPath(v0, null));
-        assertNull(graph.getPath(null, null));
+        assertNull(AstarGraph.getPath(null, v1));
+        assertNull(AstarGraph.getPath(v0, null));
+        assertNull(AstarGraph.getPath(null, null));
     }
 
     /**
@@ -346,9 +353,9 @@ public class GraphTest {
     @Test
     private Path runDFS(Vertex start, Vertex end) //FIXME: DO BETTER, methodize better & use in more places?
     {
-        assertDoesNotThrow(() -> graph.DFS(start, end));
+        assertDoesNotThrow(() -> DFSGraph.getPath(start, end));
 
-        return graph.DFS(start, end);
+        return DFSGraph.getPath(start, end);
     }
 
     /**

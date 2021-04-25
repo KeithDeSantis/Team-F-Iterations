@@ -118,9 +118,12 @@ public class AStarDemoController implements Initializable {
 
             final List<EdgeEntry> edgeEntries = allEdgeEntries.stream().filter( node -> hasNode(nodeEntries, node.getStartNode())
                     && hasNode(nodeEntries, node.getEndNode()) ).collect(Collectors.toList());
+
+            // Read from DB
+            String pathfindMethod = "ASTAR";
+
             this.graph = GraphLoader.load(nodeEntries, edgeEntries);
         } catch (Exception e) {
-            this.graph = new Graph();
             e.printStackTrace();
             //return;
         }
