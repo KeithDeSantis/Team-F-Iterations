@@ -7,10 +7,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ServiceRequestHomeNewController {
     @FXML private JFXButton Home;
@@ -24,6 +27,19 @@ public class ServiceRequestHomeNewController {
     @FXML private JFXButton internalPatientTrans;
     @FXML private JFXButton sanitationService;
     @FXML private JFXButton medicineDelivery;
+    @FXML private ImageView homeImage;
+    @FXML private ImageView facilitiesImage;
+    @FXML private ImageView laundryImage;
+    @FXML private ImageView externalImage;
+    @FXML private ImageView floralImage;
+    @FXML private ImageView foodImage;
+    @FXML private ImageView computorImage;
+    @FXML private ImageView langImage;
+    @FXML private ImageView medicineImage;
+    @FXML private ImageView internalImage;
+    @FXML private ImageView sanitationImage;
+
+
 
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
@@ -39,7 +55,7 @@ public class ServiceRequestHomeNewController {
             goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml","Home Page",buttonPushed);
         }
 
-        else if (buttonPushed == laundryServices){
+        else if (buttonPushed == launguageInterpretation){
             goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml","Language Interpretation",buttonPushed);
         }
 
@@ -47,7 +63,7 @@ public class ServiceRequestHomeNewController {
             goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/FoodDeliveryServiceRequestView.fxml","Food Delivery",buttonPushed);
         }
         else if (buttonPushed == externalPaitintTrans){
-            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/ExternalTrans.fxml","Food Delivery",buttonPushed);
+            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/ExternalTrans.fxml","External Patiant Transportation",buttonPushed);
         }
 
     }
@@ -69,37 +85,59 @@ public class ServiceRequestHomeNewController {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
 
         if (btn == Home){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/HomeBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/HomeBlackText.png"));
+            homeImage.setImage(image);
         }
         else if (btn == faciliteisMaitence){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/FacilitiesBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FacilitiesBlackText.png"));
+            facilitiesImage.setImage(image);
         }
         else if (btn == laundryServices){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/LaundryServicesBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/LaundryServicesBlackText.png"));
+            laundryImage.setImage(image);
         }
         else if (btn == externalPaitintTrans){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/ExtPatientTransportBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/ExtPatientTransportBlackText.png"));
+            externalImage.setImage(image);
         }
         else if (btn == floralDelivery){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/FloralDeliveryBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FloralDeliveryBlackText.png"));
+            floralImage.setImage(image);
         }
         else if (btn == foodDelivery){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/FoodDeliveryBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FoodDeliveryBlackText.png"));
+            foodImage.setImage(image);
         }
         else if (btn == computorServices){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/ComputerBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/ComputerBlackText.png"));
+            computorImage.setImage(image);
         }
         else if (btn == launguageInterpretation){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/LangInterpBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/LangInterpBlackText.png"));
+            langImage.setImage(image);
         }
         else if (btn == internalPatientTrans){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/IntPatientTransportBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/IntPatientTransportBlackText.png"));
+            internalImage.setImage(image);
         }
         else if (btn == sanitationService){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/SanitationServicesBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/SanitationServicesBlackText.png"));
+            sanitationImage.setImage(image);
         }
         else if (btn == medicineDelivery){
-            btn.setStyle("-fx-background-color: #F0C808; -fx-graphic: url('/imagesAndLogos/MedDeliveryBlackText.png')");
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/MedDeliveryBlackText.png"));
+            medicineImage.setImage(image);
         }
     }
 
@@ -107,37 +145,59 @@ public class ServiceRequestHomeNewController {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
 
         if (btn == Home){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/homeWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image home = new Image(getClass().getResourceAsStream("/imagesAndLogos/homeWhiteText.png"));
+            homeImage.setImage(home);
         }
         else if (btn == faciliteisMaitence){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/FacilitiesWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FacilitiesWhiteText.png"));
+            facilitiesImage.setImage(image);
         }
         else if (btn == laundryServices){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/LaundryServicesWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/LaundryServicesWhiteText.png"));
+            laundryImage.setImage(image);
         }
         else if (btn == externalPaitintTrans){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/ExtPatientTransportWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/ExtPatientTransportWhiteText.png"));
+            externalImage.setImage(image);
         }
         else if (btn == floralDelivery){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/FloralDeliveryWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FloralDeliveryWhiteText.png"));
+            floralImage.setImage(image);
         }
         else if (btn == foodDelivery){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/FoodDeliveryWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FoodDeliveryWhiteText.png"));
+            foodImage.setImage(image);
         }
         else if (btn == computorServices){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/ComputerWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/ComputerWhiteText.png"));
+            computorImage.setImage(image);
         }
         else if (btn == launguageInterpretation){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/LangInterpWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/LangInterpWhiteText.png"));
+            langImage.setImage(image);
         }
         else if (btn == internalPatientTrans){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/IntPatientTransportWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/IntPatientTransportWhiteText.png"));
+            internalImage.setImage(image);
         }
         else if (btn == sanitationService){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/SanitationServicesWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/SanitationServicesWhiteText.png"));
+            sanitationImage.setImage(image);
         }
         else if (btn == medicineDelivery){
-            btn.setStyle("-fx-background-color: #03256c; -fx-graphic: url('/imagesAndLogos/MedDeliveryWhiteText.png')");
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/MedDeliveryWhiteText.png"));
+            medicineImage.setImage(image);
         }
     }
 }
