@@ -147,7 +147,20 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <JFXDatePicker fx:id="dateField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <JFXDatePicker fx:id="dateField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin></JFXDatePicker>
+            <Label text="Name" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="nameField" focusColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" right="10.0" />
+               </GridPane.margin>
+            </JFXTextField>
          </children>
       </GridPane>
       <ButtonBar buttonMinWidth="100.0" layoutX="333.0" layoutY="458.0" prefHeight="40.0" prefWidth="491.0" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="136.0">
