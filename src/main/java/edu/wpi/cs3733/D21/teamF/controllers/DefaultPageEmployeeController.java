@@ -94,9 +94,9 @@ public class DefaultPageEmployeeController {
 
         else if (buttonPushed == serviceManager) {
             // Implement Later
-
+            //TODO Assign to combo box
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManageView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
             //Scene scene = new Scene(root);
             //stage.setScene(scene);
             stage.getScene().setRoot(root);

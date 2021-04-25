@@ -98,7 +98,7 @@ public class LanguageInterpretationRequestController implements Initializable {
                     (String) appointment.getValue() + " " + language.getText();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
-                    newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(),additionalInstr);
+                    newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), additionalInstr);
             Stage submittedStage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
             Scene submitScene = new Scene(root);
