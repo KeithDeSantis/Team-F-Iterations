@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LanguageInterpretationHelpController {
+public class LanguageInterpretationRequestHelpController {
     @FXML private JFXButton close;
     @FXML private JFXButton back;
     @FXML private JFXButton translate;

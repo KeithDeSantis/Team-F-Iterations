@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 import java.util.UUID;
 
 
-public class LanguageInterpretationRequestController implements Initializable {
+public class LanguageInterpretationServiceRequestController implements Initializable {
     @FXML private JFXButton close;
     @FXML private JFXTextField name;
     @FXML private JFXDatePicker date;
