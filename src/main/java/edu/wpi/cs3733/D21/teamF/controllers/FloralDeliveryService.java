@@ -1,9 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +27,7 @@ public class FloralDeliveryService {
     @FXML private JFXButton clearButton;
     @FXML private JFXButton submitButton;
     @FXML private JFXTextField deliveryField;
-    @FXML private JFXTextField dateField;
+    @FXML private JFXDatePicker dateField;
     @FXML private JFXTextField cardNumberField;
     @FXML private JFXTextField cardCVCField;
     @FXML private JFXTextField cardExpField;
@@ -155,7 +152,7 @@ public class FloralDeliveryService {
         else {
             cardExpField.setStyle("-fx-background-color: transparent;");
         }
-        if(dateField.getText().length() == 0) {
+        if(dateField.getValue() == null) {
             isFilled = false;
             dateField.setStyle("-fx-background-color: #ffbab8;");
         }
@@ -189,8 +186,21 @@ public class FloralDeliveryService {
         cardNumberField.setText("");
         cardExpField.setText("");
         cardCVCField.setText("");
-        dateField.setText("");
-
+        dateField.setValue(null);
+        bouquetButton.setStyle("-fx-text-fill: #000000");
+        vaseButton.setStyle("-fx-text-fill: #000000");
+        potButton.setStyle("-fx-text-fill: #000000");
+        roseCheckBox.setStyle("-fx-text-fill: #000000");
+        tulipCheckBox.setStyle("-fx-text-fill: #000000");
+        violetCheckBox.setStyle("-fx-text-fill: #000000");
+        sunflowerCheckBox.setStyle("-fx-text-fill: #000000");
+        orchidCheckBox.setStyle("-fx-text-fill: #000000");
+        daisyCheckBox.setStyle("-fx-text-fill: #000000");
+        deliveryField.setStyle("-fx-background-color: transparent;");
+        cardNumberField.setStyle("-fx-background-color: transparent;");
+        cardCVCField.setStyle("-fx-background-color: transparent;");
+        cardExpField.setStyle("-fx-background-color: transparent;");
+        dateField.setStyle("-fx-background-color: transparent;");
     }
 }
 
