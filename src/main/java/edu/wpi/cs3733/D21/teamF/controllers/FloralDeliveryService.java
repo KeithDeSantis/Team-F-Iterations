@@ -1,11 +1,18 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -17,105 +24,30 @@ import java.io.IOException;
  */
 public class FloralDeliveryService {
 
-    @FXML private Button xButton;
-    @FXML private RadioButton rButtonVase;
-    @FXML private RadioButton rButtonBouquet;
-    @FXML private RadioButton rButtonCard;
-    @FXML private RadioButton rButtonPayPal;
-    @FXML private Button helpButton;
-    @FXML private Button helpXButton;
-    @FXML private Button cancelButton;
-    @FXML private Button submitButton;
-    @FXML private TextField deliveryField;
-    @FXML private TextField cardNumField;
-    @FXML private TextField cardCVCField;
-    @FXML private TextField cardYearField;
-    @FXML private CheckBox dandelionCheckBox;
-    @FXML private CheckBox rosesCheckBox;
-    @FXML private CheckBox sunflowersCheckBox;
+    @FXML private JFXRadioButton bouquetButton;
+    @FXML private JFXRadioButton vaseButton;
+    @FXML private JFXRadioButton potButton;
+    @FXML private JFXButton clearButton;
+    @FXML private JFXButton submitButton;
+    @FXML private JFXTextField deliveryField;
+    @FXML private JFXTextField dateField;
+    @FXML private JFXTextField cardNumberField;
+    @FXML private JFXTextField cardCVCField;
+    @FXML private JFXTextField cardExpField;
+    @FXML private JFXCheckBox roseCheckBox;
+    @FXML private JFXCheckBox tulipCheckBox;
+    @FXML private JFXCheckBox violetCheckBox;
+    @FXML private JFXCheckBox sunflowerCheckBox;
+    @FXML private JFXCheckBox orchidCheckBox;
+    @FXML private JFXCheckBox daisyCheckBox;
+    @FXML private Label successField;
+    @FXML private ImageView logoHome;
 
-    /**
-     * Handles the push of a button on the screen
-     * @param e the button push
-     * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
-     * @author KeithDeSantis
-     */
+
     @FXML
-    private void handleButtonPushed(ActionEvent e) throws IOException {
-
-        Button buttonPushed = (Button) e.getSource();
-
-        if (buttonPushed == xButton || buttonPushed == cancelButton) { // is x button
-            Stage stage = (Stage) xButton.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Service Requests");
-            stage.show();
-        }
-
-        else if (buttonPushed == helpButton) { // is help button
-            Stage popUpStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FloralHelpView.fxml"));
-            Scene popUpScene = new Scene(root);
-            popUpStage.setScene(popUpScene);
-            popUpStage.setTitle("Floral Request Help Menu");
-            popUpStage.initModality(Modality.APPLICATION_MODAL);
-            popUpStage.initOwner(buttonPushed.getScene().getWindow());
-            popUpStage.showAndWait();
-        }
-        else if (buttonPushed == helpXButton) { // is the x button on the help menu
-            Stage popUpStage = (Stage) helpXButton.getScene().getWindow();
-            popUpStage.close();
-        }
-    }
-
-    /**
-     * Handles the pushing of a submit button.
-     * If successful notifies user through pop up.
-     * If form not filled out shows user alert.
-     * @param e
-     * @author KeithDeSantis
-     */
-    @FXML
-    private void handleSubmitButtonPushed(ActionEvent e) throws IOException {
-
-        if(formFilledOut()) // form is complete
-        {
-            Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml")); // Loading in pop up View
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
-            submittedStage.showAndWait();
-
-        } else { //form not complete
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner((Stage) ( (Button) e.getSource()).getScene().getWindow());  // Show alert
-            alert.setTitle("Form not filled.");
-            alert.setHeaderText("Form incomplete");
-            alert.setContentText("Please fill out at least the Location, Type of Flowers, Containers, and Payment fields.");
-            alert.showAndWait();
-        }
-
-
-    }
-
-    /**
-     * Helper that returns true if the form is acceptably filled out
-     * @return true if form is filled out
-     * @author KeithDeSantis
-     */
-    private boolean formFilledOut() {
-        boolean deliveryLocation = deliveryField.getText().length() > 0;
-        boolean card = cardCVCField.getText().length() > 0 && cardNumField.getText().length() > 0 && cardYearField.getText().length() > 0;
-        boolean containerChosen = rButtonBouquet.isSelected() || rButtonVase.isSelected();
-        boolean paymentChosen = rButtonCard.isSelected() || rButtonPayPal.isSelected();
-        boolean flowersRequested = dandelionCheckBox.isSelected() || rosesCheckBox.isSelected() || sunflowersCheckBox.isSelected();
-
-        return deliveryLocation && card && containerChosen && paymentChosen && flowersRequested;
+    public void initialize() {
+        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
+        logoHome.setImage(img);
     }
 
     /**
@@ -124,14 +56,141 @@ public class FloralDeliveryService {
      * @author KeithDeSantis
      */
     @FXML
-    private void handleRadioButtonPushed(ActionEvent actionEvent) {
-
+    private void handleRadioButtonClicked(ActionEvent actionEvent) {
         ToggleGroup groupContainer = new ToggleGroup(); // group for container buttons
-        rButtonBouquet.setToggleGroup(groupContainer);
-        rButtonVase.setToggleGroup(groupContainer);
-        ToggleGroup groupPayment = new ToggleGroup(); // group for payment buttons
-        rButtonCard.setToggleGroup(groupPayment);
-        rButtonPayPal.setToggleGroup(groupPayment);
+        bouquetButton.setToggleGroup(groupContainer);
+        vaseButton.setToggleGroup(groupContainer);
+        potButton.setToggleGroup(groupContainer);
+    }
+
+    /**
+     * When back button is pressed
+     * @param mouseEvent
+     * @author KD
+     */
+    public void handleBack(MouseEvent mouseEvent) throws IOException {
+        Stage stage = (Stage) bouquetButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml")); //FIXME Go to service request home
+        stage.getScene().setRoot(root);
+        stage.show();
+    }
+
+    /**
+     * Return to Home when it is decided where home is
+     * @param mouseEvent
+     * @author KD
+     */
+    public void handleHome(MouseEvent mouseEvent) throws IOException {
+        Stage stage = (Stage) submitButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
+        stage.getScene().setRoot(root);
+    }
+
+    /**
+     * Will eventually save the request to DB
+     * @param actionEvent
+     * @author KD
+     */
+    public void handleSubmit(ActionEvent actionEvent) {
+        if(isFilledOut()) {
+            successField.setText("Request Submitted!");
+        } else { successField.setText(""); }
+    }
+
+    public boolean isFilledOut() {
+        boolean isFilled = true;
+        if(!(bouquetButton.isSelected() || vaseButton.isSelected() || potButton.isSelected())) {
+            isFilled = false;
+            bouquetButton.setStyle("-fx-text-fill: #e8321e");
+            vaseButton.setStyle("-fx-text-fill: #e8321e");
+            potButton.setStyle("-fx-text-fill: #e8321e");
+        }
+        else {
+            bouquetButton.setStyle("-fx-text-fill: #000000");
+            vaseButton.setStyle("-fx-text-fill: #000000");
+            potButton.setStyle("-fx-text-fill: #000000");
+        }
+        if(!(roseCheckBox.isSelected() || tulipCheckBox.isSelected() || violetCheckBox.isSelected() || sunflowerCheckBox.isSelected() || orchidCheckBox.isSelected() || daisyCheckBox.isSelected())) {
+            isFilled = false;
+            roseCheckBox.setStyle("-fx-text-fill: #e8321e");
+            tulipCheckBox.setStyle("-fx-text-fill: #e8321e");
+            violetCheckBox.setStyle("-fx-text-fill: #e8321e");
+            sunflowerCheckBox.setStyle("-fx-text-fill: #e8321e");
+            orchidCheckBox.setStyle("-fx-text-fill: #e8321e");
+            daisyCheckBox.setStyle("-fx-text-fill: #e8321e");
+        }
+        else {
+            roseCheckBox.setStyle("-fx-text-fill: #000000");
+            tulipCheckBox.setStyle("-fx-text-fill: #000000");
+            violetCheckBox.setStyle("-fx-text-fill: #000000");
+            sunflowerCheckBox.setStyle("-fx-text-fill: #000000");
+            orchidCheckBox.setStyle("-fx-text-fill: #000000");
+            daisyCheckBox.setStyle("-fx-text-fill: #000000");
+        }
+        if(deliveryField.getText().length() == 0) {
+            isFilled = false;
+            deliveryField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            deliveryField.setStyle("-fx-background-color: transparent;");
+        }
+        if(cardNumberField.getText().length() == 0) {
+            isFilled = false;
+            cardNumberField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            cardNumberField.setStyle("-fx-background-color: transparent;");
+        }
+        if(cardCVCField.getText().length() == 0) {
+            isFilled = false;
+            cardCVCField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            cardCVCField.setStyle("-fx-background-color: transparent;");
+        }
+        if(cardExpField.getText().length() == 0) {
+            isFilled = false;
+            cardExpField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            cardExpField.setStyle("-fx-background-color: transparent;");
+        }
+        if(dateField.getText().length() == 0) {
+            isFilled = false;
+            dateField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            dateField.setStyle("-fx-background-color: transparent;");
+        }
+        return isFilled;
+    }
+
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF");
+    }
+
+    public void handleClear() {
+        bouquetButton.setSelected(false);
+        vaseButton.setSelected(false);
+        potButton.setSelected(false);
+        roseCheckBox.setSelected(false);
+        tulipCheckBox.setSelected(false);
+        violetCheckBox.setSelected(false);
+        sunflowerCheckBox.setSelected(false);
+        orchidCheckBox.setSelected(false);
+        daisyCheckBox.setSelected(false);
+        deliveryField.setText("");
+        cardNumberField.setText("");
+        cardExpField.setText("");
+        cardCVCField.setText("");
+        dateField.setText("");
 
     }
 }
+

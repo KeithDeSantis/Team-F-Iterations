@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MarkRequestsCompleteController implements Initializable {
@@ -57,9 +58,9 @@ public class MarkRequestsCompleteController implements Initializable {
         requestView.setShowRoot(false);
         requestView.getColumns().setAll(request, assign, status);
 
-        ArrayList<ServiceEntry> data;
+        List<ServiceEntry> data;
         try {
-            data = DatabaseAPI.getDatabaseAPI().genServiceEntries();
+            data = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
             for (ServiceEntry e : data) {
                 services.add(e);
             }
@@ -77,9 +78,9 @@ public class MarkRequestsCompleteController implements Initializable {
         Platform.exit();
     }
 
-    public void handleMarkAsComplete(ActionEvent actionEvent) throws SQLException, IOException {
+    public void handleMarkAsComplete(ActionEvent actionEvent) throws Exception {
         ServiceEntry data = requestView.getSelectionModel().getSelectedItem().getValue();
-        DatabaseAPI.getDatabaseAPI().editServiceReq(data.getUuid(), "completed", "true");
+        DatabaseAPI.getDatabaseAPI().editServiceRequest(data.getUuid(),  "true", "completed");
         Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
         Scene homeScene = new Scene(root);
