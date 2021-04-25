@@ -44,6 +44,8 @@ public class LoginController {
      * @author Jay Yen
      */
     public void handleSignIn(ActionEvent actionEvent) throws Exception {
+        DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
+        /*
         //TODO: test and see if this verifies DB existence
         ResultSet rset = ConnectionHandler.getConnection().getMetaData().getCatalogs();
         String databaseName = "";
@@ -51,7 +53,10 @@ public class LoginController {
             databaseName = rset.getString(1);
         }
 
+        System.out.println(databaseName);
+
         if (databaseName.equals("projectC1")){
+            System.out.println("here2");
             DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
         }
         else{
@@ -64,6 +69,7 @@ public class LoginController {
             DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
         }
         rset.close();
+         */
 
         boolean authenticated = false;
         String user = username.getText();
