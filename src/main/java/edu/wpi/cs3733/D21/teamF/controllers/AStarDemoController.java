@@ -83,6 +83,7 @@ public class AStarDemoController implements Initializable {
 
     /**
      * These are done for displaying the start & end nodes. This should be done better (eventually)
+     *
      * @author Alex Friedman (ahf)
      */
     private DrawableNode startNodeDisplay;
@@ -115,8 +116,8 @@ public class AStarDemoController implements Initializable {
 
             final List<NodeEntry> nodeEntries = allNodeEntries.stream().collect(Collectors.toList());
 
-            final List<EdgeEntry> edgeEntries = allEdgeEntries.stream().filter( node -> hasNode(nodeEntries, node.getStartNode())
-                    && hasNode(nodeEntries, node.getEndNode()) ).collect(Collectors.toList());
+            final List<EdgeEntry> edgeEntries = allEdgeEntries.stream().filter(node -> hasNode(nodeEntries, node.getStartNode())
+                    && hasNode(nodeEntries, node.getEndNode())).collect(Collectors.toList());
             this.graph = GraphLoader.load(nodeEntries, edgeEntries);
         } catch (Exception e) {
             this.graph = new Graph();
@@ -139,7 +140,6 @@ public class AStarDemoController implements Initializable {
         final MenuItem startPathfind = new MenuItem("Path from Here");
         final MenuItem endPathfind = new MenuItem("Path end Here");
 
-
         contextMenu.getItems().addAll(startPathfind, endPathfind);
 
 
@@ -154,7 +154,7 @@ public class AStarDemoController implements Initializable {
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
 
             startPathfind.setOnAction((ActionEvent e) -> {
-                startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX()* zoomLevel , event.getY() * zoomLevel).getNodeID());
+                startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID());
             });
 
             endPathfind.setOnAction(e -> {
@@ -180,6 +180,7 @@ public class AStarDemoController implements Initializable {
     }
     /**
      * Given a list of NodeEntries, returns the one closest to the current location
+     *
      * @param entries The list of NodeEntries
      * @param x the x coordinate of the mouse
      * @param y the y cordinate
@@ -225,6 +226,7 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Handles the pushing of a button on the screen
+     *
      * @param actionEvent the button's push
      * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
      * @author ZheCheng Song
@@ -324,6 +326,7 @@ public class AStarDemoController implements Initializable {
 
     /**
      * This is used to clear the pathfinding drawn path.
+     *
      * @author Alex Friedman (ahf)
      */
     private void clearPath()
@@ -333,6 +336,7 @@ public class AStarDemoController implements Initializable {
 
     /**
      * This is used to re-render the A* path
+     *
      * @author Alex Friedman (ahf)
      */
     private boolean updatePath()
@@ -423,6 +427,7 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Used to check if our input is valid to run the pathfinding algorithm or not
+     *
      * @author Alex Friedman (ahf)
      */
     private void checkInput() {

@@ -46,8 +46,10 @@ public class LoginFailController {
         String user = username.getText();
         String pass = password.getText();
 
+        /*
         DatabaseAPI.getDatabaseAPI().dropUsersTable();
         DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin"); //FIXME: REMOVE
+         */
 
         authenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
         Stage currentStage = (Stage)signIn.getScene().getWindow();
