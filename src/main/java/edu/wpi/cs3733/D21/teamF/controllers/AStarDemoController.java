@@ -521,9 +521,42 @@ public class AStarDemoController implements Initializable {
         }
         instructions.add("Reach Destination!");
 
-        System.out.println(pathVertex);
-        System.out.println(instructions);
-        System.out.println(stops);
+        // Hard code, do better!
+        boolean lookAtNext = false;
+        for(int i = 0; i < instructions.size() - 1; i++){
+            String ins = instructions.get(i);
+            int step = stops.get(i);
+            if(step == pathVertex.size() - 1 || step < 1)
+                continue;
+            if(lookAtNext) {
+                Vertex curV = pathVertex.get(step);
+                Vertex nexV = pathVertex.get(step + 1);
+                currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+                currDirect = calculateDirection(prevAngle, currAngle);
+                String firstInst[] = instructions.get(i).split(" ", 3);
+                instructions.set(i, currDirect + " " + firstInst[2]);
+                lookAtNext = false;
+            }
+            if (ins.split(" ")[0].equals("Take")) {
+                Vertex preV = pathVertex.get(step - 1);
+                Vertex curV = pathVertex.get(step);
+                prevAngle = Math.toDegrees(Math.atan2(curV.getY() - preV.getY(), curV.getX() - preV.getX())) + 180;
+                lookAtNext = true;
+            }
+        }
+        if (!instructions.get(0).split(" ")[0].equals("Take")){
+            Vertex curV = pathVertex.get(0);
+            Vertex nexV = pathVertex.get(1);
+            prevAngle = Math.toDegrees(Math.atan2(-1.0, 0.0)) + 180;
+            currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+            currDirect = calculateDirection(prevAngle, currAngle);
+            String firstInst[] = instructions.get(0).split(" ", 3);
+            instructions.set(0, currDirect + " " + firstInst[2]);
+        }
+
+        //System.out.println(pathVertex);
+        //System.out.println(instructions);
+        //System.out.println(stops);
     }
 
     private int searchSE(int startIndex){
@@ -554,7 +587,7 @@ public class AStarDemoController implements Initializable {
 
     private String calculateDirection(double prevAngle, double curAngle){
         double angle = (curAngle + (360 - prevAngle)) % 360;
-        System.out.println(prevAngle + " " + curAngle + " " + angle);
+
         // small angle (45) alternation ignored
         if (angle <= 45 || angle >= 315) {
             return "Look forward";
@@ -574,30 +607,27 @@ public class AStarDemoController implements Initializable {
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
         Vertex curV = pathVertex.get(stops.get(curStep));
-        //DrawableNode node = new DrawableNode(Integer.parseInt(curV.getX()), curV.getY(), curV.getID(), curV.getFloor());
-        //if(curN == null)
-        //    return;
-        //direction = curN.getDrawable();
-        direction.setId("direction");
         if(curD.equals("UP")){
-            double Y = direction.getCenterY() - 10.0;
-            direction.setCenterY(Y);
+            direction = new DrawableNode((int)Math.round(curV.getX()), (int)Math.round(curV.getY() - 50.0),
+                    "direction", curV.getFloor());
         }else if(curD.equals("LEFT")){
-            direction.setCenterX(direction.getCenterX() - 10.0);
+            direction = new DrawableNode((int)Math.round(curV.getX() - 50.0), (int)Math.round(curV.getY()),
+                    "direction", curV.getFloor());
         }else if(curD.equals("RIGHT")){
-            direction.setCenterX(direction.getCenterX() + 10.0);
+            direction = new DrawableNode((int)Math.round(curV.getX() + 50.0), (int)Math.round(curV.getY()),
+                    "direction", curV.getFloor());
         }else if(curD.equals("DOWN")){
-            direction.setCenterY(direction.getCenterY() + 10.0);
+            direction = new DrawableNode((int)Math.round(curV.getX()), (int)Math.round(curV.getY() + 50.0),
+                    "direction", curV.getFloor());
         }
         direction.setFill(Color.RED);
-        direction.setRadius(5);
+        direction.setRadius(4);
 
         mapPanel.draw(direction);
     }
 
     private void changeDirection(String inst){
         String instruction[] = inst.split(" ");
-        System.out.println(instruction);
         if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
             if(instruction[1].equals("around")){
                 switch (curD) {
@@ -619,6 +649,34 @@ public class AStarDemoController implements Initializable {
                     case "LEFT" : curD = "UP"; break;
                     case "RIGHT" : curD = "DOWN"; break;
                     case "DOWN" : curD = "LEFT"; break;
+                }
+            }
+        }
+    }
+
+    private void changeDirectionRevert(String inst){
+        String instruction[] = inst.split(" ");
+        if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
+            if(instruction[1].equals("around")){
+                switch (curD) {
+                    case "UP" : curD = "DOWN"; break;
+                    case "LEFT" : curD = "RIGHT"; break;
+                    case "RIGHT" : curD = "LEFT"; break;
+                    case "DOWN" : curD = "UP"; break;
+                }
+            }else if(instruction[1].equals("left")){
+                switch (curD) {
+                    case "UP" : curD = "RIGHT"; break;
+                    case "LEFT" : curD = "UP"; break;
+                    case "RIGHT" : curD = "DOWN"; break;
+                    case "DOWN" : curD = "LEFT"; break;
+                }
+            }else if(instruction[1].equals("right")){
+                switch (curD) {
+                    case "UP" : curD = "LEFT"; break;
+                    case "LEFT" : curD = "DOWN"; break;
+                    case "RIGHT" : curD = "UP"; break;
+                    case "DOWN" : curD = "RIGHT"; break;
                 }
             }
         }
@@ -650,8 +708,8 @@ public class AStarDemoController implements Initializable {
         mapPanel.centerNode(startNodeDisplay);
         curFloor = pathVertex.get(0).getFloor();
 
-        //curD = "UP";
-        //drawDirection();
+        curD = "UP";
+        drawDirection();
     }
 
     /**
@@ -679,6 +737,9 @@ public class AStarDemoController implements Initializable {
         drawPathFromIndex(stops.get(curStep));
         Instruction.setText(instructions.get(curStep));
         mapPanel.centerNode(startNodeDisplay);
+
+        changeDirectionRevert(instructions.get(curStep));
+        drawDirection();
     }
 
     /**
@@ -688,6 +749,8 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void goToNextNode(ActionEvent actionEvent) throws SQLException {
+        changeDirection(instructions.get(curStep));
+
         clearPath();
         curStep++;
         if(curStep == Math.min(stops.size() - 1, instructions.size() - 1)){
@@ -706,6 +769,11 @@ public class AStarDemoController implements Initializable {
         drawPathFromIndex(stops.get(curStep));
         Instruction.setText(instructions.get(curStep));
         mapPanel.centerNode(startNodeDisplay);
+
+        drawDirection();
+
+        if(direction != null &&curStep == Math.min(stops.size() - 1, instructions.size() - 1))
+                mapPanel.unDraw(this.direction.getId());
     }
 
     /**
