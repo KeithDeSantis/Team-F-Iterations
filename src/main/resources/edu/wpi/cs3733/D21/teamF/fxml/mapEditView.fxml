@@ -38,7 +38,7 @@
                   </Text>
                </children>
             </HBox>
-            <Line endX="100.0" endY="200.0" startX="2019.5" startY="200.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" />
+            <Line endX="100.0" endY="200.0" startX="1240.0" startY="200.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" />
          </children>
       </VBox>
       <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="60.0" prefHeight="100.0" prefWidth="450.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0">
