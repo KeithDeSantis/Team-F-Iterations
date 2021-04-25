@@ -601,6 +601,73 @@ public class MapEditViewController {
         drawableNode.setOnMouseEntered(e->{if(!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);});
         drawableNode.setOnMouseExited(e->{if(!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR);});
 
+        final List<DrawableEdge> startEdges = new ArrayList<>();
+        final List<DrawableEdge> endEdges = new ArrayList<>();
+        drawableNode.setOnMousePressed(e -> {
+            startEdges.clear();
+            endEdges.clear();
+
+            for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+
+                if (edgeEntry.getStartNode().equals(nodeEntry.getNodeID())) {
+                    startEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
+                }
+
+                if (edgeEntry.getEndNode().equals(nodeEntry.getNodeID())) {
+                    endEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
+                }
+            }
+        });
+
+        //ahd & kd - draggable nodes
+        drawableNode.setOnMouseDragged(e -> {
+            final int x = (int) (e.getX() * mapPanel.getZoomLevel().get());
+            final int y = (int) (e.getY() * mapPanel.getZoomLevel().get());
+
+            drawableNode.xCoordinateProperty().set(x);
+            drawableNode.yCoordinateProperty().set(y);
+
+            //FIXME: DO BETTER, DO BINDINGS
+
+            for(DrawableEdge edge : startEdges)
+            {
+                edge.getMapStartX().set(x);
+                edge.getMapStartY().set(y);
+            }
+
+            for(DrawableEdge edge : endEdges)
+            {
+                edge.getMapEndX().set(x);
+                edge.getMapEndY().set(y);
+            }
+
+        });
+
+        //ahd & kd - draggable nodes
+        drawableNode.setOnMouseReleased(e -> {
+            try {
+                DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.xCoordinateProperty().get(), "xcoord");
+                DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.yCoordinateProperty().get(), "ycoord");
+
+                ///FIXME: BIND PROPERTIES TOGETHER
+
+                for(NodeEntry entry : nodeEntryObservableList)
+                {
+                    if(entry.getNodeID().equals(drawableNode.getId()))
+                    {
+                        entry.setXcoord("" + drawableNode.xCoordinateProperty().get());
+                        entry.setYcoord("" + drawableNode.yCoordinateProperty().get());
+                        break;
+                    }
+                }
+
+                drawEdgeNodeOnFloor();
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
         drawableNode.setOnMouseClicked(e-> {
             if (selectedCircle != null)
                 selectedCircle.setFill(UIConstants.NODE_COLOR);

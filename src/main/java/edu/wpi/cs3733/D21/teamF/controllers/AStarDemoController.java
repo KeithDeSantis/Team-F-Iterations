@@ -54,6 +54,7 @@ public class AStarDemoController implements Initializable {
 
     /**
      * These are done for displaying the start & end nodes. This should be done better (eventually)
+     *
      * @author Alex Friedman (ahf)
      */
     private DrawableNode startNodeDisplay;
@@ -71,8 +72,8 @@ public class AStarDemoController implements Initializable {
 
             final List<NodeEntry> nodeEntries = allNodeEntries.stream().collect(Collectors.toList());
 
-            final List<EdgeEntry> edgeEntries = allEdgeEntries.stream().filter( node -> hasNode(nodeEntries, node.getStartNode())
-                    && hasNode(nodeEntries, node.getEndNode()) ).collect(Collectors.toList());
+            final List<EdgeEntry> edgeEntries = allEdgeEntries.stream().filter(node -> hasNode(nodeEntries, node.getStartNode())
+                    && hasNode(nodeEntries, node.getEndNode())).collect(Collectors.toList());
             this.graph = GraphLoader.load(nodeEntries, edgeEntries);
         } catch (Exception e) {
             this.graph = new Graph();
@@ -104,7 +105,7 @@ public class AStarDemoController implements Initializable {
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
 
             startPathfind.setOnAction((ActionEvent e) -> {
-                startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX()* zoomLevel , event.getY() * zoomLevel).getNodeID());
+                startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID());
             });
 
             endPathfind.setOnAction(e -> {
@@ -116,26 +117,24 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Given a list of NodeEntries, returns the one closest to the current location
+     *
      * @param entries The list of NodeEntries
-     * @param x the x coordinate of the mouse
-     * @param y the y cordinate
+     * @param x       the x coordinate of the mouse
+     * @param y       the y cordinate
      * @return the closest nodeentry
      * @author Alex Friedman (ahf)
      */
-    private final NodeEntry getClosest(List<NodeEntry> entries, double x, double y)
-    {
+    private final NodeEntry getClosest(List<NodeEntry> entries, double x, double y) {
         double minDist2 = Integer.MAX_VALUE;
         NodeEntry closest = null;
 
-        for(NodeEntry nodeEntry : entries)
-        {
-            if(!nodeEntry.getFloor().equals(mapPanel.getFloor().getValue()))
+        for (NodeEntry nodeEntry : entries) {
+            if (!nodeEntry.getFloor().equals(mapPanel.getFloor().getValue()))
                 continue;
 
             final double currDist2 = Math.pow(x - Integer.parseInt(nodeEntry.getXcoord()), 2) + Math.pow(y - Integer.parseInt(nodeEntry.getYcoord()), 2);
 
-            if(currDist2 < minDist2)
-            {
+            if (currDist2 < minDist2) {
                 minDist2 = currDist2;
                 closest = nodeEntry;
             }
@@ -143,8 +142,8 @@ public class AStarDemoController implements Initializable {
         return closest;
     }
 
-    private boolean hasNode(List<NodeEntry> nodeEntries, String nodeID){
-        for(NodeEntry n : nodeEntries){
+    private boolean hasNode(List<NodeEntry> nodeEntries, String nodeID) {
+        for (NodeEntry n : nodeEntries) {
             if (n.getNodeID().equals(nodeID)) {
                 return true;
             }
@@ -154,6 +153,7 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Handles the pushing of a button on the screen
+     *
      * @param actionEvent the button's push
      * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
      * @author ZheCheng Song
@@ -175,19 +175,17 @@ public class AStarDemoController implements Initializable {
     }
 
     /**
-     *
      * @author Alex Friedman (ahf)
      */
     @FXML
     public void handleStartBoxAction() throws SQLException {
         checkInput();
-        if(this.startNodeDisplay != null)
+        if (this.startNodeDisplay != null)
             mapPanel.unDraw(this.startNodeDisplay.getId());
 
 
         final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(startComboBox.getValue());
-        if(startNode != null)
-        {
+        if (startNode != null) {
             final DrawableNode drawableNode = startNode.getDrawable();
             drawableNode.setFill(UIConstants.NODE_COLOR);
             drawableNode.setRadius(10);
@@ -198,19 +196,17 @@ public class AStarDemoController implements Initializable {
     }
 
     /**
-     *
      * @author Alex Friedman (ahf)
      */
     @FXML
     public void handleEndBoxAction() throws SQLException {
         checkInput();
-        if(this.endNodeDisplay != null)
+        if (this.endNodeDisplay != null)
             mapPanel.unDraw(this.endNodeDisplay.getId());
 
 
         final NodeEntry endNode = DatabaseAPI.getDatabaseAPI().getNode(endComboBox.getValue());
-        if(endNode != null)
-        {
+        if (endNode != null) {
             final DrawableNode drawableNode = endNode.getDrawable();
             drawableNode.setFill(Color.GREEN);
             drawableNode.setRadius(10);
@@ -223,23 +219,23 @@ public class AStarDemoController implements Initializable {
 
     /**
      * This is used to clear the pathfinding drawn path.
+     *
      * @author Alex Friedman (ahf)
      */
-    private void clearPath()
-    {
+    private void clearPath() {
         mapPanel.clearMap();
     }
 
     /**
      * This is used to re-render the A* path
+     *
      * @author Alex Friedman (ahf)
      */
-    private boolean updatePath()
-    {
+    private boolean updatePath() {
 
-        if(this.startNodeDisplay != null)
+        if (this.startNodeDisplay != null)
             mapPanel.draw(this.startNodeDisplay);
-        if(this.endNodeDisplay != null)
+        if (this.endNodeDisplay != null)
             mapPanel.draw(this.endNodeDisplay);
 
         final String currentFloor = mapPanel.getFloor().getValue();
@@ -249,21 +245,18 @@ public class AStarDemoController implements Initializable {
         final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
         final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
 
-        if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
-        {
+        if (startVertex != null && endVertex != null && !startVertex.equals(endVertex)) {
             final Path path = this.graph.getPath(startVertex, endVertex);
-            if(path != null)
-            {
+            if (path != null) {
                 final List<Vertex> pathData = path.asList();
-                for (int i = 0; i < pathData.size() - 1; i++)
-                {
+                for (int i = 0; i < pathData.size() - 1; i++) {
                     final Vertex start = pathData.get(i);
                     final Vertex end = pathData.get(i + 1);
 
                     //int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor
                     //FIXME: DO BETTER ID WHEN WE HAVE MULTIPLE PATH DIRECTIONS!!!
-                    final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor());
-                   // final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
+                    final DrawableEdge edge = new DrawableEdge((int) start.getX(), (int) start.getY(), (int) end.getX(), (int) end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor());
+                    // final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
                     edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
                     final LinearGradient lineGradient = new LinearGradient(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY(), false, CycleMethod.NO_CYCLE,
@@ -276,9 +269,7 @@ public class AStarDemoController implements Initializable {
                 }
                 return true;
             }
-        }
-        else
-        {
+        } else {
             //FIXME: INFORM USER OF ERROR
         }
 
@@ -287,14 +278,15 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Used to check if our input is valid to run the pathfinding algorithm or not
+     *
      * @author Alex Friedman (ahf)
      */
     private void checkInput() {
         if (startComboBox.getValue() == null ||
-                endComboBox.getValue() == null){
+                endComboBox.getValue() == null) {
             clearPath();
 
-        }else{
+        } else {
             clearPath();
             updatePath();
         }
