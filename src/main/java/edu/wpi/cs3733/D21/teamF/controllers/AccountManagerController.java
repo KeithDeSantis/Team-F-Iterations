@@ -112,7 +112,25 @@ public class AccountManagerController implements Initializable{
         newUserType.getItems().add("employee");
         newUserType.getItems().add("admin");
     }
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
 
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
+
+    public void handleHoverOnDelete(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #d30000;");
+    }
+
+    public void handleHoverOffDelete(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #d30000; -fx-text-fill: #FFFFFF;");
+    }
     public void handleUserSearch(ActionEvent actionEvent) {
     }
     public void handleButtonPushed(ActionEvent actionEvent) throws SQLException, IOException{
