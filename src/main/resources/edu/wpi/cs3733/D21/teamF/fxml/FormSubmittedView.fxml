@@ -6,13 +6,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.FormSubmittedViewController">
+<AnchorPane prefHeight="200.0" prefWidth="350.0" style="-fx-background-color: e6e6e6; -fx-border-color: #03256C; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.FormSubmittedViewController">
    <children>
-      <GridPane layoutX="33.0" layoutY="70.0" prefHeight="200.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane layoutX="33.0" layoutY="70.0" maxWidth="-Infinity" prefHeight="200.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -23,18 +21,13 @@
          <children>
             <Label text="Successfully submitted request!">
                <font>
-                  <Font size="18.0" />
+                  <Font name="Montserrat Regular" size="18.0" />
                </font>
             </Label>
-            <JFXButton fx:id="okButton" buttonType="RAISED" onAction="#okButtonPushed" text="OK" GridPane.rowIndex="1">
-               <ripplerFill>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop color="#478eb7" />
-                        <Stop color="#011147" offset="1.0" />
-                     </stops>
-                  </LinearGradient>
-               </ripplerFill>
+            <JFXButton fx:id="okButton" buttonType="RAISED" onAction="#okButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="OK" textFill="WHITE" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
             </JFXButton>
          </children>
       </GridPane>
