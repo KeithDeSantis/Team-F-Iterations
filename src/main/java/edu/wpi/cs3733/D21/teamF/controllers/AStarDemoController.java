@@ -4,10 +4,7 @@ import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
-import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
-import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
-import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
-import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
+import edu.wpi.cs3733.D21.teamF.pathfinding.*;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
@@ -20,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -30,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -50,6 +49,9 @@ public class AStarDemoController implements Initializable {
 
     @FXML
     private MapPanel mapPanel;
+
+    private DoublyLinkedHashSet<Vertex> recentlyUsed, favorites;
+    private final int MAX_RECENTLY_USED = 5;
 
 
     /**
@@ -111,7 +113,13 @@ public class AStarDemoController implements Initializable {
                 endComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID());
             });
         });
+        loadRecentlyUsedVertices();
+        loadFavorites();
+    }
 
+    private void loadFavorites() {
+        this.favorites = new DoublyLinkedHashSet<>();
+        //TODO: load recentlyUsed
     }
 
     /**
@@ -195,6 +203,16 @@ public class AStarDemoController implements Initializable {
             mapPanel.draw(drawableNode);
             this.startNodeDisplay = drawableNode;
         }
+        loadRecentlyUsedVertices();
+    }
+
+    /**
+     * Loads recently used vertices from the database into the controller
+     * @author Tony Vuolo (bdane)
+     */
+    private void loadRecentlyUsedVertices() {
+        this.recentlyUsed = new DoublyLinkedHashSet<>();
+        //TODO: load recently used from database
     }
 
     /**
@@ -220,6 +238,9 @@ public class AStarDemoController implements Initializable {
             this.endNodeDisplay = drawableNode;
         }
     }
+
+    final double MPH_to_FtPerS = 22.0/15.0;
+    final double AVERAGE_WALKING_SPEED_MPH = 3.1;
 
     /**
      * This is used to clear the pathfinding drawn path.
@@ -249,11 +270,17 @@ public class AStarDemoController implements Initializable {
         final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
         final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
 
+        updateRecentlyUsed(endVertex);
+
         if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
         {
             final Path path = this.graph.getPath(startVertex, endVertex);
             if(path != null)
             {
+                final double ESTIMATED_LENGTH_TIME = path.getPathCost() * AVERAGE_WALKING_SPEED_MPH * MPH_to_FtPerS;
+                final double ESTIMATED_LENGTH_TIME_MIN = Math.floor(ESTIMATED_LENGTH_TIME + 0.5);
+
+
                 final List<Vertex> pathData = path.asList();
                 for (int i = 0; i < pathData.size() - 1; i++)
                 {
@@ -286,6 +313,20 @@ public class AStarDemoController implements Initializable {
     }
 
     /**
+     * Updates the recently used DLHS with the newest destination Vertex
+     * @param endVertex the new destination to be considered a recently used Vertex
+     * @author Tony Vuolo (bdane)
+     */
+    private void updateRecentlyUsed(Vertex endVertex) {
+        if(this.recentlyUsed.size() == MAX_RECENTLY_USED) {
+            this.recentlyUsed.add(this.recentlyUsed.removeIndex(0));
+        } else if(this.recentlyUsed.containsKey(endVertex)) {
+            this.recentlyUsed.remove(endVertex);
+            this.recentlyUsed.add(endVertex);
+        }
+    }
+
+    /**
      * Used to check if our input is valid to run the pathfinding algorithm or not
      * @author Alex Friedman (ahf)
      */
@@ -299,4 +340,9 @@ public class AStarDemoController implements Initializable {
             updatePath();
         }
     }
+    /*
+    private ComboBox<String> recentlyUsedComboBox
+
+    private void
+     */
 }
