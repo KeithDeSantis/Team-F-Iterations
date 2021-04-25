@@ -1,15 +1,3 @@
-.AnchorPane{
-    -fx-background-color: #c6c6c6;
-}
-
-.VBox{
-    -fx-background-color: #c6c6c6;
-}
-
-.GridPane{
-    -fx-background-color: #c6c6c6;
-}
-
-.HBox{
+.root {
     -fx-background-color: #c6c6c6;
 }

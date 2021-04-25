@@ -44,7 +44,7 @@ public class LoginController {
      * @author Jay Yen
      */
     public void handleSignIn(ActionEvent actionEvent) throws Exception {
-        DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
+        //DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
         /*
         //TODO: test and see if this verifies DB existence
         ResultSet rset = ConnectionHandler.getConnection().getMetaData().getCatalogs();
