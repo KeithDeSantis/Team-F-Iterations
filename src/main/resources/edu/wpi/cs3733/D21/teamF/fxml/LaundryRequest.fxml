@@ -83,6 +83,9 @@
                            <HBox.margin>
                               <Insets right="10.0" top="10.0" />
                            </HBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
                         </Label>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
@@ -91,22 +94,36 @@
                                     <Insets top="10.0" />
                                  </padding>
                               </RadioButton>
-                              <RadioButton mnemonicParsing="false" text="Darks">
+                              <RadioButton mnemonicParsing="false" text="Lights">
                                  <padding>
                                     <Insets top="10.0" />
                                  </padding>
                               </RadioButton>
-                              <RadioButton mnemonicParsing="false" text="Darks">
+                              <RadioButton mnemonicParsing="false" text="Both">
                                  <padding>
                                     <Insets top="10.0" />
                                  </padding>
                               </RadioButton>
                            </children>
                         </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <RadioButton mnemonicParsing="false" text="Hot">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </RadioButton>
+                              <RadioButton mnemonicParsing="false" text="Cold">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </RadioButton>
+                           </children>
+                        </VBox>
                      </children></HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <Button fx:id="submit" mnemonicParsing="false" onAction="#submitReq" text="Submit">
+                        <Button fx:id="submit" alignment="TOP_LEFT" contentDisplay="TOP" mnemonicParsing="false" onAction="#submitReq" text="Submit">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
