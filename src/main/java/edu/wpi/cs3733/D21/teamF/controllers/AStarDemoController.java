@@ -4,6 +4,7 @@ import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
+import edu.wpi.cs3733.D21.teamF.pathfinding.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
@@ -24,6 +25,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -39,6 +41,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -74,6 +77,9 @@ public class AStarDemoController implements Initializable {
 
     @FXML
     private Label Instruction;
+    private DoublyLinkedHashSet<Vertex> recentlyUsed, favorites;
+    private final int MAX_RECENTLY_USED = 5;
+
 
     /**
      * These are done for displaying the start & end nodes. This should be done better (eventually)
@@ -164,8 +170,14 @@ public class AStarDemoController implements Initializable {
         Instruction.setVisible(false);
 
         direction = null;
-    }
 
+        loadRecentlyUsedVertices();
+        loadFavorites();
+    }
+    private void loadFavorites() {
+        this.favorites = new DoublyLinkedHashSet<>();
+        //TODO: load recentlyUsed
+    }
     /**
      * Given a list of NodeEntries, returns the one closest to the current location
      * @param entries The list of NodeEntries
@@ -243,6 +255,7 @@ public class AStarDemoController implements Initializable {
         if(this.startNodeDisplay != null)
             mapPanel.unDraw(this.startNodeDisplay.getId());
         drawStartNode(startComboBox.getValue());
+        loadRecentlyUsedVertices();
     }
 
     /**
@@ -266,6 +279,15 @@ public class AStarDemoController implements Initializable {
     }
 
     /**
+     * Loads recently used vertices from the database into the controller
+     * @author Tony Vuolo (bdane)
+     */
+    private void loadRecentlyUsedVertices() {
+        this.recentlyUsed = new DoublyLinkedHashSet<>();
+        //TODO: load recently used from database
+    }
+
+    /**
      *
      * @author Alex Friedman (ahf)
      */
@@ -275,6 +297,7 @@ public class AStarDemoController implements Initializable {
         if(this.endNodeDisplay != null)
             mapPanel.unDraw(this.endNodeDisplay.getId());
         drawEndNode(endComboBox.getValue());
+        loadRecentlyUsedVertices();
     }
 
     /**
@@ -295,6 +318,9 @@ public class AStarDemoController implements Initializable {
             this.endNodeDisplay = drawableNode;
         }
     }
+
+    final double MPH_to_FtPerS = 22.0/15.0;
+    final double AVERAGE_WALKING_SPEED_MPH = 3.1;
 
     /**
      * This is used to clear the pathfinding drawn path.
@@ -324,12 +350,17 @@ public class AStarDemoController implements Initializable {
         final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
         final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
 
+        updateRecentlyUsed(endVertex);
+
         if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
         {
             final Path path = this.graph.getPath(startVertex, endVertex);
             pathVertex = null;
             if(path != null)
             {
+                final double ESTIMATED_LENGTH_TIME = path.getPathCost() * AVERAGE_WALKING_SPEED_MPH * MPH_to_FtPerS;
+                final double ESTIMATED_LENGTH_TIME_MIN = Math.floor(ESTIMATED_LENGTH_TIME + 0.5);
+
                 pathVertex = path.asList();
                 drawPathFromIndex(0);
                 return true;
@@ -373,6 +404,20 @@ public class AStarDemoController implements Initializable {
             edge.setStroke(lineGradient);
 
             mapPanel.draw(edge);
+        }
+    }
+
+    /**
+     * Updates the recently used DLHS with the newest destination Vertex
+     * @param endVertex the new destination to be considered a recently used Vertex
+     * @author Tony Vuolo (bdane)
+     */
+    private void updateRecentlyUsed(Vertex endVertex) {
+        if(this.recentlyUsed.size() == MAX_RECENTLY_USED) {
+            this.recentlyUsed.add(this.recentlyUsed.removeIndex(0));
+        } else if(this.recentlyUsed.containsKey(endVertex)) {
+            this.recentlyUsed.remove(endVertex);
+            this.recentlyUsed.add(endVertex);
         }
     }
 
