@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Controller for Floral Delivery Service View
@@ -88,8 +90,11 @@ public class FloralDeliveryService {
      * @param actionEvent
      * @author KD
      */
-    public void handleSubmit(ActionEvent actionEvent) {
+    public void handleSubmit(ActionEvent actionEvent) throws SQLException {
         if(isFilledOut()) {
+            String type = "Flower Delivery";
+            String name = "test";
+            DatabaseAPI.getDatabaseAPI().addServiceReq("id", type, name, "false");
             successField.setText("Request Submitted!");
         } else { successField.setText(""); }
     }
