@@ -29,6 +29,8 @@ public class MaintenanceRequestTest extends ApplicationTest {
     public void testMaintenanceIsFilled(){
         clickOn("Submit");
         verifyThat("Submit", Node::isVisible);
+        clickOn("#urgencyComboBox");
+        clickOn("URGENT");
         clickOn("#typeComboBox");
         clickOn("Electrical");
         clickOn("#locationField");

@@ -1,8 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -30,8 +28,8 @@ import java.util.stream.Collectors;
 
 public class MaintenenceRequestController {
     @FXML private JFXButton submit;
-    @FXML private JFXComboBox locationField;
-    @FXML private JFXComboBox typeComboBox;
+    @FXML private JFXComboBox<String> locationField;
+    @FXML private JFXComboBox<String> typeComboBox;
     @FXML private ImageView goBack;
     @FXML private JFXTextArea descriptionField;
     @FXML private Label typeLabel;
@@ -39,9 +37,17 @@ public class MaintenenceRequestController {
     @FXML private Label descLabel;
     @FXML private JFXButton cancel;
     @FXML private Text title;
+    @FXML private Label urgencyLabel;
+    @FXML private Label dateLabel;
+    @FXML private JFXComboBox<String> urgencyComboBox;
+    @FXML private JFXDatePicker dateOfIncident;
+    @FXML private JFXComboBox<String> assignment;
+    @FXML private Label assignmentLabel;
 
     ObservableList<String> problemTypes = FXCollections.observableArrayList("Electrical", "Lighting",
             "Elevator", "Plumbing", "Safety Hazard", "Damage");
+
+    ObservableList<String> urgencyLevels = FXCollections.observableArrayList("URGENT", "PRIORITY", "LOW PRIORITY");
 
     ObservableList<String> locations = FXCollections.observableArrayList();
 
@@ -54,11 +60,15 @@ public class MaintenenceRequestController {
         typeLabel.setFont(defaultFont);
         locationLabel.setFont(defaultFont);
         descLabel.setFont(defaultFont);
+        urgencyLabel.setFont(defaultFont);
+        dateLabel.setFont(defaultFont);
+        assignmentLabel.setFont(defaultFont);
 
         title.setFont(Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40));
 
-        // Insert problem types into combo box
+        // Insert problem types and urgency into combo boxes
         typeComboBox.setItems(problemTypes);
+        urgencyComboBox.setItems(urgencyLevels);
 
         // Load node long names from data base
         List<NodeEntry> nodeEntryList = new ArrayList<>();
@@ -89,15 +99,28 @@ public class MaintenenceRequestController {
      */
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {
         if(isFilled()) {
-            String name = "";
+            String name = urgencyComboBox.getValue().toString() + ": ";
             if (typeComboBox.getValue().toString().equals("Damage") || typeComboBox.getValue().toString().equals("Safety Hazard")) {
-                name = typeComboBox.getValue().toString() + " at " + locationField.getValue().toString();
+                name += typeComboBox.getValue().toString() + " at " + locationField.getValue().toString();
             } else {
-                name = typeComboBox.getValue().toString() + " problem at " + locationField.getValue().toString();
+                name += typeComboBox.getValue().toString() + " problem at " + locationField.getValue().toString();
             }
 
-            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name, "",
-                    "false");//, descriptionField.getText()); FIXME Re-add instructions to addServiceReq after merge
+            try{
+                name += " on " + dateOfIncident.getValue().toString();
+            } catch (NullPointerException nullPointerException){
+                //Do Nothing
+            }
+
+            String employee = "";
+            try{
+                employee = assignment.getValue().toString();
+            } catch (NullPointerException nullPointerException){
+                // Leave assigned employee blank
+            }
+
+            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name, employee,
+                    "false");//, name + ": " + descriptionField.getText()); FIXME Re-add instructions to addServiceReq after merge
             Stage submittedStage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml")); // Loading in pop up View
             Scene submitScene = new Scene(root);
@@ -141,24 +164,25 @@ public class MaintenenceRequestController {
 
     public boolean isFilled(){
         boolean filled = true;
-        try{
-            typeComboBox.getValue().toString().equals("");
-        } catch (NullPointerException nullPointerException){
+        if(typeComboBox.getValue() == null){
             filled = false;
             typeComboBox.setStyle("-fx-background-color: #ff000088");
-            typeComboBox.setPromptText("Specify the problem");
+            typeComboBox.setPromptText("Please give a location");
         }
-        try{
-            locationField.getValue().toString().equals("");
-        } catch (NullPointerException nullPointerException){
+        if(locationField.getValue() == null){
             filled = false;
-            locationField.setStyle("-fx-background-color: #ff000088");
-            locationField.setPromptText("Please give a location");
+            typeComboBox.setStyle("-fx-background-color: #ff000088");
+            typeComboBox.setPromptText("Please give a location");
         }
         if(descriptionField.getText().isEmpty()){
             filled = false;
             descriptionField.setStyle("-fx-background-color: #ff000088");
             descriptionField.setPromptText("Please give a description of the problem");
+        }
+        if(urgencyComboBox.getValue() == null){
+            filled = false;
+            urgencyComboBox.setStyle("-fx-background-color: #ff000088");
+            urgencyComboBox.setPromptText("Please give a location");
         }
         return filled;
     }
@@ -167,11 +191,13 @@ public class MaintenenceRequestController {
         locationField.setStyle("-fx-background-color: #00000000");
         descriptionField.setStyle("-fx-background-color: #00000000");
         typeComboBox.setStyle("-fx-background-color: #00000000");
+        urgencyComboBox.setStyle("-fx-background-color: #00000000");
     }
 
     public void reset2(ActionEvent actionEvent) {
         locationField.setStyle("-fx-background-color: #00000000");
         descriptionField.setStyle("-fx-background-color: #00000000");
         typeComboBox.setStyle("-fx-background-color: #00000000");
+        urgencyComboBox.setStyle("-fx-background-color: #00000000");
     }
 }
