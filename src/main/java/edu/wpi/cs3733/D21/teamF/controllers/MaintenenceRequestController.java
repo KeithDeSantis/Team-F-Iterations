@@ -137,8 +137,13 @@ public class MaintenenceRequestController {
 
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name, employee,
                     "false");//, name + ": " + descriptionField.getText()); FIXME Re-add instructions to addServiceReq after merge
+            // Loads form submitted window and passes in current stage to return to request home
+            FXMLLoader submitedPageLoader = new FXMLLoader();
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml")); // Loading in pop up View
+            Parent root = submitedPageLoader.load();
+            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
