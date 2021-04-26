@@ -5,6 +5,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
+import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -139,17 +140,19 @@ public class AccountManagerController implements Initializable {
             Platform.exit();
         }
         else if (buttonPushed == deleteUser){
-            String target = username.getText();
-            DatabaseAPI.getDatabaseAPI().deleteUser(target);
+            AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
+            //FIXME delete user/account objects
+            DatabaseAPI.getDatabaseAPI().deleteUser(user);
             refreshPage(actionEvent);
         }
         else if (buttonPushed == addUser){
-            //AccountEntry newUser = new AccountEntry(addUser.getText(), addPassword.getText(), (String) newUserType.getValue());
-            String user = addUsername.getText();
-            String pass = addPassword.getText();
-            String type = (String) newUserType.getValue();
-
-            DatabaseAPI.getDatabaseAPI().addUser(type, user, pass);
+            AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
+            AccountEntry newUser = new AccountEntry(user.getUsername(), user.getPassword(), user.getUserType());
+//            String user = addUsername.getText();
+//            String pass = addPassword.getText();
+//            String type = (String) newUserType.getValue();
+//FIXME add user/account objects
+            DatabaseAPI.getDatabaseAPI().addUser(user);
 
             refreshPage(actionEvent);
         }
