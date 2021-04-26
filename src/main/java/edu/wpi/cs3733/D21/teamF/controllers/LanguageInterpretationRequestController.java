@@ -12,6 +12,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.*;
 
 import java.io.IOException;
@@ -76,12 +79,25 @@ public class LanguageInterpretationRequestController implements Initializable {
         HashMap<String, String> codes = codeMap();
         String src = "";
         String target = codes.get(language.getValue());
-        String text = "";
-        String transText = "";
+        String text;
+        String transText;
         for(Label aLabel : labelList){
             text = aLabel.getText();
             transText = translate(src, target, text);
-            aLabel.setText(transText);
+            //byte[] bytes = transText.getBytes(StandardCharsets.UTF_8);
+            //System.out.print(transText);
+            char[] charText = transText.toCharArray();
+            //StringBuilder sb = new StringBuilder();
+            //char c = '\u00e8';
+            for(int i=0; i<charText.length; i++) {
+                String base16ASCII = Integer.toString(charText[i]);
+                charText[i] = (char) Integer.parseInt(base16ASCII);
+                System.out.println(charText[i]);
+            }
+            //String fixedString = Normalizer.normalize(transText, Normalizer.Form.NFC);
+            String decodedStr = new String(charText);
+            aLabel.setText(decodedStr);
+            //System.out.println(sb.toString());
         }
     }
 
@@ -282,7 +298,7 @@ public class LanguageInterpretationRequestController implements Initializable {
             in.close();
             return response.toString();
         }else{
-            return text;
+            return null;
         }
     }
 }
