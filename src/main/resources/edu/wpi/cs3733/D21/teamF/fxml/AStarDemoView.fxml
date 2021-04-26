@@ -24,9 +24,9 @@
             <!--<MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" />-->
             <!--<AnchorPane />-->
             <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" />
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                <children>
-                  <HBox prefHeight="34.0" prefWidth="896.0">
+                  <HBox prefHeight="34.0" prefWidth="896.0" spacing="10.0">
                      <children>
                         <ComboBox fx:id="startComboBox" onAction="#handleStartBoxAction" prefWidth="150.0" promptText="Select Start Location" />
                         <ComboBox fx:id="endComboBox" onAction="#handleEndBoxAction" prefWidth="150.0" promptText="Select End Location">
@@ -40,7 +40,12 @@
                         <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Next" textFill="WHITE" />
                      </children>
                   </HBox>
-                  <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="500.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="WHITE" />
+                  <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0" spacing="50.0">
+                     <children>
+                        <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="500.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="WHITE" />
+                        <Label fx:id="ETA" alignment="CENTER" contentDisplay="CENTER" prefWidth="100.0" style="-fx-background-color: #F0C808;" text="ETA" textFill="WHITE" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children></VBox>

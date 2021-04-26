@@ -3,45 +3,33 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.pathfinding.*;
-import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
-import edu.wpi.cs3733.uicomponents.IMapDrawable;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -77,6 +65,10 @@ public class AStarDemoController implements Initializable {
 
     @FXML
     private Label Instruction;
+
+    @FXML
+    private Label ETA;
+
     private DoublyLinkedHashSet<Vertex> recentlyUsed, favorites;
     private final int MAX_RECENTLY_USED = 5;
 
@@ -99,6 +91,7 @@ public class AStarDemoController implements Initializable {
     boolean pathFinding;
     List<Integer> stops;
     List<String> instructions;
+    List<String> eta;
     int curStep;
     String curFloor;
 
@@ -168,6 +161,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         pathVertex = null;
         Instruction.setVisible(false);
+        ETA.setVisible(false);
 
         direction = null;
 
@@ -464,6 +458,7 @@ public class AStarDemoController implements Initializable {
     private void parseRoute(){
         stops = new ArrayList<>();
         instructions = new ArrayList<>();
+        eta = new ArrayList<>();
         if(this.pathVertex == null) return;
 
         // Assert "Up" is forward for start
@@ -522,7 +517,7 @@ public class AStarDemoController implements Initializable {
         instructions.add("Reach Destination!");
 
         if(instructions.size()==0) return;
-        // Hard code, do better!
+        // Fixing Directions. Hard code, do better!
         boolean lookAtNext = false;
         for(int i = 0; i < instructions.size() - 1; i++){
             String ins = instructions.get(i);
@@ -545,7 +540,6 @@ public class AStarDemoController implements Initializable {
                 lookAtNext = true;
             }
         }
-
         if (!instructions.get(0).split(" ")[0].equals("Take")){
             Vertex curV = pathVertex.get(0);
             Vertex nexV = pathVertex.get(1);
@@ -563,9 +557,26 @@ public class AStarDemoController implements Initializable {
             String firstInst[] = instructions.get(1).split(" ", 3);
             instructions.set(1, currDirect + " " + firstInst[2]);
         }
+
+        // Calculate ETA
+        calculateETA();
+
         //System.out.println(pathVertex);
         //System.out.println(instructions);
         //System.out.println(stops);
+    }
+
+    private void calculateETA(){
+        for(int i = 0; i < stops.size(); i ++){
+            int distance = (int)Math.round(calculateDistance(pathVertex, stops.get(i), pathVertex.size() - 1));
+            // Assume walks in 1.2m/s
+            int totalSecond = (int)Math.round(distance / 1.2);
+            int hour = totalSecond / 3600;
+            if(hour > 0) totalSecond -= 3600 * hour;
+            int min = totalSecond / 60;
+            if(min > 0) totalSecond -= 60 * min;
+            eta.add("ETA : " + hour + ":" + min + ":" + totalSecond);
+        }
     }
 
     private int searchSE(int startIndex){
@@ -704,6 +715,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(false);
         End.setDisable(false);
         Instruction.setVisible(true);
+        ETA.setVisible(true);
         curStep = 0;
         pathFinding = true;
 
@@ -714,6 +726,7 @@ public class AStarDemoController implements Initializable {
         drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
         drawPathFromIndex(curStep);
         Instruction.setText(instructions.get(curStep));
+        ETA.setText(eta.get(curStep));
         mapPanel.centerNode(startNodeDisplay);
         curFloor = pathVertex.get(0).getFloor();
 
@@ -745,6 +758,7 @@ public class AStarDemoController implements Initializable {
         drawEndNode(pathVertex.get(pathVertex.size() - 1).getID());
         drawPathFromIndex(stops.get(curStep));
         Instruction.setText(instructions.get(curStep));
+        ETA.setText(eta.get(curStep));
         mapPanel.centerNode(startNodeDisplay);
 
         changeDirectionRevert(instructions.get(curStep));
@@ -777,6 +791,7 @@ public class AStarDemoController implements Initializable {
         drawStartNode(pathVertex.get(stops.get(curStep)).getID());
         drawPathFromIndex(stops.get(curStep));
         Instruction.setText(instructions.get(curStep));
+        ETA.setText(eta.get(curStep));
         mapPanel.centerNode(startNodeDisplay);
 
         drawDirection();
@@ -799,6 +814,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         End.setDisable(true);
         Instruction.setVisible(false);
+        ETA.setVisible(false);
         curStep = 0;
         pathFinding = false;
 
