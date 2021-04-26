@@ -131,8 +131,6 @@ public class MapEditViewController {
                     if(!checkNodeEntryNotEmpty(nodeEntry)) return;
                     nodeEntryObservableList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
 
-                    mapPanel.draw(getEditableNode(nodeEntry));
-
                     updateNodeEntry(nodeEntry);
                 } catch (IOException | SQLException ioException) {
                     ioException.printStackTrace();
