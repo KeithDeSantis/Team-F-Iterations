@@ -175,7 +175,7 @@ public class MaintenenceRequestController {
         stage = (Stage) goBack.getScene().getWindow();
         root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
         stage.getScene().setRoot(root);
-        stage.setTitle("Default Page");
+        stage.setTitle("Service Request Home");
         stage.show();
     }
 
