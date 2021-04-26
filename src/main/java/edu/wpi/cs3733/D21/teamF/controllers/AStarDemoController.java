@@ -267,6 +267,14 @@ public class AStarDemoController implements Initializable {
             drawableNode.setFill(UIConstants.NODE_COLOR);
             drawableNode.setRadius(10);
 
+            Tooltip tt = new Tooltip();
+            tt.setText("ID: " + startNode.getNodeID()  + "\nShort name: " + startNode.getShortName() +
+                    "\nFloor: " + startNode.getFloor() + "\nX: " + startNode.getXcoord() + " Y: " + startNode.getYcoord());
+            tt.setStyle("-fx-font: normal bold 15 Langdon; "
+                    + "-fx-base: #AE3522; "
+                    + "-fx-text-fill: orange;");
+            Tooltip.install(drawableNode, tt);
+
             mapPanel.draw(drawableNode);
             this.startNodeDisplay = drawableNode;
         }else {
@@ -308,6 +316,14 @@ public class AStarDemoController implements Initializable {
             final DrawableNode drawableNode = endNode.getDrawable();
             drawableNode.setFill(Color.GREEN);
             drawableNode.setRadius(10);
+
+            Tooltip tt = new Tooltip();
+            tt.setText("ID: " + endNode.getNodeID()  + "\nShort name: " + endNode.getShortName() +
+                    "\nFloor: " + endNode.getFloor() + "\nX: " + endNode.getXcoord() + " Y: " + endNode.getYcoord());
+            tt.setStyle("-fx-font: normal bold 15 Langdon; "
+                    + "-fx-base: #AE3522; "
+                    + "-fx-text-fill: orange;");
+            Tooltip.install(drawableNode, tt);
 
             mapPanel.draw(drawableNode);
 
