@@ -32,11 +32,11 @@ public class LanguageInterpretationServiceRequestControllerTest extends Applicat
         verifyThat("Welcome to the Service Request Application Home Menu", Node::isVisible);
     }
 
-    @Test
-    public void handleHelp() {
-        clickOn("#help");
-        verifyThat("Help", Node::isVisible);
-    }
+//    @Test
+//    public void handleHelp() {
+//        clickOn("#help");
+//        verifyThat("Help", Node::isVisible);
+//    }
 
 //    @Test
 //    public void handleTranslate() {
