@@ -1,18 +1,19 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
-import edu.wpi.cs3733.D21.teamF.database.UserHandler;
+import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -20,7 +21,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class AccountManagerController implements Initializable {
@@ -50,19 +50,51 @@ public class AccountManagerController implements Initializable {
     private JFXTextField addUsername;
 
     private String fieldChanged = "";
+    private JFXTreeTableView<AccountEntry> accountView;
+    private ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
 
     public void initialize(URL location, ResourceBundle resources) {
-        List<String> allUsers = new ArrayList<>();
-        try {
-            UserHandler userHandler = new UserHandler();
-            allUsers = userHandler.listAllUsers();
+        int colWidth = 300;
+        JFXTreeTableColumn<AccountEntry, String> username = new JFXTreeTableColumn<>("Username");
+        username.setPrefWidth(colWidth);
+        username.setCellValueFactory(cellData -> cellData.getValue().getValue().getUsernameProperty());
 
+        JFXTreeTableColumn<AccountEntry, String> password = new JFXTreeTableColumn<>("Password");
+        password.setPrefWidth(colWidth);
+        password.setCellValueFactory(cellData -> cellData.getValue().getValue().getPasswordProperty());
+
+        JFXTreeTableColumn<AccountEntry, String> userType = new JFXTreeTableColumn<>("User Type");
+        userType.setPrefWidth(colWidth);
+        userType.setCellValueFactory(cellData -> cellData.getValue().getValue().getUserTypeProperty());
+
+        final TreeItem<AccountEntry> root = new RecursiveTreeItem<AccountEntry>(accounts, RecursiveTreeObject::getChildren);
+        accountView.setRoot(root);
+        accountView.setShowRoot(false);
+        accountView.getColumns().setAll(username, password, userType);
+
+        ArrayList<AccountEntry> data;
+        try {
+            //FIXME: make accounts instead of services
+            data = DatabaseAPI.getDatabaseAPI().genServiceEntries();
+            for (AccountEntry e : data) {
+                accounts.add(e);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        //add table entries like in account manager
+        //syntax of adding item: services.add(new ServiceEntry("Request Type", "Assigned To", "Status));
+
+        ArrayList<String> allUsers = new ArrayList<>();
+        try {
+            allUsers = DatabaseAPI.getDatabaseAPI().listAllUsers();
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
-        
         for (String s : allUsers)
         {
             selectUser.getItems().add(s);
@@ -75,51 +107,80 @@ public class AccountManagerController implements Initializable {
         newUserType.getItems().add("employee");
         newUserType.getItems().add("admin");
     }
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
+
+    public void handleHoverOnDelete(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #d30000;");
+    }
+
+    public void handleHoverOffDelete(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #d30000; -fx-text-fill: #FFFFFF;");
+    }
 
     public void handleUserSearch(ActionEvent actionEvent) {
     }
 
-    public void handleQuit(ActionEvent actionEvent) {
-        Platform.exit();
-    }
-
-    public void handleDeleteUser(ActionEvent actionEvent) throws SQLException, IOException {
-        String target = username.getText();
-        DatabaseAPI.getDatabaseAPI().deleteUser(target);
-        refreshPage(actionEvent);
-    }
-
-    public void handleAddUser(ActionEvent actionEvent) throws IOException, SQLException {
-        String user = addUsername.getText();
-        String pass = addPassword.getText();
-        String type = (String) newUserType.getValue();
-
-        DatabaseAPI.getDatabaseAPI().addUser(user, type, user, pass);
-
-        refreshPage(actionEvent);
-    }
-
-    public void handleSaveChanges(ActionEvent actionEvent) throws Exception {
-        String targetUser = "";
-        String newVal = "";
-        if (fieldChanged.equals("username")){
-            targetUser = (String) selectUser.getValue();
-            newVal = username.getText();
-            DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "username");
+    public void handleButtonPushed(ActionEvent actionEvent) throws Exception {
+        JFXButton buttonPushed = (JFXButton) actionEvent.getSource();
+        if (buttonPushed == quit){
+            Platform.exit();
         }
-        else if (fieldChanged.equals("password")){
-            targetUser = (String) selectUser.getValue();
-            newVal = password.getText();
-            DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal,"password");
+        else if (buttonPushed == deleteUser){
+            String target = username.getText();
+            DatabaseAPI.getDatabaseAPI().deleteUser(target);
+            refreshPage(actionEvent);
         }
-        else if (fieldChanged.equals("type")){
-            targetUser = (String) selectUser.getValue();
-            newVal = (String) changeUserType.getValue();
-            DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "type");
-        }
-        fieldChanged = "";
+        else if (buttonPushed == addUser){
+            //AccountEntry newUser = new AccountEntry(addUser.getText(), addPassword.getText(), (String) newUserType.getValue());
+            String user = addUsername.getText();
+            String pass = addPassword.getText();
+            String type = (String) newUserType.getValue();
 
-        refreshPage(actionEvent);
+            DatabaseAPI.getDatabaseAPI().addUser(type, user, pass);
+
+            refreshPage(actionEvent);
+        }
+        else if (buttonPushed == saveChanges){
+            String targetUser = "";
+            String newVal = "";
+            if (fieldChanged.equals("username")){
+                targetUser = (String) selectUser.getValue();
+                newVal = username.getText();
+                DatabaseAPI.getDatabaseAPI().editUser(targetUser, "username", newVal);
+            }
+            else if (fieldChanged.equals("password")){
+                targetUser = (String) selectUser.getValue();
+                newVal = password.getText();
+                DatabaseAPI.getDatabaseAPI().editUser(targetUser, "password", newVal);
+            }
+            else if (fieldChanged.equals("type")){
+                targetUser = (String) selectUser.getValue();
+                newVal = (String) changeUserType.getValue();
+                DatabaseAPI.getDatabaseAPI().editUser(targetUser, "type", newVal);
+            }
+            fieldChanged = "";
+
+            refreshPage(actionEvent);
+        }
+        else if (buttonPushed == home){
+            Stage stage;
+            Parent root;
+            stage = (Stage) buttonPushed.getScene().getWindow();
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
+            stage.getScene().setRoot(root);
+            stage.setTitle("Admin Home");
+            stage.show();
+        }
     }
 
     private void refreshPage(ActionEvent actionEvent) throws IOException {
@@ -130,17 +191,6 @@ public class AccountManagerController implements Initializable {
         root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml"));
         stage.getScene().setRoot(root);
         stage.setTitle("Account Manager");
-        stage.show();
-    }
-
-    public void handleAdminHome(ActionEvent actionEvent) throws IOException {
-        Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
-        stage = (Stage) buttonPushed.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Admin Home");
         stage.show();
     }
 

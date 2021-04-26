@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import static org.testfx.api.FxAssert.verifyThat;
-public class LanguageInterpretationRequestControllerTest extends ApplicationTest{
+public class LanguageInterpretationServiceRequestControllerTest extends ApplicationTest{
 
     @Override
     public void start (Stage stage) throws Exception {
@@ -18,7 +18,7 @@ public class LanguageInterpretationRequestControllerTest extends ApplicationTest
         final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml"));
         Parent root = loader.load();
 
-        final LanguageInterpretationRequestController controller = loader.getController();
+        final LanguageInterpretationServiceRequestController controller = loader.getController();
 
         Scene scene = new Scene(root);
         stage.setScene(scene);

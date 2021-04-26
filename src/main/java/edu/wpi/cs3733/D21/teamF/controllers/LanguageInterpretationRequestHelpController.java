@@ -3,18 +3,25 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LanguageInterpretationHelpController {
+public class LanguageInterpretationRequestHelpController {
     @FXML private JFXButton close;
     @FXML private JFXButton back;
     @FXML private JFXButton translate;
 
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
     /**
      * Closes the help window and returns to the Interpretation Service Request Form
      * @param actionEvent
@@ -22,11 +29,7 @@ public class LanguageInterpretationHelpController {
      * @author Jay Yen
      */
     public void handleClose(ActionEvent actionEvent) throws IOException {
-        Stage currentStage = (Stage)close.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+        ( (Stage) close.getScene().getWindow()).close();
     }
 
     /**
@@ -36,11 +39,7 @@ public class LanguageInterpretationHelpController {
      * @throws IOException
      */
     public void handleBack(ActionEvent actionEvent) throws IOException {
-        Stage currentStage = (Stage)back.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+        ( (Stage) close.getScene().getWindow()).close();
     }
 
     public void handleTranslate(ActionEvent actionEvent) {
