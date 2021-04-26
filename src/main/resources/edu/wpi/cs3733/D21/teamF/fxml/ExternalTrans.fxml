@@ -54,12 +54,11 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Employee name" GridPane.valignment="BOTTOM" />
-                  <JFXTextField fx:id="employeeName" prefHeight="25.0" prefWidth="739.0" GridPane.valignment="TOP" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Employee name" GridPane.valignment="CENTER" />
+                  <JFXTextField fx:id="employeeName" prefHeight="25.0" prefWidth="739.0" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Method of Transportation" GridPane.rowIndex="2" />
                   <JFXTextField fx:id="methodTrans" GridPane.rowIndex="3" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Special Requests" wrappingWidth="187.1328125" GridPane.rowIndex="6" />
-                  <JFXTextField fx:id="location" GridPane.rowIndex="5" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Location" GridPane.rowIndex="4" />
                   <JFXTextField fx:id="special" prefHeight="0.0" prefWidth="961.0" GridPane.rowIndex="7" />
                   <JFXButton fx:id="submit" buttonType="RAISED" onAction="#submitpushed" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" GridPane.rowIndex="8" />
