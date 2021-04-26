@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.states.LoginState;
 import edu.wpi.cs3733.D21.teamF.states.PathfindingState;
 import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import edu.wpi.cs3733.D21.teamF.states.ServiceRequestHomeState;
@@ -53,11 +54,7 @@ public class DefaultPageController {
         Parent root;
 
         if (buttonPushed == loginButton) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Log in");
-            stage.show();
+            LoginState.getLoginState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == AStarDemo) {
             PathfindingState.getPathfindingState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == serviceRequest) {

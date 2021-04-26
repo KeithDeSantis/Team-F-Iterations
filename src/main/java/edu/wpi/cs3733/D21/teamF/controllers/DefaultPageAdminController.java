@@ -1,9 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.cs3733.D21.teamF.states.PathfindingState;
-import edu.wpi.cs3733.D21.teamF.states.SceneContext;
-import edu.wpi.cs3733.D21.teamF.states.ServiceRequestHomeState;
+import edu.wpi.cs3733.D21.teamF.states.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,30 +64,15 @@ public class DefaultPageAdminController {
         Parent root;
 
         if (buttonPushed == editMap) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Edit Map Menu");
-            stage.show();
+            EditMapState.getEditMapState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == manageServices) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
-            stage.getScene().setRoot(root);  //Changing the stage
-            stage.setTitle("Service Request Manager");
-            stage.show();
+            MarkRequestsCompleteState.getMarkRequestsCompleteState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == AStarDemo) {
             PathfindingState.getPathfindingState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == serviceRequest) {
             ServiceRequestHomeState.getServiceRequestHomeState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == manageAccount) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml"));
-            //Scene scene = new Scene(root);
-            //stage.setScene(scene);
-            stage.getScene().setRoot(root);
-            stage.setTitle("Account Manager");
-            stage.show();
-
+            AccountManagerState.getAccountManagerState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == quit) {
             Platform.exit();
         }
