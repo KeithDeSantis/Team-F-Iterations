@@ -46,6 +46,7 @@ class DatabaseAPITest {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
         assertTrue(DatabaseAPI.getDatabaseAPI().dropNodesTable());
         assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().addNode(newNode));
+        DatabaseAPI.getDatabaseAPI().createNodesTable();
     }
 
     @Test()
