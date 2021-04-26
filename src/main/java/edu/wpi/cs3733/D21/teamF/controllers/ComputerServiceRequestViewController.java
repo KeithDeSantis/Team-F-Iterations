@@ -8,10 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -47,7 +45,109 @@ public class ComputerServiceRequestViewController {
     }
 
     @FXML
-    public void handleGoHome(MouseEvent mouseEvent) throws IOException {
+    public void handleGoHome() throws IOException { goHome(); }
+
+
+
+    @FXML
+    public void handleSubmit() {
+        if(validate())
+        {
+            //Do something
+        }
+    }
+
+
+
+    @FXML
+    public void handleCancel() throws IOException { goHome(); }
+
+
+    /**
+     * Checks if our form has been filled out correctly and sets the components to use the proper style.
+     * @return true if the form has been filled out validly; returns false otherwise.
+     */
+    private boolean validate()
+    {
+        boolean accept = true;
+
+        //Clear old styles
+        setNormalStyle(computerNameText, computerLocationText, requesterTextText, urgencyComboBox,descriptionText);
+
+
+        if(computerNameText.getText().trim().isEmpty())
+        {
+            setErrorStyle(computerNameText);
+            accept = false;
+        }
+
+        if(computerLocationText.getText().trim().isEmpty())
+        {
+            setErrorStyle(computerLocationText);
+            accept = false;
+        }
+
+        if(requesterTextText.getText().trim().isEmpty())
+        {
+            setErrorStyle(requesterTextText);
+            accept = false;
+        }
+
+        if(urgencyComboBox.getValue() == null)
+        {
+            setErrorStyle(urgencyComboBox);
+            accept = false;
+        }
+
+        if(descriptionText.getText().trim().isEmpty())
+        {
+            setErrorStyle(descriptionText);
+            accept = false;
+        }
+
+        return accept;
+    }
+
+    /**
+     * Applies the 'normal' style to the given components
+     * @param components The nodes to apply the style to
+     * @author Alex Friedman (ahf)
+     */
+    private void setNormalStyle(Node...components)
+    {
+        setStyle("-fx-border-width: 0px", components);
+    }
+
+    /**
+     * Used to set the given components to use the error/invalid input style
+     * @param components The components to apply the style to
+     * @author Alex Friedman (ahf)
+     */
+    private void setErrorStyle(Node...components)
+    {
+        setStyle("-fx-border-width: 2px", components);
+        setStyle("-fx-border-color: red", components);
+    }
+
+    /**
+     * Used to set the components in the given list to have the given style.
+     * @param style The string style to apply
+     * @param components The components to apply the style to
+     * @author Alex Friedman (ahf)
+     */
+    private void setStyle(String style, Node...components)
+    {
+        for(Node n : components)
+            n.setStyle(style);
+    }
+
+
+    /**
+     * Used to return to the home page.
+     *
+     */
+    private void goHome() throws IOException {
+        //FIXME: AT SOME POINT ADD WARNING IF FORM FILLED OUT!
         Stage stage;
         Parent root;
         stage = (Stage) computerNameText.getScene().getWindow();
@@ -57,26 +157,18 @@ public class ComputerServiceRequestViewController {
         stage.show();
     }
 
-    private boolean validate()
-    {
-        boolean accept = true;
-
-        if(computerNameText.getText().isEmpty())
-        {
-
-        }
-    }
-
     @FXML
-    public void handleSubmit(ActionEvent actionEvent) {
-        System.out.println(computerNameText.getText());
-        System.out.println(computerLocationText.getText());
-        System.out.println(requesterTextText.getText());
-        System.out.println(descriptionText.getText());
-        System.out.println(urgencyComboBox.getValue());
-    }
+    public void handleClear() {
 
-    @FXML
-    public void handleCancel(ActionEvent actionEvent) {
+        setNormalStyle(computerNameText, computerLocationText, requesterTextText, urgencyComboBox,descriptionText);
+        //FIXME: ADD WARNING
+        computerNameText.setText("");
+        computerLocationText.setText("");
+        requesterTextText.setText("");
+
+        urgencyComboBox.setValue(null);
+
+
+         descriptionText.setText("");
     }
 }
