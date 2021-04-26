@@ -19,9 +19,34 @@ public class LaundryRequestController {
     @FXML private RadioButton hot;
     @FXML private RadioButton cold;
     @FXML private RadioButton folded;
-    public TextField employeeID;
-    public TextField clientName;
-    public TextField additionalInstructions;
+
+    @FXML public TextField employeeID;
+    @FXML public TextField clientName;
+    @FXML public TextField additionalInstructions;
+
+    public TextField getEmployeeID() {
+        return employeeID;
+    }
+
+    public void setEmployeeID(TextField employeeID) {
+        this.employeeID = employeeID;
+    }
+
+    public TextField getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(TextField clientName) {
+        this.clientName = clientName;
+    }
+
+    public TextField getAdditionalInstructions() {
+        return additionalInstructions;
+    }
+
+    public void setAdditionalInstructions(TextField additionalInstructions) {
+        this.additionalInstructions = additionalInstructions;
+    }
 
     @FXML
     public void submitReq(ActionEvent actionEvent) {
