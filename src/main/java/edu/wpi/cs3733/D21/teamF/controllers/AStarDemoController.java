@@ -521,6 +521,7 @@ public class AStarDemoController implements Initializable {
         }
         instructions.add("Reach Destination!");
 
+        if(instructions.size()==0) return;
         // Hard code, do better!
         boolean lookAtNext = false;
         for(int i = 0; i < instructions.size() - 1; i++){
@@ -544,6 +545,7 @@ public class AStarDemoController implements Initializable {
                 lookAtNext = true;
             }
         }
+
         if (!instructions.get(0).split(" ")[0].equals("Take")){
             Vertex curV = pathVertex.get(0);
             Vertex nexV = pathVertex.get(1);
@@ -552,8 +554,15 @@ public class AStarDemoController implements Initializable {
             currDirect = calculateDirection(prevAngle, currAngle);
             String firstInst[] = instructions.get(0).split(" ", 3);
             instructions.set(0, currDirect + " " + firstInst[2]);
+        }else{
+            Vertex curV = pathVertex.get(1);
+            Vertex nexV = pathVertex.get(2);
+            prevAngle = Math.toDegrees(Math.atan2(-1.0, 0.0)) + 180;
+            currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+            currDirect = calculateDirection(prevAngle, currAngle);
+            String firstInst[] = instructions.get(1).split(" ", 3);
+            instructions.set(1, currDirect + " " + firstInst[2]);
         }
-
         //System.out.println(pathVertex);
         //System.out.println(instructions);
         //System.out.println(stops);
