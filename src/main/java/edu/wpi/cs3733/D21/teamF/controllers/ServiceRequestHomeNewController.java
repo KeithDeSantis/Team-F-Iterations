@@ -71,9 +71,11 @@ public class ServiceRequestHomeNewController {
         else if (buttonPushed == computorServices){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ComputerServiceRequestView.fxml", "IT Services", buttonPushed);
         }
+        /* FIXME Waiting on ben to fix this page
         else if (buttonPushed == sanitationService){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/SanitationRequest.fxml", "Sanitation Services", buttonPushed);
         }
+         */
         else if (buttonPushed == laundryServices){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/LaundryRequest.fxml", "Laundry Service", buttonPushed);
         }
