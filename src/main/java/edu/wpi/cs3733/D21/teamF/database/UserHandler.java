@@ -1,5 +1,8 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
+import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
+import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -211,4 +214,68 @@ public class UserHandler implements DatabaseEntry {
             DatabaseAPI.getDatabaseAPI().addUser(arr);
         }
     }
+
+    /**
+     * Generates AccountEntry objects based on the data in the database
+     * @return List of generated AccountEntry objects
+     * @throws SQLException on error performing DB operations
+     */
+    public List<AccountEntry> genAccountEntryObjects() throws SQLException {
+        List<AccountEntry> entries = new ArrayList<>();
+        String query = "SELECT * FROM USERS";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+
+        while (rset.next())
+        {
+            String username = rset.getString(3);
+            String password = rset.getString(4);
+            String usertype = rset.getString(2);
+
+            AccountEntry newEntry = new AccountEntry(username, password, usertype);
+            entries.add(newEntry);
+        }
+        rset.close();
+        return entries;
+    }
+
+    public boolean verifyAdmin() throws SQLException{
+        boolean exists = false;
+        String sql = "SELECT * FROM USERS WHERE USERNAME='admin'";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(sql);
+        while (rset.next()){
+            if (rset.getString(1).equals("admin") && rset.getString(2).equals("administrator")){
+                exists = true;
+            }
+        }
+        rset.close();
+        return exists;
+    }
+
+    /**
+     * Make an AccountEntry object for a user given a username
+     * @param username username of user to make entry for
+     * @return AccountEntry object
+     * @throws SQLException on error with DB operations
+     */
+    public AccountEntry getUser(String username) throws SQLException{
+        String sql = "SELECT * FROM USERS WHERE USERNAME=(?)";
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, username);
+        ResultSet rset;
+        AccountEntry user = null;
+        rset = stmt.executeQuery(sql);
+        while (rset.next()){
+            String type = rset.getString(2);
+            String password = rset.getString(4);
+            user = new AccountEntry(username, password, type);
+        }
+        stmt.close();
+        rset.close();
+        return user;
+    }
+
 }

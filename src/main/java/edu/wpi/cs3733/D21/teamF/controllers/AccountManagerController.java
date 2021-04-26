@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -21,7 +22,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 
 public class AccountManagerController implements Initializable {
     @FXML
@@ -72,10 +75,10 @@ public class AccountManagerController implements Initializable {
         accountView.setShowRoot(false);
         accountView.getColumns().setAll(username, password, userType);
 
-        ArrayList<AccountEntry> data;
+        List<AccountEntry> data;
         try {
             //FIXME: make accounts instead of services
-            data = DatabaseAPI.getDatabaseAPI().genServiceEntries();
+            data = DatabaseAPI.getDatabaseAPI().genAccountEntries();
             for (AccountEntry e : data) {
                 accounts.add(e);
             }
@@ -87,18 +90,20 @@ public class AccountManagerController implements Initializable {
         //add table entries like in account manager
         //syntax of adding item: services.add(new ServiceEntry("Request Type", "Assigned To", "Status));
 
-        ArrayList<String> allUsers = new ArrayList<>();
+        List<String> allUsers;
         try {
-            allUsers = DatabaseAPI.getDatabaseAPI().listAllUsers();
+            UserHandler userHandler = new UserHandler();
+            allUsers = userHandler.listAllUsers();
+            for (String s : allUsers)
+            {
+                selectUser.getItems().add(s);
+            }
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
-        for (String s : allUsers)
-        {
-            selectUser.getItems().add(s);
-        }
+
         changeUserType.getItems().add("guest");
         changeUserType.getItems().add("employee");
         changeUserType.getItems().add("admin");
