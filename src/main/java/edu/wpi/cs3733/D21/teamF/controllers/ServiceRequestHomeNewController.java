@@ -65,7 +65,18 @@ public class ServiceRequestHomeNewController {
         else if (buttonPushed == externalPaitintTrans){
             goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/ExternalTrans.fxml","External Patient Transportation",buttonPushed);
         }
-
+        else if (buttonPushed == faciliteisMaitence){
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/maintenanceRequest.fxml", "Facilities Maintenance", buttonPushed);
+        }
+        else if (buttonPushed == computorServices){
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ComputerServiceRequestView.fxml", "IT Services", buttonPushed);
+        }
+        else if (buttonPushed == sanitationService){
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/SanitationRequest.fxml", "Sanitation Services", buttonPushed);
+        }
+        else if (buttonPushed == laundryServices){
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/LaundryRequest.fxml", "Laundry Service", buttonPushed);
+        }
     }
 
     public void goToScreen(ActionEvent e, String URL, String Title, Button currentScreen)throws IOException{
