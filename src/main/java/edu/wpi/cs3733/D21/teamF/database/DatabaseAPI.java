@@ -150,10 +150,14 @@ public class DatabaseAPI {
     public boolean authenticate(String username, String pass) throws SQLException {
         return ((UserHandler)this.userHandler).authenticate(username, pass);
     }
+
+    public boolean verifyAdminExists() throws SQLException{
+        return ((UserHandler)this.userHandler).verifyAdmin();
+    }
+
     private static class DatabaseSingletonHelper{
         private static final DatabaseAPI databaseAPI1 = new DatabaseAPI();
     }
-
 
     public static DatabaseAPI getDatabaseAPI(){
         return DatabaseSingletonHelper.databaseAPI1;
