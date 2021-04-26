@@ -37,6 +37,7 @@ public class DefaultPageAdminController {
     private void initialize(){
         // Set fonts - LM
         title.setFont(Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40));
+
         Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
         navigation.setFont(buttonDefault);
         quit.setFont(buttonDefault);

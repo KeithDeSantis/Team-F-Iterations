@@ -1,3 +1,5 @@
 .root {
     -fx-background-color: #c6c6c6;
+    -fx-pref-width: 960;
+    -fx-pref-height: 540;
 }

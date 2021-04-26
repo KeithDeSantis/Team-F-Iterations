@@ -44,7 +44,7 @@ public class  AppF extends Application {
       }
     });
     try {
-      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));//DefaultPageView.fxml"));
+      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml"));
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);
       //primaryStage.setMaximized(true);
