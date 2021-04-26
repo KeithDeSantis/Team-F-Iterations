@@ -178,14 +178,16 @@ public class GraphTest {
      */
     @Test
     public void testDFSPathEdges() {
+        graph.setPathfindingAlgorithm("dfs");
+
         //Tests that we always get the shortest path along an edge.
         for (Edge e : edges) {
             final Vertex v0 = e.getVertices()[0];
             final Vertex v1 = e.getVertices()[1];
 
-            assertDoesNotThrow(() -> graph.DFS(v0, v1));
+            assertDoesNotThrow(() -> graph.getPath(v0, v1));
 
-            final Path path = graph.DFS(v0, v1);
+            final Path path = graph.getPath(v0, v1);
 
             assertNotNull(path);
 
@@ -206,13 +208,14 @@ public class GraphTest {
      */
     @Test
     public void testDFSPathNullVertex() {
+        graph.setPathfindingAlgorithm("dfs");
         final Edge e = edges.get(0);
         final Vertex v0 = e.getVertices()[0];
         final Vertex v1 = e.getVertices()[1];
 
-        assertNull(graph.DFS(null, v1));
-        assertNull(graph.DFS(v0, null));
-        assertNull(graph.DFS(null, null));
+        assertNull(graph.getPath(null, v1));
+        assertNull(graph.getPath(v0, null));
+        assertNull(graph.getPath(null, null));
     }
 
     /**
@@ -241,17 +244,18 @@ public class GraphTest {
 
         Path path;
 
-        path = graph.DFS(v0, v1);
+        graph.setPathfindingAlgorithm("dfs");
+        path = graph.getPath(v0, v1);
         assertEquals(2, path.length());
-        path = graph.DFS(v1, v0);
+        path = graph.getPath(v1, v0);
         assertEquals(2, path.length());
-        path = graph.DFS(v1, v2);
+        path = graph.getPath(v1, v2);
         assertEquals(2, path.length());
-        path = graph.DFS(v2, v1);
+        path = graph.getPath(v2, v1);
         assertEquals(2, path.length());
-        path = graph.DFS(v0, v2);
+        path = graph.getPath(v0, v2);
         assertEquals(2, path.length());
-        path = graph.DFS(v2, v0);
+        path = graph.getPath(v2, v0);
         assertEquals(2, path.length());
     }
 
@@ -298,9 +302,11 @@ public class GraphTest {
             for (Vertex end : vertices.values()) {
                 if (! start.equals(end)) {
 
-                    assertDoesNotThrow(() -> graph.DFS(start, end));
-                    final Path dfs = graph.DFS(start, end);
+                    graph.setPathfindingAlgorithm("dfs");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path dfs = graph.getPath(start, end);
 
+                    graph.setPathfindingAlgorithm("a*");
                     assertDoesNotThrow(() -> graph.getPath(start, end));
                     final Path aStar = graph.getPath(start, end);//.asList();
 
@@ -326,6 +332,7 @@ public class GraphTest {
      */
     @Test
     public void testAStarNullVertex() {
+        graph.setPathfindingAlgorithm("a*");
         final Edge e = edges.get(0);
         final Vertex v0 = e.getVertices()[0];
         final Vertex v1 = e.getVertices()[1];
@@ -346,9 +353,10 @@ public class GraphTest {
     @Test
     private Path runDFS(Vertex start, Vertex end) //FIXME: DO BETTER, methodize better & use in more places?
     {
-        assertDoesNotThrow(() -> graph.DFS(start, end));
+        graph.setPathfindingAlgorithm("dfs");
+        assertDoesNotThrow(() -> graph.getPath(start, end));
 
-        return graph.DFS(start, end);
+        return graph.getPath(start, end);
     }
 
     /**
@@ -370,6 +378,41 @@ public class GraphTest {
 
         for(Vertex v : map) {
             assertTrue(map.containsKey(v));
+        }
+    }
+
+
+    @Test
+    public void testBFSWithDFS() {
+        //tests every possibility b/c why not? we have a small dataset
+
+        for (Vertex start : vertices.values()) {
+            for (Vertex end : vertices.values()) {
+                if (! start.equals(end)) {
+
+                    graph.setPathfindingAlgorithm("dfs");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path dfs = graph.getPath(start, end);
+
+                    graph.setPathfindingAlgorithm("bfs");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path bfs = graph.getPath(start, end);//.asList();
+
+                    if(dfs != null && bfs != null) {
+
+
+                        Iterator<Vertex> dfsListIterator = dfs.iterator(),
+                                aStarListIterator = bfs.iterator();
+                        while(dfsListIterator.hasNext() && aStarListIterator.hasNext()) {
+                            Vertex dfsElement = dfsListIterator.next(), bfsElement = aStarListIterator.next();
+                            assertTrue(dfsElement.equals(bfsElement));
+                        }
+                        assertFalse(dfsListIterator.hasNext() || aStarListIterator.hasNext());
+                    } else {
+                        assertTrue(dfs == null && bfs == null);
+                    }
+                }
+            }
         }
     }
 

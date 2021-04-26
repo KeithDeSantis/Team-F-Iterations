@@ -1,10 +1,10 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
 import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.AStarImpl;
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.BFSImpl;
 import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.DFSImpl;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Graph {
     private final List<Edge> edges;
@@ -66,7 +66,7 @@ public class Graph {
      * @author Alex Friedman (ahf), Tony Vuolo
      */
     public List<Vertex> getVertices() {
-        return vertices.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(vertices.values());
     }
 
     /**
@@ -123,7 +123,7 @@ public class Graph {
                 this.pathfindingAlgorithm = new DFSImpl();
                 return true;
             case "bfs":
-                //this.pathfindingAlgorithm = new BFSImpl();
+                this.pathfindingAlgorithm = new BFSImpl();
                 return true;
         }
         return false;
