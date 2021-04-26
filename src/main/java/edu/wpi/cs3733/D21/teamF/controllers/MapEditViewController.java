@@ -79,7 +79,7 @@ public class MapEditViewController {
         editButton.setFont(buttonDefault);
         deleteButton.setFont(buttonDefault);
 
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 50);
+        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 42);
         title.setFont(titleFont);
 
         // Node initialization
