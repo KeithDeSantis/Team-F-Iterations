@@ -13,7 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 public class ServiceRequestHomeNewController {
     @FXML private JFXButton Home;
@@ -49,27 +48,27 @@ public class ServiceRequestHomeNewController {
         Parent root;
 
         if(buttonPushed == floralDelivery){
-            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/FloralDeliveryServiceRequestView.fxml","Floral Delivery",buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FloralDeliveryServiceRequestView.fxml","Floral Delivery",buttonPushed);
         }
         else if (buttonPushed == Home) {
             goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml","Home Page",buttonPushed);
         }
 
         else if (buttonPushed == launguageInterpretation){
-            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml","Language Interpretation",buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/LanguageInterpretationServiceRequestView.fxml","Language Interpretation",buttonPushed);
         }
 
         else if (buttonPushed == foodDelivery){
-            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/FoodDeliveryServiceRequestView.fxml","Food Delivery",buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FoodDeliveryServiceRequestView.fxml","Food Delivery",buttonPushed);
         }
         else if (buttonPushed == externalPaitintTrans){
-            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/ExternalTrans.fxml","External Patient Transportation",buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/ExternalTrans.fxml","External Patient Transportation",buttonPushed);
         }
         else if (buttonPushed == faciliteisMaitence){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/maintenanceRequest.fxml", "Facilities Maintenance", buttonPushed);
         }
         else if (buttonPushed == computorServices){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ComputerServiceRequestView.fxml", "IT Services", buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/ComputerServiceRequestView.fxml", "IT Services", buttonPushed);
         }
         /* FIXME Waiting on ben to fix this page
         else if (buttonPushed == sanitationService){
@@ -77,7 +76,7 @@ public class ServiceRequestHomeNewController {
         }
          */
         else if (buttonPushed == laundryServices){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/LaundryRequest.fxml", "Laundry Service", buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/LaundryRequest.fxml", "Laundry Service", buttonPushed);
         }
     }
 

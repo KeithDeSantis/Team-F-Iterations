@@ -56,7 +56,7 @@ public class FloralDeliveryService {
 
         else if (buttonPushed == helpButton) { // is help button
             Stage popUpStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FloralHelpView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FloralHelpView.fxml"));
             Scene popUpScene = new Scene(root);
             popUpStage.setScene(popUpScene);
             popUpStage.setTitle("Floral Request Help Menu");
@@ -83,7 +83,7 @@ public class FloralDeliveryService {
         if(formFilledOut()) // form is complete
         {
             Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml")); // Loading in pop up View
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml")); // Loading in pop up View
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");

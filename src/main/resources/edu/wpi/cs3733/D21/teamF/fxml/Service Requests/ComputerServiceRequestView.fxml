@@ -25,7 +25,7 @@
                <children>
                   <ImageView fitHeight="100.0" fitWidth="86.0" onMouseClicked="#handleGoHome" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Computer Service Request" wrappingWidth="699.0577087402344">
@@ -104,9 +104,9 @@
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                      <children>
-                        <JFXButton buttonType="RAISED" onAction="#handleSubmit" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" />
-                        <JFXButton buttonType="RAISED" onAction="#handleClear" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear" />
-                        <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                        <JFXButton buttonType="RAISED" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton buttonType="RAISED" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear" />
+                        <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
                      </children>
                   </HBox>
                </children>

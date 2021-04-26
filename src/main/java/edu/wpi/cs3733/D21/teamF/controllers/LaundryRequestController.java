@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -58,8 +57,10 @@ public class LaundryRequestController {
 
     @FXML
     public void submitReq(ActionEvent e) throws IOException {
+        FormSubmittedViewController form = new FormSubmittedViewController();
+        form.changeStage((Stage) submit.getScene().getWindow());
         Stage submittedStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml")); // Loading in pop up View
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml")); // Loading in pop up View
         Scene submitScene = new Scene(root);
         submittedStage.setScene(submitScene);
         submittedStage.setTitle("Submission Complete");

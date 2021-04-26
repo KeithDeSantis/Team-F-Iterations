@@ -65,7 +65,7 @@ public class LanguageInterpretationRequestController implements Initializable {
     public void handleHelp(ActionEvent actionEvent) throws IOException {
 
         Stage submittedStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationHelpView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/LanguageInterpretationHelpView.fxml"));
         Scene helpPopUp = new Scene(root);
         submittedStage.setScene(helpPopUp);
         submittedStage.setTitle("Language Interpretation Help");
@@ -101,7 +101,7 @@ public class LanguageInterpretationRequestController implements Initializable {
         DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                 newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus());
             Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");

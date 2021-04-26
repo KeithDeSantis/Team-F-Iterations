@@ -49,7 +49,7 @@ public class FoodDeliveryServiceRequestController {
     private void handleSubmitPushed(ActionEvent e) throws IOException{
         if(formFilledOut()){
             Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
@@ -86,7 +86,7 @@ public class FoodDeliveryServiceRequestController {
             stage.show();
         } else if (buttonPushed == helpButton){
             Stage helpPopUpStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FoodDeliveryHelpView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FoodDeliveryHelpView.fxml"));
             Scene helpPopUpScene = new Scene(root);
             helpPopUpStage.setScene(helpPopUpScene);
             helpPopUpStage.setTitle("Food Delivery Request Help Menu");
