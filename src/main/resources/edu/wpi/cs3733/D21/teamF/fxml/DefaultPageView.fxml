@@ -30,7 +30,7 @@
          </padding></HBox>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="250.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+            <VBox layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
                <children>
                   <JFXButton fx:id="loginButton" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="250.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Login" VBox.vgrow="ALWAYS">
                      <font>
