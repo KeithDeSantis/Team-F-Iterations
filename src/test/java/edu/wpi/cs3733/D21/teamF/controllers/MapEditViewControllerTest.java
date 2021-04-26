@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -49,6 +50,7 @@ public class MapEditViewControllerTest extends ApplicationTest {
 
 
         Scene scene = new Scene(root);
+        SceneContext.getSceneContext().setStage(primaryStage);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

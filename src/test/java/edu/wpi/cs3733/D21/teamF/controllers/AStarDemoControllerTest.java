@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,6 +26,7 @@ public class AStarDemoControllerTest extends ApplicationTest {
 
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml"));
         Scene scene = new Scene(root);
+        SceneContext.getSceneContext().setStage(primaryStage);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

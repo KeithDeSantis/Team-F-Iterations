@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -20,6 +21,7 @@ public class AccountManagerControllerTest extends ApplicationTest {
         Parent root = loader.load();
 
         final AccountManagerController controller = loader.getController();
+        SceneContext.getSceneContext().setStage(stage);
 
         Scene scene = new Scene(root);
         stage.setScene(scene);

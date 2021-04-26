@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -17,6 +18,7 @@ public class LanguageInterpretationRequestControllerTest extends ApplicationTest
 
         final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml"));
         Parent root = loader.load();
+        SceneContext.getSceneContext().setStage(stage);
 
         final LanguageInterpretationRequestController controller = loader.getController();
 

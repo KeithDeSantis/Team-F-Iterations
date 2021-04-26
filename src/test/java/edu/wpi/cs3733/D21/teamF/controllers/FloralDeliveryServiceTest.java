@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -17,6 +18,7 @@ public class FloralDeliveryServiceTest extends ApplicationTest {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FloralDeliveryServiceRequestView.fxml"));
         Scene scene = new Scene(root);
+        SceneContext.getSceneContext().setStage(primaryStage);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
