@@ -45,6 +45,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="75.0" valignment="CENTER" vgrow="SOMETIMES" />
                </rowConstraints>
+
                <VBox.margin>
                   <Insets left="25.0" right="25.0" top="25.0" />
                </VBox.margin>
@@ -93,6 +94,7 @@
                      </GridPane.margin>
                   </JFXComboBox>
                </children>
+
             </GridPane>
             <JFXButton fx:id="saveChanges" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="Save Changes" textFill="WHITE">
                <VBox.margin>

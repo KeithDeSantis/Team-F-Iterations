@@ -52,10 +52,12 @@ public class AccountManagerController implements Initializable {
     private JFXTextField addUsername;
 
     private String fieldChanged = "";
+    @FXML
     private JFXTreeTableView<AccountEntry> accountView;
     private ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
 
     public void initialize(URL location, ResourceBundle resources) {
+        /*
         int colWidth = 300;
         JFXTreeTableColumn<AccountEntry, String> username = new JFXTreeTableColumn<>("Username");
         username.setPrefWidth(colWidth);
@@ -85,6 +87,8 @@ public class AccountManagerController implements Initializable {
         catch (SQLException e) {
             e.printStackTrace();
         }
+
+         */
 
         //add table entries like in account manager
         //syntax of adding item: services.add(new ServiceEntry("Request Type", "Assigned To", "Status));
@@ -142,18 +146,18 @@ public class AccountManagerController implements Initializable {
         else if (buttonPushed == deleteUser){
             AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
             //FIXME delete user/account objects
-            DatabaseAPI.getDatabaseAPI().deleteUser(user);
+            DatabaseAPI.getDatabaseAPI().deleteUser(user.getUsername());
             refreshPage(actionEvent);
         }
         else if (buttonPushed == addUser){
-            AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
-            AccountEntry newUser = new AccountEntry(user.getUsername(), user.getPassword(), user.getUserType());
-//            String user = addUsername.getText();
-//            String pass = addPassword.getText();
-//            String type = (String) newUserType.getValue();
+            //AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
+            //AccountEntry newUser = new AccountEntry(user.getUsername(), user.getPassword(), user.getUserType());
+            String userName = addUsername.getText();
+            String pass = addPassword.getText();
+            String type = (String) newUserType.getValue();
 //FIXME add user/account objects
-            DatabaseAPI.getDatabaseAPI().addUser(user);
-
+            DatabaseAPI.getDatabaseAPI().addUser(userName, type, userName, pass);
+            selectUser.getItems().add(userName);
             refreshPage(actionEvent);
         }
         else if (buttonPushed == saveChanges){
@@ -162,17 +166,17 @@ public class AccountManagerController implements Initializable {
             if (fieldChanged.equals("username")){
                 targetUser = (String) selectUser.getValue();
                 newVal = username.getText();
-                DatabaseAPI.getDatabaseAPI().editUser(targetUser, "username", newVal);
+                DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "username");
             }
             else if (fieldChanged.equals("password")){
                 targetUser = (String) selectUser.getValue();
                 newVal = password.getText();
-                DatabaseAPI.getDatabaseAPI().editUser(targetUser, "password", newVal);
+                DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "password");
             }
             else if (fieldChanged.equals("type")){
                 targetUser = (String) selectUser.getValue();
                 newVal = (String) changeUserType.getValue();
-                DatabaseAPI.getDatabaseAPI().editUser(targetUser, "type", newVal);
+                DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "type");
             }
             fieldChanged = "";
 
