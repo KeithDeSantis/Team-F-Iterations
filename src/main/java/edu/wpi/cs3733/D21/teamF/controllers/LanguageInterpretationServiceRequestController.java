@@ -33,15 +33,6 @@ public class LanguageInterpretationServiceRequestController implements Initializ
     @FXML private JFXButton translate;
     @FXML private JFXButton submit;
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
     /**
      * closes the Language Interpretation Request form and returns to home
      * @param actionEvent
@@ -72,6 +63,18 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         submittedStage.initModality(Modality.APPLICATION_MODAL);
         submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
         submittedStage.showAndWait();
+    }
+
+    @FXML
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    @FXML
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 
     public void handleTranslate(ActionEvent actionEvent) throws IOException{

@@ -48,7 +48,7 @@ public class MarkRequestsCompleteController implements Initializable {
         btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
     public void initialize(URL location, ResourceBundle resources) {
-        int colWidth = 300;
+        int colWidth = 200;
         JFXTreeTableColumn<ServiceEntry, String> request = new JFXTreeTableColumn<>("Request Type");
         request.setPrefWidth(colWidth);
         request.setCellValueFactory(cellData -> cellData.getValue().getValue().getRequestTypeProperty());
@@ -69,7 +69,7 @@ public class MarkRequestsCompleteController implements Initializable {
         //JFXTreeTableView<ServiceEntry> requestView = new JFXTreeTableView<ServiceEntry>(root);
         requestView.setRoot(root);
         requestView.setShowRoot(false);
-        requestView.getColumns().setAll(request, assign, status, additionalInstructions);
+        requestView.getColumns().setAll(request, assign, additionalInstructions, status);
 
         List<ServiceEntry> data;
         try {

@@ -76,10 +76,6 @@ public class ServiceEntry extends RecursiveTreeObject<ServiceEntry> {
         return completeStatus;
     }
 
-    public SimpleStringProperty completeStatusProperty() {
-        return completeStatusProperty;
-    }
-
     public void setCompleteStatusProperty(String completeStatusProperty) {
         this.completeStatusProperty.set(completeStatusProperty);
     }

@@ -267,7 +267,7 @@ public class UserHandler implements DatabaseEntry {
         stmt.setString(1, username);
         ResultSet rset;
         AccountEntry user = null;
-        rset = stmt.executeQuery(sql);
+        rset = stmt.executeQuery();
         while (rset.next()){
             String type = rset.getString(2);
             String password = rset.getString(4);
