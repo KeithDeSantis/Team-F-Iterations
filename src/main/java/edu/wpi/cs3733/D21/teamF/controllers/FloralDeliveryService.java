@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  * Controller for Floral Delivery Service View
@@ -49,8 +50,6 @@ public class FloralDeliveryService {
         Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoHome.setImage(img);
     }
-
-    private int idCounter = 0; //counter for making service request IDs
 
     /**
      * Handles the push of a radio button (sets up Toggle Groups)
@@ -97,8 +96,8 @@ public class FloralDeliveryService {
         if(isFilledOut()) {
             String type = "Flower Delivery";
             String name = nameField.getText();
-            DatabaseAPI.getDatabaseAPI().addServiceReq(Integer.toString(idCounter), type, name, "false");
-            idCounter++;
+            String uuid = UUID.randomUUID().toString();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, name, "false");
             successField.setText("Request Submitted!");
         } else { successField.setText(""); }
     }
