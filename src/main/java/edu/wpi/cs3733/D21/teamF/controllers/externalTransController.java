@@ -11,7 +11,7 @@ import javax.swing.*;
 
 public class externalTransController {
     @FXML private JFXTextField employeeName;
-    @FXML private JFXTextField location;
+    @FXML private JFXTextField loc;
     @FXML private JFXTextField methodTrans;
     @FXML private JFXTextField special;
     @FXML private JFXButton submit;

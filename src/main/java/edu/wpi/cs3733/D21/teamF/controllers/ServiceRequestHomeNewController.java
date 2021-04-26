@@ -63,7 +63,7 @@ public class ServiceRequestHomeNewController {
             goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/FoodDeliveryServiceRequestView.fxml","Food Delivery",buttonPushed);
         }
         else if (buttonPushed == externalPaitintTrans){
-            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/ExternalTrans.fxml","External Patiant Transportation",buttonPushed);
+            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/ExternalTrans.fxml","External Patient Transportation",buttonPushed);
         }
 
     }
