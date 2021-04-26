@@ -1,0 +1,9 @@
+#header{
+    -fx-background-color: #94c4f1ff;
+    -fx-border-color: #03256c;
+    -fx-border-width: 0px 0px 10px 0px;
+    -fx-pref-height: 120px;
+    -fx-padding: 5px;
+    -fx-alignment: CENTER-LEFT;
+    -fx-spacing: 10px;
+}

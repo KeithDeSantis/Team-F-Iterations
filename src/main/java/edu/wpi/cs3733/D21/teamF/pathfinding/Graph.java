@@ -1,11 +1,16 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.AStarImpl;
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.BFSImpl;
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.DFSImpl;
+
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Graph {
     private final List<Edge> edges;
     private final HashMap<String, Vertex> vertices;
+
+    private IPathfindingAlgorithm pathfindingAlgorithm;
 
     /**
      * Creates a new Graph
@@ -14,6 +19,9 @@ public class Graph {
     public Graph() {
         this.edges = new LinkedList<>();
         this.vertices = new HashMap<>();
+
+        //Default to A*
+        this.pathfindingAlgorithm = new AStarImpl();
     }
 
     /**
@@ -58,7 +66,7 @@ public class Graph {
      * @author Alex Friedman (ahf), Tony Vuolo
      */
     public List<Vertex> getVertices() {
-        return vertices.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(vertices.values());
     }
 
     /**
@@ -95,150 +103,32 @@ public class Graph {
      * @return the List of Vertices spanning the path of least weight from Vertex a to Vertex b
      * @author Tony Vuolo
      */
-    public Path getPath(Vertex a, Vertex b) {
-        if (!contains(a) || !contains(b)) {
-            return null;
-        }
-        List<Vertex> exhaustedVertices = new LinkedList<>();
-        HashMap<String, Double> weights = new HashMap<>();
-        HashMap<String, Vertex> linkages = new HashMap<>();
-        Vertex proxy = a;
-        weights.put(proxy.getID(), 0.0);
-        boolean continueGraphSearchIteration = !proxy.equals(b);
-        while(continueGraphSearchIteration) {
-            exhaustedVertices.add(proxy);
-            for(Edge edge : proxy.getEdges()) {
-                Vertex neighbor = proxy.getNeighbor(edge);
-                if(doesNotContain(exhaustedVertices, neighbor)) {
-                    Vertex prev = linkages.get(neighbor.getID());
-                    Double dijkstraWeight = weights.get(proxy.getID()) + edge.getWeight();
-                    if(prev != null) {
-                        if(weights.get(neighbor.getID()) > dijkstraWeight) {
-                            weights.replace(neighbor.getID(), dijkstraWeight);
-                            linkages.replace(neighbor.getID(), proxy);
-                        }
-                    } else {
-                        weights.put(neighbor.getID(), dijkstraWeight);
-                        linkages.put(neighbor.getID(), proxy);
-                    }
-                }
-            }
-            Vertex next = null;
-            for(String key : weights.keySet()) {
-                Vertex vertex = this.vertices.get(key);
-                if((doesNotContain(exhaustedVertices, vertex))) {
-                    if(next == null) {
-                        next = vertex;
-                    } else if(weights.get(vertex.getID()) + vertex.heuristic(b) < weights.get(next.getID()) + next.heuristic(b)) {
-                        next = vertex;
-                    }
-                }
-            }
-            if(next == null) {
-                continueGraphSearchIteration = false;
-            } else {
-                proxy = next;
-                if(proxy.equals(b)) {
-                    continueGraphSearchIteration = false;
-                }
-            }
-        }
-//        List<Vertex> pathList = null;
-//        if(proxy.equals(b)) {
-//            pathList = new LinkedList<>();
-//            boolean continueBackwardPathGeneration = true;
-//            while(continueBackwardPathGeneration) {
-//                proxy = linkages.get(proxy.getID());
-//                if (proxy == null) {
-//                    continueBackwardPathGeneration = false;
-//                } else {
-//                    pathList.add(0, proxy);
-//                }
-//            }
-//        }
-//        Path path = new Path();
-//        if(pathList == null) {
-//            path = null;
-//        } else {
-//            for(Vertex vertex : pathList) {
-//                path.addVertexToPath(vertex, 0);
-//            }
-//            path.addVertexToPath(b, weights.get(b.getID()));
-//        }
-//        return path == null ? null : path.asList();
-
-        Path path = null;
-        if(proxy.equals(b)) {
-            path = new Path();
-            path.addVertexToPath(b, weights.get(b.getID()));
-            Vertex cursor = linkages.get(b.getID());
-            while(cursor != null) {
-                path.insertVertexInPath(0, cursor, 0);
-                cursor = linkages.get(cursor.getID());
-            }
-        }
-        return path;
-    }
-
+    public Path getPath(Vertex a, Vertex b) { return pathfindingAlgorithm.getPath(this, a, b); }
 
     /**
-     * Performs Depth-First Search on adjacency matrix
-     * @param a vertex to start from
-     * @return ArrayList of resultant path
+     * Used to change the pathfinding algorithm type.
+     * @param algorithmName The name of the algorithm to use (AStar/A*, BFS, DFS);
+     * @return true if we successfully changed the pathfinding algorithm. False if the specified algorithm could not be found.
+     * @author Alex Friedman (ahf)
      */
-    public Path DFS(Vertex a, Vertex b) {
-
-        if (contains(a) && contains(b)) { //FIXME: NULL CHECK
-            final Path path = DFS_Recur(a, b, new Path());
-
-            return path;
-        }
-
-        return null;
-    }
-
-    //FIXME: COMMENT
-    private Path DFS_Recur(Vertex curr, Vertex end, Path path)
+    public boolean setPathfindingAlgorithm(String algorithmName)
     {
-        if(curr == null) //FIXME: DO MORE NULL CHECKS, END SHOULDN'T BE ABLE TO BE NULL ANYWAYS
-            return null;
-
-        path.addVertexToPath(curr, 0.0);
-        //path.add(curr);
-
-        if(curr == end)
-            return path;
-
-        Path acceptedPath = null;
-
-        for(Edge e : curr.getEdges())
+        switch (algorithmName.toLowerCase())
         {
-            final Vertex n = curr.getNeighbor(e);
-
-            if(!path.contains(n))
-            {
-                //FIXME: Use more as a stack?
-                //final Path duplicated = path.clone();
-                //duplicated.addVertexToPath(n, e.getWeight());
-                path.addVertexToPath(n, e.getWeight());
-
-                final Path currPath = DFS_Recur(n, end, path); //duplicated);
-
-                //FIXME: DO BETTER HEURISTIC CHECK ON PATH SIZES TO ENSURE WE DON'T TEST ALL. MAKE PATH CLASS
-                if(currPath != null) {
-                    if (acceptedPath == null)
-                        acceptedPath = currPath.clone();
-                    else if (currPath.getPathCost() < acceptedPath.getPathCost())//currPath.size() < acceptedPath.size())
-                    {
-                        acceptedPath = currPath.clone();
-                    }
-                }
-                path.removeVertexFromPath(n, e.getWeight());
-            }
+            case "astar":
+            case "a*":
+                this.pathfindingAlgorithm = new AStarImpl();
+                return true;
+            case "dfs":
+                this.pathfindingAlgorithm = new DFSImpl();
+                return true;
+            case "bfs":
+                this.pathfindingAlgorithm = new BFSImpl();
+                return true;
         }
-
-        return acceptedPath;
+        return false;
     }
+
 
     /**
      * Determines if a given List contains a specific Vertex
@@ -247,7 +137,7 @@ public class Graph {
      * @return true if some value in the List is congruent to the Vertex, else false
      * @author Tony Vuolo
      */
-    private boolean doesNotContain(List<Vertex> list, Vertex vertex) {
+    public boolean doesNotContain(List<Vertex> list, Vertex vertex) {
         for(Vertex query : list) {
             if(query.equals(vertex)) {
                 return false;

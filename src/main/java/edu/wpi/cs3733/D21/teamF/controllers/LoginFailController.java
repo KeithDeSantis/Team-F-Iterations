@@ -63,7 +63,7 @@ public class LoginFailController {
         }
         //displays error message
         else{
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/LoginFailView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LoginFail.fxml"));
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
         }
