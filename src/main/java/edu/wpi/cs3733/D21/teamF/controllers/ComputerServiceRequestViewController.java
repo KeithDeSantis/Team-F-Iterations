@@ -10,6 +10,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -50,10 +53,18 @@ public class ComputerServiceRequestViewController {
 
 
     @FXML
-    public void handleSubmit() {
+    public void handleSubmit() throws IOException {
         if(validate())
         {
             //Do something
+            Stage submittedStage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml")); // Loading in pop up View
+            Scene submitScene = new Scene(root);
+            submittedStage.setScene(submitScene);
+            submittedStage.setTitle("Submission Complete");
+            submittedStage.initModality(Modality.APPLICATION_MODAL);
+            submittedStage.initOwner((computerNameText).getScene().getWindow());
+            submittedStage.showAndWait();
         }
     }
 

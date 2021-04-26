@@ -31,4 +31,9 @@ public class FormSubmittedViewController {
         btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 
+    public void handleHoverOn(javafx.scene.input.MouseEvent mouseEvent) {
+    }
+
+    public void handleHoverOff(javafx.scene.input.MouseEvent mouseEvent) {
+    }
 }
