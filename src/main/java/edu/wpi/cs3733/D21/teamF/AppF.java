@@ -11,7 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import javax.xml.crypto.Data;
 
 public class  AppF extends Application {
@@ -24,9 +24,15 @@ public class  AppF extends Application {
   }
 
   @Override
-  public void start(Stage primaryStage) throws SQLException {
-    DatabaseAPI.getDatabaseAPI().createNodesTable();
-    DatabaseAPI.getDatabaseAPI().createEdgesTable();
+  public void start(Stage primaryStage) throws SQLException, Exception {
+    if (DatabaseAPI.getDatabaseAPI().createNodesTable())
+    {
+        DatabaseAPI.getDatabaseAPI().populateNodes(CSVManager.load("MapfAllNodes.csv"));
+    }
+    if (DatabaseAPI.getDatabaseAPI().createEdgesTable())
+    {
+        DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("MapfAllEdges.csv"));
+    }
     DatabaseAPI.getDatabaseAPI().createUserTable();
     DatabaseAPI.getDatabaseAPI().createServiceRequestTable(); //FIXME: DO BETTER
 
