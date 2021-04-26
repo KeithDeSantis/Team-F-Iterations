@@ -133,6 +133,27 @@ public class DoublyLinkedHashSet<Payload> implements Iterable<Payload> {
     }
 
     /**
+     * Removes an element from this DoublyLinkedHashSet if the index is in the required bounds
+     * @param index the index of the target element
+     * @return the element at the specified index
+     */
+    public Payload removeIndex(int index) {
+        if(index < 0 || index >= size()) {
+            throw new IndexOutOfBoundsException();
+        } else {
+            HashNode<Payload> head = this.head;
+            int cursorIndex = 0;
+            while(cursorIndex < index) {
+                head = head.next;
+                cursorIndex++;
+            }
+            Payload removedPayload = head.payload;
+            remove(head.payload);
+            return removedPayload;
+        }
+    }
+
+    /**
      * Converts this DoublyLinkedHashSet to a List
      * @return the Payload contents of this DoublyLinkedHashSet in a List
      */

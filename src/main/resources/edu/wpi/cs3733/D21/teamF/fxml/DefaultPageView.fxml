@@ -2,120 +2,59 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Ellipse?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.DefaultPageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-image: url('imagesAndLogos/BWHExterior.jpg'); -fx-background-size: 1920; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.DefaultPageController">
    <children>
-      <HBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="header" alignment="CENTER_LEFT" prefHeight="120.0" prefWidth="960.0" spacing="10.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
          <children>
-            <VBox alignment="CENTER" prefHeight="510.0" prefWidth="504.0" spacing="50.0">
+            <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL" wrappingWidth="489.7598876953125">
+               <font>
+                  <Font name="Volkhov Regular" size="40.0" />
+               </font>
+            </Text>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" top="5.0" />
+         </padding></HBox>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="250.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="463.0" text="Welcome to Brigham and Women's Hospital!" textAlignment="CENTER" wrapText="true">
+                  <JFXButton fx:id="loginButton" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="250.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Login" VBox.vgrow="ALWAYS">
                      <font>
-                        <Font name="Tahoma Bold" size="28.0" />
+                        <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
-                     <VBox.margin>
-                        <Insets left="50.0" top="30.0" />
-                     </VBox.margin>
-                  </Label>
-                  <ImageView fitHeight="321.0" fitWidth="278.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
-                     <image>
-                        <Image url="@../../../../imagesAndLogos/BandWLogo.png" />
-                     </image>
-                     <VBox.margin>
-                        <Insets left="50.0" />
-                     </VBox.margin>
-                  </ImageView>
-               </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="540.0" prefWidth="498.0" spacing="35.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <GridPane alignment="CENTER" prefHeight="474.0" prefWidth="405.0">
-                    <columnConstraints>
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="203.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="202.0" minWidth="10.0" prefWidth="202.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="1.0" prefHeight="1.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <JFXButton fx:id="serviceRequest" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " wrapText="true">
-                           <font>
-                              <Font name="Tahoma" size="18.0" />
-                           </font>
-                           <graphic>
-                              <ImageView fx:id="serviceButton" fitHeight="100.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true" />
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton fx:id="quit" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" text=" " GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </JFXButton>
-                        <Label text="Service Request Menu" GridPane.rowIndex="1">
-                           <font>
-                              <Font name="Tahoma" size="18.0" />
-                           </font>
-                        </Label>
-                        <Label text="Directions" GridPane.rowIndex="3">
-                           <font>
-                              <Font name="Tahoma" size="18.0" />
-                           </font>
-                        </Label>
-                        <Label text="Quit App" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <font>
-                              <Font name="Tahoma" size="18.0" />
-                           </font>
-                        </Label>
-                        <JFXButton fx:id="AStarDemo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" ripplerFill="#ffffff00" GridPane.rowIndex="2">
-                           <graphic>
-                              <ImageView fx:id="directionsImage" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
-                           </graphic>
-                        </JFXButton>
-                        <Ellipse fill="#ff1f1f" radiusX="50.0" radiusY="50.0" stroke="RED" strokeType="INSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="X" textAlignment="CENTER" wrappingWidth="50.41455078125" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                           <font>
-                              <Font name="Tahoma Bold" size="61.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets left="50.0" right="53.0" />
-                           </GridPane.margin>
-                        </Text>
-                        <Label text="Login" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <font>
-                              <Font name="Tahoma" size="18.0" />
-                           </font>
-                        </Label>
-                        <JFXButton fx:id="loginButton" ellipsisString="" onAction="#handleButtonPushed" prefHeight="100.0" prefWidth="150.0" text=" " GridPane.columnIndex="1">
-                           <graphic>
-                              <ImageView fx:id="login" fitHeight="90.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
-                           </graphic>
-                        </JFXButton>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="50.0" left="60.0" right="60.0" top="50.0" />
-                     </VBox.margin>
-                  </GridPane>
+                  </JFXButton>
+                  <JFXButton fx:id="navigation" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="250.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Navigation" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="serviceRequest" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="250.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Request Service" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="quit" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="250.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Quit">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
                </children>
             </VBox>
          </children>
-      </HBox>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</VBox>
