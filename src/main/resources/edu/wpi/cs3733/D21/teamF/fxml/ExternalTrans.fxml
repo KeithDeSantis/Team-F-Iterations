@@ -48,7 +48,7 @@
                   <JFXTextField fx:id="location" GridPane.rowIndex="5" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Location" GridPane.rowIndex="4" />
                   <JFXTextField fx:id="special" prefHeight="0.0" prefWidth="961.0" GridPane.rowIndex="7" />
-                  <JFXButton fx:id="submit" buttonType="RAISED" onAction="#submitpushed" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" GridPane.rowIndex="8" />
+                  <JFXButton fx:id="submit" buttonType="RAISED" onAction="#submitpushed" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" GridPane.rowIndex="8" text="Submit" />
                </children>
             </VBox>
          </children>

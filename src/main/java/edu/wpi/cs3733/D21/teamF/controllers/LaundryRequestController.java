@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXRadioButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,15 +11,15 @@ import javafx.scene.control.TextField;
 
 public class LaundryRequestController {
 
-    @FXML private Button submit;
-    @FXML private Button cancel;
-    @FXML private Button help;
-    @FXML private RadioButton darks;
-    @FXML private RadioButton lights;
-    @FXML private RadioButton both;
-    @FXML private RadioButton hot;
-    @FXML private RadioButton cold;
-    @FXML private RadioButton folded;
+    @FXML private JFXButton submit;
+    @FXML private JFXButton cancel;
+    @FXML private JFXButton help;
+    @FXML private JFXRadioButton darks;
+    @FXML private JFXRadioButton lights;
+    @FXML private JFXRadioButton both;
+    @FXML private JFXRadioButton hot;
+    @FXML private JFXRadioButton cold;
+    @FXML private JFXRadioButton folded;
 
     @FXML public TextField employeeID;
     @FXML public TextField clientName;
