@@ -71,7 +71,14 @@ public class ComputerServiceRequestViewController {
 
 
     @FXML
-    public void handleCancel() throws IOException { goHome(); }
+    public void handleCancel() throws IOException { // Updated to return to service request home instead of default page
+        Stage stage;
+        Parent root;
+        stage = (Stage) computerNameText.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Service Request Home");
+        stage.show(); }
 
 
     /**
