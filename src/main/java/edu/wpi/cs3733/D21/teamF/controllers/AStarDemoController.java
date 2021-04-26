@@ -80,7 +80,7 @@ public class AStarDemoController implements Initializable {
      */
     private DrawableNode startNodeDisplay;
     private DrawableNode endNodeDisplay;
-
+    private DrawableNode userNodeDisplay;
 
     // Global variables for the stepper
     private List<Vertex> pathVertex;
@@ -96,6 +96,7 @@ public class AStarDemoController implements Initializable {
     String curFloor;
 
     DrawableNode direction;
+    private static final double PIXEL_TO_METER_RATIO = 10;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -161,7 +162,6 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         pathVertex = null;
         Instruction.setVisible(false);
-        ETA.setVisible(false);
 
         direction = null;
 
@@ -331,8 +331,31 @@ public class AStarDemoController implements Initializable {
         }
     }
 
-    final double MPH_to_FtPerS = 22.0/15.0;
-    final double AVERAGE_WALKING_SPEED_MPH = 3.1;
+    /**
+     * Helper function used to draw the userNode with given ID
+     * @param nodeID the ID of the Node
+     * @author Alex Friedman (ahf) / ZheCheng Song
+     */
+    private void drawUserNode(String nodeID) throws SQLException{
+        final NodeEntry userNode = DatabaseAPI.getDatabaseAPI().getNode(nodeID);
+        if(userNode != null)
+        {
+            final DrawableNode drawableNode = userNode.getDrawable();
+            drawableNode.setFill(Color.PURPLE);
+            drawableNode.setRadius(10);
+
+            Tooltip tt = new Tooltip();
+            tt.setText("User");
+            tt.setStyle("-fx-font: normal bold 15 Langdon; "
+                    + "-fx-base: #AE3522; "
+                    + "-fx-text-fill: orange;");
+            Tooltip.install(drawableNode, tt);
+
+            mapPanel.draw(drawableNode);
+
+            this.userNodeDisplay = drawableNode;
+        }
+    }
 
     /**
      * This is used to clear the pathfinding drawn path.
@@ -372,9 +395,6 @@ public class AStarDemoController implements Initializable {
             pathVertex = null;
             if(path != null)
             {
-                final double ESTIMATED_LENGTH_TIME = path.getPathCost() * AVERAGE_WALKING_SPEED_MPH * MPH_to_FtPerS;
-                final double ESTIMATED_LENGTH_TIME_MIN = Math.floor(ESTIMATED_LENGTH_TIME + 0.5);
-
                 pathVertex = path.asList();
                 drawPathFromIndex(0);
                 return true;
@@ -448,6 +468,7 @@ public class AStarDemoController implements Initializable {
         }else{
             clearPath();
             updatePath();
+            ETA.setText(calculateETA(0, pathVertex.size() - 1));
             Go.setDisable(false);
         }
     }
@@ -575,24 +596,29 @@ public class AStarDemoController implements Initializable {
         }
 
         // Calculate ETA
-        calculateETA();
-
+        for(int i = 0; i < stops.size(); i ++) {
+            eta.add(calculateETA(stops.get(i), pathVertex.size() - 1));
+        }
         //System.out.println(pathVertex);
         //System.out.println(instructions);
         //System.out.println(stops);
     }
 
-    private void calculateETA(){
-        for(int i = 0; i < stops.size(); i ++){
-            int distance = (int)Math.round(calculateDistance(pathVertex, stops.get(i), pathVertex.size() - 1));
-            // Assume walks in 1.2m/s
-            int totalSecond = (int)Math.round(distance / 1.2);
-            int hour = totalSecond / 3600;
-            if(hour > 0) totalSecond -= 3600 * hour;
-            int min = totalSecond / 60;
-            if(min > 0) totalSecond -= 60 * min;
-            eta.add("ETA : " + hour + ":" + min + ":" + totalSecond);
-        }
+    private String calculateETA(int startIndex, int endIndex){
+        int distance = (int)Math.round(calculateDistance(pathVertex, startIndex, endIndex));
+        // Assume walks in 1.2m/s
+        int totalSecond = (int)Math.round(distance / 1.2);
+        int hour = totalSecond / 3600;
+        if(hour > 0) totalSecond -= 3600 * hour;
+        int min = totalSecond / 60;
+        if(min > 0) totalSecond -= 60 * min;
+        String hZero = "";
+        String mZero = "";
+        String sZero = "";
+        if(hour / 10 < 1) hZero = "0";
+        if(min / 10 < 1) mZero = "0";
+        if(totalSecond / 10 < 1) sZero = "0";
+        return ("ETA : " + hZero + hour + ":" + mZero + min + ":" + sZero + totalSecond);
     }
 
     private int searchSE(int startIndex){
@@ -731,19 +757,21 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(false);
         End.setDisable(false);
         Instruction.setVisible(true);
-        ETA.setVisible(true);
         curStep = 0;
         pathFinding = true;
 
         parseRoute();
         mapPanel.switchMap(pathVertex.get(0).getFloor());
+
         clearPath();
+        drawPathFromIndex(0);
         drawStartNode(pathVertex.get(0).getID());
         drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
-        drawPathFromIndex(curStep);
+        drawUserNode(pathVertex.get(stops.get(curStep)).getID());
+        mapPanel.centerNode(userNodeDisplay);
+
         Instruction.setText(instructions.get(curStep));
         ETA.setText(eta.get(curStep));
-        mapPanel.centerNode(startNodeDisplay);
         curFloor = pathVertex.get(0).getFloor();
 
         curD = "UP";
@@ -757,7 +785,6 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void goToPrevNode(ActionEvent actionEvent) throws SQLException {
-        clearPath();
         curStep--;
         if(curStep == 0){
             Prev.setDisable(true);
@@ -770,12 +797,16 @@ public class AStarDemoController implements Initializable {
             mapPanel.switchMap(pathVertex.get(stops.get(curStep)).getFloor());
         }
         curFloor = pathVertex.get(stops.get(curStep)).getFloor();
-        drawStartNode(pathVertex.get(stops.get(curStep)).getID());
-        drawEndNode(pathVertex.get(pathVertex.size() - 1).getID());
-        drawPathFromIndex(stops.get(curStep));
+
+        clearPath();
+        drawPathFromIndex(0);
+        drawStartNode(pathVertex.get(0).getID());
+        drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
+        drawUserNode(pathVertex.get(stops.get(curStep)).getID());
+        mapPanel.centerNode(userNodeDisplay);
+
         Instruction.setText(instructions.get(curStep));
         ETA.setText(eta.get(curStep));
-        mapPanel.centerNode(startNodeDisplay);
 
         changeDirectionRevert(instructions.get(curStep));
         drawDirection();
@@ -790,13 +821,11 @@ public class AStarDemoController implements Initializable {
     public void goToNextNode(ActionEvent actionEvent) throws SQLException {
         changeDirection(instructions.get(curStep));
 
-        clearPath();
         curStep++;
         if(curStep == Math.min(stops.size() - 1, instructions.size() - 1)){
             Next.setDisable(true);
         }
         else {
-            drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
             Prev.setDisable(false);
             Next.setDisable(false);
         }
@@ -804,16 +833,22 @@ public class AStarDemoController implements Initializable {
             mapPanel.switchMap(pathVertex.get(stops.get(curStep)).getFloor());
         }
         curFloor = pathVertex.get(stops.get(curStep)).getFloor();
-        drawStartNode(pathVertex.get(stops.get(curStep)).getID());
-        drawPathFromIndex(stops.get(curStep));
+
+        clearPath();
+        drawPathFromIndex(0);
+        drawStartNode(pathVertex.get(0).getID());
+        drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
+        drawUserNode(pathVertex.get(stops.get(curStep)).getID());
+        mapPanel.centerNode(userNodeDisplay);
+
         Instruction.setText(instructions.get(curStep));
         ETA.setText(eta.get(curStep));
-        mapPanel.centerNode(startNodeDisplay);
 
         drawDirection();
 
         if(direction != null &&curStep == Math.min(stops.size() - 1, instructions.size() - 1))
                 mapPanel.unDraw(this.direction.getId());
+
     }
 
     /**
@@ -830,16 +865,19 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         End.setDisable(true);
         Instruction.setVisible(false);
-        ETA.setVisible(false);
         curStep = 0;
         pathFinding = false;
 
         mapPanel.switchMap(pathVertex.get(0).getFloor());
+
         clearPath();
+        drawPathFromIndex(0);
         drawStartNode(pathVertex.get(0).getID());
         drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
-        drawPathFromIndex(curStep);
-        mapPanel.centerNode(startNodeDisplay);
+        drawUserNode(pathVertex.get(stops.get(curStep)).getID());
+        mapPanel.centerNode(userNodeDisplay);
+
+        ETA.setText(calculateETA(0, pathVertex.size() - 1));
     }
 
     /**
@@ -854,6 +892,6 @@ public class AStarDemoController implements Initializable {
         for (int i = start; i < end; i++) {
             sumDist += path.get(i).EuclideanDistance(path.get(i + 1));
         }
-        return sumDist;
+        return sumDist / PIXEL_TO_METER_RATIO;
     }
 }
