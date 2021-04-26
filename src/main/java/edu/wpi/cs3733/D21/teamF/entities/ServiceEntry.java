@@ -13,6 +13,33 @@ public class ServiceEntry extends RecursiveTreeObject<ServiceEntry> {
     SimpleStringProperty requestTypeProperty;
     SimpleStringProperty assignedToProperty;
     SimpleStringProperty completeStatusProperty;
+    SimpleStringProperty additionalInstructionsProperty;
+    SimpleStringProperty uuidProperty;
+
+    public ServiceEntry(String uuid, String requestType, String assignedTo, String completeStatus, String additionalInstructions) {
+        this.uuid = uuid;
+        this.requestType = requestType;
+        this.assignedTo = assignedTo;
+        this.completeStatus = completeStatus;
+        this.additionalInstructions = additionalInstructions;
+        requestTypeProperty = new SimpleStringProperty(requestType);
+        assignedToProperty = new SimpleStringProperty(assignedTo);
+        completeStatusProperty = new SimpleStringProperty(completeStatus);
+        additionalInstructionsProperty = new SimpleStringProperty(additionalInstructions);
+        uuidProperty = new SimpleStringProperty(uuid);
+    }
+
+    public SimpleStringProperty getUuidProperty() {
+        return uuidProperty;
+    }
+
+    public SimpleStringProperty uuidProperty() {
+        return uuidProperty;
+    }
+
+    public void setUuidProperty(SimpleStringProperty uuidProperty) {
+        this.uuidProperty = uuidProperty;
+    }
 
     public String getAdditionalInstructions() {
         return additionalInstructions;
@@ -26,26 +53,8 @@ public class ServiceEntry extends RecursiveTreeObject<ServiceEntry> {
         return additionalInstructionsProperty;
     }
 
-    public SimpleStringProperty additionalInstructionsPropertyProperty() {
-        return additionalInstructionsProperty;
-    }
-
-    public void setAdditionalInstructionsProperty(String additionalInstructionsProperty) {
-        this.additionalInstructionsProperty.set(additionalInstructionsProperty);
-    }
-
-    SimpleStringProperty additionalInstructionsProperty;
-
-    public ServiceEntry(String uuid, String requestType, String assignedTo, String completeStatus, String additionalInstructions) {
-        this.uuid = uuid;
-        this.requestType = requestType;
-        this.assignedTo = assignedTo;
-        this.completeStatus = completeStatus;
-        this.additionalInstructions = additionalInstructions;
-        requestTypeProperty = new SimpleStringProperty(requestType);
-        assignedToProperty = new SimpleStringProperty(assignedTo);
-        completeStatusProperty = new SimpleStringProperty(completeStatus);
-        additionalInstructionsProperty = new SimpleStringProperty(additionalInstructions);
+    public void setAdditionalInstructionsProperty(SimpleStringProperty additionalInstructionsProperty) {
+        this.additionalInstructionsProperty = additionalInstructionsProperty;
     }
 
     public String getRequestType() {
@@ -56,8 +65,8 @@ public class ServiceEntry extends RecursiveTreeObject<ServiceEntry> {
         return requestTypeProperty;
     }
 
-    public void setRequestTypeProperty(String requestType) {
-        this.requestTypeProperty.set(requestType);
+    public void setRequestTypeProperty(SimpleStringProperty requestTypeProperty) {
+        this.requestTypeProperty = requestTypeProperty;
     }
 
     public String getAssignedTo() {
@@ -68,16 +77,16 @@ public class ServiceEntry extends RecursiveTreeObject<ServiceEntry> {
         return assignedToProperty;
     }
 
-    public void setAssignedToProperty(String assignedToProperty) {
-        this.assignedToProperty.set(assignedToProperty);
+    public void setAssignedToProperty(SimpleStringProperty assignedToProperty) {
+        this.assignedToProperty = assignedToProperty;
     }
 
     public String getCompleteStatus() {
         return completeStatus;
     }
 
-    public void setCompleteStatusProperty(String completeStatusProperty) {
-        this.completeStatusProperty.set(completeStatusProperty);
+    public void setCompleteStatusProperty(SimpleStringProperty completeStatusProperty) {
+        this.completeStatusProperty = completeStatusProperty;
     }
 
     public String getUuid() {

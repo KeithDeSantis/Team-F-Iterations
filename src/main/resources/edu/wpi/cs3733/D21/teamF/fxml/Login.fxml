@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LoginController">
    <children>
@@ -27,14 +26,14 @@
                   <Insets left="25.0" right="25.0" top="25.0" />
                </VBox.margin>
             </Label>
-            <Text fx:id="errorMessage" fill="#e6e6e6" strokeType="OUTSIDE" strokeWidth="0.0" text="Username and/or password do not match our records">
+            <Label fx:id="errorMessage" text="Username and/or password do not match our records" textFill="#c6000000">
                <VBox.margin>
                   <Insets top="25.0" />
                </VBox.margin>
                <font>
                   <Font name="Montserrat Bold" size="18.0" />
                </font>
-            </Text>
+            </Label>
             <JFXTextField fx:id="username" focusColor="#03256c" promptText="Username or email">
                <VBox.margin>
                   <Insets bottom="25.0" left="100.0" right="100.0" top="25.0" />
