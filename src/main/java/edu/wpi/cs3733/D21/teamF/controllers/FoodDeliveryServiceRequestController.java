@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import com.jfoenix.controls.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,33 +18,33 @@ import java.io.IOException;
  */
 public class FoodDeliveryServiceRequestController {
 
-    @FXML private Button xButton;
-    @FXML private Button cancelButton;
-    @FXML private Button helpButton;
+    @FXML private JFXButton xButton;
+    @FXML private JFXButton cancelButton;
+    @FXML private JFXButton helpButton;
     @FXML private Button helpXButton;
-    @FXML private Button submitButton;
-    @FXML private TextField deliveryLocationField;
-    @FXML private TextField deliveryTimeField;
-    @FXML private TextField allergyField;
-    @FXML private TextField specialInstructionsField;
-    @FXML private RadioButton rButtonFood1;
-    @FXML private RadioButton rButtonFood2;
-    @FXML private RadioButton rButtonFood3;
-    @FXML private RadioButton rButtonFood4;
-    @FXML private RadioButton rButtonDrink1;
-    @FXML private RadioButton rButtonDrink2;
-    @FXML private RadioButton rButtonDrink3;
-    @FXML private RadioButton rButtonDrink4;
-    @FXML private CheckBox cbSide1;
-    @FXML private CheckBox cbSide2;
-    @FXML private CheckBox cbSide3;
-    @FXML private CheckBox cbSide4;
+    @FXML private JFXButton submitButton;
+    @FXML private JFXTextField deliveryLocationField;
+    @FXML private JFXTimePicker deliveryTimeField;
+    @FXML private JFXTextField allergyField;
+    @FXML private JFXTextField specialInstructionsField;
+    @FXML private JFXRadioButton rButtonFood1;
+    @FXML private JFXRadioButton rButtonFood2;
+    @FXML private JFXRadioButton rButtonFood3;
+    @FXML private JFXRadioButton rButtonFood4;
+    @FXML private JFXRadioButton rButtonDrink1;
+    @FXML private JFXRadioButton rButtonDrink2;
+    @FXML private JFXRadioButton rButtonDrink3;
+    @FXML private JFXRadioButton rButtonDrink4;
+    @FXML private JFXCheckBox cbSide1;
+    @FXML private JFXCheckBox cbSide2;
+    @FXML private JFXCheckBox cbSide3;
+    @FXML private JFXCheckBox cbSide4;
 
     /**
      * handles submit being pressed
      * @param e is the button being pushed
      * @throws IOException
-     * @author Keith DeSantis
+     * @author KH
      */
     @FXML
     private void handleSubmitPushed(ActionEvent e) throws IOException{
@@ -106,13 +107,13 @@ public class FoodDeliveryServiceRequestController {
      */
     private boolean formFilledOut() {
         boolean deliveryLocation = deliveryLocationField.getText().length() > 0;
-        boolean deliveryTime = deliveryTimeField.getText().length() > 0;
+        //boolean deliveryTime = deliveryTimeField.getText().length() > 0;
         //boolean allergy = allergyField.getText().length() > 0;
         boolean foodChosen = rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected();
         boolean drinkChosen = rButtonDrink1.isSelected() || rButtonDrink2.isSelected() || rButtonDrink3.isSelected() || rButtonDrink4.isSelected();
         boolean sideChosen = cbSide1.isSelected() || cbSide2.isSelected() || cbSide3.isSelected() || cbSide4.isSelected();
 
-        return deliveryLocation && deliveryTime && foodChosen && drinkChosen && sideChosen;
+        return deliveryLocation && foodChosen && drinkChosen && sideChosen;
     }
 
     /**
