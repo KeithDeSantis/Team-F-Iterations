@@ -184,12 +184,12 @@ public class MaintenenceRequestController {
         if(typeComboBox.getValue() == null){
             filled = false;
             typeComboBox.setStyle("-fx-background-color: #ff000088");
-            typeComboBox.setPromptText("Please give a location");
+            typeComboBox.setPromptText("Specify the problem");
         }
         if(locationField.getValue() == null){
             filled = false;
-            typeComboBox.setStyle("-fx-background-color: #ff000088");
-            typeComboBox.setPromptText("Please give a location");
+            locationField.setStyle("-fx-background-color: #ff000088");
+            locationField.setPromptText("Please give a location");
         }
         if(descriptionField.getText().isEmpty()){
             filled = false;
@@ -217,4 +217,6 @@ public class MaintenenceRequestController {
         typeComboBox.setStyle("-fx-background-color: #00000000");
         urgencyComboBox.setStyle("-fx-background-color: #00000000");
     }
+
+
 }

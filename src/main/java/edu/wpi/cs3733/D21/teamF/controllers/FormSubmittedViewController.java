@@ -2,9 +2,9 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-import java.awt.event.MouseEvent;
 
 /**
  * Controller for Form Submitted Pop Up
@@ -21,6 +21,7 @@ public class FormSubmittedViewController {
     private void okButtonPushed() {
         ( (Stage) okButton.getScene().getWindow()).close();
     }
+
     public void handleHoverOn(MouseEvent mouseEvent) {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
         btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");

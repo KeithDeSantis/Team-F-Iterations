@@ -4,9 +4,16 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 
 public class LaundryRequestController {
@@ -50,10 +57,25 @@ public class LaundryRequestController {
     }
 
     @FXML
-    public void submitReq(ActionEvent actionEvent) {
+    public void submitReq(ActionEvent e) throws IOException {
+        Stage submittedStage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml")); // Loading in pop up View
+        Scene submitScene = new Scene(root);
+        submittedStage.setScene(submitScene);
+        submittedStage.setTitle("Submission Complete");
+        submittedStage.initModality(Modality.APPLICATION_MODAL);
+        submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
+        submittedStage.showAndWait();
     }
 
     @FXML
-    public void cancelReq(ActionEvent actionEvent) {
+    public void cancelReq(ActionEvent actionEvent) throws IOException {
+        Stage stage;
+        Parent root;
+        stage = (Stage) cancel.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Service Request Home");
+        stage.show();
     }
 }

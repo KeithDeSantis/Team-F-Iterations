@@ -168,11 +168,11 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <JFXButton fx:id="submit" alignment="TOP_LEFT" contentDisplay="TOP" mnemonicParsing="false" onAction="#submitReq" text="Submit" GridPane.columnIndex="2" />
-                              <JFXButton fx:id="cancel" mnemonicParsing="false" onAction="#cancelReq" text="Cancel" GridPane.columnIndex="1" />
+                              <JFXButton fx:id="submit" alignment="TOP_LEFT" buttonType="RAISED" contentDisplay="TOP" mnemonicParsing="false" onAction="#submitReq" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="2" />
+                              <JFXButton fx:id="cancel" buttonType="RAISED" mnemonicParsing="false" onAction="#cancelReq" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.columnIndex="1" />
                               <JFXButton mnemonicParsing="false" text="Help" />
                               <JFXButton layoutX="10.0" layoutY="98.0" mnemonicParsing="false" text="Help" />
-                              <JFXButton fx:id="help" layoutX="10.0" layoutY="98.0" mnemonicParsing="false" text="Help" />
+                              <JFXButton fx:id="help" buttonType="RAISED" layoutX="10.0" layoutY="98.0" mnemonicParsing="false" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Help" />
                            </children>
                         </GridPane>
                      </children>
