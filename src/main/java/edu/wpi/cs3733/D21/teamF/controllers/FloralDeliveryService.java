@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Controller for Floral Delivery Service View
@@ -28,6 +30,7 @@ public class FloralDeliveryService {
     @FXML private JFXButton submitButton;
     @FXML private JFXTextField deliveryField;
     @FXML private JFXDatePicker dateField;
+    @FXML private JFXTextField nameField;
     @FXML private JFXTextField cardNumberField;
     @FXML private JFXTextField cardCVCField;
     @FXML private JFXTextField cardExpField;
@@ -46,6 +49,8 @@ public class FloralDeliveryService {
         Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoHome.setImage(img);
     }
+
+    private int idCounter = 0; //counter for making service request IDs
 
     /**
      * Handles the push of a radio button (sets up Toggle Groups)
@@ -88,8 +93,12 @@ public class FloralDeliveryService {
      * @param actionEvent
      * @author KD
      */
-    public void handleSubmit(ActionEvent actionEvent) {
+    public void handleSubmit(ActionEvent actionEvent) throws SQLException {
         if(isFilledOut()) {
+            String type = "Flower Delivery";
+            String name = nameField.getText();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(Integer.toString(idCounter), type, name, "false");
+            idCounter++;
             successField.setText("Request Submitted!");
         } else { successField.setText(""); }
     }
@@ -130,6 +139,13 @@ public class FloralDeliveryService {
         }
         else {
             deliveryField.setStyle("-fx-background-color: transparent;");
+        }
+        if(nameField.getText().length() == 0) {
+            isFilled = false;
+            nameField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            nameField.setStyle("-fx-background-color: transparent;");
         }
         if(cardNumberField.getText().length() == 0) {
             isFilled = false;
@@ -183,6 +199,7 @@ public class FloralDeliveryService {
         orchidCheckBox.setSelected(false);
         daisyCheckBox.setSelected(false);
         deliveryField.setText("");
+        nameField.setText("");
         cardNumberField.setText("");
         cardExpField.setText("");
         cardCVCField.setText("");
@@ -197,6 +214,7 @@ public class FloralDeliveryService {
         orchidCheckBox.setStyle("-fx-text-fill: #000000");
         daisyCheckBox.setStyle("-fx-text-fill: #000000");
         deliveryField.setStyle("-fx-background-color: transparent;");
+        nameField.setStyle("-fx-background-color: transparent;");
         cardNumberField.setStyle("-fx-background-color: transparent;");
         cardCVCField.setStyle("-fx-background-color: transparent;");
         cardExpField.setStyle("-fx-background-color: transparent;");
