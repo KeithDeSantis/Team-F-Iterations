@@ -1,11 +1,9 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -17,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Cell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -34,6 +33,7 @@ public class MarkRequestsCompleteController implements Initializable {
     private JFXButton markAsComplete;
     @FXML
     private JFXButton home;
+    @FXML private JFXComboBox<String> employeeDropDown;
     @FXML
     private JFXTreeTableView<ServiceEntry> requestView;
     private ObservableList<ServiceEntry> services = FXCollections.observableArrayList();
@@ -48,6 +48,7 @@ public class MarkRequestsCompleteController implements Initializable {
         btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
     public void initialize(URL location, ResourceBundle resources) {
+        //TreeTable
         List<ServiceEntry> data;
         try {
             data = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
@@ -81,13 +82,29 @@ public class MarkRequestsCompleteController implements Initializable {
         requestView.setShowRoot(false);
         requestView.getColumns().setAll(request, assign, status, additionalInstructions);
 
-
-
-        //add table entries like in account manager
-        //syntax of adding item: services.add(new ServiceEntry("Request Type", "Assigned To", "Status));
+        //employeeDropDown
+        List<String> employees;
+        try {
+            UserHandler userHandler = new UserHandler();
+            //get all users who are employees
+            // employees = userHandler.listAllUsers();
+            for (String s : employees)
+            {
+                employeeDropDown.getItems().add(s);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
 
     }
-
+    public void editingState (MouseEvent mouseEvent){
+        Cell editingCell = new Cell();
+        editingCell.startEdit();
+        editingCell.setText("");
+        editingCell.setGraphic(employeeDropDown);
+    }
     public void handleClose(ActionEvent actionEvent) {
         Platform.exit();
     }
