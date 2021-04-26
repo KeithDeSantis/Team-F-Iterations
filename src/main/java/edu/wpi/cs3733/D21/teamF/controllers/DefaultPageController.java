@@ -1,5 +1,8 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.states.PathfindingState;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
+import edu.wpi.cs3733.D21.teamF.states.ServiceRequestHomeState;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -56,20 +59,9 @@ public class DefaultPageController {
             stage.setTitle("Log in");
             stage.show();
         } else if (buttonPushed == AStarDemo) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("AStar Pathfinding Demo");
-            stage.show();
-
+            PathfindingState.getPathfindingState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == serviceRequest) {
-
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Service Request Home");
-            stage.show();
-
+            ServiceRequestHomeState.getServiceRequestHomeState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == quit) {
             Platform.exit();
         }

@@ -1,5 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
+import edu.wpi.cs3733.D21.teamF.states.ServiceRequestHomeState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -78,12 +80,7 @@ public class FoodDeliveryServiceRequestController {
         Button buttonPushed = (Button) e.getSource();
 
         if (buttonPushed == xButton || buttonPushed == cancelButton) { // is x button
-            Stage stage = (Stage) xButton.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Service Requests");
-            stage.show();
+            ServiceRequestHomeState.getServiceRequestHomeState().switchScene(SceneContext.getSceneContext());
         } else if (buttonPushed == helpButton){
             Stage helpPopUpStage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FoodDeliveryHelpView.fxml"));

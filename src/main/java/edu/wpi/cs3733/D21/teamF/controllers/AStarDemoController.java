@@ -3,11 +3,12 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
+import edu.wpi.cs3733.D21.teamF.states.DefaultPageState;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
@@ -16,7 +17,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -166,11 +166,14 @@ public class AStarDemoController implements Initializable {
         Parent root;
 
         if (buttonPushed == goBack) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
+            DefaultPageState.getDefaultPageState().switchScene(SceneContext.getSceneContext());
+            /*stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("Default Page");
             stage.show();
+
+             */
         }
     }
 

@@ -1,6 +1,9 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.states.DefaultPageState;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
+import edu.wpi.cs3733.D21.teamF.states.ServiceRequestHomeState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,10 +69,7 @@ public class FloralDeliveryService {
      * @author KD
      */
     public void handleBack(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) bouquetButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml")); //FIXME Go to service request home
-        stage.getScene().setRoot(root);
-        stage.show();
+        ServiceRequestHomeState.getServiceRequestHomeState().switchScene(SceneContext.getSceneContext());
     }
 
     /**
@@ -78,9 +78,7 @@ public class FloralDeliveryService {
      * @author KD
      */
     public void handleHome(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) submitButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-        stage.getScene().setRoot(root);
+        DefaultPageState.getDefaultPageState().switchScene(SceneContext.getSceneContext());
     }
 
     /**

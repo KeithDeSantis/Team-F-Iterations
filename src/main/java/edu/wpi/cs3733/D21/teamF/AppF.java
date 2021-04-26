@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +32,7 @@ public class  AppF extends Application {
     DatabaseAPI.getDatabaseAPI().createServiceRequestTable(); //FIXME: DO BETTER
 
     AppF.primaryStage = primaryStage;
+    SceneContext.getSceneContext().setStage(primaryStage);
 
     //ConnectionHandler.main(false);
     Runtime.getRuntime().addShutdownHook(new Thread(){

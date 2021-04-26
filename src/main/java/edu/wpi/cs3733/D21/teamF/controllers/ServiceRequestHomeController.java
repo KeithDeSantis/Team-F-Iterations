@@ -1,6 +1,8 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733.D21.teamF.states.DefaultPageState;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,12 +50,7 @@ public class ServiceRequestHomeController {
             stage.show();
         }
         else if (buttonPushed == home) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);  //Changing the stage
-            stage.setTitle("Home Page");
-            stage.show();
+            DefaultPageState.getDefaultPageState().switchScene(SceneContext.getSceneContext());
         }
 
         else if (buttonPushed == languageInterpretation){

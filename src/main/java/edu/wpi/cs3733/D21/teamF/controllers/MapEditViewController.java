@@ -8,6 +8,9 @@ import edu.wpi.cs3733.D21.teamF.database.EdgeHandler;
 import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.states.DefaultPageAdminState;
+import edu.wpi.cs3733.D21.teamF.states.DefaultPageState;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
@@ -1176,11 +1179,7 @@ public class MapEditViewController {
     }
 
     public void handleHome(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) saveButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Admin Home");
-        stage.show();
+        DefaultPageAdminState.getDefaultPageAdminState().switchScene(SceneContext.getSceneContext());
     }
 
     public void handleTabChange(Event event) {

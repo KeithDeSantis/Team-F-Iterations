@@ -6,6 +6,8 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
 import edu.wpi.cs3733.D21.teamF.database.UserHandler;
+import edu.wpi.cs3733.D21.teamF.states.DefaultPageAdminState;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -134,14 +136,7 @@ public class AccountManagerController implements Initializable {
     }
 
     public void handleAdminHome(ActionEvent actionEvent) throws IOException {
-        Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
-        stage = (Stage) buttonPushed.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Admin Home");
-        stage.show();
+        DefaultPageAdminState.getDefaultPageAdminState().switchScene(SceneContext.getSceneContext());
     }
 
     public void changingUsername(MouseEvent mouseEvent) throws SQLException{

@@ -3,6 +3,8 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.states.SceneContext;
+import edu.wpi.cs3733.D21.teamF.states.ServiceRequestHomeState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,11 +38,7 @@ public class LanguageInterpretationRequestController implements Initializable {
      * @author Jay
      */
     public void handleClose(ActionEvent actionEvent) throws IOException {
-        Stage currentStage = (Stage)close.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+        ServiceRequestHomeState.getServiceRequestHomeState().switchScene(SceneContext.getSceneContext());
     }
 
     /**
