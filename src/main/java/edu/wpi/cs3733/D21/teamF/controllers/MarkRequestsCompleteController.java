@@ -48,6 +48,16 @@ public class MarkRequestsCompleteController implements Initializable {
         btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
     public void initialize(URL location, ResourceBundle resources) {
+        List<ServiceEntry> data;
+        try {
+            data = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
+            for (ServiceEntry e : data) {
+                services.add(e);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
         int colWidth = 200;
         JFXTreeTableColumn<ServiceEntry, String> request = new JFXTreeTableColumn<>("Request Type");
         request.setPrefWidth(colWidth);
@@ -62,25 +72,16 @@ public class MarkRequestsCompleteController implements Initializable {
         status.setCellValueFactory(cellData -> cellData.getValue().getValue().getCompleteStatusProperty());
 
         JFXTreeTableColumn<ServiceEntry, String> additionalInstructions = new JFXTreeTableColumn<>("Additional Details");
-        status.setPrefWidth(colWidth);
-        status.setCellValueFactory(cellData -> cellData.getValue().getValue().getAdditionalInstructionsProperty());
+        additionalInstructions.setPrefWidth(colWidth);
+        additionalInstructions.setCellValueFactory(cellData -> cellData.getValue().getValue().getAdditionalInstructionsProperty());
 
         final TreeItem<ServiceEntry> root = new RecursiveTreeItem<ServiceEntry>(services, RecursiveTreeObject::getChildren);
         //JFXTreeTableView<ServiceEntry> requestView = new JFXTreeTableView<ServiceEntry>(root);
         requestView.setRoot(root);
         requestView.setShowRoot(false);
-        requestView.getColumns().setAll(request, assign, additionalInstructions, status);
+        requestView.getColumns().setAll(request, assign, status, additionalInstructions);
 
-        List<ServiceEntry> data;
-        try {
-            data = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
-            for (ServiceEntry e : data) {
-                services.add(e);
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
+
 
         //add table entries like in account manager
         //syntax of adding item: services.add(new ServiceEntry("Request Type", "Assigned To", "Status));

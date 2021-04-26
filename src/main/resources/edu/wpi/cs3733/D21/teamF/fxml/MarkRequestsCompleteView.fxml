@@ -21,7 +21,7 @@
                   <Font name="Volkhov Regular" size="50.0" />
                </font>
             </Label>
-            <JFXTreeTableView fx:id="requestView">
+            <JFXTreeTableView fx:id="requestView" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" top="25.0" />
                </VBox.margin>
