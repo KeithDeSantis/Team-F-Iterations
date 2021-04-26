@@ -9,14 +9,14 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Cell;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -33,7 +33,7 @@ public class MarkRequestsCompleteController implements Initializable {
     private JFXButton markAsComplete;
     @FXML
     private JFXButton home;
-    @FXML private JFXComboBox<String> employeeDropDown;
+    @FXML private ComboBox<String> employeeDropDown;
     @FXML
     private JFXTreeTableView<ServiceEntry> requestView;
     private ObservableList<ServiceEntry> services = FXCollections.observableArrayList();
@@ -76,12 +76,7 @@ public class MarkRequestsCompleteController implements Initializable {
         additionalInstructions.setPrefWidth(colWidth);
         additionalInstructions.setCellValueFactory(cellData -> cellData.getValue().getValue().getAdditionalInstructionsProperty());
 
-        final TreeItem<ServiceEntry> root = new RecursiveTreeItem<ServiceEntry>(services, RecursiveTreeObject::getChildren);
-        //JFXTreeTableView<ServiceEntry> requestView = new JFXTreeTableView<ServiceEntry>(root);
-        requestView.setRoot(root);
-        requestView.setShowRoot(false);
-        requestView.getColumns().setAll(request, assign, status, additionalInstructions);
-
+        /*
         //employeeDropDown
         List<String> employees;
         try {
@@ -98,7 +93,35 @@ public class MarkRequestsCompleteController implements Initializable {
             e.printStackTrace();
         }
 
+         */
+
+        ObservableList<String> testList = FXCollections.observableArrayList();
+        testList.add("Keith");
+        testList.add("Jay");
+        testList.add("Yo");
+
+        assign.setCellFactory(ComboBoxTreeTableCell.forTreeTableColumn(testList));
+        assign.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<ServiceEntry, String>>() {
+            @Override
+            public void handle(TreeTableColumn.CellEditEvent<ServiceEntry, String> event) {
+
+            }
+        });
+
+
+
+        final TreeItem<ServiceEntry> root = new RecursiveTreeItem<ServiceEntry>(services, RecursiveTreeObject::getChildren);
+        //JFXTreeTableView<ServiceEntry> requestView = new JFXTreeTableView<ServiceEntry>(root);
+        requestView.setEditable(true);
+        requestView.setRoot(root);
+        requestView.setShowRoot(false);
+        requestView.getColumns().setAll(request, assign, status, additionalInstructions);
+
+
+
     }
+
+
     public void editingState (MouseEvent mouseEvent){
         Cell editingCell = new Cell();
         editingCell.startEdit();
