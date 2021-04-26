@@ -136,7 +136,7 @@
             <Insets left="25.0" right="25.0" />
          </padding>
       </HBox>
-      <Text fx:id="title" fill="#03256c" layoutX="173.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL MAP EDITOR" wrappingWidth="683.6530394388933" AnchorPane.leftAnchor="140.0" AnchorPane.topAnchor="17.0">
+      <Text fx:id="title" fill="#03256c" layoutX="173.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL MAP EDITOR" wrappingWidth="849.9999976158142" AnchorPane.leftAnchor="140.0" AnchorPane.topAnchor="17.0">
          <font>
             <Font size="50.0" />
          </font>
