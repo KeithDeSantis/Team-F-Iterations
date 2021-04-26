@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.xml.transform.Templates;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
@@ -45,11 +46,13 @@ public class MaintenenceRequestController {
     @FXML private Label assignmentLabel;
 
     ObservableList<String> problemTypes = FXCollections.observableArrayList("Electrical", "Lighting",
-            "Elevator", "Plumbing", "Safety Hazard", "Damage");
+            "Elevator", "Plumbing", "Safety Hazard", "Damage", "Spill", "HAZ-MAT");
 
     ObservableList<String> urgencyLevels = FXCollections.observableArrayList("URGENT", "PRIORITY", "LOW PRIORITY");
 
     ObservableList<String> locations = FXCollections.observableArrayList();
+
+    ObservableList<String> employeeList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize(){
@@ -87,6 +90,20 @@ public class MaintenenceRequestController {
         // Set location combo box to use long names
         locationField.setItems(locations);
 
+        // Load in employee list from database TODO Replace with UserEntry after merge W/ updated DB
+        List<NodeEntry> employees = new ArrayList<>();
+        try {
+            employees = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        employees.stream().sorted(Comparator.comparing(NodeEntry::getShortName)).collect(Collectors.toList()).forEach(employee ->{
+            employeeList.add(employee.getShortName());
+        });
+
+        // Set list to assignment Combo Box
+        assignment.setItems(employeeList);
 
     }
 
@@ -99,11 +116,11 @@ public class MaintenenceRequestController {
      */
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {
         if(isFilled()) {
-            String name = urgencyComboBox.getValue().toString() + ": ";
-            if (typeComboBox.getValue().toString().equals("Damage") || typeComboBox.getValue().toString().equals("Safety Hazard")) {
-                name += typeComboBox.getValue().toString() + " at " + locationField.getValue().toString();
+            String name = urgencyComboBox.getValue() + ": ";
+            if (typeComboBox.getValue().equals("Damage") || typeComboBox.getValue().equals("Safety Hazard") || typeComboBox.getValue().equals("Spill")) {
+                name += typeComboBox.getValue() + " at " + locationField.getValue();
             } else {
-                name += typeComboBox.getValue().toString() + " problem at " + locationField.getValue().toString();
+                name += typeComboBox.getValue() + " problem at " + locationField.getValue();
             }
 
             try{
@@ -114,7 +131,7 @@ public class MaintenenceRequestController {
 
             String employee = "";
             try{
-                employee = assignment.getValue().toString();
+                employee = assignment.getValue();
             } catch (NullPointerException nullPointerException){
                 // Leave assigned employee blank
             }
