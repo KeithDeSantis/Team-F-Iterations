@@ -35,10 +35,10 @@ public class  AppF extends Application {
       }
     });
     try {
-      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
+      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxmlDefaultPageView.fxml"));
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);
-      primaryStage.setMaximized(true);
+      //primaryStage.setMaximized(true);
       primaryStage.show();
     } catch (IOException e) {
       e.printStackTrace();
