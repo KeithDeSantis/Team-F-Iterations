@@ -41,7 +41,7 @@ public class JDServiceRequest {
             finished.showAndWait();
         }
     }
-
+/*
     @FXML
     private void handleButtonPushed(javafx.event.ActionEvent e) throws IOException {
 
@@ -56,4 +56,6 @@ public class JDServiceRequest {
             stage.show();
         }
     }
+
+ */
 }
