@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.uicomponents.MapPanel;
@@ -77,7 +76,7 @@ public class EditMapNodeController {
 
         List <NodeEntry> data = new ArrayList<>();
         try {
-            data = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            data = DatabaseAPI.getDatabaseAPI().genNodeEntries();
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -239,8 +238,8 @@ public class EditMapNodeController {
             return;
 
         String nodeID = nodeEntry.getNodeID();
-        int xCoord = Integer.parseInt(nodeEntry.getXcoord());
-        int yCoord = Integer.parseInt(nodeEntry.getYcoord());
+        int xCoordinate = Integer.parseInt(nodeEntry.getXcoord());
+        int yCoordinate = Integer.parseInt(nodeEntry.getYcoord());
         String nodeFloor = nodeEntry.getFloor();
         String nodeBuilding = nodeEntry.getBuilding();
         String nodeType = nodeEntry.getNodeType();
@@ -248,7 +247,7 @@ public class EditMapNodeController {
         String shortName = nodeEntry.getShortName();
 
 
-        DatabaseAPI.getDatabaseAPI().addNode(nodeID, xCoord, yCoord, nodeFloor, nodeBuilding, nodeType, longName, shortName);
+        DatabaseAPI.getDatabaseAPI().addNode(nodeID, ""+ xCoordinate, ""+ yCoordinate, nodeFloor, nodeBuilding, nodeType, longName, shortName);
 
         mapPanel.draw(getEditableNode(nodeEntry));
 
@@ -347,11 +346,8 @@ public class EditMapNodeController {
 
                 nodeList.forEach(n -> mapPanel.draw(getEditableNode(n)));
 
-                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
-                final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
-                        "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                        "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable);
+                DatabaseAPI.getDatabaseAPI().dropNodesTable();
+                DatabaseAPI.getDatabaseAPI().createNodesTable();
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }
@@ -502,11 +498,8 @@ public class EditMapNodeController {
 
                 nodeList.forEach(x -> mapPanel.draw(getEditableNode(x)));
 
-                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1NODES");
-                final String initNodesTable = "CREATE TABLE L1Nodes(NodeID varchar(200), " +
-                        "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                        "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initNodesTable);
+                DatabaseAPI.getDatabaseAPI().dropNodesTable();
+                DatabaseAPI.getDatabaseAPI().createNodesTable();
                 DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
         }

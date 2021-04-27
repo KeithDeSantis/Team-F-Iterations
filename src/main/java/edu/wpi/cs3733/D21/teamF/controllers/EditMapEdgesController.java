@@ -95,7 +95,7 @@ public class EditMapEdgesController {
 
         List <EdgeEntry> data = new ArrayList<>();
         try {
-            data = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            data = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -164,7 +164,7 @@ public class EditMapEdgesController {
      * @author Karen Hou
      */
     @FXML
-    private void handleEditEdge() throws IOException, SQLException {
+    private void handleEditEdge() throws Exception {
         // Get the current selected edge index
         int index = edgeTable.getSelectionModel().getSelectedIndex();
         EdgeEntry selectedEdge;
@@ -185,9 +185,10 @@ public class EditMapEdgesController {
             String oldID = selectedEdge.getEdgeID();
             ArrayList<String> newValues = openEditDialogue(selectedEdge);
 
-            DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "startNode", newValues.get(1));
-            DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "endNode", newValues.get(2));
-            DatabaseAPI.getDatabaseAPI().updateEntry("L1Edges", "edge", oldID, "id", newValues.get(0));
+            //Like that or?
+            DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(1), "startNode");
+            DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(2), "endNode");
+            DatabaseAPI.getDatabaseAPI().editEdge(oldID,  newValues.get(0), "edgeID");
 
             final DrawableEdge drawableEdge = mapPanel.getNode(oldID);
             drawableEdge.setId(newValues.get(0));
@@ -380,10 +381,8 @@ public class EditMapEdgesController {
                     return new EdgeEntry(line[0], line[1], line[2]);
                 }).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
 
-                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
-                final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
-                        "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
+                DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+                DatabaseAPI.getDatabaseAPI().createEdgesTable();
                 DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
             }
         }
@@ -416,8 +415,8 @@ public class EditMapEdgesController {
         NodeEntry startNode = null;
         NodeEntry endNode = null;
         try {
-            startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), node.getStartNode());
-            endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), node.getEndNode());
+            startNode = DatabaseAPI.getDatabaseAPI().getNode(node.getStartNode());
+            endNode = DatabaseAPI.getDatabaseAPI().getNode(node.getEndNode());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -467,8 +466,8 @@ public class EditMapEdgesController {
             NodeEntry startNode = null;
             NodeEntry endNode = null;
             try {
-                startNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getStartNode());
-                endNode = DatabaseAPI.getDatabaseAPI().getNode(ConnectionHandler.getConnection(), e.getEndNode());
+                startNode = DatabaseAPI.getDatabaseAPI().getNode(e.getStartNode());
+                endNode = DatabaseAPI.getDatabaseAPI().getNode(e.getEndNode());
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -615,10 +614,8 @@ public class EditMapEdgesController {
                     return new EdgeEntry(line[0], line[1], line[2]);
                 }).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
 
-                DatabaseAPI.getDatabaseAPI().dropTable(ConnectionHandler.getConnection(), "L1EDGES");
-                final String initEdgesTable = "CREATE TABLE L1Edges(edgeID varchar(200), " +
-                        "startNode varchar(200), endNode varchar(200), primary key(edgeID))";
-                DatabaseAPI.getDatabaseAPI().createTable(ConnectionHandler.getConnection(), initEdgesTable);
+                DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+                DatabaseAPI.getDatabaseAPI().createEdgesTable();
                 DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
             }
         }

@@ -26,9 +26,7 @@ public class GraphLoader {
      */
     public static Graph load(String nodesCSV, String edgesCSV) throws Exception {
         //Null checks provided by exceptions in CSVReader.load
-
-        //The graph that we will return
-        final Graph graph = new Graph();
+        Graph graph = new Graph();
 
         final List<String[]> nodesReader = CSVManager.load(nodesCSV);
 
@@ -105,9 +103,7 @@ public class GraphLoader {
     public static Graph load(List<NodeEntry> nodeEntries, List<EdgeEntry> edgeEntries) throws Exception {
         //Null checks provided by exceptions in CSVReader.load
 
-        //The graph that we will return
-        final Graph graph = new Graph();
-
+        Graph graph = new Graph();
 
         //I would use a HashSet, but HashSets use HashMaps anyways, so this just makes sense.
         final HashMap<String, Vertex> vertices = new HashMap<>();
