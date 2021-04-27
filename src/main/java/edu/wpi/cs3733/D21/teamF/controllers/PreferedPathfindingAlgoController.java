@@ -1,0 +1,48 @@
+package edu.wpi.cs3733.D21.teamF.controllers;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
+public class PreferedPathfindingAlgoController {
+
+    @FXML JFXComboBox<String> algorithmComboBox;
+    @FXML Label title;
+    @FXML JFXButton okButton;
+
+    @FXML
+    public void initialize() {
+        Font defaultFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 13);
+        title.setFont(defaultFont);
+        okButton.setFont(defaultFont);
+
+        ObservableList<String> algoList = FXCollections.observableArrayList();
+        algoList.add("A Star");
+        algoList.add("Breadth-First-Search");
+        algoList.add("Depth-First-Search");
+
+        algorithmComboBox.setItems(algoList);
+    }
+
+    public void handleOkClicked() {
+        Stage stage = (Stage) algorithmComboBox.getScene().getWindow();
+        stage.close();
+    }
+
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF");
+    }
+}
