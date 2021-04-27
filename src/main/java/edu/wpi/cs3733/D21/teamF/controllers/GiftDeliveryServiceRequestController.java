@@ -17,7 +17,7 @@ public class GiftDeliveryServiceRequestController {
 
         public void handleClose(ActionEvent actionEvent) throws IOException {
             Stage currentStage = (Stage)cancel.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomenEWView.fxml"));
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
             currentStage.show();
