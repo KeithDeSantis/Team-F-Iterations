@@ -186,8 +186,8 @@ public class DatabaseAPI {
         return systemHandler.deleteEntry(id);
     }
 
-    public String getCurrentAlgorithm(String id) throws SQLException{
-        return ((SystemPreferences)this.systemHandler).getAlgorithm(id);
+    public String getCurrentAlgorithm() throws SQLException{
+        return ((SystemPreferences)this.systemHandler).getAlgorithm();
     }
 
     private static class DatabaseSingletonHelper{

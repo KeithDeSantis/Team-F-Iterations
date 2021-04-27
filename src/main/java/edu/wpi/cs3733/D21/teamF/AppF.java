@@ -26,7 +26,8 @@ public class  AppF extends Application {
     DatabaseAPI.getDatabaseAPI().createNodesTable();
     DatabaseAPI.getDatabaseAPI().createEdgesTable();
     DatabaseAPI.getDatabaseAPI().createUserTable();
-    DatabaseAPI.getDatabaseAPI().createServiceRequestTable(); //FIXME: DO BETTER
+    DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
+    DatabaseAPI.getDatabaseAPI().createSystemTable(); //FIXME: DO BETTER
 
     AppF.primaryStage = primaryStage;
 
