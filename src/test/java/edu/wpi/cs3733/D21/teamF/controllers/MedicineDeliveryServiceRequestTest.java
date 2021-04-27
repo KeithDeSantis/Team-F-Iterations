@@ -1,4 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
+import com.jfoenix.controls.JFXTextField;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -8,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import java.io.IOException;
 import static org.testfx.api.FxAssert.verifyThat;
-
 public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
+
     /**
      * Starts the application
      * @param primaryStage the stage to be set
@@ -25,7 +27,7 @@ public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
     }
 
     /**
-     * Tests whether the form submits successfully if the
+     * Tests whether the form submits successfully if all the fields are filled
      * @author Tony Vuolo (bdane)
      */
     @Test
@@ -46,7 +48,22 @@ public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
         write("j");
         clickOn("#cardholder");
         write("j");
-        clickOn("#submit");
+        clickOn("SUBMIT");
         verifyThat("Request Submitted!", Node::isVisible);
+    }
+
+    /**
+     * Tests that the test fails if any field is left blank
+     * @author Tony Vuolo (bdane)
+     */
+    @Test
+    public void testFailSubmission() {
+        clickOn("SUBMIT");
+        verifyThat("#employeeName", Node::isVisible);
+
+        clickOn("#clientRoom");
+        write("j");
+        clickOn("SUBMIT");
+        verifyThat("#employeeName", Node::isVisible);
     }
 }
