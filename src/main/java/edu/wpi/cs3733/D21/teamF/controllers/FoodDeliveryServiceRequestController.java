@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -109,6 +110,15 @@ public class FoodDeliveryServiceRequestController {
 
         }
     }
+
+
+    public void handleBack(MouseEvent mouseEvent) throws IOException {
+        Stage stage = (Stage) rButtonFood1.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.show();
+    }
+
     /**
      * handles submit being pressed
      * @param e is the button being pushed
