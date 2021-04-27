@@ -18,7 +18,7 @@ public class MaintenanceRequestTest extends ApplicationTest {
         final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/maintenanceRequest.fxml"));
         Parent root = loader.load();
 
-        final MaintenenceRequestController controller = loader.getController();
+        //final MaintenenceRequestController controller = loader.getController();
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

@@ -19,7 +19,7 @@ public class AccountManagerControllerTest extends ApplicationTest {
         final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml"));
         Parent root = loader.load();
 
-        final AccountManagerController controller = loader.getController();
+        //final AccountManagerController controller = loader.getController();
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
