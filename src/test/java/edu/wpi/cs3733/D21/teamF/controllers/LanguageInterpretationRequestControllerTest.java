@@ -15,7 +15,7 @@ public class LanguageInterpretationRequestControllerTest extends ApplicationTest
     public void start (Stage stage) throws Exception {
         System.gc();
 
-        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/LanguageInterpretationServiceRequestView.fxml"));
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml"));
         Parent root = loader.load();
 
         final LanguageInterpretationRequestController controller = loader.getController();

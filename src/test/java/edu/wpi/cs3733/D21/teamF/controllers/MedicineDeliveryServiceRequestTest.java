@@ -1,6 +1,4 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
-import com.jfoenix.controls.JFXTextField;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -20,7 +18,7 @@ public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/MedicineDeliveryServiceRequestView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml"));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();

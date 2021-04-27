@@ -1,13 +1,9 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
-import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
-import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
-import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -51,7 +47,7 @@ public class SanitationRequestController {
     public void handleSubmit(ActionEvent actionEvent) throws IOException {
         // Loads form submitted window and passes in current stage to return to request home
         FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
+        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
         Stage submittedStage = new Stage();
         Parent root = submitedPageLoader.load();
         FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();

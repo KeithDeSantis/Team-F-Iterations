@@ -36,6 +36,12 @@ public class InternalTransportationController {
 
     @FXML private JFXCheckBox doctorCheckBox;
 
+    @FXML private JFXButton cancel;
+
+    @FXML
+    public void initialize(){
+        cancel.setDisableVisualFocus(true); // Clears visual focus from cancel button, cause unknown - LM
+    }
 
     private boolean isFilledOut() {
 
@@ -72,7 +78,7 @@ public class InternalTransportationController {
 
     public void handleBack(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) submit.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Service Requests");
@@ -82,8 +88,13 @@ public class InternalTransportationController {
     public void handleSubmit(ActionEvent e) throws IOException {
         if(isFilledOut()) // form is complete
         {
+            // Loads form submitted window and passes in current stage to return to request home
+            FXMLLoader submitedPageLoader = new FXMLLoader();
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml")); // Loading in pop up View
+            Parent root = submitedPageLoader.load();
+            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
@@ -108,5 +119,20 @@ public class InternalTransportationController {
         patientRoom.setText("");
         relativesCheckBox.setSelected(false);
         doctorCheckBox.setSelected(false);
+    }
+
+    /**
+     * Handles returning to the service menu from the cancel button
+     * Requires a different argument than the image view, thus different method
+     * @param actionEvent The node that calls the method
+     * @author Leo Morris
+     */
+    public void handleBack2(ActionEvent actionEvent) throws IOException {
+        Stage stage = (Stage) submit.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Service Requests");
+        stage.show();
     }
 }

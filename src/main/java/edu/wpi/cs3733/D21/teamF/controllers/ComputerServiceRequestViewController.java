@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -57,7 +56,7 @@ public class ComputerServiceRequestViewController {
         {
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
             Parent root = submitedPageLoader.load();
             FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();

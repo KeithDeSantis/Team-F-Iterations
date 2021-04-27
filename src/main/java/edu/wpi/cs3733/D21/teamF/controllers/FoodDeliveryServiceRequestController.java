@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
-import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import javafx.collections.FXCollections;
@@ -22,7 +21,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Controller for Food Delivery Service View
@@ -136,7 +134,7 @@ public class FoodDeliveryServiceRequestController {
 
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
             Parent root = submitedPageLoader.load();
             FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
@@ -170,7 +168,7 @@ public class FoodDeliveryServiceRequestController {
             stage.show();
         } else if (buttonPushed == helpButton){
             Stage helpPopUpStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FoodDeliveryHelpView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryHelpView.fxml"));
             Scene helpPopUpScene = new Scene(root);
             helpPopUpStage.setScene(helpPopUpScene);
             helpPopUpStage.setTitle("Food Delivery Request Help Menu");

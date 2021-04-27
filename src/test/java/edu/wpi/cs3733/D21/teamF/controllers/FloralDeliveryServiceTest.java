@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -9,13 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import java.io.IOException;
 import static org.testfx.api.FxAssert.verifyThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class FloralDeliveryServiceTest extends ApplicationTest {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FloralDeliveryServiceRequestView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryServiceRequestView.fxml"));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();

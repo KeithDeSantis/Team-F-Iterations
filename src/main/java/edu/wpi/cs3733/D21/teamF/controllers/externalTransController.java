@@ -8,12 +8,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 
 public class externalTransController {
@@ -31,7 +29,7 @@ public class externalTransController {
     public void submitpushed(ActionEvent actionEvent) throws IOException {
         // Loads form submitted window and passes in current stage to return to request home
         FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
+        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
         Stage submittedStage = new Stage();
         Parent root = submitedPageLoader.load();
         FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();

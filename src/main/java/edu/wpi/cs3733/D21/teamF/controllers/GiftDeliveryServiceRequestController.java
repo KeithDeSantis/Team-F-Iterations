@@ -27,7 +27,7 @@ public class GiftDeliveryServiceRequestController {
         public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
             Parent root = submitedPageLoader.load();
             FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();

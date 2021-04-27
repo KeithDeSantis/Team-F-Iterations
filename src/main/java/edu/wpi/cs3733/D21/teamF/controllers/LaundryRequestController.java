@@ -59,7 +59,7 @@ public class LaundryRequestController {
     public void submitReq(ActionEvent e) throws IOException {
         // Loads form submitted window and passes in current stage to return to request home
         FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
+        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
         Stage submittedStage = new Stage();
         Parent root = submitedPageLoader.load();
         FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();

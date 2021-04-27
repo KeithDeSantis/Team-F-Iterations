@@ -63,7 +63,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="submit" mnemonicParsing="false" text="Submit" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <Button fx:id="submitButton" mnemonicParsing="false" text="Submit" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                   <JFXComboBox fx:id="location" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <JFXComboBox fx:id="employeeAssigned" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Label text="Employee Assigned" GridPane.columnIndex="2">

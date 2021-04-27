@@ -71,7 +71,7 @@ public class FloralDeliveryService {
      */
     public void handleBack(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) bouquetButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml")); //FIXME Go to service request home
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml")); //FIXME Go to service request home
         stage.getScene().setRoot(root);
         stage.show();
     }

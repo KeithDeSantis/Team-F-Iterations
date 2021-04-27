@@ -40,7 +40,10 @@ public class ServiceRequestHomeNewController {
     @FXML private ImageView sanitationImage;
     @FXML private ImageView giftImage;
 
-
+    @FXML
+    public void initialize(){
+        Home.setDisableVisualFocus(true); // Disable visual focus on home button, occurs on returning to menu - LM
+    }
 
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
@@ -50,27 +53,27 @@ public class ServiceRequestHomeNewController {
         Parent root;
 
         if(buttonPushed == floralDelivery){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FloralDeliveryServiceRequestView.fxml","Floral Delivery",buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryServiceRequestView.fxml","Floral Delivery",buttonPushed);
         }
         else if (buttonPushed == Home) {
             goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml","Home Page",buttonPushed);
         }
 
         else if (buttonPushed == launguageInterpretation){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/LanguageInterpretationServiceRequestView.fxml","Language Interpretation",buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml","Language Interpretation",buttonPushed);
         }
 
         else if (buttonPushed == foodDelivery){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FoodDeliveryServiceRequestView.fxml","Food Delivery",buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryServiceRequestView.fxml","Food Delivery",buttonPushed);
         }
         else if (buttonPushed == externalPaitintTrans){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/ExternalTrans.fxml","External Patient Transportation",buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ExternalTrans.fxml","External Patient Transportation",buttonPushed);
         }
         else if (buttonPushed == faciliteisMaitence){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/maintenanceRequest.fxml", "Facilities Maintenance", buttonPushed);
         }
         else if (buttonPushed == computorServices){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/ComputerServiceRequestView.fxml", "IT Services", buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceRequestView.fxml", "IT Services", buttonPushed);
         }
         /* FIXME Waiting on ben to fix this page
         else if (buttonPushed == sanitationService){
@@ -78,13 +81,16 @@ public class ServiceRequestHomeNewController {
         }
          */
         else if (buttonPushed == laundryServices){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/LaundryRequest.fxml", "Laundry Service", buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LaundryRequest.fxml", "Laundry Service", buttonPushed);
         }
         else if (buttonPushed == medicineDelivery){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/MedicineDeliveryServiceRequestView.fxml", "Medicine Delivery", buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml", "Medicine Delivery", buttonPushed);
         }
         else if (buttonPushed == giftDelivery){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/GiftDeliveryServiceRequest.fxml", "Gift Delivery", buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml", "Gift Delivery", buttonPushed);
+        }
+        else if (buttonPushed == internalPatientTrans){
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/InternalTransportationView.fxml", "Internal Patient Transport", buttonPushed);
         }
     }
 
