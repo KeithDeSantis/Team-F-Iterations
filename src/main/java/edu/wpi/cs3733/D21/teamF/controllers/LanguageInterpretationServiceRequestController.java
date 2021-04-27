@@ -126,18 +126,13 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      * @author Jay Yen
      */
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
-        if(formFilledOut() != true) {
-
-        }else{
+        if(formFilledOut()) {
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
                     " Name: " + name.getText() + " Appointment: " + (String) appointment.getValue() + " Language: " + language.getValue();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
-
-        DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
-                newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus());
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
             submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
@@ -264,25 +259,25 @@ public class LanguageInterpretationServiceRequestController implements Initializ
     }
     
     private boolean formFilledOut(){
-
+        boolean isFilled = true;
         if(name.getText().trim().isEmpty()){
             name.setStyle("-fx-border-color: red");
+            isFilled = false;
         }
         if(date.getValue() == null){
             date.setStyle("-fx-border-color: red");
+            isFilled = false;
         }
         if(time.getValue() == null){
             time.setStyle("-fx-border-color: red");
+            isFilled = false;
         }
         if(language.getValue() == null)
         {
             language.setStyle("-fx-border-color: red");
+            isFilled = false;
         }
-
-        if(name.getText().trim().isEmpty() && language.getValue() != null){
-            return true;
-        }
-        return false;
+        return isFilled;
     }
 
     /**
