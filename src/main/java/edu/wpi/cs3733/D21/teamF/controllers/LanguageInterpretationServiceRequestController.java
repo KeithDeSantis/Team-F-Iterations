@@ -97,8 +97,8 @@ public class LanguageInterpretationServiceRequestController implements Initializ
             alert.showAndWait();
         }else{
             String uuid = UUID.randomUUID().toString();
-            String additionalInstr =  date.getValue().toString() + " " + time.getValue() + " " + name.getText() + " " +
-                    (String) appointment.getValue() + " " + language.getText();
+            String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
+                    " Name: " + name.getText() + " Appointment: " + (String) appointment.getValue() + " Language: " + language.getText();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());

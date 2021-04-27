@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -25,6 +26,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -93,29 +95,20 @@ public class MarkRequestsCompleteController implements Initializable {
         additionalInstructions.setPrefWidth(colWidth);
         additionalInstructions.setCellValueFactory(cellData -> cellData.getValue().getValue().getAdditionalInstructionsProperty());
 
-        /*
-        //employeeDropDown
-        List<String> employees;
+        ObservableList<String> employees = FXCollections.observableArrayList();
+        List<AccountEntry> userData = null;
         try {
-            UserHandler userHandler = new UserHandler();
-            //get all users who are employees
-            // employees = userHandler.listAllUsers();
-            for (String s : employees)
-            {
-                employeeDropDown.add(s);
+            userData = DatabaseAPI.getDatabaseAPI().genAccountEntries();
+        } catch (SQLException e) {
+
+        }
+        if (userData != null){
+            for (AccountEntry a : userData){
+                if (a.getUserType().equals("employee")){
+                    employees.add(a.getUsername());
+                }
             }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-         */
-
-        ObservableList<String> employees = FXCollections.observableArrayList();
-        employees.add("Keith");
-        employees.add("Jay");
-        employees.add("Yo");
 
         assign.setCellFactory(ComboBoxTreeTableCell.forTreeTableColumn(employees));
         assign.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<ServiceEntry, String>>() {
