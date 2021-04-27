@@ -161,10 +161,17 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="121.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER">
+                  <JFXButton fx:id="giftDelivery" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="121.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
+                     <graphic>
+                        <ImageView fx:id="giftImage" fitHeight="114.0" fitWidth="184.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../imagesAndLogos/GiftDeliveryWhiteText.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </JFXButton>
                   <JFXButton fx:id="sanitationService" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="122.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                      <font>
@@ -251,12 +258,11 @@
                         <Font name="Montserrat Regular" size="13.0" />
                      </font>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Johvanni" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                      <font>
                         <Font name="Montserrat Regular" size="13.0" />
                      </font>
                   </Text>
-                  <ImageView fitHeight="62.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
                </children>
             </GridPane>
          </children>
