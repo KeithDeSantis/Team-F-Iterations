@@ -103,6 +103,10 @@ public class MaintenenceRequestController {
         // Set list to assignment Combo Box
         assignment.setItems(employeeList);
 
+        assignment.setVisible(false);
+        assignment.setDisable(true);
+        assignmentLabel.setVisible(false);
+
     }
 
     /**
