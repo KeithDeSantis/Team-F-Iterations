@@ -1,9 +1,11 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -32,11 +34,16 @@ public class MarkRequestsCompleteController implements Initializable {
     @FXML
     private JFXButton markAsComplete;
     @FXML
+    private JFXButton assignButton;
+    @FXML
+    private JFXButton cancel;
+     @FXML
     private JFXButton home;
     @FXML private ComboBox<String> employeeDropDown;
     @FXML
     private JFXTreeTableView<ServiceEntry> requestView;
     private ObservableList<ServiceEntry> services = FXCollections.observableArrayList();
+    private String selectedPerson;
 
     public void handleHoverOn(MouseEvent mouseEvent) {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
@@ -46,6 +53,16 @@ public class MarkRequestsCompleteController implements Initializable {
     public void handleHoverOff(MouseEvent mouseEvent) {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
         btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
+
+    public void handleHoverOnCancel(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #d30000;");
+    }
+
+    public void handleHoverOffCancel(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #d30000; -fx-text-fill: #FFFFFF;");
     }
     public void initialize(URL location, ResourceBundle resources) {
         //TreeTable
@@ -85,7 +102,7 @@ public class MarkRequestsCompleteController implements Initializable {
             // employees = userHandler.listAllUsers();
             for (String s : employees)
             {
-                employeeDropDown.getItems().add(s);
+                employeeDropDown.add(s);
             }
         }
         catch (SQLException e)
@@ -95,20 +112,18 @@ public class MarkRequestsCompleteController implements Initializable {
 
          */
 
-        ObservableList<String> testList = FXCollections.observableArrayList();
-        testList.add("Keith");
-        testList.add("Jay");
-        testList.add("Yo");
+        ObservableList<String> employees = FXCollections.observableArrayList();
+        employees.add("Keith");
+        employees.add("Jay");
+        employees.add("Yo");
 
-        assign.setCellFactory(ComboBoxTreeTableCell.forTreeTableColumn(testList));
+        assign.setCellFactory(ComboBoxTreeTableCell.forTreeTableColumn(employees));
         assign.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<ServiceEntry, String>>() {
             @Override
-            public void handle(TreeTableColumn.CellEditEvent<ServiceEntry, String> event) {
-
-            }
+                public void handle(TreeTableColumn.CellEditEvent<ServiceEntry, String> t) {
+                     t.getRowValue().getValue().setAssignedTo(t.getNewValue());
+                }
         });
-
-
 
         final TreeItem<ServiceEntry> root = new RecursiveTreeItem<ServiceEntry>(services, RecursiveTreeObject::getChildren);
         //JFXTreeTableView<ServiceEntry> requestView = new JFXTreeTableView<ServiceEntry>(root);
@@ -116,18 +131,9 @@ public class MarkRequestsCompleteController implements Initializable {
         requestView.setRoot(root);
         requestView.setShowRoot(false);
         requestView.getColumns().setAll(request, assign, status, additionalInstructions);
-
-
-
     }
 
 
-    public void editingState (MouseEvent mouseEvent){
-        Cell editingCell = new Cell();
-        editingCell.startEdit();
-        editingCell.setText("");
-        editingCell.setGraphic(employeeDropDown);
-    }
     public void handleClose(ActionEvent actionEvent) {
         Platform.exit();
     }
@@ -151,5 +157,25 @@ public class MarkRequestsCompleteController implements Initializable {
         stage.getScene().setRoot(root);
         stage.setTitle("Admin Home");
         stage.show();
+    }
+
+    public void handleAssign(ActionEvent actionEvent) throws Exception {
+        //ServiceEntry data = requestView.getSelectionModel().getSelectedItem().getValue();
+        for (ServiceEntry s:services){
+            DatabaseAPI.getDatabaseAPI().editServiceRequest(s.getUuid(), s.getAssignedTo(), "assignedperson");
+        }
+                Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
+        Scene homeScene = new Scene(root);
+        currentStage.setScene(homeScene);
+        currentStage.show();
+    }
+
+    public void handleCancel(ActionEvent actionEvent) throws IOException{
+        Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
+        Scene homeScene = new Scene(root);
+        currentStage.setScene(homeScene);
+        currentStage.show();
     }
 }
