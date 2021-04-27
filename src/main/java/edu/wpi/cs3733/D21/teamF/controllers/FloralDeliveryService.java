@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  * Controller for Floral Delivery Service View
@@ -28,6 +31,7 @@ public class FloralDeliveryService {
     @FXML private JFXButton submitButton;
     @FXML private JFXTextField deliveryField;
     @FXML private JFXDatePicker dateField;
+    @FXML private JFXTextField nameField;
     @FXML private JFXTextField cardNumberField;
     @FXML private JFXTextField cardCVCField;
     @FXML private JFXTextField cardExpField;
@@ -67,7 +71,7 @@ public class FloralDeliveryService {
      */
     public void handleBack(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) bouquetButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml")); //FIXME Go to service request home
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml")); //FIXME Go to service request home
         stage.getScene().setRoot(root);
         stage.show();
     }
@@ -88,9 +92,25 @@ public class FloralDeliveryService {
      * @param actionEvent
      * @author KD
      */
-    public void handleSubmit(ActionEvent actionEvent) {
+    public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException {
         if(isFilledOut()) {
-            successField.setText("Request Submitted!");
+            String type = "Flower Delivery";
+            String name = nameField.getText();
+            String uuid = UUID.randomUUID().toString();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, name, "false");
+            //successField.setText("Request Submitted!");
+            // Loads form submitted window and passes in current stage to return to request home
+            FXMLLoader submitedPageLoader = new FXMLLoader();
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
+            Stage submittedStage = new Stage();
+            Parent root = submitedPageLoader.load();
+            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) submitButton.getScene().getWindow());
+            Scene submitScene = new Scene(root);
+            submittedStage.setScene(submitScene);
+            submittedStage.setTitle("Submission Complete");
+            submittedStage.initModality(Modality.APPLICATION_MODAL);
+            submittedStage.showAndWait();
         } else { successField.setText(""); }
     }
 
@@ -130,6 +150,13 @@ public class FloralDeliveryService {
         }
         else {
             deliveryField.setStyle("-fx-background-color: transparent;");
+        }
+        if(nameField.getText().length() == 0) {
+            isFilled = false;
+            nameField.setStyle("-fx-background-color: #ffbab8;");
+        }
+        else {
+            nameField.setStyle("-fx-background-color: transparent;");
         }
         if(cardNumberField.getText().length() == 0) {
             isFilled = false;
@@ -183,6 +210,7 @@ public class FloralDeliveryService {
         orchidCheckBox.setSelected(false);
         daisyCheckBox.setSelected(false);
         deliveryField.setText("");
+        nameField.setText("");
         cardNumberField.setText("");
         cardExpField.setText("");
         cardCVCField.setText("");
@@ -197,6 +225,7 @@ public class FloralDeliveryService {
         orchidCheckBox.setStyle("-fx-text-fill: #000000");
         daisyCheckBox.setStyle("-fx-text-fill: #000000");
         deliveryField.setStyle("-fx-background-color: transparent;");
+        nameField.setStyle("-fx-background-color: transparent;");
         cardNumberField.setStyle("-fx-background-color: transparent;");
         cardCVCField.setStyle("-fx-background-color: transparent;");
         cardExpField.setStyle("-fx-background-color: transparent;");

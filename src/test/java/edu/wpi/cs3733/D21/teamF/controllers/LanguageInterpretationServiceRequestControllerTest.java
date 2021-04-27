@@ -15,7 +15,7 @@ public class LanguageInterpretationServiceRequestControllerTest extends Applicat
     public void start (Stage stage) throws Exception {
         System.gc();
 
-        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml"));
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml"));
         Parent root = loader.load();
 
         final LanguageInterpretationServiceRequestController controller = loader.getController();
@@ -29,7 +29,7 @@ public class LanguageInterpretationServiceRequestControllerTest extends Applicat
     @Test
     public void handleClose() {
         clickOn("#close");
-        verifyThat("Welcome to the Service Request Application Home Menu", Node::isVisible);
+        verifyThat("Jay", Node::isVisible);
     }
 
 //    @Test

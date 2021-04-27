@@ -137,8 +137,12 @@ public class Path implements Iterable<Vertex> {
      * Converts this path to a printable format
      * @return this Path as a String
      */
+    @Override
     public String toString() {
-        return this.vertices.toString();
+        return "Path{" +
+                "vertices=" + vertices +
+                ", pathCost=" + pathCost +
+                '}';
     }
 
     /**

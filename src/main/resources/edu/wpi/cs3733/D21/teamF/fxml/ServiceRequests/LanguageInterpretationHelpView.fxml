@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6; -fx-border-color: #03256C; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LanguageInterpretationRequestHelpController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6; -fx-border-color: #03256C; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LanguageInterpretationHelpController">
     <children>
         <VBox layoutX="91.0" layoutY="52.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
             <children>
@@ -46,9 +46,9 @@
                     <VBox.margin>
                         <Insets bottom="10.0" left="30.0" />
                     </VBox.margin>
-                    <font>
-                        <Font name="Montserrat Regular" size="15.0" />
-                    </font>
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
                 </Label>
                 <Label text="Appointment type:">
                     <VBox.margin>
@@ -84,26 +84,26 @@
                         <Insets bottom="10.0" left="25.0" right="25.0" />
                     </VBox.margin>
                 </Label>
-                <VBox alignment="TOP_CENTER" prefWidth="100.0">
-                    <children>
-                        <JFXButton fx:id="back" buttonType="RAISED" onAction="#handleBack" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="Back to Interpretation Request Form" textFill="WHITE">
-                            <font>
-                                <Font name="Tahoma" size="15.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </JFXButton>
-                        <JFXButton fx:id="translate" buttonType="RAISED" onAction="#handleTranslate" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="Translate" textFill="WHITE">
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
-                        </JFXButton>
-                    </children>
-                    <VBox.margin>
-                        <Insets left="25.0" right="25.0" />
-                    </VBox.margin>
-                </VBox>
+            <VBox alignment="TOP_CENTER" prefWidth="100.0">
+               <children>
+                      <JFXButton fx:id="back" buttonType="RAISED" onAction="#handleBack" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="Back to Interpretation Request Form" textFill="WHITE">
+                          <font>
+                              <Font name="Tahoma" size="15.0" />
+                          </font>
+                          <VBox.margin>
+                              <Insets bottom="10.0" />
+                          </VBox.margin>
+                      </JFXButton>
+                      <JFXButton fx:id="translate" buttonType="RAISED" onAction="#handleTranslate" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="Translate" textFill="WHITE">
+                          <VBox.margin>
+                              <Insets />
+                          </VBox.margin>
+                      </JFXButton>
+               </children>
+               <VBox.margin>
+                  <Insets left="25.0" right="25.0" />
+               </VBox.margin>
+            </VBox>
             </children>
         </VBox>
     </children>

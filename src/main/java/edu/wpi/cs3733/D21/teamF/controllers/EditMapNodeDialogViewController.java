@@ -116,22 +116,22 @@ public class EditMapNodeDialogViewController {
         // Check if each field has been filled out, if not do not continue and highlight the text field red - KD
 
         if(nodeIDField.getText().length() <= 0 || !isUniqueNodeID(nodeIDField.getText())) {
-            nodeIDField.setStyle("-fx-background-color:  #ffbab8");
+            nodeIDField.setStyle("-fx-background-color:  #ff000088");
         }
         if(!isProperFloor(floorField.getText())) {
-            floorField.setStyle("-fx-background-color:  #ffbab8");
+            floorField.setStyle("-fx-background-color:  #ff000088");
         }
         if(buildingField.getText().length() <= 0) {
-            buildingField.setStyle("-fx-background-color:  #ffbab8");
+            buildingField.setStyle("-fx-background-color:  #ff000088");
         }
         if(nodeTypeField.getText().length() <= 0) {
-            nodeTypeField.setStyle("-fx-background-color:  #ffbab8");
+            nodeTypeField.setStyle("-fx-background-color:  #ff000088");
         }
         if(longNameField.getText().length() <= 0) {
-            longNameField.setStyle("-fx-background-color:  #ffbab8");
+            longNameField.setStyle("-fx-background-color:  #ff000088");
         }
         if(shortNameField.getText().length() <= 0) {
-            shortNameField.setStyle("-fx-background-color:  #ffbab8");
+            shortNameField.setStyle("-fx-background-color:  #ff000088");
         }
         try {
             xCoordValid = Integer.parseInt(xCoordField.getText()) >= 0 && Integer.parseInt(xCoordField.getText()) <= 5000; } // make sure coordinates are valid integers and not negative
@@ -144,8 +144,8 @@ public class EditMapNodeDialogViewController {
             yCoordValid = false;
         }
 
-        if(!xCoordValid) {xCoordField.setStyle("-fx-background-color:  #ffbab8");}
-        if(!yCoordValid) {yCoordField.setStyle("-fx-background-color: #ffbab8");}
+        if(!xCoordValid) {xCoordField.setStyle("-fx-background-color:  #ff000088");}
+        if(!yCoordValid) {yCoordField.setStyle("-fx-background-color: #ff000088");}
 
         return nodeIDField.getText().length() > 0 &&
                 isUniqueNodeID(nodeIDField.getText()) &&

@@ -15,22 +15,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
-<AnchorPane prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MapEditViewController">
+<AnchorPane prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: #c6c6c6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MapEditViewController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="200.0" layoutX="716.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="1174.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Line endX="90.0" endY="200.00001525878906" startX="1263.9998779296875" startY="200.00001525878906" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <ImageView fitHeight="181.0" fitWidth="153.0" onMouseClicked="#handleHome" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <HBox layoutX="273.0" layoutY="74.0" prefHeight="149.0" prefWidth="1164.0" style="-fx-background-color: #94c4f1;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <HBox layoutY="138.0" prefHeight="17.0" prefWidth="1164.0" style="-fx-background-color: #03256c;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <ImageView fitHeight="124.0" fitWidth="121.0" onMouseClicked="#handleHome" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <image>
             <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
          </image>
       </ImageView>
-      <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="60.0" prefHeight="100.0" prefWidth="450.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0">
+      <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="173.0" prefHeight="502.0" prefWidth="774.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="173.0">
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="240.0">
                <children>
@@ -138,11 +136,10 @@
             <Insets left="25.0" right="25.0" />
          </padding>
       </HBox>
-      <Text fx:id="title" fill="#03256c" layoutX="173.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL MAP EDITOR" wrappingWidth="990.3173828125" AnchorPane.leftAnchor="173.0" AnchorPane.topAnchor="17.0">
+      <Text fx:id="title" fill="#03256c" layoutX="173.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL MAP EDITOR" wrappingWidth="849.9999976158142" AnchorPane.leftAnchor="140.0" AnchorPane.topAnchor="17.0">
          <font>
-            <Font name="Volkhov Regular" size="60.0" />
+            <Font size="50.0" />
          </font>
       </Text>
    </children>
 </AnchorPane>
-

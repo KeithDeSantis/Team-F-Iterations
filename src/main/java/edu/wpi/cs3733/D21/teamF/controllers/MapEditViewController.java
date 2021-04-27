@@ -79,7 +79,7 @@ public class MapEditViewController {
         editButton.setFont(buttonDefault);
         deleteButton.setFont(buttonDefault);
 
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 60);
+        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 42);
         title.setFont(titleFont);
 
         // Node initialization
@@ -130,8 +130,6 @@ public class MapEditViewController {
                     openEditNodeDialog(nodeEntry);
                     if(!checkNodeEntryNotEmpty(nodeEntry)) return;
                     nodeEntryObservableList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
-
-                    mapPanel.draw(getEditableNode(nodeEntry));
 
                     updateNodeEntry(nodeEntry);
                 } catch (IOException | SQLException ioException) {

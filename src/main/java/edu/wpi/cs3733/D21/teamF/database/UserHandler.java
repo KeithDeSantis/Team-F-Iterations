@@ -17,6 +17,27 @@ import java.util.List;
 public class UserHandler implements DatabaseEntry {
 
     /**
+     * verify that the admin user exists
+     * @return true if admin exists, false otherwise
+     * @throws SQLException on error with query
+     */
+    public boolean verifyAdmin() throws SQLException{
+        boolean exists = false;
+        String sql = "SELECT * FROM USERS WHERE USERNAME='admin'";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(sql);
+        while (rset.next()){
+            if (rset.getString(1).equals("admin") && rset.getString(2).equals("administrator")){
+                exists = true;
+            }
+        }
+        rset.close();
+
+        return exists;
+    }
+
+    /**
      * method to generate random salt, stored in user's DB row entry
      * @return byte array representation of the salt
      * @throws NoSuchAlgorithmException if algorithm specified is not found
@@ -238,21 +259,6 @@ public class UserHandler implements DatabaseEntry {
         }
         rset.close();
         return entries;
-    }
-
-    public boolean verifyAdmin() throws SQLException{
-        boolean exists = false;
-        String sql = "SELECT * FROM USERS WHERE USERNAME='admin'";
-        ResultSet rset;
-        Statement stmt = ConnectionHandler.getConnection().createStatement();
-        rset = stmt.executeQuery(sql);
-        while (rset.next()){
-            if (rset.getString(1).equals("admin") && rset.getString(2).equals("administrator")){
-                exists = true;
-            }
-        }
-        rset.close();
-        return exists;
     }
 
     /**

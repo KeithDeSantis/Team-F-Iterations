@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import javafx.event.ActionEvent;
@@ -16,6 +17,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginController {
@@ -33,7 +36,7 @@ public class LoginController {
     @FXML
     private JFXButton skipSignIn;
 
-    public void handleButtonPushed(ActionEvent actionEvent) throws IOException, SQLException {
+    public void handleButtonPushed(ActionEvent actionEvent) throws IOException, SQLException, SQLException {
         Button buttonPushed = (JFXButton) actionEvent.getSource();  //Getting current stage
         if (buttonPushed == closeLogin) {
             Stage currentStage = (Stage) closeLogin.getScene().getWindow();

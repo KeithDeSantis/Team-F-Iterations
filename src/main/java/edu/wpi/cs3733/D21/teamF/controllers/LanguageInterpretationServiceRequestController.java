@@ -11,15 +11,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
+import java.util.*;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
-import java.util.UUID;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 
 
 public class LanguageInterpretationServiceRequestController implements Initializable {
@@ -28,11 +36,24 @@ public class LanguageInterpretationServiceRequestController implements Initializ
     @FXML private JFXDatePicker date;
     @FXML private JFXTimePicker time;
     @FXML private JFXComboBox<String> appointment;
-    @FXML private JFXTextField language;
+    @FXML private JFXComboBox<String> language;
     @FXML private JFXButton help;
     @FXML private JFXButton translate;
     @FXML private JFXButton submit;
+    @FXML private Label nameLabel;
+    @FXML private Label dtLabel;
+    @FXML private Label appointmentLabel;
+    @FXML private Label languageLabel;
 
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
     /**
      * closes the Language Interpretation Request form and returns to home
      * @param actionEvent
@@ -41,7 +62,7 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      */
     public void handleClose(ActionEvent actionEvent) throws IOException {
         Stage currentStage = (Stage)close.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
         Scene homeScene = new Scene(root);
         currentStage.setScene(homeScene);
         currentStage.show();
@@ -54,9 +75,8 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      * @author Jay Yen
      */
     public void handleHelp(ActionEvent actionEvent) throws IOException {
-
         Stage submittedStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationHelpView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml"));
         Scene helpPopUp = new Scene(root);
         submittedStage.setScene(helpPopUp);
         submittedStage.setTitle("Language Interpretation Help");
@@ -65,19 +85,38 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         submittedStage.showAndWait();
     }
 
-    @FXML
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    @FXML
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
-
+    /**
+     * Calls translate function when translate button is clicked
+     * @param actionEvent
+     * @throws IOException
+     * @author Johvanni Perez
+     */
     public void handleTranslate(ActionEvent actionEvent) throws IOException{
+        if(language.getValue() != null) {
+            List<Label> labelList = new ArrayList<Label>(); //list of labels that need to get fixed
+            labelList.add(nameLabel);
+            labelList.add(dtLabel);
+            labelList.add(appointmentLabel);
+            labelList.add(languageLabel);
+
+            HashMap<String, String> codes = codeMap();
+            String src = "";                                //empty string that translator uses to autodetect src lang
+            String target = codes.get(language.getValue()); //gets lang code of the lang specified
+            String text;
+            String transText;
+            for (Label aLabel : labelList) {
+                text = aLabel.getText();
+                transText = translate(src, target, text);
+                aLabel.setText(transText);
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner((Stage) ( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
+            alert.setTitle("Language Missing");
+            alert.setHeaderText("Specify language");
+            alert.setContentText("Please select a language from the dropdown list.");
+            alert.showAndWait();
+        }
     }
 
     /**
@@ -87,29 +126,29 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      * @author Jay Yen
      */
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
-
         if(formFilledOut() != true) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner((Stage) ((Button) actionEvent.getSource()).getScene().getWindow());
-            alert.setTitle("Form not filled");
-            alert.setHeaderText("Form incomplete");
-            alert.setContentText("Please fill out the fields marked in red.");
-            alert.showAndWait();
+
         }else{
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
-                    " Name: " + name.getText() + " Appointment: " + (String) appointment.getValue() + " Language: " + language.getText();
+                    " Name: " + name.getText() + " Appointment: " + (String) appointment.getValue() + " Language: " + language.getValue();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
 
+        DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
+                newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus());
+            // Loads form submitted window and passes in current stage to return to request home
+            FXMLLoader submitedPageLoader = new FXMLLoader();
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
+            Parent root = submitedPageLoader.load();
+            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
             submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
             submittedStage.showAndWait();
         }
 
@@ -207,11 +246,26 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         appointment.getItems().add("Weight Management");
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
-    }
 
+       // language.getItems().add("Arabic");
+       // language.getItems().add("Dutch");
+        language.getItems().add("English");
+        language.getItems().add("French");
+       // language.getItems().add("German");
+       // language.getItems().add("Greek");
+       // language.getItems().add("Haitian Creole");
+        language.getItems().add("Italian");
+       // language.getItems().add("Japanese");
+       // language.getItems().add("Korean");
+        language.getItems().add("Portuguese");
+       // language.getItems().add("Russian");
+        language.getItems().add("Spanish");
+       // language.getItems().add("Vietnamese");
+    }
+    
     private boolean formFilledOut(){
 
-        if(name.getText().length() <= 0){
+        if(name.getText().trim().isEmpty()){
             name.setStyle("-fx-border-color: red");
         }
         if(date.getValue() == null){
@@ -220,12 +274,69 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         if(time.getValue() == null){
             time.setStyle("-fx-border-color: red");
         }
-        if(language.getText().length() <= 0){
+        if(language.getValue() == null)
+        {
             language.setStyle("-fx-border-color: red");
         }
-        if(name.getText().length() > 0 && language.getText().length() > 0){
+
+        if(name.getText().trim().isEmpty() && language.getValue() != null){
             return true;
         }
         return false;
+    }
+
+    /**
+     * HashMap containing languages and their lang codes
+     * @return
+     * @author Johvanni Perez
+     */
+    public static HashMap<String, String> codeMap(){
+        HashMap<String, String> langCodes = new HashMap<String, String>();
+
+        langCodes.put("Arabic", "ar");
+        langCodes.put("Dutch", "nl");
+        langCodes.put("English", "en");
+        langCodes.put("French", "fr");
+        langCodes.put("German", "de");
+        langCodes.put("Greek", "el");
+        langCodes.put("Haitian Creole", "ht");
+        langCodes.put("Italian", "it");
+        langCodes.put("Japanese", "ja");
+        langCodes.put("Korean", "ko");
+        langCodes.put("Portuguese", "pt");
+        langCodes.put("Russian", "ru");
+        langCodes.put("Spanish", "es");
+        langCodes.put("Vietnamese", "vi");
+
+        return langCodes;
+    }
+
+    /**
+     * web scraper that uses javascript to access a translation generator and return translations
+     * @param src the original language that needs to be translated
+     * @param target the language that the translation will be provided in
+     * @param text the string that needs to translated
+     * @return a translated string
+     * @throws IOException
+     * @author Johvanni Perez
+     */
+    public String translate(String src, String target, String text) throws IOException {
+
+
+        String urlStr = "https://script.google.com/macros/s/AKfycbzk_1ZP98MqQNuWvs_Yo3UamuN7WCABIG3UiUUighYgCeqIf4ha4qUzubb2jxopuTP7/exec"
+                + "?q=" + URLEncoder.encode(text, "UTF-8") +
+                "&target=" + target +
+                "&source=" + src;
+        URL url = new URL(urlStr);
+        StringBuilder response = new StringBuilder();
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputline;
+        while((inputline = in.readLine()) != null){
+            response.append(inputline);
+        }
+        in.close();
+        return response.toString();
     }
 }

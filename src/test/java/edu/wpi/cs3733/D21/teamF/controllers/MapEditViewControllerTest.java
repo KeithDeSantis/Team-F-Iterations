@@ -216,13 +216,13 @@ public class MapEditViewControllerTest extends ApplicationTest {
         doubleClickOn("#searchField");
         write("MS");
     }
-/*
+
     @Test
     public void clickOnEdgeTest() {
-        clickOn("#fWALK00501_FEXIT00301");
-        verifyThat("fWALK00501_FEXIT00301", Node::isVisible);
+        clickOn("#fWALK00101_fWALK00201");
+        verifyThat("fWALK00101_fWALK00201", Node::isVisible);
     }
-*/
+
     @Test
     public void deleteEdgeTest() {
         clickOn("#FHALL01401_FHALL01101");

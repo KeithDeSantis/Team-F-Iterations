@@ -1,47 +1,53 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.sun.javafx.tk.FontLoader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class DefaultPageController {
     @FXML
-    private Button AStarDemo;
+    private JFXButton navigation;
     @FXML
-    private Button serviceRequest;
+    private JFXButton serviceRequest;
     @FXML
-    private Button quit;
+    private JFXButton quit;
     @FXML
-    private Button loginButton;
+    private JFXButton loginButton;
+    @FXML
+    private Text title;
 
-    @FXML private ImageView directionsImage;
-
-    @FXML private ImageView serviceButton;
-
-    @FXML private ImageView login;
 
     @FXML private void initialize(){
-        final Image directions = new Image(getClass().getResourceAsStream("/imagesAndLogos/directionsArrow.png"));
-        directionsImage.setImage(directions);
-        final Image serviceRequest = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButton.png"));
-        serviceButton.setImage(serviceRequest);
-        final Image lockImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/login.png"));
-        login.setImage(lockImage);
+        // Apply fonts to title and buttons
+        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40);
+        title.setFont(titleFont);
+
+        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
+        navigation.setFont(buttonDefault);
+        quit.setFont(buttonDefault);
+        serviceRequest.setFont(buttonDefault);
+        loginButton.setFont(buttonDefault);
+
+        // CLear visual focus for login button (unknown why it defaults to false) - LM
+        loginButton.setDisableVisualFocus(true);
     }
     /**
      * Handles the pushing of a button on the screen
      * @param actionEvent the button's push
      * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
      * @author ZheCheng Song
-     */
+    */
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
@@ -55,7 +61,7 @@ public class DefaultPageController {
             stage.getScene().setRoot(root);
             stage.setTitle("Log in");
             stage.show();
-        } else if (buttonPushed == AStarDemo) {
+        } else if (buttonPushed == navigation) {
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml"));
             stage.getScene().setRoot(root);
@@ -65,7 +71,7 @@ public class DefaultPageController {
         } else if (buttonPushed == serviceRequest) {
 
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("Service Request Home");
             stage.show();
@@ -73,5 +79,15 @@ public class DefaultPageController {
         } else if (buttonPushed == quit) {
             Platform.exit();
         }
+    }
+
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 }
