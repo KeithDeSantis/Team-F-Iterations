@@ -20,7 +20,7 @@
    <children>
       <VBox layoutX="325.0" layoutY="93.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #94c4f1;">
+            <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
                   <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                      <image>

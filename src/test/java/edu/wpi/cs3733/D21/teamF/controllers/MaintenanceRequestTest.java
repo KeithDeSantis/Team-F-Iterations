@@ -15,7 +15,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 public class MaintenanceRequestTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/maintenanceRequest.fxml"));
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/maintenanceRequest.fxml"));
         Parent root = loader.load();
 
         final MaintenenceRequestController controller = loader.getController();

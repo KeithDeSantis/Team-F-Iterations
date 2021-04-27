@@ -20,7 +20,7 @@
    <children>
       <VBox prefHeight="940.0" prefWidth="960.0" style="-fx-background-color: #c6c6c6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: 94c4f1;">
+            <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: 94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
                   <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -51,7 +51,7 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
                      <children>
-                        <JFXButton fx:id="cancel" onAction="#handleCancel" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                        <JFXButton fx:id="cancel" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
                      </children>
                   </HBox>
                   <JFXTextArea fx:id="description" GridPane.rowIndex="1" />
@@ -74,7 +74,7 @@
                   </Label>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <children>
-                        <JFXButton fx:id="submit" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton fx:id="submit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" onAction="#handleSubmit"/>
                      </children>
                   </HBox>
                </children>

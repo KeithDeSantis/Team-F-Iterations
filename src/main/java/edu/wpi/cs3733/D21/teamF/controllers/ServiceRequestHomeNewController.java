@@ -70,16 +70,14 @@ public class ServiceRequestHomeNewController {
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ExternalTrans.fxml","External Patient Transportation",buttonPushed);
         }
         else if (buttonPushed == faciliteisMaitence){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/maintenanceRequest.fxml", "Facilities Maintenance", buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/maintenanceRequest.fxml", "Facilities Maintenance", buttonPushed);
         }
         else if (buttonPushed == computorServices){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceRequestView.fxml", "IT Services", buttonPushed);
         }
-        /* FIXME Waiting on ben to fix this page
         else if (buttonPushed == sanitationService){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/SanitationRequest.fxml", "Sanitation Services", buttonPushed);
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/SanitationRequest.fxml", "Sanitation Services", buttonPushed);
         }
-         */
         else if (buttonPushed == laundryServices){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LaundryRequest.fxml", "Laundry Service", buttonPushed);
         }

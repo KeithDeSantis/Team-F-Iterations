@@ -16,7 +16,7 @@
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox fx:id= "header" prefHeight="126.0" prefWidth="960.0" style="-fx-background-color: #94C4F1">
+            <HBox fx:id= "header" prefHeight="126.0" prefWidth="960.0" style="-fx-background-color: #94C4F1" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
                   <ImageView fx:id="image" fitWidth="100.0" onMouseClicked="#goHome" pickOnBounds="true" preserveRatio="true">
                      <image>

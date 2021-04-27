@@ -19,11 +19,11 @@
     <children>
       <VBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-              <HBox fx:id="header" prefHeight="113.0" prefWidth="614.0" style="-fx-background-color: #00bfff;">
+              <HBox fx:id="header" prefHeight="113.0" prefWidth="614.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                   <children>
-                      <ImageView fitHeight="104.0" fitWidth="116.0" pickOnBounds="true" preserveRatio="true">
+                      <ImageView fitHeight="110.0" pickOnBounds="true" preserveRatio="true">
                           <image>
-                              <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                              <Image url="/imagesAndLogos/BandWLogo.png" />
                           </image>
                       </ImageView>
                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Brigham's and Womens Hospital Gift Delivery" wrappingWidth="351.28253173828125" />

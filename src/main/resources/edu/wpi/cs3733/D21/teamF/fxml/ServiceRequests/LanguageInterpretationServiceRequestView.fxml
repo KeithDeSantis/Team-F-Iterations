@@ -7,6 +7,8 @@
 <?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -16,19 +18,28 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LanguageInterpretationRequestController">
    <children>
-      <JFXButton fx:id="close" buttonType="RAISED" onAction="#handleClose" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #03256C;" text="x" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+      <JFXButton fx:id="close" buttonType="RAISED" onAction="#handleClose" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #03256C;" text="x" textAlignment="CENTER" textFill="WHITE" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
          <font>
             <Font name="Montserrat Regular" size="15.0" />
          </font>
       </JFXButton>
-      <Label alignment="CENTER" lineSpacing="8.0" prefHeight="63.0" prefWidth="873.0" text="Language Interpretation Request" textAlignment="CENTER" underline="true" wrapText="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0">
-         <font>
-            <Font name="Volkhov Regular" size="50.0" />
-         </font>
-         <padding>
-            <Insets bottom="25.0" />
-         </padding>
-      </Label>
+      <HBox fx:id="header" layoutX="25.0" layoutY="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
+         <children>
+            <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+               </image>
+            </ImageView>
+            <Label lineSpacing="8.0" prefHeight="79.0" prefWidth="706.0" text="Language Interpretation Request" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Volkhov Regular" size="40.0" />
+               </font>
+               <padding>
+                  <Insets bottom="25.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">
          <children>
             <GridPane alignment="CENTER_LEFT" prefHeight="356.0" prefWidth="860.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

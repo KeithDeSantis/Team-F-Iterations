@@ -18,7 +18,7 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MedicineDeliveryServiceRequest">
     <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #c6c6c6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <HBox minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #94c4f1;">
+        <HBox fx:id="header" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                 <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
             </ImageView>
