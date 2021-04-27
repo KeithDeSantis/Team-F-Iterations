@@ -114,7 +114,7 @@ public class FoodDeliveryServiceRequestController {
 
     public void handleBack(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) rButtonFood1.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
         stage.getScene().setRoot(root);
         stage.show();
     }
