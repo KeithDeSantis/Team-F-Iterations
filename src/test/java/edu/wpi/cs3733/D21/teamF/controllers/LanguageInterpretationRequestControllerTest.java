@@ -29,13 +29,13 @@ public class LanguageInterpretationRequestControllerTest extends ApplicationTest
     @Test
     public void handleClose() {
         clickOn("#close");
-        verifyThat("Welcome to the Service Request Application Home Menu", Node::isVisible);
+        verifyThat("Jay", Node::isVisible);
     }
 
     @Test
     public void handleHelp() {
         clickOn("#help");
-        verifyThat("Help", Node::isVisible);
+        verifyThat("Language Interpretation Help", Node::isVisible);
     }
 
 //    @Test

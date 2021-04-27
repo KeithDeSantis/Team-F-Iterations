@@ -50,7 +50,7 @@ public class LanguageInterpretationRequestController implements Initializable {
      */
     public void handleClose(ActionEvent actionEvent) throws IOException {
         Stage currentStage = (Stage)close.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
         Scene homeScene = new Scene(root);
         currentStage.setScene(homeScene);
         currentStage.show();

@@ -18,12 +18,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LanguageInterpretationRequestController">
    <children>
-      <JFXButton fx:id="close" buttonType="RAISED" onAction="#handleClose" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #03256C;" text="x" textAlignment="CENTER" textFill="WHITE" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
-         <font>
-            <Font name="Montserrat Regular" size="15.0" />
-         </font>
-      </JFXButton>
-      <HBox fx:id="header" layoutX="25.0" layoutY="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
+      <HBox fx:id="header" layoutX="25.0" layoutY="50.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -146,17 +141,18 @@
             </GridPane>
          </children>
       </AnchorPane>
-      <HBox layoutX="271.0" layoutY="456.0">
+      <HBox layoutX="271.0" layoutY="456.0" spacing="30.0">
          <children>
             <JFXButton fx:id="help" buttonType="RAISED" onAction="#handleHelp" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="?" textFill="WHITE" />
+            <JFXButton fx:id="close" buttonType="RAISED" onAction="#handleClose" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="26.0" prefWidth="104.0" style="-fx-background-color: #03256C;" text="Cancel" textFill="WHITE" />
             <JFXButton fx:id="translate" buttonType="RAISED" onAction="#handleTranslate" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="26.0" prefWidth="104.0" style="-fx-background-color: #03256C;" text="Translate" textFill="WHITE">
                <HBox.margin>
-                  <Insets left="50.0" />
+                  <Insets />
                </HBox.margin>
             </JFXButton>
             <JFXButton fx:id="submit" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#handleSubmit" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="26.0" prefWidth="94.0" style="-fx-background-color: #03256C;" text="Submit" textFill="WHITE">
                <HBox.margin>
-                  <Insets left="50.0" />
+                  <Insets />
                </HBox.margin>
             </JFXButton>
          </children>
