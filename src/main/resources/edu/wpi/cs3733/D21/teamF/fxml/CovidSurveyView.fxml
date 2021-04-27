@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidSurveyViewController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidSurveyViewController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="100.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1920.0" AnchorPane.bottomAnchor="440.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Line endX="1922.0" endY="-2.0" fill="#03256c" layoutX="-62.0" layoutY="99.0" startX="-2.0" startY="-2.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="5.0" />
+      <ImageView fitHeight="68.0" fitWidth="84.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0">
+         <image>
+            <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+         </image>
+      </ImageView>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="83.0" prefWidth="600.0" text="COVID-19 Symptom Tracker " wrapText="true" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+         <font>
+            <Font name="Verdana" size="36.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="helpButton" buttonType="RAISED" layoutX="10.0" layoutY="10.0" onAction="#handleButtonPushed" style="-fx-background-color: #03256C;" text="?" textFill="WHITE" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+   </children>
 </AnchorPane>
