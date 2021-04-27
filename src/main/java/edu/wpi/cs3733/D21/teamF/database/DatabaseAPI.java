@@ -16,12 +16,14 @@ public class DatabaseAPI {
     private final DatabaseEntry edgeHandler;
     private final DatabaseEntry serviceRequestHandler;
     private final DatabaseEntry userHandler;
+    private final DatabaseEntry systemHandler;
 
     public DatabaseAPI() {
         this.nodeHandler = new NodeHandler();
         this.edgeHandler = new EdgeHandler();
         this.userHandler = new UserHandler();
         this.serviceRequestHandler = new ServiceRequestHandler();
+        this.systemHandler = new SystemPreferences();
     }
 
     public boolean createNodesTable() {
@@ -162,6 +164,30 @@ public class DatabaseAPI {
 
     public boolean verifyAdminExists() throws SQLException{
         return ((UserHandler)this.userHandler).verifyAdmin();
+    }
+
+    public boolean addSystemPreferences(String...colValues) throws SQLException{
+        return systemHandler.addEntry(colValues);
+    }
+
+    public boolean dropSystemTable(){
+        return systemHandler.dropTable();
+    }
+
+    public boolean createSystemTable(){
+        return systemHandler.createTable();
+    }
+
+    public boolean editSystemSettings(String id, String newVal, String colName) throws Exception{
+        return systemHandler.editEntry(id, newVal, colName);
+    }
+
+    public boolean deleteSystemPreference(String id) throws SQLException{
+        return systemHandler.deleteEntry(id);
+    }
+
+    public String getCurrentAlgorithm(String id) throws SQLException{
+        return ((SystemPreferences)this.systemHandler).getAlgorithm(id);
     }
 
     private static class DatabaseSingletonHelper{
