@@ -180,6 +180,11 @@ public class AStarDemoController implements Initializable {
     private void loadFavorites() {
         this.favorites = new DoublyLinkedHashSet<>();
         //TODO: load recentlyUsed
+        ObservableList<String> favoriteVertices = FXCollections.observableList(new ArrayList<>());
+        for(Vertex vertex : this.favorites) {
+            favoriteVertices.add(vertex.getID());
+        }
+        this.favoritesComboBox.setItems(favoriteVertices);
     }
     /**
      * Given a list of NodeEntries, returns the one closest to the current location
@@ -945,7 +950,7 @@ public class AStarDemoController implements Initializable {
         mapPanel.centerNode(endNodeDisplay);
 
         favoritesComboBox.setValue(favoritesComboBox.getPromptText());
-        endComboBox.setValue(endComboBox.getPromptText());
+        //endComboBox.setValue(endComboBox.getPromptText());
         loadRecentlyUsedVertices();
     }
 
@@ -962,7 +967,7 @@ public class AStarDemoController implements Initializable {
         mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(endNodeDisplay);
 
-        endComboBox.setValue(endComboBox.getPromptText());
+        //endComboBox.setValue(endComboBox.getPromptText());
         recentlyUsedComboBox.setValue(recentlyUsedComboBox.getPromptText());
         loadRecentlyUsedVertices();
     }
