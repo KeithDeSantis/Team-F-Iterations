@@ -68,12 +68,17 @@
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="quit" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="200.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Close" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <JFXButton fx:id="quit" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Close" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="signOut" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Sign Out" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" buttonType="RAISED">
+            <JFXButton fx:id="signOut" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Sign Out" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <font>
+                  <Font name="Montserrat SemiBold" size="20.0" />
+               </font>
+            </JFXButton>
+            <JFXButton fx:id="pathfindingSettingButton" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="40.0" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Pathfinding Settings" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
