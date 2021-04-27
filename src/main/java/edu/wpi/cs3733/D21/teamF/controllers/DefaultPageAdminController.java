@@ -84,7 +84,7 @@ public class DefaultPageAdminController {
         } else if (buttonPushed == serviceRequest) {
 
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("Service Request Home");
             stage.show();
