@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.sun.javafx.tk.FontLoader;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -56,25 +57,32 @@ public class DefaultPageController {
         Parent root;
 
         if (buttonPushed == loginButton) {
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("Log in");
             stage.show();
+             */
+            SceneContext.getSceneContext().switchScene("Login.fxml");
         } else if (buttonPushed == navigation) {
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("AStar Pathfinding Demo");
             stage.show();
-
+             */
+            SceneContext.getSceneContext().switchScene("AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {
-
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("Service Request Home");
             stage.show();
+             */
+            SceneContext.getSceneContext().switchScene("ServiceRequestHomeView.fxml");
 
         } else if (buttonPushed == quit) {
             Platform.exit();

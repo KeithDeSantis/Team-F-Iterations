@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +33,8 @@ public class  AppF extends Application {
 
     AppF.primaryStage = primaryStage;
 
+    SceneContext.getSceneContext().setStage(primaryStage);
+
     //ConnectionHandler.main(false);
     Runtime.getRuntime().addShutdownHook(new Thread(){
       @Override
@@ -44,6 +47,7 @@ public class  AppF extends Application {
       }
     });
     try {
+
       Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);

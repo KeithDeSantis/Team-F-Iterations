@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -63,33 +64,43 @@ public class DefaultPageAdminController {
         Parent root;
 
         if (buttonPushed == editMap) {
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("Edit Map Menu");
             stage.show();
+             */
+            SceneContext.getSceneContext().switchScene("mapEditView.fxml");
         } else if (buttonPushed == manageServices) {
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
             stage.getScene().setRoot(root);  //Changing the stage
             stage.setTitle("Service Request Manager");
             stage.show();
+             */
+            SceneContext.getSceneContext().switchScene("MarkRequestsCompleteView.fxml");
         } else if (buttonPushed == navigation) {
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("AStar Pathfinding Demo");
             stage.show();
-
+             */
+            SceneContext.getSceneContext().switchScene("AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {
-
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("Service Request Home");
             stage.show();
-
+             */
+            SceneContext.getSceneContext().switchScene("ServiceRequestHomeView.fxml");
         } else if (buttonPushed == manageAccount) {
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml"));
             //Scene scene = new Scene(root);
@@ -97,16 +108,20 @@ public class DefaultPageAdminController {
             stage.getScene().setRoot(root);
             stage.setTitle("Account Manager");
             stage.show();
-
+             */
+            SceneContext.getSceneContext().switchScene("AccountManagerView.fxml");
         } else if (buttonPushed == quit) {
             Platform.exit();
 
         } else if (buttonPushed == signOut){
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
             stage.getScene().setRoot(root);
             stage.setTitle("");
             stage.show();
+             */
+            SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
         }
     }
 

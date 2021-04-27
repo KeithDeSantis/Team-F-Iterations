@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
 import edu.wpi.cs3733.D21.teamF.database.UserHandler;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -123,6 +124,7 @@ public class AccountManagerController implements Initializable {
     }
 
     private void refreshPage(ActionEvent actionEvent) throws IOException {
+        /*
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
         Stage stage;
         Parent root;
@@ -131,9 +133,12 @@ public class AccountManagerController implements Initializable {
         stage.getScene().setRoot(root);
         stage.setTitle("Account Manager");
         stage.show();
+         */
+        SceneContext.getSceneContext().switchScene("AccountManagerView.fxml");
     }
 
     public void handleAdminHome(ActionEvent actionEvent) throws IOException {
+        /*
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
         Stage stage;
         Parent root;
@@ -142,6 +147,8 @@ public class AccountManagerController implements Initializable {
         stage.getScene().setRoot(root);
         stage.setTitle("Admin Home");
         stage.show();
+         */
+        SceneContext.getSceneContext().switchScene("DefaultPageAdminView.fxml");
     }
 
     public void changingUsername(MouseEvent mouseEvent) throws SQLException{
