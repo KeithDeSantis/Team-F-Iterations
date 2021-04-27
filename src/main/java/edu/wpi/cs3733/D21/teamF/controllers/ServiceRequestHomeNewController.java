@@ -26,6 +26,7 @@ public class ServiceRequestHomeNewController {
     @FXML private JFXButton internalPatientTrans;
     @FXML private JFXButton sanitationService;
     @FXML private JFXButton medicineDelivery;
+    @FXML private JFXButton giftDelivery;
     @FXML private ImageView homeImage;
     @FXML private ImageView facilitiesImage;
     @FXML private ImageView laundryImage;
@@ -37,6 +38,7 @@ public class ServiceRequestHomeNewController {
     @FXML private ImageView medicineImage;
     @FXML private ImageView internalImage;
     @FXML private ImageView sanitationImage;
+    @FXML private ImageView giftImage;
 
 
 
@@ -77,6 +79,9 @@ public class ServiceRequestHomeNewController {
          */
         else if (buttonPushed == laundryServices){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/LaundryRequest.fxml", "Laundry Service", buttonPushed);
+        }
+        else if (buttonPushed == laundryServices){
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/GiftDelivery.fxml", "Gift Delivery", buttonPushed);
         }
     }
 
@@ -151,6 +156,11 @@ public class ServiceRequestHomeNewController {
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/MedDeliveryBlackText.png"));
             medicineImage.setImage(image);
         }
+        else if (btn == giftDelivery){
+            btn.setStyle("-fx-background-color: #F0C808");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/GiftDeliveryBlackText.png"));
+            giftImage.setImage(image);
+        }
     }
 
     public void handleHoverOff(MouseEvent mouseEvent) {
@@ -210,6 +220,11 @@ public class ServiceRequestHomeNewController {
             btn.setStyle("-fx-background-color: #03256c");
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/MedDeliveryWhiteText.png"));
             medicineImage.setImage(image);
+        }
+        else if (btn == giftDelivery){
+            btn.setStyle("-fx-background-color: #03256c");
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/GiftDeliveryWhiteText.png"));
+            giftImage.setImage(image);
         }
     }
 }
