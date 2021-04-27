@@ -133,23 +133,22 @@ public class FoodDeliveryServiceRequestController {
             String person = "";
             String completed = "false";
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, person, type, completed);
-            Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
-            submittedStage.showAndWait();
+
+//            Stage submittedStage = (Stage) cancelButton.getScene().getWindow();
+//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
+//            Scene submitScene = new Scene(root);
+//            submittedStage.setScene(submitScene);
+//            submittedStage.setTitle("Submission Complete");
+//            submittedStage.showAndWait();
         }
-//        else {
+        //else {
 //            Alert alert = new Alert(Alert.AlertType.WARNING);
 //            alert.initOwner((Stage) ((Button) e.getSource()).getScene().getWindow());
 //            alert.setTitle("Form not filled.");
 //            alert.setHeaderText("Form incomplete");
 //            alert.setContentText("Please fill out the location, type of food, drink, and side.");
 //            alert.showAndWait();
-//        }
+//       }
     }
 
 
