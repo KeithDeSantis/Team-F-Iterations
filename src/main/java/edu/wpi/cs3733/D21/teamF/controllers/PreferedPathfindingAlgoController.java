@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
 
 public class PreferedPathfindingAlgoController {
 
@@ -31,8 +34,10 @@ public class PreferedPathfindingAlgoController {
         algorithmComboBox.setItems(algoList);
     }
 
-    public void handleOkClicked() {
+    public void handleOkClicked() throws SQLException {
         Stage stage = (Stage) algorithmComboBox.getScene().getWindow();
+        DatabaseAPI.getDatabaseAPI().deleteSystemPreference("MASTER");
+        DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", algorithmComboBox.getValue());
         stage.close();
     }
 

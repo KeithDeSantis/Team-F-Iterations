@@ -25,6 +25,8 @@ public class DefaultPageController {
     @FXML
     private JFXButton loginButton;
     @FXML
+    private JFXButton covidSurvey;
+    @FXML
     private Text title;
 
 
@@ -38,6 +40,7 @@ public class DefaultPageController {
         quit.setFont(buttonDefault);
         serviceRequest.setFont(buttonDefault);
         loginButton.setFont(buttonDefault);
+        covidSurvey.setFont(buttonDefault);
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
@@ -78,6 +81,14 @@ public class DefaultPageController {
 
         } else if (buttonPushed == quit) {
             Platform.exit();
+        }
+
+        else if (buttonPushed == covidSurvey){
+            stage = (Stage) buttonPushed.getScene().getWindow();
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml"));
+            stage.getScene().setRoot(root);
+            stage.setTitle("Covid Survey");
+            stage.show();
         }
     }
 
