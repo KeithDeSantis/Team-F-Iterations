@@ -7,6 +7,7 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -89,6 +90,7 @@ public class MarkRequestsCompleteController implements Initializable {
     }
 
     public void handleHome(ActionEvent actionEvent) throws IOException {
+        /*
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
         Stage stage;
         Parent root;
@@ -97,5 +99,7 @@ public class MarkRequestsCompleteController implements Initializable {
         stage.getScene().setRoot(root);
         stage.setTitle("Admin Home");
         stage.show();
+         */
+        SceneContext.getSceneContext().switchScene("DefaultPageAdminView.fxml");
     }
 }

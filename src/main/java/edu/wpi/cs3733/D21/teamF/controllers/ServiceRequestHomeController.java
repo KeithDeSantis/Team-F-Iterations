@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,43 +37,52 @@ public class ServiceRequestHomeController {
 
         if(buttonPushed == floralDelivery)
         {
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FloralDeliveryServiceRequestView.fxml"));
             stage.getScene().setRoot(root);
             // Changed method of switching scenes so the window doesn't resize everytime.
-            /*
-            Scene scene = new Scene(root);
-            stage.setScene(scene);  //Changing the stage
-             */
+
             stage.setTitle("Floral Delivery");
             stage.show();
+             */
+            SceneContext.getSceneContext().switchScene("FloralDeliveryServiceRequestView.fxml");
         }
         else if (buttonPushed == home) {
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);  //Changing the stage
             stage.setTitle("Home Page");
             stage.show();
+             */
+            SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
         }
 
         else if (buttonPushed == languageInterpretation){
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);  //Changing the stage
             stage.setTitle("Language Interpretation");
             stage.show();
+             */
+            SceneContext.getSceneContext().switchScene("LanguageInterpretationServiceRequestView.fxml");
         }
 
         else if (buttonPushed == foodDelivery)
         {
+            /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FoodDeliveryServiceRequestView.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Food Delivery");
             stage.show();
+             */
+            SceneContext.getSceneContext().switchScene("FoodDeliveryServiceRequestView.fxml");
 
         }
 

@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,11 +29,14 @@ public class LoginFailController {
      * @author Jay Yen
      */
     public void handleCloseLogin(ActionEvent actionEvent) throws IOException {
+        /*
         Stage currentStage = (Stage)closeLogin.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
         Scene homeScene = new Scene(root);
         currentStage.setScene(homeScene);
         currentStage.show();
+         */
+        SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
     }
 
     /**
@@ -56,16 +60,22 @@ public class LoginFailController {
         Parent root;
 
         if (authenticated){
+            /*
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
             // set user privileges to patient, employee or admin
+             */
+            SceneContext.getSceneContext().switchScene("DefaultPageAdminView.fxml");
         }
         //displays error message
         else{
+            /*
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LoginFail.fxml"));
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
+             */
+            SceneContext.getSceneContext().switchScene("LoginFail.fxml");
         }
         currentStage.show();
     }
