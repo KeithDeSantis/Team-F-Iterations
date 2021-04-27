@@ -125,9 +125,8 @@ public class MedicineDeliveryServiceRequest {
      */
     @FXML
     private void mouseOn(MouseEvent mouseEvent) {
-        JFXButton button = (JFXButton) mouseEvent.getSource();
-        button.setStyle("-fx-background-color: #FFFFFF");
-        button.setStyle("-fx-text-color: #03256C");
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
     }
 
     /**
@@ -137,9 +136,8 @@ public class MedicineDeliveryServiceRequest {
      */
     @FXML
     private void mouseOff(MouseEvent mouseEvent) {
-        JFXButton button = (JFXButton) mouseEvent.getSource();
-        button.setStyle("-fx-background-color: #03256C");
-        button.setStyle("-fx-text-color: #FFFFFF");
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 
 
