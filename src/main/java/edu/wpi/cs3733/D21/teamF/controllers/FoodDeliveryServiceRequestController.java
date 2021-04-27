@@ -127,28 +127,27 @@ public class FoodDeliveryServiceRequestController {
      */
     @FXML
     private void handleSubmitPushed(ActionEvent e) throws IOException, SQLException {
-        if(formFilledOut()){
+        if (formFilledOut()) {
             String uuid = UUID.randomUUID().toString();
             String type = "Food Delivery";
             String person = "";
             String completed = "false";
-            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, person, type, completed);
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed);
 
-//            Stage submittedStage = (Stage) cancelButton.getScene().getWindow();
-//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
-//            Scene submitScene = new Scene(root);
-//            submittedStage.setScene(submitScene);
-//            submittedStage.setTitle("Submission Complete");
-//            submittedStage.showAndWait();
+            // Loads form submitted window and passes in current stage to return to request home
+            FXMLLoader submitedPageLoader = new FXMLLoader();
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
+            Stage submittedStage = new Stage();
+            Parent root = submitedPageLoader.load();
+            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) submitButton.getScene().getWindow());
+            Scene submitScene = new Scene(root);
+            submittedStage.setScene(submitScene);
+            submittedStage.setTitle("Submission Complete");
+            submittedStage.initModality(Modality.APPLICATION_MODAL);
+            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
+            submittedStage.showAndWait();
         }
-        //else {
-//            Alert alert = new Alert(Alert.AlertType.WARNING);
-//            alert.initOwner((Stage) ((Button) e.getSource()).getScene().getWindow());
-//            alert.setTitle("Form not filled.");
-//            alert.setHeaderText("Form incomplete");
-//            alert.setContentText("Please fill out the location, type of food, drink, and side.");
-//            alert.showAndWait();
-//       }
     }
 
 
@@ -164,7 +163,7 @@ public class FoodDeliveryServiceRequestController {
 
         if (buttonPushed == cancelButton) { // is cancel button
             Stage stage = (Stage) cancelButton.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Service Requests");
