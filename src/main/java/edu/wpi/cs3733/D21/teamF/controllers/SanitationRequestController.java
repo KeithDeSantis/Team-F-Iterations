@@ -22,24 +22,24 @@ import java.util.stream.Collectors;
 public class SanitationRequestController {
 
     @FXML private JFXButton submit;
+    @FXML private JFXButton cancel;
     @FXML private JFXTextArea description;
-    @FXML private JFXComboBox<String> location;
+    @FXML private JFXComboBox<String> loc;
     @FXML private JFXComboBox<String> employeeAssigned;
 
 
     private void initialize(){
-        Graph graph = new Graph();
         try {
-            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+        //    List<UserEntry> UserEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
 
             final ObservableList<String> nodeList = FXCollections.observableArrayList();
             nodeList.addAll(nodeEntries.stream().map(NodeEntry::getShortName)
                     .sorted().collect(Collectors.toList()));
-            this.location.setItems(nodeList);
+            this.loc.setItems(nodeList);
 
         } catch (Exception e) {
             e.printStackTrace();
-            //return;
         }
 
     }
@@ -58,6 +58,16 @@ public class SanitationRequestController {
         submittedStage.initModality(Modality.APPLICATION_MODAL);
         submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
         submittedStage.showAndWait();
+    }
+
+    public void handleCancel(ActionEvent actionEvent) throws IOException {
+        Stage stage;
+        Parent root;
+        stage = (Stage) cancel.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Service Request Home");
+        stage.show();
     }
 
 }
