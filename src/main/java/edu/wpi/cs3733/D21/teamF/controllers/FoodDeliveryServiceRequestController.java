@@ -1,15 +1,28 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Controller for Food Delivery Service View
@@ -17,58 +30,130 @@ import java.io.IOException;
  */
 public class FoodDeliveryServiceRequestController {
 
-    @FXML private Button xButton;
-    @FXML private Button cancelButton;
-    @FXML private Button helpButton;
+    @FXML private JFXButton xButton;
+    @FXML private JFXButton cancelButton;
+    @FXML private JFXButton helpButton;
     @FXML private Button helpXButton;
-    @FXML private Button submitButton;
-    @FXML private TextField deliveryLocationField;
-    @FXML private TextField deliveryTimeField;
-    @FXML private TextField allergyField;
-    @FXML private TextField specialInstructionsField;
-    @FXML private RadioButton rButtonFood1;
-    @FXML private RadioButton rButtonFood2;
-    @FXML private RadioButton rButtonFood3;
-    @FXML private RadioButton rButtonFood4;
-    @FXML private RadioButton rButtonDrink1;
-    @FXML private RadioButton rButtonDrink2;
-    @FXML private RadioButton rButtonDrink3;
-    @FXML private RadioButton rButtonDrink4;
-    @FXML private CheckBox cbSide1;
-    @FXML private CheckBox cbSide2;
-    @FXML private CheckBox cbSide3;
-    @FXML private CheckBox cbSide4;
+    @FXML private JFXButton submitButton;
+    @FXML private JFXComboBox<String> deliveryLocationField;
+    @FXML private JFXTimePicker deliveryTimeField;
+    @FXML private JFXTextField allergyField;
+    @FXML private JFXTextField specialInstructionsField;
+    @FXML private JFXRadioButton rButtonFood1;
+    @FXML private JFXRadioButton rButtonFood2;
+    @FXML private JFXRadioButton rButtonFood3;
+    @FXML private JFXRadioButton rButtonFood4;
+    @FXML private JFXRadioButton rButtonDrink1;
+    @FXML private JFXRadioButton rButtonDrink2;
+    @FXML private JFXRadioButton rButtonDrink3;
+    @FXML private JFXRadioButton rButtonDrink4;
+    @FXML private JFXCheckBox cbSide1;
+    @FXML private JFXCheckBox cbSide2;
+    @FXML private JFXCheckBox cbSide3;
+    @FXML private JFXCheckBox cbSide4;
+    @FXML private Label title;
+    @FXML private Label locLabel;
+    @FXML private Label delLabel;
+    @FXML private Label allLabel;
+    @FXML private Label siLabel;
+    @FXML private Label mealLabel;
+    @FXML private Label sideLabel;
+    @FXML private Label drinkLabel;
+    @FXML private HBox header;
+
+
+    @FXML
+    private void initialize(){
+
+        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40);
+        title.setFont(titleFont); //set title font
+
+        Font buttonFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
+        cancelButton.setFont(buttonFont);
+        submitButton.setFont(buttonFont);
+        helpButton.setFont(buttonFont);
+        //helpXButton.setFont(buttonFont);
+
+        Font textFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-Regular.ttf", 15);
+        locLabel.setFont(textFont);
+        delLabel.setFont(textFont);
+        allLabel.setFont(textFont);
+        siLabel.setFont(textFont);
+        mealLabel.setFont(textFont);
+        sideLabel.setFont(textFont);
+        drinkLabel.setFont(textFont);
+        rButtonFood1.setFont(textFont);
+        rButtonFood2.setFont(textFont);
+        rButtonFood3.setFont(textFont);
+        rButtonFood4.setFont(textFont);
+        rButtonDrink1.setFont(textFont);
+        rButtonDrink2.setFont(textFont);
+        rButtonDrink3.setFont(textFont);
+        rButtonDrink4.setFont(textFont);
+        cbSide1.setFont(textFont);
+        cbSide2.setFont(textFont);
+        cbSide3.setFont(textFont);
+        cbSide4.setFont(textFont);
+
+
+        try{
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+
+            final ObservableList<String> nodeList = FXCollections.observableArrayList();
+            for(NodeEntry n: nodeEntries){
+                nodeList.add(n.getShortName());
+            }
+            //nodeList.addAll(nodeEntries.stream().map(NodeEntry::getShortName).sorted().collect(Collectors.toList()));
+            this.deliveryLocationField.setItems(nodeList);
+
+        } catch(Exception e){
+
+        }
+    }
+
+
+    public void handleBack(MouseEvent mouseEvent) throws IOException {
+        Stage stage = (Stage) rButtonFood1.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.show();
+    }
 
     /**
      * handles submit being pressed
      * @param e is the button being pushed
      * @throws IOException
-     * @author Keith DeSantis
+     * @author KH
      */
     @FXML
-    private void handleSubmitPushed(ActionEvent e) throws IOException{
+    private void handleSubmitPushed(ActionEvent e) throws IOException, SQLException {
         if(formFilledOut()){
-            Stage submittedStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
-            submittedStage.showAndWait();
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner((Stage) ((Button) e.getSource()).getScene().getWindow());
-            alert.setTitle("Form not filled.");
-            alert.setHeaderText("Form incomplete");
-            alert.setContentText("Please fill out the location, type of food, drink, and side.");
-            alert.showAndWait();
+            String uuid = UUID.randomUUID().toString();
+            String type = "Food Delivery";
+            String person = "";
+            String completed = "false";
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, person, type, completed);
+
+//            Stage submittedStage = (Stage) cancelButton.getScene().getWindow();
+//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
+//            Scene submitScene = new Scene(root);
+//            submittedStage.setScene(submitScene);
+//            submittedStage.setTitle("Submission Complete");
+//            submittedStage.showAndWait();
         }
+        //else {
+//            Alert alert = new Alert(Alert.AlertType.WARNING);
+//            alert.initOwner((Stage) ((Button) e.getSource()).getScene().getWindow());
+//            alert.setTitle("Form not filled.");
+//            alert.setHeaderText("Form incomplete");
+//            alert.setContentText("Please fill out the location, type of food, drink, and side.");
+//            alert.showAndWait();
+//       }
     }
 
 
     /**
-     * handles cancel,help and x button being pushed
+     * handles cancel and help button being pushed
      * @param e is the button being pressed
      * @throws IOException
      * @author KH
@@ -77,8 +162,8 @@ public class FoodDeliveryServiceRequestController {
     private void handleButtonPushed(ActionEvent e) throws IOException{
         Button buttonPushed = (Button) e.getSource();
 
-        if (buttonPushed == xButton || buttonPushed == cancelButton) { // is x button
-            Stage stage = (Stage) xButton.getScene().getWindow();
+        if (buttonPushed == cancelButton) { // is cancel button
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -105,14 +190,57 @@ public class FoodDeliveryServiceRequestController {
      * @author KH
      */
     private boolean formFilledOut() {
-        boolean deliveryLocation = deliveryLocationField.getText().length() > 0;
-        boolean deliveryTime = deliveryTimeField.getText().length() > 0;
-        //boolean allergy = allergyField.getText().length() > 0;
-        boolean foodChosen = rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected();
-        boolean drinkChosen = rButtonDrink1.isSelected() || rButtonDrink2.isSelected() || rButtonDrink3.isSelected() || rButtonDrink4.isSelected();
-        boolean sideChosen = cbSide1.isSelected() || cbSide2.isSelected() || cbSide3.isSelected() || cbSide4.isSelected();
+        boolean isFilled = true;
+        if(! (rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected())){
+            isFilled = false;
+            rButtonFood1.setStyle("-fx-text-fill: #e8321e");
+            rButtonFood2.setStyle("-fx-text-fill: #e8321e");
+            rButtonFood3.setStyle("-fx-text-fill: #e8321e");
+            rButtonFood4.setStyle("-fx-text-fill: #e8321e");
+        } else {
+            rButtonFood1.setStyle("-fx-text-fill: #000000");
+            rButtonFood2.setStyle("-fx-text-fill: #000000");
+            rButtonFood3.setStyle("-fx-text-fill: #000000");
+            rButtonFood4.setStyle("-fx-text-fill: #000000");
+        }
+        if(! (rButtonDrink1.isSelected() || rButtonDrink2.isSelected() || rButtonDrink3.isSelected() || rButtonDrink4.isSelected())){
+            isFilled = false;
+            rButtonDrink1.setStyle("-fx-text-fill: #e8321e");
+            rButtonDrink2.setStyle("-fx-text-fill: #e8321e");
+            rButtonDrink3.setStyle("-fx-text-fill: #e8321e");
+            rButtonDrink4.setStyle("-fx-text-fill: #e8321e");
+        } else {
+            rButtonDrink1.setStyle("-fx-text-fill: #000000");
+            rButtonDrink2.setStyle("-fx-text-fill: #000000");
+            rButtonDrink3.setStyle("-fx-text-fill: #000000");
+            rButtonDrink4.setStyle("-fx-text-fill: #000000");
+        }
+        if(! (cbSide1.isSelected() || cbSide2.isSelected() || cbSide3.isSelected() || cbSide4.isSelected())){
+            isFilled = false;
+            cbSide1.setStyle("-fx-text-fill: #e8321e");
+            cbSide2.setStyle("-fx-text-fill: #e8321e");
+            cbSide3.setStyle("-fx-text-fill: #e8321e");
+            cbSide4.setStyle("-fx-text-fill: #e8321e");
+        } else {
+            cbSide1.setStyle("-fx-text-fill: #000000");
+            cbSide2.setStyle("-fx-text-fill: #000000");
+            cbSide3.setStyle("-fx-text-fill: #000000");
+            cbSide4.setStyle("-fx-text-fill: #000000");
+        }
+        if(deliveryLocationField.getValue() == null){
+            isFilled = false;
+            deliveryLocationField.setStyle("-fx-background-color: #ffbab8");
+        } else {
+            deliveryLocationField.setStyle("-fx-background-color: transparent");
+        }
+        if(deliveryTimeField.getValue() == null){
+            isFilled = false;
+            deliveryTimeField.setStyle("-fx-background-color: #ffbab8");
+        } else {
+            deliveryTimeField.setStyle("-fx-background-color: transparent");
+        }
 
-        return deliveryLocation && deliveryTime && foodChosen && drinkChosen && sideChosen;
+        return isFilled;
     }
 
     /**
