@@ -12,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -48,10 +50,51 @@ public class FoodDeliveryServiceRequestController {
     @FXML private JFXCheckBox cbSide2;
     @FXML private JFXCheckBox cbSide3;
     @FXML private JFXCheckBox cbSide4;
+    @FXML private Label title;
+    @FXML private Label locLabel;
+    @FXML private Label delLabel;
+    @FXML private Label allLabel;
+    @FXML private Label siLabel;
+    @FXML private Label mealLabel;
+    @FXML private Label sideLabel;
+    @FXML private Label drinkLabel;
+    @FXML private HBox header;
 
 
     @FXML
     private void initialize(){
+
+        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40);
+        title.setFont(titleFont); //set title font
+
+        Font buttonFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
+        cancelButton.setFont(buttonFont);
+        submitButton.setFont(buttonFont);
+        helpButton.setFont(buttonFont);
+        //helpXButton.setFont(buttonFont);
+
+        Font textFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-Regular.ttf", 15);
+        locLabel.setFont(textFont);
+        delLabel.setFont(textFont);
+        allLabel.setFont(textFont);
+        siLabel.setFont(textFont);
+        mealLabel.setFont(textFont);
+        sideLabel.setFont(textFont);
+        drinkLabel.setFont(textFont);
+        rButtonFood1.setFont(textFont);
+        rButtonFood2.setFont(textFont);
+        rButtonFood3.setFont(textFont);
+        rButtonFood4.setFont(textFont);
+        rButtonDrink1.setFont(textFont);
+        rButtonDrink2.setFont(textFont);
+        rButtonDrink3.setFont(textFont);
+        rButtonDrink4.setFont(textFont);
+        cbSide1.setFont(textFont);
+        cbSide2.setFont(textFont);
+        cbSide3.setFont(textFont);
+        cbSide4.setFont(textFont);
+
+
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 
@@ -138,7 +181,7 @@ public class FoodDeliveryServiceRequestController {
      */
     private boolean formFilledOut() {
         boolean deliveryLocation = (deliveryLocationField.getValue() != null);
-        //boolean deliveryTime = deliveryTimeField.getText().length() > 0;
+        boolean deliveryTime = (deliveryTimeField.getValue() != null);
         //boolean allergy = allergyField.getText().length() > 0;
         boolean foodChosen = rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected();
         boolean drinkChosen = rButtonDrink1.isSelected() || rButtonDrink2.isSelected() || rButtonDrink3.isSelected() || rButtonDrink4.isSelected();

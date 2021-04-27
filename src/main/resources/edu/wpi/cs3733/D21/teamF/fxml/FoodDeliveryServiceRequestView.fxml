@@ -17,24 +17,25 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.paint.Color?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.FoodDeliveryServiceRequestController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1920.0" AnchorPane.topAnchor="0.0" />
-      <Line endX="1922.0" endY="-2.0" fill="#03256c" layoutX="-62.0" layoutY="99.0" startX="-2.0" startY="-2.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="5.0" />
-      <ImageView fitHeight="68.0" fitWidth="84.0" layoutX="28.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
-         <image>
-            <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
-         </image></ImageView>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="83.0" prefWidth="483.0" text="Food Delivery Request" wrapText="true" AnchorPane.leftAnchor="242.0" AnchorPane.rightAnchor="235.0" AnchorPane.topAnchor="3.0">
-         <font>
-            <Font name="Verdana" size="36.0" />
-         </font>
-      </Label>
-      <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleButtonPushed" style="-fx-background-color: #03256C;" text="?" textFill="WHITE" AnchorPane.leftAnchor="880.0" AnchorPane.topAnchor="30.0">
+      <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <ImageView fitHeight="68.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="83.0" prefWidth="483.0" text="Food Delivery Request" wrapText="true">
+               <font>
+                  <Font name="Verdana" size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleButtonPushed" style="-fx-background-color: #03256C;" text="?" textFill="WHITE" visible="false" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="30.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -56,24 +57,24 @@
                   <Insets left="25.0" right="25.0" />
                </HBox.margin>
                <children>
-                  <Label text="Delivery Location:">
+                  <Label fx:id="locLabel" text="Delivery Location:">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label text="Delivery Time:" GridPane.rowIndex="1">
+                  <Label fx:id="delLabel" text="Delivery Time:" GridPane.rowIndex="1">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label text="List Any Allergies:" GridPane.rowIndex="2">
+                  <Label fx:id="allLabel" text="List Any Allergies:" GridPane.rowIndex="2">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
                   <JFXTimePicker fx:id="deliveryTimeField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <JFXTextField fx:id="allergyField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label text="Special Instructions:" GridPane.rowIndex="3">
+                  <Label fx:id="siLabel" text="Special Instructions:" GridPane.rowIndex="3">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -100,17 +101,17 @@
                   <Insets left="25.0" right="25.0" top="10.0" />
                </HBox.margin>
                <children>
-                  <Label text="Select Meal:">
+                  <Label fx:id="mealLabel" text="Select Meal:">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label text="Select Side (up to two):" GridPane.rowIndex="2">
+                  <Label fx:id="sideLabel" text="Select Side (up to two):" GridPane.rowIndex="2">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label text="Select Drink:" GridPane.rowIndex="4">
+                  <Label fx:id="drinkLabel" text="Select Drink:" GridPane.rowIndex="4">
                      <font>
                         <Font size="15.0" />
                      </font>
