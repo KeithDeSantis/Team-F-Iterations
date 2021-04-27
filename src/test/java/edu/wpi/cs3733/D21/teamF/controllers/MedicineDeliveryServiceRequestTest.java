@@ -46,7 +46,7 @@ public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
         write("j");
         clickOn("#cardholder");
         write("j");
-        clickOn("#submit");
-        verifyThat("Request Submitted!", Node::isVisible);
+        clickOn("SUBMIT");
+        verifyThat("#okButton", Node::isVisible);
     }
 }
