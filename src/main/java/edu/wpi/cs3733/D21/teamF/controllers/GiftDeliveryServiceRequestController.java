@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,11 +25,19 @@ public class GiftDeliveryServiceRequestController {
         }
 
         public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
-            Stage currentStage = (Stage)submit.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml"));
-            Scene homeScene = new Scene(root);
-            currentStage.setScene(homeScene);
-            currentStage.show();
+            // Loads form submitted window and passes in current stage to return to request home
+            FXMLLoader submitedPageLoader = new FXMLLoader();
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
+            Stage submittedStage = new Stage();
+            Parent root = submitedPageLoader.load();
+            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
+            Scene submitScene = new Scene(root);
+            submittedStage.setScene(submitScene);
+            submittedStage.setTitle("Submission Complete");
+            submittedStage.initModality(Modality.APPLICATION_MODAL);
+            submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
+            submittedStage.showAndWait();
         }
 
 
