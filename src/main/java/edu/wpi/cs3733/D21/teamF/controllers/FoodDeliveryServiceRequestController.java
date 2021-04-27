@@ -130,7 +130,8 @@ public class FoodDeliveryServiceRequestController {
             String type = "Food Delivery";
             String person = "";
             String completed = "false";
-            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed);
+            String additionalInfo = "Delivery Location: " + deliveryLocationField.getValue() + "Delivery time: " + deliveryTimeField.getValue();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();

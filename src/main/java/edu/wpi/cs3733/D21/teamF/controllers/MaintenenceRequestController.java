@@ -134,9 +134,9 @@ public class MaintenenceRequestController {
                 // Leave assigned employee blank
             }
 
-            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name, employee,
-                    "false");//, name + ": " + descriptionField.getText()); FIXME Re-add instructions to addServiceReq after merge
-            // Loads form submitted window and passes in current stage to return to request home
+            String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
+                    "Urgency: " + urgencyComboBox.getValue();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name,"", "false", additionalInfo);
             FXMLLoader submitedPageLoader = new FXMLLoader();
             submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
             Stage submittedStage = new Stage();

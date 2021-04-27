@@ -95,9 +95,10 @@ public class FloralDeliveryService {
     public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException {
         if(isFilledOut()) {
             String type = "Flower Delivery";
-            String name = nameField.getText();
             String uuid = UUID.randomUUID().toString();
-            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, name, "false");
+            String additionalInfo = "Date: " + dateField.getValue() + "Deliver to: " + deliveryField.getText() +
+            "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", additionalInfo);
             //successField.setText("Request Submitted!");
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
