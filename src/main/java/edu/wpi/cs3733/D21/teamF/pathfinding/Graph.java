@@ -1,22 +1,27 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.AStarImpl;
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.BFSImpl;
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.DFSImpl;
+
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Graph {
     private final List<Edge> edges;
     private final HashMap<String, Vertex> vertices;
 
-    IPathfindingAlgos pathfindingAlgos;
+    private IPathfindingAlgorithm pathfindingAlgorithm;
 
     /**
      * Creates a new Graph
      * @author Tony Vuolo
      */
     public Graph() {
-        pathfindingAlgos = new AStarGraph();
         this.edges = new LinkedList<>();
         this.vertices = new HashMap<>();
+
+        //Default to A*
+        this.pathfindingAlgorithm = new AStarImpl();
     }
 
     /**
@@ -61,7 +66,7 @@ public class Graph {
      * @author Alex Friedman (ahf), Tony Vuolo
      */
     public List<Vertex> getVertices() {
-        return vertices.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(vertices.values());
     }
 
     /**
@@ -98,9 +103,32 @@ public class Graph {
      * @return the List of Vertices spanning the path of least weight from Vertex a to Vertex b
      * @author Tony Vuolo
      */
-    public Path getPath(Vertex a, Vertex b) {
-        return pathfindingAlgos.getPath(this, a, b);
+    public Path getPath(Vertex a, Vertex b) { return pathfindingAlgorithm.getPath(this, a, b); }
+
+    /**
+     * Used to change the pathfinding algorithm type.
+     * @param algorithmName The name of the algorithm to use (AStar/A*, BFS, DFS);
+     * @return true if we successfully changed the pathfinding algorithm. False if the specified algorithm could not be found.
+     * @author Alex Friedman (ahf)
+     */
+    public boolean setPathfindingAlgorithm(String algorithmName)
+    {
+        switch (algorithmName.toLowerCase())
+        {
+            case "astar":
+            case "a*":
+                this.pathfindingAlgorithm = new AStarImpl();
+                return true;
+            case "dfs":
+                this.pathfindingAlgorithm = new DFSImpl();
+                return true;
+            case "bfs":
+                this.pathfindingAlgorithm = new BFSImpl();
+                return true;
+        }
+        return false;
     }
+
 
     /**
      * Determines if a given List contains a specific Vertex
@@ -116,15 +144,5 @@ public class Graph {
             }
         }
         return true;
-    }
-
-    public void switchAlgos(String algos){
-        switch (algos.toLowerCase()){
-            case "astar": this.pathfindingAlgos = new AStarGraph(); break;
-            case "a*": this.pathfindingAlgos = new AStarGraph(); break;
-            case "dfs": this.pathfindingAlgos = new DFSGraph(); break;
-            case "bfs": this.pathfindingAlgos = new BFSGraph(); break;
-            default: this.pathfindingAlgos = new AStarGraph(); break;
-        }
     }
 }

@@ -46,8 +46,10 @@ public class LoginFailController {
         String user = username.getText();
         String pass = password.getText();
 
+        /*
         DatabaseAPI.getDatabaseAPI().dropUsersTable();
         DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin"); //FIXME: REMOVE
+         */
 
         authenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
         Stage currentStage = (Stage)signIn.getScene().getWindow();
@@ -61,7 +63,7 @@ public class LoginFailController {
         }
         //displays error message
         else{
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/fuchsiafalcons/fxml/LoginFailView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LoginFail.fxml"));
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
         }

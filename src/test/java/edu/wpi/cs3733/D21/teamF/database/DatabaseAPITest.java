@@ -27,15 +27,17 @@ class DatabaseAPITest {
         DatabaseAPI.getDatabaseAPI().createNodesTable();
         DatabaseAPI.getDatabaseAPI().createEdgesTable();
         DatabaseAPI.getDatabaseAPI().createUserTable();
+        DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
 
+        /*
         //FIXME: DO BETTER!
         try {
             DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
 
+        */
     }
 
     @Test()
@@ -44,6 +46,7 @@ class DatabaseAPITest {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
         assertTrue(DatabaseAPI.getDatabaseAPI().dropNodesTable());
         assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().addNode(newNode));
+        DatabaseAPI.getDatabaseAPI().createNodesTable();
     }
 
     @Test()
@@ -342,5 +345,19 @@ class DatabaseAPITest {
         EdgeEntry actual = DatabaseAPI.getDatabaseAPI().getEdge("test");
         assertEquals(expected.getEdgeID(), actual.getEdgeID());
         assertEquals(expected.getStartNode(), actual.getStartNode());
+    }
+
+    @Test
+    @DisplayName("test verifying the admin user entry")
+    public void testAdmin() throws SQLException{
+        String[] admin = {"admin", "administrator", "admin", "admin"};
+        DatabaseAPI.getDatabaseAPI().addUser(admin);
+        assertTrue(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
+    }
+
+    @Test
+    @DisplayName("test admin doesnt exist")
+    public void testNoAdmin() throws SQLException{
+        assertFalse(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
     }
 }

@@ -1,3 +1,5 @@
+/*
+
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -238,10 +240,12 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("Reset Database");
     }
 
-    /**
+    */
+/**
      * Test that the drag node feature updates the node entry in nodelist
      * @author KD
-     */
+     *//*
+
     @Test
     public void testDragNode() {
         drag("#FHALL01201").dropBy(-40,-10);
@@ -254,10 +258,12 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("Reset Database");
     }
 
-    /**
+    */
+/**
      * Make sure dropping on another node has no effect
      * @author KD
-     */
+     *//*
+
     @Test
     public void testDragNodeOverNode() {
         drag("#fWALK00201").dropTo("#fWALK00301");
@@ -270,7 +276,8 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         clickOn("Reset Database");
     }
 
-    /*  Tests work but for some reason are causing that Java Heap space thing - KD
+    */
+/*  Tests work but for some reason are causing that Java Heap space thing - KD
     @Test
     public void testFilteringByNodeID() {
         clickOn("#searchComboBox");
@@ -340,7 +347,9 @@ public class EditMapNodeControllerTest extends ApplicationTest {
         sleep(500);
         verifyThat("No content in table", Node::isVisible);
     }
-     */
+     *//*
+
 
 }
 
+*/

@@ -1,3 +1,4 @@
+/*
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -139,3 +140,4 @@ public class EditMapEdgesControllerTest extends ApplicationTest{
         assertTrue(hasTestClicking);
     }
 }
+*/
