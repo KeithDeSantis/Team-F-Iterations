@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 
+import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -41,13 +42,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AStarDemoController implements Initializable {
+    @FXML
+    public ComboBox<String> favoritesComboBox;
+    @FXML
+    public ComboBox<String> recentlyUsedComboBox;
+    @FXML
+    public JFXButton addFavorite;
 
     @FXML
     private Button goBack;
@@ -260,7 +264,7 @@ public class AStarDemoController implements Initializable {
         if(this.startNodeDisplay != null)
             mapPanel.unDraw(this.startNodeDisplay.getId());
         drawStartNode(startComboBox.getValue());
-        loadRecentlyUsedVertices();
+
     }
 
     /**
@@ -302,7 +306,9 @@ public class AStarDemoController implements Initializable {
         if(this.endNodeDisplay != null)
             mapPanel.unDraw(this.endNodeDisplay.getId());
         drawEndNode(endComboBox.getValue());
-        loadRecentlyUsedVertices();
+
+        favoritesComboBox.setValue(favoritesComboBox.getPromptText());
+        recentlyUsedComboBox.setValue(recentlyUsedComboBox.getPromptText());
     }
 
     /**
@@ -432,7 +438,7 @@ public class AStarDemoController implements Initializable {
      */
     private void checkInput() {
         if (startComboBox.getValue() == null ||
-                endComboBox.getValue() == null){
+                (endComboBox.getValue() == null && favoritesComboBox.getValue() == null && recentlyUsedComboBox.getValue() == null)){
             clearPath();
 
         }else{
@@ -590,8 +596,8 @@ public class AStarDemoController implements Initializable {
     }
 
     private void changeDirection(String inst){
-        String instruction[] = inst.split(" ");
-        System.out.println(instruction);
+        String[] instruction = inst.split(" ");
+        System.out.println(Arrays.toString(instruction));
         if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
             if(instruction[1].equals("around")){
                 switch (curD) {
@@ -740,5 +746,49 @@ public class AStarDemoController implements Initializable {
             sumDist += path.get(i).EuclideanDistance(path.get(i + 1));
         }
         return sumDist;
+    }
+
+    /**
+     * Resets the end node setting if the favoritesComboBox is changed
+     * @param actionEvent the ActionEvent signalling that the favoritesComboBox has been changed
+     * @throws SQLException if an error occurs in drawEndNode
+     * @author Tony Vuolo (bdane)
+     */
+    @FXML
+    public void handleFavoritesBoxAction(ActionEvent actionEvent) throws SQLException {
+        checkInput();
+        if(this.endNodeDisplay != null)
+            mapPanel.unDraw(this.endNodeDisplay.getId());
+        drawEndNode(favoritesComboBox.getValue());
+
+        endComboBox.setValue(endComboBox.getPromptText());
+        recentlyUsedComboBox.setValue(recentlyUsedComboBox.getPromptText());
+
+    }
+
+    /**
+     * Resets the end node setting if the recentlyUsedComboBox is changed
+     * @param actionEvent the ActionEvent signalling that the recentlyUsedComboBox has been changed
+     * @throws SQLException if an error occurs in drawEndNode
+     * @author Tony Vuolo (bdane)
+     */
+    @FXML
+    public void handleRecentlyUsedBoxAction(ActionEvent actionEvent) throws SQLException {
+        checkInput();
+        if(this.endNodeDisplay != null)
+            mapPanel.unDraw(this.endNodeDisplay.getId());
+        drawEndNode(recentlyUsedComboBox.getValue());
+
+        favoritesComboBox.setValue(favoritesComboBox.getPromptText());
+        endComboBox.setValue(endComboBox.getPromptText());
+    }
+
+    /**
+     * Opens the Favorites menu
+     * @param actionEvent the ActionEvent signalling that the "+" button has been pressed
+     * @author Tony Vuolo
+     */
+    public void addFavorite(ActionEvent actionEvent) {
+        //opens favorites menu
     }
 }
