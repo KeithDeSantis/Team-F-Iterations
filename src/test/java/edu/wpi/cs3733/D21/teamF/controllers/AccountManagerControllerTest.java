@@ -38,14 +38,14 @@ public class AccountManagerControllerTest extends ApplicationTest {
         verifyThat("admin", Node::isVisible);
     }
 
-    @Test
-    public void handleDeleteUser() {
-        clickOn("#selectUser");
-        clickOn("admin");
-        clickOn("#deleteUser");
-        clickOn("#selectUser");
-        //verifyThat(" ");
-    }
+//    @Test
+//    public void handleDeleteUser() {
+//        clickOn("#selectUser");
+//        clickOn("admin");
+//        clickOn("#deleteUser");
+//        clickOn("#selectUser");
+//        assertEquals(null, #selectUser.getItems());
+//    }
 
     @Test
     public void handleAddUser() {

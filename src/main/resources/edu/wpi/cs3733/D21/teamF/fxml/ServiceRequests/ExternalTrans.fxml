@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #c6c6c6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.externalTransController">
+   <children>
+      <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id= "header" prefHeight="126.0" prefWidth="960.0" style="-fx-background-color: #94C4F1" stylesheets="/stylesheets/DefaultHeaderBG.css">
+               <children>
+                  <ImageView fx:id="image" fitWidth="100.0" onMouseClicked="#goHome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMENS HOSPITAL EXTERNAL PATIENT TRANSPORTATION" wrappingWidth="840.06640625">
+                     <font>
+                        <Font name="Montserrat Regular" size="45.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+            </HBox>
+            <VBox prefHeight="354.0" prefWidth="958.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Employee name" GridPane.valignment="BOTTOM">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin></Text>
+                  <JFXTextField fx:id="employeeName" prefHeight="22.0" prefWidth="961.0" GridPane.valignment="TOP">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin></JFXTextField>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Method of Transportation" GridPane.rowIndex="2">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin></Text>
+                  <JFXTextField fx:id="methodTrans" GridPane.rowIndex="3">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin></JFXTextField>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Special Requests" wrappingWidth="187.1328125" GridPane.rowIndex="6">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin></Text>
+                  <JFXTextField fx:id="loc" GridPane.rowIndex="5">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin></JFXTextField>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Location" GridPane.rowIndex="4">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin></Text>
+                  <JFXTextField fx:id="special" prefHeight="0.0" prefWidth="961.0" GridPane.rowIndex="7">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin></JFXTextField>
+                  <HBox prefHeight="54.0" prefWidth="961.0">
+                     <children>
+                        <JFXButton fx:id="submit" buttonType="RAISED" onAction="#submitpushed" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton fx:id="Cancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" onAction="#cancel">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -16,7 +16,12 @@ public class ServiceRequestHandler implements DatabaseEntry {
      */
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
-        final String query = "INSERT INTO service_requests values(?, ?, ?, ?)";
+        System.out.println(colValues[0]);
+        System.out.println(colValues[1]);
+        System.out.println(colValues[2]);
+        System.out.println(colValues[3]);
+        System.out.println(colValues[4]);
+        final String query = "INSERT INTO service_requests values(?, ?, ?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
         int colCounter = 1;
         for (String s : colValues) {
@@ -32,7 +37,8 @@ public class ServiceRequestHandler implements DatabaseEntry {
     @Override
     public boolean editEntry(String id, String newVal, String colName) throws Exception{
         boolean success = false;
-        if (colName.equals("name") || colName.equals("assignedperson") || colName.equals("completed")) {
+        if (colName.equals("name") || colName.equals("assignedperson") || colName.equals("completed") ||
+        colName.equals("Additional instructions")) {
             String query = String.format("UPDATE service_requests SET %s=(?) WHERE uuid=(?)", colName);
             try {
                 PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
@@ -69,7 +75,7 @@ public class ServiceRequestHandler implements DatabaseEntry {
     public boolean createTable() {
         boolean success = false;
         final String initServicesTable = "CREATE TABLE SERVICE_REQUESTS(uuid varchar(200), name varchar(200)," +
-                "assignedPerson varchar(200), completed varchar(200), primary key(uuid))";
+                "assignedPerson varchar(200), completed varchar(200), additionalInstructions varchar(500), primary key(uuid))";
         try {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initServicesTable);
@@ -127,8 +133,9 @@ public class ServiceRequestHandler implements DatabaseEntry {
             String name = rset.getString(2);
             String assignedPerson = rset.getString(3);
             String completed = rset.getString(4);
+            String additionalInstructions = rset.getString(5);
 
-            ServiceEntry newEntry = new ServiceEntry(uuid, name, assignedPerson, completed);
+            ServiceEntry newEntry = new ServiceEntry(uuid, name, assignedPerson, completed, additionalInstructions);
             entries.add(newEntry);
         }
         rset.close();

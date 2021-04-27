@@ -253,7 +253,7 @@ class DatabaseAPITest {
     @DisplayName("test adding a service request")
     public void testAddServiceRequest() throws SQLException
     {
-        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false", "extra instructions"};
         assertTrue(DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest));
     }
 
@@ -261,7 +261,7 @@ class DatabaseAPITest {
     @DisplayName("test deleting a serviceRequest")
     public void testDeleteServiceRequest() throws SQLException
     {
-        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false", "additional steps"};
         DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest);
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteServiceRequest("1"));
     }
@@ -270,7 +270,7 @@ class DatabaseAPITest {
     @DisplayName("test editing a service request")
     public void testEditServiceRequest() throws Exception
     {
-        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false", "additional steps"};
         DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest);
         assertTrue(DatabaseAPI.getDatabaseAPI().editServiceRequest("1", "Declan", "assignedperson"));
     }
@@ -293,8 +293,8 @@ class DatabaseAPITest {
     public void testPopulateServiceReqs() throws SQLException
     {
         ArrayList<String[]> sreqs = new ArrayList<>();
-        String[] sreq1 = {"1", "A task", "Ben", "false"};
-        String[] sreq2 = {"2", "Another task", "Declan", "true"};
+        String[] sreq1 = {"1", "A task", "Ben", "false", "test"};
+        String[] sreq2 = {"2", "Another task", "Declan", "true", "test"};
         sreqs.add(sreq1);
         sreqs.add(sreq2);
 
@@ -307,10 +307,10 @@ class DatabaseAPITest {
     @DisplayName("test generating service request entry list")
     public void testGenerateServiceRequestEntries() throws SQLException
     {
-        ServiceEntry entry = new ServiceEntry("1", "a task", "Ben","true");
+        ServiceEntry entry = new ServiceEntry("1", "a task", "Ben","true", "instructions");
         ArrayList<ServiceEntry> expected = new ArrayList<>();
         expected.add(entry);
-        String[] newService = {"1", "a task", "Ben","true"};
+        String[] newService = {"1", "a task", "Ben","true", "instructions"};
         DatabaseAPI.getDatabaseAPI().addServiceReq(newService);
         List<ServiceEntry> actual = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
         assertEquals(expected.get(0).getUuid(), actual.get(0).getUuid());

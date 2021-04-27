@@ -8,29 +8,44 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Polygon?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.FloralDeliveryService">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="100.0" layoutX="8.0" layoutY="-3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="960.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-3.0" />
-      <Line endX="1022.0000610351562" endY="-1.9999847412109375" layoutX="-62.0" layoutY="99.0" startX="-101.0" startY="-2.0" stroke="#03256c" strokeLineCap="BUTT" strokeWidth="5.0" AnchorPane.leftAnchor="-165.5" AnchorPane.rightAnchor="-799.5" />
-      <ImageView fx:id="logoHome" fitHeight="68.0" fitWidth="84.0" layoutX="28.0" layoutY="9.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0" />
-      <Circle fill="#e6e6e6" layoutX="203.0" layoutY="44.0" onMouseClicked="#handleBack" radius="31.0" stroke="BLACK" strokeType="INSIDE" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="242.0" layoutY="3.0" prefHeight="83.0" prefWidth="483.0" text="Floral Delivery Request" AnchorPane.leftAnchor="242.0" AnchorPane.rightAnchor="235.0" AnchorPane.topAnchor="3.0">
-         <font>
-            <Font name="Verdana" size="36.0" />
-         </font>
-      </Label>
-      <Polygon layoutX="197.0" layoutY="54.0" onMouseClicked="#handleBack" points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" rotate="-90.0" scaleX="0.3" scaleY="0.3" stroke="BLACK" strokeType="INSIDE" />
+      <HBox fx:id="header" layoutX="25.0" layoutY="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
+         <children>
+            <ImageView fx:id="logoHome" fitHeight="110.0" fitWidth="84.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+               </image>
+            </ImageView>
+            <StackPane maxHeight="81.0" maxWidth="85.0" prefHeight="81.0" prefWidth="85.0">
+               <children>
+                  <Circle fill="#e6e6e6" onMouseClicked="#handleBack" radius="35.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon onMouseClicked="#handleBack" points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" rotate="-90.0" scaleX="0.3" scaleY="0.3" stroke="BLACK" strokeType="INSIDE" StackPane.alignment="CENTER">
+                     <StackPane.margin>
+                        <Insets right="5.0" />
+                     </StackPane.margin>
+                  </Polygon>
+               </children>
+            </StackPane>
+            <Label contentDisplay="CENTER" prefHeight="83.0" prefWidth="483.0" text="Floral Delivery Request">
+               <font>
+                  <Font name="Verdana" size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
       <GridPane layoutX="67.0" layoutY="152.0" prefHeight="278.0" prefWidth="821.0" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="67.0" AnchorPane.rightAnchor="72.0" AnchorPane.topAnchor="152.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -147,7 +162,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <JFXDatePicker fx:id="dateField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <JFXDatePicker fx:id="dateField" defaultColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin></JFXDatePicker>

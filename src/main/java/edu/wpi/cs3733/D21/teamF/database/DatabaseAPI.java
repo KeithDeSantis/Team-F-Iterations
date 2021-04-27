@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
 
+import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
@@ -147,8 +148,16 @@ public class DatabaseAPI {
         userHandler.populateTable(users);
     }
 
+    public AccountEntry getUser(String username) throws SQLException{
+        return ((UserHandler)this.userHandler).getUser(username);
+    }
+
     public boolean authenticate(String username, String pass) throws SQLException {
         return ((UserHandler)this.userHandler).authenticate(username, pass);
+    }
+
+    public List<AccountEntry> genAccountEntries() throws SQLException{
+        return ((UserHandler)this.userHandler).genAccountEntryObjects();
     }
 
     public boolean verifyAdminExists() throws SQLException{
@@ -158,6 +167,7 @@ public class DatabaseAPI {
     private static class DatabaseSingletonHelper{
         private static final DatabaseAPI databaseAPI1 = new DatabaseAPI();
     }
+
 
     public static DatabaseAPI getDatabaseAPI(){
         return DatabaseSingletonHelper.databaseAPI1;

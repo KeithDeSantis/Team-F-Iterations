@@ -71,7 +71,7 @@ public class FloralDeliveryService {
      */
     public void handleBack(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) bouquetButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml")); //FIXME Go to service request home
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml")); //FIXME Go to service request home
         stage.getScene().setRoot(root);
         stage.show();
     }
@@ -92,13 +92,25 @@ public class FloralDeliveryService {
      * @param actionEvent
      * @author KD
      */
-    public void handleSubmit(ActionEvent actionEvent) throws SQLException {
+    public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException {
         if(isFilledOut()) {
             String type = "Flower Delivery";
             String name = nameField.getText();
             String uuid = UUID.randomUUID().toString();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, name, "false");
-            successField.setText("Request Submitted!");
+            //successField.setText("Request Submitted!");
+            // Loads form submitted window and passes in current stage to return to request home
+            FXMLLoader submitedPageLoader = new FXMLLoader();
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
+            Stage submittedStage = new Stage();
+            Parent root = submitedPageLoader.load();
+            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) submitButton.getScene().getWindow());
+            Scene submitScene = new Scene(root);
+            submittedStage.setScene(submitScene);
+            submittedStage.setTitle("Submission Complete");
+            submittedStage.initModality(Modality.APPLICATION_MODAL);
+            submittedStage.showAndWait();
         } else { successField.setText(""); }
     }
 

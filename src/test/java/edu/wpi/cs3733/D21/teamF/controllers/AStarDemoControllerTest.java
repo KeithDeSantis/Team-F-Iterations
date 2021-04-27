@@ -72,11 +72,38 @@ public class AStarDemoControllerTest extends ApplicationTest {
         sleep(100);
         verifyThat("ACONF00102", Node::isVisible);
         clickOn("ACONF00102");
+        verifyThat("#ACONF00102", Node::isVisible);
         verifyThat("#endComboBox", Node::isVisible);
         clickOn("#endComboBox");
         sleep(100);
-        verifyThat("ADEPT00301", Node::isVisible);
-        clickOn("ADEPT00301");
+        verifyThat("ACONF00103", Node::isVisible);
+        clickOn("ACONF00103");
+        verifyThat("#ACONF00103", Node::isVisible);
+    }
+
+    @Test
+    public void testNavigation() {
+        verifyThat("#Go", Node::isDisable);
+        verifyThat("#End", Node::isDisable);
+        verifyThat("#Prev", Node::isDisable);
+        verifyThat("#Next", Node::isDisable);
+        testComboBox();
+        clickOn("#Go");
+        verifyThat("#Go", Node::isDisable);
+        verifyThat("#Prev", Node::isDisable);
+        verifyThat("2", Node::isVisible);
+        clickOn("#Next");
+        clickOn("#Next");
+        clickOn("#Next");
+        clickOn("#Next");
+        verifyThat("3", Node::isVisible);
+        clickOn("#Next");
+        clickOn("#Next");
+        clickOn("#Next");
+        verifyThat("#Next", Node::isDisable);
+        verifyThat("Reach Destination!", Node::isVisible);
+        clickOn("#End");
+        verifyThat("2", Node::isVisible);
     }
 }
 

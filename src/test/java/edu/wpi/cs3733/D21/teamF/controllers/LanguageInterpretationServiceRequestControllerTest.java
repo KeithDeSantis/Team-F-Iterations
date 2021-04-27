@@ -9,16 +9,16 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import static org.testfx.api.FxAssert.verifyThat;
-public class LanguageInterpretationRequestControllerTest extends ApplicationTest{
+public class LanguageInterpretationServiceRequestControllerTest extends ApplicationTest{
 
     @Override
     public void start (Stage stage) throws Exception {
         System.gc();
 
-        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml"));
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml"));
         Parent root = loader.load();
 
-        final LanguageInterpretationRequestController controller = loader.getController();
+        final LanguageInterpretationServiceRequestController controller = loader.getController();
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -29,14 +29,14 @@ public class LanguageInterpretationRequestControllerTest extends ApplicationTest
     @Test
     public void handleClose() {
         clickOn("#close");
-        verifyThat("Welcome to the Service Request Application Home Menu", Node::isVisible);
+        verifyThat("Jay", Node::isVisible);
     }
 
-    @Test
-    public void handleHelp() {
-        clickOn("#help");
-        verifyThat("Help", Node::isVisible);
-    }
+//    @Test
+//    public void handleHelp() {
+//        clickOn("#help");
+//        verifyThat("Help", Node::isVisible);
+//    }
 
 //    @Test
 //    public void handleTranslate() {
