@@ -1,8 +1,5 @@
 package edu.wpi.cs3733.D21.teamF;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.application.Application;
@@ -12,7 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javax.xml.crypto.Data;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class  AppF extends Application {
 
