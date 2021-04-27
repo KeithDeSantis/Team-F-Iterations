@@ -141,14 +141,15 @@ public class FoodDeliveryServiceRequestController {
             submittedStage.initModality(Modality.APPLICATION_MODAL);
             submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
             submittedStage.showAndWait();
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner((Stage) ((Button) e.getSource()).getScene().getWindow());
-            alert.setTitle("Form not filled.");
-            alert.setHeaderText("Form incomplete");
-            alert.setContentText("Please fill out the location, type of food, drink, and side.");
-            alert.showAndWait();
         }
+//        else {
+//            Alert alert = new Alert(Alert.AlertType.WARNING);
+//            alert.initOwner((Stage) ((Button) e.getSource()).getScene().getWindow());
+//            alert.setTitle("Form not filled.");
+//            alert.setHeaderText("Form incomplete");
+//            alert.setContentText("Please fill out the location, type of food, drink, and side.");
+//            alert.showAndWait();
+//        }
     }
 
 
@@ -190,14 +191,57 @@ public class FoodDeliveryServiceRequestController {
      * @author KH
      */
     private boolean formFilledOut() {
-        boolean deliveryLocation = (deliveryLocationField.getValue() != null);
-        boolean deliveryTime = (deliveryTimeField.getValue() != null);
-        //boolean allergy = allergyField.getText().length() > 0;
-        boolean foodChosen = rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected();
-        boolean drinkChosen = rButtonDrink1.isSelected() || rButtonDrink2.isSelected() || rButtonDrink3.isSelected() || rButtonDrink4.isSelected();
-        boolean sideChosen = cbSide1.isSelected() || cbSide2.isSelected() || cbSide3.isSelected() || cbSide4.isSelected();
+        boolean isFilled = true;
+        if(! (rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected())){
+            isFilled = false;
+            rButtonFood1.setStyle("-fx-text-fill: #e8321e");
+            rButtonFood2.setStyle("-fx-text-fill: #e8321e");
+            rButtonFood3.setStyle("-fx-text-fill: #e8321e");
+            rButtonFood4.setStyle("-fx-text-fill: #e8321e");
+        } else {
+            rButtonFood1.setStyle("-fx-text-fill: #000000");
+            rButtonFood2.setStyle("-fx-text-fill: #000000");
+            rButtonFood3.setStyle("-fx-text-fill: #000000");
+            rButtonFood4.setStyle("-fx-text-fill: #000000");
+        }
+        if(! (rButtonDrink1.isSelected() || rButtonDrink2.isSelected() || rButtonDrink3.isSelected() || rButtonDrink4.isSelected())){
+            isFilled = false;
+            rButtonDrink1.setStyle("-fx-text-fill: #e8321e");
+            rButtonDrink2.setStyle("-fx-text-fill: #e8321e");
+            rButtonDrink3.setStyle("-fx-text-fill: #e8321e");
+            rButtonDrink4.setStyle("-fx-text-fill: #e8321e");
+        } else {
+            rButtonDrink1.setStyle("-fx-text-fill: #000000");
+            rButtonDrink2.setStyle("-fx-text-fill: #000000");
+            rButtonDrink3.setStyle("-fx-text-fill: #000000");
+            rButtonDrink4.setStyle("-fx-text-fill: #000000");
+        }
+        if(! (cbSide1.isSelected() || cbSide2.isSelected() || cbSide3.isSelected() || cbSide4.isSelected())){
+            isFilled = false;
+            cbSide1.setStyle("-fx-text-fill: #e8321e");
+            cbSide2.setStyle("-fx-text-fill: #e8321e");
+            cbSide3.setStyle("-fx-text-fill: #e8321e");
+            cbSide4.setStyle("-fx-text-fill: #e8321e");
+        } else {
+            cbSide1.setStyle("-fx-text-fill: #000000");
+            cbSide2.setStyle("-fx-text-fill: #000000");
+            cbSide3.setStyle("-fx-text-fill: #000000");
+            cbSide4.setStyle("-fx-text-fill: #000000");
+        }
+        if(deliveryLocationField.getValue() == null){
+            isFilled = false;
+            deliveryLocationField.setStyle("-fx-background-color: #ffbab8");
+        } else {
+            deliveryLocationField.setStyle("-fx-background-color: transparent");
+        }
+        if(deliveryTimeField.getValue() == null){
+            isFilled = false;
+            deliveryTimeField.setStyle("-fx-background-color: #ffbab8");
+        } else {
+            deliveryTimeField.setStyle("-fx-background-color: transparent");
+        }
 
-        return deliveryLocation && foodChosen && drinkChosen && sideChosen;
+        return isFilled;
     }
 
     /**

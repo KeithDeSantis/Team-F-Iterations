@@ -72,7 +72,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <JFXTimePicker fx:id="deliveryTimeField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <JFXTimePicker fx:id="deliveryTimeField" defaultColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <JFXTextField fx:id="allergyField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label fx:id="siLabel" text="Special Instructions:" GridPane.rowIndex="3">
                      <font>
@@ -123,6 +123,9 @@
                      <font>
                         <Font size="15.0" />
                      </font>
+                     <selectedColor>
+                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                     </selectedColor>
                   </JFXRadioButton>
                   <JFXRadioButton fx:id="rButtonFood2" onAction="#handleRadialButtonPushed" text="Caesar Salad" GridPane.columnIndex="2">
                      <unSelectedColor>
@@ -131,6 +134,9 @@
                      <font>
                         <Font size="15.0" />
                      </font>
+                     <selectedColor>
+                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                     </selectedColor>
                   </JFXRadioButton>
                   <JFXRadioButton fx:id="rButtonFood3" onAction="#handleRadialButtonPushed" text="Beef Stir-fry" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <unSelectedColor>
@@ -139,6 +145,9 @@
                      <font>
                         <Font size="15.0" />
                      </font>
+                     <selectedColor>
+                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                     </selectedColor>
                   </JFXRadioButton>
                   <JFXRadioButton fx:id="rButtonFood4" onAction="#handleRadialButtonPushed" text="Shrimp Paella" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <unSelectedColor>
@@ -147,23 +156,26 @@
                      <font>
                         <Font size="15.0" />
                      </font>
+                     <selectedColor>
+                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                     </selectedColor>
                   </JFXRadioButton>
-                  <JFXCheckBox fx:id="cbSide1" text="Potato Chips" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <JFXCheckBox fx:id="cbSide1" checkedColor="#f0c808" text="Potato Chips" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXCheckBox>
-                  <JFXCheckBox fx:id="cbSide2" text="Side Salad" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                  <JFXCheckBox fx:id="cbSide2" checkedColor="#f0c808" text="Side Salad" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXCheckBox>
-                  <JFXCheckBox fx:id="cbSide3" text="French Fries" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <JFXCheckBox fx:id="cbSide3" checkedColor="#f0c808" text="French Fries" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXCheckBox>
-                  <JFXCheckBox fx:id="cbSide4" text="Brownie" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                  <JFXCheckBox fx:id="cbSide4" checkedColor="#f0c808" text="Brownie" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="3">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -175,6 +187,9 @@
                      <font>
                         <Font size="15.0" />
                      </font>
+                     <selectedColor>
+                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                     </selectedColor>
                   </JFXRadioButton>
                   <JFXRadioButton fx:id="rButtonDrink3" onAction="#handleRadialButtonPushed" text="Iced Tea" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <unSelectedColor>
@@ -183,6 +198,9 @@
                      <font>
                         <Font size="15.0" />
                      </font>
+                     <selectedColor>
+                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                     </selectedColor>
                   </JFXRadioButton>
                   <JFXRadioButton fx:id="rButtonDrink4" onAction="#handleRadialButtonPushed" text="Sprite" GridPane.columnIndex="2" GridPane.rowIndex="5">
                      <unSelectedColor>
@@ -191,6 +209,9 @@
                      <font>
                         <Font size="15.0" />
                      </font>
+                     <selectedColor>
+                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                     </selectedColor>
                   </JFXRadioButton>
                   <JFXRadioButton fx:id="rButtonDrink2" onAction="#handleRadialButtonPushed" text="Lemonade" GridPane.columnIndex="2" GridPane.rowIndex="4">
                      <font>
@@ -199,6 +220,9 @@
                      <unSelectedColor>
                         <Color red="0.0117647061124444" green="0.14509804546833038" blue="0.42352941632270813" />
                      </unSelectedColor>
+                     <selectedColor>
+                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                     </selectedColor>
                   </JFXRadioButton>
                </children>
             </GridPane>
