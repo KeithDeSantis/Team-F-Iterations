@@ -104,10 +104,10 @@ public class CovidSurveyViewController {
      */
     @FXML private void handleSubmitPushed(ActionEvent e) throws IOException{
         FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
+        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
         Stage submittedStage = new Stage();
         Parent root = submitedPageLoader.load();
-        FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+        CovidFormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
         formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
         Scene submitScene = new Scene(root);
         submittedStage.setScene(submitScene);
