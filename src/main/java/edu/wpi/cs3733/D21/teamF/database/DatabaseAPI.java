@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
 
+import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
@@ -15,12 +16,14 @@ public class DatabaseAPI {
     private final DatabaseEntry edgeHandler;
     private final DatabaseEntry serviceRequestHandler;
     private final DatabaseEntry userHandler;
+    private final DatabaseEntry systemHandler;
 
     public DatabaseAPI() {
         this.nodeHandler = new NodeHandler();
         this.edgeHandler = new EdgeHandler();
         this.userHandler = new UserHandler();
         this.serviceRequestHandler = new ServiceRequestHandler();
+        this.systemHandler = new SystemPreferences();
     }
 
     public boolean createNodesTable() {
@@ -147,17 +150,50 @@ public class DatabaseAPI {
         userHandler.populateTable(users);
     }
 
+    public AccountEntry getUser(String username) throws SQLException{
+        return ((UserHandler)this.userHandler).getUser(username);
+    }
+
     public boolean authenticate(String username, String pass) throws SQLException {
         return ((UserHandler)this.userHandler).authenticate(username, pass);
+    }
+
+    public List<AccountEntry> genAccountEntries() throws SQLException{
+        return ((UserHandler)this.userHandler).genAccountEntryObjects();
     }
 
     public boolean verifyAdminExists() throws SQLException{
         return ((UserHandler)this.userHandler).verifyAdmin();
     }
 
+    public boolean addSystemPreferences(String...colValues) throws SQLException{
+        return systemHandler.addEntry(colValues);
+    }
+
+    public boolean dropSystemTable(){
+        return systemHandler.dropTable();
+    }
+
+    public boolean createSystemTable(){
+        return systemHandler.createTable();
+    }
+
+    public boolean editSystemSettings(String id, String newVal, String colName) throws Exception{
+        return systemHandler.editEntry(id, newVal, colName);
+    }
+
+    public boolean deleteSystemPreference(String id) throws SQLException{
+        return systemHandler.deleteEntry(id);
+    }
+
+    public String getCurrentAlgorithm() throws SQLException{
+        return ((SystemPreferences)this.systemHandler).getAlgorithm();
+    }
+
     private static class DatabaseSingletonHelper{
         private static final DatabaseAPI databaseAPI1 = new DatabaseAPI();
     }
+
 
     public static DatabaseAPI getDatabaseAPI(){
         return DatabaseSingletonHelper.databaseAPI1;

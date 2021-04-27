@@ -251,6 +251,8 @@ public class AStarDemoController implements Initializable {
         if(this.startNodeDisplay != null)
             mapPanel.unDraw(this.startNodeDisplay.getId());
         drawStartNode(startComboBox.getValue());
+        mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
+        mapPanel.centerNode(startNodeDisplay);
         loadRecentlyUsedVertices();
     }
 
@@ -301,6 +303,8 @@ public class AStarDemoController implements Initializable {
         if(this.endNodeDisplay != null)
             mapPanel.unDraw(this.endNodeDisplay.getId());
         drawEndNode(endComboBox.getValue());
+        mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
+        mapPanel.centerNode(endNodeDisplay);
         loadRecentlyUsedVertices();
     }
 
@@ -874,8 +878,7 @@ public class AStarDemoController implements Initializable {
         drawPathFromIndex(0);
         drawStartNode(pathVertex.get(0).getID());
         drawEndNode(pathVertex.get(pathVertex.size()-1).getID());
-        drawUserNode(pathVertex.get(stops.get(curStep)).getID());
-        mapPanel.centerNode(userNodeDisplay);
+        mapPanel.centerNode(startNodeDisplay);
 
         ETA.setText(calculateETA(0, pathVertex.size() - 1));
     }

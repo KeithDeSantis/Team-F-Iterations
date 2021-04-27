@@ -34,7 +34,8 @@ public class  AppF extends Application {
         DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("MapfAllEdges.csv"));
     }
     DatabaseAPI.getDatabaseAPI().createUserTable();
-    DatabaseAPI.getDatabaseAPI().createServiceRequestTable(); //FIXME: DO BETTER
+    DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
+    DatabaseAPI.getDatabaseAPI().createSystemTable(); //FIXME: DO BETTER
 
     AppF.primaryStage = primaryStage;
 

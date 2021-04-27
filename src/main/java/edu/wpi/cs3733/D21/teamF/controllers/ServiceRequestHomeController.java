@@ -37,7 +37,7 @@ public class ServiceRequestHomeController {
         if(buttonPushed == floralDelivery)
         {
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FloralDeliveryServiceRequestView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryServiceRequestView.fxml"));
             stage.getScene().setRoot(root);
             // Changed method of switching scenes so the window doesn't resize everytime.
             /*
@@ -58,7 +58,7 @@ public class ServiceRequestHomeController {
 
         else if (buttonPushed == languageInterpretation){
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);  //Changing the stage
             stage.setTitle("Language Interpretation");
@@ -68,7 +68,7 @@ public class ServiceRequestHomeController {
         else if (buttonPushed == foodDelivery)
         {
             stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FoodDeliveryServiceRequestView.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryServiceRequestView.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Food Delivery");

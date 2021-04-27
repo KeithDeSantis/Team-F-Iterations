@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.layout.RowConstraints?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LanguageInterpretationServiceRequestController">
+   <children>
+      <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" />
+      <JFXButton fx:id="close" buttonType="RAISED" onAction="#handleClose" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #03256C;" text="x" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="150.0">
+         <font>
+            <Font name="Montserrat Regular" size="15.0" />
+         </font>
+      </JFXButton>
+      <Label alignment="CENTER" lineSpacing="8.0" prefHeight="63.0" prefWidth="873.0" text="Language Interpretation Request" textAlignment="CENTER" underline="true" wrapText="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="175.0">
+         <font>
+            <Font name="Volkhov Regular" size="50.0" />
+         </font>
+         <padding>
+            <Insets bottom="25.0" />
+         </padding>
+      </Label>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="250.0">
+         <children>
+            <GridPane alignment="CENTER_LEFT" prefHeight="356.0" prefWidth="860.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="400.0" />
+                  <ColumnConstraints hgrow="NEVER" maxWidth="282.0" minWidth="10.0" prefWidth="25.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="400.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label lineSpacing="8.0" prefHeight="29.0" prefWidth="97.0" text="Name:">
+                     <font>
+                        <Font name="Montserrat Regular" size="24.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="25.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <JFXTextField fx:id="name" focusColor="#94c4f1" promptText="Name" unFocusColor="#03256c" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets left="25.0" right="25.0" />
+                     </GridPane.margin>
+                  </JFXTextField>
+                  <Label text="Appointment Date and Time:" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Montserrat Regular" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets left="25.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="50.0" GridPane.rowIndex="3">
+                     <children>
+                        <JFXDatePicker fx:id="date" defaultColor="#03256c" prefWidth="125.0" promptText="Date" />
+                        <JFXTimePicker fx:id="time" defaultColor="#03256c" editable="true" prefWidth="125.0" promptText="Time">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </JFXTimePicker>
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets left="25.0" right="25.0" />
+                     </GridPane.margin>
+                  </HBox>
+                  <Label text="Type of Appointment:" GridPane.columnIndex="2">
+                     <font>
+                        <Font name="Montserrat Regular" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets left="25.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <JFXComboBox fx:id="appointment" focusColor="#94c4f1" prefHeight="26.0" prefWidth="164.0" promptText="Appointment" unFocusColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets left="25.0" />
+                     </GridPane.margin>
+                  </JFXComboBox>
+                  <Label text="Language:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Montserrat Regular" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets left="25.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <JFXComboBox fx:id="language" focusColor="#94c4f1" promptText="Language" unFocusColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets left="25.0" right="25.0" />
+                     </GridPane.margin>
+                  </JFXComboBox>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+      <HBox layoutX="271.0" layoutY="456.0">
+         <children>
+            <JFXButton fx:id="help" buttonType="RAISED" onAction="#handleHelp" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="?" textFill="WHITE" />
+            <JFXButton fx:id="translate" buttonType="RAISED" onAction="#handleTranslate" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="26.0" prefWidth="104.0" style="-fx-background-color: #03256C;" text="Translate" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+            </JFXButton>
+            <JFXButton fx:id="submit" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#handleSubmit" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="26.0" prefWidth="94.0" style="-fx-background-color: #03256C;" text="Submit" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+            </JFXButton>
+         </children>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>

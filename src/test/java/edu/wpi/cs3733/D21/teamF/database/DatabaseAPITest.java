@@ -23,11 +23,13 @@ class DatabaseAPITest {
         DatabaseAPI.getDatabaseAPI().dropEdgesTable();
         DatabaseAPI.getDatabaseAPI().dropUsersTable();
         DatabaseAPI.getDatabaseAPI().dropServiceRequestTable();
+        DatabaseAPI.getDatabaseAPI().dropSystemTable();
 
         DatabaseAPI.getDatabaseAPI().createNodesTable();
         DatabaseAPI.getDatabaseAPI().createEdgesTable();
         DatabaseAPI.getDatabaseAPI().createUserTable();
         DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
+        DatabaseAPI.getDatabaseAPI().createSystemTable();
 
         /*
         //FIXME: DO BETTER!
@@ -253,7 +255,7 @@ class DatabaseAPITest {
     @DisplayName("test adding a service request")
     public void testAddServiceRequest() throws SQLException
     {
-        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false", "extra instructions"};
         assertTrue(DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest));
     }
 
@@ -261,7 +263,7 @@ class DatabaseAPITest {
     @DisplayName("test deleting a serviceRequest")
     public void testDeleteServiceRequest() throws SQLException
     {
-        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false", "additional steps"};
         DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest);
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteServiceRequest("1"));
     }
@@ -270,7 +272,7 @@ class DatabaseAPITest {
     @DisplayName("test editing a service request")
     public void testEditServiceRequest() throws Exception
     {
-        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
+        String[] newServiceRequest = {"1", "Sample Task", "Ben", "false", "additional steps"};
         DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest);
         assertTrue(DatabaseAPI.getDatabaseAPI().editServiceRequest("1", "Declan", "assignedperson"));
     }
@@ -293,8 +295,8 @@ class DatabaseAPITest {
     public void testPopulateServiceReqs() throws SQLException
     {
         ArrayList<String[]> sreqs = new ArrayList<>();
-        String[] sreq1 = {"1", "A task", "Ben", "false"};
-        String[] sreq2 = {"2", "Another task", "Declan", "true"};
+        String[] sreq1 = {"1", "A task", "Ben", "false", "test"};
+        String[] sreq2 = {"2", "Another task", "Declan", "true", "test"};
         sreqs.add(sreq1);
         sreqs.add(sreq2);
 
@@ -307,10 +309,10 @@ class DatabaseAPITest {
     @DisplayName("test generating service request entry list")
     public void testGenerateServiceRequestEntries() throws SQLException
     {
-        ServiceEntry entry = new ServiceEntry("1", "a task", "Ben","true");
+        ServiceEntry entry = new ServiceEntry("1", "a task", "Ben","true", "instructions");
         ArrayList<ServiceEntry> expected = new ArrayList<>();
         expected.add(entry);
-        String[] newService = {"1", "a task", "Ben","true"};
+        String[] newService = {"1", "a task", "Ben","true", "instructions"};
         DatabaseAPI.getDatabaseAPI().addServiceReq(newService);
         List<ServiceEntry> actual = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
         assertEquals(expected.get(0).getUuid(), actual.get(0).getUuid());
@@ -359,5 +361,38 @@ class DatabaseAPITest {
     @DisplayName("test admin doesnt exist")
     public void testNoAdmin() throws SQLException{
         assertFalse(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
+    }
+
+    @Test
+    @DisplayName("test adding system preferences")
+    public void testAddSystemPreferences() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().addSystemPreferences("2", "BFS"));
+    }
+
+    @Test
+    @DisplayName("test deleting system preferences")
+    public void testDeleteSystemPreferences() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addSystemPreferences("1", "DFS");
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteSystemPreference("1"));
+    }
+
+    @Test
+    @DisplayName("test dropping system preferences table")
+    public void testDropSystemPreferences() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropSystemTable());
+    }
+
+    @Test
+    @DisplayName("test creating system preferences table")
+    public void testCreatingSystemTable() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().dropSystemTable();
+        assertTrue(DatabaseAPI.getDatabaseAPI().createSystemTable());
+    }
+
+    @Test
+    @DisplayName("test getting and adding correct algorithm (1st entry always)")
+    public void testGetAlgorithm() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", "A*");
+        assertEquals(DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm(), "A*");
     }
 }
