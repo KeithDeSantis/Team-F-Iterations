@@ -15,7 +15,6 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LanguageInterpretationRequestController">
    <children>
       <VBox layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: cde7ff;">
@@ -53,7 +52,7 @@
             </Label>
             <VBox prefHeight="254.0" prefWidth="300.0">
                <children>
-                  <Label lineSpacing="8.0" prefHeight="18.0" prefWidth="42.0" text="Name:">
+                  <Label fx:id="nameLabel" lineSpacing="8.0" prefHeight="18.0" prefWidth="42.0" text="Name:">
                      <font>
                         <Font name="Tahoma" size="12.0" />
                      </font>
@@ -66,7 +65,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </JFXTextField>
-                  <Label text="Appointment Date and Time:">
+                  <Label fx:id="dtLabel" text="Appointment Date and Time:">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
@@ -84,7 +83,7 @@
                         </JFXTimePicker>
                      </children>
                   </HBox>
-                  <Label text="Type of Appointment:">
+                  <Label fx:id="appointmentLabel" text="Type of Appointment:">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
@@ -94,12 +93,12 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </JFXComboBox>
-                  <Label layoutX="40.0" layoutY="111.0" text="Language:">
+                  <Label fx:id="languageLabel" layoutX="40.0" layoutY="111.0" text="Language:">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextField fx:id="language" />
+                  <JFXComboBox fx:id="language" prefHeight="26.0" prefWidth="164.0" promptText="Language" />
                   <HBox prefHeight="14.0" prefWidth="300.0">
                      <children>
                         <JFXButton fx:id="help" buttonType="RAISED" onAction="#handleHelp" text="?">
