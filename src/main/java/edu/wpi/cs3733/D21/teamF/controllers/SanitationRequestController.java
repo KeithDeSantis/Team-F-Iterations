@@ -34,7 +34,7 @@ public class SanitationRequestController {
     private void initialize(){
         Graph graph = new Graph();
         try {
-            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 
             final ObservableList<String> nodeList = FXCollections.observableArrayList();
             nodeList.addAll(nodeEntries.stream().map(NodeEntry::getShortName)

@@ -76,7 +76,7 @@ public class MaintenenceRequestController {
         List<NodeEntry> nodeEntryList = new ArrayList<>();
 
         try{
-            nodeEntryList = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            nodeEntryList = DatabaseAPI.getDatabaseAPI().genNodeEntries();
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -92,7 +92,7 @@ public class MaintenenceRequestController {
         // Load in employee list from database TODO Replace with UserEntry after merge W/ updated DB
         List<NodeEntry> employees = new ArrayList<>();
         try {
-            employees = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
+            employees = DatabaseAPI.getDatabaseAPI().genNodeEntries();
         } catch (SQLException e){
             e.printStackTrace();
         }

@@ -84,7 +84,18 @@ public class MedicineDeliveryServiceRequest {
             }
         }
         if(submitSuccessful) {
-            close(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/FormSubmittedView.fxml", "Request Submitted!");
+            // Loads form submitted window and passes in current stage to return to request home
+            FXMLLoader submitedPageLoader = new FXMLLoader();
+            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/FormSubmittedView.fxml"));
+            Stage submittedStage = new Stage();
+            Parent root = submitedPageLoader.load();
+            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) employeeName.getScene().getWindow());
+            Scene submitScene = new Scene(root);
+            submittedStage.setScene(submitScene);
+            submittedStage.setTitle("Submission Complete");
+            submittedStage.initModality(Modality.APPLICATION_MODAL);
+            submittedStage.showAndWait();
         }
     }
 
@@ -94,11 +105,18 @@ public class MedicineDeliveryServiceRequest {
      * @throws IOException if the new file resource is invalid
      * @author Tony Vuolo (bdane)
      */
-    @FXML
+    @FXML // Replaced close method with this (See comment on close) - LM
     private void cancel(ActionEvent actionEvent) throws IOException {
-        close(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml", "Service Requests");
+        Stage stage;
+        Parent root;
+        stage = (Stage) employeeName.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Service Request Home");
+        stage.show();
     }
 
+    /*  REMOVED: Caused duplicate window instead of closing request page- LM
     /**
      * Closes the application
      * @param actionEvent the ActionEvent signalling that the page is to be closed
@@ -106,7 +124,7 @@ public class MedicineDeliveryServiceRequest {
      * @param title the title of the new page
      * @throws IOException if the file resource is invalid
      * @author Tony Vuolo (bdane)
-     */
+
     private void close(ActionEvent actionEvent, String resource, String title) throws IOException {
         Stage submittedStage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource(resource));
@@ -117,6 +135,7 @@ public class MedicineDeliveryServiceRequest {
         submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
         submittedStage.showAndWait();
     }
+    */
 
     /**
      * Changes the style of a Button when moused over

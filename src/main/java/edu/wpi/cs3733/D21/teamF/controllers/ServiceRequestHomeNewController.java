@@ -78,6 +78,9 @@ public class ServiceRequestHomeNewController {
         else if (buttonPushed == laundryServices){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/LaundryRequest.fxml", "Laundry Service", buttonPushed);
         }
+        else if (buttonPushed == medicineDelivery){
+            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/Service Requests/MedicineDeliveryServiceRequestView.fxml", "Medicine Delivery", buttonPushed);
+        }
     }
 
     public void goToScreen(ActionEvent e, String URL, String Title, Button currentScreen)throws IOException{
