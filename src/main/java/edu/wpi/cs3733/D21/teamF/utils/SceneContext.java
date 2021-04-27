@@ -10,11 +10,14 @@ import java.io.IOException;
 public class SceneContext {
 
     private Stage stage;
-    private static SceneContext sceneContext = new SceneContext();
 
     private SceneContext() {}
 
-    public static SceneContext getSceneContext() { return sceneContext; }
+    private static class SceneContextSingletonHelper {
+        private static final SceneContext sceneContext = new SceneContext();
+    }
+
+    public static SceneContext getSceneContext() { return SceneContextSingletonHelper.sceneContext; }
 
     public void switchScene(String fxml) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/" + fxml));
