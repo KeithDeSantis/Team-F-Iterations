@@ -19,7 +19,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidSurveyViewController">
    <children>
-      <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="68.0" fitWidth="84.0" onMouseClicked="#handleBack" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -33,7 +33,7 @@
             </Label>
          </children>
       </HBox>
-      <HBox prefHeight="340.0" prefWidth="960.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+      <HBox prefHeight="340.0" prefWidth="960.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
          <children>
             <GridPane prefHeight="340.0" prefWidth="378.0">
               <columnConstraints>
@@ -176,7 +176,7 @@
             <Insets left="25.0" right="25.0" top="10.0" />
          </padding>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="91.0" prefWidth="960.0" spacing="25.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="440.0">
+      <HBox alignment="CENTER" prefHeight="91.0" prefWidth="960.0" spacing="25.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="460.0">
          <children>
             <JFXButton fx:id="submit" buttonType="RAISED" onAction="#handleSubmitPushed" style="-fx-background-color: #03256C;" text="Submit" textFill="WHITE">
                <font>

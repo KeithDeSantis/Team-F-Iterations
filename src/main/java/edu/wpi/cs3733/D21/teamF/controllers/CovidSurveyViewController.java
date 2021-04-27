@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -102,7 +103,17 @@ public class CovidSurveyViewController {
      * @throws IOException
      */
     @FXML private void handleSubmitPushed(ActionEvent e) throws IOException{
-        //TODO: handle submit pushed
+        FXMLLoader submitedPageLoader = new FXMLLoader();
+        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
+        Stage submittedStage = new Stage();
+        Parent root = submitedPageLoader.load();
+        FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+        formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
+        Scene submitScene = new Scene(root);
+        submittedStage.setScene(submitScene);
+        submittedStage.setTitle("Submission Complete");
+        submittedStage.initModality(Modality.APPLICATION_MODAL);
+        submittedStage.showAndWait();
     }
 
 
@@ -141,5 +152,15 @@ public class CovidSurveyViewController {
         ToggleGroup question2 = new ToggleGroup(); //group for second question
         yes2.setToggleGroup(question2);
         no2.setToggleGroup(question2);
+    }
+
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 }
