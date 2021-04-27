@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<?import com.jfoenix.controls.JFXListView?>
+<AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #c6c6c6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AddFavoritesController">
+    <children>
+        <VBox prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #c6c6c6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label fx:id="editFavoritesList" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #94c4f1;" text="Edit Favorites List" textAlignment="CENTER">
+                    <font>
+                        <Font size="40.0" />
+                    </font>
+                </Label>
+                <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
+                    <children>
+                        <JFXListView fx:id="favoritesTreeList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#favoriteClicked" HBox.hgrow="SOMETIMES" />
+                        <GridPane maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <JFXButton fx:id="exit" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#exit" style="-fx-background-color: #03256C;" text="EXIT" textFill="WHITE" GridPane.columnSpan="2" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="2" GridPane.vgrow="SOMETIMES">
+                                    <GridPane.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </GridPane.margin>
+                                </JFXButton>
+                                <JFXButton fx:id="add" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#add" style="-fx-background-color: #03256C;" text="ADD" textFill="WHITE" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+                                    <GridPane.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </GridPane.margin>
+                                </JFXButton>
+                                <JFXButton fx:id="remove" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#remove" style="-fx-background-color: #03256C;" text="REMOVE" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </GridPane.margin>
+                                </JFXButton>
+                                <JFXComboBox fx:id="newFavoriteComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#newFavoriteComboBox" promptText="Node ID" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
+                                    <GridPane.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </GridPane.margin>
+                                </JFXComboBox>
+                            </children>
+                        </GridPane>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

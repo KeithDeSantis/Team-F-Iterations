@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -36,6 +37,10 @@ import java.util.stream.Collectors;
 
 public class AStarDemoController implements Initializable {
 
+    @FXML
+    public ComboBox<String> recentlyUsedComboBox;
+    @FXML
+    public ComboBox<String> favoritesComboBox;
     @FXML
     private Button goBack;
 
@@ -70,7 +75,6 @@ public class AStarDemoController implements Initializable {
     private Label ETA;
 
     private DoublyLinkedHashSet<Vertex> recentlyUsed, favorites;
-    private final int MAX_RECENTLY_USED = 5;
 
 
     /**
@@ -168,6 +172,11 @@ public class AStarDemoController implements Initializable {
         loadRecentlyUsedVertices();
         loadFavorites();
     }
+
+    /**
+     * Loads favorite nodes
+     * @author Tony Vuolo (bdane)
+     */
     private void loadFavorites() {
         this.favorites = new DoublyLinkedHashSet<>();
         //TODO: load recentlyUsed
@@ -305,6 +314,9 @@ public class AStarDemoController implements Initializable {
         drawEndNode(endComboBox.getValue());
         mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(endNodeDisplay);
+
+        favoritesComboBox.setValue(favoritesComboBox.getPromptText());
+        recentlyUsedComboBox.setValue(recentlyUsedComboBox.getPromptText());
         loadRecentlyUsedVertices();
     }
 
@@ -451,12 +463,20 @@ public class AStarDemoController implements Initializable {
      * @author Tony Vuolo (bdane)
      */
     private void updateRecentlyUsed(Vertex endVertex) {
+        int MAX_RECENTLY_USED = 5;
         if(this.recentlyUsed.size() == MAX_RECENTLY_USED) {
             this.recentlyUsed.add(this.recentlyUsed.removeIndex(0));
         } else if(this.recentlyUsed.containsKey(endVertex)) {
             this.recentlyUsed.remove(endVertex);
             this.recentlyUsed.add(endVertex);
+        } else {
+            this.recentlyUsed.add(endVertex);
         }
+        ObservableList<String> recentlyUsed = FXCollections.observableList(new ArrayList<>());
+        for(Vertex vertex : this.recentlyUsed) {
+            recentlyUsed.add(vertex.getID());
+        }
+        recentlyUsedComboBox.setItems(recentlyUsed);
     }
 
     /**
@@ -755,6 +775,19 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void startNavigation(ActionEvent actionEvent) throws SQLException {
+
+        String endVertex = "";
+        if(endComboBox.getValue() != null) {
+            endVertex = endComboBox.getValue();
+        } else if(favoritesComboBox.getValue() != null) {
+            endVertex = favoritesComboBox.getValue();
+        } else {
+            endVertex = recentlyUsedComboBox.getValue();
+        }
+        if(endVertex.length() > 0) {
+            updateRecentlyUsed(this.graph.getVertex(endVertex));
+        }
+
         startComboBox.setDisable(true);
         endComboBox.setDisable(true);
         Go.setDisable(true);
@@ -896,5 +929,54 @@ public class AStarDemoController implements Initializable {
             sumDist += path.get(i).EuclideanDistance(path.get(i + 1));
         }
         return sumDist / PIXEL_TO_METER_RATIO;
+    }
+
+    /**
+     *
+     * @throws SQLException if an issue occurs in the recentlyUsedComboBox
+     */
+    @FXML
+    public void recentlyUsedComboBox() throws SQLException {
+        checkInput();
+        if(this.endNodeDisplay != null)
+            mapPanel.unDraw(this.endNodeDisplay.getId());
+        drawEndNode(recentlyUsedComboBox.getValue());
+        mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
+        mapPanel.centerNode(endNodeDisplay);
+
+        favoritesComboBox.setValue(favoritesComboBox.getPromptText());
+        endComboBox.setValue(endComboBox.getPromptText());
+        loadRecentlyUsedVertices();
+    }
+
+    /**
+     * Responds to a change in selection in the favoritesComboBox
+     * @throws SQLException if an issue occurs in drawEndNode
+     */
+    @FXML
+    public void favoritesComboBox() throws SQLException {
+        checkInput();
+        if(this.endNodeDisplay != null)
+            mapPanel.unDraw(this.endNodeDisplay.getId());
+        drawEndNode(favoritesComboBox.getValue());
+        mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
+        mapPanel.centerNode(endNodeDisplay);
+
+        endComboBox.setValue(endComboBox.getPromptText());
+        recentlyUsedComboBox.setValue(recentlyUsedComboBox.getPromptText());
+        loadRecentlyUsedVertices();
+    }
+
+    /**
+     * Opens the Edit Favorites page
+     * @author Tony Vuolo
+     */
+    @FXML
+    public void editFavorites() throws IOException {
+        Stage currentStage = (Stage) recentlyUsedComboBox.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AddFavoritesView.fxml"));
+        Scene homeScene = new Scene(root);
+        currentStage.setScene(homeScene);
+        currentStage.show();
     }
 }
