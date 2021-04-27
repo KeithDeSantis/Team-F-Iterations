@@ -10,6 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -29,16 +31,15 @@ public class EditMapNodeDialogViewController {
     @FXML private TextField nodeTypeField;
     @FXML private TextField longNameField;
     @FXML private TextField shortNameField;
-    @FXML private JFXButton backButton;
-    @FXML private JFXButton nodeIDButton;
-    @FXML private JFXButton xCoordButton;
-    @FXML private JFXButton yCoordButton;
-    @FXML private JFXButton floorButton;
-    @FXML private JFXButton buildingButton;
-    @FXML private JFXButton nodeTypeButton;
-    @FXML private JFXButton longNameButton;
-    @FXML private JFXButton shortNameButton;
-    @FXML private Label helpText;
+    @FXML private Label nodeIDLabel;
+    @FXML private Label xCoordLabel;
+    @FXML private Label yCoordLabel;
+    @FXML private Label floorLabel;
+    @FXML private Label buildingLabel;
+    @FXML private Label nodeTypeLabel;
+    @FXML private Label longNameLabel;
+    @FXML private Label shortNameLabel;
+    @FXML private Label title;
 
     private NodeEntry node = new NodeEntry(); // This will be the node that we pass in to edit - KD
     private Stage dialogStage; // This will be so we have access to our stage - KD
@@ -55,6 +56,18 @@ public class EditMapNodeDialogViewController {
      */
     @FXML
     private void initialize() {
+        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 18);
+        nodeIDLabel.setFont(buttonDefault);
+        xCoordLabel.setFont(buttonDefault);
+        yCoordLabel.setFont(buttonDefault);
+        floorLabel.setFont(buttonDefault);
+        buildingLabel.setFont(buttonDefault);
+        nodeTypeLabel.setFont(buttonDefault);
+        longNameLabel.setFont(buttonDefault);
+        shortNameLabel.setFont(buttonDefault);
+
+        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 24);
+        title.setFont(titleFont);
     }
 
 
@@ -103,22 +116,22 @@ public class EditMapNodeDialogViewController {
         // Check if each field has been filled out, if not do not continue and highlight the text field red - KD
 
         if(nodeIDField.getText().length() <= 0 || !isUniqueNodeID(nodeIDField.getText())) {
-            nodeIDField.setStyle("-fx-background-color:  #ffbab8");
+            nodeIDField.setStyle("-fx-background-color:  #ff000088");
         }
         if(!isProperFloor(floorField.getText())) {
-            floorField.setStyle("-fx-background-color:  #ffbab8");
+            floorField.setStyle("-fx-background-color:  #ff000088");
         }
         if(buildingField.getText().length() <= 0) {
-            buildingField.setStyle("-fx-background-color:  #ffbab8");
+            buildingField.setStyle("-fx-background-color:  #ff000088");
         }
         if(nodeTypeField.getText().length() <= 0) {
-            nodeTypeField.setStyle("-fx-background-color:  #ffbab8");
+            nodeTypeField.setStyle("-fx-background-color:  #ff000088");
         }
         if(longNameField.getText().length() <= 0) {
-            longNameField.setStyle("-fx-background-color:  #ffbab8");
+            longNameField.setStyle("-fx-background-color:  #ff000088");
         }
         if(shortNameField.getText().length() <= 0) {
-            shortNameField.setStyle("-fx-background-color:  #ffbab8");
+            shortNameField.setStyle("-fx-background-color:  #ff000088");
         }
         try {
             xCoordValid = Integer.parseInt(xCoordField.getText()) >= 0 && Integer.parseInt(xCoordField.getText()) <= 5000; } // make sure coordinates are valid integers and not negative
@@ -131,8 +144,8 @@ public class EditMapNodeDialogViewController {
             yCoordValid = false;
         }
 
-        if(!xCoordValid) {xCoordField.setStyle("-fx-background-color:  #ffbab8");}
-        if(!yCoordValid) {yCoordField.setStyle("-fx-background-color: #ffbab8");}
+        if(!xCoordValid) {xCoordField.setStyle("-fx-background-color:  #ff000088");}
+        if(!yCoordValid) {yCoordField.setStyle("-fx-background-color: #ff000088");}
 
         return nodeIDField.getText().length() > 0 &&
                 isUniqueNodeID(nodeIDField.getText()) &&
@@ -185,60 +198,6 @@ public class EditMapNodeDialogViewController {
         return is1 || is2 || is3 || isL1 || isL2 || isG;
     }
 
-
-    /**
-     * Closes popup
-     */
-    public void handleBackClicked() {
-         Stage helpStage = (Stage) backButton.getScene().getWindow();
-         helpStage.close();
-    }
-
-    /**
-     * Opens a pop up where user can learn what to enter in each field
-     * @throws IOException
-     * @author KD
-     */
-    public void openHelpMenu() throws IOException {
-        FXMLLoader dialogLoader = new FXMLLoader();
-        dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/NodeEditHelpView.fxml")); // load in Edit Dialog - KD
-        Stage helpStage = new Stage();
-        Parent root = dialogLoader.load();
-        EditMapNodeDialogViewController dialogController = dialogLoader.getController(); // get edit dialog's controller - KD
-        helpStage.setTitle("Edit Node");
-        helpStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
-        helpStage.initOwner(dialogStage);
-        helpStage.setScene(new Scene(root)); // set scene - KD
-
-        helpStage.showAndWait(); // open pop up - KD
-    }
-
-    /**
-     * Displays helpful text in the help pop up based on the field selected
-     * @param actionEvent button being pressed
-     * @author KD
-     */
-    public void helpButtonPressed(ActionEvent actionEvent) {
-        JFXButton btn = (JFXButton) actionEvent.getSource();
-        if(btn==nodeIDButton) changeHelpLabel("An identifying key for your node, of a format similar to: CCONF001L1.");
-        else if(btn==xCoordButton) changeHelpLabel("A non-negative integer between 0 and 5000 that is the x-position of your node.");
-        else if(btn==yCoordButton) changeHelpLabel("A non-negative integer between 0 and 3400 that is the y-position of your node.");
-        else if(btn==floorButton) changeHelpLabel("The floor your node is on out of the options L2, L1, G, 1, 2, or 3.");
-        else if(btn==buildingButton) changeHelpLabel("The building your node is in.");
-        else if(btn==nodeTypeButton) changeHelpLabel("The type of room your node represents, for example a restroom has node type \"REST\".");
-        else if(btn==longNameButton) changeHelpLabel("A descriptive name of your node.");
-        else if(btn==shortNameButton) changeHelpLabel("A short name for your node that will be displayed.");
-    }
-
-    /**
-     * Helper for helpButtonPressed() that sets the help label to the given string
-     * @param label the string
-     * @author KD
-     */
-    public void changeHelpLabel(String label) {
-        helpText.setText(label);
-    }
-
     public void setCurrentIDIfEditing(String currentIDIfEditing) {
         this.currentIDIfEditing = currentIDIfEditing;
     }
@@ -256,5 +215,15 @@ public class EditMapNodeDialogViewController {
                 return false;
         }
         return true;
+    }
+
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 }

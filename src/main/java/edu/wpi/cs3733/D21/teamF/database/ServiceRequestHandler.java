@@ -105,7 +105,7 @@ public class ServiceRequestHandler implements DatabaseEntry {
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {
-            DatabaseAPI1.getDatabaseAPI1().addServiceReq(arr);
+            DatabaseAPI.getDatabaseAPI().addServiceReq(arr);
         }
     }
 
@@ -114,8 +114,8 @@ public class ServiceRequestHandler implements DatabaseEntry {
      * @return ArrayList of ServiceEntry objects
      * @throws SQLException on error performing DB operations
      */
-    public ArrayList<ServiceEntry> genServiceRequestEntries() throws SQLException{
-        ArrayList<ServiceEntry> entries = new ArrayList<>();
+    public List<ServiceEntry> genServiceRequestEntries() throws SQLException{
+        List<ServiceEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM service_requests";
         ResultSet rset;
         Statement stmt = ConnectionHandler.getConnection().createStatement();
@@ -131,6 +131,7 @@ public class ServiceRequestHandler implements DatabaseEntry {
             ServiceEntry newEntry = new ServiceEntry(uuid, name, assignedPerson, completed);
             entries.add(newEntry);
         }
+        rset.close();
 
         return entries;
     }

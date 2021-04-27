@@ -2,10 +2,10 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
-import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -34,6 +35,8 @@ public class EditMapEdgeDialogueViewController {
     @FXML
     private JFXButton ok;
 
+    @FXML private Label title;
+
     private EdgeEntry edge = new EdgeEntry();
     private Stage dialogueStage;
     public boolean okClicked;
@@ -43,10 +46,19 @@ public class EditMapEdgeDialogueViewController {
     public EditMapEdgeDialogueViewController(){}
     @FXML
     private void initialize(){
+        // Load in fonts
+        Font font = Font.loadFont("file:src/main/resources/fonts/Montserrat-Regular.ttf", 15);
+        edgeID.setFont(font);
+        ok.setFont(font);
+
+        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 24);
+        title.setFont(titleFont);
+
+
         Graph graph = new Graph();
         try {
-            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
-            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries(ConnectionHandler.getConnection());
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
 
             graph = GraphLoader.load(nodeEntries, edgeEntries);
         } catch (Exception e) {
@@ -96,10 +108,12 @@ public class EditMapEdgeDialogueViewController {
         if(startNode.getValue().length() <=0){
             startNode.setStyle("-fx-border-widge: 2px");
             startNode.setStyle("-fx-border-color: red");
+            startNode.setStyle("-fx-background-color: #ff000088");
         }
         if(endNode.getValue().length() <=0){
             endNode.setStyle("-fx-border-widge: 2px");
             endNode.setStyle("-fx-border-color: red");
+            endNode.setStyle("-fx-background-color: #ff000088");
         }
         return isUniqueNodeID(edgeID.getText()) &&
                 edgeID.getText().length() > 0 &&
@@ -152,6 +166,10 @@ public class EditMapEdgeDialogueViewController {
      */
     @FXML
     private void updateEdgeIDLabel(){
+        startNode.setStyle("-fx-border-widge: 0px");
+        startNode.setStyle("-fx-background-color: #00000000");
+        endNode.setStyle("-fx-border-widge: 0px");
+        endNode.setStyle("-fx-background-color: #00000000");
         edgeID.setText("Edge ID: " +startNode.getValue() + "_" + endNode.getValue());
     }
 

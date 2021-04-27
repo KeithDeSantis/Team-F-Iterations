@@ -46,4 +46,12 @@ public class DrawableNode extends Circle implements IMapDrawable
     public StringProperty getFloor() {
         return this.floor;
     }
+
+    public SimpleIntegerProperty xCoordinateProperty() {
+        return xCoordinate;
+    }
+
+    public SimpleIntegerProperty yCoordinateProperty() {
+        return yCoordinate;
+    }
 }

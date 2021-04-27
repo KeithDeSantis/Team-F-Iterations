@@ -83,7 +83,6 @@ public class EdgeHandler implements DatabaseEntry {
             success = true;
         }
         catch (SQLException e){
-            System.out.println("here");
             success = false;
         }
         return success;
@@ -114,7 +113,7 @@ public class EdgeHandler implements DatabaseEntry {
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {
-            DatabaseAPI1.getDatabaseAPI1().addEdge(arr);
+            DatabaseAPI.getDatabaseAPI().addEdge(arr);
         }
     }
 
@@ -123,8 +122,8 @@ public class EdgeHandler implements DatabaseEntry {
      * @return ArrayList of EdgeEntry objects
      * @throws SQLException on error performing DB operations
      */
-    public ArrayList<EdgeEntry> genEdgeEntryObjects() throws SQLException {
-        ArrayList<EdgeEntry> entries = new ArrayList<>();
+    public List<EdgeEntry> genEdgeEntryObjects() throws SQLException {
+        List<EdgeEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM AllEdges";
         ResultSet rset;
         Statement stmt = ConnectionHandler.getConnection().createStatement();
@@ -139,6 +138,7 @@ public class EdgeHandler implements DatabaseEntry {
             EdgeEntry newEntry = new EdgeEntry(edgeID, startNode, endNode);
             entries.add(newEntry);
         }
+        rset.close();
         return entries;
     }
 
@@ -168,9 +168,10 @@ public class EdgeHandler implements DatabaseEntry {
             final String edgeID = rset.getString(1);
             final String start = rset.getString(2);
             final String end = rset.getString(3);
-
+            rset.close();
             return new EdgeEntry(edgeID, start, end);
         }
+        rset.close();
         return null;
     }
 }

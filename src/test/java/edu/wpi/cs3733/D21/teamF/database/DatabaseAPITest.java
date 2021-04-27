@@ -10,39 +10,51 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseAPITest {
     @BeforeEach
     public void setUp() {
-        DatabaseAPI1.getDatabaseAPI1().dropNodesTable();
-        DatabaseAPI1.getDatabaseAPI1().dropEdgesTable();
-        DatabaseAPI1.getDatabaseAPI1().dropUsersTable();
-        DatabaseAPI1.getDatabaseAPI1().dropServiceRequestTable();
+        DatabaseAPI.getDatabaseAPI().dropNodesTable();
+        DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+        DatabaseAPI.getDatabaseAPI().dropUsersTable();
+        DatabaseAPI.getDatabaseAPI().dropServiceRequestTable();
 
+        DatabaseAPI.getDatabaseAPI().createNodesTable();
+        DatabaseAPI.getDatabaseAPI().createEdgesTable();
+        DatabaseAPI.getDatabaseAPI().createUserTable();
+        DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
 
-        DatabaseAPI1.getDatabaseAPI1().createNodesTable();
-        DatabaseAPI1.getDatabaseAPI1().createEdgesTable();
-        DatabaseAPI1.getDatabaseAPI1().createUserTable();
-        DatabaseAPI1.getDatabaseAPI1().createServiceRequestTable();
+        /*
+        //FIXME: DO BETTER!
+        try {
+            DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
+        */
     }
 
     @Test()
     @DisplayName("test dropping nodes table")
     public void testDropNodesTable() {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().dropNodesTable());
-        assertThrows(SQLException.class, () -> DatabaseAPI1.getDatabaseAPI1().addNode(newNode));
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropNodesTable());
+        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().addNode(newNode));
+        DatabaseAPI.getDatabaseAPI().createNodesTable();
     }
 
     @Test()
     @DisplayName("test dropping edges table")
     public void testDropEdgesTable() {
         String[] newEdge = {"test", "start", "end"};
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().dropEdgesTable());
-        assertThrows(SQLException.class, () -> DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropEdgesTable());
+        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().addEdge(newEdge));
     }
 
     @Test
@@ -50,9 +62,9 @@ class DatabaseAPITest {
     public void testAddNodesTable() throws SQLException
     {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
-        DatabaseAPI1.getDatabaseAPI1().dropNodesTable();
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().createNodesTable());
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().addNode(newNode));
+        DatabaseAPI.getDatabaseAPI().dropNodesTable();
+        assertTrue(DatabaseAPI.getDatabaseAPI().createNodesTable());
+        assertTrue(DatabaseAPI.getDatabaseAPI().addNode(newNode));
     }
 
     @Test
@@ -60,9 +72,9 @@ class DatabaseAPITest {
     public void testAddEdgesTable() throws SQLException
     {
         String[] newEdge = {"test",  "start", "end"};
-        DatabaseAPI1.getDatabaseAPI1().dropEdgesTable();
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().createEdgesTable());
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
+        DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+        assertTrue(DatabaseAPI.getDatabaseAPI().createEdgesTable());
+        assertTrue(DatabaseAPI.getDatabaseAPI().addEdge(newEdge));
     }
 
     @Test
@@ -70,7 +82,7 @@ class DatabaseAPITest {
     public void testAddNodeBasic() throws SQLException
     {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().addNode(newNode));
+        assertTrue(DatabaseAPI.getDatabaseAPI().addNode(newNode));
     }
 
     @Test
@@ -78,21 +90,21 @@ class DatabaseAPITest {
     public void testAddEdgeBasic() throws SQLException
     {
         String[] newEdge = {"test", "start", "end"};
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
+        assertTrue(DatabaseAPI.getDatabaseAPI().addEdge(newEdge));
     }
 
     @Test
     @DisplayName("test invalid node add")
     public void testInvalidNodeAdd() {
         String[] newNode = {"test", "1234"};
-        assertThrows(SQLException.class, () -> DatabaseAPI1.getDatabaseAPI1().addNode(newNode));
+        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().addNode(newNode));
     }
 
     @Test
     @DisplayName("test invalid edge add")
     public void testInvalidEdgeAdd() {
         String[] newEdge = {"test", "1234"};
-        assertThrows(SQLException.class, () -> DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
+        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().addEdge(newEdge));
     }
 
     @Test
@@ -100,8 +112,8 @@ class DatabaseAPITest {
     public void testDeleteNode() throws SQLException
     {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
-        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteNode("test"));
+        DatabaseAPI.getDatabaseAPI().addNode(newNode);
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("test"));
     }
 
     @Test
@@ -109,16 +121,16 @@ class DatabaseAPITest {
     public void testDeleteInvalidNode() throws SQLException
     {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
-        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
-        assertFalse(DatabaseAPI1.getDatabaseAPI1().deleteNode("notTest"));
+        DatabaseAPI.getDatabaseAPI().addNode(newNode);
+        assertFalse(DatabaseAPI.getDatabaseAPI().deleteNode("notTest"));
     }
 
     @Test
     @DisplayName("test populate nodes")
     public void testPopulateNodes() throws Exception
     {
-        DatabaseAPI1.getDatabaseAPI1().populateNodes(CSVManager.load("MapfAllNodes.csv"));
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteNode("ACONF00102"));
+        DatabaseAPI.getDatabaseAPI().populateNodes(CSVManager.load("MapfAllNodes.csv"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("ACONF00102"));
     }
 
     @Test
@@ -129,8 +141,8 @@ class DatabaseAPITest {
         ArrayList<NodeEntry> expected = new ArrayList<>();
         expected.add(entry);
         String[] newNode = {"test", "1", "1", "f", "b", "t", "l", "s"};
-        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
-        ArrayList<NodeEntry> actual = DatabaseAPI1.getDatabaseAPI1().genNodeEntries();
+        DatabaseAPI.getDatabaseAPI().addNode(newNode);
+        List<NodeEntry> actual = DatabaseAPI.getDatabaseAPI().genNodeEntries();
         assertEquals(expected.get(0).getNodeID(), actual.get(0).getNodeID());
     }
 
@@ -139,8 +151,8 @@ class DatabaseAPITest {
     public void testEditNode() throws Exception
     {
         String[] newNode = {"test", "1", "2", "f", "b", "t", "l", "s"};
-        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().editNode("test", "test1", "nodeid"));
+        DatabaseAPI.getDatabaseAPI().addNode(newNode);
+        assertTrue(DatabaseAPI.getDatabaseAPI().editNode("test", "test1", "nodeid"));
     }
 
     @Test
@@ -148,8 +160,8 @@ class DatabaseAPITest {
     public void testEditEdge() throws Exception
     {
         String[] newEdge = {"test", "start", "end"};
-        DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().editEdge("test", "test1", "startnode"));
+        DatabaseAPI.getDatabaseAPI().addEdge(newEdge);
+        assertTrue(DatabaseAPI.getDatabaseAPI().editEdge("test", "test1", "startnode"));
     }
 
     @Test
@@ -157,17 +169,17 @@ class DatabaseAPITest {
     public void testDeleteEdge() throws SQLException
     {
         String[] newEdge = {"test", "start", "end"};
-        DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteEdge("test"));
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge));
+        DatabaseAPI.getDatabaseAPI().addEdge(newEdge);
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteEdge("test"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().addEdge(newEdge));
     }
 
     @Test
     @DisplayName("test populating edges table")
     public void testPopulateEdges() throws Exception
     {
-        DatabaseAPI1.getDatabaseAPI1().populateEdges(CSVManager.load("MapfAllEdges.csv"));
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteEdge("AHALL00202_AHALL00302"));
+        DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("MapfAllEdges.csv"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteEdge("AHALL00202_AHALL00302"));
     }
 
     @Test
@@ -178,8 +190,8 @@ class DatabaseAPITest {
         ArrayList<EdgeEntry> expected = new ArrayList<>();
         expected.add(entry);
         String[] newEdge = {"test", "start", "end"};
-        DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
-        ArrayList<EdgeEntry> actual = DatabaseAPI1.getDatabaseAPI1().genEdgeEntries();
+        DatabaseAPI.getDatabaseAPI().addEdge(newEdge);
+        List<EdgeEntry> actual = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
         assertEquals(expected.get(0).getEdgeID(), actual.get(0).getEdgeID());
     }
 
@@ -188,7 +200,7 @@ class DatabaseAPITest {
     public void testAddUser() throws SQLException
     {
         String[] newUser = {"1", "employee", "declan", "password"};
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().addUser(newUser));
+        assertTrue(DatabaseAPI.getDatabaseAPI().addUser(newUser));
     }
 
     @Test
@@ -196,8 +208,8 @@ class DatabaseAPITest {
     public void testDeleteUser() throws SQLException
     {
         String[] newUser = {"1", "employee", "declan", "password"};
-        DatabaseAPI1.getDatabaseAPI1().addUser(newUser);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteUser("declan"));
+        DatabaseAPI.getDatabaseAPI().addUser(newUser);
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteUser("declan"));
     }
 
     @Test
@@ -205,21 +217,21 @@ class DatabaseAPITest {
     public void testEditUser() throws Exception
     {
         String[] newUser = {"1", "employee", "declan", "password"};
-        DatabaseAPI1.getDatabaseAPI1().addUser(newUser);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().editUser("declan", "password123", "password"));
+        DatabaseAPI.getDatabaseAPI().addUser(newUser);
+        assertTrue(DatabaseAPI.getDatabaseAPI().editUser("declan", "password123", "password"));
     }
 
     @Test
     @DisplayName("test dropping users table")
     public void testDropUsersTable() {
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().dropUsersTable());
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropUsersTable());
     }
 
     @Test
     @DisplayName("test adding users table")
     public void testAddUsersTable() {
-        DatabaseAPI1.getDatabaseAPI1().dropUsersTable();
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().createUserTable());
+        DatabaseAPI.getDatabaseAPI().dropUsersTable();
+        assertTrue(DatabaseAPI.getDatabaseAPI().createUserTable());
     }
 
     @Test
@@ -232,9 +244,9 @@ class DatabaseAPITest {
         users.add(user1);
         users.add(user2);
 
-        DatabaseAPI1.getDatabaseAPI1().populateUsers(users);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteUser("testuser"));
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteUser("username"));
+        DatabaseAPI.getDatabaseAPI().populateUsers(users);
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteUser("testuser"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteUser("username"));
     }
 
     @Test
@@ -242,7 +254,7 @@ class DatabaseAPITest {
     public void testAddServiceRequest() throws SQLException
     {
         String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().addServiceReq(newServiceRequest));
+        assertTrue(DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest));
     }
 
     @Test
@@ -250,8 +262,8 @@ class DatabaseAPITest {
     public void testDeleteServiceRequest() throws SQLException
     {
         String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
-        DatabaseAPI1.getDatabaseAPI1().addServiceReq(newServiceRequest);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteServiceRequest("1"));
+        DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest);
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteServiceRequest("1"));
     }
 
     @Test
@@ -259,21 +271,21 @@ class DatabaseAPITest {
     public void testEditServiceRequest() throws Exception
     {
         String[] newServiceRequest = {"1", "Sample Task", "Ben", "false"};
-        DatabaseAPI1.getDatabaseAPI1().addServiceReq(newServiceRequest);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().editServiceRequest("1", "Declan", "assignedperson"));
+        DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest);
+        assertTrue(DatabaseAPI.getDatabaseAPI().editServiceRequest("1", "Declan", "assignedperson"));
     }
 
     @Test
     @DisplayName("test dropping service_request table")
     public void testDropServiceReqTable() {
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().dropServiceRequestTable());
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropServiceRequestTable());
     }
 
     @Test
     @DisplayName("test adding service requests table")
     public void testAddServiceReqTable() {
-        DatabaseAPI1.getDatabaseAPI1().dropServiceRequestTable();
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().createServiceRequestTable());
+        DatabaseAPI.getDatabaseAPI().dropServiceRequestTable();
+        assertTrue(DatabaseAPI.getDatabaseAPI().createServiceRequestTable());
     }
 
     @Test
@@ -286,9 +298,9 @@ class DatabaseAPITest {
         sreqs.add(sreq1);
         sreqs.add(sreq2);
 
-        DatabaseAPI1.getDatabaseAPI1().populateServiceRequestTable(sreqs);
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteServiceRequest("1"));
-        assertTrue(DatabaseAPI1.getDatabaseAPI1().deleteServiceRequest("2"));
+        DatabaseAPI.getDatabaseAPI().populateServiceRequestTable(sreqs);
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteServiceRequest("1"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteServiceRequest("2"));
     }
 
     @Test
@@ -299,8 +311,8 @@ class DatabaseAPITest {
         ArrayList<ServiceEntry> expected = new ArrayList<>();
         expected.add(entry);
         String[] newService = {"1", "a task", "Ben","true"};
-        DatabaseAPI1.getDatabaseAPI1().addServiceReq(newService);
-        ArrayList<ServiceEntry> actual = DatabaseAPI1.getDatabaseAPI1().genServiceRequestEntries();
+        DatabaseAPI.getDatabaseAPI().addServiceReq(newService);
+        List<ServiceEntry> actual = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
         assertEquals(expected.get(0).getUuid(), actual.get(0).getUuid());
     }
 
@@ -308,7 +320,7 @@ class DatabaseAPITest {
     @DisplayName("Test authentication and encryption")
     public void testAuthentication() throws SQLException{
         String[] newUser = {"1", "admin", "declan", "password"};
-        DatabaseAPI1.getDatabaseAPI1().addUser(newUser);
+        DatabaseAPI.getDatabaseAPI().addUser(newUser);
         UserHandler handler = new UserHandler();
         assertTrue(handler.authenticate("declan", "password"));
     }
@@ -318,8 +330,8 @@ class DatabaseAPITest {
     public void testGetNode() throws SQLException{
         NodeEntry expected = new NodeEntry("id", "1", "2", "f", "b", "t", "l", "s");
         String[] newNode = {"id", "1", "2", "f", "b", "t", "l", "s"};
-        DatabaseAPI1.getDatabaseAPI1().addNode(newNode);
-        NodeEntry actual = DatabaseAPI1.getDatabaseAPI1().getNode("id");
+        DatabaseAPI.getDatabaseAPI().addNode(newNode);
+        NodeEntry actual = DatabaseAPI.getDatabaseAPI().getNode("id");
         assertEquals(expected.getNodeID(), actual.getNodeID());
         assertEquals(expected.getFloor(), actual.getFloor());
     }
@@ -329,9 +341,23 @@ class DatabaseAPITest {
     public void testGetEdge() throws SQLException{
         EdgeEntry expected = new EdgeEntry("test", "start", "end");
         String[] newEdge = {"test", "start", "end"};
-        DatabaseAPI1.getDatabaseAPI1().addEdge(newEdge);
-        EdgeEntry actual = DatabaseAPI1.getDatabaseAPI1().getEdge("test");
+        DatabaseAPI.getDatabaseAPI().addEdge(newEdge);
+        EdgeEntry actual = DatabaseAPI.getDatabaseAPI().getEdge("test");
         assertEquals(expected.getEdgeID(), actual.getEdgeID());
         assertEquals(expected.getStartNode(), actual.getStartNode());
+    }
+
+    @Test
+    @DisplayName("test verifying the admin user entry")
+    public void testAdmin() throws SQLException{
+        String[] admin = {"admin", "administrator", "admin", "admin"};
+        DatabaseAPI.getDatabaseAPI().addUser(admin);
+        assertTrue(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
+    }
+
+    @Test
+    @DisplayName("test admin doesnt exist")
+    public void testNoAdmin() throws SQLException{
+        assertFalse(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
     }
 }

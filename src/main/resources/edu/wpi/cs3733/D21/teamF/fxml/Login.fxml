@@ -11,9 +11,9 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LoginController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0"  xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LoginController" stylesheets="/stylesheets/DefaultPageStyleSheet.css">
    <children>
-      <JFXButton fx:id="closeLogin" onAction="#handleCloseLogin" text="x">
+      <JFXButton fx:id="closeLogin" onAction="#handleCloseLogin" text="x" stylesheets="/stylesheets/DefaultButtonStyle.css">
          <font>
             <Font name="Tahoma" size="15.0" />
          </font>
@@ -52,7 +52,7 @@
                   <Font name="Tahoma" size="15.0" />
                </font>
             </JFXPasswordField>
-            <JFXButton fx:id="signIn" buttonType="RAISED" defaultButton="true" onAction="#handleSignIn" text="Sign in">
+            <JFXButton fx:id="signIn" buttonType="RAISED" defaultButton="true" onAction="#handleSignIn" text="Sign in" stylesheets="/stylesheets/DefaultButtonStyle.css">
                <VBox.margin>
                   <Insets bottom="25.0" top="25.0" />
                </VBox.margin>
@@ -70,7 +70,7 @@
             </JFXButton>
          </children>
       </VBox>
-      <JFXButton fx:id="closeLogin" onAction="#handleCloseLogin" text="x">
+      <JFXButton fx:id="closeLogin" onAction="#handleCloseLogin" text="x" stylesheets="/stylesheets/DefaultButtonStyle.css">
          <font>
             <Font name="Tahoma" size="15.0" />
          </font>

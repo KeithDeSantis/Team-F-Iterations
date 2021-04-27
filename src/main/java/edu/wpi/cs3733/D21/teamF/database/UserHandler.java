@@ -1,7 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
-import edu.wpi.cs3733.D21.teamF.database.DatabaseEntry;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -10,9 +8,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserHandler implements DatabaseEntry {
+
+    /**
+     * verify that the admin user exists
+     * @return true if admin exists, false otherwise
+     * @throws SQLException on error with query
+     */
+    public boolean verifyAdmin() throws SQLException{
+        boolean exists = false;
+        String sql = "SELECT * FROM USERS WHERE USERNAME='admin'";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(sql);
+        while (rset.next()){
+            if (rset.getString(1).equals("admin") && rset.getString(2).equals("administrator")){
+                exists = true;
+            }
+        }
+        rset.close();
+
+        return exists;
+    }
 
     /**
      * method to generate random salt, stored in user's DB row entry
@@ -55,6 +75,24 @@ public class UserHandler implements DatabaseEntry {
     }
 
     /**
+     * Get a list of all the usernames in the DB
+     * @return List of strings for usernames
+     * @throws SQLException on error with DB operations
+     */
+    public List<String> listAllUsers() throws SQLException {
+        List<String> allUsernames = new ArrayList<>();
+        String query = "SELECT * FROM USERS";
+        ResultSet rset;
+        Statement stmt = ConnectionHandler.getConnection().createStatement();
+        rset = stmt.executeQuery(query);
+        while (rset.next()) {
+            allUsernames.add(rset.getString(3));
+        }
+        rset.close();
+        return allUsernames;
+    }
+
+    /**
      * Query the database and ensure the username and password given match the DB (hash matching)
      * @param username the string username supplied from the user
      * @param password the string password supplied from the user
@@ -77,6 +115,7 @@ public class UserHandler implements DatabaseEntry {
                 authenticated = true;
             }
         }
+        rset.close();
         return authenticated;
     }
 
@@ -159,6 +198,7 @@ public class UserHandler implements DatabaseEntry {
             success = true;
         }
         catch (SQLException e){
+          //  e.printStackTrace();
             success = false;
         }
         return success;
@@ -189,7 +229,7 @@ public class UserHandler implements DatabaseEntry {
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {
-            DatabaseAPI1.getDatabaseAPI1().addUser(arr);
+            DatabaseAPI.getDatabaseAPI().addUser(arr);
         }
     }
 }
