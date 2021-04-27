@@ -10,58 +10,44 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;"
-            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
-   <VBox alignment="CENTER" layoutX="272.0" layoutY="35.0" prefHeight="200.0" prefWidth="100.0"
-         AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0"
-         AnchorPane.topAnchor="10.0">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
+   <VBox alignment="CENTER" layoutX="272.0" layoutY="35.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="10.0">
       <Label text="AStar PathFinding Demo">
          <font>
-            <Font size="25.0"/>
+            <Font size="25.0" />
          </font>
       </Label>
-      <AnchorPane prefHeight="450.0" prefWidth="700.0"/>
+      <AnchorPane prefHeight="450.0" prefWidth="700.0" />
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
          <HBox prefHeight="34.0" prefWidth="896.0">
-            <ComboBox fx:id="startComboBox" onAction="#handleStartBoxAction" prefWidth="150.0"
-                      promptText="Select Start Location"/>
-            <ComboBox fx:id="endComboBox" onAction="#handleEndBoxAction" prefWidth="150.0"
-                      promptText="Select End Location">
+            <ComboBox fx:id="startComboBox" onAction="#handleStartBoxAction" prefWidth="150.0" promptText="Select Start Location" />
+            <ComboBox fx:id="endComboBox" onAction="#handleEndBoxAction" prefWidth="150.0" promptText="Select End Location">
                <padding>
-                  <Insets left="16.0"/>
+                  <Insets left="16.0" />
                </padding>
             </ComboBox>
-            <ComboBox fx:id="favoritesComboBox" onAction="#handleFavoritesBoxAction" prefWidth="150.0"
-                      promptText="Favorites">
+            <ComboBox fx:id="favoritesComboBox" onAction="#handleFavoritesBoxAction" prefWidth="150.0" promptText="Favorites">
                <padding>
-                  <Insets left="16.0"/>
+                  <Insets left="16.0" />
                </padding>
             </ComboBox>
-            <ComboBox fx:id="recentlyUsedComboBox" onAction="#handleRecentlyUsedBoxAction" prefWidth="150.0"
-                      promptText="Recently Used">
+            <ComboBox fx:id="recentlyUsedComboBox" onAction="#handleRecentlyUsedBoxAction" prefWidth="150.0" promptText="Recently Used">
                <padding>
-                  <Insets left="16.0"/>
+                  <Insets left="16.0" />
                </padding>
             </ComboBox>
-            <JFXButton fx:id="addFavorite" buttonType="RAISED" onAction="#addFavorite" ripplerFill="WHITE"
-                       style="-fx-background-color: #03256C;" text="+" textFill="WHITE"/>
-            <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" ripplerFill="WHITE"
-                       style="-fx-background-color: #03256C;" text="Start Navigation" textFill="WHITE"/>
-            <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" ripplerFill="WHITE"
-                       style="-fx-background-color: #03256C;" text="End Navigation" textFill="WHITE"/>
-            <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE"
-                       style="-fx-background-color: #03256C;" text="Prev" textFill="WHITE"/>
-            <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE"
-                       style="-fx-background-color: #03256C;" text="Next" textFill="WHITE"/>
+            <JFXButton fx:id="addFavorite" buttonType="RAISED" onAction="#addFavorite" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="+" textFill="WHITE" />
+            <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Start Navigation" textFill="WHITE" />
+            <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="End Navigation" textFill="WHITE" />
+            <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Prev" textFill="WHITE" />
+            <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Next" textFill="WHITE" />
          </HBox>
-         <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="500.0"
-                style="-fx-background-color: #F0C808;" text="Instructions" textFill="WHITE"/>
+         <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="500.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="WHITE" />
       </VBox>
    </VBox>
    <Button fx:id="goBack" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleButtonPushed" text="X">
       <font>
-         <Font name="Tahoma" size="18.0"/>
+         <Font name="Tahoma" size="18.0" />
       </font>
    </Button>
 </AnchorPane>
