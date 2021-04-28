@@ -47,7 +47,7 @@ public class  AppF extends Application {
       }
     });
     try {
-      SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
+      SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
       /*
       Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
       Scene scene = new Scene(root);

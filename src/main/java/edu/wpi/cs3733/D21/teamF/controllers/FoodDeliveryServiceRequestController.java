@@ -87,7 +87,7 @@ public class FoodDeliveryServiceRequestController {
             stage.setTitle("Service Requests");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("ServiceRequestHomeView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml");
         } else if (buttonPushed == helpButton){
             Stage helpPopUpStage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/FoodDeliveryHelpView.fxml"));

@@ -64,7 +64,7 @@ public class DefaultPageController {
             stage.setTitle("Log in");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("Login.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
         } else if (buttonPushed == navigation) {
             /*
             stage = (Stage) buttonPushed.getScene().getWindow();
@@ -73,7 +73,7 @@ public class DefaultPageController {
             stage.setTitle("AStar Pathfinding Demo");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("AStarDemoView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {
             /*
             stage = (Stage) buttonPushed.getScene().getWindow();
@@ -82,7 +82,7 @@ public class DefaultPageController {
             stage.setTitle("Service Request Home");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("ServiceRequestHomeView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml");
 
         } else if (buttonPushed == quit) {
             Platform.exit();

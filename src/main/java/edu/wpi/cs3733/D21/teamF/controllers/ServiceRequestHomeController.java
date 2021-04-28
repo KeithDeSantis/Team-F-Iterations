@@ -57,7 +57,7 @@ public class ServiceRequestHomeController {
             stage.setTitle("Home Page");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
 
         else if (buttonPushed == languageInterpretation){
@@ -69,7 +69,7 @@ public class ServiceRequestHomeController {
             stage.setTitle("Language Interpretation");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("LanguageInterpretationServiceRequestView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/LanguageInterpretationServiceRequestView.fxml");
         }
 
         else if (buttonPushed == foodDelivery)
@@ -82,7 +82,7 @@ public class ServiceRequestHomeController {
             stage.setTitle("Food Delivery");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("FoodDeliveryServiceRequestView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/FoodDeliveryServiceRequestView.fxml");
 
         }
 

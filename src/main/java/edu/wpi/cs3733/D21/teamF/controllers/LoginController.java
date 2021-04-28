@@ -38,7 +38,7 @@ public class LoginController {
         currentStage.setScene(homeScene);
         currentStage.show();
          */
-        SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     /**
@@ -66,7 +66,7 @@ public class LoginController {
             currentStage.show();
             // set user privileges to patient, employee or admin
              */
-            SceneContext.getSceneContext().switchScene("DefaultPageAdminView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
         }
         //displays error message
         else{
@@ -77,7 +77,7 @@ public class LoginController {
             currentStage.setScene(homeScene);
             currentStage.show();
              */
-            SceneContext.getSceneContext().switchScene("LoginFail.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/LoginFail.fxml");
         }
     }
 }

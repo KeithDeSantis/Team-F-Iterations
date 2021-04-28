@@ -64,19 +64,19 @@ public class DefaultPageAdminController {
         Parent root;
 
         if (buttonPushed == editMap) {
-            SceneContext.getSceneContext().switchScene("mapEditView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
         } else if (buttonPushed == manageServices) {
-            SceneContext.getSceneContext().switchScene("MarkRequestsCompleteView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml");
         } else if (buttonPushed == navigation) {
-            SceneContext.getSceneContext().switchScene("AStarDemoView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {
-            SceneContext.getSceneContext().switchScene("ServiceRequestHomeView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml");
         } else if (buttonPushed == manageAccount) {
-            SceneContext.getSceneContext().switchScene("AccountManagerView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
         } else if (buttonPushed == quit) {
             Platform.exit();
         } else if (buttonPushed == signOut){
-            SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
     }
 

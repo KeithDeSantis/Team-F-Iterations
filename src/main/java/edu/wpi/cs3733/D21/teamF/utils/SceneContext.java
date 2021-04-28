@@ -20,7 +20,7 @@ public class SceneContext {
     public static SceneContext getSceneContext() { return SceneContextSingletonHelper.sceneContext; }
 
     public void switchScene(String fxml) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/" + fxml));
+        Parent root = FXMLLoader.load(getClass().getResource(fxml));
         stage.setScene(new Scene(root));
         stage.show();
     }

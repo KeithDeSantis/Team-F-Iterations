@@ -1182,7 +1182,7 @@ public class MapEditViewController {
         stage.setTitle("Admin Home");
         stage.show();
          */
-        SceneContext.getSceneContext().switchScene("DefaultPageAdminView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
     }
 
     public void handleTabChange(Event event) {

@@ -58,7 +58,7 @@ public class LanguageInterpretationRequestController implements Initializable {
         currentStage.setScene(homeScene);
         currentStage.show();
          */
-        SceneContext.getSceneContext().switchScene("ServiceRequestHomeView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml");
     }
 
     /**

@@ -61,7 +61,7 @@ public class DefaultPageEmployeeController {
         Parent root;
 
         if (buttonPushed == editMap) {
-            SceneContext.getSceneContext().switchScene("mapEditView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
             /*
             stage = (Stage) buttonPushed.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml"));
@@ -77,7 +77,7 @@ public class DefaultPageEmployeeController {
             stage.setTitle("Edit Map Edges");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         } else if (buttonPushed == navigation) {
             /*
             stage = (Stage) buttonPushed.getScene().getWindow();
@@ -86,7 +86,7 @@ public class DefaultPageEmployeeController {
             stage.setTitle("AStar Pathfinding Demo");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("AStarDemoView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {
             /*
             stage = (Stage) buttonPushed.getScene().getWindow();
@@ -95,7 +95,7 @@ public class DefaultPageEmployeeController {
             stage.setTitle("Service Request Home");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("ServiceRequestHomeView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml");
         }
 
         else if (buttonPushed == serviceManager) {
@@ -109,7 +109,7 @@ public class DefaultPageEmployeeController {
             stage.setTitle("Service Request Manager");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("ServiceRequestManageView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManageView.fxml");
 
         }
         else if (buttonPushed == quit) {
@@ -124,7 +124,7 @@ public class DefaultPageEmployeeController {
             stage.setTitle("");
             stage.show();
              */
-            SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
     }
     /** handles highlighting buttons when hovering

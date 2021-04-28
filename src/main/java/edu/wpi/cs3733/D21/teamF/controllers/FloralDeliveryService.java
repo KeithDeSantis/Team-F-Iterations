@@ -77,7 +77,7 @@ public class FloralDeliveryService {
         stage.getScene().setRoot(root);
         stage.show();
          */
-        SceneContext.getSceneContext().switchScene("ServiceRequestHomeView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml");
     }
 
     /**
@@ -91,7 +91,7 @@ public class FloralDeliveryService {
         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
         stage.getScene().setRoot(root);
          */
-        SceneContext.getSceneContext().switchScene("DefaultPageView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     /**

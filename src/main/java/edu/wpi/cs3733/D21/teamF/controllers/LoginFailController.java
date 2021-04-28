@@ -66,7 +66,7 @@ public class LoginFailController {
             currentStage.setScene(homeScene);
             // set user privileges to patient, employee or admin
              */
-            SceneContext.getSceneContext().switchScene("DefaultPageAdminView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
         }
         //displays error message
         else{
@@ -75,7 +75,7 @@ public class LoginFailController {
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
              */
-            SceneContext.getSceneContext().switchScene("LoginFail.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/LoginFail.fxml");
         }
         currentStage.show();
     }

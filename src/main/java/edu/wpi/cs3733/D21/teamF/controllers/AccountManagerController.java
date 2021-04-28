@@ -134,7 +134,7 @@ public class AccountManagerController implements Initializable {
         stage.setTitle("Account Manager");
         stage.show();
          */
-        SceneContext.getSceneContext().switchScene("AccountManagerView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
     }
 
     public void handleAdminHome(ActionEvent actionEvent) throws IOException {
@@ -148,7 +148,7 @@ public class AccountManagerController implements Initializable {
         stage.setTitle("Admin Home");
         stage.show();
          */
-        SceneContext.getSceneContext().switchScene("DefaultPageAdminView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
     }
 
     public void changingUsername(MouseEvent mouseEvent) throws SQLException{
