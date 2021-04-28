@@ -50,39 +50,6 @@ public class CovidSurveyViewController {
 
     @FXML
     private void initialize(){
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40);
-        title.setFont(titleFont); //set title font
-
-        Font buttonFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        submit.setFont(buttonFont); //set button fonts
-        cancel.setFont(buttonFont);
-
-        Font textFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-Regular.ttf", 15);
-        posTestPrompt.setFont(textFont); //set text
-        fifteenPrompt.setFont(textFont);
-        tempPrompt.setFont(textFont);
-        symptomsPrompt.setFont(textFont);
-        yes1.setFont(textFont);
-        yes2.setFont(textFont);
-        no1.setFont(textFont);
-        no2.setFont(textFont);
-
-        Font checkFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-Regular.ttf", 12);
-        cough.setFont(checkFont); //set smaller checkbox font
-        breathing.setFont(checkFont);
-        fatigue.setFont(checkFont);
-        aches.setFont(checkFont);
-        headache.setFont(checkFont);
-        lossOfTaste.setFont(checkFont);
-        soreThroat.setFont(checkFont);
-        congestion.setFont(checkFont);
-        nausea.setFont(checkFont);
-        diarrhea.setFont(checkFont);
-        blueSkin.setFont(checkFont);
-        pain.setFont(checkFont);
-        confusion.setFont(checkFont);
-        stayAwake.setFont(checkFont);
-        fever.setFont(checkFont);
     }
 
     /**

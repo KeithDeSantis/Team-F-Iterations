@@ -64,10 +64,6 @@ public class MapPanel extends AnchorPane {
     @FXML
     public void initialize(){
         // Set button fonts - LM
-        Font font = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        zoomInButton.setFont(font);
-        zoomOutButton.setFont(font);
-
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);

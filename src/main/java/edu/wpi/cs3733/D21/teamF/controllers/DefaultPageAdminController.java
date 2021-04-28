@@ -41,16 +41,6 @@ public class DefaultPageAdminController {
     @FXML
     private void initialize(){
         // Set fonts - LM
-        title.setFont(Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40));
-
-        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        navigation.setFont(buttonDefault);
-        quit.setFont(buttonDefault);
-        serviceRequest.setFont(buttonDefault);
-        manageAccount.setFont(buttonDefault);
-        manageServices.setFont(buttonDefault);
-        signOut.setFont(buttonDefault);
-        editMap.setFont(buttonDefault);
 
         // Disable focus on edit button - LM
         editMap.setDisableVisualFocus(true);

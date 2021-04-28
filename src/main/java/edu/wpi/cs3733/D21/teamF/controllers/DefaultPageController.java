@@ -34,15 +34,6 @@ public class DefaultPageController {
 
     @FXML private void initialize(){
         // Apply fonts to title and buttons
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40);
-        title.setFont(titleFont);
-
-        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        navigation.setFont(buttonDefault);
-        quit.setFont(buttonDefault);
-        serviceRequest.setFont(buttonDefault);
-        loginButton.setFont(buttonDefault);
-        covidSurvey.setFont(buttonDefault);
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);

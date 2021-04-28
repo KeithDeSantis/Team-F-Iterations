@@ -55,18 +55,6 @@ public class MaintenenceRequestController {
 
     @FXML
     public void initialize(){
-        // Setup fonts
-        Font defaultFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        submit.setFont(defaultFont);
-        cancel.setFont(defaultFont);
-        typeLabel.setFont(defaultFont);
-        locationLabel.setFont(defaultFont);
-        descLabel.setFont(defaultFont);
-        urgencyLabel.setFont(defaultFont);
-        dateLabel.setFont(defaultFont);
-        assignmentLabel.setFont(defaultFont);
-
-        title.setFont(Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40));
 
         // Insert problem types and urgency into combo boxes
         typeComboBox.setItems(problemTypes);

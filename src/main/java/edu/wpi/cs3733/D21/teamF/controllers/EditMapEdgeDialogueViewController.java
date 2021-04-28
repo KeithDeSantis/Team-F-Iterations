@@ -48,14 +48,6 @@ public class EditMapEdgeDialogueViewController {
     @FXML
     private void initialize(){
         // Load in fonts
-        Font font = Font.loadFont("file:src/main/resources/fonts/Montserrat-Regular.ttf", 15);
-        edgeID.setFont(font);
-        ok.setFont(font);
-
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 24);
-        title.setFont(titleFont);
-
-
         Graph graph = new Graph();
         try {
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();

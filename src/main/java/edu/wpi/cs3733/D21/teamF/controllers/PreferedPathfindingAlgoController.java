@@ -22,10 +22,6 @@ public class PreferedPathfindingAlgoController {
 
     @FXML
     public void initialize() {
-        Font defaultFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 13);
-        title.setFont(defaultFont);
-        okButton.setFont(defaultFont);
-
         ObservableList<String> algoList = FXCollections.observableArrayList();
         algoList.add("A Star");
         algoList.add("Breadth-First-Search");
