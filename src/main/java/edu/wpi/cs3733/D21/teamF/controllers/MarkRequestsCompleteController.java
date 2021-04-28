@@ -8,7 +8,6 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,7 +17,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -26,7 +28,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -127,8 +128,15 @@ public class MarkRequestsCompleteController implements Initializable {
     }
 
 
-    public void handleClose(ActionEvent actionEvent) {
-        Platform.exit();
+    public void handleClose(ActionEvent actionEvent) throws IOException{
+        Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
+        Stage stage;
+        Parent root;
+        stage = (Stage) buttonPushed.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
+        stage.getScene().setRoot(root);
+        stage.setTitle("Admin Home");
+        stage.show();
     }
 
     public void handleMarkAsComplete(ActionEvent actionEvent) throws Exception {

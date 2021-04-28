@@ -1,11 +1,12 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.*;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -140,7 +140,13 @@ public class AccountManagerController implements Initializable {
     public void handleButtonPushed(ActionEvent actionEvent) throws Exception {
         JFXButton buttonPushed = (JFXButton) actionEvent.getSource();
         if (buttonPushed == quit){
-            Platform.exit();
+            Stage stage;
+            Parent root;
+            stage = (Stage) buttonPushed.getScene().getWindow();
+            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
+            stage.getScene().setRoot(root);
+            stage.setTitle("Admin Home");
+            stage.show();
         }
         else if (buttonPushed == deleteUser){
             AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
