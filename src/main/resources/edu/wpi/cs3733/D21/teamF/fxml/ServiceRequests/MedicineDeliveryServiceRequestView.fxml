@@ -24,7 +24,7 @@
             </ImageView>
             <Label text="BRIGHAM AND WOMEN'S HOSPITAL MEDICINE DELIVERY" wrapText="true">
                 <font>
-                    <Font size="40.0" />
+                    <Font name="Volkhov Regular" size="40.0" />
                 </font>
             </Label>
         </HBox>

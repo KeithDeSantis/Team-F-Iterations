@@ -3,7 +3,6 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import javafx.event.ActionEvent;
@@ -17,8 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginController {
@@ -43,6 +40,7 @@ public class LoginController {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
             Scene homeScene = new Scene(root);
             currentStage.setScene(homeScene);
+            currentStage.setTitle("Home");
             currentStage.show();
         } else if (buttonPushed == signIn) {
             if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
