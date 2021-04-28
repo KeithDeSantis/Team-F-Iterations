@@ -130,7 +130,8 @@ public class FoodDeliveryServiceRequestController {
             String type = "Food Delivery";
             String person = "";
             String completed = "false";
-            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed);
+            String additionalInfo = "Delivery Location: " + deliveryLocationField.getValue() + "Delivery time: " + deliveryTimeField.getValue();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
@@ -138,12 +139,11 @@ public class FoodDeliveryServiceRequestController {
             Stage submittedStage = new Stage();
             Parent root = submitedPageLoader.load();
             FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submitButton.getScene().getWindow());
+            formSubmittedViewController.changeStage((Stage) rButtonFood1.getScene().getWindow());
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
             submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
             submittedStage.showAndWait();
         }
     }
@@ -261,6 +261,17 @@ public class FoodDeliveryServiceRequestController {
 
     }
 
+    @FXML
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    @FXML
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
 
 
 

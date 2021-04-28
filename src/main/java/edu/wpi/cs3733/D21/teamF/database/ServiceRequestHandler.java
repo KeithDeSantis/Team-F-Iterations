@@ -75,7 +75,7 @@ public class ServiceRequestHandler implements DatabaseEntry {
     public boolean createTable() {
         boolean success = false;
         final String initServicesTable = "CREATE TABLE SERVICE_REQUESTS(uuid varchar(200), name varchar(200)," +
-                "assignedPerson varchar(200), completed varchar(200), additionalInstructions varchar(500), primary key(uuid))";
+                "assignedPerson varchar(200), completed varchar(200), additionalInstructions varchar(700), primary key(uuid))";
         try {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initServicesTable);

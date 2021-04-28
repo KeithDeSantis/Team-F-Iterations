@@ -119,6 +119,31 @@ public class AStarDemoController implements Initializable {
             //return;
         }
 
+
+        try {
+            final String algorithmFromAPI = DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm();
+            if(algorithmFromAPI == null)
+            {
+                DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", "A Star");
+            }
+            else
+            switch(algorithmFromAPI){
+                case "A Star":
+                    this.graph.setPathfindingAlgorithm("a*");
+                    break;
+                case "Breadth-First-Search":
+                    this.graph.setPathfindingAlgorithm("bfs");
+                    break;
+                case "Depth-First-Search":
+                    this.graph.setPathfindingAlgorithm("dfs");
+                    break;
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        ;
+
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
         nodeList.addAll(this.graph.getVertices().stream().map(Vertex::getID)
                 .sorted().collect(Collectors.toList()));

@@ -84,6 +84,7 @@ public class EdgeHandler implements DatabaseEntry {
         }
         catch (SQLException e){
             success = false;
+            return success;
         }
         return success;
     }
@@ -102,7 +103,7 @@ public class EdgeHandler implements DatabaseEntry {
             success = true;
         }
         catch (SQLException e){
-            success = false;
+            return false;
         }
         return success;
     }
