@@ -8,6 +8,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -134,22 +135,11 @@ public class MarkRequestsCompleteController implements Initializable {
     public void handleMarkAsComplete(ActionEvent actionEvent) throws Exception {
         ServiceEntry data = requestView.getSelectionModel().getSelectedItem().getValue();
         DatabaseAPI.getDatabaseAPI().editServiceRequest(data.getUuid(),  "true", "completed");
-        Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml");
     }
 
     public void handleHome(ActionEvent actionEvent) throws IOException {
-        Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
-        stage = (Stage) buttonPushed.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Admin Home");
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
     }
 
     public void handleAssign(ActionEvent actionEvent) throws Exception {
@@ -157,18 +147,10 @@ public class MarkRequestsCompleteController implements Initializable {
         for (ServiceEntry s:services){
             DatabaseAPI.getDatabaseAPI().editServiceRequest(s.getUuid(), s.getAssignedTo(), "assignedperson");
         }
-                Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml");
     }
 
     public void handleCancel(ActionEvent actionEvent) throws IOException{
-        Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml");
     }
 }

@@ -5,6 +5,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -181,25 +182,12 @@ public class AccountManagerController implements Initializable {
             refreshPage(actionEvent);
         }
         else if (buttonPushed == home){
-            Stage stage;
-            Parent root;
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Admin Home");
-            stage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
         }
     }
 
     private void refreshPage(ActionEvent actionEvent) throws IOException {
-        Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
-        stage = (Stage) buttonPushed.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Account Manager");
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
     }
 
     public void changingUsername(MouseEvent mouseEvent) throws SQLException{

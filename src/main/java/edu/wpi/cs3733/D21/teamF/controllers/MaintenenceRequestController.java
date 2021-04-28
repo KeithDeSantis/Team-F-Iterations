@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -157,13 +158,7 @@ public class MaintenenceRequestController {
     }
 
     public void handleGoHome(MouseEvent mouseEvent) throws IOException {
-        Stage stage;
-        Parent root;
-        stage = (Stage) goBack.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Default Page");
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     public void handleHoverOn(MouseEvent mouseEvent) {
@@ -177,13 +172,7 @@ public class MaintenenceRequestController {
     }
 
     public void handleCancel(ActionEvent actionEvent) throws IOException {
-        Stage stage;
-        Parent root;
-        stage = (Stage) goBack.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Service Request Home");
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
     public boolean isFilled(){

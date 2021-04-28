@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -61,13 +62,7 @@ public class SanitationRequestController {
     }
 
     public void handleCancel(ActionEvent actionEvent) throws IOException {
-        Stage stage;
-        Parent root;
-        stage = (Stage) cancel.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Service Request Home");
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
 }
