@@ -57,7 +57,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <JFXButton fx:id="resetFromDB" buttonType="RAISED" onAction="#handleReset" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Reset From Database" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <JFXButton fx:id="resetFromDB" buttonType="RAISED" onAction="#handleReset" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Reset Database" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
