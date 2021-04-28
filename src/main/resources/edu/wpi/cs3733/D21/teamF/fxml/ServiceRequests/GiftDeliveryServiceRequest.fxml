@@ -47,8 +47,14 @@
                         <children>
                             <JFXTextField maxWidth="200.0" prefWidth="300.0" GridPane.halignment="CENTER" />
                             <JFXTextField maxWidth="200.0" prefHeight="25.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                            <Label text="Employee Name" GridPane.halignment="CENTER" GridPane.rowSpan="2" />
-                            <Label text="Patient Name" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                            <Label text="Employee Name" GridPane.halignment="CENTER" GridPane.rowSpan="2">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font></Label>
+                            <Label text="Patient Name" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font></Label>
                             <HBox prefHeight="100.0" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                 <children>
                                     <GridPane prefHeight="102.0" prefWidth="307.0" HBox.hgrow="ALWAYS">
@@ -78,11 +84,23 @@
                         </rowConstraints>
                         <children>
                             <JFXTextArea maxHeight="159.0" maxWidth="250.0" prefHeight="159.0" prefWidth="250.0" style="-fx-border-color: #000000;" GridPane.halignment="CENTER" />
-                            <Label text="Special Istructions" GridPane.halignment="CENTER" GridPane.valignment="TOP" />
+                            <Label text="Special Instructions" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font></Label>
                             <JFXTextField maxWidth="100.0" prefHeight="25.0" prefWidth="297.0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                            <Label text="Card Number" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
-                            <Label text="Expiration Date" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
-                            <Label prefHeight="17.0" prefWidth="38.0" text="CSV" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+                            <Label text="Card Number" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font></Label>
+                            <Label text="Expiration Date" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font></Label>
+                            <Label prefHeight="17.0" prefWidth="38.0" text="CSV" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font></Label>
                         <JFXTextField layoutX="102.0" layoutY="288.0" maxWidth="100.0" prefHeight="25.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                         <JFXTextField layoutX="10.0" layoutY="104.0" maxWidth="200.0" prefHeight="25.0" prefWidth="100.0" GridPane.rowIndex="1" />
                         </children>

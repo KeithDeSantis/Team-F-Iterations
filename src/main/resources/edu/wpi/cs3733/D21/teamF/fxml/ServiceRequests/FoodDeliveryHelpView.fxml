@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="634.0" prefWidth="600.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.FoodDeliveryServiceRequestController">
+<AnchorPane prefHeight="634.0" prefWidth="600.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.FoodDeliveryServiceRequestController">
    <children>
       <GridPane prefWidth="600.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -45,59 +44,101 @@
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
             <Label text="Delivery Time:" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
             <Label text="Select Meal:" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
             <Label text="Select Side:" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
             <Label text="Select Drink:" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
             <Label text="List Any Allergies:" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
             <Label text="Special Instructions:" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
-            <Label text="Specify the room number and floor where you want flowers delivered." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Specify the room number and floor where you want flowers delivered." GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font></Label>
             <Label prefWidth="460.0" text="The time the food is to be delivered (if you want it to be delivered as soon as possible, please put ASAP)" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets right="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
             <Label text="The meal you would like. Today's options include steak and mixed vegetables, caesar salad, beef stir-fry, and shrimp paella." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets right="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
             <Label text="Select up to two sides you would like to have with your meal. Brownies are gluten-free and vegan." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets right="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
-            <Label text="Select the drink you would like to have with your meal." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label text="Please list any allergies you or the person eating the meal may have." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label text="Select the drink you would like to have with your meal." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font></Label>
+            <Label text="Please list any allergies you or the person eating the meal may have." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font></Label>
             <Label text="Any special instructions or food restrictions you or the person eating the meal may have." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets right="20.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="12.0" />
+               </font>
             </Label>
          </children>
       </GridPane>

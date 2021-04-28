@@ -51,30 +51,36 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
                      <children>
-                        <JFXButton fx:id="cancel" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                        <JFXButton fx:id="cancel" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></JFXButton>
                      </children>
                   </HBox>
                   <JFXTextArea fx:id="description" GridPane.rowIndex="1" />
                   <Label text="Job Description">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Montserrat Regular" size="18.0" />
                      </font>
                   </Label>
                   <Label text="Location" GridPane.columnIndex="1">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Montserrat Regular" size="18.0" />
                      </font>
                   </Label>
                   <JFXComboBox fx:id="loc" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <JFXComboBox fx:id="employeeAssigned" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Label text="Employee Assigned" GridPane.columnIndex="2">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Montserrat Regular" size="18.0" />
                      </font>
                   </Label>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <children>
-                        <JFXButton fx:id="submit" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton fx:id="submit" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></JFXButton>
                      </children>
                   </HBox>
                </children>

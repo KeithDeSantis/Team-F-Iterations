@@ -41,7 +41,10 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Employee name" GridPane.valignment="BOTTOM">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin></Text>
+                     </VBox.margin>
+                     <font>
+                        <Font name="Montserrat Regular" size="14.0" />
+                     </font></Text>
                   <JFXTextField fx:id="employeeName" prefHeight="22.0" prefWidth="961.0" GridPane.valignment="TOP">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
@@ -49,7 +52,10 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Method of Transportation" GridPane.rowIndex="2">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin></Text>
+                     </VBox.margin>
+                     <font>
+                        <Font name="Montserrat Regular" size="14.0" />
+                     </font></Text>
                   <JFXTextField fx:id="methodTrans" GridPane.rowIndex="3">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
@@ -57,7 +63,10 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Special Requests" wrappingWidth="187.1328125" GridPane.rowIndex="6">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin></Text>
+                     </VBox.margin>
+                     <font>
+                        <Font name="Montserrat Regular" size="14.0" />
+                     </font></Text>
                   <JFXTextField fx:id="loc" GridPane.rowIndex="5">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
@@ -65,7 +74,10 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Location" GridPane.rowIndex="4">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin></Text>
+                     </VBox.margin>
+                     <font>
+                        <Font name="Montserrat Regular" size="14.0" />
+                     </font></Text>
                   <JFXTextField fx:id="special" prefHeight="0.0" prefWidth="961.0" GridPane.rowIndex="7">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
