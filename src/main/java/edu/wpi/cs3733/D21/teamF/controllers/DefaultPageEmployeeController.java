@@ -34,16 +34,6 @@ public class DefaultPageEmployeeController {
     @FXML private JFXButton serviceManager;
 
     @FXML private void initialize(){
-        title.setFont(Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40));
-
-        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        navigation.setFont(buttonDefault);
-        quit.setFont(buttonDefault);
-        serviceRequest.setFont(buttonDefault);
-        serviceManager.setFont(buttonDefault);
-        signOut.setFont(buttonDefault);
-        editMap.setFont(buttonDefault);
-
     }
 
     /**

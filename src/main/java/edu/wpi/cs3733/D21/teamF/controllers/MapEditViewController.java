@@ -71,17 +71,6 @@ public class MapEditViewController {
     @FXML
     private void initialize(){
         // Set fonts for buttons
-        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        saveButton.setFont(buttonDefault);
-        loadButton.setFont(buttonDefault);
-        resetFromDB.setFont(buttonDefault);
-        newButton.setFont(buttonDefault);
-        editButton.setFont(buttonDefault);
-        deleteButton.setFont(buttonDefault);
-
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 42);
-        title.setFont(titleFont);
-
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
         try {

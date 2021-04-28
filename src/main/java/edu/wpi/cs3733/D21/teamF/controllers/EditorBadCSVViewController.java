@@ -14,10 +14,7 @@ public class EditorBadCSVViewController {
 
     @FXML
     public void initialize() {
-        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 12);
-        formatErrorMessage.setFont(buttonDefault);
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 14);
-        formatErrorTitle.setFont(titleFont);
+
     }
 
     /**

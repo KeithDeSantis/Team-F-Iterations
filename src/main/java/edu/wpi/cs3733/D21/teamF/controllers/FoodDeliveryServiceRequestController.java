@@ -63,37 +63,6 @@ public class FoodDeliveryServiceRequestController {
     @FXML
     private void initialize(){
 
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40);
-        title.setFont(titleFont); //set title font
-
-        Font buttonFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        cancelButton.setFont(buttonFont);
-        submitButton.setFont(buttonFont);
-        helpButton.setFont(buttonFont);
-        //helpXButton.setFont(buttonFont);
-
-        Font textFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-Regular.ttf", 15);
-        locLabel.setFont(textFont);
-        delLabel.setFont(textFont);
-        allLabel.setFont(textFont);
-        siLabel.setFont(textFont);
-        mealLabel.setFont(textFont);
-        sideLabel.setFont(textFont);
-        drinkLabel.setFont(textFont);
-        rButtonFood1.setFont(textFont);
-        rButtonFood2.setFont(textFont);
-        rButtonFood3.setFont(textFont);
-        rButtonFood4.setFont(textFont);
-        rButtonDrink1.setFont(textFont);
-        rButtonDrink2.setFont(textFont);
-        rButtonDrink3.setFont(textFont);
-        rButtonDrink4.setFont(textFont);
-        cbSide1.setFont(textFont);
-        cbSide2.setFont(textFont);
-        cbSide3.setFont(textFont);
-        cbSide4.setFont(textFont);
-
-
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 
