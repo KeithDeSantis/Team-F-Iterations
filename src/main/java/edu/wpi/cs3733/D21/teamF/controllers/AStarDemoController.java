@@ -18,7 +18,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -87,16 +86,16 @@ public class AStarDemoController implements Initializable {
     private DrawableUser userNodeDisplay;
 
     // Global variables for the stepper
-    private ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
+    private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
 
     private List<NodeEntry> allNodeEntries = new ArrayList<>();
     private List<EdgeEntry> allEdgeEntries = new ArrayList<>();
 
-    private SimpleBooleanProperty pathFinding = new SimpleBooleanProperty(false);
-    private ObservableList<Integer> stops = FXCollections.observableArrayList();
-    private List<String> instructions;
-    private List<String> eta;
-    private SimpleIntegerProperty curStep = new SimpleIntegerProperty(0);
+    private final SimpleBooleanProperty pathFinding = new SimpleBooleanProperty(false);
+    private final ObservableList<Integer> stops = FXCollections.observableArrayList();
+    private final ObservableList<String> instructions = FXCollections.observableArrayList();
+    private final ObservableList<String> eta = FXCollections.observableArrayList();
+    private final SimpleIntegerProperty curStep = new SimpleIntegerProperty(0);
 
 
     private DrawableNode direction;
@@ -306,6 +305,7 @@ public class AStarDemoController implements Initializable {
      */
     //drawUserNode(pathVertex.get(stops.get(curStep.get())).getID());
     private void drawUserNode() {
+        //FIXME: ONLY DO ONCE!
         final DrawableUser drawableUser = new DrawableUser(0, 0, "userNode", "");
 
         final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stops))
@@ -316,25 +316,9 @@ public class AStarDemoController implements Initializable {
 
         drawableUser.getFloor().bind(Bindings.createStringBinding(() -> vertexProperty.get().getFloor(), vertexProperty));
 
-        System.out.println(drawableUser.getFloor().get());
-
-        /*
-        drawableUser.xCoordinateProperty().bind(
-                Bindings.when(Bindings.isEmpty(stops)).then(0).otherwise(
-                        Bindings.valueAt(pathVertex, Bindings.integerValueAt(stops, curStep)).get().getX()
-                )
-        );
-         */
         drawableUser.xCoordinateProperty().bind(Bindings.createDoubleBinding(() -> vertexProperty.get().getX(), vertexProperty));
 
         drawableUser.yCoordinateProperty().bind(Bindings.createDoubleBinding(() -> vertexProperty.get().getY(), vertexProperty));
-/*
-        drawableUser.yCoordinateProperty().bind(
-                Bindings.when(Bindings.isEmpty(stops)).then(0).otherwise(
-                        Bindings.valueAt(pathVertex, Bindings.integerValueAt(stops, curStep)).get().getY()
-                )
-        );
-*/
         this.userNodeDisplay = drawableUser;
 
         mapPanel.draw(this.userNodeDisplay);
@@ -362,10 +346,6 @@ public class AStarDemoController implements Initializable {
         if(this.endNodeDisplay != null)
             mapPanel.draw(this.endNodeDisplay);
 
-        final String currentFloor = mapPanel.getFloor().getValue();
-
-        final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
-
         final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
         final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
 
@@ -378,7 +358,7 @@ public class AStarDemoController implements Initializable {
             if(path != null)
             {
                 pathVertex.addAll(path.asList());
-                drawPathFromIndex(0);
+                drawPathFromIndex();
                 return true;
             }
         }
@@ -393,12 +373,9 @@ public class AStarDemoController implements Initializable {
     /**
      * Helper function to draw the path starting from given index, input 0 as index to draw the whole path
      * snatched from updatePath()
-     * @param indexz starting index
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
-    private void drawPathFromIndex(int indexz){
-        final String currentFloor = mapPanel.getFloor().getValue();
-
+    private void drawPathFromIndex(){
         final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
 
         for (int i = 0; i < pathVertex.size() - 1; i++)
@@ -412,19 +389,11 @@ public class AStarDemoController implements Initializable {
             // final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
             edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
-            /*
-            final LinearGradient lineGradient = new LinearGradient(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY(), false, CycleMethod.NO_CYCLE,
-                    new Stop(0, (i >= s ? Color.ORANGE : LINE_STROKE_TRANSPARENT)),
-                    new Stop(1, (i >= s ? Color.ORANGE : LINE_STROKE_TRANSPARENT)));
-
-            edge.setStroke(lineGradient);
-             */
-            //edge.strokeProperty().bind();
             edge.strokeProperty().bind(
                     Bindings.when(Bindings.isEmpty(stops)).then(Color.RED).otherwise(
                             Bindings.when(Bindings.integerValueAt(stops, curStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE)
                     )
-            );//Bindings.when(Bindings.integerValueAt(stops, curStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE));
+            );
 
             mapPanel.draw(edge);
         }
@@ -457,7 +426,8 @@ public class AStarDemoController implements Initializable {
         }else{
             clearPath();
             updatePath();
-            ETA.setText(calculateETA(0, pathVertex.size() - 1));
+            ETA.textProperty().unbind();
+            ETA.setText("ETA"); //FIXME: DO BETTER EVENTUALLY
             Go.setDisable(false);
         }
     }
@@ -483,15 +453,15 @@ public class AStarDemoController implements Initializable {
      */
     private void parseRoute(){
         stops.clear();
-        instructions = new ArrayList<>();
-        eta = new ArrayList<>();
+        instructions.clear();
+        eta.clear();
         if(this.pathVertex.isEmpty()) return;
 
         // Assert "Up" is forward for start
         double prevAngle = Math.toDegrees(Math.atan2(-1.0,0.0)) + 180;
         double currAngle;
         String prevDirect = "Look forward";
-        String currDirect = "";
+        String currDirect;
         double distance;
         boolean lastSE = false;
 
@@ -540,7 +510,7 @@ public class AStarDemoController implements Initializable {
             distance = calculateDistance(pathVertex, stops.get(stops.size() - 2), stops.get(stops.size() - 1));
             instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
         }
-        instructions.add("Reach Destination!");
+        instructions.add("Arrive at destination!");
 
         if(instructions.size()==0) return;
         // Fixing Directions. Hard code, do better!
@@ -555,7 +525,7 @@ public class AStarDemoController implements Initializable {
                 Vertex nexV = pathVertex.get(step + 1);
                 currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
                 currDirect = calculateDirection(prevAngle, currAngle);
-                String firstInst[] = instructions.get(i).split(" ", 3);
+                String[] firstInst = instructions.get(i).split(" ", 3);
                 instructions.set(i, currDirect + " " + firstInst[2]);
                 lookAtNext = false;
             }
@@ -572,7 +542,7 @@ public class AStarDemoController implements Initializable {
             prevAngle = Math.toDegrees(Math.atan2(-1.0, 0.0)) + 180;
             currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
             currDirect = calculateDirection(prevAngle, currAngle);
-            String firstInst[] = instructions.get(0).split(" ", 3);
+            String[] firstInst = instructions.get(0).split(" ", 3);
             instructions.set(0, currDirect + " " + firstInst[2]);
         }else{
             Vertex curV = pathVertex.get(1);
@@ -580,17 +550,14 @@ public class AStarDemoController implements Initializable {
             prevAngle = Math.toDegrees(Math.atan2(-1.0, 0.0)) + 180;
             currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
             currDirect = calculateDirection(prevAngle, currAngle);
-            String firstInst[] = instructions.get(1).split(" ", 3);
+            String[] firstInst = instructions.get(1).split(" ", 3);
             instructions.set(1, currDirect + " " + firstInst[2]);
         }
 
         // Calculate ETA
-        for(int i = 0; i < stops.size(); i ++) {
-            eta.add(calculateETA(stops.get(i), pathVertex.size() - 1));
+        for (Integer stop : stops) {
+            eta.add(calculateETA(stop, pathVertex.size() - 1));
         }
-        //System.out.println(pathVertex);
-        //System.out.println(instructions);
-        //System.out.println(stops);
     }
 
     private String calculateETA(int startIndex, int endIndex){
@@ -653,23 +620,28 @@ public class AStarDemoController implements Initializable {
         }
     }
 
-    String curD;
-    private void drawDirection() throws SQLException {
+    private String curD;
+    private void drawDirection(){
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
         Vertex curV = pathVertex.get(stops.get(curStep.get()));
-        if(curD.equals("UP")){
-            direction = new DrawableNode((int)Math.round(curV.getX()), (int)Math.round(curV.getY() - 50.0),
-                    "direction", curV.getFloor(),"","","","");
-        }else if(curD.equals("LEFT")){
-            direction = new DrawableNode((int)Math.round(curV.getX() - 50.0), (int)Math.round(curV.getY()),
-                    "direction", curV.getFloor(),"","","","");
-        }else if(curD.equals("RIGHT")){
-            direction = new DrawableNode((int)Math.round(curV.getX() + 50.0), (int)Math.round(curV.getY()),
-                    "direction", curV.getFloor(),"","","","");
-        }else if(curD.equals("DOWN")){
-            direction = new DrawableNode((int)Math.round(curV.getX()), (int)Math.round(curV.getY() + 50.0),
-                    "direction", curV.getFloor(),"","","","");
+        switch (curD) {
+            case "UP":
+                direction = new DrawableNode((int) Math.round(curV.getX()), (int) Math.round(curV.getY() - 50.0),
+                        "direction", curV.getFloor(), "", "", "", "");
+                break;
+            case "LEFT":
+                direction = new DrawableNode((int) Math.round(curV.getX() - 50.0), (int) Math.round(curV.getY()),
+                        "direction", curV.getFloor(), "", "", "", "");
+                break;
+            case "RIGHT":
+                direction = new DrawableNode((int) Math.round(curV.getX() + 50.0), (int) Math.round(curV.getY()),
+                        "direction", curV.getFloor(), "", "", "", "");
+                break;
+            case "DOWN":
+                direction = new DrawableNode((int) Math.round(curV.getX()), (int) Math.round(curV.getY() + 50.0),
+                        "direction", curV.getFloor(), "", "", "", "");
+                break;
         }
         direction.setFill(Color.RED);
         direction.setRadius(4);
@@ -678,68 +650,123 @@ public class AStarDemoController implements Initializable {
     }
 
     private void changeDirection(String inst){
-        String instruction[] = inst.split(" ");
+        String[] instruction = inst.split(" ");
         if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
-            if(instruction[1].equals("around")){
-                switch (curD) {
-                    case "UP" : curD = "DOWN"; break;
-                    case "LEFT" : curD = "RIGHT"; break;
-                    case "RIGHT" : curD = "LEFT"; break;
-                    case "DOWN" : curD = "UP"; break;
-                }
-            }else if(instruction[1].equals("left")){
-                switch (curD) {
-                    case "UP" : curD = "LEFT"; break;
-                    case "LEFT" : curD = "DOWN"; break;
-                    case "RIGHT" : curD = "UP"; break;
-                    case "DOWN" : curD = "RIGHT"; break;
-                }
-            }else if(instruction[1].equals("right")){
-                switch (curD) {
-                    case "UP" : curD = "RIGHT"; break;
-                    case "LEFT" : curD = "UP"; break;
-                    case "RIGHT" : curD = "DOWN"; break;
-                    case "DOWN" : curD = "LEFT"; break;
-                }
+            switch (instruction[1]) {
+                case "around":
+                    switch (curD) {
+                        case "UP":
+                            curD = "DOWN";
+                            break;
+                        case "LEFT":
+                            curD = "RIGHT";
+                            break;
+                        case "RIGHT":
+                            curD = "LEFT";
+                            break;
+                        case "DOWN":
+                            curD = "UP";
+                            break;
+                    }
+                    break;
+                case "left":
+                    switch (curD) {
+                        case "UP":
+                            curD = "LEFT";
+                            break;
+                        case "LEFT":
+                            curD = "DOWN";
+                            break;
+                        case "RIGHT":
+                            curD = "UP";
+                            break;
+                        case "DOWN":
+                            curD = "RIGHT";
+                            break;
+                    }
+                    break;
+                case "right":
+                    switch (curD) {
+                        case "UP":
+                            curD = "RIGHT";
+                            break;
+                        case "LEFT":
+                            curD = "UP";
+                            break;
+                        case "RIGHT":
+                            curD = "DOWN";
+                            break;
+                        case "DOWN":
+                            curD = "LEFT";
+                            break;
+                    }
+                    break;
             }
         }
     }
 
     private void changeDirectionRevert(String inst){
-        String instruction[] = inst.split(" ");
+        String[] instruction = inst.split(" ");
         if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
-            if(instruction[1].equals("around")){
-                switch (curD) {
-                    case "UP" : curD = "DOWN"; break;
-                    case "LEFT" : curD = "RIGHT"; break;
-                    case "RIGHT" : curD = "LEFT"; break;
-                    case "DOWN" : curD = "UP"; break;
-                }
-            }else if(instruction[1].equals("left")){
-                switch (curD) {
-                    case "UP" : curD = "RIGHT"; break;
-                    case "LEFT" : curD = "UP"; break;
-                    case "RIGHT" : curD = "DOWN"; break;
-                    case "DOWN" : curD = "LEFT"; break;
-                }
-            }else if(instruction[1].equals("right")){
-                switch (curD) {
-                    case "UP" : curD = "LEFT"; break;
-                    case "LEFT" : curD = "DOWN"; break;
-                    case "RIGHT" : curD = "UP"; break;
-                    case "DOWN" : curD = "RIGHT"; break;
-                }
+            switch (instruction[1]) {
+                case "around":
+                    switch (curD) {
+                        case "UP":
+                            curD = "DOWN";
+                            break;
+                        case "LEFT":
+                            curD = "RIGHT";
+                            break;
+                        case "RIGHT":
+                            curD = "LEFT";
+                            break;
+                        case "DOWN":
+                            curD = "UP";
+                            break;
+                    }
+                    break;
+                case "left":
+                    switch (curD) {
+                        case "UP":
+                            curD = "RIGHT";
+                            break;
+                        case "LEFT":
+                            curD = "UP";
+                            break;
+                        case "RIGHT":
+                            curD = "DOWN";
+                            break;
+                        case "DOWN":
+                            curD = "LEFT";
+                            break;
+                    }
+                    break;
+                case "right":
+                    switch (curD) {
+                        case "UP":
+                            curD = "LEFT";
+                            break;
+                        case "LEFT":
+                            curD = "DOWN";
+                            break;
+                        case "RIGHT":
+                            curD = "UP";
+                            break;
+                        case "DOWN":
+                            curD = "RIGHT";
+                            break;
+                    }
+                    break;
             }
         }
     }
 
     /**
      * Function to react to 'Start Navigation' button being pressed and start the route stepper
-     * @param actionEvent
      * @throws SQLException
      * @author ZheCheng Song
      */
-    public void startNavigation(ActionEvent actionEvent) throws SQLException {
+    public void startNavigation() throws SQLException {
         startComboBox.setDisable(true);
         endComboBox.setDisable(true);
         Go.setDisable(true);
@@ -755,15 +782,15 @@ public class AStarDemoController implements Initializable {
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
         clearPath();
-        drawPathFromIndex(0);
+        drawPathFromIndex();
+        mapPanel.draw(this.userNodeDisplay);
         this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
         this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
-       // drawUserNode(pathVertexz.get(stops.get(curStep.get())).getID());
         mapPanel.centerNode(userNodeDisplay);
 
-        Instruction.setText(instructions.get(curStep.get()));
-        ETA.setText(eta.get(curStep.get()));
-//        curFloor = pathVertex.get(0).getFloor();
+        Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructions)).then("").otherwise(Bindings.stringValueAt(instructions, curStep)));
+        //Instruction.setText(instructionsz.get(curStep.get()));
+        ETA.textProperty().bind(Bindings.stringValueAt(eta, curStep));
 
         curD = "UP";
         drawDirection();
@@ -771,12 +798,11 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Function to react to 'Prev' button being pressed and go to the previous point with stepper
-     * @param actionEvent
-     * @throws SQLException
      * @author ZheCheng Song
      */
-    public void goToPrevNode(ActionEvent actionEvent) throws SQLException {
+    public void goToPrevNode() {
         curStep.set(curStep.get() - 1);
+
         if(curStep.get() == 0){
             Prev.setDisable(true);
         }
@@ -784,22 +810,12 @@ public class AStarDemoController implements Initializable {
             Prev.setDisable(false);
             Next.setDisable(false);
         }
-        if(!pathVertex.get(curStep.get()).getFloor().equals(mapPanel.getFloor())){
+
+        if(!pathVertex.get(curStep.get()).getFloor().equals(mapPanel.getFloor().getValue())){
             mapPanel.switchMap(pathVertex.get(stops.get(curStep.get())).getFloor());
         }
-        //curFloor = pathVertex.get(stops.get(curStep.get())).getFloor();
 
-        clearPath();
-        drawPathFromIndex(0);
-
-        mapPanel.draw(this.startNodeDisplay);
-        mapPanel.draw(this.endNodeDisplay);
-        mapPanel.draw(this.userNodeDisplay);
-        //drawUserNode(pathVertexz.get(stops.get(curStep.get())).getID());
         mapPanel.centerNode(userNodeDisplay);
-
-        Instruction.setText(instructions.get(curStep.get()));
-        ETA.setText(eta.get(curStep.get()));
 
         changeDirectionRevert(instructions.get(curStep.get()));
         drawDirection();
@@ -807,11 +823,9 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Function to react to 'Next' button being pressed and go to the next point with stepper
-     * @param actionEvent
-     * @throws SQLException
      * @author ZheCheng Song
      */
-    public void goToNextNode(ActionEvent actionEvent) throws SQLException {
+    public void goToNextNode() {
         changeDirection(instructions.get(curStep.get()));
 
         curStep.set(curStep.get() + 1);
@@ -822,22 +836,11 @@ public class AStarDemoController implements Initializable {
             Prev.setDisable(false);
             Next.setDisable(false);
         }
-        if(!pathVertex.get(stops.get(curStep.get())).getFloor().equals(mapPanel.getFloor())){
+        if(!pathVertex.get(stops.get(curStep.get())).getFloor().equals(mapPanel.getFloor().getValue())){
             mapPanel.switchMap(pathVertex.get(stops.get(curStep.get())).getFloor());
         }
-        //curFloor = pathVertex.get(stops.get(curStep.get())).getFloor();
 
-        clearPath();
-        drawPathFromIndex(0);
-
-        mapPanel.draw(this.startNodeDisplay);
-        mapPanel.draw(this.endNodeDisplay);
-        mapPanel.draw(this.userNodeDisplay);
-        //drawUserNode(pathVertexz.get(stops.get(curStep.get())).getID());
         mapPanel.centerNode(userNodeDisplay);
-
-        Instruction.setText(instructions.get(curStep.get()));
-        ETA.setText(eta.get(curStep.get()));
 
         drawDirection();
 
@@ -848,11 +851,10 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Function to react to 'End Navigation' button being pressed and stop the stepper
-     * @param actionEvent
      * @throws SQLException
      * @author ZheCheng Song
      */
-    public void endNavigation(ActionEvent actionEvent) throws SQLException {
+    public void endNavigation() throws SQLException {
         startComboBox.setDisable(false);
         endComboBox.setDisable(false);
         Go.setDisable(false);
@@ -866,12 +868,10 @@ public class AStarDemoController implements Initializable {
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
         clearPath();
-        drawPathFromIndex(0);
+        drawPathFromIndex();
         this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
         this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
         mapPanel.centerNode(startNodeDisplay);
-
-        ETA.setText(calculateETA(0, pathVertex.size() - 1));
     }
 
     /**

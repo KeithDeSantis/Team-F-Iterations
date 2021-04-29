@@ -104,6 +104,10 @@ public class MapPanel extends AnchorPane {
      * @author ZheCheng
      */
     public void switchMap(String floor){
+
+        if(floor.equals(this.floor))
+            return;
+
         this.floor.setValue(floor);
         switch(floor){
             case "1": if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
