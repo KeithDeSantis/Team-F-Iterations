@@ -8,6 +8,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,7 +19,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -127,21 +131,7 @@ public class MarkRequestsCompleteController implements Initializable {
     }
 
 
-    public void handleClose(ActionEvent actionEvent) {
-        Platform.exit();
-    }
-
-    public void handleMarkAsComplete(ActionEvent actionEvent) throws Exception {
-        ServiceEntry data = requestView.getSelectionModel().getSelectedItem().getValue();
-        DatabaseAPI.getDatabaseAPI().editServiceRequest(data.getUuid(),  "true", "completed");
-        Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
-    }
-
-    public void handleHome(ActionEvent actionEvent) throws IOException {
+    public void handleClose(ActionEvent actionEvent) throws IOException{
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
         Stage stage;
         Parent root;
@@ -152,23 +142,25 @@ public class MarkRequestsCompleteController implements Initializable {
         stage.show();
     }
 
+    public void handleMarkAsComplete(ActionEvent actionEvent) throws Exception {
+        ServiceEntry data = requestView.getSelectionModel().getSelectedItem().getValue();
+        DatabaseAPI.getDatabaseAPI().editServiceRequest(data.getUuid(),  "true", "completed");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml");
+    }
+
+    public void handleHome(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+    }
+
     public void handleAssign(ActionEvent actionEvent) throws Exception {
         //ServiceEntry data = requestView.getSelectionModel().getSelectedItem().getValue();
         for (ServiceEntry s:services){
             DatabaseAPI.getDatabaseAPI().editServiceRequest(s.getUuid(), s.getAssignedTo(), "assignedperson");
         }
-                Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml");
     }
 
     public void handleCancel(ActionEvent actionEvent) throws IOException{
-        Stage currentStage = (Stage) markAsComplete.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml");
     }
 }
