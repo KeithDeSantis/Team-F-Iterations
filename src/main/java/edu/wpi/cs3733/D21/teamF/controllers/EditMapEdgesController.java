@@ -2,10 +2,9 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
-import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.pathfinding.NodeEntry;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;

@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Graph {
     private final List<Edge> edges;
-    private final HashMap<String, Vertex> vertices;
+    private final HashMap<String, NodeEntry> vertices;
 
     private IPathfindingAlgorithm pathfindingAlgorithm;
 
@@ -32,7 +32,7 @@ public class Graph {
      */
     public boolean addEdge(Edge edge) {
         this.edges.add(edge);
-        Vertex[] endpoints = edge.getVertices();
+        NodeEntry[] endpoints = edge.getVertices();
         return this.vertices.get(endpoints[0].getID()) != null && this.vertices.get(endpoints[1].getID()) != null;
     }
 
@@ -41,7 +41,7 @@ public class Graph {
      * @param vertex the additive Vertex
      * @author Tony Vuolo
      */
-    public void addVertex(Vertex vertex) {
+    public void addVertex(NodeEntry vertex) {
         this.vertices.put(vertex.getID(), vertex);
     }
 
@@ -65,7 +65,7 @@ public class Graph {
      * @return An array containing all of our vertices.
      * @author Alex Friedman (ahf), Tony Vuolo
      */
-    public List<Vertex> getVertices() {
+    public List<NodeEntry> getVertices() {
         return new ArrayList<>(vertices.values());
     }
 
@@ -75,7 +75,7 @@ public class Graph {
      * @return The vertex
      * @author Alex Friedman (ahf), Tony Vuolo
      */
-    public Vertex getVertex(String vertexID)
+    public NodeEntry getVertex(String vertexID)
     {
         return this.vertices.get(vertexID);
     }
@@ -86,9 +86,9 @@ public class Graph {
      * @return true if the comparator Vertex is contained in this Graph, else false
      * @author Tony Vuolo
      */
-    public boolean contains(Vertex vertex) {
+    public boolean contains(NodeEntry vertex) {
         for(String key : this.vertices.keySet()) {
-            Vertex query = this.vertices.get(key);
+            NodeEntry query = this.vertices.get(key);
             if(query.equals(vertex)) {
                 return true;
             }
@@ -103,7 +103,7 @@ public class Graph {
      * @return the List of Vertices spanning the path of least weight from Vertex a to Vertex b
      * @author Tony Vuolo
      */
-    public Path getPath(Vertex a, Vertex b) { return pathfindingAlgorithm.getPath(this, a, b); }
+    public Path getPath(NodeEntry a, NodeEntry b) { return pathfindingAlgorithm.getPath(this, a, b); }
 
     /**
      * Used to change the pathfinding algorithm type.
@@ -137,8 +137,8 @@ public class Graph {
      * @return true if some value in the List is congruent to the Vertex, else false
      * @author Tony Vuolo
      */
-    public boolean doesNotContain(List<Vertex> list, Vertex vertex) {
-        for(Vertex query : list) {
+    public boolean doesNotContain(List<NodeEntry> list, NodeEntry vertex) {
+        for(NodeEntry query : list) {
             if(query.equals(vertex)) {
                 return false;
             }

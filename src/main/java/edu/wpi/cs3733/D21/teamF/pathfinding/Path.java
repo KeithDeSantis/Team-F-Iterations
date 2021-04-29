@@ -8,14 +8,14 @@ import java.util.*;
  *
  * @author Alex Friedman (ahf)
  */
-public class Path implements Iterable<Vertex> {
+public class Path implements Iterable<NodeEntry> {
 
     /**
      *  Used to track the vertices we have visited and the order we visited them in.
      *
      * Created by Alex Friedman (ahf)
      */
-    private final DoublyLinkedHashSet<Vertex> vertices;
+    private final DoublyLinkedHashSet<NodeEntry> vertices;
 
     /**
      * Used to store the weight of the path.
@@ -40,7 +40,7 @@ public class Path implements Iterable<Vertex> {
      * @return The new weight of the path, or -1 if there was an issue.
      * @author Alex Friedman (ahf)
      */
-    public double addVertexToPath(Vertex vertex, double pathWeight)
+    public double addVertexToPath(NodeEntry vertex, double pathWeight)
     {
         //Adds to the LinkedHashSet
         if(this.vertices.add(vertex))
@@ -59,7 +59,7 @@ public class Path implements Iterable<Vertex> {
      * @return The new weight of the path, or -1 if there was an issue.
      * @author Alex Friedman (ahf)
      */
-    public double insertVertexInPath(int index, Vertex vertex, double pathWeight)
+    public double insertVertexInPath(int index, NodeEntry vertex, double pathWeight)
     {
         //Adds to the LinkedHashSet
         if(this.vertices.insert(index, vertex))
@@ -78,7 +78,7 @@ public class Path implements Iterable<Vertex> {
      * @return The new weight of the path, or -1 if there was an issue.
      * @author Alex Friedman (ahf)
      */
-    public double removeVertexFromPath(Vertex vertex, double pathWeight)
+    public double removeVertexFromPath(NodeEntry vertex, double pathWeight)
     {
         //FIXME: MAKE SURE WE DO EVERYTHING IN ORDER
 
@@ -96,7 +96,7 @@ public class Path implements Iterable<Vertex> {
      * @return The List of vertices traveled to.
      * @author Alex Friedman (ahf)
      */
-    public List<Vertex> asList()
+    public List<NodeEntry> asList()
     {
         return new LinkedList<>(this.vertices.asList());
     }
@@ -110,7 +110,7 @@ public class Path implements Iterable<Vertex> {
     public Path clone() {
         final Path duplicate = new Path();
 
-        for(Vertex v : this.vertices)
+        for(NodeEntry v : this.vertices)
             duplicate.addVertexToPath(v, 0.0);
         duplicate.pathCost = this.pathCost;
 
@@ -123,7 +123,7 @@ public class Path implements Iterable<Vertex> {
      * @return true if the vertex is in the path, and false if it is not.
      * @author Alex Friedman (ahf)
      */
-    public boolean contains(Vertex vertex) { return this.vertices.containsKey(vertex); }
+    public boolean contains(NodeEntry vertex) { return this.vertices.containsKey(vertex); }
 
 
     /**
@@ -150,7 +150,7 @@ public class Path implements Iterable<Vertex> {
      * @return an Iterator.
      */
     @Override
-    public Iterator<Vertex> iterator() {
+    public Iterator<NodeEntry> iterator() {
         return this.vertices.iterator();
     }
 
@@ -167,7 +167,7 @@ public class Path implements Iterable<Vertex> {
      * @param index the target index
      * @return the target Vertex
      */
-    public Vertex get(int index) {
+    public NodeEntry get(int index) {
         return this.vertices.getIndex(index);
     }
 }

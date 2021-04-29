@@ -4,18 +4,14 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
-import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
-import edu.wpi.cs3733.D21.teamF.pathfinding.AStarGraph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
-import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
+import edu.wpi.cs3733.D21.teamF.pathfinding.NodeEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -59,7 +55,7 @@ public class EditMapEdgeDialogueViewController {
             //return;
         }
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(graph.getVertices().stream().map(Vertex::getID)
+        nodeList.addAll(graph.getVertices().stream().map(NodeEntry::getID)
                 .sorted().collect(Collectors.toList()));
         this.startNode.setItems(nodeList);
         this.endNode.setItems(nodeList);

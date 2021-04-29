@@ -1,7 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
-import java.util.*;
-
 public class DFSGraph implements IPathfindingAlgos {
     Graph graph;
     /**
@@ -9,7 +7,7 @@ public class DFSGraph implements IPathfindingAlgos {
      * @param a vertex to start from
      * @return ArrayList of resultant path
      */
-    public Path getPath(Graph graph, Vertex a, Vertex b) {
+    public Path getPath(Graph graph, NodeEntry a, NodeEntry b) {
         this.graph = graph;
         if (graph.contains(a) && graph.contains(b)) { //FIXME: NULL CHECK
 
@@ -20,7 +18,7 @@ public class DFSGraph implements IPathfindingAlgos {
     }
 
     //FIXME: COMMENT
-    private Path DFS_Recur(Vertex curr, Vertex end, Path path)
+    private Path DFS_Recur(NodeEntry curr, NodeEntry end, Path path)
     {
         if(curr == null) //FIXME: DO MORE NULL CHECKS, END SHOULDN'T BE ABLE TO BE NULL ANYWAYS
             return null;
@@ -35,7 +33,7 @@ public class DFSGraph implements IPathfindingAlgos {
 
         for(Edge e : curr.getEdges())
         {
-            final Vertex n = curr.getNeighbor(e);
+            final NodeEntry n = curr.getNeighbor(e);
 
             if(!path.contains(n))
             {

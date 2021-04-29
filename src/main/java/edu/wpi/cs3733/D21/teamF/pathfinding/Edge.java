@@ -1,7 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
 public class Edge {
-    private final Vertex a, b;
+    private final NodeEntry a, b;
     private final double weight;
 
     /**
@@ -10,7 +10,7 @@ public class Edge {
      * @param b the other endpoint Vertex
      * @author Tony Vuolo
      */
-    public Edge(Vertex a, Vertex b) {
+    public Edge(NodeEntry a, NodeEntry b) {
         this.a = a;
         this.b = b;
         this.weight = a.EuclideanDistance(b);
@@ -26,8 +26,8 @@ public class Edge {
      * @return {this.a, this.b}
      * @author Tony Vuolo
      */
-    public Vertex[] getVertices() {
-        return new Vertex[]{this.a, this.b};
+    public NodeEntry[] getVertices() {
+        return new NodeEntry[]{this.a, this.b};
     }
 
     /**
@@ -45,7 +45,7 @@ public class Edge {
      * @return true if the Vertex is this.a or this.b, else false
      * @author Tony Vuolo
      */
-    public boolean isEndpoint(Vertex vertex) {
+    public boolean isEndpoint(NodeEntry vertex) {
         return this.a.getID().equals(vertex.getID()) || this.b.getID().equals(vertex.getID());
     }
 

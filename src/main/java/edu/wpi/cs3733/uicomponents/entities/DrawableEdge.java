@@ -1,6 +1,6 @@
 package edu.wpi.cs3733.uicomponents.entities;
 
-import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.pathfinding.NodeEntry;
 import edu.wpi.cs3733.uicomponents.IMapDrawable;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import javafx.beans.property.*;
