@@ -381,10 +381,8 @@ public class AStarDemoController implements Initializable {
 
         final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
 
-
-        System.out.println(stops + " -> " + curStep);
         int s = (stops == null) ? 0 : stops.get(curStep);
-        for (int i = s; i < pathVertex.size() - 1; i++)
+        for (int i = 0; i < pathVertex.size() - 1; i++)
         {
             final Vertex start = pathVertex.get(i);
             final Vertex end = pathVertex.get(i + 1);
@@ -396,8 +394,8 @@ public class AStarDemoController implements Initializable {
             edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
             final LinearGradient lineGradient = new LinearGradient(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY(), false, CycleMethod.NO_CYCLE,
-                    new Stop(0, (start.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)),
-                    new Stop(1, (end.getFloor().equals(currentFloor) ? Color.ORANGE : LINE_STROKE_TRANSPARENT)));
+                    new Stop(0, (i >= s ? Color.ORANGE : LINE_STROKE_TRANSPARENT)),
+                    new Stop(1, (i >= s ? Color.ORANGE : LINE_STROKE_TRANSPARENT)));
 
             edge.setStroke(lineGradient);
 
