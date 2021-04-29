@@ -100,6 +100,7 @@ public class AStarDemoController implements Initializable {
 
     private DrawableNode direction;
 
+    private String currentDirection;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -162,6 +163,10 @@ public class AStarDemoController implements Initializable {
 
             endPathfind.setOnAction(e -> endComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
         });
+
+
+        startComboBox.disableProperty().bind(pathFinding);
+        endComboBox.disableProperty().bind(pathFinding);
 
         Go.setDisable(true);
         End.setDisable(true);
@@ -620,12 +625,11 @@ public class AStarDemoController implements Initializable {
         }
     }
 
-    private String curD;
     private void drawDirection(){
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
         Vertex curV = pathVertex.get(stops.get(curStep.get()));
-        switch (curD) {
+        switch (currentDirection) {
             case "UP":
                 direction = new DrawableNode((int) Math.round(curV.getX()), (int) Math.round(curV.getY() - 50.0),
                         "direction", curV.getFloor(), "", "", "", "");
@@ -654,54 +658,66 @@ public class AStarDemoController implements Initializable {
         if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
             switch (instruction[1]) {
                 case "around":
-                    switch (curD) {
-                        case "UP":
-                            curD = "DOWN";
-                            break;
-                        case "LEFT":
-                            curD = "RIGHT";
-                            break;
-                        case "RIGHT":
-                            curD = "LEFT";
-                            break;
-                        case "DOWN":
-                            curD = "UP";
-                            break;
-                    }
+                    switchDirectionDown();
                     break;
                 case "left":
-                    switch (curD) {
-                        case "UP":
-                            curD = "LEFT";
-                            break;
-                        case "LEFT":
-                            curD = "DOWN";
-                            break;
-                        case "RIGHT":
-                            curD = "UP";
-                            break;
-                        case "DOWN":
-                            curD = "RIGHT";
-                            break;
-                    }
+                    switchDirectionLeft();
                     break;
                 case "right":
-                    switch (curD) {
-                        case "UP":
-                            curD = "RIGHT";
-                            break;
-                        case "LEFT":
-                            curD = "UP";
-                            break;
-                        case "RIGHT":
-                            curD = "DOWN";
-                            break;
-                        case "DOWN":
-                            curD = "LEFT";
-                            break;
-                    }
+                    switchDirectionRight();
                     break;
             }
+        }
+    }
+
+    private void switchDirectionDown() {
+        switch (currentDirection) {
+            case "UP":
+                currentDirection = "DOWN";
+                break;
+            case "LEFT":
+                currentDirection = "RIGHT";
+                break;
+            case "RIGHT":
+                currentDirection = "LEFT";
+                break;
+            case "DOWN":
+                currentDirection = "UP";
+                break;
+        }
+    }
+
+    private void switchDirectionRight() {
+        switch (currentDirection) {
+            case "UP":
+                currentDirection = "RIGHT";
+                break;
+            case "LEFT":
+                currentDirection = "UP";
+                break;
+            case "RIGHT":
+                currentDirection = "DOWN";
+                break;
+            case "DOWN":
+                currentDirection = "LEFT";
+                break;
+        }
+    }
+
+    private void switchDirectionLeft() {
+        switch (currentDirection) {
+            case "UP":
+                currentDirection = "LEFT";
+                break;
+            case "LEFT":
+                currentDirection = "DOWN";
+                break;
+            case "RIGHT":
+                currentDirection = "UP";
+                break;
+            case "DOWN":
+                currentDirection = "RIGHT";
+                break;
         }
     }
 
@@ -710,52 +726,13 @@ public class AStarDemoController implements Initializable {
         if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
             switch (instruction[1]) {
                 case "around":
-                    switch (curD) {
-                        case "UP":
-                            curD = "DOWN";
-                            break;
-                        case "LEFT":
-                            curD = "RIGHT";
-                            break;
-                        case "RIGHT":
-                            curD = "LEFT";
-                            break;
-                        case "DOWN":
-                            curD = "UP";
-                            break;
-                    }
+                    switchDirectionDown();
                     break;
                 case "left":
-                    switch (curD) {
-                        case "UP":
-                            curD = "RIGHT";
-                            break;
-                        case "LEFT":
-                            curD = "UP";
-                            break;
-                        case "RIGHT":
-                            curD = "DOWN";
-                            break;
-                        case "DOWN":
-                            curD = "LEFT";
-                            break;
-                    }
+                    switchDirectionRight();
                     break;
                 case "right":
-                    switch (curD) {
-                        case "UP":
-                            curD = "LEFT";
-                            break;
-                        case "LEFT":
-                            curD = "DOWN";
-                            break;
-                        case "RIGHT":
-                            curD = "UP";
-                            break;
-                        case "DOWN":
-                            curD = "RIGHT";
-                            break;
-                    }
+                    switchDirectionLeft();
                     break;
             }
         }
@@ -767,8 +744,6 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void startNavigation() throws SQLException {
-        startComboBox.setDisable(true);
-        endComboBox.setDisable(true);
         Go.setDisable(true);
         Next.setDisable(false);
         End.setDisable(false);
@@ -789,10 +764,9 @@ public class AStarDemoController implements Initializable {
         mapPanel.centerNode(userNodeDisplay);
 
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructions)).then("").otherwise(Bindings.stringValueAt(instructions, curStep)));
-        //Instruction.setText(instructionsz.get(curStep.get()));
         ETA.textProperty().bind(Bindings.stringValueAt(eta, curStep));
 
-        curD = "UP";
+        currentDirection = "UP";
         drawDirection();
     }
 
@@ -851,12 +825,9 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Function to react to 'End Navigation' button being pressed and stop the stepper
-     * @throws SQLException
      * @author ZheCheng Song
      */
-    public void endNavigation() throws SQLException {
-        startComboBox.setDisable(false);
-        endComboBox.setDisable(false);
+    public void endNavigation() {
         Go.setDisable(false);
         Prev.setDisable(true);
         Next.setDisable(true);
@@ -866,11 +837,6 @@ public class AStarDemoController implements Initializable {
         pathFinding.set(false);
 
         mapPanel.switchMap(pathVertex.get(0).getFloor());
-
-        clearPath();
-        drawPathFromIndex();
-        this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
-        this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
         mapPanel.centerNode(startNodeDisplay);
     }
 
