@@ -27,6 +27,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
@@ -59,6 +60,7 @@ public class MapEditViewController {
     @FXML private JFXTreeTableView<EdgeEntry> edgeTreeTable;
     @FXML private MapPanel mapPanel;
     @FXML private Text title;
+    @FXML private JFXToggleButton edgeMakingToggle;
 
     private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
     private ObservableList<NodeEntry> nodeEntryObservableList = FXCollections.observableArrayList();
@@ -1323,6 +1325,10 @@ public class MapEditViewController {
             searchComboBox.setItems(searchables);
             searchComboBox.setValue("Edge ID");
         }
+    }
+
+    public void handleToggle(ActionEvent actionEvent) {
+
     }
 }
 
