@@ -233,6 +233,9 @@ public class MapEditViewController {
                 String oldID = selectedEdge.getEdgeID();
                 ArrayList<String> newValues = openEditEdgeDialog(selectedEdge);
 
+                if(newValues == null)
+                    return;
+
                 DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(1), "startNode");
                 DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(2), "endNode");
                 DatabaseAPI.getDatabaseAPI().editEdge(oldID, newValues.get(0), "edgeId");
@@ -1479,6 +1482,10 @@ public class MapEditViewController {
         dialogueStage.initOwner((Stage) newButton.getScene().getWindow());
         dialogueStage.setScene(new Scene(root));
         dialogueStage.showAndWait();
+
+        if(!editDialogueController.okClicked)
+            return null;
+
         ArrayList<String> returnList = new ArrayList<>();
         returnList.add(editedEdge.getEdgeID());
         returnList.add(editedEdge.getStartNode());
@@ -1577,8 +1584,14 @@ public class MapEditViewController {
      */
     private void createNewEdgeFromNodes() throws IOException, SQLException {
         EdgeEntry newEdge = new EdgeEntry(firstCircle.getId() + "_" + secondCircle.getId(), firstCircle.getId(), secondCircle.getId());
-        openEditEdgeDialog(newEdge);
-        if (newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||
+        List<String> values = openEditEdgeDialog(newEdge);
+
+        selectedCircle.setFill(UIConstants.NODE_COLOR);
+
+        firstCircle = null;
+        secondCircle = null;
+
+        if (values == null || newEdge.edgeIDProperty().getValue().isEmpty() || newEdge.startNodeProperty().getValue().isEmpty() ||
                 newEdge.endNodeProperty().getValue().isEmpty())
             return; //FIXME: DO BETTER ERROR CHECKING
         updateEdgeEntry(newEdge);
