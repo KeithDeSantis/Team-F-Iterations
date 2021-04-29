@@ -137,12 +137,15 @@ public class Graph {
         {
             case "astar":
             case "a*":
+            case "a star":
                 this.pathfindingAlgorithm = new AStarImpl();
                 return true;
             case "dfs":
+            case "depth-first-search":
                 this.pathfindingAlgorithm = new DFSImpl();
                 return true;
             case "bfs":
+            case "breadth-first-search":
                 this.pathfindingAlgorithm = new BFSImpl();
                 return true;
         }
