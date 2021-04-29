@@ -1,11 +1,13 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,16 +36,6 @@ public class DefaultPageEmployeeController {
     @FXML private JFXButton serviceManager;
 
     @FXML private void initialize(){
-        title.setFont(Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40));
-
-        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        navigation.setFont(buttonDefault);
-        quit.setFont(buttonDefault);
-        serviceRequest.setFont(buttonDefault);
-        serviceManager.setFont(buttonDefault);
-        signOut.setFont(buttonDefault);
-        editMap.setFont(buttonDefault);
-
     }
 
     /**
@@ -60,55 +52,24 @@ public class DefaultPageEmployeeController {
         Parent root;
 
         if (buttonPushed == editMap) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Edit Map Vertex");
-            stage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
         } else if (buttonPushed == signOut) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-            stage.getScene().setRoot(root);  //Changing the stage
-            stage.setTitle("Edit Map Edges");
-            stage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         } else if (buttonPushed == navigation) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("AStar Pathfinding Demo");
-            stage.show();
-
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {
-
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Service Request Home");
-            stage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml");
         }
-
         else if (buttonPushed == serviceManager) {
             // Implement Later
             //TODO Assign to combo box
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml"));
-            //Scene scene = new Scene(root);
-            //stage.setScene(scene);
-            stage.getScene().setRoot(root);
-            stage.setTitle("Service Request Manager");
-            stage.show();
-
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml");
         }
         else if (buttonPushed == quit) {
             Platform.exit();
         }
         else if(buttonPushed == signOut){
-
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("");
-            stage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
     }
     /** handles highlighting buttons when hovering

@@ -7,30 +7,47 @@
 <?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.RowConstraints?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LanguageInterpretationServiceRequestController">
    <children>
-      <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" />
+      <HBox fx:id="header" prefHeight="131.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+               </image>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </ImageView>
+            <Label text="Brigham and Women's Hospital">
+               <font>
+                  <Font name="Volkhov Regular" size="40.0" />
+               </font>
+            </Label>
+         </children></HBox>
       <JFXButton fx:id="close" buttonType="RAISED" onAction="#handleClose" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #03256C;" text="x" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="150.0">
          <font>
             <Font name="Montserrat Regular" size="15.0" />
          </font>
       </JFXButton>
-      <Label alignment="CENTER" lineSpacing="8.0" prefHeight="63.0" prefWidth="873.0" text="Language Interpretation Request" textAlignment="CENTER" underline="true" wrapText="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="175.0">
+      <Label alignment="CENTER" lineSpacing="8.0" prefHeight="63.0" prefWidth="873.0" text="Language Interpretation Request" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0">
          <font>
-            <Font name="Volkhov Regular" size="50.0" />
+            <Font name="Volkhov Regular" size="40.0" />
          </font>
          <padding>
             <Insets bottom="25.0" />
          </padding>
       </Label>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="250.0">
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="225.0">
          <children>
             <GridPane alignment="CENTER_LEFT" prefHeight="356.0" prefWidth="860.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <columnConstraints>
@@ -45,7 +62,7 @@
                   <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label lineSpacing="8.0" prefHeight="29.0" prefWidth="97.0" text="Name:">
+                  <Label fx:id="nameLabel" lineSpacing="8.0" prefHeight="29.0" prefWidth="97.0" text="Name:">
                      <font>
                         <Font name="Montserrat Regular" size="24.0" />
                      </font>
@@ -64,7 +81,7 @@
                         <Insets left="25.0" right="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
-                  <Label text="Appointment Date and Time:" GridPane.rowIndex="2">
+                  <Label fx:id="dtLabel" text="Appointment Date and Time:" GridPane.rowIndex="2">
                      <font>
                         <Font name="Montserrat Regular" size="24.0" />
                      </font>
@@ -91,7 +108,7 @@
                         <Insets left="25.0" right="25.0" />
                      </GridPane.margin>
                   </HBox>
-                  <Label text="Type of Appointment:" GridPane.columnIndex="2">
+                  <Label fx:id="appointmentLabel" text="Type of Appointment:" GridPane.columnIndex="2">
                      <font>
                         <Font name="Montserrat Regular" size="24.0" />
                      </font>
@@ -110,7 +127,7 @@
                         <Insets left="25.0" />
                      </GridPane.margin>
                   </JFXComboBox>
-                  <Label text="Language:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                  <Label fx:id="languageLabel" text="Language:" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <font>
                         <Font name="Montserrat Regular" size="24.0" />
                      </font>

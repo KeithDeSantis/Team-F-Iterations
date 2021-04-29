@@ -29,7 +29,7 @@
                   </ImageView>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Internal Patient Transportation Request" wrappingWidth="776.79150390625">
                      <font>
-                        <Font size="40.0" />
+                        <Font name="Volkhov Regular" size="40.0" />
                      </font>
                   </Text>
                </children>
@@ -53,8 +53,14 @@
                   <JFXButton fx:id="cancel" buttonType="RAISED" onAction="#handleBack2" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Cancel" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Label text="Name :" />
-                        <JFXTextField fx:id="employeeName" alignment="CENTER" promptText="Name of Employee" />
+                        <Label text="Name :">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></Label>
+                        <JFXTextField fx:id="employeeName" alignment="CENTER" promptText="Name of Employee">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></JFXTextField>
                      </children>
                      <GridPane.margin>
                         <Insets />
@@ -62,36 +68,66 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="2">
                      <children>
-                        <Label text="Date :" />
-                        <JFXTextField fx:id="movingDate" alignment="CENTER" promptText="Moving Date" />
+                        <Label text="Date :">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></Label>
+                        <JFXTextField fx:id="movingDate" alignment="CENTER" promptText="Moving Date">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></JFXTextField>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
                      <children>
-                        <Label text="Patient" />
-                        <JFXTextField fx:id="patientName" alignment="CENTER" promptText="Name of Patient" />
+                        <Label text="Patient">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></Label>
+                        <JFXTextField fx:id="patientName" alignment="CENTER" promptText="Name of Patient">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></JFXTextField>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <Label text="Room" />
-                        <JFXTextField fx:id="patientRoom" alignment="CENTER" promptText="Room of Patient" />
+                        <Label text="Room">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></Label>
+                        <JFXTextField fx:id="patientRoom" alignment="CENTER" promptText="Room of Patient">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></JFXTextField>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
                      <children>
-                        <Label text="Location :" />
-                        <JFXTextField fx:id="deliverLocation" alignment="CENTER" promptText="Deliver Room" />
+                        <Label text="Location :">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></Label>
+                        <JFXTextField fx:id="deliverLocation" alignment="CENTER" promptText="Deliver Room">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></JFXTextField>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
                      <children>
-                        <JFXCheckBox fx:id="relativesCheckBox" text="Relatives/Friends Following" />
+                        <JFXCheckBox fx:id="relativesCheckBox" text="Relatives/Friends Following">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></JFXCheckBox>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <children>
-                        <JFXCheckBox fx:id="doctorCheckBox" text="Need Doctor Following" />
+                        <JFXCheckBox fx:id="doctorCheckBox" text="Need Doctor Following">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font></JFXCheckBox>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">

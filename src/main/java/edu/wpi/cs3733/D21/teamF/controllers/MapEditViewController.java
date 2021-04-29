@@ -9,6 +9,7 @@ import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
@@ -71,17 +72,6 @@ public class MapEditViewController {
     @FXML
     private void initialize(){
         // Set fonts for buttons
-        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        saveButton.setFont(buttonDefault);
-        loadButton.setFont(buttonDefault);
-        resetFromDB.setFont(buttonDefault);
-        newButton.setFont(buttonDefault);
-        editButton.setFont(buttonDefault);
-        deleteButton.setFont(buttonDefault);
-
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 42);
-        title.setFont(titleFont);
-
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
         try {
@@ -1174,11 +1164,7 @@ public class MapEditViewController {
     }
 
     public void handleHome(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) saveButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Admin Home");
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
     }
 
     public void handleTabChange(Event event) {

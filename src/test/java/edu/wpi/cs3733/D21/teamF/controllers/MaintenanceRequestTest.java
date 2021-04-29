@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -15,14 +16,9 @@ import static org.testfx.api.FxAssert.verifyThat;
 public class MaintenanceRequestTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/maintenanceRequest.fxml"));
-        Parent root = loader.load();
-
-        final MaintenenceRequestController controller = loader.getController();
-
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        System.gc();
+        SceneContext.getSceneContext().setStage(primaryStage);
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/maintenanceRequest.fxml");
     }
 
     @Test

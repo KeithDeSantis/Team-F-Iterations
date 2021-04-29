@@ -80,6 +80,7 @@ public class NodeHandler implements DatabaseEntry {
         }
         catch (SQLException e){
             success = false;
+            return success;
         }
         return success;
     }
@@ -98,8 +99,7 @@ public class NodeHandler implements DatabaseEntry {
             success = true;
         }
         catch (SQLException e){
-            e.printStackTrace();
-            success = false;
+            return false;
         }
         return success;
     }

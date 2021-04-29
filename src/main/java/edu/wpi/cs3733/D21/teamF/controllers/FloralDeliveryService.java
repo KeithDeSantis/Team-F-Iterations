@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -70,10 +71,7 @@ public class FloralDeliveryService {
      * @author KD
      */
     public void handleBack(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) bouquetButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml")); //FIXME Go to service request home
-        stage.getScene().setRoot(root);
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
     /**
@@ -82,9 +80,7 @@ public class FloralDeliveryService {
      * @author KD
      */
     public void handleHome(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) submitButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-        stage.getScene().setRoot(root);
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     /**
@@ -95,9 +91,10 @@ public class FloralDeliveryService {
     public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException {
         if(isFilledOut()) {
             String type = "Flower Delivery";
-            String name = nameField.getText();
             String uuid = UUID.randomUUID().toString();
-            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, name, "false");
+            String additionalInfo = "Date: " + dateField.getValue() + "Deliver to: " + deliveryField.getText() +
+            "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", additionalInfo);
             //successField.setText("Request Submitted!");
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();

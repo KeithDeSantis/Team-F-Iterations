@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * Controller for Form Submitted Pop Up
  */
-public class FormSubmittedViewController {
+public class CovidFormSubmittedViewController {
     Stage previuosStage = new Stage();
     @FXML private JFXButton okButton;
 
@@ -28,12 +28,12 @@ public class FormSubmittedViewController {
         ( (Stage) okButton.getScene().getWindow()).close();
         /*
         Parent root;
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
         previuosStage.getScene().setRoot(root);
         previuosStage.setTitle("Service Request Home");
         previuosStage.show();
          */
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     public void handleHoverOn(MouseEvent mouseEvent) {
@@ -50,3 +50,4 @@ public class FormSubmittedViewController {
         previuosStage = setPreviuosStage;
     }
 }
+

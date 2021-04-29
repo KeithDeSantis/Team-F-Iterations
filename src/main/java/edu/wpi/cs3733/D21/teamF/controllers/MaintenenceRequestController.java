@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -54,18 +55,6 @@ public class MaintenenceRequestController {
 
     @FXML
     public void initialize(){
-        // Setup fonts
-        Font defaultFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        submit.setFont(defaultFont);
-        cancel.setFont(defaultFont);
-        typeLabel.setFont(defaultFont);
-        locationLabel.setFont(defaultFont);
-        descLabel.setFont(defaultFont);
-        urgencyLabel.setFont(defaultFont);
-        dateLabel.setFont(defaultFont);
-        assignmentLabel.setFont(defaultFont);
-
-        title.setFont(Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40));
 
         // Insert problem types and urgency into combo boxes
         typeComboBox.setItems(problemTypes);
@@ -103,6 +92,10 @@ public class MaintenenceRequestController {
         // Set list to assignment Combo Box
         assignment.setItems(employeeList);
 
+        assignment.setVisible(false);
+        assignment.setDisable(true);
+        assignmentLabel.setVisible(false);
+
     }
 
     /**
@@ -134,9 +127,9 @@ public class MaintenenceRequestController {
                 // Leave assigned employee blank
             }
 
-            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name, employee,
-                    "false");//, name + ": " + descriptionField.getText()); FIXME Re-add instructions to addServiceReq after merge
-            // Loads form submitted window and passes in current stage to return to request home
+            String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
+                    "Urgency: " + urgencyComboBox.getValue();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name,"", "false", additionalInfo);
             FXMLLoader submitedPageLoader = new FXMLLoader();
             submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
@@ -153,13 +146,7 @@ public class MaintenenceRequestController {
     }
 
     public void handleGoHome(MouseEvent mouseEvent) throws IOException {
-        Stage stage;
-        Parent root;
-        stage = (Stage) goBack.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Default Page");
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     public void handleHoverOn(MouseEvent mouseEvent) {
@@ -173,13 +160,7 @@ public class MaintenenceRequestController {
     }
 
     public void handleCancel(ActionEvent actionEvent) throws IOException {
-        Stage stage;
-        Parent root;
-        stage = (Stage) goBack.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Service Request Home");
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
     public boolean isFilled(){
