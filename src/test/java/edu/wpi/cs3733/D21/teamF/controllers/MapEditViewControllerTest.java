@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,10 +54,15 @@ public class MapEditViewControllerTest extends ApplicationTest {
         primaryStage.show();
     }
 
+    @BeforeEach
+    public void beforeTest() {
+        System.gc();
+    }
+
     @AfterEach
     public void afterTest()
     {
-        clickOn("Reset From Database");
+        clickOn("Reset Database");
         System.gc();
     }
 
@@ -277,5 +283,10 @@ public class MapEditViewControllerTest extends ApplicationTest {
         clickOn("End Node");
         doubleClickOn("#searchField");
         write("DEPT");
+    }
+
+    @Test
+    public void clickOnToggle() {
+        clickOn("#edgeCreationToggle");
     }
 }
