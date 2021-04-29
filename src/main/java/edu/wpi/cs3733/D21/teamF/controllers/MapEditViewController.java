@@ -10,6 +10,7 @@ import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
+import edu.wpi.cs3733.uicomponents.IMapDrawable;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
@@ -122,6 +123,7 @@ public class MapEditViewController {
                     nodeEntryObservableList.add(nodeEntry); // add the new node to the Observable list (which is linked to table and updates) - KD
 
                     updateNodeEntry(nodeEntry);
+                    handleSearch();
                 } catch (IOException | SQLException ioException) {
                     ioException.printStackTrace();
                 }
@@ -460,6 +462,12 @@ public class MapEditViewController {
                 }
             }
         }
+        if(searchField.getText().length() == 0) {
+            for (Node node : mapPanel.getCanvas().getChildren()) {
+                if(node instanceof DrawableNode) ((DrawableNode) node).setShouldDisplay(true);
+                if(node instanceof DrawableEdge) ((DrawableEdge) node).setShouldDisplay(true);
+            }
+        }
         
     }
 
@@ -694,6 +702,7 @@ public class MapEditViewController {
                 drawEdgeNodeOnFloor(); //FIXME do better with queries
             }
         }
+        searchField.setText("");
 
     } //FIXME sometimes error 'L1NODES' already exists in Schema 'APP' happens and the map isnt drawn
 
