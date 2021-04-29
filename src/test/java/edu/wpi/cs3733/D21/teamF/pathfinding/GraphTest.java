@@ -416,4 +416,83 @@ public class GraphTest {
         }
     }
 
+    /**
+     * Tests the functionality of the concatenate() function in DoublyLinkedHashSet
+     * @author Tony Vuolo
+     */
+    @Test
+    public void testDLHSConcatenate() {
+        DoublyLinkedHashSet<Integer> set = new DoublyLinkedHashSet<>();
+        List<Integer> list = new LinkedList<>();
+        for(int i = 0; i < 10; i++) {
+            DoublyLinkedHashSet<Integer> augend = new DoublyLinkedHashSet<>();
+            augend.add(i);
+            set.concatenate(augend);
+            list.add(i);
+            assertEquals(list.toString(), set.toString());
+        }
+    }
+
+    /**
+     * Tests the functionality of the concatenate() function in Path
+     * @author Tony Vuolo (bdane)
+     */
+    @Test
+    public void testPathConcatenate() {
+        final int MAX_NUM_VERTICES = 10;
+        Vertex[] vertices = new Vertex[MAX_NUM_VERTICES * 2 + 1];
+        for(int i = 0; i < vertices.length; i++) {
+            vertices[i] = new Vertex("" + i, 0, 0, "");
+        }
+        Path mainPath = new Path();
+        Path[] path = new Path[MAX_NUM_VERTICES];
+        for(int i = 0; i < MAX_NUM_VERTICES; i++) {
+            path[i] = new Path();
+            for(int j = 0; j < 3; j++) {
+                path[i].addVertexToPath(vertices[2 * i + j], 0);
+            }
+            mainPath.concatenate(path[i]);
+        }
+        int value = 0;
+        for(Vertex vertex : mainPath) {
+            assertEquals("" + value++, vertex.getID());
+        }
+    }
+
+    /**
+     * Tests whether getPath with a List of Vertices works
+     * @author Tony Vuolo (bdane)
+     */
+    @Test
+    public void testGetPathWithOrderedStops() {
+        String[] vertexList = {
+                "CLABS002L1",
+                "WELEV00KL1",
+                "CREST001L1",
+                "CHALL007L1",
+                "CRETL001L1",
+                "CDEPT003L1"
+        };
+        List<Vertex> list = new LinkedList<>();
+        for(String element : vertexList) {
+            list.add(this.vertices.get(element));
+        }
+        Path totalPath = this.graph.getPath(list);
+        List<Vertex> totalPathList = totalPath.asList(), fragmentedPathList = new LinkedList<>();
+        fragmentedPathList.add(this.vertices.get(vertexList[0]));
+        double length = 0;
+        for(int i = 1; i < vertexList.length; i++) {
+            Path newPathFragment = this.graph.getPath(this.vertices.get(vertexList[i - 1]), this.vertices.get(vertexList[i]));
+            length += newPathFragment.getPathCost();
+            List<Vertex> fragmentList = newPathFragment.asList();
+            fragmentList.remove(0);
+            fragmentedPathList.addAll(fragmentList);
+        }
+        assertEquals(totalPathList.size(), fragmentedPathList.size());
+        assertEquals(totalPath.getPathCost(), length, 0.1);
+        ListIterator<Vertex> iterator = totalPathList.listIterator();;
+        for(Vertex v : fragmentedPathList) {
+            assertEquals(iterator.next().getID(), v.getID());
+        }
+    }
 }
