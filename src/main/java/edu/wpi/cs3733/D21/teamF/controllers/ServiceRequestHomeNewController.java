@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -93,14 +94,7 @@ public class ServiceRequestHomeNewController {
     }
 
     public void goToScreen(ActionEvent e, String URL, String Title, Button currentScreen)throws IOException{
-        Stage stage;
-        Parent root;
-        stage = (Stage) currentScreen.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource(URL));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle(Title);
-        stage.show();
+        SceneContext.getSceneContext().switchScene(URL);
     }
 
 

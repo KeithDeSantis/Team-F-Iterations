@@ -8,6 +8,7 @@ import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
@@ -258,11 +259,7 @@ public class AStarDemoController implements Initializable {
         Parent root;
 
         if (buttonPushed == goBack) {
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Default Page");
-            stage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
     }
 

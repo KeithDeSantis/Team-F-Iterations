@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,12 +37,7 @@ public class LoginController {
     public void handleButtonPushed(ActionEvent actionEvent) throws IOException, SQLException, SQLException {
         Button buttonPushed = (JFXButton) actionEvent.getSource();  //Getting current stage
         if (buttonPushed == closeLogin) {
-            Stage currentStage = (Stage) closeLogin.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-            Scene homeScene = new Scene(root);
-            currentStage.setScene(homeScene);
-            currentStage.setTitle("Home");
-            currentStage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         } else if (buttonPushed == signIn) {
             if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
                 DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
@@ -55,27 +51,12 @@ public class LoginController {
                 AccountEntry userInfo = DatabaseAPI.getDatabaseAPI().getUser(user);
                 errorMessage.setStyle("-fx-text-fill: #c6000000;");
                 if (userInfo.getUserType().equals("administrator")) {
-                    Stage currentStage = (Stage) signIn.getScene().getWindow();
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-                    Scene homeScene = new Scene(root);
-                    currentStage.setScene(homeScene);
-                    currentStage.setTitle("Admin Home");
-                    currentStage.show();
+                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
                     // set user privileges to employee
                 } else if (userInfo.getUserType().equals("employee")) {
-                    Stage currentStage = (Stage) signIn.getScene().getWindow();
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml"));
-                    Scene homeScene = new Scene(root);
-                    currentStage.setScene(homeScene);
-                    currentStage.setTitle("Employee Home");
-                    currentStage.show();
+                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
                 } else{
-                    Stage currentStage = (Stage) signIn.getScene().getWindow();
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-                    Scene homeScene = new Scene(root);
-                    currentStage.setScene(homeScene);
-                    currentStage.setTitle("Home");
-                    currentStage.show();
+                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
                 }
             }
             else {
@@ -84,12 +65,7 @@ public class LoginController {
             }
         }
             else if (buttonPushed == skipSignIn) {
-                Stage currentStage = (Stage) signIn.getScene().getWindow();
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-                Scene homeScene = new Scene(root);
-                currentStage.setScene(homeScene);
-                currentStage.setTitle("Home");
-                currentStage.show();
+                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
             }
 
     }

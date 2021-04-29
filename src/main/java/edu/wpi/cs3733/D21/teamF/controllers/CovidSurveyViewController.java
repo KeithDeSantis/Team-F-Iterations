@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,10 +59,7 @@ public class CovidSurveyViewController {
      * @author kh
      */
     public void handleBack(MouseEvent mouseEvent) throws IOException{
-        Stage stage = (Stage) yes1.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     /**
@@ -95,12 +93,7 @@ public class CovidSurveyViewController {
         Button buttonPushed = (Button) e.getSource();
 
         if (buttonPushed == cancel) { // is cancel button
-            Stage stage = (Stage) cancel.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("");
-            stage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
     }
 
