@@ -53,7 +53,7 @@ public class MapEditViewController {
     @FXML
     private JFXButton deleteButton;
     @FXML
-    private JFXComboBox<String> searchComboBox = new JFXComboBox<>();
+    private JFXComboBox<String> searchComboBox;
     @FXML
     private JFXTextField searchField;
     @FXML
