@@ -174,8 +174,10 @@ public class MapEditViewController {
      * @author KD, LM, KH
      */
     public void handleEdit(ActionEvent actionEvent) throws Exception {
+
         NodeEntry selectedNode;
         if(nodesTab.isSelected()) {
+            if(nodeTreeTable.getSelectionModel().getSelectedIndex() < 0) return;
             try{
                 selectedNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue(); // get item the is selected - KD
             } catch (NullPointerException e){
@@ -195,6 +197,7 @@ public class MapEditViewController {
         }
         else if(edgesTab.isSelected()) {
             // Get the current selected edge index
+            if(edgeTreeTable.getSelectionModel().getSelectedIndex() < 0) return;
             EdgeEntry selectedEdge;
             try {
                 selectedEdge = edgeTreeTable.getSelectionModel().getSelectedItem().getValue();
