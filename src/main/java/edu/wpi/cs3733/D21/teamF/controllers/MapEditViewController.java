@@ -195,10 +195,9 @@ public class MapEditViewController {
         }
         else if(edgesTab.isSelected()) {
             // Get the current selected edge index
-            int index = edgeTreeTable.getSelectionModel().getSelectedIndex();
             EdgeEntry selectedEdge;
             try {
-                selectedEdge = edgeEntryObservableList.get(index);
+                selectedEdge = edgeTreeTable.getSelectionModel().getSelectedItem().getValue();
             } catch (ArrayIndexOutOfBoundsException e){
                 return;
             }
@@ -224,6 +223,7 @@ public class MapEditViewController {
                 handleSelectEdge();
             }
         }
+        handleSearch();
     } //FIXME edited node and node disappeared?
 
     /**
@@ -291,14 +291,14 @@ public class MapEditViewController {
             if(!checkEdgeEntryNotEmpty(newEdge)){return;}
             updateEdgeEntry(newEdge);
         }
+        handleSearch();
     }
 
     /**
      * Search filters tree table based on which tab is open
-     * @param keyEvent
      * @author KD
      */
-    public void handleSearch(KeyEvent keyEvent) {
+    public void handleSearch() {
         if(nodesTab.isSelected()) {
             nodeTreeTable.setPredicate(new Predicate<TreeItem<NodeEntry>>() {
                 @Override
@@ -761,14 +761,19 @@ public class MapEditViewController {
      * @author ZheCheng
      */
     private int findNode(String nodeID){
+
         int index = 0;
-        for(NodeEntry n: nodeEntryObservableList){
-            if(n.getNodeID().equals(nodeID)){
+        for(TreeItem<NodeEntry> nodeEntryTreeItem : nodeTreeTable.getRoot().getChildren()) {
+            if(nodeEntryTreeItem.getValue().getNodeID().equals(nodeID)){
                 return index;
             }
             index++;
         }
         return -1; // FIXME handle this error
+
+         // KD - fixed issue with search filter and node finding.  Now it iterates through the things visible in the tree table, NOT the list since the indices will no longer align.  Same done for edges
+
+
     }
 
     /**
@@ -777,8 +782,8 @@ public class MapEditViewController {
      */
     private int findEdge(String nodeID){
         int index = 0;
-        for(EdgeEntry e: edgeEntryObservableList){
-            if(e.getEdgeID() == nodeID){
+        for(TreeItem<EdgeEntry> e: edgeTreeTable.getRoot().getChildren()){
+            if(e.getValue().getEdgeID() == nodeID){
                 break;
             }
             index++;
@@ -851,13 +856,14 @@ public class MapEditViewController {
         // Check if need to switch map
         if(node.getFloor().equals(mapPanel.getFloor().get())){
             //mapPanel.drawNodeOnFloor();
-            if(selectedCircle != null)
-                selectedCircle.setFill(UIConstants.NODE_COLOR);
         }else{
             //floor = node.getFloor();
             mapPanel.switchMap(node.getFloor());
         }
 
+        // Clear highlight on nodes
+        if(selectedCircle != null)
+            selectedCircle.setFill(UIConstants.NODE_COLOR);
         // Clear highlight on edges
         if(selectedLine != null)
             selectedLine.setStroke(UIConstants.LINE_COLOR);
