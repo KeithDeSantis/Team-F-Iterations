@@ -17,7 +17,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -109,7 +108,7 @@ public class AStarDemoController implements Initializable {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
             List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
 
-            final List<NodeEntry> nodeEntries = allNodeEntries.stream().collect(Collectors.toList());
+            final List<NodeEntry> nodeEntries = new ArrayList<>(allNodeEntries);
 
             final List<EdgeEntry> edgeEntries = allEdgeEntries.stream().filter(node -> hasNode(nodeEntries, node.getStartNode())
                     && hasNode(nodeEntries, node.getEndNode())).collect(Collectors.toList());
@@ -143,7 +142,7 @@ public class AStarDemoController implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        ;
+
 
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
         nodeList.addAll(this.graph.getVertices().stream().map(Vertex::getID)
@@ -173,13 +172,9 @@ public class AStarDemoController implements Initializable {
 
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
 
-            startPathfind.setOnAction((ActionEvent e) -> {
-                startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID());
-            });
+            startPathfind.setOnAction((ActionEvent e) -> startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
 
-            endPathfind.setOnAction(e -> {
-                endComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID());
-            });
+            endPathfind.setOnAction(e -> endComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
         });
 
         Go.setDisable(true);
@@ -207,7 +202,7 @@ public class AStarDemoController implements Initializable {
      * @return the closest nodeentry
      * @author Alex Friedman (ahf)
      */
-    private final NodeEntry getClosest(List<NodeEntry> entries, double x, double y)
+    private NodeEntry getClosest(List<NodeEntry> entries, double x, double y)
     {
         double minDist2 = Integer.MAX_VALUE;
         NodeEntry closest = null;
@@ -255,8 +250,6 @@ public class AStarDemoController implements Initializable {
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
 
         if (buttonPushed == goBack) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
