@@ -1083,126 +1083,147 @@ public class MapEditViewController {
         final List<DrawableEdge> endEdges = new ArrayList<>();
 
         if (clickToMakeEdge) {
-            ((DrawableNode) drawableNode).setOnMouseClicked(e -> {
-                if (selectedCircle != null)
-                    selectedCircle.setFill(UIConstants.NODE_COLOR);
-                if (selectedLine != null)
-                    selectedLine.setStroke(UIConstants.LINE_COLOR);
-
-                selectedCircle = ((DrawableNode) drawableNode);
-                ((DrawableNode) drawableNode).setFill(UIConstants.NODE_COLOR_SELECTED);
-                if (firstCircle == null) {
-                    firstCircle = ((DrawableNode) drawableNode);
-                    tabPane.getSelectionModel().select(nodesTab);
-                    nodeTreeTable.getSelectionModel().clearAndSelect(findNode(((DrawableNode) drawableNode).getId()));
-                    nodeTreeTable.requestFocus();
-                    nodeTreeTable.scrollTo(findNode(((DrawableNode) drawableNode).getId()));
-                } else {
-                    secondCircle = ((DrawableNode) drawableNode);
-                    // Second node selected, create edge
-                    try {
-                        tabPane.getSelectionModel().select(edgesTab);
-                        edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(firstCircle.getId() + "_" + secondCircle.getId()));
-                        edgeTreeTable.requestFocus();
-                        edgeTreeTable.scrollTo(findEdge(firstCircle.getId() + "_" + secondCircle.getId()));
-                        createNewEdgeFromNodes();
-                        handleSearch();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-                }
-            });
-            ((DrawableNode) drawableNode).setOnMousePressed(e -> {
-                return;
-            });
-            ((DrawableNode) drawableNode).setOnMouseDragged(e -> {
-                return;
-            });
-            ((DrawableNode) drawableNode).setOnMouseReleased(e -> {
-                return;
+            drawableNode.setOnMouseClicked(e -> {
+                handleCreateEdgeFromNodes(drawableNode);
             });
         }
-        if (!clickToMakeEdge) {
+        else {
             drawableNode.setOnMouseClicked(e -> {
-                return;
+                if(e.isShiftDown())
+                    handleCreateEdgeFromNodes(drawableNode);
             });
+
             drawableNode.setOnMousePressed(e -> {
-
-                if (selectedCircle != null)
-                    selectedCircle.setFill(UIConstants.NODE_COLOR);
-                if (selectedLine != null)
-                    selectedLine.setStroke(UIConstants.LINE_COLOR);
-
-                selectedCircle = drawableNode;
-                drawableNode.setFill(UIConstants.NODE_COLOR_SELECTED);
-
-
-                tabPane.getSelectionModel().select(nodesTab);
-                nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
-                nodeTreeTable.requestFocus();
-                nodeTreeTable.scrollTo(findNode(drawableNode.getId()));
-
-                startEdges.clear();
-                endEdges.clear();
-
-                for (EdgeEntry edgeEntry : edgeEntryObservableList) {
-
-                    if (edgeEntry.getStartNode().equals(nodeEntry.getNodeID())) {
-                        startEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
-                    }
-
-                    if (edgeEntry.getEndNode().equals(nodeEntry.getNodeID())) {
-                        endEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
-                    }
-                }
+                handleNodeDragMousePressed(drawableNode, nodeEntry, startEdges, endEdges);
             });
 
             drawableNode.setOnMouseDragged(e -> {
-                final int x = (int) (e.getX() * mapPanel.getZoomLevel().get());
-                final int y = (int) (e.getY() * mapPanel.getZoomLevel().get());
-
-                drawableNode.xCoordinateProperty().set(x);
-                drawableNode.yCoordinateProperty().set(y);
-
-                //FIXME: DO BETTER, DO BINDINGS
-
-                for (DrawableEdge edge : startEdges) {
-                    edge.getMapStartX().set(x);
-                    edge.getMapStartY().set(y);
-                }
-
-                for (DrawableEdge edge : endEdges) {
-                    edge.getMapEndX().set(x);
-                    edge.getMapEndY().set(y);
-                }
-
+                handleNodeDragMouseDragged(drawableNode, e, startEdges, endEdges);
             });
 
             drawableNode.setOnMouseReleased(e -> {
-                try {
-                    DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.xCoordinateProperty().get(), "xcoord");
-                    DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.yCoordinateProperty().get(), "ycoord");
+                if(!e.isDragDetect())
+                {
+                    selectedCircle.setFill(UIConstants.NODE_COLOR);
 
-                    ///FIXME: BIND PROPERTIES TOGETHER
-
-                    for (NodeEntry entry : nodeEntryObservableList) {
-                        if (entry.getNodeID().equals(drawableNode.getId())) {
-                            entry.setXcoord("" + drawableNode.xCoordinateProperty().get());
-                            entry.setYcoord("" + drawableNode.yCoordinateProperty().get());
-                            break;
-                        }
-                    }
-
-
-                } catch (Exception exception) {
-                    exception.printStackTrace();
+                    firstCircle = null;
+                    secondCircle = null;
                 }
+                handleNodeDragMouseReleased(drawableNode);
             });
         }
 
         return drawableNode;
+    }
+
+    /**
+     * Used to manage MousePressed when we are dragging.
+     */
+    private void handleNodeDragMousePressed(DrawableNode drawableNode, NodeEntry nodeEntry, List<DrawableEdge> startEdges, List<DrawableEdge> endEdges)
+    {
+        if (selectedCircle != null)
+            selectedCircle.setFill(UIConstants.NODE_COLOR);
+        if (selectedLine != null)
+            selectedLine.setStroke(UIConstants.LINE_COLOR);
+
+        selectedCircle = drawableNode;
+        drawableNode.setFill(UIConstants.NODE_COLOR_SELECTED);
+
+
+        tabPane.getSelectionModel().select(nodesTab);
+        nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
+        nodeTreeTable.requestFocus();
+        nodeTreeTable.scrollTo(findNode(drawableNode.getId()));
+
+        startEdges.clear();
+        endEdges.clear();
+
+        for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+
+            if (edgeEntry.getStartNode().equals(nodeEntry.getNodeID())) {
+                startEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
+            }
+
+            if (edgeEntry.getEndNode().equals(nodeEntry.getNodeID())) {
+                endEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
+            }
+        }
+    }
+
+    private void handleNodeDragMouseDragged(DrawableNode drawableNode, MouseEvent e, List<DrawableEdge> startEdges, List<DrawableEdge> endEdges)
+    {
+        final int x = (int) (e.getX() * mapPanel.getZoomLevel().get());
+        final int y = (int) (e.getY() * mapPanel.getZoomLevel().get());
+
+        drawableNode.xCoordinateProperty().set(x);
+        drawableNode.yCoordinateProperty().set(y);
+
+        //FIXME: DO BETTER, DO BINDINGS
+
+        for (DrawableEdge edge : startEdges) {
+            edge.getMapStartX().set(x);
+            edge.getMapStartY().set(y);
+        }
+
+        for (DrawableEdge edge : endEdges) {
+            edge.getMapEndX().set(x);
+            edge.getMapEndY().set(y);
+        }
+    }
+
+    private void handleNodeDragMouseReleased(DrawableNode drawableNode)
+    {
+        try {
+            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.xCoordinateProperty().get(), "xcoord");
+            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.yCoordinateProperty().get(), "ycoord");
+
+            ///FIXME: BIND PROPERTIES TOGETHER
+
+            for (NodeEntry entry : nodeEntryObservableList) {
+                if (entry.getNodeID().equals(drawableNode.getId())) {
+                    entry.setXcoord("" + drawableNode.xCoordinateProperty().get());
+                    entry.setYcoord("" + drawableNode.yCoordinateProperty().get());
+                    break;
+                }
+            }
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void handleCreateEdgeFromNodes(DrawableNode drawableNode)
+    {
+        if (selectedCircle != null)
+            selectedCircle.setFill(UIConstants.NODE_COLOR);
+        if (selectedLine != null)
+            selectedLine.setStroke(UIConstants.LINE_COLOR);
+
+        selectedCircle = drawableNode;
+        drawableNode.setFill(UIConstants.NODE_COLOR_SELECTED);
+        if (firstCircle == null) {
+            firstCircle = drawableNode;
+            tabPane.getSelectionModel().select(nodesTab);
+            nodeTreeTable.getSelectionModel().clearAndSelect(findNode(drawableNode.getId()));
+            nodeTreeTable.requestFocus();
+            nodeTreeTable.scrollTo(findNode(drawableNode.getId()));
+        } else {
+            secondCircle = drawableNode;
+            // Second node selected, create edge
+            try {
+                tabPane.getSelectionModel().select(edgesTab);
+                edgeTreeTable.getSelectionModel().clearAndSelect(findEdge(firstCircle.getId() + "_" + secondCircle.getId()));
+                edgeTreeTable.requestFocus();
+                edgeTreeTable.scrollTo(findEdge(firstCircle.getId() + "_" + secondCircle.getId()));
+                createNewEdgeFromNodes();
+                handleSearch();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     private DrawableEdge getEditableEdge(EdgeEntry edge, NodeEntry startNode, NodeEntry endNode) {
