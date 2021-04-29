@@ -264,7 +264,6 @@ public class AStarDemoController implements Initializable {
 
 
             mapPanel.draw(drawableNode);
-            this.startNodeDisplay = drawableNode;
             return drawableNode;
         }
         return null;
@@ -338,7 +337,6 @@ public class AStarDemoController implements Initializable {
      */
     private boolean updatePath()
     {
-        System.out.println(this.startNodeDisplay + " -> " + this.endNodeDisplay);
         if(this.startNodeDisplay != null)
             mapPanel.draw(this.startNodeDisplay);
         if(this.endNodeDisplay != null)
