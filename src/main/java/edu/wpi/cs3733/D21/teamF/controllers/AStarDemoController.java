@@ -45,9 +45,6 @@ public class AStarDemoController implements Initializable {
     @FXML
     private ComboBox<String> endComboBox;
 
-    //FIXME: DO BETTER
-    private Graph graph;
-
     @FXML
     private MapPanel mapPanel;
 
@@ -69,6 +66,9 @@ public class AStarDemoController implements Initializable {
     @FXML
     private Label ETA;
 
+
+    //FIXME: DO BETTER
+    private Graph graph;
 
     private final int MAX_RECENTLY_USED = 5;
 
@@ -363,7 +363,27 @@ public class AStarDemoController implements Initializable {
             if(path != null)
             {
                 pathVertex.addAll(path.asList());
-                drawPathFromIndex();
+
+                final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
+
+                for (int i = 0; i < pathVertex.size() - 1; i++)
+                {
+                    final Vertex start = pathVertex.get(i);
+                    final Vertex end = pathVertex.get(i + 1);
+
+                    //int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor
+                    //FIXME: DO BETTER ID WHEN WE HAVE MULTIPLE PATH DIRECTIONS!!!
+                    final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor(), new NodeEntry(), new NodeEntry());
+                    edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
+
+                    edge.strokeProperty().bind(
+                            Bindings.when(Bindings.isEmpty(stops)).then(Color.RED).otherwise(
+                                    Bindings.when(Bindings.integerValueAt(stops, curStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE)
+                            )
+                    );
+
+                    mapPanel.draw(edge);
+                }
                 return true;
             }
         }
@@ -373,35 +393,6 @@ public class AStarDemoController implements Initializable {
         }
 
         return false; //We had an error
-    }
-
-    /**
-     * Helper function to draw the path starting from given index, input 0 as index to draw the whole path
-     * snatched from updatePath()
-     * @author Alex Friedman (ahf) / ZheCheng Song
-     */
-    private void drawPathFromIndex(){
-        final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
-
-        for (int i = 0; i < pathVertex.size() - 1; i++)
-        {
-            final Vertex start = pathVertex.get(i);
-            final Vertex end = pathVertex.get(i + 1);
-
-            //int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor
-            //FIXME: DO BETTER ID WHEN WE HAVE MULTIPLE PATH DIRECTIONS!!!
-            final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor(), new NodeEntry(), new NodeEntry());
-            // final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
-            edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
-
-            edge.strokeProperty().bind(
-                    Bindings.when(Bindings.isEmpty(stops)).then(Color.RED).otherwise(
-                            Bindings.when(Bindings.integerValueAt(stops, curStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE)
-                    )
-            );
-
-            mapPanel.draw(edge);
-        }
     }
 
     /**
@@ -756,8 +747,6 @@ public class AStarDemoController implements Initializable {
         parseRoute();
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
-        clearPath();
-        drawPathFromIndex();
         mapPanel.draw(this.userNodeDisplay);
         this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
         this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
