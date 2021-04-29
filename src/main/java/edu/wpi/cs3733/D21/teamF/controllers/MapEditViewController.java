@@ -1357,7 +1357,8 @@ public class MapEditViewController {
             return;
         }
         // Get selected Edge
-        EdgeEntry edge = edgeEntryObservableList.get(edgeTreeTable.getSelectionModel().getSelectedIndex());
+        //EdgeEntry edge = edgeEntryObservableList.get(edgeTreeTable.getSelectionModel().getSelectedIndex());
+        EdgeEntry edge = edgeTreeTable.getSelectionModel().getSelectedItem().getValue();
 
         if (edge == null) {
             //FIXME Null Warning
@@ -1671,12 +1672,12 @@ public class MapEditViewController {
     }
 
     public void handleToggle(ActionEvent actionEvent) {
-        if (edgeCreationToggle.getText().equals("Click Node")) {
+        if (edgeCreationToggle.getText().equals("Drag and Drop")) {
             clickToMakeEdge = true;
-            edgeCreationToggle.setText("Click to Make Edge");
+            edgeCreationToggle.setText("Edge Creation");
         } else {
             clickToMakeEdge = false;
-            edgeCreationToggle.setText("Click Node");
+            edgeCreationToggle.setText("Drag and Drop");
         }
         drawEdgeNodeOnFloor();
         handleSearch();
