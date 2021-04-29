@@ -89,7 +89,6 @@ public class AStarDemoController implements Initializable {
     private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
 
     private List<NodeEntry> allNodeEntries = new ArrayList<>();
-    private List<EdgeEntry> allEdgeEntries = new ArrayList<>();
 
     private final SimpleBooleanProperty pathFinding = new SimpleBooleanProperty(false);
     private final ObservableList<Integer> stops = FXCollections.observableArrayList();
@@ -109,7 +108,7 @@ public class AStarDemoController implements Initializable {
 
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
-            allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
+            List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
             this.graph = GraphLoader.load(allNodeEntries, allEdgeEntries);
         } catch (Exception e) {
             this.graph = new Graph();
@@ -142,11 +141,11 @@ public class AStarDemoController implements Initializable {
 
         final ContextMenu contextMenu = new ContextMenu();
 
-        //FIXME: CHANGE TEXT TO BE MORE ACCESSABLE
-        final MenuItem startPathfind = new MenuItem("Path from Here");
-        final MenuItem endPathfind = new MenuItem("Path end Here");
+        //FIXME: CHANGE TEXT TO BE MORE ACCESSIBLE
+        final MenuItem startPathMenu = new MenuItem("Path from Here");
+        final MenuItem endPathMenu = new MenuItem("Path end Here");
 
-        contextMenu.getItems().addAll(startPathfind, endPathfind);
+        contextMenu.getItems().addAll(startPathMenu, endPathMenu);
 
 
         List<NodeEntry> finalAllNodeEntries = allNodeEntries;
@@ -159,9 +158,9 @@ public class AStarDemoController implements Initializable {
 
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
 
-            startPathfind.setOnAction((ActionEvent e) -> startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
+            startPathMenu.setOnAction((ActionEvent e) -> startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
 
-            endPathfind.setOnAction(e -> endComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
+            endPathMenu.setOnAction(e -> endComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
         });
 
 
@@ -191,8 +190,8 @@ public class AStarDemoController implements Initializable {
      *
      * @param entries The list of NodeEntries
      * @param x the x coordinate of the mouse
-     * @param y the y cordinate
-     * @return the closest nodeentry
+     * @param y the y coordinate
+     * @return the closest NodeEntry
      * @author Alex Friedman (ahf)
      */
     private NodeEntry getClosest(List<NodeEntry> entries, double x, double y)
@@ -225,7 +224,7 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     @FXML
-    private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
+    public void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
 
@@ -731,7 +730,7 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Function to react to 'Start Navigation' button being pressed and start the route stepper
-     * @throws SQLException
+     * @throws SQLException thrown if getDrawableNode has an issue
      * @author ZheCheng Song
      */
     public void startNavigation() throws SQLException {
