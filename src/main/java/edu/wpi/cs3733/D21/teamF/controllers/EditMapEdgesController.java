@@ -542,7 +542,9 @@ public class EditMapEdgesController {
                 Integer.parseInt(endNode.getYcoord()),
                 edge.getEdgeID(),
                 startNode.getFloor(),
-                endNode.getFloor()
+                endNode.getFloor(),
+                startNode,
+                endNode
         );
 
         return drawableEdge;

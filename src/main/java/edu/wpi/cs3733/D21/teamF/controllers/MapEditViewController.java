@@ -19,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -327,6 +328,72 @@ public class MapEditViewController {
                     return true;
                 }
             });
+            for(Node node : mapPanel.getCanvas().getChildren()) {
+                if (node instanceof DrawableNode) {
+                    node = (DrawableNode) node;
+                    switch (searchComboBox.getValue()) {
+                        case "Node ID":
+                            if (node.getId().contains(searchField.getText())) ((DrawableNode) node).setShouldDisplay(true);
+                            else ((DrawableNode) node).setShouldDisplay(false);
+                            break;
+                        case "Floor":
+                            if (((DrawableNode) node).getFloor().get().equals(searchField.getText())) ((DrawableNode) node).setShouldDisplay(true);
+                            else ((DrawableNode) node).setShouldDisplay(false);
+                            break;
+                        case "Building":
+                            if (((DrawableNode) node).getBuilding().contains(searchField.getText())) ((DrawableNode) node).setShouldDisplay(true);
+                            else ((DrawableNode) node).setShouldDisplay(false);
+                            break;
+                        case "Node Type":
+                            if (((DrawableNode) node).getNodeType().contains(searchField.getText())) ((DrawableNode) node).setShouldDisplay(true);
+                            else ((DrawableNode) node).setShouldDisplay(false);
+                            break;
+                        case "Long Name":
+                            if (((DrawableNode) node).getLongName().contains(searchField.getText())) ((DrawableNode) node).setShouldDisplay(true);
+                            else ((DrawableNode) node).setShouldDisplay(false);
+                            break;
+                        case "Short Name":
+                            if (((DrawableNode) node).getShortName().contains(searchField.getText())) ((DrawableNode) node).setShouldDisplay(true);
+                            else ((DrawableNode) node).setShouldDisplay(false);
+                            break;
+                        default:
+                            ((DrawableNode) node).setShouldDisplay(true);
+                            break;
+                    }
+                }
+                if (node instanceof DrawableEdge) {
+                    node = (DrawableEdge) node;
+                    switch (searchComboBox.getValue()) {
+                        case "Node ID":
+                            if (node.getId().contains(searchField.getText())) ((DrawableEdge) node).setShouldDisplay(true);
+                            else ((DrawableEdge) node).setShouldDisplay(false);
+                            break;
+                        case "Floor":
+                            if (((DrawableEdge) node).getFloor().get().equals(searchField.getText())) ((DrawableEdge) node).setShouldDisplay(true);
+                            else ((DrawableEdge) node).setShouldDisplay(false);
+                            break;
+                        case "Building":
+                            if (((DrawableEdge) node).getStartNode().getBuilding().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getBuilding().contains(searchField.getText())) ((DrawableEdge) node).setShouldDisplay(true);
+                            else ((DrawableEdge) node).setShouldDisplay(false);
+                            break;
+                        case "Node Type":
+                            if (((DrawableEdge) node).getStartNode().getNodeType().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeType().contains(searchField.getText())) ((DrawableEdge) node).setShouldDisplay(true);
+                            else ((DrawableEdge) node).setShouldDisplay(false);
+                            break;
+                        case "Long Name":
+                            if (((DrawableEdge) node).getStartNode().getLongName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getLongName().contains(searchField.getText())) ((DrawableEdge) node).setShouldDisplay(true);
+                            else ((DrawableEdge) node).setShouldDisplay(false);
+                            break;
+                        case "Short Name":
+                            if (((DrawableEdge) node).getStartNode().getShortName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getShortName().contains(searchField.getText())) ((DrawableEdge) node).setShouldDisplay(true);
+                            else ((DrawableEdge) node).setShouldDisplay(false);
+                            break;
+                        default:
+                            ((DrawableEdge) node).setShouldDisplay(true);
+                            break;
+                    }
+                }
+            }
         }
         else if(edgesTab.isSelected()) {
             edgeTreeTable.setPredicate(new Predicate<TreeItem<EdgeEntry>>() {
@@ -347,7 +414,53 @@ public class MapEditViewController {
                     return true;
                 }
             });
+            List<NodeEntry> nodesToKeep = new ArrayList<NodeEntry>();
+            for(Node node : mapPanel.getCanvas().getChildren()) {
+                if (node instanceof DrawableEdge) {
+                    node = (DrawableEdge) node;
+                    switch (searchComboBox.getValue()) {
+                        case "Edge ID":
+                            if (node.getId().contains(searchField.getText())) {
+                                ((DrawableEdge) node).setShouldDisplay(true);
+                                nodesToKeep.add(((DrawableEdge) node).getStartNode());
+                                nodesToKeep.add(((DrawableEdge) node).getEndNode());
+                            }
+                            else ((DrawableEdge) node).setShouldDisplay(false);
+                            break;
+                        case "Start Node":
+                            if (((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText())) {
+                                ((DrawableEdge) node).setShouldDisplay(true);
+                                nodesToKeep.add(((DrawableEdge) node).getStartNode());
+                                nodesToKeep.add(((DrawableEdge) node).getEndNode());
+                            }
+                            else ((DrawableEdge) node).setShouldDisplay(false);
+                            break;
+                        case "End Node":
+                            if (((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText())) {
+                                ((DrawableEdge) node).setShouldDisplay(true);
+                                nodesToKeep.add(((DrawableEdge) node).getStartNode());
+                                nodesToKeep.add(((DrawableEdge) node).getEndNode());
+                            }
+                            else ((DrawableEdge) node).setShouldDisplay(false);
+                            break;
+                        default:
+                            ((DrawableEdge) node).setShouldDisplay(true);
+                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
+                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
+                            break;
+                    }
+                }
+            }
+            for(Node node : mapPanel.getCanvas().getChildren()) {
+                if(node instanceof DrawableNode) {
+                    ((DrawableNode) node).setShouldDisplay(false);
+                    for(NodeEntry nodeEntry : nodesToKeep) {
+                        if(node.getId().equals(nodeEntry.getNodeID())) ((DrawableNode) node).setShouldDisplay(true);
+                    }
+                }
+            }
         }
+        
     }
 
     /**
@@ -753,7 +866,9 @@ public class MapEditViewController {
                 Integer.parseInt(endNode.getYcoord()),
                 edge.getEdgeID(),
                 startNode.getFloor(),
-                endNode.getFloor()
+                endNode.getFloor(),
+                startNode,
+                endNode
         );
 
         return drawableEdge;

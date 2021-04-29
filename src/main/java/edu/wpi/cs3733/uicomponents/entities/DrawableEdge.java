@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.uicomponents.entities;
 
+import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.uicomponents.IMapDrawable;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import javafx.beans.property.*;
@@ -17,8 +18,11 @@ public class DrawableEdge extends Line implements IMapDrawable
 
     private SimpleBooleanProperty shouldDisplay;
 
+    private NodeEntry startNode;
+    private NodeEntry endNode;
 
-    public DrawableEdge(int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor)
+
+    public DrawableEdge(int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor, NodeEntry startNode, NodeEntry endNode)
     {
         this.startX = new SimpleIntegerProperty(startX);
         this.startY = new SimpleIntegerProperty(startY);
@@ -34,6 +38,9 @@ public class DrawableEdge extends Line implements IMapDrawable
         this.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
         this.setStroke(UIConstants.LINE_COLOR);
         this.setId(ID);
+
+        this.startNode = startNode;
+        this.endNode = endNode;
     }
 
     @Override
@@ -65,4 +72,16 @@ public class DrawableEdge extends Line implements IMapDrawable
 
     public SimpleIntegerProperty getMapEndX() { return this.endX; }
     public SimpleIntegerProperty getMapEndY() { return this.endY; }
+
+    public void setShouldDisplay(boolean shouldDisplay) {
+        this.shouldDisplay.set(shouldDisplay);
+    }
+
+    public NodeEntry getStartNode() {
+        return startNode;
+    }
+
+    public NodeEntry getEndNode() {
+        return endNode;
+    }
 }

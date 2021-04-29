@@ -456,7 +456,7 @@ public class AStarDemoController implements Initializable {
 
             //int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor
             //FIXME: DO BETTER ID WHEN WE HAVE MULTIPLE PATH DIRECTIONS!!!
-            final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor());
+            final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor(), new NodeEntry(), new NodeEntry());
             // final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
             edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
@@ -700,16 +700,16 @@ public class AStarDemoController implements Initializable {
         Vertex curV = pathVertex.get(stops.get(curStep));
         if(curD.equals("UP")){
             direction = new DrawableNode((int)Math.round(curV.getX()), (int)Math.round(curV.getY() - 50.0),
-                    "direction", curV.getFloor());
+                    "direction", curV.getFloor(),"","","","");
         }else if(curD.equals("LEFT")){
             direction = new DrawableNode((int)Math.round(curV.getX() - 50.0), (int)Math.round(curV.getY()),
-                    "direction", curV.getFloor());
+                    "direction", curV.getFloor(),"","","","");
         }else if(curD.equals("RIGHT")){
             direction = new DrawableNode((int)Math.round(curV.getX() + 50.0), (int)Math.round(curV.getY()),
-                    "direction", curV.getFloor());
+                    "direction", curV.getFloor(),"","","","");
         }else if(curD.equals("DOWN")){
             direction = new DrawableNode((int)Math.round(curV.getX()), (int)Math.round(curV.getY() + 50.0),
-                    "direction", curV.getFloor());
+                    "direction", curV.getFloor(),"","","","");
         }
         direction.setFill(Color.RED);
         direction.setRadius(4);
