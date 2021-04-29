@@ -13,8 +13,12 @@ import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
+import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,9 +26,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 
 import java.io.IOException;
 import java.net.URL;
@@ -83,15 +84,15 @@ public class AStarDemoController implements Initializable {
      */
     private DrawableNode startNodeDisplay;
     private DrawableNode endNodeDisplay;
-    private DrawableNode userNodeDisplay;
+    private DrawableUser userNodeDisplay;
 
     // Global variables for the stepper
-    private List<Vertex> pathVertex;
+    private ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
 
     private List<NodeEntry> allNodeEntries = new ArrayList<>();
     private List<EdgeEntry> allEdgeEntries = new ArrayList<>();
 
-    private boolean pathFinding;
+    private SimpleBooleanProperty pathFinding = new SimpleBooleanProperty(false);
     private ObservableList<Integer> stops = FXCollections.observableArrayList();
     private List<String> instructions;
     private List<String> eta;
@@ -137,7 +138,7 @@ public class AStarDemoController implements Initializable {
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
 
-        pathFinding = false;
+        pathFinding.set(false);
 
         final ContextMenu contextMenu = new ContextMenu();
 
@@ -151,7 +152,7 @@ public class AStarDemoController implements Initializable {
         List<NodeEntry> finalAllNodeEntries = allNodeEntries;
 
         mapPanel.getMap().setOnContextMenuRequested(event -> {
-            if(pathFinding){
+            if(pathFinding.get()){
                 return;
             }
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
@@ -167,13 +168,15 @@ public class AStarDemoController implements Initializable {
         End.setDisable(true);
         Prev.setDisable(true);
         Next.setDisable(true);
-        pathVertex = null;
+        pathVertex.clear();
         Instruction.setVisible(false);
 
         direction = null;
 
         loadRecentlyUsedVertices();
         loadFavorites();
+
+        drawUserNode();
     }
     private void loadFavorites() {
         this.favorites = new DoublyLinkedHashSet<>();
@@ -266,7 +269,7 @@ public class AStarDemoController implements Initializable {
             Tooltip.install(drawableNode, tt);
 
 
-            mapPanel.draw(drawableNode);
+            mapPanel.draw(drawableNode); //FIXME: MOVE OUT?
             return drawableNode;
         }
         return null;
@@ -299,28 +302,42 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Helper function used to draw the userNode with given ID
-     * @param nodeID the ID of the Node
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
-    private void drawUserNode(String nodeID) throws SQLException{
-        final NodeEntry userNode = DatabaseAPI.getDatabaseAPI().getNode(nodeID);
-        if(userNode != null)
-        {
-            final DrawableNode drawableNode = userNode.getDrawable();
-            drawableNode.setFill(Color.CYAN);
-            drawableNode.setRadius(10);
+    //drawUserNode(pathVertex.get(stops.get(curStep.get())).getID());
+    private void drawUserNode() {
+        final DrawableUser drawableUser = new DrawableUser(0, 0, "userNode", "");
 
-            Tooltip tt = new Tooltip();
-            tt.setText("User");
-            tt.setStyle("-fx-font: normal bold 15 Langdon; "
-                    + "-fx-base: #AE3522; "
-                    + "-fx-text-fill: orange;");
-            Tooltip.install(drawableNode, tt);
+        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stops))
+                .then(new Vertex("N/A", -1, -1, "N/A"))
+                .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stops, curStep)));
 
-            mapPanel.draw(drawableNode);
+        drawableUser.shouldDisplay().bind(pathFinding);
 
-            this.userNodeDisplay = drawableNode;
-        }
+        drawableUser.getFloor().bind(Bindings.createStringBinding(() -> vertexProperty.get().getFloor(), vertexProperty));
+
+        System.out.println(drawableUser.getFloor().get());
+
+        /*
+        drawableUser.xCoordinateProperty().bind(
+                Bindings.when(Bindings.isEmpty(stops)).then(0).otherwise(
+                        Bindings.valueAt(pathVertex, Bindings.integerValueAt(stops, curStep)).get().getX()
+                )
+        );
+         */
+        drawableUser.xCoordinateProperty().bind(Bindings.createDoubleBinding(() -> vertexProperty.get().getX(), vertexProperty));
+
+        drawableUser.yCoordinateProperty().bind(Bindings.createDoubleBinding(() -> vertexProperty.get().getY(), vertexProperty));
+/*
+        drawableUser.yCoordinateProperty().bind(
+                Bindings.when(Bindings.isEmpty(stops)).then(0).otherwise(
+                        Bindings.valueAt(pathVertex, Bindings.integerValueAt(stops, curStep)).get().getY()
+                )
+        );
+*/
+        this.userNodeDisplay = drawableUser;
+
+        mapPanel.draw(this.userNodeDisplay);
     }
 
     /**
@@ -357,10 +374,10 @@ public class AStarDemoController implements Initializable {
         if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
         {
             final Path path = this.graph.getPath(startVertex, endVertex);
-            pathVertex = null;
+            pathVertex.clear();
             if(path != null)
             {
-                pathVertex = path.asList();
+                pathVertex.addAll(path.asList());
                 drawPathFromIndex(0);
                 return true;
             }
@@ -384,9 +401,6 @@ public class AStarDemoController implements Initializable {
 
         final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
 
-        //System.out.println(curStep.get());
-      //  System.out.println(stops.size());
-        //int s = (stops.isEmpty()) ? 0 : stops.get(curStep.get());
         for (int i = 0; i < pathVertex.size() - 1; i++)
         {
             final Vertex start = pathVertex.get(i);
@@ -471,7 +485,7 @@ public class AStarDemoController implements Initializable {
         stops.clear();
         instructions = new ArrayList<>();
         eta = new ArrayList<>();
-        if(this.pathVertex == null) return;
+        if(this.pathVertex.isEmpty()) return;
 
         // Assert "Up" is forward for start
         double prevAngle = Math.toDegrees(Math.atan2(-1.0,0.0)) + 180;
@@ -735,7 +749,7 @@ public class AStarDemoController implements Initializable {
 
         curStep.set(0);
 
-        pathFinding = true;
+        pathFinding.set(true);
 
         parseRoute();
         mapPanel.switchMap(pathVertex.get(0).getFloor());
@@ -744,7 +758,7 @@ public class AStarDemoController implements Initializable {
         drawPathFromIndex(0);
         this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
         this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
-        drawUserNode(pathVertex.get(stops.get(curStep.get())).getID());
+       // drawUserNode(pathVertexz.get(stops.get(curStep.get())).getID());
         mapPanel.centerNode(userNodeDisplay);
 
         Instruction.setText(instructions.get(curStep.get()));
@@ -778,11 +792,10 @@ public class AStarDemoController implements Initializable {
         clearPath();
         drawPathFromIndex(0);
 
-        //this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
-        //this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
         mapPanel.draw(this.startNodeDisplay);
         mapPanel.draw(this.endNodeDisplay);
-        drawUserNode(pathVertex.get(stops.get(curStep.get())).getID());
+        mapPanel.draw(this.userNodeDisplay);
+        //drawUserNode(pathVertexz.get(stops.get(curStep.get())).getID());
         mapPanel.centerNode(userNodeDisplay);
 
         Instruction.setText(instructions.get(curStep.get()));
@@ -816,11 +829,11 @@ public class AStarDemoController implements Initializable {
 
         clearPath();
         drawPathFromIndex(0);
-       // this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
-       // this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
+
         mapPanel.draw(this.startNodeDisplay);
         mapPanel.draw(this.endNodeDisplay);
-        drawUserNode(pathVertex.get(stops.get(curStep.get())).getID());
+        mapPanel.draw(this.userNodeDisplay);
+        //drawUserNode(pathVertexz.get(stops.get(curStep.get())).getID());
         mapPanel.centerNode(userNodeDisplay);
 
         Instruction.setText(instructions.get(curStep.get()));
@@ -848,7 +861,7 @@ public class AStarDemoController implements Initializable {
         End.setDisable(true);
         Instruction.setVisible(false);
         curStep.set(0);
-        pathFinding = false;
+        pathFinding.set(false);
 
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
