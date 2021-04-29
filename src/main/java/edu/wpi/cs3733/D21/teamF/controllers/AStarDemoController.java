@@ -179,7 +179,26 @@ public class AStarDemoController implements Initializable {
         loadRecentlyUsedVertices();
         loadFavorites();
 
-        drawUserNode();
+        /*
+         * Inits user node
+         */
+
+        final DrawableUser drawableUser = new DrawableUser(0, 0, "userNode", "");
+
+        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stops))
+                .then(new Vertex("N/A", -1, -1, "N/A"))
+                .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stops, curStep)));
+
+        drawableUser.shouldDisplay().bind(pathFinding);
+
+        drawableUser.getFloor().bind(Bindings.createStringBinding(() -> vertexProperty.get().getFloor(), vertexProperty));
+
+        drawableUser.xCoordinateProperty().bind(Bindings.createDoubleBinding(() -> vertexProperty.get().getX(), vertexProperty));
+
+        drawableUser.yCoordinateProperty().bind(Bindings.createDoubleBinding(() -> vertexProperty.get().getY(), vertexProperty));
+        this.userNodeDisplay = drawableUser;
+
+        mapPanel.draw(this.userNodeDisplay);
     }
     private void loadFavorites() {
         this.favorites = new DoublyLinkedHashSet<>();
@@ -303,40 +322,6 @@ public class AStarDemoController implements Initializable {
     }
 
 
-    /**
-     * Helper function used to draw the userNode with given ID
-     * @author Alex Friedman (ahf) / ZheCheng Song
-     */
-    //drawUserNode(pathVertex.get(stops.get(curStep.get())).getID());
-    private void drawUserNode() {
-        //FIXME: ONLY DO ONCE!
-        final DrawableUser drawableUser = new DrawableUser(0, 0, "userNode", "");
-
-        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stops))
-                .then(new Vertex("N/A", -1, -1, "N/A"))
-                .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stops, curStep)));
-
-        drawableUser.shouldDisplay().bind(pathFinding);
-
-        drawableUser.getFloor().bind(Bindings.createStringBinding(() -> vertexProperty.get().getFloor(), vertexProperty));
-
-        drawableUser.xCoordinateProperty().bind(Bindings.createDoubleBinding(() -> vertexProperty.get().getX(), vertexProperty));
-
-        drawableUser.yCoordinateProperty().bind(Bindings.createDoubleBinding(() -> vertexProperty.get().getY(), vertexProperty));
-        this.userNodeDisplay = drawableUser;
-
-        mapPanel.draw(this.userNodeDisplay);
-    }
-
-    /**
-     * This is used to clear the pathfinding drawn path.
-     *
-     * @author Alex Friedman (ahf)
-     */
-    private void clearPath()
-    {
-        mapPanel.clearMap();
-    }
 
     /**
      * This is used to re-render the A* path
@@ -414,12 +399,10 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf)
      */
     private void checkInput() {
-        if (startComboBox.getValue() == null ||
-                endComboBox.getValue() == null){
-            clearPath();
-
+        if (startComboBox.getValue() == null || endComboBox.getValue() == null){
+            mapPanel.clearMap();
         }else{
-            clearPath();
+            mapPanel.clearMap();
             updatePath();
             ETA.textProperty().unbind();
             ETA.setText("ETA"); //FIXME: DO BETTER EVENTUALLY
