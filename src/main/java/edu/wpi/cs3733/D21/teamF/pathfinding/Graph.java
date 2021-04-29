@@ -126,6 +126,22 @@ public class Graph {
     }
 
     /**
+     * Gets the Path of least weight between two Vertices
+     * @param v the List of Vertices
+     * @return the Path of least weight that will travel to every Vertex in the List in optimal order
+     */
+    public Path getUnorderedPath(Vertex... v) {
+        List<Path> paths = new LinkedList<>();
+        for(int i = 0; i < v.length; i++) {
+            for(int j = i + 1; j < v.length; j++) {
+                paths.add(getPath(v[i], v[j]));
+            }
+        }
+        //TODO: finish method
+        return null;
+    }
+
+    /**
      * Used to change the pathfinding algorithm type.
      * @param algorithmName The name of the algorithm to use (AStar/A*, BFS, DFS);
      * @return true if we successfully changed the pathfinding algorithm. False if the specified algorithm could not be found.

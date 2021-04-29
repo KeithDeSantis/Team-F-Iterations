@@ -495,4 +495,34 @@ public class GraphTest {
             assertEquals(iterator.next().getID(), v.getID());
         }
     }
+
+    /**
+     * Tests HashCluster
+     */
+    @Test
+    public void testHashCluster() {
+        HashCluster<Integer> cluster = new HashCluster<>();
+        for(int i = 0; i < 15; i++) {
+            cluster.add(i);
+        }
+        for(int i = 0; i < 6; i++) {
+            cluster.join(i, i + 1);
+        }
+        for(int i = 10; i < 15; i++) {
+            cluster.join(i, i + 1);
+        }
+        cluster.join(7, 10);
+        System.out.println(cluster);
+
+
+
+        DoublyLinkedHashSet<Integer> set = new DoublyLinkedHashSet<>();
+        for(int i = 0; i < 10; i++) {
+            set.add(i);
+        }
+        set.switchAfter(5);
+        set.switchAfter(5);
+        set.switchAfter(5);
+        System.out.println(set);
+    }
 }
