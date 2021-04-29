@@ -130,8 +130,7 @@ public class AStarDemoController implements Initializable {
 
 
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(this.graph.getVertices().stream().map(Vertex::getID)
-                .sorted().collect(Collectors.toList()));
+        nodeList.addAll(this.graph.getVertices().stream().map(Vertex::getID).sorted().collect(Collectors.toList()));
 
 
         startComboBox.setItems(nodeList);
@@ -147,9 +146,6 @@ public class AStarDemoController implements Initializable {
 
         contextMenu.getItems().addAll(startPathMenu, endPathMenu);
 
-
-        List<NodeEntry> finalAllNodeEntries = allNodeEntries;
-
         mapPanel.getMap().setOnContextMenuRequested(event -> {
             if(pathFinding.get()){
                 return;
@@ -158,9 +154,9 @@ public class AStarDemoController implements Initializable {
 
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
 
-            startPathMenu.setOnAction((ActionEvent e) -> startComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
+            startPathMenu.setOnAction((ActionEvent e) -> startComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
 
-            endPathMenu.setOnAction(e -> endComboBox.setValue(getClosest(finalAllNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
+            endPathMenu.setOnAction(e -> endComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
         });
 
 
@@ -180,7 +176,7 @@ public class AStarDemoController implements Initializable {
         loadFavorites();
 
         /*
-         * Inits user node
+         * initializes user node
          */
 
         final DrawableUser drawableUser = new DrawableUser(0, 0, "userNode", "");
@@ -806,6 +802,9 @@ public class AStarDemoController implements Initializable {
         Instruction.setVisible(false);
         curStep.set(0);
         pathFinding.set(false);
+
+        if(direction != null)
+            mapPanel.unDraw(this.direction.getId());
 
         mapPanel.switchMap(pathVertex.get(0).getFloor());
         mapPanel.centerNode(startNodeDisplay);
