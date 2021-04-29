@@ -13,6 +13,8 @@ import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -90,11 +92,11 @@ public class AStarDemoController implements Initializable {
     private List<EdgeEntry> allEdgeEntries = new ArrayList<>();
 
     private boolean pathFinding;
-    private List<Integer> stops;
+    private ObservableList<Integer> stops = FXCollections.observableArrayList();
     private List<String> instructions;
     private List<String> eta;
-    private int curStep;
-    private String curFloor;
+    private SimpleIntegerProperty curStep = new SimpleIntegerProperty(0);
+
 
     private DrawableNode direction;
 
@@ -130,6 +132,7 @@ public class AStarDemoController implements Initializable {
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
         nodeList.addAll(this.graph.getVertices().stream().map(Vertex::getID)
                 .sorted().collect(Collectors.toList()));
+
 
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
@@ -304,7 +307,7 @@ public class AStarDemoController implements Initializable {
         if(userNode != null)
         {
             final DrawableNode drawableNode = userNode.getDrawable();
-            drawableNode.setFill(Color.PURPLE);
+            drawableNode.setFill(Color.CYAN);
             drawableNode.setRadius(10);
 
             Tooltip tt = new Tooltip();
@@ -381,7 +384,9 @@ public class AStarDemoController implements Initializable {
 
         final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
 
-        int s = (stops == null) ? 0 : stops.get(curStep);
+        //System.out.println(curStep.get());
+      //  System.out.println(stops.size());
+        //int s = (stops.isEmpty()) ? 0 : stops.get(curStep.get());
         for (int i = 0; i < pathVertex.size() - 1; i++)
         {
             final Vertex start = pathVertex.get(i);
@@ -393,11 +398,19 @@ public class AStarDemoController implements Initializable {
             // final Line line = new Line(start.getX()/zoomLevel, start.getY()/zoomLevel, end.getX()/zoomLevel, end.getY()/zoomLevel);
             edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
+            /*
             final LinearGradient lineGradient = new LinearGradient(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY(), false, CycleMethod.NO_CYCLE,
                     new Stop(0, (i >= s ? Color.ORANGE : LINE_STROKE_TRANSPARENT)),
                     new Stop(1, (i >= s ? Color.ORANGE : LINE_STROKE_TRANSPARENT)));
 
             edge.setStroke(lineGradient);
+             */
+            //edge.strokeProperty().bind();
+            edge.strokeProperty().bind(
+                    Bindings.when(Bindings.isEmpty(stops)).then(Color.RED).otherwise(
+                            Bindings.when(Bindings.integerValueAt(stops, curStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE)
+                    )
+            );//Bindings.when(Bindings.integerValueAt(stops, curStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE));
 
             mapPanel.draw(edge);
         }
@@ -455,7 +468,7 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     private void parseRoute(){
-        stops = new ArrayList<>();
+        stops.clear();
         instructions = new ArrayList<>();
         eta = new ArrayList<>();
         if(this.pathVertex == null) return;
@@ -630,7 +643,7 @@ public class AStarDemoController implements Initializable {
     private void drawDirection() throws SQLException {
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
-        Vertex curV = pathVertex.get(stops.get(curStep));
+        Vertex curV = pathVertex.get(stops.get(curStep.get()));
         if(curD.equals("UP")){
             direction = new DrawableNode((int)Math.round(curV.getX()), (int)Math.round(curV.getY() - 50.0),
                     "direction", curV.getFloor(),"","","","");
@@ -719,7 +732,9 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(false);
         End.setDisable(false);
         Instruction.setVisible(true);
-        curStep = 0;
+
+        curStep.set(0);
+
         pathFinding = true;
 
         parseRoute();
@@ -729,12 +744,12 @@ public class AStarDemoController implements Initializable {
         drawPathFromIndex(0);
         this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
         this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
-        drawUserNode(pathVertex.get(stops.get(curStep)).getID());
+        drawUserNode(pathVertex.get(stops.get(curStep.get())).getID());
         mapPanel.centerNode(userNodeDisplay);
 
-        Instruction.setText(instructions.get(curStep));
-        ETA.setText(eta.get(curStep));
-        curFloor = pathVertex.get(0).getFloor();
+        Instruction.setText(instructions.get(curStep.get()));
+        ETA.setText(eta.get(curStep.get()));
+//        curFloor = pathVertex.get(0).getFloor();
 
         curD = "UP";
         drawDirection();
@@ -747,31 +762,33 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void goToPrevNode(ActionEvent actionEvent) throws SQLException {
-        curStep--;
-        if(curStep == 0){
+        curStep.set(curStep.get() - 1);
+        if(curStep.get() == 0){
             Prev.setDisable(true);
         }
         else {
             Prev.setDisable(false);
             Next.setDisable(false);
         }
-        if(!pathVertex.get(curStep).getFloor().equals(curFloor)){
-            mapPanel.switchMap(pathVertex.get(stops.get(curStep)).getFloor());
+        if(!pathVertex.get(curStep.get()).getFloor().equals(mapPanel.getFloor())){
+            mapPanel.switchMap(pathVertex.get(stops.get(curStep.get())).getFloor());
         }
-        curFloor = pathVertex.get(stops.get(curStep)).getFloor();
+        //curFloor = pathVertex.get(stops.get(curStep.get())).getFloor();
 
         clearPath();
         drawPathFromIndex(0);
 
-        this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
-        this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
-        drawUserNode(pathVertex.get(stops.get(curStep)).getID());
+        //this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
+        //this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
+        mapPanel.draw(this.startNodeDisplay);
+        mapPanel.draw(this.endNodeDisplay);
+        drawUserNode(pathVertex.get(stops.get(curStep.get())).getID());
         mapPanel.centerNode(userNodeDisplay);
 
-        Instruction.setText(instructions.get(curStep));
-        ETA.setText(eta.get(curStep));
+        Instruction.setText(instructions.get(curStep.get()));
+        ETA.setText(eta.get(curStep.get()));
 
-        changeDirectionRevert(instructions.get(curStep));
+        changeDirectionRevert(instructions.get(curStep.get()));
         drawDirection();
     }
 
@@ -782,34 +799,36 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void goToNextNode(ActionEvent actionEvent) throws SQLException {
-        changeDirection(instructions.get(curStep));
+        changeDirection(instructions.get(curStep.get()));
 
-        curStep++;
-        if(curStep == Math.min(stops.size() - 1, instructions.size() - 1)){
+        curStep.set(curStep.get() + 1);
+        if(curStep.get() == Math.min(stops.size() - 1, instructions.size() - 1)){
             Next.setDisable(true);
         }
         else {
             Prev.setDisable(false);
             Next.setDisable(false);
         }
-        if(!pathVertex.get(stops.get(curStep)).getFloor().equals(curFloor)){
-            mapPanel.switchMap(pathVertex.get(stops.get(curStep)).getFloor());
+        if(!pathVertex.get(stops.get(curStep.get())).getFloor().equals(mapPanel.getFloor())){
+            mapPanel.switchMap(pathVertex.get(stops.get(curStep.get())).getFloor());
         }
-        curFloor = pathVertex.get(stops.get(curStep)).getFloor();
+        //curFloor = pathVertex.get(stops.get(curStep.get())).getFloor();
 
         clearPath();
         drawPathFromIndex(0);
-        this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
-        this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
-        drawUserNode(pathVertex.get(stops.get(curStep)).getID());
+       // this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
+       // this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
+        mapPanel.draw(this.startNodeDisplay);
+        mapPanel.draw(this.endNodeDisplay);
+        drawUserNode(pathVertex.get(stops.get(curStep.get())).getID());
         mapPanel.centerNode(userNodeDisplay);
 
-        Instruction.setText(instructions.get(curStep));
-        ETA.setText(eta.get(curStep));
+        Instruction.setText(instructions.get(curStep.get()));
+        ETA.setText(eta.get(curStep.get()));
 
         drawDirection();
 
-        if(direction != null &&curStep == Math.min(stops.size() - 1, instructions.size() - 1))
+        if(direction != null && curStep.get() == Math.min(stops.size() - 1, instructions.size() - 1))
                 mapPanel.unDraw(this.direction.getId());
 
     }
@@ -828,7 +847,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         End.setDisable(true);
         Instruction.setVisible(false);
-        curStep = 0;
+        curStep.set(0);
         pathFinding = false;
 
         mapPanel.switchMap(pathVertex.get(0).getFloor());
