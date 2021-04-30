@@ -16,14 +16,14 @@ public class NodeEntryTest {
         nodeEntry.setNodeType("type");
         nodeEntry.setBuilding("build");
         nodeEntry.setFloor("floor");
-        nodeEntry.setYcoord("y");
-        nodeEntry.setXcoord("x");
+        nodeEntry.setYCoordinate("y");
+        nodeEntry.setXCoordinate("x");
         nodeEntry.setLongName("long");
         assertTrue(nodeEntry.getNodeType().equals("type") &&
                 nodeEntry.getLongName().equals("long") &&
                 nodeEntry.getBuilding().equals("build") &&
                 nodeEntry.getFloor().equals("floor") &&
-                nodeEntry.getYcoord().equals("y") &&
-                nodeEntry.getXcoord().equals("x"));
+                nodeEntry.getYCoordinate().equals("y") &&
+                nodeEntry.getXCoordinate().equals("x"));
     }
 }

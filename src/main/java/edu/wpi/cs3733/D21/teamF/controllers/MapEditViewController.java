@@ -128,8 +128,8 @@ public class MapEditViewController {
 
             createNodeMenuItem.setOnAction((ActionEvent e) -> {
                 NodeEntry nodeEntry = new NodeEntry();
-                nodeEntry.setXcoord("" + (int) (event.getX() * mapPanel.getZoomLevel().get()));
-                nodeEntry.setYcoord("" + (int) (event.getY() * mapPanel.getZoomLevel().get()));
+                nodeEntry.setXCoordinate("" + (int) (event.getX() * mapPanel.getZoomLevel().get()));
+                nodeEntry.setYCoordinate("" + (int) (event.getY() * mapPanel.getZoomLevel().get()));
                 nodeEntry.setFloor(mapPanel.getFloor().get());
 
                 try {
@@ -643,8 +643,8 @@ public class MapEditViewController {
 
                 data.addAll(nodeEntryObservableList.stream().map(node -> new String[]{
                         node.getNodeID(),
-                        node.getXcoord(),
-                        node.getYcoord(),
+                        node.getXCoordinate(),
+                        node.getYCoordinate(),
                         node.getFloor(),
                         node.getBuilding(),
                         node.getNodeType(),
@@ -942,8 +942,8 @@ public class MapEditViewController {
 
             for (NodeEntry entry : nodeEntryObservableList) {
                 if (entry.getNodeID().equals(drawableNode.getId())) {
-                    entry.setXcoord("" + drawableNode.xCoordinateProperty().get());
-                    entry.setYcoord("" + drawableNode.yCoordinateProperty().get());
+                    entry.setXCoordinate("" + drawableNode.xCoordinateProperty().get());
+                    entry.setYCoordinate("" + drawableNode.yCoordinateProperty().get());
                     break;
                 }
             }
@@ -987,10 +987,10 @@ public class MapEditViewController {
 
     private DrawableEdge getEditableEdge(EdgeEntry edge, NodeEntry startNode, NodeEntry endNode) {
         final DrawableEdge drawableEdge = new DrawableEdge(
-                Integer.parseInt(startNode.getXcoord()),
-                Integer.parseInt(startNode.getYcoord()),
-                Integer.parseInt(endNode.getXcoord()),
-                Integer.parseInt(endNode.getYcoord()),
+                Integer.parseInt(startNode.getXCoordinate()),
+                Integer.parseInt(startNode.getYCoordinate()),
+                Integer.parseInt(endNode.getXCoordinate()),
+                Integer.parseInt(endNode.getYCoordinate()),
                 edge.getEdgeID(),
                 startNode.getFloor(),
                 endNode.getFloor(),
@@ -1049,8 +1049,8 @@ public class MapEditViewController {
             return;
 
         String nodeID = nodeEntry.getNodeID();
-        int xCoord = Integer.parseInt(nodeEntry.getXcoord());
-        int yCoord = Integer.parseInt(nodeEntry.getYcoord());
+        int xCoord = Integer.parseInt(nodeEntry.getXCoordinate());
+        int yCoord = Integer.parseInt(nodeEntry.getYCoordinate());
         String nodeFloor = nodeEntry.getFloor();
         String nodeBuilding = nodeEntry.getBuilding();
         String nodeType = nodeEntry.getNodeType();
@@ -1197,7 +1197,7 @@ public class MapEditViewController {
      * @author KD
      */
     public boolean checkNodeEntryNotEmpty(NodeEntry nodeEntry) {
-        return !nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXcoord().isEmpty() && !nodeEntry.getYcoord().isEmpty() &&
+        return !nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXCoordinate().isEmpty() && !nodeEntry.getYCoordinate().isEmpty() &&
                 !nodeEntry.getFloor().isEmpty() && !nodeEntry.getBuilding().isEmpty() && !nodeEntry.getNodeType().isEmpty() &&
                 !nodeEntry.getLongName().isEmpty() && !nodeEntry.getShortName().isEmpty();
     }

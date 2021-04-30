@@ -64,8 +64,8 @@ public class EditMapNodeDialogViewController {
         {
             node.setNodeID(nodeIDField.getText()); // set all the fields of our node object to the new values given by the user - KD
             node.setNodeIDProperty(nodeIDField.getText());
-            node.setXcoord(xCoordField.getText());
-            node.setYcoord(yCoordField.getText());
+            node.setXCoordinate(xCoordField.getText());
+            node.setYCoordinate(yCoordField.getText());
             node.setFloor(floorField.getText());
             node.setBuilding(buildingField.getText());
             node.setNodeType(nodeTypeField.getText());
@@ -148,8 +148,8 @@ public class EditMapNodeDialogViewController {
     public void setTheNode(NodeEntry theNode) {
         node = theNode;
         nodeIDField.setText(node.getNodeID());
-        xCoordField.setText(node.getXcoord());
-        yCoordField.setText(node.getYcoord());
+        xCoordField.setText(node.getXCoordinate());
+        yCoordField.setText(node.getYCoordinate());
         floorField.setText(node.getFloor());
         buildingField.setText(node.getBuilding());
         nodeTypeField.setText(node.getNodeType());
