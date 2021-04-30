@@ -50,13 +50,7 @@ public class externalTransController {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
+
+
 }

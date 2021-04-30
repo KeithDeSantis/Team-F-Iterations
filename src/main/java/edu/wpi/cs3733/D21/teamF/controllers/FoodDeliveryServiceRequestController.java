@@ -223,18 +223,5 @@ public class FoodDeliveryServiceRequestController {
 
     }
 
-    @FXML
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    @FXML
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
-
-
 
 }

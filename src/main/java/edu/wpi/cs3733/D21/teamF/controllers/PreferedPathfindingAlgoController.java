@@ -21,13 +21,14 @@ public class PreferedPathfindingAlgoController {
     @FXML JFXButton okButton;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         ObservableList<String> algoList = FXCollections.observableArrayList();
         algoList.add("A Star");
         algoList.add("Breadth-First-Search");
         algoList.add("Depth-First-Search");
 
         algorithmComboBox.setItems(algoList);
+        algorithmComboBox.setValue(DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm());
     }
 
     public void handleOkClicked() throws SQLException {

@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -38,5 +39,8 @@ public class GiftDeliveryServiceRequestController {
         }
 
 
+    public void handleBack(MouseEvent mouseEvent) throws IOException {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+    }
 }
 

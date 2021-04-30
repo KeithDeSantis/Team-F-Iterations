@@ -51,15 +51,9 @@ public class MarkRequestsCompleteController implements Initializable {
     private ObservableList<ServiceEntry> services = FXCollections.observableArrayList();
     private String selectedPerson;
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
+
+
 
     public void handleHoverOnCancel(MouseEvent mouseEvent) {
         JFXButton btn = (JFXButton) mouseEvent.getSource();

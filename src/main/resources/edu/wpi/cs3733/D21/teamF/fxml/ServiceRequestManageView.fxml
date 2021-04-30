@@ -22,7 +22,7 @@
                   <Font name="Tahoma" size="29.0" />
                </font>
             </Label>
-            <JFXButton fx:id="manageFloralDeliveryRequests" buttonType="RAISED" onAction="#handleManageFloralDeliveryRequests" text="Floral Delivery">
+            <JFXButton fx:id="manageFloralDeliveryRequests" buttonType="RAISED" onAction="#handleManageFloralDeliveryRequests" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Floral Delivery">
                <ripplerFill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
@@ -38,7 +38,7 @@
                   <Insets bottom="12.0" />
                </VBox.margin>
             </JFXButton>
-            <JFXButton fx:id="manageFoodDeliveryRequests" buttonType="RAISED" layoutX="242.0" layoutY="122.0" onAction="#handleManageFoodDeliveryRequests" text="Food Delivery">
+            <JFXButton fx:id="manageFoodDeliveryRequests" buttonType="RAISED" stylesheets="@/stylesheets/DefaultButtonStyle.css" layoutX="242.0" layoutY="122.0" onAction="#handleManageFoodDeliveryRequests" text="Food Delivery">
                <ripplerFill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
@@ -54,7 +54,7 @@
                   <Insets bottom="12.0" />
                </VBox.margin>
             </JFXButton>
-            <JFXButton fx:id="manageLanguageInterpretationRequests" buttonType="RAISED" layoutX="242.0" layoutY="169.0" onAction="#handleManageLanguageInterpretaionRequests" text="Language Interpretation">
+            <JFXButton fx:id="manageLanguageInterpretationRequests" buttonType="RAISED" stylesheets="@/stylesheets/DefaultButtonStyle.css" layoutX="242.0" layoutY="169.0" onAction="#handleManageLanguageInterpretaionRequests" text="Language Interpretation">
                <ripplerFill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
@@ -70,7 +70,7 @@
                   <Insets bottom="12.0" />
                </VBox.margin>
             </JFXButton>
-            <JFXButton fx:id="manageLanguageInterpretationRequests1" buttonType="RAISED" layoutX="202.0" layoutY="216.0" onAction="#handleManageLanguageInterpretaionRequests" text="Log out">
+            <JFXButton fx:id="manageLanguageInterpretationRequests1" stylesheets="@/stylesheets/DefaultButtonStyle.css" buttonType="RAISED" layoutX="202.0" layoutY="216.0" onAction="#handleManageLanguageInterpretaionRequests" text="Log out">
                <ripplerFill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
