@@ -450,7 +450,7 @@ public class AStarDemoController implements Initializable {
 
             // Stair or Elevator found
             if ((curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV"))
-            && curV.getID().substring(0, 5).equals(nexV.getID().substring(0, 5))){
+            && curV.getID().substring(1, 5).equals(nexV.getID().substring(1, 5))){
                 // Not first node, finish line search
                 if(i!=0){
                     stops.add(i);
@@ -465,17 +465,23 @@ public class AStarDemoController implements Initializable {
                 curV = pathVertex.get(i);
                 nexV = pathVertex.get(i + 1);
                 // do better
-                prevAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+                currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
+                prevDirect = calculateDirection(prevAngle, currAngle);
+                prevAngle = currAngle;
                 stops.add(i);
             }
 
             currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
             currDirect = calculateDirection(prevAngle, currAngle);
             prevAngle = currAngle;
-            if(!currDirect.equals("Look forward") && i != 0){
-                stops.add(i);
-                distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
-                instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
+            if(i != 0) {
+                if (!currDirect.equals("Look forward")) {
+                    stops.add(i);
+                    distance = calculateDistance(pathVertex, stops.get(stops.size() - 2), stops.get(stops.size() - 1));
+                    instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
+                    prevDirect = currDirect;
+                }
+            }else{
                 prevDirect = currDirect;
             }
         }
@@ -485,48 +491,6 @@ public class AStarDemoController implements Initializable {
             instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
         }
         instructions.add("Arrive at destination!");
-
-        if(instructions.size()==0) return;
-        // Fixing Directions. Hard code, do better!
-        boolean lookAtNext = false;
-        for(int i = 0; i < instructions.size() - 1; i++){
-            String ins = instructions.get(i);
-            int step = stops.get(i);
-            if(step == pathVertex.size() - 1 || step < 1)
-                continue;
-            if(lookAtNext) {
-                Vertex curV = pathVertex.get(step);
-                Vertex nexV = pathVertex.get(step + 1);
-                currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
-                currDirect = calculateDirection(prevAngle, currAngle);
-                String[] firstInst = instructions.get(i).split(" ", 3);
-                instructions.set(i, currDirect + " " + firstInst[2]);
-                lookAtNext = false;
-            }
-            if (ins.split(" ")[0].equals("Take")) {
-                Vertex preV = pathVertex.get(step - 1);
-                Vertex curV = pathVertex.get(step);
-                prevAngle = Math.toDegrees(Math.atan2(curV.getY() - preV.getY(), curV.getX() - preV.getX())) + 180;
-                lookAtNext = true;
-            }
-        }
-        if (!instructions.get(0).split(" ")[0].equals("Take")){
-            Vertex curV = pathVertex.get(0);
-            Vertex nexV = pathVertex.get(1);
-            prevAngle = Math.toDegrees(Math.atan2(-1.0, 0.0)) + 180;
-            currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
-            currDirect = calculateDirection(prevAngle, currAngle);
-            String[] firstInst = instructions.get(0).split(" ", 3);
-            instructions.set(0, currDirect + " " + firstInst[2]);
-        }else{
-            Vertex curV = pathVertex.get(1);
-            Vertex nexV = pathVertex.get(2);
-            prevAngle = Math.toDegrees(Math.atan2(-1.0, 0.0)) + 180;
-            currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
-            currDirect = calculateDirection(prevAngle, currAngle);
-            String[] firstInst = instructions.get(1).split(" ", 3);
-            instructions.set(1, currDirect + " " + firstInst[2]);
-        }
 
         // Calculate ETA
         for (Integer stop : stops) {
@@ -557,7 +521,7 @@ public class AStarDemoController implements Initializable {
         Vertex curV;
         for(int i = startIndex + 1; i < pathVertex.size(); i++){
             curV = pathVertex.get(i);
-            if(!curV.getID().substring(0, 5).equals(preV.getID().substring(0, 5)) || i == pathVertex.size() - 1){
+            if(!curV.getID().substring(1, 5).equals(preV.getID().substring(1, 5)) || i == pathVertex.size() - 1){
                 curN = findNodeEntry(curV.getID());
                 if (curN == null) return -1;
                 String type = curN.getNodeType();
@@ -725,6 +689,8 @@ public class AStarDemoController implements Initializable {
         parseRoute();
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
+        if(userNodeDisplay != null)
+            mapPanel.unDraw(userNodeDisplay.getId());
         mapPanel.draw(this.userNodeDisplay);
         this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
         this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
