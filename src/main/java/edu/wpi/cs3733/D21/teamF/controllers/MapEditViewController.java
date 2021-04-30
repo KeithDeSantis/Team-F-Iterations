@@ -201,9 +201,9 @@ public class MapEditViewController {
                 return;
             }
 
-            String targetID = selectedNode.getNodeID();
-            DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
-            mapPanel.unDraw(targetID);
+            String targetNodeID = selectedNode.getNodeID();
+            DatabaseAPI.getDatabaseAPI().deleteNode(targetNodeID);
+            mapPanel.unDraw(targetNodeID);
 
             String previousID = selectedNode.getNodeID();
             openEditNodeDialog(selectedNode); // allow editing of selection - KD
@@ -261,11 +261,11 @@ public class MapEditViewController {
                 return;
             }
             deleteAssociatedEdges(nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID()); // delete all edges connected to the node
-            String targetID = nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID();
-            DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
+            String targetNodeID = nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID();
+            DatabaseAPI.getDatabaseAPI().deleteNode(targetNodeID);
             nodeEntryObservableList.remove(selectedIndex); // remove said index from table - KD
             selectedCircle = null;
-            mapPanel.unDraw(targetID);
+            mapPanel.unDraw(targetNodeID);
         } else if (edgesTab.isSelected()) {
             int index = edgeTreeTable.getSelectionModel().getSelectedIndex();
             EdgeEntry selectedEdge;

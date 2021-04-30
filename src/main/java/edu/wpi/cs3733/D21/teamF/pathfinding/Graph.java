@@ -33,7 +33,7 @@ public class Graph {
     public boolean addEdge(EdgeEntry edge) {
         this.edges.add(edge);
         NodeEntry[] endpoints = edge.getVertices();
-        return this.vertices.get(endpoints[0].getID()) != null && this.vertices.get(endpoints[1].getID()) != null;
+        return this.vertices.get(endpoints[0].getNodeID()) != null && this.vertices.get(endpoints[1].getNodeID()) != null;
     }
 
     /**
@@ -42,7 +42,7 @@ public class Graph {
      * @author Tony Vuolo
      */
     public void addVertex(NodeEntry vertex) {
-        this.vertices.put(vertex.getID(), vertex);
+        this.vertices.put(vertex.getNodeID(), vertex);
     }
 
     /**

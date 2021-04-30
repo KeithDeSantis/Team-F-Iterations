@@ -53,7 +53,7 @@ public class EdgeEntry extends RecursiveTreeObject<EdgeEntry> {
      * @author Tony Vuolo
      */
     public boolean isEndpoint(NodeEntry vertex) {
-        return this.a.getID().equals(vertex.getID()) || this.b.getID().equals(vertex.getID());
+        return this.a.getNodeID().equals(vertex.getNodeID()) || this.b.getNodeID().equals(vertex.getNodeID());
     }
 
     /**
@@ -64,8 +64,8 @@ public class EdgeEntry extends RecursiveTreeObject<EdgeEntry> {
      */
     public boolean equals(EdgeEntry edge) {
         if(edge != null) {
-            boolean checkEnds = (this.a.getID().equals(edge.a.getID())) && (this.b.getID().equals(edge.b.getID()));
-            boolean checkEndsReverse = (this.a.getID().equals(edge.b.getID())) && (this.b.getID().equals(edge.a.getID()));
+            boolean checkEnds = (this.a.getNodeID().equals(edge.a.getNodeID())) && (this.b.getNodeID().equals(edge.b.getNodeID()));
+            boolean checkEndsReverse = (this.a.getNodeID().equals(edge.b.getNodeID())) && (this.b.getNodeID().equals(edge.a.getNodeID()));
             return checkEnds || checkEndsReverse;
         }
         return false;

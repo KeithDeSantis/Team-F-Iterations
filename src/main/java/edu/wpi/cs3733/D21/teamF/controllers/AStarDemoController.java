@@ -128,7 +128,7 @@ public class AStarDemoController implements Initializable {
 
 
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(this.graph.getVertices().stream().map(NodeEntry::getID).sorted().collect(Collectors.toList()));
+        nodeList.addAll(this.graph.getVertices().stream().map(NodeEntry::getNodeID).sorted().collect(Collectors.toList()));
 
 
         startComboBox.setItems(nodeList);
@@ -351,7 +351,7 @@ public class AStarDemoController implements Initializable {
 
                     //int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor
                     //FIXME: DO BETTER ID WHEN WE HAVE MULTIPLE PATH DIRECTIONS!!!
-                    final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor(), new NodeEntry(), new NodeEntry());
+                    final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getNodeID() + "_" + end.getNodeID(), start.getFloor(), end.getFloor(), new NodeEntry(), new NodeEntry());
                     edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
                     edge.strokeProperty().bind(
@@ -443,12 +443,12 @@ public class AStarDemoController implements Initializable {
             NodeEntry curV = pathVertex.get(i);
             NodeEntry nexV = pathVertex.get(i + 1);
 
-            NodeEntry curN = findNodeEntry(curV.getID());
+            NodeEntry curN = findNodeEntry(curV.getNodeID());
             if (curN == null) return;
 
             // Stair or Elevator found
             if ((curN.getNodeType().equals("STAI") || curN.getNodeType().equals("ELEV"))
-            && curV.getID().substring(0, 5).equals(nexV.getID().substring(0, 5))){
+            && curV.getNodeID().substring(0, 5).equals(nexV.getNodeID().substring(0, 5))){
                 // Not first node, finish line search
                 if(i!=0){
                     stops.add(i);
@@ -555,8 +555,8 @@ public class AStarDemoController implements Initializable {
         NodeEntry curV;
         for(int i = startIndex + 1; i < pathVertex.size(); i++){
             curV = pathVertex.get(i);
-            if(!curV.getID().substring(0, 5).equals(preV.getID().substring(0, 5)) || i == pathVertex.size() - 1){
-                curN = findNodeEntry(curV.getID());
+            if(!curV.getNodeID().substring(0, 5).equals(preV.getNodeID().substring(0, 5)) || i == pathVertex.size() - 1){
+                curN = findNodeEntry(curV.getNodeID());
                 if (curN == null) return -1;
                 String type = curN.getNodeType();
                 if (type.equals("STAI"))
@@ -724,8 +724,8 @@ public class AStarDemoController implements Initializable {
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
         mapPanel.draw(this.userNodeDisplay);
-        this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
-        this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
+        this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getNodeID(), UIConstants.NODE_COLOR, 10);
+        this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getNodeID(), Color.GREEN, 10);
         mapPanel.centerNode(userNodeDisplay);
 
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructions)).then("").otherwise(Bindings.stringValueAt(instructions, curStep)));

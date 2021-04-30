@@ -455,7 +455,7 @@ public class GraphTest {
         }
         int value = 0;
         for(NodeEntry vertex : mainPath) {
-            assertEquals("" + value++, vertex.getID());
+            assertEquals("" + value++, vertex.getNodeID());
         }
     }
 
@@ -492,7 +492,7 @@ public class GraphTest {
         assertEquals(totalPath.getPathCost(), length, 0.1);
         ListIterator<NodeEntry> iterator = totalPathList.listIterator();;
         for(NodeEntry v : fragmentedPathList) {
-            assertEquals(iterator.next().getID(), v.getID());
+            assertEquals(iterator.next().getNodeID(), v.getNodeID());
         }
     }
 }

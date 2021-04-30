@@ -55,7 +55,7 @@ public class EditMapEdgeDialogueViewController {
             //return;
         }
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(graph.getVertices().stream().map(NodeEntry::getID)
+        nodeList.addAll(graph.getVertices().stream().map(NodeEntry::getNodeID)
                 .sorted().collect(Collectors.toList()));
         this.startNode.setItems(nodeList);
         this.endNode.setItems(nodeList);

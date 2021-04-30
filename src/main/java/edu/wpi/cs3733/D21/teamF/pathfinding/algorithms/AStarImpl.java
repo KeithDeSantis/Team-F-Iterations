@@ -18,23 +18,23 @@ public class AStarImpl implements IPathfindingAlgorithm {
         HashMap<String, Double> weights = new HashMap<>();
         HashMap<String, NodeEntry> linkages = new HashMap<>();
         NodeEntry proxy = a;
-        weights.put(proxy.getID(), 0.0);
+        weights.put(proxy.getNodeID(), 0.0);
         boolean continueGraphSearchIteration = !proxy.equals(b);
         while(continueGraphSearchIteration) {
             exhaustedVertices.add(proxy);
             for(EdgeEntry edge : proxy.getEdges()) {
                 NodeEntry neighbor = proxy.getNeighbor(edge);
                 if(graph.doesNotContain(exhaustedVertices, neighbor)) {
-                    NodeEntry prev = linkages.get(neighbor.getID());
-                    Double dijkstraWeight = weights.get(proxy.getID()) + edge.getWeight();
+                    NodeEntry prev = linkages.get(neighbor.getNodeID());
+                    Double dijkstraWeight = weights.get(proxy.getNodeID()) + edge.getWeight();
                     if(prev != null) {
-                        if(weights.get(neighbor.getID()) > dijkstraWeight) {
-                            weights.replace(neighbor.getID(), dijkstraWeight);
-                            linkages.replace(neighbor.getID(), proxy);
+                        if(weights.get(neighbor.getNodeID()) > dijkstraWeight) {
+                            weights.replace(neighbor.getNodeID(), dijkstraWeight);
+                            linkages.replace(neighbor.getNodeID(), proxy);
                         }
                     } else {
-                        weights.put(neighbor.getID(), dijkstraWeight);
-                        linkages.put(neighbor.getID(), proxy);
+                        weights.put(neighbor.getNodeID(), dijkstraWeight);
+                        linkages.put(neighbor.getNodeID(), proxy);
                     }
                 }
             }
@@ -44,7 +44,7 @@ public class AStarImpl implements IPathfindingAlgorithm {
                 if((graph.doesNotContain(exhaustedVertices, vertex))) {
                     if(next == null) {
                         next = vertex;
-                    } else if(weights.get(vertex.getID()) + vertex.heuristic(b) < weights.get(next.getID()) + next.heuristic(b)) {
+                    } else if(weights.get(vertex.getNodeID()) + vertex.heuristic(b) < weights.get(next.getNodeID()) + next.heuristic(b)) {
                         next = vertex;
                     }
                 }
@@ -63,7 +63,7 @@ public class AStarImpl implements IPathfindingAlgorithm {
 //            pathList = new LinkedList<>();
 //            boolean continueBackwardPathGeneration = true;
 //            while(continueBackwardPathGeneration) {
-//                proxy = linkages.get(proxy.getID());
+//                proxy = linkages.get(proxy.getNodeID());
 //                if (proxy == null) {
 //                    continueBackwardPathGeneration = false;
 //                } else {
@@ -78,18 +78,18 @@ public class AStarImpl implements IPathfindingAlgorithm {
 //            for(Vertex vertex : pathList) {
 //                path.addVertexToPath(vertex, 0);
 //            }
-//            path.addVertexToPath(b, weights.get(b.getID()));
+//            path.addVertexToPath(b, weights.get(b.getNodeID()));
 //        }
 //        return path == null ? null : path.asList();
 
         Path path = null;
         if(proxy.equals(b)) {
             path = new Path();
-            path.addVertexToPath(b, weights.get(b.getID()));
-            NodeEntry cursor = linkages.get(b.getID());
+            path.addVertexToPath(b, weights.get(b.getNodeID()));
+            NodeEntry cursor = linkages.get(b.getNodeID());
             while(cursor != null) {
                 path.insertVertexInPath(0, cursor, 0);
-                cursor = linkages.get(cursor.getID());
+                cursor = linkages.get(cursor.getNodeID());
             }
         }
         return path;

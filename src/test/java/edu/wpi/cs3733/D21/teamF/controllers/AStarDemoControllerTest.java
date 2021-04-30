@@ -99,7 +99,7 @@ public class AStarDemoControllerTest extends ApplicationTest {
         clickOn("#Next");
         clickOn("#Next");
         verifyThat("#Next", Node::isDisable);
-        verifyThat("Reach Destination!", Node::isVisible);
+        verifyThat("Arrive at destination!", Node::isVisible);
         clickOn("#End");
         verifyThat("2", Node::isVisible);
     }

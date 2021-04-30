@@ -8,10 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class NodeEntry  extends RecursiveTreeObject<NodeEntry> {
-    private String ID;
     private List<EdgeEntry> edges;
     private double x, y;
-
     private String floor;
     private String nodeID;
     private String xcoord;
@@ -29,7 +27,8 @@ public class NodeEntry  extends RecursiveTreeObject<NodeEntry> {
      * @author Tony Vuolo
      */
     public NodeEntry(String ID, int x, int y, String floor) {
-        this.ID = ID;
+        //this.ID = ID;
+        this.nodeID = ID; //TODO HERE
         this.x = x;
         this.y = y;
         this.edges = new LinkedList<>();
@@ -37,18 +36,33 @@ public class NodeEntry  extends RecursiveTreeObject<NodeEntry> {
         this.floor = floor;
     }
 
+    // KD - Constructor for testing purposes
+    public NodeEntry(String nodeID, String name) {
+        this(nodeID,"", "", "" ,"", "",  "", name);
+    }
+
+    // KD - Empty Constructor
+    public NodeEntry() {
+        this("", "", "", "", "", "", "", "");
+    }
+
+    //ahf - constructor for all fields.
+    public NodeEntry(String nodeID, String xcoord, String ycoord, String floor, String building, String nodeType, String longName, String shortName) {
+        this.nodeID = nodeID;
+        this.xcoord = xcoord;
+        this.ycoord = ycoord;
+        this.floor = floor;
+        this.building = building;
+        this.nodeType = nodeType;
+        this.longName = longName;
+        this.shortName = shortName;
+        nodeIDProperty = new SimpleStringProperty(this.nodeID);
+        shortNameProperty = new SimpleStringProperty(this.shortName);
+    }
+
 
     public String getFloor() {
         return floor;
-    }
-
-    /**
-     * Gets the ID number of this Vertex
-     * @return this.ID
-     * @author Tony Vuolo
-     */
-    public String getID() {
-        return this.ID;
     }
 
     /**
@@ -106,7 +120,7 @@ public class NodeEntry  extends RecursiveTreeObject<NodeEntry> {
      * @return true if the Vertices share the same ID, else false
      */
     public boolean equals(NodeEntry vertex) {
-        return vertex != null && this.ID.equals(vertex.getID());
+        return vertex != null && this.nodeID.equals(vertex.getNodeID());
     }
 
     /**
@@ -124,7 +138,7 @@ public class NodeEntry  extends RecursiveTreeObject<NodeEntry> {
      * @return this.ID
      */
     public String toString() {
-        return this.ID;
+        return this.nodeID;
     }
 
 
@@ -144,31 +158,6 @@ public class NodeEntry  extends RecursiveTreeObject<NodeEntry> {
      */
     public double getY() {
         return y;
-    }
-
-    // KD - Constructor for testing purposes
-    public NodeEntry(String nodeID, String name) {
-        this(nodeID,"", "", "" ,"", "",  "", name);
-    }
-
-
-    // KD - Empty Constructor
-    public NodeEntry() {
-        this("", "", "", "", "", "", "", "");
-    }
-
-    //ahf - constructor for all fields.
-    public NodeEntry(String nodeID, String xcoord, String ycoord, String floor, String building, String nodeType, String longName, String shortName) {
-        this.nodeID = nodeID;
-        this.xcoord = xcoord;
-        this.ycoord = ycoord;
-        this.floor = floor;
-        this.building = building;
-        this.nodeType = nodeType;
-        this.longName = longName;
-        this.shortName = shortName;
-        nodeIDProperty = new SimpleStringProperty(this.nodeID);
-        shortNameProperty = new SimpleStringProperty(this.shortName);
     }
 
     public void setNodeID(String nodeID) {
