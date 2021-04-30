@@ -1,5 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -24,6 +26,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -37,28 +41,28 @@ import java.util.stream.Collectors;
 public class AStarDemoController implements Initializable {
 
     @FXML
-    private Button goBack;
+    private ImageView goBack;
 
     @FXML
-    private ComboBox<String> startComboBox;
+    private JFXComboBox<String> startComboBox;
 
     @FXML
-    private ComboBox<String> endComboBox;
+    private JFXComboBox<String> endComboBox;
 
     @FXML
     private MapPanel mapPanel;
 
     @FXML
-    private Button Go;
+    private JFXButton Go;
 
     @FXML
-    private Button End;
+    private JFXButton End;
 
     @FXML
-    private Button Prev;
+    private JFXButton Prev;
 
     @FXML
-    private Button Next;
+    private JFXButton Next;
 
     @FXML
     private Label Instruction;
@@ -156,7 +160,7 @@ public class AStarDemoController implements Initializable {
 
             startPathMenu.setOnAction((ActionEvent e) -> startComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
 
-            endPathMenu.setOnAction(e -> endComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
+            endPathMenu.setOnAction((ActionEvent e) -> endComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
         });
 
 
@@ -231,22 +235,6 @@ public class AStarDemoController implements Initializable {
     }
 
 
-    /**
-     * Handles the pushing of a button on the screen
-     *
-     * @param actionEvent the button's push
-     * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
-     * @author ZheCheng Song
-     */
-    @FXML
-    public void handleButtonPushed(ActionEvent actionEvent) throws IOException {
-
-        Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-
-        if (buttonPushed == goBack) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-        }
-    }
 
     /**
      *
@@ -484,7 +472,7 @@ public class AStarDemoController implements Initializable {
             distance = calculateDistance(pathVertex, stops.get(stops.size() - 2), stops.get(stops.size() - 1));
             instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
         }
-        instructions.add("Arrive at destination!");
+        instructions.add("Arrived at Destination!");
 
         if(instructions.size()==0) return;
         // Fixing Directions. Hard code, do better!
@@ -823,5 +811,26 @@ public class AStarDemoController implements Initializable {
             sumDist += path.get(i).EuclideanDistance(path.get(i + 1));
         }
         return sumDist / PIXEL_TO_METER_RATIO;
+    }
+
+    /**
+     * Returns user to main page after clicking on the B&W Logo
+     * Replaces handleButtonPushed
+     * @param mouseEvent The node that triggered the method
+     * @throws IOException
+     * @author Leo Morris
+     */
+    public void handleGoBack(MouseEvent mouseEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+    }
+
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 }
