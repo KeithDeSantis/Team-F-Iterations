@@ -83,7 +83,7 @@ public class CurrentUser {
      * @return The current user singleton.
      * @author Alex Friedman (ahf)
      */
-    public static CurrentUser getDatabaseAPI(){
+    public static CurrentUser getCurrentUser(){
         return CurrentUserSingletonHelper.currentUser;
     }
 }
