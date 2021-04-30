@@ -88,7 +88,7 @@ public class MapEditViewController {
     @FXML
     private void initialize() {
         clickToMakeEdge = false;
-        // Set fonts for buttons
+
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
         try {
@@ -108,9 +108,11 @@ public class MapEditViewController {
         JFXTreeTableColumn<NodeEntry, String> idColumn = new JFXTreeTableColumn<>("Node ID");
         idColumn.setPrefWidth(colWidth);
         idColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getNodeIDProperty());
+
         JFXTreeTableColumn<NodeEntry, String> shortColumn = new JFXTreeTableColumn<>("Name");
         shortColumn.setPrefWidth(colWidth);
         shortColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getShortNameProperty());
+
         final TreeItem<NodeEntry> root = new RecursiveTreeItem<>(nodeEntryObservableList, RecursiveTreeObject::getChildren);
         nodeTreeTable.setRoot(root);
         nodeTreeTable.setShowRoot(false);

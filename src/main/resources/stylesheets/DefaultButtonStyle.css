@@ -1,4 +1,7 @@
 .button {
     -fx-background-color: #03256C;
     -fx-text-fill: #FFFFFF;
+    -fx-font-family: "Symbol";
+    -fx-font-style: normal;
+    -fx-font-size: 15px;
 }
