@@ -13,22 +13,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.text.Normalizer;
-import java.util.*;
-
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.SQLException;
+import java.util.*;
 
 
 public class LanguageInterpretationServiceRequestController implements Initializable {
@@ -52,7 +47,7 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      * @throws IOException
      * @author Jay
      */
-    public void handleClose(ActionEvent actionEvent) throws IOException {
+    public void handleCancel(ActionEvent actionEvent) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
@@ -72,7 +67,6 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
         submittedStage.showAndWait();
     }
-
     /**
      * Calls translate function when translate button is clicked
      * @param actionEvent
@@ -322,4 +316,5 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         in.close();
         return response.toString();
     }
+
 }
