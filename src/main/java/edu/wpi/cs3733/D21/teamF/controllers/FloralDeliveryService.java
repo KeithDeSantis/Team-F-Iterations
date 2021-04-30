@@ -67,10 +67,9 @@ public class FloralDeliveryService {
 
     /**
      * When back button is pressed
-     * @param mouseEvent
      * @author KD
      */
-    public void handleBack(MouseEvent mouseEvent) throws IOException {
+    public void handleBack() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
