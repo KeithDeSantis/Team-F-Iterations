@@ -260,11 +260,11 @@ public class AStarDemoController implements Initializable {
     @FXML
     public void handleStartBoxAction() {
         checkInput();
-        if(this.startNodeDisplay != null)
-            mapPanel.unDraw(this.startNodeDisplay.getId());
+       // if(this.startNodeDisplay != null)
+        //    mapPanel.unDraw(this.startNodeDisplay.getId());
         //FIXME: USE BINDINGS
         this.startNodeDisplay = mapPanel.getNode(startComboBox.getValue()); //getDrawableNode(startComboBox.getValue(), UIConstants.NODE_COLOR, 10);
-        System.out.println("LF: " + startComboBox.getValue());
+
         mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(startNodeDisplay);
         loadRecentlyUsedVertices();
@@ -281,8 +281,6 @@ public class AStarDemoController implements Initializable {
         if(startNode != null)
         {
             final DrawableNode drawableNode = startNode.getDrawable();
-
-            System.out.println(drawableNode.getId());
 
             drawableNode.setFill(color);//UIConstants.NODE_COLOR);
             drawableNode.setRadius(radius);//10);
@@ -326,8 +324,8 @@ public class AStarDemoController implements Initializable {
     @FXML
     public void handleEndBoxAction() {
         checkInput();
-        if(this.endNodeDisplay != null)
-            mapPanel.unDraw(this.endNodeDisplay.getId());
+//        if(this.endNodeDisplay != null)
+//            mapPanel.unDraw(this.endNodeDisplay.getId());
         //FIXME: USE BINDINGS?
         this.endNodeDisplay = mapPanel.getNode(endComboBox.getValue());//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
         mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
@@ -344,10 +342,10 @@ public class AStarDemoController implements Initializable {
      */
     private boolean updatePath()
     {
-        if(this.startNodeDisplay != null)
-            mapPanel.draw(this.startNodeDisplay);
-        if(this.endNodeDisplay != null)
-            mapPanel.draw(this.endNodeDisplay);
+//        if(this.startNodeDisplay != null)
+//            mapPanel.draw(this.startNodeDisplay);
+//        if(this.endNodeDisplay != null)
+//            mapPanel.draw(this.endNodeDisplay);
 
         final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
         final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
@@ -414,9 +412,9 @@ public class AStarDemoController implements Initializable {
      */
     private void checkInput() {
         if (startComboBox.getValue() == null || endComboBox.getValue() == null){
-            mapPanel.clearMap();
+          mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
         }else{
-            mapPanel.clearMap();
+            mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
             updatePath();
             ETA.textProperty().unbind();
             ETA.setText("ETA"); //FIXME: DO BETTER EVENTUALLY
