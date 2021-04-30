@@ -1,58 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<!--<?import edu.wpi.cs3733.uicomponents.MapPanel?>-->
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: cde7ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
+<VBox alignment="CENTER" prefHeight="414.0" prefWidth="840.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
-      <VBox alignment="CENTER" layoutX="272.0" layoutY="35.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="10.0">
+      <HBox fx:id="header" prefHeight="85.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
          <children>
-            <Label text="AStar PathFinding Demo">
+            <ImageView fx:id="goBack" accessibleRole="BUTTON" fitHeight="90.0" fitWidth="200.0" onMouseClicked="#handleGoBack" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+               </image>
+            </ImageView>
+            <Text text="BRIGHAM AND WOMEN'S HOSPITAL NAVIGATION" wrappingWidth="741.9599609375">
                <font>
-                  <Font size="25.0" />
+                  <Font name="Volkhov Regular" size="40.0" />
                </font>
-            </Label>
-            <!--<MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" />-->
-            <!--<AnchorPane />-->
-            <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" />
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+            </Text>
+         </children></HBox>
+      <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0">
+         <VBox.margin>
+            <Insets left="25.0" right="25.0" top="10.0" />
+         </VBox.margin>
+      </MapPanel>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
                <children>
-                  <HBox prefHeight="34.0" prefWidth="896.0" spacing="10.0">
-                     <children>
-                        <ComboBox fx:id="startComboBox" onAction="#handleStartBoxAction" prefWidth="150.0" promptText="Select Start Location" />
-                        <ComboBox fx:id="endComboBox" onAction="#handleEndBoxAction" prefWidth="150.0" promptText="Select End Location">
-                           <padding>
-                              <Insets left="16.0" />
-                           </padding>
-                        </ComboBox>
-                        <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Start Navigation" textFill="WHITE" />
-                        <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="End Navigation" textFill="WHITE" />
-                        <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Prev" textFill="WHITE" />
-                        <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Next" textFill="WHITE" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0" spacing="50.0">
-                     <children>
-                        <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="500.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="WHITE" />
-                        <Label fx:id="ETA" alignment="CENTER" contentDisplay="CENTER" prefWidth="100.0" style="-fx-background-color: #F0C808;" text="ETA" textFill="WHITE" />
-                     </children>
-                  </HBox>
+                  <JFXComboBox fx:id="startComboBox" focusColor="#f0c808" onAction="#handleStartBoxAction" prefWidth="200.0" promptText="Select Start Location" unFocusColor="#03256c" />
+                  <JFXComboBox fx:id="endComboBox" onAction="#handleEndBoxAction" prefWidth="200.0" promptText="Select End Location" unFocusColor="#03256c">
+                     <padding>
+                        <Insets left="16.0" />
+                     </padding>
+                  </JFXComboBox>
+                  <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Start Navigation" textFill="WHITE" />
+                  <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="End Navigation" textFill="WHITE" />
+                  <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Prev" textFill="WHITE" />
+                  <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Next" textFill="WHITE" />
                </children>
-            </VBox>
-         </children></VBox>
-      <Button fx:id="goBack" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleButtonPushed" text="X">
-         <font>
-            <Font name="Tahoma" size="18.0" />
-         </font>
-      </Button>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0" spacing="50.0">
+               <children>
+                  <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="300.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="BLACK">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Label>
+                  <Label fx:id="ETA" alignment="CENTER" contentDisplay="CENTER" prefWidth="150.0" style="-fx-background-color: #F0C808;" text="ETA" textFill="BLACK">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
    </children>
-</AnchorPane>
+</VBox>
