@@ -137,7 +137,65 @@ public class Graph {
                 paths.add(getPath(v[i], v[j]));
             }
         }
-        //TODO: finish method
+        for(int i = 0; i < paths.size(); i++) {
+            int index = 0;
+            ListIterator<Path> iterator = paths.listIterator();
+            Path prev = null;
+            while(index < paths.size() - i - 1) {
+                Path nextPath = iterator.next();
+                if(prev == null) {
+                    iterator.remove();
+                } else if(prev.getPathCost() < nextPath.getPathCost()) {
+                    iterator.remove();
+                    iterator.add(prev);
+                }
+                prev = nextPath;
+                index++;
+            }
+            if(prev != null) {
+                iterator.add(prev);
+            }
+        }
+        HashCluster<Vertex> hashCluster = new HashCluster<>();
+        for(Vertex vertex : v) {
+            hashCluster.add(vertex);
+        }
+        int totalClusters = v.length;
+        for(Path path : paths) {
+            Vertex start = path.getStart(), end = path.getEnd();
+            if(start.equals(v[0]) && end.equals(v[v.length - 1])) {
+                if(totalClusters == 2) {
+                    hashCluster.join(start, end);
+                    totalClusters--;
+                }
+            } else if(start.equals(v[0])) {
+                if(hashCluster.isIsolated(start)) {
+                    hashCluster.join(start, end);
+                    totalClusters--;
+                }
+            } else if(end.equals(v[v.length - 1])) {
+                if(hashCluster.isIsolated(start)) {
+                    hashCluster.join(start, end);
+                    totalClusters--;
+                }
+            } else {
+                Vertex totalStart = hashCluster.getOtherEnd(start), totalEnd = hashCluster.getOtherEnd(end);
+                if(totalStart != null && totalEnd != null) {
+                    if(((totalStart.equals(v[0]) && totalEnd.equals(v[v.length - 1])) ||
+                            (totalStart.equals(v[v.length - 1]) && totalEnd.equals(v[0])))) {
+                        if(totalClusters == 2) {
+                            hashCluster.join(start, end);
+                            totalClusters--;
+                        }
+                    } else {
+                        hashCluster.join(start, end);
+                        totalClusters--;
+                    }
+                }
+            }
+        }
+        Iterator<Vertex> iterator = hashCluster.iterator();
+
         return null;
     }
 

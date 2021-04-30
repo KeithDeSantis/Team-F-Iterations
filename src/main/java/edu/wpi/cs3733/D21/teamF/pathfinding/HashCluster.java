@@ -1,11 +1,13 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.Iterator;
 
-public class HashCluster<Payload> {
+public class HashCluster<Payload> implements Iterable<Payload> {
     private final HashMap<Payload, HashChain.HashNode<Payload>> links;
     private final HashMap<Payload, HashChain<Payload>> chains;
+    private final DoublyLinkedHashSet<Payload> ends;
+    private int numChains;
 
     /**
      * Creates a new HashCluster
@@ -14,6 +16,8 @@ public class HashCluster<Payload> {
     public HashCluster() {
         this.links = new HashMap<>();
         this.chains = new HashMap<>();
+        this.ends = new DoublyLinkedHashSet<>();
+        this.numChains = 0;
     }
 
     /**
@@ -28,6 +32,8 @@ public class HashCluster<Payload> {
         HashChain.HashNode<Payload> node = new HashChain.HashNode<>(addend);
         this.links.put(addend, node);
         this.chains.put(addend, new HashChain<>(node, node));
+        this.ends.add(addend);
+        this.numChains++;
         return true;
     }
 
@@ -46,22 +52,27 @@ public class HashCluster<Payload> {
                 aNode.node2 = bNode;
                 if(aNode.node1 != null) {
                     this.chains.replace(a, null);
+                    this.ends.remove(a);
                 }
             } else {
                 aNode.node1 = bNode;
                 this.chains.replace(a, null);
+                this.ends.remove(a);
             }
             if(bNode.node2 == null) {
                 bNode.node2 = aNode;
                 if(bNode.node1 != null) {
                     this.chains.replace(b, null);
+                    this.ends.remove(b);
                 }
             } else {
                 bNode.node1 = aNode;
                 this.chains.replace(b, null);
+                this.ends.remove(b);
             }
             aChain.end1 = (aChain.end1 == null) ? aChain.end2 : aChain.end1;
             aChain.end2 = bChain.getOtherEnd(b);
+            this.numChains--;
         }
     }
 
@@ -77,6 +88,9 @@ public class HashCluster<Payload> {
             return false;
         }
         HashChain<Payload> chain = this.chains.get(a);
+        if(isIsolated(a)) {
+            this.numChains--;
+        }
         if(chain == null) {
             HashChain.HashNode<Payload> node1 = node.node1, node2 = node.node2;
             if(node2.node2 != null && node2.node2.equals(node)) {
@@ -105,8 +119,21 @@ public class HashCluster<Payload> {
         }
         this.links.remove(a);
         this.chains.remove(a);
+        this.ends.remove(a);
         return true;
     }
+
+    /**
+     * Finds the other end of the HashChain
+     * @param payload the target Payload
+     * @return null if the Payload does not occur on the end of a chain, else the other end
+     */
+    public Payload getOtherEnd(Payload payload) {
+        HashChain<Payload> chain = this.chains.get(payload);
+        return chain == null ? null : chain.getOtherEnd(payload).payload;
+    }
+
+
 
     /**
      * Determines whether a given Payload in this HashCluster is isolated
@@ -128,6 +155,51 @@ public class HashCluster<Payload> {
             builder.append(value.node1).append(" - ").append(value.payload).append(" - ").append(value.node2).append("\n");
         }
         return builder.toString();
+    }
+
+    /**
+     * Returns an iterator over Payload elements. Note that if the Iterator begins on
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<Payload> iterator() {
+        return new Iterator<Payload>() {
+            private HashChain.HashNode<Payload> currentNode, prevNode;
+
+            /**
+             * Determines whether there is another element left to iterate over in the HashChain
+             * @return true if another element exists, else false
+             */
+            @Override
+            public boolean hasNext() {
+                return this.currentNode != null;
+            }
+
+            /**
+             * Gets the next element in this
+             * @return the next element if one exists, else false
+             */
+            @Override
+            public Payload next() {
+                if(this.currentNode == null) {
+                    throw new IllegalStateException();
+                }
+                if(this.prevNode == null) {
+                    this.prevNode = this.currentNode;
+                    this.currentNode = (this.currentNode.node1 == null) ? this.currentNode.node2 : this.currentNode.node1;
+                } else {
+                    HashChain.HashNode<Payload> cursor = this.currentNode;
+                    if(this.currentNode.node1 == null || this.currentNode.node2 == null) {
+                        this.currentNode = null;
+                    } else {
+                        this.currentNode = (this.currentNode.node1.equals(this.prevNode)) ?
+                                this.currentNode.node2 : this.currentNode.node1;
+                    }
+                    this.prevNode = cursor;
+                }
+                return this.prevNode.payload;
+            }
+        };
     }
 
     /**
