@@ -239,6 +239,8 @@ public class MapPanel extends AnchorPane {
 
         element.visibleProperty().bind(element.shouldDisplay().and(this.floor.isEqualTo(element.getFloor())));
 
+        System.out.println("E " + element.getId());
+
         this.canvas.getChildren().add(element);
         return element;
     }
