@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -27,16 +26,16 @@
             </ScrollPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+                        <HBox alignment="CENTER" prefHeight="79.0" prefWidth="269.0" spacing="40.0">
                            <children>
-                              <Label text="Floor:" textAlignment="CENTER">
+                              <Label prefHeight="16.0" prefWidth="56.0" text="Floor:" textAlignment="CENTER">
                                  <font>
                                     <Font name="Tahoma" size="13.0" />
                                  </font>
                               </Label>
-                              <JFXComboBox fx:id="floorComboBox" />
+                              <JFXSlider fx:id="floorSlider" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="3.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="38.0" prefWidth="186.0" spacing="5.0">
@@ -56,16 +55,6 @@
                                     <Font size="19.0" />
                                  </font>
                               </JFXButton>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
-                           <children>
-                              <Label text="Floor:" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Tahoma" size="13.0" />
-                                 </font>
-                              </Label>
-                              <JFXSlider fx:id="floorSlider" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" onZoom="#handleFloorBoxAction" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="3.0" />
                            </children>
                         </HBox>
                      </children>

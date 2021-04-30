@@ -11,7 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,8 +33,6 @@ public class MapPanel extends AnchorPane {
     @FXML private ImageView map;
     @FXML private Pane canvas;
 
-    @FXML private ComboBox<String> floorComboBox;
-
     @FXML private JFXButton zoomInButton;
 
     @FXML private JFXButton zoomOutButton;
@@ -49,7 +46,8 @@ public class MapPanel extends AnchorPane {
     private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
 
 
-    private StringProperty floor = new SimpleStringProperty("1");
+    private final StringProperty floor = new SimpleStringProperty("1");
+    private final ObjectProperty<String> fp = new SimpleObjectProperty<>();
 
     private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
 
@@ -106,7 +104,7 @@ public class MapPanel extends AnchorPane {
 
         @Override
         public Number fromString(String string) {
-            return new Integer(doubleStringConverter.fromString(string).intValue());
+            return doubleStringConverter.fromString(string).intValue();
         }
     };
 
@@ -155,27 +153,13 @@ public class MapPanel extends AnchorPane {
         final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
 
 
-        zoomOutButton.textProperty().bind(binding);
-        floorComboBox.setItems(floorName);
-
         Bindings.bindBidirectional(this.floor, floorSlider.valueProperty(), doublePropertyStringConverter);
-        //this.floor.bindBidirectional(floorSlider.getLabelFormatter());
-      //  this.floor.bind(binding);
-        //floorComboBox.valueProperty().bindBidirectional(this.floor);
-        this.floorSlider.valueProperty().addListener(e -> {
-            switchMap(this.doubleStringConverter.toString(this.floorSlider.valueProperty().get()));
-        });
+
+        this.floorSlider.valueProperty().addListener(e -> switchMap(this.doubleStringConverter.toString(this.floorSlider.valueProperty().get())));
+
+        fp.bind(this.floor);
     }
 
-
-    /**
-     * Handle switching floor using combobox
-     * @author ZheCheng
-     */
-    @FXML
-    public void handleFloorBoxAction() {
-
-    }
 
     /**
      * Handle switching floor map and redraw the nodes in new floor
@@ -183,7 +167,7 @@ public class MapPanel extends AnchorPane {
      */
     public void switchMap(String floor){
 
-        if(floor.equals(this.floor))
+        if(floor.equals(this.floor.get()))
             return;
 
         this.floor.setValue(floor);
@@ -203,7 +187,6 @@ public class MapPanel extends AnchorPane {
             default: if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
                 map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
         }
-        floorComboBox.setValue(floor);
         //drawNodeOnFloor();
     }
 
@@ -219,7 +202,7 @@ public class MapPanel extends AnchorPane {
     }
 
     public ObjectProperty<String> getFloor() {
-        return floorComboBox.valueProperty();
+        return this.fp;
     }
 
     public Pane getCanvas() {
