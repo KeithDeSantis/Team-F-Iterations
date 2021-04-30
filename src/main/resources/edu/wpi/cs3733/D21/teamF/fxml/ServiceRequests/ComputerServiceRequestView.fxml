@@ -21,7 +21,7 @@
    <children>
       <VBox layoutX="313.0" layoutY="141.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
+            <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
                   <ImageView fitHeight="100.0" fitWidth="86.0" onMouseClicked="#handleGoHome" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -104,9 +104,9 @@
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                      <children>
-                        <JFXButton buttonType="RAISED" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" />
-                        <JFXButton buttonType="RAISED" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear" />
-                        <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                        <JFXButton buttonType="RAISED" onAction="#handleSubmit" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton buttonType="RAISED" onAction="#handleClear" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                        <JFXButton buttonType="RAISED" onAction="#handleCancel" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
                      </children>
                   </HBox>
                </children>
