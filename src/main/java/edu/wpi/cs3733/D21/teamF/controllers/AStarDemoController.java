@@ -173,6 +173,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         pathVertex.clear();
         Instruction.setVisible(false);
+        ETA.setVisible(false);
 
         direction = null;
 
@@ -705,6 +706,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(false);
         End.setDisable(false);
         Instruction.setVisible(true);
+        ETA.setVisible(true);
 
         curStep.set(0);
 
@@ -788,6 +790,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         End.setDisable(true);
         Instruction.setVisible(false);
+        ETA.setVisible(false);
         curStep.set(0);
         pathFinding.set(false);
 
