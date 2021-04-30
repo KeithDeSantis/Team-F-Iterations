@@ -1,5 +1,9 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.controls.JFXTooltip;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -24,6 +28,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -37,28 +43,28 @@ import java.util.stream.Collectors;
 public class AStarDemoController implements Initializable {
 
     @FXML
-    private Button goBack;
+    private ImageView goBack;
 
     @FXML
-    private ComboBox<String> startComboBox;
+    private JFXComboBox<String> startComboBox;
 
     @FXML
-    private ComboBox<String> endComboBox;
+    private JFXComboBox<String> endComboBox;
 
     @FXML
     private MapPanel mapPanel;
 
     @FXML
-    private Button Go;
+    private JFXButton Go;
 
     @FXML
-    private Button End;
+    private JFXButton End;
 
     @FXML
-    private Button Prev;
+    private JFXButton Prev;
 
     @FXML
-    private Button Next;
+    private JFXButton Next;
 
     @FXML
     private Label Instruction;
@@ -156,7 +162,7 @@ public class AStarDemoController implements Initializable {
 
             startPathMenu.setOnAction((ActionEvent e) -> startComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
 
-            endPathMenu.setOnAction(e -> endComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
+            endPathMenu.setOnAction((ActionEvent e) -> endComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
         });
 
 
@@ -169,6 +175,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         pathVertex.clear();
         Instruction.setVisible(false);
+        ETA.setVisible(false);
 
         direction = null;
 
@@ -195,6 +202,10 @@ public class AStarDemoController implements Initializable {
         this.userNodeDisplay = drawableUser;
 
         mapPanel.draw(this.userNodeDisplay);
+
+
+        for(NodeEntry e : allNodeEntries)
+          getDrawableNodez(e.getNodeID(), Color.ORANGE, 5);
     }
     private void loadFavorites() {
         this.favorites = new DoublyLinkedHashSet<>();
@@ -241,7 +252,7 @@ public class AStarDemoController implements Initializable {
     @FXML
     public void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
-        Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
+        ImageView buttonPushed = (ImageView) actionEvent.getSource();  //Getting current stage
 
         if (buttonPushed == goBack) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
@@ -253,11 +264,13 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handleStartBoxAction() throws SQLException {
+    public void handleStartBoxAction() {
         checkInput();
-        if(this.startNodeDisplay != null)
-            mapPanel.unDraw(this.startNodeDisplay.getId());
-        this.startNodeDisplay = getDrawableNode(startComboBox.getValue(), UIConstants.NODE_COLOR, 10);
+       // if(this.startNodeDisplay != null)
+        //    mapPanel.unDraw(this.startNodeDisplay.getId());
+        //FIXME: USE BINDINGS
+        this.startNodeDisplay = mapPanel.getNode(startComboBox.getValue()); //getDrawableNode(startComboBox.getValue(), UIConstants.NODE_COLOR, 10);
+
         mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(startNodeDisplay);
         loadRecentlyUsedVertices();
@@ -267,8 +280,9 @@ public class AStarDemoController implements Initializable {
      * @param nodeID the ID of the Node
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
-    private DrawableNode getDrawableNode(String nodeID, Color color, double radius) throws SQLException{
-        final NodeEntry startNode = DatabaseAPI.getDatabaseAPI().getNode(nodeID);
+    private DrawableNode getDrawableNodez(String nodeID, Color color, double radius) {
+        final NodeEntry startNode = findNodeEntry(nodeID);
+
 
         if(startNode != null)
         {
@@ -276,7 +290,14 @@ public class AStarDemoController implements Initializable {
             drawableNode.setFill(color);//UIConstants.NODE_COLOR);
             drawableNode.setRadius(radius);//10);
 
-            Tooltip tt = new Tooltip();
+            drawableNode.radiusProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(drawableNode.getId()).or(endComboBox.valueProperty().isEqualTo(drawableNode.getId()))).then(10).otherwise(5));
+
+            drawableNode.fillProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(drawableNode.getId())).then(Color.ORANGE).otherwise(
+                    Bindings.when(endComboBox.valueProperty().isEqualTo(drawableNode.getId())).then(Color.GREEN).otherwise(UIConstants.NODE_COLOR)
+            ));
+
+
+            Tooltip tt = new JFXTooltip();
             tt.setText(startNode.getShortName() +
                         "\nBuilding: " + startNode.getBuilding() +
                         "\nFloor: " + startNode.getFloor());
@@ -307,11 +328,12 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handleEndBoxAction() throws SQLException {
+    public void handleEndBoxAction() {
         checkInput();
-        if(this.endNodeDisplay != null)
-            mapPanel.unDraw(this.endNodeDisplay.getId());
-        this.endNodeDisplay = getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
+//        if(this.endNodeDisplay != null)
+//            mapPanel.unDraw(this.endNodeDisplay.getId());
+        //FIXME: USE BINDINGS?
+        this.endNodeDisplay = mapPanel.getNode(endComboBox.getValue());//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
         mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(endNodeDisplay);
         loadRecentlyUsedVertices();
@@ -326,10 +348,10 @@ public class AStarDemoController implements Initializable {
      */
     private boolean updatePath()
     {
-        if(this.startNodeDisplay != null)
-            mapPanel.draw(this.startNodeDisplay);
-        if(this.endNodeDisplay != null)
-            mapPanel.draw(this.endNodeDisplay);
+//        if(this.startNodeDisplay != null)
+//            mapPanel.draw(this.startNodeDisplay);
+//        if(this.endNodeDisplay != null)
+//            mapPanel.draw(this.endNodeDisplay);
 
         final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
         final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
@@ -396,9 +418,9 @@ public class AStarDemoController implements Initializable {
      */
     private void checkInput() {
         if (startComboBox.getValue() == null || endComboBox.getValue() == null){
-            mapPanel.clearMap();
+          mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
         }else{
-            mapPanel.clearMap();
+            mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
             updatePath();
             ETA.textProperty().unbind();
             ETA.setText("ETA"); //FIXME: DO BETTER EVENTUALLY
@@ -673,14 +695,14 @@ public class AStarDemoController implements Initializable {
 
     /**
      * Function to react to 'Start Navigation' button being pressed and start the route stepper
-     * @throws SQLException thrown if getDrawableNode has an issue
      * @author ZheCheng Song
      */
-    public void startNavigation() throws SQLException {
+    public void startNavigation() {
         Go.setDisable(true);
         Next.setDisable(false);
         End.setDisable(false);
         Instruction.setVisible(true);
+        ETA.setVisible(true);
 
         curStep.set(0);
 
@@ -692,8 +714,9 @@ public class AStarDemoController implements Initializable {
         if(userNodeDisplay != null)
             mapPanel.unDraw(userNodeDisplay.getId());
         mapPanel.draw(this.userNodeDisplay);
-        this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
-        this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
+
+        this.startNodeDisplay = mapPanel.getNode(pathVertex.get(0).getID());//getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
+        this.endNodeDisplay = mapPanel.getNode(pathVertex.get(pathVertex.size()-1).getID());//getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
         mapPanel.centerNode(userNodeDisplay);
 
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructions)).then("").otherwise(Bindings.stringValueAt(instructions, curStep)));
@@ -766,6 +789,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         End.setDisable(true);
         Instruction.setVisible(false);
+        ETA.setVisible(false);
         curStep.set(0);
         pathFinding.set(false);
 
@@ -789,5 +813,26 @@ public class AStarDemoController implements Initializable {
             sumDist += path.get(i).EuclideanDistance(path.get(i + 1));
         }
         return sumDist / PIXEL_TO_METER_RATIO;
+    }
+
+    /**
+     * Returns user to main page after clicking on the B&W Logo
+     * Replaces handleButtonPushed
+     * @param mouseEvent The node that triggered the method
+     * @throws IOException
+     * @author Leo Morris
+     */
+    public void handleGoBack(MouseEvent mouseEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+    }
+
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
+
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 }

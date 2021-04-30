@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXSlider?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root type="javafx.scene.layout.AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" >
+<fx:root prefHeight="400.0" prefWidth="600.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -26,16 +26,16 @@
             </ScrollPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+                        <HBox alignment="CENTER" prefHeight="79.0" prefWidth="269.0" spacing="40.0">
                            <children>
-                              <Label text="Floor:" textAlignment="CENTER">
+                              <Label prefHeight="16.0" prefWidth="56.0" text="Floor:" textAlignment="CENTER">
                                  <font>
                                     <Font name="Tahoma" size="13.0" />
                                  </font>
                               </Label>
-                              <JFXComboBox fx:id="floorComboBox" onAction="#handleFloorBoxAction" />
+                              <JFXSlider fx:id="floorSlider" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="3.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="38.0" prefWidth="186.0" spacing="5.0">
