@@ -194,7 +194,6 @@ public class DatabaseAPI {
         private static final DatabaseAPI databaseAPI1 = new DatabaseAPI();
     }
 
-
     public static DatabaseAPI getDatabaseAPI(){
         return DatabaseSingletonHelper.databaseAPI1;
     }
