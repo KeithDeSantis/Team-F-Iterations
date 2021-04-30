@@ -165,7 +165,7 @@ public class ComputerServiceRequestViewController {
      */
     private void goHome() throws IOException {
         //FIXME: AT SOME POINT ADD WARNING IF FORM FILLED OUT!
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     @FXML
