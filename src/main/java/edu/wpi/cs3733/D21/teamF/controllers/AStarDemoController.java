@@ -689,6 +689,8 @@ public class AStarDemoController implements Initializable {
         parseRoute();
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
+        if(userNodeDisplay != null)
+            mapPanel.unDraw(userNodeDisplay.getId());
         mapPanel.draw(this.userNodeDisplay);
         this.startNodeDisplay = getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
         this.endNodeDisplay = getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
