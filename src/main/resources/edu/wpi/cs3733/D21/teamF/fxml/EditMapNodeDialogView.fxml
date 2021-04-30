@@ -28,7 +28,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <JFXButton fx:id="okButton" buttonType="RAISED" defaultButton="true" onAction="#handleOkClicked" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="27.0" prefWidth="195.0" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="OK" textFill="WHITE" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
+      <JFXButton fx:id="okButton" buttonType="RAISED" defaultButton="true" onAction="#handleOkClicked" prefHeight="27.0" prefWidth="195.0" ripplerFill="WHITE" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="OK" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
          <font>
             <Font name="Tahoma" size="13.0" />
          </font></JFXButton>

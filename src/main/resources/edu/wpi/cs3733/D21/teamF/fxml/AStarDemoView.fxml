@@ -34,10 +34,10 @@
                               <Insets left="16.0" />
                            </padding>
                         </ComboBox>
-                        <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Start Navigation" textFill="WHITE" />
-                        <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="End Navigation" textFill="WHITE" />
-                        <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Prev" textFill="WHITE" />
-                        <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Next" textFill="WHITE" />
+                        <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation" />
+                        <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="End Navigation" />
+                        <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Prev" />
+                        <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Next" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0" spacing="50.0">

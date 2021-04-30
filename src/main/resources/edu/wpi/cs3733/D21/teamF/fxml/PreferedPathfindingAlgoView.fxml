@@ -13,7 +13,7 @@
          <children>
             <Label fx:id="title" text="Preferred Pathfinding Algorithm:" />
             <JFXComboBox fx:id="algorithmComboBox" prefHeight="27.0" prefWidth="271.0" />
-            <JFXButton fx:id="okButton" buttonType="RAISED" onAction="#handleOkClicked" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="OK" textFill="WHITE" />
+            <JFXButton fx:id="okButton" buttonType="RAISED" onAction="#handleOkClicked" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="OK" />
          </children>
       </VBox>
    </children>
