@@ -1,6 +1,9 @@
 package edu.wpi.cs3733.uicomponents;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSlider;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,9 +20,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
+import javafx.util.StringConverter;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -38,6 +40,9 @@ public class MapPanel extends AnchorPane {
 
     @FXML private JFXButton zoomOutButton;
 
+    @FXML
+    private JFXSlider floorSlider;
+
     private DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
 
     private final DoubleProperty INITIAL_WIDTH = new SimpleDoubleProperty();
@@ -47,6 +52,63 @@ public class MapPanel extends AnchorPane {
     private StringProperty floor = new SimpleStringProperty("1");
 
     private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
+
+    final StringConverter<Double> doubleStringConverter = new StringConverter<Double>() {
+        @Override
+        public String toString(Double d) {
+            final int cutValue = d.intValue();
+
+            switch (cutValue) {
+                case 0:
+                    return "L2";
+                case 1:
+                    return "L1";
+                case 2:
+                    return "G";
+                case 3:
+                    return "1";
+                case 4:
+                    return "2";
+                case 5:
+                    return "3";
+                default:
+                    return "N/A";
+            }
+        }
+
+        @Override
+        public Double fromString(String s) {
+            switch (s) {
+                case "L2":
+                    return 0.0;
+                case "L1":
+                    return 1.0;
+                case "G":
+                    return 2.0;
+                case "1":
+                    return 3.0;
+                case "2":
+                    return 4.0;
+                case "3":
+                    return 5.0;
+                default:
+                    return -1.0;
+
+            }
+        }
+    };
+
+    final StringConverter<Number> doublePropertyStringConverter = new StringConverter<Number>() {
+        @Override
+        public String toString(Number object) {
+            return doubleStringConverter.toString(object.doubleValue());
+        }
+
+        @Override
+        public Number fromString(String string) {
+            return new Integer(doubleStringConverter.fromString(string).intValue());
+        }
+    };
 
     public MapPanel() {
         final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/uicomponents/MapPanel.fxml"));
@@ -84,19 +146,35 @@ public class MapPanel extends AnchorPane {
         // Set up floor comboBox and draw nodes on that floor
         final ObservableList<String> floorName = FXCollections.observableArrayList();
         floorName.addAll("1","2","3","L1","L2","G");
+
+
+
+
+        floorSlider.setLabelFormatter(doubleStringConverter);
+
+        final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
+
+
+        zoomOutButton.textProperty().bind(binding);
         floorComboBox.setItems(floorName);
-        floorComboBox.valueProperty().bindBidirectional(this.floor);
+
+        Bindings.bindBidirectional(this.floor, floorSlider.valueProperty(), doublePropertyStringConverter);
+        //this.floor.bindBidirectional(floorSlider.getLabelFormatter());
+      //  this.floor.bind(binding);
+        //floorComboBox.valueProperty().bindBidirectional(this.floor);
+        this.floorSlider.valueProperty().addListener(e -> {
+            switchMap(this.doubleStringConverter.toString(this.floorSlider.valueProperty().get()));
+        });
     }
 
 
     /**
      * Handle switching floor using combobox
-     * @param actionEvent
      * @author ZheCheng
      */
     @FXML
-    public void handleFloorBoxAction(ActionEvent actionEvent) {
-        switchMap(floorComboBox.getValue().toString());
+    public void handleFloorBoxAction() {
+
     }
 
     /**
