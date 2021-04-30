@@ -50,7 +50,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <JFXButton fx:id="cancel" buttonType="RAISED" onAction="#handleBack2" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Cancel" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                  <JFXButton fx:id="cancel" buttonType="RAISED" onAction="#handleBack2" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Label text="Name :">
@@ -132,12 +132,12 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <children>
-                        <JFXButton fx:id="submit" buttonType="RAISED" onAction="#handleSubmit" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Submit" textFill="WHITE" />
+                        <JFXButton fx:id="submit" buttonType="RAISED" onAction="#handleSubmit" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                      <children>
-                        <JFXButton fx:id="clear" buttonType="RAISED" onAction="#handleClear" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Clear" textFill="WHITE" />
+                        <JFXButton fx:id="clear" buttonType="RAISED" onAction="#handleClear" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                      </children>
                   </HBox>
                </children>

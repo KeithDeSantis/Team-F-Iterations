@@ -84,8 +84,8 @@
                      </VBox.margin></JFXTextField>
                   <HBox prefHeight="54.0" prefWidth="961.0">
                      <children>
-                        <JFXButton fx:id="submit" buttonType="RAISED" onAction="#submitpushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" />
-                        <JFXButton fx:id="Cancel" buttonType="RAISED" onAction="#cancel" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel">
+                        <JFXButton fx:id="submit" buttonType="RAISED" onAction="#submitpushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton fx:id="Cancel" buttonType="RAISED" onAction="#cancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>

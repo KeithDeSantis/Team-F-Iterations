@@ -35,7 +35,7 @@
             </Label>
          </children>
       </HBox>
-      <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleButtonPushed" style="-fx-background-color: #03256C;" text="?" textFill="WHITE" visible="false" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="30.0">
+      <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" visible="false" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="30.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -230,12 +230,12 @@
       </HBox>
       <ButtonBar buttonMinWidth="100.0" layoutX="596.0" prefHeight="40.0" prefWidth="364.0" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="325.0" AnchorPane.rightAnchor="325.0">
          <buttons>
-            <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" textFill="WHITE">
+            <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
                <font>
                   <Font size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmitPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="28.0" prefWidth="150.0" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" textFill="WHITE">
+            <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmitPushed" prefHeight="28.0" prefWidth="150.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
                <font>
                   <Font size="15.0" />
                </font>
