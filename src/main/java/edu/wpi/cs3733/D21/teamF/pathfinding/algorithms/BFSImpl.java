@@ -15,7 +15,7 @@ public class BFSImpl implements IPathfindingAlgorithm {
      * @return ArrayList of resultant path
      */
     @Override
-    public Path getPath(Graph graph, Vertex a, Vertex b) {
+    public Path getPath(Graph graph, NodeEntry a, NodeEntry b) {
         this.graph = graph;
         if (graph.contains(a) && graph.contains(b)) { //FIXME: NULL CHECK
             return BFS(a, b);
@@ -25,7 +25,7 @@ public class BFSImpl implements IPathfindingAlgorithm {
 
 
     //FIXME: COMMENT
-    private Path BFS(Vertex start, Vertex end)
+    private Path BFS(NodeEntry start, NodeEntry end)
     {
         if(start == null) //FIXME: DO MORE NULL CHECKS, END SHOULDN'T BE ABLE TO BE NULL ANYWAYS
             return null;
@@ -33,7 +33,7 @@ public class BFSImpl implements IPathfindingAlgorithm {
         final Queue<BFSNode> verticesToCheck = new PriorityQueue<>();
         verticesToCheck.add(new BFSNode(0.0, null, start));
 
-        final Set<Vertex> visited = new HashSet<>();
+        final Set<NodeEntry> visited = new HashSet<>();
         //visited.add(start);
 
 
@@ -48,9 +48,9 @@ public class BFSImpl implements IPathfindingAlgorithm {
 
             visited.add(currentVertex.value);
 
-            for(Edge e : currentVertex.value.getEdges())
+            for(EdgeEntry e : currentVertex.value.getEdges())
             {
-                final Vertex n = currentVertex.value.getNeighbor(e);
+                final NodeEntry n = currentVertex.value.getNeighbor(e);
 
                 final BFSNode currBFSNode = new BFSNode(currentVertex.heuristic + e.getWeight(), currentVertex, n);
 
@@ -93,9 +93,9 @@ public class BFSImpl implements IPathfindingAlgorithm {
     private static class BFSNode implements Comparable<BFSNode>{
         private Double heuristic;
         private BFSNode parent;
-        private Vertex value;
+        private NodeEntry value;
 
-        public BFSNode(Double heuristic, BFSNode parent, Vertex value) {
+        public BFSNode(Double heuristic, BFSNode parent, NodeEntry value) {
             this.heuristic = heuristic;
             this.parent = parent;
             this.value = value;

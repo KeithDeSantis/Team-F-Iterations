@@ -1,7 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
-import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
-import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 
 import java.util.HashMap;
@@ -31,7 +29,7 @@ public class GraphLoader {
         final List<String[]> nodesReader = CSVManager.load(nodesCSV);
 
         //I would use a HashSet, but HashSets use HashMaps anyways, so this just makes sense.
-        final HashMap<String, Vertex> vertices = new HashMap<>();
+        final HashMap<String, NodeEntry> vertices = new HashMap<>();
 
         if(!nodesReader.isEmpty() && nodesReader.get(0).length != 8)
             throw new Exception("Invalid nodes csv file format");
@@ -51,7 +49,7 @@ public class GraphLoader {
 
                 final String floor = currLine[3];
 
-                final Vertex currVertex = new Vertex(nodeID, xCoordinate, yCoordinate, floor);
+                final NodeEntry currVertex = new NodeEntry(nodeID, xCoordinate, yCoordinate, floor);
                 vertices.put(nodeID, currVertex);
 
                 graph.addVertex(currVertex);
@@ -80,16 +78,16 @@ public class GraphLoader {
         return graph;
     }
 
-    private static void addVertex(Graph graph, HashMap<String, Vertex> vertices, String edgeID, String startNode, String endNode) throws Exception {
-        final Vertex startVertex = vertices.get(startNode);
+    private static void addVertex(Graph graph, HashMap<String, NodeEntry> vertices, String edgeID, String startNode, String endNode) throws Exception {
+        final NodeEntry startVertex = vertices.get(startNode);
         if(startVertex == null)
             throw new Exception("In edge: " + edgeID + ", start vertex (" + startNode + ") is undefined.");
 
-        final Vertex endVertex = vertices.get(endNode);
+        final NodeEntry endVertex = vertices.get(endNode);
         if(endVertex == null)
             throw new Exception("In edge: " + edgeID + ", end vertex (" + endNode + ") is undefined.");
 
-        final Edge edge = new Edge(startVertex, endVertex); //Edge will automatically add itself to each of the vertices
+        final EdgeEntry edge = new EdgeEntry(startVertex, endVertex); //Edge will automatically add itself to each of the vertices
 
         graph.addEdge(edge);
     }
@@ -106,7 +104,7 @@ public class GraphLoader {
         Graph graph = new Graph();
 
         //I would use a HashSet, but HashSets use HashMaps anyways, so this just makes sense.
-        final HashMap<String, Vertex> vertices = new HashMap<>();
+        final HashMap<String, NodeEntry> vertices = new HashMap<>();
 
 
         for(NodeEntry nodeEntry : nodeEntries)
@@ -122,7 +120,7 @@ public class GraphLoader {
                 final int xCoordinate = Integer.parseInt(nodeEntry.getXcoord());
                 final int yCoordinate = Integer.parseInt(nodeEntry.getYcoord());
 
-                final Vertex currVertex = new Vertex(nodeID, xCoordinate, yCoordinate, nodeEntry.getFloor());
+                final NodeEntry currVertex = new NodeEntry(nodeID, xCoordinate, yCoordinate, nodeEntry.getFloor());
                 vertices.put(nodeID, currVertex);
 
                 graph.addVertex(currVertex);

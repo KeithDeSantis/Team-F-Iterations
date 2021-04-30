@@ -7,8 +7,8 @@ import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.DFSImpl;
 import java.util.*;
 
 public class Graph {
-    private final List<Edge> edges;
-    private final HashMap<String, Vertex> vertices;
+    private final List<EdgeEntry> edges;
+    private final HashMap<String, NodeEntry> vertices;
 
     private IPathfindingAlgorithm pathfindingAlgorithm;
 
@@ -30,9 +30,9 @@ public class Graph {
      * @return true if both endpoint Vertices are already contained in the Graph, else false
      * @author Tony Vuolo
      */
-    public boolean addEdge(Edge edge) {
+    public boolean addEdge(EdgeEntry edge) {
         this.edges.add(edge);
-        Vertex[] endpoints = edge.getVertices();
+        NodeEntry[] endpoints = edge.getVertices();
         return this.vertices.get(endpoints[0].getID()) != null && this.vertices.get(endpoints[1].getID()) != null;
     }
 
@@ -41,7 +41,7 @@ public class Graph {
      * @param vertex the additive Vertex
      * @author Tony Vuolo
      */
-    public void addVertex(Vertex vertex) {
+    public void addVertex(NodeEntry vertex) {
         this.vertices.put(vertex.getID(), vertex);
     }
 
@@ -51,8 +51,8 @@ public class Graph {
      * @return true if the comparator Edge is contained in this Graph, else false
      * @author Tony Vuolo
      */
-    public boolean contains(Edge edge) {
-        for(Edge query : this.edges) {
+    public boolean contains(EdgeEntry edge) {
+        for(EdgeEntry query : this.edges) {
             if(query.equals(edge)) {
                 return true;
             }
@@ -65,7 +65,7 @@ public class Graph {
      * @return An array containing all of our vertices.
      * @author Alex Friedman (ahf), Tony Vuolo
      */
-    public List<Vertex> getVertices() {
+    public List<NodeEntry> getVertices() {
         return new ArrayList<>(vertices.values());
     }
 
@@ -75,7 +75,7 @@ public class Graph {
      * @return The vertex
      * @author Alex Friedman (ahf), Tony Vuolo
      */
-    public Vertex getVertex(String vertexID)
+    public NodeEntry getVertex(String vertexID)
     {
         return this.vertices.get(vertexID);
     }
@@ -86,9 +86,9 @@ public class Graph {
      * @return true if the comparator Vertex is contained in this Graph, else false
      * @author Tony Vuolo
      */
-    public boolean contains(Vertex vertex) {
+    public boolean contains(NodeEntry vertex) {
         for(String key : this.vertices.keySet()) {
-            Vertex query = this.vertices.get(key);
+            NodeEntry query = this.vertices.get(key);
             if(query.equals(vertex)) {
                 return true;
             }
@@ -103,7 +103,7 @@ public class Graph {
      * @return the List of Vertices spanning the path of least weight from Vertex a to Vertex b
      * @author Tony Vuolo, Alex Friedman (ahf)
      */
-    public Path getPath(Vertex a, Vertex b) {
+    public Path getPath(NodeEntry a, NodeEntry b) {
         return pathfindingAlgorithm.getPath(this, a, b);
     }
 
@@ -112,10 +112,10 @@ public class Graph {
      * @param v the (ordered) List of Vertices to be reached
      * @return the Path of least weight that will travel to every Vertex in the List in order
      */
-    public Path getPath(List<Vertex> v) {
+    public Path getPath(List<NodeEntry> v) {
         Path path = new Path();
-        ListIterator<Vertex> iterator = v.listIterator();
-        Vertex prev = iterator.next(), current;
+        ListIterator<NodeEntry> iterator = v.listIterator();
+        NodeEntry prev = iterator.next(), current;
         path.addVertexToPath(prev, 0);
         while(iterator.hasNext()) {
             current = iterator.next();
@@ -160,8 +160,8 @@ public class Graph {
      * @return true if some value in the List is congruent to the Vertex, else false
      * @author Tony Vuolo
      */
-    public boolean doesNotContain(List<Vertex> list, Vertex vertex) {
-        for(Vertex query : list) {
+    public boolean doesNotContain(List<NodeEntry> list, NodeEntry vertex) {
+        for(NodeEntry query : list) {
             if(query.equals(vertex)) {
                 return false;
             }

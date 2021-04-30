@@ -1,6 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
-import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
+import edu.wpi.cs3733.D21.teamF.pathfinding.EdgeEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

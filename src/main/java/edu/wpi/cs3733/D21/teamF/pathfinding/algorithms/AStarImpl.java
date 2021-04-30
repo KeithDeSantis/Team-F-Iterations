@@ -10,22 +10,22 @@ public class AStarImpl implements IPathfindingAlgorithm {
 
 
     @Override
-    public Path getPath(Graph graph, Vertex a, Vertex b) {
+    public Path getPath(Graph graph, NodeEntry a, NodeEntry b) {
         if (!graph.contains(a) || !graph.contains(b)) {
             return null;
         }
-        List<Vertex> exhaustedVertices = new LinkedList<>();
+        List<NodeEntry> exhaustedVertices = new LinkedList<>();
         HashMap<String, Double> weights = new HashMap<>();
-        HashMap<String, Vertex> linkages = new HashMap<>();
-        Vertex proxy = a;
+        HashMap<String, NodeEntry> linkages = new HashMap<>();
+        NodeEntry proxy = a;
         weights.put(proxy.getID(), 0.0);
         boolean continueGraphSearchIteration = !proxy.equals(b);
         while(continueGraphSearchIteration) {
             exhaustedVertices.add(proxy);
-            for(Edge edge : proxy.getEdges()) {
-                Vertex neighbor = proxy.getNeighbor(edge);
+            for(EdgeEntry edge : proxy.getEdges()) {
+                NodeEntry neighbor = proxy.getNeighbor(edge);
                 if(graph.doesNotContain(exhaustedVertices, neighbor)) {
-                    Vertex prev = linkages.get(neighbor.getID());
+                    NodeEntry prev = linkages.get(neighbor.getID());
                     Double dijkstraWeight = weights.get(proxy.getID()) + edge.getWeight();
                     if(prev != null) {
                         if(weights.get(neighbor.getID()) > dijkstraWeight) {
@@ -38,9 +38,9 @@ public class AStarImpl implements IPathfindingAlgorithm {
                     }
                 }
             }
-            Vertex next = null;
+            NodeEntry next = null;
             for(String key : weights.keySet()) {
-                Vertex vertex = graph.getVertex(key);
+                NodeEntry vertex = graph.getVertex(key);
                 if((graph.doesNotContain(exhaustedVertices, vertex))) {
                     if(next == null) {
                         next = vertex;
@@ -86,7 +86,7 @@ public class AStarImpl implements IPathfindingAlgorithm {
         if(proxy.equals(b)) {
             path = new Path();
             path.addVertexToPath(b, weights.get(b.getID()));
-            Vertex cursor = linkages.get(b.getID());
+            NodeEntry cursor = linkages.get(b.getID());
             while(cursor != null) {
                 path.insertVertexInPath(0, cursor, 0);
                 cursor = linkages.get(cursor.getID());

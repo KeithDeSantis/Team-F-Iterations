@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.entities;
 
+import edu.wpi.cs3733.D21.teamF.pathfinding.EdgeEntry;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

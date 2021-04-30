@@ -2,9 +2,9 @@ package edu.wpi.cs3733.D21.teamF.database;
 
 
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
-import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
-import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.pathfinding.EdgeEntry;
+import edu.wpi.cs3733.D21.teamF.pathfinding.NodeEntry;
 
 import java.sql.*;
 import java.util.List;

@@ -1,13 +1,11 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
-import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.pathfinding.*;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
-import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
+import edu.wpi.cs3733.D21.teamF.pathfinding.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
@@ -74,7 +72,7 @@ public class AStarDemoController implements Initializable {
 
     private static final double PIXEL_TO_METER_RATIO = 10;
 
-    private DoublyLinkedHashSet<Vertex> recentlyUsed, favorites;
+    private DoublyLinkedHashSet<NodeEntry> recentlyUsed, favorites;
 
     /**
      * These are done for displaying the start & end nodes. This should be done better (eventually)
@@ -86,7 +84,7 @@ public class AStarDemoController implements Initializable {
     private DrawableUser userNodeDisplay;
 
     // Global variables for the stepper
-    private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
+    private final ObservableList<NodeEntry> pathVertex = FXCollections.observableArrayList();
 
     private List<NodeEntry> allNodeEntries = new ArrayList<>();
 
@@ -130,7 +128,7 @@ public class AStarDemoController implements Initializable {
 
 
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(this.graph.getVertices().stream().map(Vertex::getID).sorted().collect(Collectors.toList()));
+        nodeList.addAll(this.graph.getVertices().stream().map(NodeEntry::getID).sorted().collect(Collectors.toList()));
 
 
         startComboBox.setItems(nodeList);
@@ -181,8 +179,8 @@ public class AStarDemoController implements Initializable {
 
         final DrawableUser drawableUser = new DrawableUser(0, 0, "userNode", "");
 
-        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stops))
-                .then(new Vertex("N/A", -1, -1, "N/A"))
+        final ObjectBinding<NodeEntry> vertexProperty = Bindings.when(Bindings.isEmpty(stops))
+                .then(new NodeEntry("N/A", -1, -1, "N/A"))
                 .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stops, curStep)));
 
         drawableUser.shouldDisplay().bind(pathFinding);
@@ -331,8 +329,8 @@ public class AStarDemoController implements Initializable {
         if(this.endNodeDisplay != null)
             mapPanel.draw(this.endNodeDisplay);
 
-        final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
-        final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
+        final NodeEntry startVertex = this.graph.getVertex(startComboBox.getValue());
+        final NodeEntry endVertex = this.graph.getVertex(endComboBox.getValue());
 
         updateRecentlyUsed(endVertex);
 
@@ -348,8 +346,8 @@ public class AStarDemoController implements Initializable {
 
                 for (int i = 0; i < pathVertex.size() - 1; i++)
                 {
-                    final Vertex start = pathVertex.get(i);
-                    final Vertex end = pathVertex.get(i + 1);
+                    final NodeEntry start = pathVertex.get(i);
+                    final NodeEntry end = pathVertex.get(i + 1);
 
                     //int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor
                     //FIXME: DO BETTER ID WHEN WE HAVE MULTIPLE PATH DIRECTIONS!!!
@@ -380,7 +378,7 @@ public class AStarDemoController implements Initializable {
      * @param endVertex the new destination to be considered a recently used Vertex
      * @author Tony Vuolo (bdane)
      */
-    private void updateRecentlyUsed(Vertex endVertex) {
+    private void updateRecentlyUsed(NodeEntry endVertex) {
         if(this.recentlyUsed.size() == MAX_RECENTLY_USED) {
             this.recentlyUsed.add(this.recentlyUsed.removeIndex(0));
         } else if(this.recentlyUsed.containsKey(endVertex)) {
@@ -442,8 +440,8 @@ public class AStarDemoController implements Initializable {
         stops.add(0);
 
         for(int i = 0; i < pathVertex.size() -1; i++){
-            Vertex curV = pathVertex.get(i);
-            Vertex nexV = pathVertex.get(i + 1);
+            NodeEntry curV = pathVertex.get(i);
+            NodeEntry nexV = pathVertex.get(i + 1);
 
             NodeEntry curN = findNodeEntry(curV.getID());
             if (curN == null) return;
@@ -495,8 +493,8 @@ public class AStarDemoController implements Initializable {
             if(step == pathVertex.size() - 1 || step < 1)
                 continue;
             if(lookAtNext) {
-                Vertex curV = pathVertex.get(step);
-                Vertex nexV = pathVertex.get(step + 1);
+                NodeEntry curV = pathVertex.get(step);
+                NodeEntry nexV = pathVertex.get(step + 1);
                 currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
                 currDirect = calculateDirection(prevAngle, currAngle);
                 String[] firstInst = instructions.get(i).split(" ", 3);
@@ -504,23 +502,23 @@ public class AStarDemoController implements Initializable {
                 lookAtNext = false;
             }
             if (ins.split(" ")[0].equals("Take")) {
-                Vertex preV = pathVertex.get(step - 1);
-                Vertex curV = pathVertex.get(step);
+                NodeEntry preV = pathVertex.get(step - 1);
+                NodeEntry curV = pathVertex.get(step);
                 prevAngle = Math.toDegrees(Math.atan2(curV.getY() - preV.getY(), curV.getX() - preV.getX())) + 180;
                 lookAtNext = true;
             }
         }
         if (!instructions.get(0).split(" ")[0].equals("Take")){
-            Vertex curV = pathVertex.get(0);
-            Vertex nexV = pathVertex.get(1);
+            NodeEntry curV = pathVertex.get(0);
+            NodeEntry nexV = pathVertex.get(1);
             prevAngle = Math.toDegrees(Math.atan2(-1.0, 0.0)) + 180;
             currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
             currDirect = calculateDirection(prevAngle, currAngle);
             String[] firstInst = instructions.get(0).split(" ", 3);
             instructions.set(0, currDirect + " " + firstInst[2]);
         }else{
-            Vertex curV = pathVertex.get(1);
-            Vertex nexV = pathVertex.get(2);
+            NodeEntry curV = pathVertex.get(1);
+            NodeEntry nexV = pathVertex.get(2);
             prevAngle = Math.toDegrees(Math.atan2(-1.0, 0.0)) + 180;
             currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
             currDirect = calculateDirection(prevAngle, currAngle);
@@ -553,8 +551,8 @@ public class AStarDemoController implements Initializable {
 
     private int searchSE(int startIndex){
         NodeEntry curN;
-        Vertex preV = pathVertex.get(startIndex);
-        Vertex curV;
+        NodeEntry preV = pathVertex.get(startIndex);
+        NodeEntry curV;
         for(int i = startIndex + 1; i < pathVertex.size(); i++){
             curV = pathVertex.get(i);
             if(!curV.getID().substring(0, 5).equals(preV.getID().substring(0, 5)) || i == pathVertex.size() - 1){
@@ -597,7 +595,7 @@ public class AStarDemoController implements Initializable {
     private void drawDirection(){
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
-        Vertex curV = pathVertex.get(stops.get(curStep.get()));
+        NodeEntry curV = pathVertex.get(stops.get(curStep.get()));
         switch (currentDirection) {
             case "UP":
                 direction = new DrawableNode((int) Math.round(curV.getX()), (int) Math.round(curV.getY() - 50.0),
@@ -817,7 +815,7 @@ public class AStarDemoController implements Initializable {
      * @param end End index represent the ending node in list
      * @return sumDist the total distance from start Vertex to end Vertex
      */
-    private double calculateDistance(List<Vertex> path, int start, int end) {
+    private double calculateDistance(List<NodeEntry> path, int start, int end) {
         double sumDist = 0.0;
         for (int i = start; i < end; i++) {
             sumDist += path.get(i).EuclideanDistance(path.get(i + 1));

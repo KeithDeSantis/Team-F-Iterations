@@ -1,14 +1,13 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
-import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.pathfinding.EdgeEntry;
+import edu.wpi.cs3733.D21.teamF.pathfinding.NodeEntry;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,6 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MapEditViewControllerTest extends ApplicationTest {
 

@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
-import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

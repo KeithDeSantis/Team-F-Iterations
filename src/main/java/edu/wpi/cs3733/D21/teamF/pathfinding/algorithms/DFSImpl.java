@@ -13,7 +13,7 @@ public class DFSImpl implements IPathfindingAlgorithm {
      * @return ArrayList of resultant path
      */
     @Override
-    public Path getPath(Graph graph, Vertex a, Vertex b) {
+    public Path getPath(Graph graph, NodeEntry a, NodeEntry b) {
         this.graph = graph;
         if (graph.contains(a) && graph.contains(b)) { //FIXME: NULL CHECK
             final Path path = DFS_Recur(a, b, new Path());
@@ -25,7 +25,7 @@ public class DFSImpl implements IPathfindingAlgorithm {
 
 
     //FIXME: COMMENT
-    private Path DFS_Recur(Vertex curr, Vertex end, Path path)
+    private Path DFS_Recur(NodeEntry curr, NodeEntry end, Path path)
     {
         if(curr == null) //FIXME: DO MORE NULL CHECKS, END SHOULDN'T BE ABLE TO BE NULL ANYWAYS
             return null;
@@ -38,9 +38,9 @@ public class DFSImpl implements IPathfindingAlgorithm {
 
         Path acceptedPath = null;
 
-        for(Edge e : curr.getEdges())
+        for(EdgeEntry e : curr.getEdges())
         {
-            final Vertex n = curr.getNeighbor(e);
+            final NodeEntry n = curr.getNeighbor(e);
 
             if(!path.contains(n))
             {

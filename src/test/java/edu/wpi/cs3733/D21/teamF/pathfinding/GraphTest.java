@@ -27,18 +27,18 @@ public class GraphTest {
      *
      * Created by Alex Friedman (ahf)
      * @see Graph
-     * @see Edge
+     * @see EdgeEntry
      */
-    private List<Edge> edges;
+    private List<EdgeEntry> edges;
 
     /**
      * Stores the vertices in the graph.
      *
      * Created by Alex Friedman
      * @see Graph
-     * @see Vertex
+     * @see NodeEntry
      */
-    private HashMap<String, Vertex> vertices;
+    private HashMap<String, NodeEntry> vertices;
 
     /**
      * Setup test suite.
@@ -62,8 +62,8 @@ public class GraphTest {
         edgesField.setAccessible(true);
         verticesField.setAccessible(true);
         //Initialize our local lists
-        edges = (List<Edge>) edgesField.get(graph);
-        vertices = (HashMap<String, Vertex>) verticesField.get(graph);
+        edges = (List<EdgeEntry>) edgesField.get(graph);
+        vertices = (HashMap<String, NodeEntry>) verticesField.get(graph);
 
     }
 
@@ -79,7 +79,7 @@ public class GraphTest {
      * This function tests Graph.contains(Vertex)
      * @author Alex Friedman (ahf)
      * @see Graph
-     * @see Vertex
+     * @see NodeEntry
      */
     @Test
     public void testContainsVertex() {
@@ -87,7 +87,7 @@ public class GraphTest {
          * Iterate through our list of vertices and make sure that the graph
          * contains them all (as we know the graph does).
          */
-        for (Vertex v : vertices.values()) {
+        for (NodeEntry v : vertices.values()) {
             assertTrue(graph.contains(v));
         }
     }
@@ -96,7 +96,7 @@ public class GraphTest {
      * This tests Graph.contains(Edge)
      * @author Alex Friedman (ahf)
      * @see Graph
-     * @see Edge
+     * @see EdgeEntry
      */
     @Test
     public void testContainsEdge() {
@@ -104,7 +104,7 @@ public class GraphTest {
          * Iterate through the list of edges that we know are all in the graph, and
          * make sure that Graph.contains(Edge) correctly identifies them.
          */
-        for (Edge e : edges) {
+        for (EdgeEntry e : edges) {
             assertTrue(graph.contains(e));
         }
     }
@@ -116,13 +116,13 @@ public class GraphTest {
      */
     @Test
     public void testEdgeConnector() {
-        Vertex v0 = new Vertex("0", 0, 0, ""), v1 = new Vertex("1", 3, 4, "");
+        NodeEntry v0 = new NodeEntry("0", 0, 0, ""), v1 = new NodeEntry("1", 3, 4, "");
 
         // asserts that the Vertices have no added Edges
         assertEquals(0, v0.getEdges().size());
         assertEquals(0, v1.getEdges().size());
 
-        Edge edge0 = new Edge(v0, v1), edge1 = new Edge(v1, v0), edge2 = new Edge(v0, v0);
+        EdgeEntry edge0 = new EdgeEntry(v0, v1), edge1 = new EdgeEntry(v1, v0), edge2 = new EdgeEntry(v0, v0);
 
         // asserts that the Vertices have added all Edges above
         assertEquals(4, v0.getEdges().size());
@@ -173,17 +173,17 @@ public class GraphTest {
      * should be written.
      * @author Alex Friedman (ahf)
      * @see Graph
-     * @see Edge
-     * @see Vertex
+     * @see EdgeEntry
+     * @see NodeEntry
      */
     @Test
     public void testDFSPathEdges() {
         graph.setPathfindingAlgorithm("dfs");
 
         //Tests that we always get the shortest path along an edge.
-        for (Edge e : edges) {
-            final Vertex v0 = e.getVertices()[0];
-            final Vertex v1 = e.getVertices()[1];
+        for (EdgeEntry e : edges) {
+            final NodeEntry v0 = e.getVertices()[0];
+            final NodeEntry v1 = e.getVertices()[1];
 
             assertDoesNotThrow(() -> graph.getPath(v0, v1));
 
@@ -203,15 +203,15 @@ public class GraphTest {
      * able to avoid error and return null
      * @author ZheCheng Song
      * @see Graph
-     * @see Edge
-     * @see Vertex
+     * @see EdgeEntry
+     * @see NodeEntry
      */
     @Test
     public void testDFSPathNullVertex() {
         graph.setPathfindingAlgorithm("dfs");
-        final Edge e = edges.get(0);
-        final Vertex v0 = e.getVertices()[0];
-        final Vertex v1 = e.getVertices()[1];
+        final EdgeEntry e = edges.get(0);
+        final NodeEntry v0 = e.getVertices()[0];
+        final NodeEntry v1 = e.getVertices()[1];
 
         assertNull(graph.getPath(null, v1));
         assertNull(graph.getPath(v0, null));
@@ -223,17 +223,17 @@ public class GraphTest {
      * check to see if the path always only contains two node
      * @author ZheCheng Song
      * @see Graph
-     * @see Edge
-     * @see Vertex
+     * @see EdgeEntry
+     * @see NodeEntry
      */
     @Test
     public void testDFSPathShortest() {
-        final Vertex v0 = new Vertex("T0", 0, 0, "");
-        final Vertex v1 = new Vertex("T1", 0, 1, "");
-        final Vertex v2 = new Vertex("T2", 1, 0, "");
-        final Edge e0 = new Edge(v0, v1);
-        final Edge e1 = new Edge(v1, v2);
-        final Edge e2 = new Edge(v2, v0);
+        final NodeEntry v0 = new NodeEntry("T0", 0, 0, "");
+        final NodeEntry v1 = new NodeEntry("T1", 0, 1, "");
+        final NodeEntry v2 = new NodeEntry("T2", 1, 0, "");
+        final EdgeEntry e0 = new EdgeEntry(v0, v1);
+        final EdgeEntry e1 = new EdgeEntry(v1, v2);
+        final EdgeEntry e2 = new EdgeEntry(v2, v0);
 
         graph.addVertex(v0);
         graph.addVertex(v1);
@@ -263,8 +263,8 @@ public class GraphTest {
      * Tests longer chains in DFS.
      * @author Alex Friedman (ahf)
      * @see Graph
-     * @see Edge
-     * @see Vertex
+     * @see EdgeEntry
+     * @see NodeEntry
      */
     @Test
     public void testDFSGraphChain() {
@@ -298,8 +298,8 @@ public class GraphTest {
     public void testAStarWithDFS() {
         //tests every possibility b/c why not? we have a small dataset
 
-        for (Vertex start : vertices.values()) {
-            for (Vertex end : vertices.values()) {
+        for (NodeEntry start : vertices.values()) {
+            for (NodeEntry end : vertices.values()) {
                 if (! start.equals(end)) {
 
                     graph.setPathfindingAlgorithm("dfs");
@@ -311,10 +311,10 @@ public class GraphTest {
                     final Path aStar = graph.getPath(start, end);//.asList();
 
                     if(dfs != null && aStar != null) {
-                        Iterator<Vertex> dfsListIterator = dfs.iterator(),
+                        Iterator<NodeEntry> dfsListIterator = dfs.iterator(),
                                 aStarListIterator = aStar.iterator();
                         while(dfsListIterator.hasNext() && aStarListIterator.hasNext()) {
-                            Vertex dfsElement = dfsListIterator.next(), aStarElement = aStarListIterator.next();
+                            NodeEntry dfsElement = dfsListIterator.next(), aStarElement = aStarListIterator.next();
                             assertTrue(dfsElement.equals(aStarElement));
                         }
                         assertFalse(dfsListIterator.hasNext() || aStarListIterator.hasNext());
@@ -333,9 +333,9 @@ public class GraphTest {
     @Test
     public void testAStarNullVertex() {
         graph.setPathfindingAlgorithm("a*");
-        final Edge e = edges.get(0);
-        final Vertex v0 = e.getVertices()[0];
-        final Vertex v1 = e.getVertices()[1];
+        final EdgeEntry e = edges.get(0);
+        final NodeEntry v0 = e.getVertices()[0];
+        final NodeEntry v1 = e.getVertices()[1];
 
         assertNull(graph.getPath(null, v1));
         assertNull(graph.getPath(v0, null));
@@ -351,7 +351,7 @@ public class GraphTest {
      * @author Alex Friedman (ahf)
      */
     @Test
-    private Path runDFS(Vertex start, Vertex end) //FIXME: DO BETTER, methodize better & use in more places?
+    private Path runDFS(NodeEntry start, NodeEntry end) //FIXME: DO BETTER, methodize better & use in more places?
     {
         graph.setPathfindingAlgorithm("dfs");
         assertDoesNotThrow(() -> graph.getPath(start, end));
@@ -365,18 +365,18 @@ public class GraphTest {
      */
     @Test
     public void testDoublyLinkedHashMap() {
-        Vertex v0 = new Vertex("CCONF", 3, 7, "");
-        Vertex v1 = new Vertex("CDEPT", 3, 7, "");
-        Vertex v2 = new Vertex("CHALL", 3, 7, "");
-        Vertex v3 = new Vertex("CLABS", 3, 7, "");
+        NodeEntry v0 = new NodeEntry("CCONF", 3, 7, "");
+        NodeEntry v1 = new NodeEntry("CDEPT", 3, 7, "");
+        NodeEntry v2 = new NodeEntry("CHALL", 3, 7, "");
+        NodeEntry v3 = new NodeEntry("CLABS", 3, 7, "");
 
-        DoublyLinkedHashSet<Vertex> map = new DoublyLinkedHashSet<>();
+        DoublyLinkedHashSet<NodeEntry> map = new DoublyLinkedHashSet<>();
         map.insert(0, v0);
         map.insert(0, v1);
         map.insert(0, v2);
         map.insert(0, v3);
 
-        for(Vertex v : map) {
+        for(NodeEntry v : map) {
             assertTrue(map.containsKey(v));
         }
     }
@@ -386,8 +386,8 @@ public class GraphTest {
     public void testBFSWithDFS() {
         //tests every possibility b/c why not? we have a small dataset
 
-        for (Vertex start : vertices.values()) {
-            for (Vertex end : vertices.values()) {
+        for (NodeEntry start : vertices.values()) {
+            for (NodeEntry end : vertices.values()) {
                 if (! start.equals(end)) {
 
                     graph.setPathfindingAlgorithm("dfs");
@@ -401,10 +401,10 @@ public class GraphTest {
                     if(dfs != null && bfs != null) {
 
 
-                        Iterator<Vertex> dfsListIterator = dfs.iterator(),
+                        Iterator<NodeEntry> dfsListIterator = dfs.iterator(),
                                 aStarListIterator = bfs.iterator();
                         while(dfsListIterator.hasNext() && aStarListIterator.hasNext()) {
-                            Vertex dfsElement = dfsListIterator.next(), bfsElement = aStarListIterator.next();
+                            NodeEntry dfsElement = dfsListIterator.next(), bfsElement = aStarListIterator.next();
                             assertTrue(dfsElement.equals(bfsElement));
                         }
                         assertFalse(dfsListIterator.hasNext() || aStarListIterator.hasNext());
@@ -440,9 +440,9 @@ public class GraphTest {
     @Test
     public void testPathConcatenate() {
         final int MAX_NUM_VERTICES = 10;
-        Vertex[] vertices = new Vertex[MAX_NUM_VERTICES * 2 + 1];
+        NodeEntry[] vertices = new NodeEntry[MAX_NUM_VERTICES * 2 + 1];
         for(int i = 0; i < vertices.length; i++) {
-            vertices[i] = new Vertex("" + i, 0, 0, "");
+            vertices[i] = new NodeEntry("" + i, 0, 0, "");
         }
         Path mainPath = new Path();
         Path[] path = new Path[MAX_NUM_VERTICES];
@@ -454,7 +454,7 @@ public class GraphTest {
             mainPath.concatenate(path[i]);
         }
         int value = 0;
-        for(Vertex vertex : mainPath) {
+        for(NodeEntry vertex : mainPath) {
             assertEquals("" + value++, vertex.getID());
         }
     }
@@ -473,25 +473,25 @@ public class GraphTest {
                 "CRETL001L1",
                 "CDEPT003L1"
         };
-        List<Vertex> list = new LinkedList<>();
+        List<NodeEntry> list = new LinkedList<>();
         for(String element : vertexList) {
             list.add(this.vertices.get(element));
         }
         Path totalPath = this.graph.getPath(list);
-        List<Vertex> totalPathList = totalPath.asList(), fragmentedPathList = new LinkedList<>();
+        List<NodeEntry> totalPathList = totalPath.asList(), fragmentedPathList = new LinkedList<>();
         fragmentedPathList.add(this.vertices.get(vertexList[0]));
         double length = 0;
         for(int i = 1; i < vertexList.length; i++) {
             Path newPathFragment = this.graph.getPath(this.vertices.get(vertexList[i - 1]), this.vertices.get(vertexList[i]));
             length += newPathFragment.getPathCost();
-            List<Vertex> fragmentList = newPathFragment.asList();
+            List<NodeEntry> fragmentList = newPathFragment.asList();
             fragmentList.remove(0);
             fragmentedPathList.addAll(fragmentList);
         }
         assertEquals(totalPathList.size(), fragmentedPathList.size());
         assertEquals(totalPath.getPathCost(), length, 0.1);
-        ListIterator<Vertex> iterator = totalPathList.listIterator();;
-        for(Vertex v : fragmentedPathList) {
+        ListIterator<NodeEntry> iterator = totalPathList.listIterator();;
+        for(NodeEntry v : fragmentedPathList) {
             assertEquals(iterator.next().getID(), v.getID());
         }
     }
