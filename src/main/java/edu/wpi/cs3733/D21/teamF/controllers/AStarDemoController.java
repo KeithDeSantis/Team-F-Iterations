@@ -264,6 +264,7 @@ public class AStarDemoController implements Initializable {
             mapPanel.unDraw(this.startNodeDisplay.getId());
         //FIXME: USE BINDINGS
         this.startNodeDisplay = mapPanel.getNode(startComboBox.getValue()); //getDrawableNode(startComboBox.getValue(), UIConstants.NODE_COLOR, 10);
+        System.out.println("LF: " + startComboBox.getValue());
         mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(startNodeDisplay);
         loadRecentlyUsedVertices();
@@ -275,7 +276,6 @@ public class AStarDemoController implements Initializable {
      */
     private DrawableNode getDrawableNodez(String nodeID, Color color, double radius) {
         final NodeEntry startNode = findNodeEntry(nodeID);
-        System.out.println(startNode);
 
 
         if(startNode != null)
@@ -283,6 +283,7 @@ public class AStarDemoController implements Initializable {
             final DrawableNode drawableNode = startNode.getDrawable();
 
             System.out.println(drawableNode.getId());
+
             drawableNode.setFill(color);//UIConstants.NODE_COLOR);
             drawableNode.setRadius(radius);//10);
 
