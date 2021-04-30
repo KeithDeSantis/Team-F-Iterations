@@ -1,4 +1,4 @@
 .button {
-    -fx-background-color: #03256C;
+    -fx-background-image: url("/imagesAndLogos/photo.jpeg");
     -fx-text-fill: #FFFFFF;
 }
