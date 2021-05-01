@@ -1,14 +1,12 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
-import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URLEncoder;
+import java.net.URL;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class GoogleAPI {
     //private static GoogleAPI googleAPI;
@@ -16,12 +14,17 @@ public class GoogleAPI {
 
     }
 
+    private void parseGoogleData(String json){
+        //TODO: clarify with zach, do we need to write a parser?
+    }
+
     private String buildUrl(String origin, String destination){
         StringBuilder url = new StringBuilder();
-        String urlBase = "http://maps.googleapis.com/maps/api/directions/json?";
+        String urlBase = "https://maps.googleapis.com/maps/api/directions/json";
+        url.append(urlBase);
         url.append("?origin=" + origin);
         url.append("&destination=" + destination);
-        String apiKey = ""; //TODO: ADD API KEY HERE
+        String apiKey = ""; //TODO: ADD/REMOVE API KEY HERE
         url.append("&key=" + apiKey);
 
         System.out.println(url.toString());
@@ -29,7 +32,7 @@ public class GoogleAPI {
         return url.toString();
     }
 
-    public void findDistance(String origin, String destination) throws IOException{
+    public String queryAPI(String origin, String destination) throws IOException{
         String requestUrl = buildUrl(origin, destination);
         URL getRequestUrl = new URL(requestUrl);
         StringBuilder apiResponse = new StringBuilder();
@@ -40,9 +43,9 @@ public class GoogleAPI {
         String temp;
         while ((temp = data.readLine()) != null){
             apiResponse.append(temp);
-            System.out.println(temp);
         }
         data.close();
+        return apiResponse.toString();
     }
 
     private static class googleSingletonHelper{

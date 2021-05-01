@@ -17,6 +17,6 @@ class GoogleAPITest {
     @Test
     @DisplayName("testing finding distance")
     public void testFindDistance() throws IOException {
-        GoogleAPI.getGoogleAPI().findDistance("Toronto", "Montreal");
+        GoogleAPI.getGoogleAPI().queryAPI("Toronto", "Montreal");
     }
 }
