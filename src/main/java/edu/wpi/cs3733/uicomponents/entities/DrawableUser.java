@@ -7,8 +7,8 @@ import javafx.scene.shape.Circle;
 
 public class DrawableUser extends Circle implements IMapDrawable
 {
-    private final SimpleIntegerProperty xCoordinate;
-    private final SimpleIntegerProperty yCoordinate;
+    private final IntegerProperty xCoordinate;
+    private final IntegerProperty yCoordinate;
     private final StringProperty floor;
 
     private final SimpleBooleanProperty shouldDisplay;
@@ -45,11 +45,11 @@ public class DrawableUser extends Circle implements IMapDrawable
         return this.floor;
     }
 
-    public SimpleIntegerProperty xCoordinateProperty() {
+    public IntegerProperty xCoordinateProperty() {
         return xCoordinate;
     }
 
-    public SimpleIntegerProperty yCoordinateProperty() {
+    public IntegerProperty yCoordinateProperty() {
         return yCoordinate;
     }
 
