@@ -1,4 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class GiftDeliveryServiceRequestController {
         @FXML private Button cancel;
@@ -23,6 +25,9 @@ public class GiftDeliveryServiceRequestController {
         }
 
         public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
+            String uuid = UUID.randomUUID().toString();
+            String type = "Gift Delivery";
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", ""); //TODO: CHECK FOR ADDITIONAL INFO?
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
             submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
