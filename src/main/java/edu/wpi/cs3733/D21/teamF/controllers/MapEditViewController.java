@@ -11,8 +11,12 @@ import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
+import edu.wpi.cs3733.uicomponents.entities.DrawableCircle;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
+import edu.wpi.cs3733.uicomponents.entities.DrawableRectSelection;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -90,6 +94,8 @@ public class MapEditViewController {
     private Circle secondCircle = null;
 
     List<NodeEntry> nodeList = new ArrayList<>();
+
+    private final DrawableRectSelection rectSelector = new DrawableRectSelection(-1, -1, "N/A");
 
     @FXML
     private void initialize() {
@@ -192,6 +198,142 @@ public class MapEditViewController {
         // Set up floor comboBox and draw the nodes and edges on current floor
         drawEdgeNodeOnFloor();
 
+        //Bind selector so that we are always on floor
+        rectSelector.shouldDisplay().set(false);
+        rectSelector.getFloor().bind(mapPanel.getFloor());
+
+        mapPanel.draw(rectSelector);
+
+        final List<NodeEntry> selectedNodes = new ArrayList<>();
+
+        final DrawableCircle alignLeft = new DrawableCircle(-1, -1, "al", "n/a");
+        final DrawableCircle alignHorizontalMiddle = new DrawableCircle(-1, -1, "ahm", "n/a");
+        final DrawableCircle alignRight = new DrawableCircle(-1, -1, "ar", "n/a");
+        final DrawableCircle alignTop = new DrawableCircle(-1, -1, "at", "n/a");
+        final DrawableCircle alignVerticalMiddle = new DrawableCircle(-1, -1, "avm", "n/a");
+        final DrawableCircle alignBottom = new DrawableCircle(-1, -1, "ab", "n/a");
+
+        alignLeft.getFloor().bind(mapPanel.getFloor());
+        alignHorizontalMiddle.getFloor().bind(mapPanel.getFloor());
+        alignRight.getFloor().bind(mapPanel.getFloor());
+        alignTop.getFloor().bind(mapPanel.getFloor());
+        alignVerticalMiddle.getFloor().bind(mapPanel.getFloor());
+        alignBottom.getFloor().bind(mapPanel.getFloor());
+
+        alignLeft.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignHorizontalMiddle.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignRight.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignTop.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignVerticalMiddle.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignBottom.shouldDisplay().bind(rectSelector.shouldDisplay());
+
+        final int ALIGN_FLOAT_DIST = 20; //FIXME: DO BETTER
+
+        alignLeft.xCoordinateProperty().bind(rectSelector.xProperty());
+        alignLeft.yCoordinateProperty().bind(rectSelector.yProperty().subtract(ALIGN_FLOAT_DIST));
+        alignLeft.setOnMouseClicked(x -> {
+            System.out.println("HELLO??");
+            for(NodeEntry e : selectedNodes)
+            {
+                System.out.println(e);
+                e.setXCoordinate(rectSelector.xProperty() + "");
+                ((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set((int) (rectSelector.xProperty().get() * mapPanel.getZoomLevel().get()));
+            }
+        });
+
+        alignHorizontalMiddle.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty().divide(2.0)));
+        alignHorizontalMiddle.yCoordinateProperty().bind(rectSelector.yProperty().subtract(ALIGN_FLOAT_DIST));
+
+        alignRight.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()));
+        alignRight.yCoordinateProperty().bind(rectSelector.yProperty().subtract(ALIGN_FLOAT_DIST));
+
+
+        alignTop.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
+        alignTop.yCoordinateProperty().bind(rectSelector.yProperty());
+
+        alignVerticalMiddle.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
+        alignVerticalMiddle.yCoordinateProperty().bind(rectSelector.yProperty().add(rectSelector.heightProperty().divide(2.0)));
+
+        alignBottom.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
+        alignBottom.yCoordinateProperty().bind(rectSelector.yProperty().add(rectSelector.heightProperty()));
+
+        mapPanel.draw(alignLeft);
+        mapPanel.draw(alignHorizontalMiddle);
+        mapPanel.draw(alignRight);
+        mapPanel.draw(alignTop);
+        mapPanel.draw(alignVerticalMiddle);
+        mapPanel.draw(alignBottom);
+
+
+
+        //Starts drawing the rectangle
+        mapPanel.getMap().setOnDragDetected(x -> {
+            rectSelector.x0CoordinateProperty().set((int) (x.getX() * mapPanel.getZoomLevel().get()));
+            rectSelector.y0CoordinateProperty().set((int) (x.getY() * mapPanel.getZoomLevel().get()));
+            rectSelector.x1CoordinateProperty().set((int) (x.getX() * mapPanel.getZoomLevel().get()));
+            rectSelector.y1CoordinateProperty().set((int) (x.getY() * mapPanel.getZoomLevel().get()));
+
+            rectSelector.shouldDisplay().set(true);
+        });
+
+        //Allows for drag to select region
+        mapPanel.getMap().setOnMouseDragged(x -> {
+            rectSelector.x1CoordinateProperty().set((int) (x.getX() * mapPanel.getZoomLevel().get()));
+            rectSelector.y1CoordinateProperty().set((int) (x.getY() * mapPanel.getZoomLevel().get()));
+        });
+
+        //Clears rect on other click
+        mapPanel.getMap().setOnMousePressed(x -> {
+            rectSelector.shouldDisplay().set(false);
+            selectedNodes.clear();
+        });
+
+        mapPanel.getMap().setOnMouseReleased(x -> {
+            if(!rectSelector.isVisible())
+                return;
+
+            System.out.println("HELLO?");
+            selectedNodes.clear();
+
+            final int X0 = (int) (rectSelector.getX() * mapPanel.getZoomLevel().get());
+            final int X1  = (int) ((rectSelector.getX() + rectSelector.getWidth()) * mapPanel.getZoomLevel().get());
+
+            final int Y0 = (int) (rectSelector.getY() * mapPanel.getZoomLevel().get());
+            final int Y1  = (int) ((rectSelector.getY() + rectSelector.getHeight()) * mapPanel.getZoomLevel().get());
+
+
+            //FIXME: DO THIS BETTER
+            //Drag done
+            for(NodeEntry n : nodeEntryObservableList) {
+                final int X = Integer.parseInt(n.getXCoordinate());
+                final int Y = Integer.parseInt(n.getYCoordinate());
+                System.out.println(X0 + " <= " + X + " && " + X + " <= " + X1 + " && " + Y0 + " <= " + Y + " && " + Y + " <= " + Y1);
+                if (X0 <= X && X <= X1 && Y0 <= Y && Y <= Y1)
+                    selectedNodes.add(n);
+            }
+        });
+
+        /*
+          try {
+            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.xCoordinateProperty().get(), "xcoord");
+            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.yCoordinateProperty().get(), "ycoord");
+
+            ///FIXME: BIND PROPERTIES TOGETHER
+
+            for (NodeEntry entry : nodeEntryObservableList) {
+                if (entry.getNodeID().equals(drawableNode.getId())) {
+                    entry.setXCoordinate("" + drawableNode.xCoordinateProperty().get());
+                    entry.setYCoordinate("" + drawableNode.yCoordinateProperty().get());
+                    break;
+                }
+            }
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+         */
+        rectSelector.setMouseTransparent(true);
     }
 
     /**

@@ -56,7 +56,6 @@ public class MapPanel extends AnchorPane {
     private final ObjectProperty<String> fp = new SimpleObjectProperty<>();
 
 
-
     //FIXME: DO BETTER!
     private final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
     private final Image F2Image = new Image(getClass().getResourceAsStream("/maps/02_thesecondfloor.png"));
@@ -179,6 +178,10 @@ public class MapPanel extends AnchorPane {
 
         if(floor.equals(this.floor.get()))
             return;
+
+        final IMapDrawable regionSelector = getNode("regionSelector");
+        if(regionSelector != null) //FIXME: DO BETTER
+            regionSelector.shouldDisplay().set(false);
 
         this.floor.setValue(floor);
         switch(floor){

@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.uicomponents.entities;
 
 import edu.wpi.cs3733.uicomponents.IMapDrawable;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -37,13 +38,15 @@ public class DrawableRectSelection extends Rectangle implements IMapDrawable
 
 
 
-    public IntegerProperty x0CoordinateProperty() {
-        return x0Coordinate;
-    }
+    public IntegerProperty x0CoordinateProperty() { return x0Coordinate; }
+
+    public IntegerProperty x1CoordinateProperty() { return x1Coordinate; }
 
     public IntegerProperty y0CoordinateProperty() {
         return y0Coordinate;
     }
+
+    public IntegerProperty y1CoordinateProperty() {return y1Coordinate; }
 
     public void setFloor(String floor) {
         this.floor.set(floor);
@@ -53,11 +56,11 @@ public class DrawableRectSelection extends Rectangle implements IMapDrawable
 
     @Override
     public void bindLocation(DoubleProperty zoomLevel) {
-        this.xProperty().bind(x0Coordinate.divide(zoomLevel));
-        this.yProperty().bind(y0Coordinate.divide(zoomLevel));
+        this.xProperty().bind(Bindings.min(x0Coordinate, x1Coordinate).divide(zoomLevel));
+        this.yProperty().bind(Bindings.min(y0Coordinate, y1Coordinate).divide(zoomLevel));
 
-        this.widthProperty().bind((x1Coordinate.subtract(x0Coordinate)).divide(zoomLevel));
-        this.heightProperty().bind((y1Coordinate.subtract(y0Coordinate)).divide(zoomLevel));
+        this.widthProperty().bind((Bindings.max(x1Coordinate.subtract(x0Coordinate), (x0Coordinate.subtract(x1Coordinate))).divide(zoomLevel)));
+        this.heightProperty().bind((Bindings.max(y1Coordinate.subtract(y0Coordinate), (y0Coordinate.subtract(y1Coordinate))).divide(zoomLevel)));
     }
 
     @Override
