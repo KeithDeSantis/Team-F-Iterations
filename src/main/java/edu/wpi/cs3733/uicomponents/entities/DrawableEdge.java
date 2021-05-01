@@ -8,10 +8,10 @@ import javafx.scene.shape.Line;
 
 public class DrawableEdge extends Line implements IMapDrawable
 {
-    private final SimpleIntegerProperty startX;
-    private final SimpleIntegerProperty startY;
-    private final SimpleIntegerProperty endX;
-    private final SimpleIntegerProperty endY;
+    private final IntegerProperty startX;
+    private final IntegerProperty startY;
+    private final IntegerProperty endX;
+    private final IntegerProperty endY;
 
     private final StringProperty startFloor;
     private final StringProperty endFloor;
@@ -67,11 +67,11 @@ public class DrawableEdge extends Line implements IMapDrawable
 
 
 
-    public SimpleIntegerProperty getMapStartX() { return this.startX; }
-    public SimpleIntegerProperty getMapStartY() { return this.startY; }
+    public IntegerProperty getMapStartX() { return this.startX; }
+    public IntegerProperty getMapStartY() { return this.startY; }
 
-    public SimpleIntegerProperty getMapEndX() { return this.endX; }
-    public SimpleIntegerProperty getMapEndY() { return this.endY; }
+    public IntegerProperty getMapEndX() { return this.endX; }
+    public IntegerProperty getMapEndY() { return this.endY; }
 
     public void setShouldDisplay(boolean shouldDisplay) {
         this.shouldDisplay.set(shouldDisplay);

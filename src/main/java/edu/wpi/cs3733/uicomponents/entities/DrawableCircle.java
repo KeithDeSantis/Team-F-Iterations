@@ -5,34 +5,36 @@ import javafx.beans.property.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class DrawableUser extends Circle implements IMapDrawable
+/**
+ * Please do not use this w/o talking to ahf
+ */
+public class DrawableCircle extends Circle implements IMapDrawable
 {
     private final IntegerProperty xCoordinate;
     private final IntegerProperty yCoordinate;
     private final StringProperty floor;
 
-    private final SimpleBooleanProperty shouldDisplay;
+    private final SimpleBooleanProperty shouldDisplay = new SimpleBooleanProperty(false); //FIXME: DO BETTER!;
 
-    public DrawableUser(int xCoordinate, int yCoordinate, String ID, String floor)
+    public DrawableCircle(int xCoordinate, int yCoordinate, String ID, String floor)
     {
         this.xCoordinate = new SimpleIntegerProperty(xCoordinate);
         this.yCoordinate = new SimpleIntegerProperty(yCoordinate);
 
         this.floor = new SimpleStringProperty(floor);
 
-        this.shouldDisplay = new SimpleBooleanProperty(true); //FIXME: DO BETTER!
-
         this.setId(ID);
 
         this.setRadius(10);
 
-        this.setFill(Color.CYAN);
+        //DON'T SWITCH THIS TO DARKGREY. DARKGREY IS LIGHTER THAN GREY
+        this.setFill(Color.GRAY.darker());// just for the meme : .brighter().grayscale());
     }
 
     @Override
     public void bindLocation(DoubleProperty zoomLevel) {
-        this.centerXProperty().bind(xCoordinate.divide(zoomLevel));
-        this.centerYProperty().bind(yCoordinate.divide(zoomLevel));
+        this.centerXProperty().bind(xCoordinate);//.divide(zoomLevel));
+        this.centerYProperty().bind(yCoordinate);//.divide(zoomLevel));
     }
 
     @Override

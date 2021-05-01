@@ -179,6 +179,8 @@ public class AStarDemoController implements Initializable {
             if(currEntry == null)
                 return;
 
+            mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
+
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
             startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(currEntry.getNodeID())));
@@ -187,7 +189,6 @@ public class AStarDemoController implements Initializable {
 
             //FIXME: Make these ones require that thing is visible
             whatsHereMenu.setOnAction(e -> {
-
 
                 final JFXDialog dialog = new JFXDialog();
                 final JFXDialogLayout layout = new JFXDialogLayout();
@@ -198,7 +199,7 @@ public class AStarDemoController implements Initializable {
                 //FIXME: DO BREAKS W/ CSS
                 layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
                         "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
-                        "may also be prone to contain information about running to the second arrangement (it's only the\n " +
+                        "may also be prone to contain information about running to the second arrangement (it's only the\n" +
                         "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
                         "avenue by Radio City."));
 
