@@ -1,5 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
