@@ -6,8 +6,6 @@ import java.util.*;
 
 public class BFSImpl implements IPathfindingAlgorithm {
 
-    private Graph graph;
-
 
     /**
      * Performs Breath-First Search on adjacency matrix
@@ -16,7 +14,6 @@ public class BFSImpl implements IPathfindingAlgorithm {
      */
     @Override
     public Path getPath(Graph graph, Vertex a, Vertex b) {
-        this.graph = graph;
         if (graph.contains(a) && graph.contains(b)) { //FIXME: NULL CHECK
             return BFS(a, b);
         }
@@ -91,9 +88,9 @@ public class BFSImpl implements IPathfindingAlgorithm {
     }
 
     private static class BFSNode implements Comparable<BFSNode>{
-        private Double heuristic;
-        private BFSNode parent;
-        private Vertex value;
+        private final Double heuristic;
+        private final BFSNode parent;
+        private final Vertex value;
 
         public BFSNode(Double heuristic, BFSNode parent, Vertex value) {
             this.heuristic = heuristic;

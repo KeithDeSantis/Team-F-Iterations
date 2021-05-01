@@ -38,8 +38,8 @@ public class DatabaseAPI {
         nodeHandler.populateTable(entries);
     }
 
-    public boolean addNode(String...colVals) throws SQLException {
-        return nodeHandler.addEntry(colVals);
+    public boolean addNode(String...colValues) throws SQLException {
+        return nodeHandler.addEntry(colValues);
     }
 
     public boolean editNode(String id, String newVal, String colName) throws Exception{

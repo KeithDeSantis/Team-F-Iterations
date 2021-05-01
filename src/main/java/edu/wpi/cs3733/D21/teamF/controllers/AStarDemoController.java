@@ -1,9 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXSlider;
-import com.jfoenix.controls.JFXTooltip;
+import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -19,7 +16,10 @@ import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -31,6 +31,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -96,11 +97,11 @@ public class AStarDemoController implements Initializable {
 
     private List<NodeEntry> allNodeEntries = new ArrayList<>();
 
-    private final SimpleBooleanProperty pathFinding = new SimpleBooleanProperty(false);
-    private final ObservableList<Integer> stops = FXCollections.observableArrayList();
-    private final ObservableList<String> instructions = FXCollections.observableArrayList();
-    private final ObservableList<String> eta = FXCollections.observableArrayList();
-    private final SimpleIntegerProperty curStep = new SimpleIntegerProperty(0);
+    private final BooleanProperty isCurrentlyNavigating = new SimpleBooleanProperty(false);
+    private final ObservableList<Integer> stopsList = FXCollections.observableArrayList();
+    private final ObservableList<String> instructionsList = FXCollections.observableArrayList();
+    private final ObservableList<String> etaList = FXCollections.observableArrayList();
+    private final IntegerProperty currentStep = new SimpleIntegerProperty(0);
 
 
     private DrawableNode direction;
@@ -155,7 +156,7 @@ public class AStarDemoController implements Initializable {
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
 
-        pathFinding.set(false);
+        isCurrentlyNavigating.set(false);
 
         final ContextMenu contextMenu = new ContextMenu();
 
@@ -163,24 +164,63 @@ public class AStarDemoController implements Initializable {
         final MenuItem startPathMenu = new MenuItem("Path from Here");
         final MenuItem endPathMenu = new MenuItem("Path end Here");
 
-        contextMenu.getItems().addAll(startPathMenu, endPathMenu);
+        final MenuItem whatsHereMenu = new MenuItem("What's here?");
+
+        contextMenu.getItems().addAll(startPathMenu, endPathMenu, new SeparatorMenuItem(), whatsHereMenu);
 
         mapPanel.getMap().setOnContextMenuRequested(event -> {
-            if(pathFinding.get()){
+            if(isCurrentlyNavigating.get()){
                 return;
             }
-            contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
+            final NodeEntry currEntry = getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel);
 
-            startPathMenu.setOnAction((ActionEvent e) -> startComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
+            if(currEntry == null)
+                return;
 
-            endPathMenu.setOnAction((ActionEvent e) -> endComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
+            contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
+
+            startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(currEntry.getNodeID())));
+
+            endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(currEntry.getNodeID())));
+
+            //FIXME: Make these ones require that thing is visible
+            whatsHereMenu.setOnAction(e -> {
+
+
+                final JFXDialog dialog = new JFXDialog();
+                final JFXDialogLayout layout = new JFXDialogLayout();
+
+
+                layout.setHeading(new Text(currEntry.getLongName()));
+
+                //FIXME: DO BREAKS W/ CSS
+                layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
+                        "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
+                        "may also be prone to contain information about running to the second arrangement (it's only the\n " +
+                        "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
+                        "avenue by Radio City."));
+
+                final JFXButton closeBtn = new JFXButton("Close");
+                closeBtn.setOnAction(a -> dialog.close());
+
+                final JFXButton directionsTo = new JFXButton("Direction To");
+                directionsTo.setOnAction(a -> {startComboBox.setValue(idToShortName(currEntry.getNodeID())); dialog.close();});
+
+                final JFXButton directionsFrom = new JFXButton("Directions From");
+                directionsFrom.setOnAction(a ->  {endComboBox.setValue(idToShortName(currEntry.getNodeID())); dialog.close();});
+
+                layout.setActions(directionsTo, directionsFrom, closeBtn);
+
+                dialog.setContent(layout);
+                mapPanel.showDialog(dialog);
+            });
         });
 
 
-        startComboBox.disableProperty().bind(pathFinding);
-        endComboBox.disableProperty().bind(pathFinding);
+        startComboBox.disableProperty().bind(isCurrentlyNavigating);
+        endComboBox.disableProperty().bind(isCurrentlyNavigating);
 
         Go.setDisable(true);
         End.setDisable(true);
@@ -201,11 +241,11 @@ public class AStarDemoController implements Initializable {
 
         final DrawableUser drawableUser = new DrawableUser(0, 0, "userNode", "");
 
-        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stops))
+        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stopsList))
                 .then(new Vertex("N/A", -1, -1, "N/A"))
-                .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stops, curStep)));
+                .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stopsList, currentStep)));
 
-        drawableUser.shouldDisplay().bind(pathFinding);
+        drawableUser.shouldDisplay().bind(isCurrentlyNavigating);
 
         drawableUser.getFloor().bind(Bindings.createStringBinding(() -> vertexProperty.get().getFloor(), vertexProperty));
 
@@ -218,7 +258,7 @@ public class AStarDemoController implements Initializable {
 
 
         for(NodeEntry e : allNodeEntries)
-          getDrawableNodez(e.getNodeID(), Color.ORANGE, 5);
+          getDrawableNode(e.getNodeID());
     }
     private void loadFavorites() {
         this.favorites = new DoublyLinkedHashSet<>();
@@ -272,7 +312,7 @@ public class AStarDemoController implements Initializable {
             if(!nodeEntry.getFloor().equals(mapPanel.getFloor().getValue()))
                 continue;
 
-            final double currDist2 = Math.pow(x - Integer.parseInt(nodeEntry.getXcoord()), 2) + Math.pow(y - Integer.parseInt(nodeEntry.getYcoord()), 2);
+            final double currDist2 = Math.pow(x - Integer.parseInt(nodeEntry.getXCoordinate()), 2) + Math.pow(y - Integer.parseInt(nodeEntry.getYCoordinate()), 2);
 
             if(currDist2 < minDist2)
             {
@@ -311,7 +351,7 @@ public class AStarDemoController implements Initializable {
        // if(this.startNodeDisplay != null)
         //    mapPanel.unDraw(this.startNodeDisplay.getId());
         //FIXME: USE BINDINGS
-        this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue())); //getDrawableNode(startComboBox.getValue(), UIConstants.NODE_COLOR, 10);
+        this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue()));
 
         mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(startNodeDisplay);
@@ -322,27 +362,39 @@ public class AStarDemoController implements Initializable {
      * @param nodeID the ID of the Node
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
-    private DrawableNode getDrawableNodez(String nodeID, Color color, double radius) {
-        final NodeEntry startNode = findNodeEntry(nodeID);
+    private DrawableNode getDrawableNode(String nodeID) {
+        final NodeEntry node = findNodeEntry(nodeID);
 
-
-        if(startNode != null)
+        if(node != null)
         {
-            final DrawableNode drawableNode = startNode.getDrawable();
-            drawableNode.setFill(color);//UIConstants.NODE_COLOR);
-            drawableNode.setRadius(radius);//10);
+            final DrawableNode drawableNode = node.getDrawable();
+            //drawableNode.setRadius(UIConstants.NODE_RADIUS);
 
-            drawableNode.radiusProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId())).or(endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId())))).then(10).otherwise(5));
+            drawableNode.setOnContextMenuRequested(mapPanel.getMap().getOnContextMenuRequested());
 
-            drawableNode.fillProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()))).then(Color.ORANGE).otherwise(
-                    Bindings.when(endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()))).then(Color.GREEN).otherwise(UIConstants.NODE_COLOR)
+            final BooleanBinding isStartNode = startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()));
+            final BooleanBinding isEndNode = endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()));
+            final BooleanBinding isStartOrEndNode = isStartNode.or(isEndNode);
+
+            drawableNode.radiusProperty().bind(Bindings.when(isStartOrEndNode).then(10).otherwise(5));
+
+          //  drawableNode.fillProperty().set(new Color(0, 0, 0, 0));
+            drawableNode.setStrokeWidth(2.0);
+
+            drawableNode.fillProperty().bind(Bindings.when(isStartOrEndNode).then(getNodeTypeColor(drawableNode.getNodeType())).otherwise(new Color(0, 0, 0, 0)));
+
+            drawableNode.strokeProperty().bind(
+                    Bindings.when(isStartNode).then(Color.ORANGE).otherwise(
+                            Bindings.when(isEndNode).then(Color.GREEN).otherwise(getNodeTypeColor(drawableNode.getNodeType()))
             ));
+
+            drawableNode.opacityProperty().bind(Bindings.when(isCurrentlyNavigating.not().or(isStartOrEndNode)).then(1.0).otherwise(0.2));
 
 
             Tooltip tt = new JFXTooltip();
-            tt.setText(startNode.getShortName() +
-                        "\nBuilding: " + startNode.getBuilding() +
-                        "\nFloor: " + startNode.getFloor());
+            tt.setText(node.getShortName() +
+                        "\nBuilding: " + node.getBuilding() +
+                        "\nFloor: " + node.getFloor());
 
             tt.setStyle("-fx-font: normal bold 15 Langdon; "
                     + "-fx-base: #AE3522; "
@@ -354,6 +406,41 @@ public class AStarDemoController implements Initializable {
             return drawableNode;
         }
         return null;
+    }
+
+    private Color getNodeTypeColor(String type)
+    {
+        switch (type){
+            case "HALL":
+            case "WALK":
+                return new Color(0, 0, 0, 0);
+            case "CONF":
+                return Color.GREEN;
+            case "DEPT":
+                return Color.BROWN;
+            case "ELEV":
+                return Color.YELLOW;
+            case "INFO":
+                return Color.LIGHTBLUE;
+            case "REST":
+            case "BATH":
+                return Color.BLUE;
+            case "LABS":
+                return Color.LIGHTGREEN;
+            case "STAI":
+                return Color.RED;
+            case "SERV":
+                return Color.GRAY;
+            case "PARK":
+                return Color.BLACK;
+            case "EXIT":
+                return Color.GOLD;
+            case "RETL":
+                return Color.PINK;
+            default:
+                System.out.println(type);
+                return Color.RED.brighter();
+        }
     }
 
     /**
@@ -390,11 +477,6 @@ public class AStarDemoController implements Initializable {
      */
     private boolean updatePath()
     {
-//        if(this.startNodeDisplay != null)
-//            mapPanel.draw(this.startNodeDisplay);
-//        if(this.endNodeDisplay != null)
-//            mapPanel.draw(this.endNodeDisplay);
-
         final Vertex startVertex = this.graph.getVertex(shortNameToID(startComboBox.getValue()));
         final Vertex endVertex = this.graph.getVertex(shortNameToID(endComboBox.getValue()));
 
@@ -421,8 +503,8 @@ public class AStarDemoController implements Initializable {
                     edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
                     edge.strokeProperty().bind(
-                            Bindings.when(Bindings.isEmpty(stops)).then(Color.RED).otherwise(
-                                    Bindings.when(Bindings.integerValueAt(stops, curStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE)
+                            Bindings.when(Bindings.isEmpty(stopsList)).then(Color.RED).otherwise(
+                                    Bindings.when(Bindings.integerValueAt(stopsList, currentStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE)
                             )
                     );
 
@@ -490,9 +572,9 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     private void parseRoute(){
-        stops.clear();
-        instructions.clear();
-        eta.clear();
+        stopsList.clear();
+        instructionsList.clear();
+        etaList.clear();
         if(this.pathVertex.isEmpty()) return;
 
         // Assert "Up" is forward for start
@@ -503,7 +585,7 @@ public class AStarDemoController implements Initializable {
         double distance;
         boolean lastSE = false;
 
-        stops.add(0);
+        stopsList.add(0);
 
         for(int i = 0; i < pathVertex.size() -1; i++){
             Vertex curV = pathVertex.get(i);
@@ -517,9 +599,9 @@ public class AStarDemoController implements Initializable {
             && curV.getID().substring(1, 5).equals(nexV.getID().substring(1, 5))){
                 // Not first node, finish line search
                 if(i!=0){
-                    stops.add(i);
-                    distance = calculateDistance(pathVertex, stops.get(stops.size()-2), stops.get(stops.size()-1));
-                    instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
+                    stopsList.add(i);
+                    distance = calculateDistance(pathVertex, stopsList.get(stopsList.size()-2), stopsList.get(stopsList.size()-1));
+                    instructionsList.add(prevDirect + " and walk " + Math.round(distance) + " m");
                 }
                 i = searchSE(i);
                 if(i == pathVertex.size() - 1) {
@@ -532,7 +614,7 @@ public class AStarDemoController implements Initializable {
                 currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
                 prevDirect = calculateDirection(prevAngle, currAngle);
                 prevAngle = currAngle;
-                stops.add(i);
+                stopsList.add(i);
             }
 
             currAngle = Math.toDegrees(Math.atan2(nexV.getY() - curV.getY(), nexV.getX() - curV.getX())) + 180;
@@ -540,25 +622,25 @@ public class AStarDemoController implements Initializable {
             prevAngle = currAngle;
             if(i != 0) {
                 if (!currDirect.equals("Look forward")) {
-                    stops.add(i);
-                    distance = calculateDistance(pathVertex, stops.get(stops.size() - 2), stops.get(stops.size() - 1));
-                    instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
+                    stopsList.add(i);
+                    distance = calculateDistance(pathVertex, stopsList.get(stopsList.size() - 2), stopsList.get(stopsList.size() - 1));
+                    instructionsList.add(prevDirect + " and walk " + Math.round(distance) + " m");
                     prevDirect = currDirect;
                 }
             }else{
                 prevDirect = currDirect;
             }
         }
-        stops.add(pathVertex.size() - 1);
+        stopsList.add(pathVertex.size() - 1);
         if(!lastSE) {
-            distance = calculateDistance(pathVertex, stops.get(stops.size() - 2), stops.get(stops.size() - 1));
-            instructions.add(prevDirect + " and walk " + Math.round(distance) + " m");
+            distance = calculateDistance(pathVertex, stopsList.get(stopsList.size() - 2), stopsList.get(stopsList.size() - 1));
+            instructionsList.add(prevDirect + " and walk " + Math.round(distance) + " m");
         }
-        instructions.add("Arrive at destination!");
+        instructionsList.add("Arrive at destination!");
 
         // Calculate ETA
-        for (Integer stop : stops) {
-            eta.add(calculateETA(stop, pathVertex.size() - 1));
+        for (Integer stop : stopsList) {
+            etaList.add(calculateETA(stop, pathVertex.size() - 1));
         }
     }
 
@@ -593,7 +675,7 @@ public class AStarDemoController implements Initializable {
                     type = "Stair";
                 else
                     type = "Elevator";
-                instructions.add("Take " + type + " to Floor " + preV.getFloor());
+                instructionsList.add("Take " + type + " to Floor " + preV.getFloor());
                 if(i == pathVertex.size() - 1)
                     return pathVertex.size() - 1;
                 else
@@ -625,7 +707,7 @@ public class AStarDemoController implements Initializable {
     private void drawDirection(){
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
-        Vertex curV = pathVertex.get(stops.get(curStep.get()));
+        Vertex curV = pathVertex.get(stopsList.get(currentStep.get()));
         switch (currentDirection) {
             case "UP":
                 direction = new DrawableNode((int) Math.round(curV.getX()), (int) Math.round(curV.getY() - 50.0),
@@ -746,9 +828,9 @@ public class AStarDemoController implements Initializable {
         Instruction.setVisible(true);
         ETA.setVisible(true);
 
-        curStep.set(0);
+        currentStep.set(0);
 
-        pathFinding.set(true);
+        isCurrentlyNavigating.set(true);
 
         parseRoute();
         mapPanel.switchMap(pathVertex.get(0).getFloor());
@@ -757,12 +839,12 @@ public class AStarDemoController implements Initializable {
             mapPanel.unDraw(userNodeDisplay.getId());
         mapPanel.draw(this.userNodeDisplay);
 
-        this.startNodeDisplay = mapPanel.getNode(pathVertex.get(0).getID());//getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
-        this.endNodeDisplay = mapPanel.getNode(pathVertex.get(pathVertex.size()-1).getID());//getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
+        this.startNodeDisplay = mapPanel.getNode(pathVertex.get(0).getID());
+        this.endNodeDisplay = mapPanel.getNode(pathVertex.get(pathVertex.size()-1).getID());
         mapPanel.centerNode(userNodeDisplay);
 
-        Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructions)).then("").otherwise(Bindings.stringValueAt(instructions, curStep)));
-        ETA.textProperty().bind(Bindings.stringValueAt(eta, curStep));
+        Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
+        ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
 
         currentDirection = "UP";
         drawDirection();
@@ -773,9 +855,9 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void goToPrevNode() {
-        curStep.set(curStep.get() - 1);
+        currentStep.set(currentStep.get() - 1);
 
-        if(curStep.get() == 0){
+        if(currentStep.get() == 0){
             Prev.setDisable(true);
         }
         else {
@@ -783,13 +865,13 @@ public class AStarDemoController implements Initializable {
             Next.setDisable(false);
         }
 
-        if(!pathVertex.get(stops.get(curStep.get())).getFloor().equals(mapPanel.getFloor().getValue())){
-            mapPanel.switchMap(pathVertex.get(stops.get(curStep.get())).getFloor());
+        if(!pathVertex.get(stopsList.get(currentStep.get())).getFloor().equals(mapPanel.getFloor().getValue())){
+            mapPanel.switchMap(pathVertex.get(stopsList.get(currentStep.get())).getFloor());
         }
 
         mapPanel.centerNode(userNodeDisplay);
 
-        changeDirectionRevert(instructions.get(curStep.get()));
+        changeDirectionRevert(instructionsList.get(currentStep.get()));
         drawDirection();
     }
 
@@ -798,25 +880,25 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void goToNextNode() {
-        changeDirection(instructions.get(curStep.get()));
+        changeDirection(instructionsList.get(currentStep.get()));
 
-        curStep.set(curStep.get() + 1);
-        if(curStep.get() == Math.min(stops.size() - 1, instructions.size() - 1)){
+        currentStep.set(currentStep.get() + 1);
+        if(currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1)){
             Next.setDisable(true);
         }
         else {
             Prev.setDisable(false);
             Next.setDisable(false);
         }
-        if(!pathVertex.get(stops.get(curStep.get())).getFloor().equals(mapPanel.getFloor().getValue())){
-            mapPanel.switchMap(pathVertex.get(stops.get(curStep.get())).getFloor());
+        if(!pathVertex.get(stopsList.get(currentStep.get())).getFloor().equals(mapPanel.getFloor().getValue())){
+            mapPanel.switchMap(pathVertex.get(stopsList.get(currentStep.get())).getFloor());
         }
 
         mapPanel.centerNode(userNodeDisplay);
 
         drawDirection();
 
-        if(direction != null && curStep.get() == Math.min(stops.size() - 1, instructions.size() - 1))
+        if(direction != null && currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1))
                 mapPanel.unDraw(this.direction.getId());
 
     }
@@ -832,8 +914,8 @@ public class AStarDemoController implements Initializable {
         End.setDisable(true);
         Instruction.setVisible(false);
         ETA.setVisible(false);
-        curStep.set(0);
-        pathFinding.set(false);
+        currentStep.set(0);
+        isCurrentlyNavigating.set(false);
 
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
