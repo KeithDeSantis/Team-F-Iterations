@@ -27,7 +27,7 @@
                               <Image url="/imagesAndLogos/BandWLogo.png" />
                           </image>
                       </ImageView>
-                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Gift Delivery" wrappingWidth="748.2825317382812">
+                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Gift Delivery" wrappingWidth="735.2825317382812">
                      <font>
                         <Font name="Volkhov Regular" size="40.0" />
                      </font></Text>
@@ -35,7 +35,7 @@
               </HBox>
             <HBox VBox.vgrow="ALWAYS">
                <children>
-                    <GridPane prefHeight="307.0" prefWidth="150.0" style="-fx-background-color: c6c6c6;" HBox.hgrow="ALWAYS">
+                    <GridPane prefHeight="307.0" prefWidth="150.0" style="-fx-background-color: #e6e6e6;" HBox.hgrow="ALWAYS">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         </columnConstraints>
@@ -74,7 +74,7 @@
                             </HBox>
                         </children>
                     </GridPane>
-                    <GridPane prefHeight="307.0" prefWidth="307.0" style="-fx-background-color: #c6c6c6;" HBox.hgrow="ALWAYS">
+                    <GridPane prefHeight="307.0" prefWidth="307.0" style="-fx-background-color: #e6e6e6;" HBox.hgrow="ALWAYS">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         </columnConstraints>

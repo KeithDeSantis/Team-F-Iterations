@@ -41,6 +41,8 @@ public class LoginController {
         } else if (buttonPushed == signIn) {
             if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
                 DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
+                DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff");
+                DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest");
             }
             boolean authenticated = false;
             String user = username.getText();
