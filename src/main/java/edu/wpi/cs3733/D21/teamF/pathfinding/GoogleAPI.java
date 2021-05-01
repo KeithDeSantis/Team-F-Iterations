@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class GoogleAPI {
     //private static GoogleAPI googleAPI;
@@ -15,7 +16,17 @@ public class GoogleAPI {
     }
 
     private void parseGoogleData(String json){
-        //TODO: clarify with zach, do we need to write a parser?
+        final JSONObject data = new JSONObject(json);
+        final JSONArray steps = data.getJSONArray("steps");
+        StringBuilder directions = new StringBuilder();
+        for (int i=0; i< steps.length(); i++){
+            final JSONObject instruction = steps.getJSONObject(i);
+            String temp = "";
+            if ((temp = instruction.getString("html_instructions")) != null){
+                directions.append(temp);
+            }
+        }
+        System.out.println(directions);
     }
 
     private String buildUrl(String origin, String destination){
