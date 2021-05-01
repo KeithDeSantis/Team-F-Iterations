@@ -72,6 +72,12 @@ public class MapEditViewController {
     private Text title;
     @FXML
     private JFXToggleButton edgeCreationToggle;
+    @FXML private Label nodeIDDisplayLabel;
+    @FXML private Label floorDisplayLabel;
+    @FXML private Label buildingDisplayLabel;
+    @FXML private Label nodeTypeDisplayLabel;
+    @FXML private Label longNameDisplayLabel;
+    @FXML private Label shortNameDisplayLabel;
 
     private boolean clickToMakeEdge;
 
@@ -823,9 +829,11 @@ public class MapEditViewController {
 
         drawableNode.setOnMouseEntered(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);
+            handleDisplayNodeInfo(drawableNode);
         });
         drawableNode.setOnMouseExited(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR);
+            handleUndisplayNodeInfo();
         });
 
         final List<DrawableEdge> startEdges = new ArrayList<>();
@@ -1446,6 +1454,36 @@ public class MapEditViewController {
         }
         drawEdgeNodeOnFloor();
         handleSearch();
+    }
+
+    public void handleDisplayNodeInfo(DrawableNode drawableNode) {
+        nodeIDDisplayLabel.setText(drawableNode.getId());
+        nodeIDDisplayLabel.setOpacity(1);
+        floorDisplayLabel.setText(drawableNode.getFloor().get());
+        floorDisplayLabel.setOpacity(1);
+        buildingDisplayLabel.setText(drawableNode.getBuilding());
+        buildingDisplayLabel.setOpacity(1);
+        nodeTypeDisplayLabel.setText(drawableNode.getNodeType());
+        nodeTypeDisplayLabel.setOpacity(1);
+        longNameDisplayLabel.setText(drawableNode.getLongName());
+        longNameDisplayLabel.setOpacity(1);
+        shortNameDisplayLabel.setText(drawableNode.getShortName());
+        shortNameDisplayLabel.setOpacity(1);
+    }
+
+    public void handleUndisplayNodeInfo() {
+        nodeIDDisplayLabel.setText("Node ID");
+        nodeIDDisplayLabel.setOpacity(0.5);
+        floorDisplayLabel.setText("Floor");
+        floorDisplayLabel.setOpacity(0.5);
+        buildingDisplayLabel.setText("Building");
+        buildingDisplayLabel.setOpacity(0.5);
+        nodeTypeDisplayLabel.setText("Node Type");
+        nodeTypeDisplayLabel.setOpacity(0.5);
+        longNameDisplayLabel.setText("Long Name");
+        longNameDisplayLabel.setOpacity(0.5);
+        shortNameDisplayLabel.setText("Short Name");
+        shortNameDisplayLabel.setOpacity(0.5);
     }
 }
 
