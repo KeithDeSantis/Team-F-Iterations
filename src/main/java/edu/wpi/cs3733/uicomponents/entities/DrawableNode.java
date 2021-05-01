@@ -10,13 +10,13 @@ public class DrawableNode extends Circle implements IMapDrawable
 {
     private final SimpleIntegerProperty xCoordinate;
     private final SimpleIntegerProperty yCoordinate;
-    private StringProperty floor;
-    private StringProperty building;
-    private StringProperty nodeType;
-    private StringProperty longName;
-    private StringProperty shortName;
+    private final StringProperty floor;
+    private final StringProperty building;
+    private final StringProperty nodeType;
+    private final StringProperty longName;
+    private final StringProperty shortName;
 
-    private SimpleBooleanProperty shouldDisplay;
+    private final SimpleBooleanProperty shouldDisplay;
 
 
     public DrawableNode(int xCoordinate, int yCoordinate, String ID, String floor, String building, String nodeType, String longName, String shortName)

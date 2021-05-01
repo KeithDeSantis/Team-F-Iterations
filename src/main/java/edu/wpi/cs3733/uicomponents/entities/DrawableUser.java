@@ -1,7 +1,5 @@
 package edu.wpi.cs3733.uicomponents.entities;
 
-
-import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.IMapDrawable;
 import javafx.beans.property.*;
 import javafx.scene.paint.Color;
@@ -11,9 +9,9 @@ public class DrawableUser extends Circle implements IMapDrawable
 {
     private final SimpleIntegerProperty xCoordinate;
     private final SimpleIntegerProperty yCoordinate;
-    private StringProperty floor;
+    private final StringProperty floor;
 
-    private SimpleBooleanProperty shouldDisplay;
+    private final SimpleBooleanProperty shouldDisplay;
 
     public DrawableUser(int xCoordinate, int yCoordinate, String ID, String floor)
     {
@@ -53,10 +51,6 @@ public class DrawableUser extends Circle implements IMapDrawable
 
     public SimpleIntegerProperty yCoordinateProperty() {
         return yCoordinate;
-    }
-
-    public void setShouldDisplay(boolean shouldDisplay) {
-        this.shouldDisplay.set(shouldDisplay);
     }
 
     public void setFloor(String floor) {

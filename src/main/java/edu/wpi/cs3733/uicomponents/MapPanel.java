@@ -3,10 +3,7 @@ package edu.wpi.cs3733.uicomponents;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,11 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
@@ -29,18 +23,23 @@ import java.io.IOException;
  */
 public class MapPanel extends AnchorPane {
 
-    @FXML private ScrollPane scroll;
-    @FXML private ImageView map;
-    @FXML private Pane canvas;
-
-    @FXML private JFXButton zoomInButton;
-
-    @FXML private JFXButton zoomOutButton;
+    @FXML
+    public ScrollPane scroll;
 
     @FXML
-    private JFXSlider floorSlider;
+    public ImageView map;
 
-    private DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
+    @FXML
+    public Pane canvas;
+
+    @FXML public JFXButton zoomInButton;
+
+    @FXML public JFXButton zoomOutButton;
+
+    @FXML
+    public JFXSlider floorSlider;
+
+    private final DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
 
     private final DoubleProperty INITIAL_WIDTH = new SimpleDoubleProperty();
     private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
@@ -140,17 +139,9 @@ public class MapPanel extends AnchorPane {
         map.fitHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
         map.setImage(F1Image); // Copied from A* Vis - KD
 
-
-        // Set up floor comboBox and draw nodes on that floor
-        final ObservableList<String> floorName = FXCollections.observableArrayList();
-        floorName.addAll("1","2","3","L1","L2","G");
-
-
-
-
         floorSlider.setLabelFormatter(doubleStringConverter);
 
-        final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
+       // final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
 
 
         Bindings.bindBidirectional(this.floor, floorSlider.valueProperty(), doublePropertyStringConverter);
@@ -210,28 +201,6 @@ public class MapPanel extends AnchorPane {
     }
 
 
-
-    /**
-     * Center the given node in scrollpane
-     * @param c The node to be centered
-     * @author ZheCheng
-     */
-    public void centerNode(Circle c){
-
-        double h = scroll.getContent().getBoundsInLocal().getHeight();
-        double y = (c.getBoundsInParent().getMaxY() +
-                c.getBoundsInParent().getMinY()) / 2.0;
-        double v = scroll.getViewportBounds().getHeight();
-        scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
-
-        double w = scroll.getContent().getBoundsInLocal().getWidth();
-        double x = (c.getBoundsInParent().getMaxX() +
-                c.getBoundsInParent().getMinX()) / 2.0;
-        double hw = scroll.getViewportBounds().getWidth();
-        scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
-
-    }
-
     /**
      * Basic implementation of Zooming the map by changing the zoom level and reloading
      * @param actionEvent the press of zoom in or zoom out
@@ -254,49 +223,35 @@ public class MapPanel extends AnchorPane {
     }
 
     /**
-     * Center the given line in scrollpane
-     * @param l The line to be centered
+     * Center the given node in the map
+     * @param node The node to be centered
      * @author ZheCheng
      */
-    public void centerNode(Line l){
+    public void centerNode(Node node){
 
         double h = scroll.getContent().getBoundsInLocal().getHeight();
-        double y = (l.getBoundsInParent().getMaxY() +
-                l.getBoundsInParent().getMinY()) / 2.0;
+        double y = (node.getBoundsInParent().getMaxY() +
+                node.getBoundsInParent().getMinY()) / 2.0;
         double v = scroll.getViewportBounds().getHeight();
         scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
 
         double w = scroll.getContent().getBoundsInLocal().getWidth();
-        double x = (l.getBoundsInParent().getMaxX() +
-                l.getBoundsInParent().getMinX()) / 2.0;
+        double x = (node.getBoundsInParent().getMaxX() +
+                node.getBoundsInParent().getMinX()) / 2.0;
         double hw = scroll.getViewportBounds().getWidth();
         scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
     }
 
     /**
-     * Draw a single line to represent the edge
-     * @author ZheCheng
+     * Used to add an element to the map so that it can be drawn.
+     * @param element The element to be drawn
+     * @param <Element> An object type that extends Node and implements IMapDrawable
+     * @return The element to be drawn
+     * @author Alex Friedman (ahf)
      */
-//    public Line drawLine(double startX, double startY, double endX, double endY, String edgeID){
-//        Line l = new Line();
-//        l.startXProperty().bind((new SimpleDoubleProperty(startX)).divide(zoomLevel));
-//        l.startYProperty().bind((new SimpleDoubleProperty(startY)).divide(zoomLevel));
-//
-//        l.endXProperty().bind((new SimpleDoubleProperty(endX)).divide(zoomLevel));
-//        l.endYProperty().bind((new SimpleDoubleProperty(endY)).divide(zoomLevel));
-//
-//        l.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
-//        l.setStroke(UIConstants.LINE_COLOR);
-//        l.setId(edgeID);
-//        this.canvas.getChildren().add(l);
-//
-//        return l;
-//    }
-
     public <Element extends Node & IMapDrawable> Element draw(Element element)
     {
         element.bindLocation(zoomLevel);
-
 
         element.visibleProperty().bind(element.shouldDisplay().and(this.floor.isEqualTo(element.getFloor())));
 
@@ -304,11 +259,24 @@ public class MapPanel extends AnchorPane {
         return element;
     }
 
+    /**
+     * Given an ID, removes the given node from the map.
+     * @param ID The id of the node to be removed.
+     * @author Alex Friedman (ahf)
+     */
     public void unDraw(String ID)
     {
         canvas.getChildren().removeIf(x -> x.getId().equals(ID));
     }
 
+
+    /**
+     * Given an ID, finds and returns that node.
+     * @param ID The id of the node.
+     * @param <Element> An object type that extends Node and implements IMapDrawable
+     * @return The element with the corresponding ID.
+     * @author Alex Friedman (ahf)
+     */
     public <Element extends Node & IMapDrawable> Element getNode(String ID)
     {
         for (Node x : canvas.getChildren())
@@ -320,13 +288,12 @@ public class MapPanel extends AnchorPane {
         return null;
     }
 
+    /**
+     * Removes all IMapDrawables from the map
+     * @author Alex Friedman (ahf)
+     */
     public void clearMap()
     {
         canvas.getChildren().removeIf(x -> x instanceof IMapDrawable);
     }
-
-    // Added by LM
-
-
-
 }

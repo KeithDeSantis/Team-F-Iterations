@@ -13,13 +13,13 @@ public class DrawableEdge extends Line implements IMapDrawable
     private final SimpleIntegerProperty endX;
     private final SimpleIntegerProperty endY;
 
-    private StringProperty startFloor;
-    private StringProperty endFloor;
+    private final StringProperty startFloor;
+    private final StringProperty endFloor;
 
-    private SimpleBooleanProperty shouldDisplay;
+    private final SimpleBooleanProperty shouldDisplay;
 
-    private NodeEntry startNode;
-    private NodeEntry endNode;
+    private final NodeEntry startNode;
+    private final NodeEntry endNode;
 
 
     public DrawableEdge(int startX, int startY, int endX, int endY, String ID, String startFloor, String endFloor, NodeEntry startNode, NodeEntry endNode)
