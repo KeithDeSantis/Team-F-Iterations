@@ -22,8 +22,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -521,7 +519,7 @@ public class AStarDemoController implements Initializable {
                             )
                     );
 
-                    int localStop = 0;
+                    int localStop;
                     for(localStop = 0; localStop < stopsList.size() - 1; localStop++)
                     {
                         if(stopsList.get(localStop + 1) > i)
@@ -970,11 +968,10 @@ public class AStarDemoController implements Initializable {
     /**
      * Returns user to main page after clicking on the B&W Logo
      * Replaces handleButtonPushed
-     * @param mouseEvent The node that triggered the method
      * @throws IOException
      * @author Leo Morris
      */
-    public void handleGoBack(MouseEvent mouseEvent) throws IOException {
+    public void handleGoBack() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
