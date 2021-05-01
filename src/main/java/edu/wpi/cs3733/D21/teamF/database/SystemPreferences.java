@@ -79,11 +79,11 @@ public class SystemPreferences implements DatabaseEntry{
         return success;
     }
 
-    public String getAlgorithm(String id) throws SQLException{
+    public String getAlgorithm() throws SQLException{
         String query = "SELECT * FROM SYSTEM_PREFERENCES WHERE ID=(?)";
         ResultSet rset;
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
-        stmt.setString(1, id);
+        stmt.setString(1, "MASTER");
         rset = stmt.executeQuery();
         if (rset.next()){
             return rset.getString(2);

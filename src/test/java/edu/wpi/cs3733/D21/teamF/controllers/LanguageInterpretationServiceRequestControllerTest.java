@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -14,15 +15,8 @@ public class LanguageInterpretationServiceRequestControllerTest extends Applicat
     @Override
     public void start (Stage stage) throws Exception {
         System.gc();
-
-        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml"));
-        Parent root = loader.load();
-
-        final LanguageInterpretationServiceRequestController controller = loader.getController();
-
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        SceneContext.getSceneContext().setStage(stage);
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml");
     }
 
 

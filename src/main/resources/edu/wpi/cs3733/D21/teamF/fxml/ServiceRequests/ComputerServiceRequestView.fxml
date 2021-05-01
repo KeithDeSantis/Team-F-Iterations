@@ -17,20 +17,20 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #c6c6c6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ComputerServiceRequestViewController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ComputerServiceRequestViewController">
    <children>
       <VBox layoutX="313.0" layoutY="141.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
+            <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
                   <ImageView fitHeight="100.0" fitWidth="86.0" onMouseClicked="#handleGoHome" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Computer Service Request" wrappingWidth="699.0577087402344">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Computer Service Request" wrappingWidth="736.0577087402344">
                      <font>
-                        <Font size="35.0" />
+                        <Font name="Volkhov Regular" size="40.0" />
                      </font>
                   </Text>
                </children>
@@ -56,7 +56,7 @@
                      <children>
                         <Label text="Computer Name">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Montserrat Regular" size="14.0" />
                            </font>
                         </Label>
                         <JFXTextField fx:id="computerNameText" />
@@ -66,7 +66,7 @@
                      <children>
                         <Label text="Computer Location">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Montserrat Regular" size="14.0" />
                            </font>
                         </Label>
                         <JFXTextField fx:id="computerLocationText" />
@@ -76,7 +76,7 @@
                      <children>
                         <Label text="Requestor">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Montserrat Regular" size="14.0" />
                            </font>
                         </Label>
                         <JFXTextField fx:id="requesterTextText" />
@@ -86,7 +86,7 @@
                      <children>
                         <Label text="Urgency">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Montserrat Regular" size="14.0" />
                            </font>
                         </Label>
                         <JFXComboBox fx:id="urgencyComboBox" promptText="Select urgency..." />
@@ -96,7 +96,7 @@
                      <children>
                         <Label text="Description">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Montserrat Regular" size="14.0" />
                            </font>
                         </Label>
                         <JFXTextArea fx:id="descriptionText" prefWidth="640.0" />
@@ -104,9 +104,9 @@
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                      <children>
-                        <JFXButton buttonType="RAISED" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" />
-                        <JFXButton buttonType="RAISED" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear" />
-                        <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                        <JFXButton buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                        <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
                      </children>
                   </HBox>
                </children>

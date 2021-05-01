@@ -1,6 +1,9 @@
 package edu.wpi.cs3733.uicomponents;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSlider;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,7 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,9 +19,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
+import javafx.util.StringConverter;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -32,11 +33,12 @@ public class MapPanel extends AnchorPane {
     @FXML private ImageView map;
     @FXML private Pane canvas;
 
-    @FXML private ComboBox<String> floorComboBox;
-
     @FXML private JFXButton zoomInButton;
 
     @FXML private JFXButton zoomOutButton;
+
+    @FXML
+    private JFXSlider floorSlider;
 
     private DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
 
@@ -44,9 +46,67 @@ public class MapPanel extends AnchorPane {
     private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
 
 
-    private StringProperty floor = new SimpleStringProperty("1");
+    private final StringProperty floor = new SimpleStringProperty("1");
+    private final ObjectProperty<String> fp = new SimpleObjectProperty<>();
 
     private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
+
+    final StringConverter<Double> doubleStringConverter = new StringConverter<Double>() {
+        @Override
+        public String toString(Double d) {
+            final int cutValue = d.intValue();
+
+            switch (cutValue) {
+                case 0:
+                    return "L2";
+                case 1:
+                    return "L1";
+                case 2:
+                    return "G";
+                case 3:
+                    return "1";
+                case 4:
+                    return "2";
+                case 5:
+                    return "3";
+                default:
+                    return "N/A";
+            }
+        }
+
+        @Override
+        public Double fromString(String s) {
+            switch (s) {
+                case "L2":
+                    return 0.0;
+                case "L1":
+                    return 1.0;
+                case "G":
+                    return 2.0;
+                case "1":
+                    return 3.0;
+                case "2":
+                    return 4.0;
+                case "3":
+                    return 5.0;
+                default:
+                    return -1.0;
+
+            }
+        }
+    };
+
+    final StringConverter<Number> doublePropertyStringConverter = new StringConverter<Number>() {
+        @Override
+        public String toString(Number object) {
+            return doubleStringConverter.toString(object.doubleValue());
+        }
+
+        @Override
+        public Number fromString(String string) {
+            return doubleStringConverter.fromString(string).intValue();
+        }
+    };
 
     public MapPanel() {
         final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/uicomponents/MapPanel.fxml"));
@@ -64,10 +124,6 @@ public class MapPanel extends AnchorPane {
     @FXML
     public void initialize(){
         // Set button fonts - LM
-        Font font = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        zoomInButton.setFont(font);
-        zoomOutButton.setFont(font);
-
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
@@ -88,26 +144,32 @@ public class MapPanel extends AnchorPane {
         // Set up floor comboBox and draw nodes on that floor
         final ObservableList<String> floorName = FXCollections.observableArrayList();
         floorName.addAll("1","2","3","L1","L2","G");
-        floorComboBox.setItems(floorName);
-        floorComboBox.valueProperty().bindBidirectional(this.floor);
-    }
 
 
-    /**
-     * Handle switching floor using combobox
-     * @param actionEvent
-     * @author ZheCheng
-     */
-    @FXML
-    public void handleFloorBoxAction(ActionEvent actionEvent) {
-        switchMap(floorComboBox.getValue().toString());
+
+
+        floorSlider.setLabelFormatter(doubleStringConverter);
+
+        final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
+
+
+        Bindings.bindBidirectional(this.floor, floorSlider.valueProperty(), doublePropertyStringConverter);
+
+        this.floorSlider.valueProperty().addListener(e -> switchMap(this.doubleStringConverter.toString(this.floorSlider.valueProperty().get())));
+
+        fp.bind(this.floor);
     }
+
 
     /**
      * Handle switching floor map and redraw the nodes in new floor
      * @author ZheCheng
      */
     public void switchMap(String floor){
+
+        if(floor.equals(this.floor.get()))
+            return;
+
         this.floor.setValue(floor);
         switch(floor){
             case "1": if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
@@ -125,7 +187,6 @@ public class MapPanel extends AnchorPane {
             default: if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
                 map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
         }
-        floorComboBox.setValue(floor);
         //drawNodeOnFloor();
     }
 
@@ -141,7 +202,7 @@ public class MapPanel extends AnchorPane {
     }
 
     public ObjectProperty<String> getFloor() {
-        return floorComboBox.valueProperty();
+        return this.fp;
     }
 
     public Pane getCanvas() {
@@ -265,13 +326,7 @@ public class MapPanel extends AnchorPane {
     }
 
     // Added by LM
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
+
+
 }

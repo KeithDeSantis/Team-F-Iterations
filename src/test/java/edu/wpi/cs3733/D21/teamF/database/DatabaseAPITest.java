@@ -392,7 +392,7 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test getting and adding correct algorithm (1st entry always)")
     public void testGetAlgorithm() throws SQLException{
-        DatabaseAPI.getDatabaseAPI().addSystemPreferences("test", "A*");
-        assertEquals(DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm("test"), "A*");
+        DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", "A*");
+        assertEquals(DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm(), "A*");
     }
 }

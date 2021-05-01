@@ -56,18 +56,7 @@ public class EditMapNodeDialogViewController {
      */
     @FXML
     private void initialize() {
-        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 18);
-        nodeIDLabel.setFont(buttonDefault);
-        xCoordLabel.setFont(buttonDefault);
-        yCoordLabel.setFont(buttonDefault);
-        floorLabel.setFont(buttonDefault);
-        buildingLabel.setFont(buttonDefault);
-        nodeTypeLabel.setFont(buttonDefault);
-        longNameLabel.setFont(buttonDefault);
-        shortNameLabel.setFont(buttonDefault);
 
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 24);
-        title.setFont(titleFont);
     }
 
 
@@ -217,13 +206,7 @@ public class EditMapNodeDialogViewController {
         return true;
     }
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
+
+
 }

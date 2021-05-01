@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -22,11 +23,8 @@ public class AStarDemoControllerTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws IOException {
         setUp();
-
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml"));
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        SceneContext.getSceneContext().setStage(primaryStage);
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
     }
 
     @BeforeEach
@@ -59,8 +57,8 @@ public class AStarDemoControllerTest extends ApplicationTest {
 
     @Test
     public void testBackButton() {
-        verifyThat("X", Node::isVisible);
-        clickOn("X");
+        verifyThat("#goBack", Node::isVisible);
+        clickOn("#goBack");
         verifyThat("Navigation", Node::isVisible);
     }
 
@@ -76,9 +74,9 @@ public class AStarDemoControllerTest extends ApplicationTest {
         verifyThat("#endComboBox", Node::isVisible);
         clickOn("#endComboBox");
         sleep(100);
-        verifyThat("ACONF00103", Node::isVisible);
-        clickOn("ACONF00103");
-        verifyThat("#ACONF00103", Node::isVisible);
+        verifyThat("ADEPT00102", Node::isVisible);
+        clickOn("ADEPT00102");
+        verifyThat("#ADEPT00102", Node::isVisible);
     }
 
     @Test
@@ -95,13 +93,8 @@ public class AStarDemoControllerTest extends ApplicationTest {
         clickOn("#Next");
         clickOn("#Next");
         clickOn("#Next");
-        clickOn("#Next");
-        verifyThat("3", Node::isVisible);
-        clickOn("#Next");
-        clickOn("#Next");
-        clickOn("#Next");
         verifyThat("#Next", Node::isDisable);
-        verifyThat("Reach Destination!", Node::isVisible);
+        verifyThat("Arrived at Destination!", Node::isVisible);
         clickOn("#End");
         verifyThat("2", Node::isVisible);
     }

@@ -21,7 +21,7 @@ public class UIConstants {
 
     public static final Color LINE_COLOR = new Color(Color.ORANGE.getRed(), Color.ORANGE.getGreen(), Color.ORANGE.getBlue(), 0.5);
 
-    public static final double LINE_STROKE_WIDTH = 7.0;
+    public static final double LINE_STROKE_WIDTH = 5.0;
 
 
 }

@@ -97,13 +97,33 @@ public class Graph {
     }
 
     /**
-     * Finds the path of least weight between two Vertices using an A* algorithm
+     * Finds the path of least weight between two Vertices
      * @param a the start Vertex
      * @param b the endpoint Vertex
      * @return the List of Vertices spanning the path of least weight from Vertex a to Vertex b
-     * @author Tony Vuolo
+     * @author Tony Vuolo, Alex Friedman (ahf)
      */
-    public Path getPath(Vertex a, Vertex b) { return pathfindingAlgorithm.getPath(this, a, b); }
+    public Path getPath(Vertex a, Vertex b) {
+        return pathfindingAlgorithm.getPath(this, a, b);
+    }
+
+    /**
+     * Gets the Path of least weight between two vertices
+     * @param v the (ordered) List of Vertices to be reached
+     * @return the Path of least weight that will travel to every Vertex in the List in order
+     */
+    public Path getPath(List<Vertex> v) {
+        Path path = new Path();
+        ListIterator<Vertex> iterator = v.listIterator();
+        Vertex prev = iterator.next(), current;
+        path.addVertexToPath(prev, 0);
+        while(iterator.hasNext()) {
+            current = iterator.next();
+            path.concatenate(getPath(prev, current));
+            prev = current;
+        }
+        return path;
+    }
 
     /**
      * Used to change the pathfinding algorithm type.
@@ -117,12 +137,15 @@ public class Graph {
         {
             case "astar":
             case "a*":
+            case "a star":
                 this.pathfindingAlgorithm = new AStarImpl();
                 return true;
             case "dfs":
+            case "depth-first-search":
                 this.pathfindingAlgorithm = new DFSImpl();
                 return true;
             case "bfs":
+            case "breadth-first-search":
                 this.pathfindingAlgorithm = new BFSImpl();
                 return true;
         }

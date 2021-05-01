@@ -168,6 +168,42 @@ public class DoublyLinkedHashSet<Payload> implements Iterable<Payload> {
     }
 
     /**
+     * Links this DoublyLinkedHashSets with another one
+     * @param set the augend set
+     * @author Tony Vuolo (bdane)
+     */
+    public void concatenate(DoublyLinkedHashSet<Payload> set) {
+        if(set != null) {
+            if(this.tail != null) {
+                set.head.prev = this.tail;
+                this.tail.next = set.head;
+            } else {
+                this.head = set.head;
+            }
+            this.tail = set.tail;
+            this.map.putAll(set.map);
+        }
+    }
+
+    /**
+     * Gets the head of this DoublyLinkedHashSet
+     * @return this.head
+     * @author Tony Vuolo (bdane)
+     */
+    public Payload getHead() {
+        return this.head == null ? null : this.head.payload;
+    }
+
+    /**
+     * Gets the tail of this DoublyLinkedHashSet
+     * @return this.tail
+     * @author Tony Vuolo (bdane)
+     */
+    public Payload getTail() {
+        return this.tail == null ? null : this.tail.payload;
+    }
+
+    /**
      * Finds the size of this DoublyLinkedHashSet
      * @return this.map.size
      */

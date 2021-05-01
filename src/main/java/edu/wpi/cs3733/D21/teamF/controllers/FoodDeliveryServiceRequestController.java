@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -63,37 +64,6 @@ public class FoodDeliveryServiceRequestController {
     @FXML
     private void initialize(){
 
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40);
-        title.setFont(titleFont); //set title font
-
-        Font buttonFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        cancelButton.setFont(buttonFont);
-        submitButton.setFont(buttonFont);
-        helpButton.setFont(buttonFont);
-        //helpXButton.setFont(buttonFont);
-
-        Font textFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-Regular.ttf", 15);
-        locLabel.setFont(textFont);
-        delLabel.setFont(textFont);
-        allLabel.setFont(textFont);
-        siLabel.setFont(textFont);
-        mealLabel.setFont(textFont);
-        sideLabel.setFont(textFont);
-        drinkLabel.setFont(textFont);
-        rButtonFood1.setFont(textFont);
-        rButtonFood2.setFont(textFont);
-        rButtonFood3.setFont(textFont);
-        rButtonFood4.setFont(textFont);
-        rButtonDrink1.setFont(textFont);
-        rButtonDrink2.setFont(textFont);
-        rButtonDrink3.setFont(textFont);
-        rButtonDrink4.setFont(textFont);
-        cbSide1.setFont(textFont);
-        cbSide2.setFont(textFont);
-        cbSide3.setFont(textFont);
-        cbSide4.setFont(textFont);
-
-
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 
@@ -111,10 +81,7 @@ public class FoodDeliveryServiceRequestController {
 
 
     public void handleBack(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) rButtonFood1.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.show();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     /**
@@ -130,7 +97,8 @@ public class FoodDeliveryServiceRequestController {
             String type = "Food Delivery";
             String person = "";
             String completed = "false";
-            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed);
+            String additionalInfo = "Delivery Location: " + deliveryLocationField.getValue() + "Delivery time: " + deliveryTimeField.getValue();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
@@ -138,12 +106,11 @@ public class FoodDeliveryServiceRequestController {
             Stage submittedStage = new Stage();
             Parent root = submitedPageLoader.load();
             FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submitButton.getScene().getWindow());
+            formSubmittedViewController.changeStage((Stage) rButtonFood1.getScene().getWindow());
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
             submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
             submittedStage.showAndWait();
         }
     }
@@ -160,12 +127,7 @@ public class FoodDeliveryServiceRequestController {
         Button buttonPushed = (Button) e.getSource();
 
         if (buttonPushed == cancelButton) { // is cancel button
-            Stage stage = (Stage) cancelButton.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Service Requests");
-            stage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
         } else if (buttonPushed == helpButton){
             Stage helpPopUpStage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryHelpView.fxml"));
@@ -260,8 +222,6 @@ public class FoodDeliveryServiceRequestController {
         rButtonDrink4.setToggleGroup(drinkGroup);
 
     }
-
-
 
 
 }

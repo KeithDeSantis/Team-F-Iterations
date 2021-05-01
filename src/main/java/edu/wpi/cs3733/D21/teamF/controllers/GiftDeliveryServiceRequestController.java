@@ -1,4 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -6,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -17,11 +19,7 @@ public class GiftDeliveryServiceRequestController {
         @FXML private Button submit;
 
         public void handleClose(ActionEvent actionEvent) throws IOException {
-            Stage currentStage = (Stage)cancel.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomenEWView.fxml"));
-            Scene homeScene = new Scene(root);
-            currentStage.setScene(homeScene);
-            currentStage.show();
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
         }
 
         public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
@@ -41,5 +39,8 @@ public class GiftDeliveryServiceRequestController {
         }
 
 
+    public void handleBack(MouseEvent mouseEvent) throws IOException {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+    }
 }
 

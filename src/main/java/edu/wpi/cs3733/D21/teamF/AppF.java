@@ -1,16 +1,19 @@
 package edu.wpi.cs3733.D21.teamF;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.sql.SQLException;
+import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
+import javax.xml.crypto.Data;
 
 public class  AppF extends Application {
 
@@ -22,13 +25,22 @@ public class  AppF extends Application {
   }
 
   @Override
-  public void start(Stage primaryStage) throws SQLException {
-    DatabaseAPI.getDatabaseAPI().createNodesTable();
-    DatabaseAPI.getDatabaseAPI().createEdgesTable();
+  public void start(Stage primaryStage) throws SQLException, Exception {
+    if (DatabaseAPI.getDatabaseAPI().createNodesTable())
+    {
+        DatabaseAPI.getDatabaseAPI().populateNodes(CSVManager.load("MapfAllNodes.csv"));
+    }
+    if (DatabaseAPI.getDatabaseAPI().createEdgesTable())
+    {
+        DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("MapfAllEdges.csv"));
+    }
     DatabaseAPI.getDatabaseAPI().createUserTable();
-    DatabaseAPI.getDatabaseAPI().createServiceRequestTable(); //FIXME: DO BETTER
+    DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
+    DatabaseAPI.getDatabaseAPI().createSystemTable(); //FIXME: DO BETTER
 
     AppF.primaryStage = primaryStage;
+
+    SceneContext.getSceneContext().setStage(primaryStage);
 
     //ConnectionHandler.main(false);
     Runtime.getRuntime().addShutdownHook(new Thread(){
@@ -42,11 +54,7 @@ public class  AppF extends Application {
       }
     });
     try {
-      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-      Scene scene = new Scene(root);
-      primaryStage.setScene(scene);
-      //primaryStage.setMaximized(true);
-      primaryStage.show();
+      SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     } catch (IOException e) {
       e.printStackTrace();
       Platform.exit();

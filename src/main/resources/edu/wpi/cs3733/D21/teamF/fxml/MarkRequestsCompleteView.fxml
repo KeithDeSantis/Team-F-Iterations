@@ -5,23 +5,40 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MarkRequestsCompleteController">
    <children>
-      <JFXButton fx:id="close" buttonType="RAISED" layoutY="-1.0" onAction="#handleClose" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="x" textFill="WHITE" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+      <HBox fx:id="header" prefHeight="100.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
+         <children>
+            <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+               </image>
+            </ImageView>
+            <Label text="Brigham and Women's Hospital">
+               <font>
+                  <Font name="Volkhov Regular" size="40.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <Label layoutX="206.0" prefHeight="67.0" prefWidth="704.0" text="Service Request Manager" AnchorPane.leftAnchor="206.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0">
+         <font>
+            <Font name="Volkhov Regular" size="50.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="close" buttonType="RAISED" layoutY="-1.0" onAction="#handleClose" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="x" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="150.0">
          <font>
             <Font name="Montserrat Regular" size="15.0" />
          </font></JFXButton>
-      <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0">
+      <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
-            <Label text="Service Request Manager">
-               <font>
-                  <Font name="Volkhov Regular" size="50.0" />
-               </font>
-            </Label>
             <JFXTreeTableView fx:id="requestView" editable="true" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" top="25.0" />
@@ -29,14 +46,14 @@
             </JFXTreeTableView>
             <ButtonBar maxHeight="-Infinity" prefHeight="43.0" prefWidth="810.0">
               <buttons>
-                  <JFXButton fx:id="home" buttonType="RAISED" onAction="#handleHome" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="Home" textFill="WHITE" />
-                  <JFXButton fx:id="markAsComplete" buttonType="RAISED" onAction="#handleMarkAsComplete" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="31.0" prefWidth="304.0" style="-fx-background-color: #03256C;" text="Mark as Complete" textFill="WHITE" />
-                  <JFXButton fx:id="assignButton" buttonType="RAISED" onAction="#handleAssign" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #03256C;" text="Assign" textFill="WHITE">
+                  <JFXButton fx:id="home" buttonType="RAISED" onAction="#handleHome" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Home"/>
+                  <JFXButton fx:id="markAsComplete" buttonType="RAISED" onAction="#handleMarkAsComplete" stylesheets="@/stylesheets/DefaultButtonStyle.css" prefHeight="31.0" prefWidth="304.0" text="Mark as Complete" />
+                  <JFXButton fx:id="assignButton" buttonType="RAISED" onAction="#handleAssign" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Assign" >
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="cancel" buttonType="RAISED" minWidth="38.0" onAction="#handleCancel" onMouseEntered="#handleHoverOnCancel" onMouseExited="#handleHoverOffCancel" prefHeight="29.0" style="-fx-background-color: #d30000;" text="Cancel" textFill="WHITE">
+                  <JFXButton fx:id="cancel" buttonType="RAISED" minWidth="38.0" onAction="#handleCancel" stylesheets="@/stylesheets/DefaultButtonStyle.css" prefHeight="29.0" text="Cancel">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>

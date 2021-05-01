@@ -1,42 +1,34 @@
 package edu.wpi.cs3733.uicomponents.entities;
 
 
-import edu.wpi.cs3733.uicomponents.IMapDrawable;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
+import edu.wpi.cs3733.uicomponents.IMapDrawable;
 import javafx.beans.property.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class DrawableNode extends Circle implements IMapDrawable
+public class DrawableUser extends Circle implements IMapDrawable
 {
     private final SimpleIntegerProperty xCoordinate;
     private final SimpleIntegerProperty yCoordinate;
     private StringProperty floor;
-    private StringProperty building;
-    private StringProperty nodeType;
-    private StringProperty longName;
-    private StringProperty shortName;
 
     private SimpleBooleanProperty shouldDisplay;
 
-
-    public DrawableNode(int xCoordinate, int yCoordinate, String ID, String floor, String building, String nodeType, String longName, String shortName)
+    public DrawableUser(int xCoordinate, int yCoordinate, String ID, String floor)
     {
         this.xCoordinate = new SimpleIntegerProperty(xCoordinate);
         this.yCoordinate = new SimpleIntegerProperty(yCoordinate);
 
         this.floor = new SimpleStringProperty(floor);
-        this.building = new SimpleStringProperty(building);
-        this.nodeType = new SimpleStringProperty(nodeType);
-        this.longName = new SimpleStringProperty(longName);
-        this.shortName = new SimpleStringProperty(shortName);
 
         this.shouldDisplay = new SimpleBooleanProperty(true); //FIXME: DO BETTER!
 
         this.setId(ID);
 
-        this.setRadius(UIConstants.NODE_RADIUS);
+        this.setRadius(10);
 
-        this.setFill(UIConstants.NODE_COLOR);
+        this.setFill(Color.CYAN);
     }
 
     @Override
@@ -70,22 +62,4 @@ public class DrawableNode extends Circle implements IMapDrawable
     public void setFloor(String floor) {
         this.floor.set(floor);
     }
-
-
-    public String getBuilding() {
-        return building.get();
-    }
-
-    public String getNodeType() {
-        return nodeType.get();
-    }
-
-    public String getLongName() {
-        return longName.get();
-    }
-
-    public String getShortName() {
-        return shortName.get();
-    }
-
 }

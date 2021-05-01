@@ -121,7 +121,11 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
                 Integer.parseInt(xcoord),
                 Integer.parseInt(ycoord),
                 nodeID,
-                floor
+                floor,
+                building,
+                nodeType,
+                longName,
+                shortName
         );
     }
 }
