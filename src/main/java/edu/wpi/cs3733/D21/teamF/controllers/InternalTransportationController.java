@@ -78,7 +78,7 @@ public class InternalTransportationController {
     }
 
     public void handleBack(MouseEvent mouseEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 
     public void handleSubmit(ActionEvent e) throws IOException {

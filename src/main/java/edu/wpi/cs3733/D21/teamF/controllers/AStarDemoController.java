@@ -972,7 +972,7 @@ public class AStarDemoController implements Initializable {
      * @author Leo Morris
      */
     public void handleGoBack() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 
     public void handleHoverOn(MouseEvent mouseEvent) {

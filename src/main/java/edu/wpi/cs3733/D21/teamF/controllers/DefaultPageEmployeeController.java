@@ -53,7 +53,7 @@ public class DefaultPageEmployeeController {
         } else if (buttonPushed == navigation) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
         }
         else if (buttonPushed == serviceManager) {
             // Implement Later

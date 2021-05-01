@@ -40,7 +40,7 @@ public class GiftDeliveryServiceRequestController {
 
 
     public void handleBack(MouseEvent mouseEvent) throws IOException {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+            SceneContext.getSceneContext().loadDefault();
     }
 }
 

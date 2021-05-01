@@ -146,7 +146,7 @@ public class MaintenenceRequestController {
     }
 
     public void handleGoHome(MouseEvent mouseEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 
     public void handleCancel(ActionEvent actionEvent) throws IOException {

@@ -79,7 +79,7 @@ public class FloralDeliveryService {
      * @author KD
      */
     public void handleHome(MouseEvent mouseEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 
     /**

@@ -11,6 +11,7 @@ public class CurrentUser {
      * Tracks if the user has been authenticated
      */
     private boolean isAuthenticated = false;
+    private AccountEntry loggedIn = null;
 
     /**
      * Attempts to log in a user
@@ -23,11 +24,11 @@ public class CurrentUser {
     public boolean login(String user, String pass) throws SQLException {
 
         this.isAuthenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
-
-        /*
-         * Do stuff to store the user token
-         */
-
+        if(isAuthenticated){
+            loggedIn = DatabaseAPI.getDatabaseAPI().getUser(user);
+        } else {
+            loggedIn = null;
+        }
         return this.isAuthenticated;
     }
 
@@ -42,11 +43,7 @@ public class CurrentUser {
 
         isAuthenticated = false;
 
-        /*
-         * Clear fields.
-         */
-
-
+        loggedIn = null;
         return true;
     }
 
@@ -56,6 +53,13 @@ public class CurrentUser {
      * @return True if the current user is logged in, false otherwise.
      */
     public boolean isAuthenticated() { return isAuthenticated; }
+
+    /**
+     * Method to get the current auhorization level of the logged in user
+     * @return AuthorizationLevel enumeration ADMIN, EMPLOYEE, USER, GUEST
+     * @author Leo Morris
+     */
+    public AccountEntry getLoggedIn(){ return loggedIn; }
 
 
     /*
