@@ -1566,6 +1566,7 @@ public class MapEditViewController {
             mapPanel.draw(getEditableNode(n));
             // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
         }
+        handleSearch();
     }
 
     /**
