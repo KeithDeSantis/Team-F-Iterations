@@ -850,13 +850,14 @@ public class MapEditViewController {
 
             drawableNode.setOnMousePressed(e -> handleNodeDragMousePressed(drawableNode, nodeEntry, startEdges, endEdges));
 
-            drawableNode.setOnMouseDragged(e -> handleNodeDragMouseDragged(drawableNode, e, startEdges, endEdges));
+            drawableNode.setOnMouseDragged(e -> {
+                handleNodeDragMouseDragged(drawableNode, e, startEdges, endEdges);
+                handleDisplayNodeInfo(drawableNode); // Keeps the Node Info from flickering while dragging - KD
+            });
 
             drawableNode.setOnMouseReleased(e -> {
                 if(!e.isDragDetect())
                 {
-                    selectedCircle.setFill(UIConstants.NODE_COLOR);
-
                     firstCircle = null;
                     secondCircle = null;
                 }
@@ -1444,6 +1445,10 @@ public class MapEditViewController {
          */
     }
 
+    /**
+     * Handles when the toggle for editor mode is switched between Click and Drag or Edge Creation
+     * @author KD
+     */
     public void handleToggle() {
         if (edgeCreationToggle.getText().equals("Drag and Drop")) {
             clickToMakeEdge = true;
@@ -1456,6 +1461,11 @@ public class MapEditViewController {
         handleSearch();
     }
 
+    /**
+     * Displays the node currently hovered over's data in the node info section
+     * @param drawableNode the node hovered over
+     * @author KD
+     */
     public void handleDisplayNodeInfo(DrawableNode drawableNode) {
         nodeIDDisplayLabel.setText(drawableNode.getId());
         nodeIDDisplayLabel.setOpacity(1);
@@ -1471,6 +1481,10 @@ public class MapEditViewController {
         shortNameDisplayLabel.setOpacity(1);
     }
 
+    /**
+     * Clears the node info section
+     * @author KD
+     */
     public void handleUndisplayNodeInfo() {
         nodeIDDisplayLabel.setText("Node ID");
         nodeIDDisplayLabel.setOpacity(0.5);
