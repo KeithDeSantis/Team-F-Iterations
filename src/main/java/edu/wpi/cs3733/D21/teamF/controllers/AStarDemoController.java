@@ -22,6 +22,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -211,7 +213,9 @@ public class AStarDemoController implements Initializable {
                 final JFXButton directionsFrom = new JFXButton("Directions From");
                 directionsFrom.setOnAction(a ->  {endComboBox.setValue(idToShortName(currEntry.getNodeID())); dialog.close();});
 
-                layout.setActions(directionsTo, directionsFrom, closeBtn);
+                final JFXButton toggleFavorite = new JFXButton("FIXME: Add Favorite");
+
+                layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
 
                 dialog.setContent(layout);
                 mapPanel.showDialog(dialog);
@@ -392,6 +396,13 @@ public class AStarDemoController implements Initializable {
 
 
             Tooltip tt = new JFXTooltip();
+           drawableNode.opacityProperty().addListener((observable, oldValue, newValue) -> {// (isCurrentlyNavigating.not().or(isStartOrEndNode)).addListener((observable, oldValue, newValue) -> {
+                if(newValue.doubleValue() == 1.0)
+                    Tooltip.install(drawableNode, tt);
+                else
+                    Tooltip.uninstall(drawableNode, tt);
+            });
+
             tt.setText(node.getShortName() +
                         "\nBuilding: " + node.getBuilding() +
                         "\nFloor: " + node.getFloor());
@@ -490,6 +501,8 @@ public class AStarDemoController implements Initializable {
             {
                 pathVertex.addAll(path.asList());
 
+                parseRoute();
+
                 final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
 
                 for (int i = 0; i < pathVertex.size() - 1; i++)
@@ -507,6 +520,21 @@ public class AStarDemoController implements Initializable {
                                     Bindings.when(Bindings.integerValueAt(stopsList, currentStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE)
                             )
                     );
+
+                    int localStop = 0;
+                    for(localStop = 0; localStop < stopsList.size() - 1; localStop++)
+                    {
+                        if(stopsList.get(localStop + 1) > i)
+                            break;
+                    }
+
+                    Tooltip tt = new JFXTooltip();
+                    tt.textProperty().set(instructionsList.get(localStop) + "\nETA: " + etaList.get(localStop));
+
+                    tt.setStyle("-fx-font: normal bold 15 Langdon; "
+                            + "-fx-base: #AE3522; "
+                            + "-fx-text-fill: orange;");
+                    Tooltip.install(edge, tt);
 
                     mapPanel.draw(edge);
                 }
