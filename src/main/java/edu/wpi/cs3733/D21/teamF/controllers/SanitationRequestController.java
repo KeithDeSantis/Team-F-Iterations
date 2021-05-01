@@ -29,16 +29,14 @@ public class SanitationRequestController {
     @FXML private JFXComboBox<String> loc;
     @FXML private JFXTextField clientName;
 
-
     @FXML
     private void initialize(){
         try {
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
-        //    List<UserEntry> UserEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
-
             final ObservableList<String> nodeList = FXCollections.observableArrayList();
-            nodeList.addAll(nodeEntries.stream().map(NodeEntry::getShortName)
-                    .sorted().collect(Collectors.toList()));
+            for (NodeEntry e : nodeEntries){
+                nodeList.add(e.getShortName());
+            }
             this.loc.setItems(nodeList);
 
         } catch (Exception e) {
