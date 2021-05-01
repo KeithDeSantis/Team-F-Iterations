@@ -81,7 +81,7 @@ public class FoodDeliveryServiceRequestController {
 
 
     public void handleBack(MouseEvent mouseEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     /**
@@ -222,19 +222,6 @@ public class FoodDeliveryServiceRequestController {
         rButtonDrink4.setToggleGroup(drinkGroup);
 
     }
-
-    @FXML
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    @FXML
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
-
 
 
 }

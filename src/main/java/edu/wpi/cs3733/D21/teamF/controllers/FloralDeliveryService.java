@@ -67,10 +67,9 @@ public class FloralDeliveryService {
 
     /**
      * When back button is pressed
-     * @param mouseEvent
      * @author KD
      */
-    public void handleBack(MouseEvent mouseEvent) throws IOException {
+    public void handleBack() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
@@ -184,16 +183,6 @@ public class FloralDeliveryService {
             dateField.setStyle("-fx-background-color: transparent;");
         }
         return isFilled;
-    }
-
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000");
-    }
-
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF");
     }
 
     public void handleClear() {
