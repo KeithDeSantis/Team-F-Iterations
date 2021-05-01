@@ -8,7 +8,7 @@ public class HashCluster<Payload> implements Iterable<Payload> {
     private final HashMap<Payload, HashChain<Payload>> chains;
     private final DoublyLinkedHashSet<Payload> ends;
     private int numChains;
-    private HashChain.HashNode<Payload> focus;
+    public Payload focus;
 
     /**
      * Creates a new HashCluster
@@ -19,6 +19,7 @@ public class HashCluster<Payload> implements Iterable<Payload> {
         this.chains = new HashMap<>();
         this.ends = new DoublyLinkedHashSet<>();
         this.numChains = 0;
+        this.focus = null;
     }
 
     /**
@@ -133,8 +134,6 @@ public class HashCluster<Payload> implements Iterable<Payload> {
         HashChain<Payload> chain = this.chains.get(payload);
         return chain == null ? null : chain.getOtherEnd(payload).payload;
     }
-
-
 
     /**
      * Determines whether a given Payload in this HashCluster is isolated
