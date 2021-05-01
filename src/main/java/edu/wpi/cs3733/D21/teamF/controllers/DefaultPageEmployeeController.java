@@ -5,14 +5,9 @@ import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -63,7 +58,7 @@ public class DefaultPageEmployeeController {
         else if (buttonPushed == serviceManager) {
             // Implement Later
             //TODO Assign to combo box
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/MarkRequestsCompleteView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManagerView.fxml");
         }
         else if (buttonPushed == quit) {
             Platform.exit();
@@ -76,11 +71,17 @@ public class DefaultPageEmployeeController {
      * @author Keith Desantis, insterted by Leo Morris
      * @param mouseEvent The button hovered over
      */
-
+    public void handleHoverOn(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+    }
 
     /** handles removing highlight on buttons when not hovering
      * @author Keith Desantis, insterted by Leo Morris
      * @param mouseEvent The button hovered off
      */
-
+    public void handleHoverOff(MouseEvent mouseEvent) {
+        JFXButton btn = (JFXButton) mouseEvent.getSource();
+        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
 }
