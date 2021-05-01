@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -17,11 +18,14 @@
          <children>
             <ScrollPane fx:id="scroll" prefHeight="442.0" prefWidth="521.0" stylesheets="/stylesheets/NodeEditorScrollPaneStyle.css">
                <content>
-                  <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
+                  <StackPane fx:id="stackPane" prefHeight="150.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true" />
+                        <Pane fx:id="canvas" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fx:id="map" fitHeight="392.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true" />
+                           </children></Pane>
                      </children>
-                  </Pane>
+                  </StackPane>
                </content>
             </ScrollPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -45,12 +49,12 @@
                                     <Font name="Tahoma" size="18.0" />
                                  </font>
                               </Label>
-                              <JFXButton fx:id="zoomInButton" buttonType="RAISED" onAction="#handleZoom" ripplerFill="WHITE" text="+" stylesheets="/stylesheets/DefaultButtonStyle.css">
+                              <JFXButton fx:id="zoomInButton" buttonType="RAISED" onAction="#handleZoom" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="+">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="zoomOutButton" buttonType="RAISED" onAction="#handleZoom" ripplerFill="WHITE"  text="-" stylesheets="/stylesheets/DefaultButtonStyle.css">
+                              <JFXButton fx:id="zoomOutButton" buttonType="RAISED" onAction="#handleZoom" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="-">
                                  <font>
                                     <Font size="19.0" />
                                  </font>

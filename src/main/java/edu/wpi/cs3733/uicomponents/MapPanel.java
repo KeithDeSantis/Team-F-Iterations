@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.uicomponents;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXSlider;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
@@ -32,9 +34,14 @@ public class MapPanel extends AnchorPane {
     @FXML
     public Pane canvas;
 
-    @FXML public JFXButton zoomInButton;
+    @FXML
+    public JFXButton zoomInButton;
 
-    @FXML public JFXButton zoomOutButton;
+    @FXML
+    public JFXButton zoomOutButton;
+
+    @FXML
+    public StackPane stackPane;
 
     @FXML
     public JFXSlider floorSlider;
@@ -128,6 +135,9 @@ public class MapPanel extends AnchorPane {
         map.setPreserveRatio(true);
         F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
 
+
+        stackPane.prefWidthProperty().bind(this.widthProperty());
+        stackPane.prefHeightProperty().bind(this.heightProperty());
 
         INITIAL_WIDTH.setValue(F1Image.getWidth());
         INITIAL_HEIGHT.setValue(F1Image.getHeight());
@@ -295,5 +305,11 @@ public class MapPanel extends AnchorPane {
     public void clearMap()
     {
         canvas.getChildren().removeIf(x -> x instanceof IMapDrawable);
+    }
+
+
+    public void showDialog(JFXDialog dialog)
+    {
+        dialog.show(stackPane);
     }
 }

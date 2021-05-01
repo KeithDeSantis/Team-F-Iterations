@@ -1,8 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTooltip;
+import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -30,6 +28,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -162,7 +161,9 @@ public class AStarDemoController implements Initializable {
         final MenuItem startPathMenu = new MenuItem("Path from Here");
         final MenuItem endPathMenu = new MenuItem("Path end Here");
 
-        contextMenu.getItems().addAll(startPathMenu, endPathMenu);
+        final MenuItem whatsHereMenu = new MenuItem("What's here?");
+
+        contextMenu.getItems().addAll(startPathMenu, endPathMenu, new SeparatorMenuItem(), whatsHereMenu);
 
         mapPanel.getMap().setOnContextMenuRequested(event -> {
             if(pathFinding.get()){
@@ -172,9 +173,40 @@ public class AStarDemoController implements Initializable {
 
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
 
-            startPathMenu.setOnAction((ActionEvent e) -> startComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
+            startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
 
-            endPathMenu.setOnAction((ActionEvent e) -> endComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
+            endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
+
+            whatsHereMenu.setOnAction(e -> {
+                final NodeEntry nodeEntry = getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel);
+
+                final JFXDialog dialog = new JFXDialog();
+                final JFXDialogLayout layout = new JFXDialogLayout();
+
+
+                layout.setHeading(new Text(nodeEntry.getLongName()));
+
+                //FIXME: DO BREAKS W/ CSS
+                layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
+                        "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
+                        "may also be prone to contain information about running to the second arrangement (it's only the\n " +
+                        "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
+                        "avenue by Radio City."));
+
+                final JFXButton closeBtn = new JFXButton("Close");
+                closeBtn.setOnAction(a -> dialog.close());
+
+                final JFXButton directionsTo = new JFXButton("Direction To");
+                directionsTo.setOnAction(a -> {startComboBox.setValue(idToShortName(nodeEntry.getNodeID())); dialog.close();});
+
+                final JFXButton directionsFrom = new JFXButton("Directions From");
+                directionsFrom.setOnAction(a ->  {endComboBox.setValue(idToShortName(nodeEntry.getNodeID())); dialog.close();});
+
+                layout.setActions(directionsTo, directionsFrom, closeBtn);
+
+                dialog.setContent(layout);
+                mapPanel.showDialog(dialog);
+            });
         });
 
 
