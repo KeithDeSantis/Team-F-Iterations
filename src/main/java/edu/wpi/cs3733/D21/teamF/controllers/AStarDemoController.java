@@ -107,6 +107,8 @@ public class AStarDemoController implements Initializable {
 
     private String currentDirection;
 
+    final ObservableList<String> nodeList = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -135,9 +137,20 @@ public class AStarDemoController implements Initializable {
         }
 
 
-        final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(this.graph.getVertices().stream().map(Vertex::getID).sorted().collect(Collectors.toList()));
-
+        List<String> shortNameList = new ArrayList<>();
+        for(Vertex vertex : this.graph.getVertices()){
+            NodeEntry node = findNodeEntry(vertex.getID());
+            if (node == null) { continue; } // Error checking
+            if(!node.getNodeType().equals("HALL")){
+                if(!shortNameList.contains(node.getShortName())){
+                    shortNameList.add(node.getShortName());
+                }else{
+                    shortNameList.add(node.getShortName() +
+                            node.getNodeID().substring(node.getNodeID().length() - 5));
+                }
+            }
+        }
+        nodeList.addAll(shortNameList.stream().sorted().collect(Collectors.toList()));
 
         startComboBox.setItems(nodeList);
         endComboBox.setItems(nodeList);
@@ -160,9 +173,9 @@ public class AStarDemoController implements Initializable {
 
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
 
-            startPathMenu.setOnAction((ActionEvent e) -> startComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
+            startPathMenu.setOnAction((ActionEvent e) -> startComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
 
-            endPathMenu.setOnAction((ActionEvent e) -> endComboBox.setValue(getClosest(allNodeEntries, event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID()));
+            endPathMenu.setOnAction((ActionEvent e) -> endComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
         });
 
 
@@ -211,22 +224,51 @@ public class AStarDemoController implements Initializable {
         this.favorites = new DoublyLinkedHashSet<>();
         //TODO: load recentlyUsed
     }
+
+    private String shortNameToID(String shortName){
+        for(NodeEntry node : allNodeEntries) {
+            if (node.getShortName().equals(shortName)) {
+                return node.getNodeID();
+            }
+            if (shortName.length() > 5 && node.getShortName().equals(shortName.substring(0, shortName.length() - 5)) &&
+                    shortName.substring(shortName.length() - 5).equals(node.getNodeID().substring(node.getNodeID().length() - 5))) {
+                return node.getNodeID();
+            }
+        }
+        return null;
+    }
+
+    private String idToShortName(String ID){
+        NodeEntry node = findNodeEntry(ID);
+        if(node == null){
+            return null;
+        }
+        if(nodeList.contains(node.getShortName())){
+            return node.getShortName();
+        }else{
+            return node.getShortName() + node.getNodeID().substring(node.getNodeID().length() - 5);
+        }
+    }
+
     /**
      * Given a list of NodeEntries, returns the one closest to the current location
      *
-     * @param entries The list of NodeEntries
      * @param x the x coordinate of the mouse
      * @param y the y coordinate
      * @return the closest NodeEntry
      * @author Alex Friedman (ahf)
      */
-    private NodeEntry getClosest(List<NodeEntry> entries, double x, double y)
+    private NodeEntry getClosest(double x, double y)
     {
         double minDist2 = Integer.MAX_VALUE;
         NodeEntry closest = null;
 
-        for(NodeEntry nodeEntry : entries)
+        for(String sn : nodeList)
         {
+            NodeEntry nodeEntry = findNodeEntry(shortNameToID(sn));
+            if(nodeEntry == null){
+                return null;
+            }
             if(!nodeEntry.getFloor().equals(mapPanel.getFloor().getValue()))
                 continue;
 
@@ -269,7 +311,7 @@ public class AStarDemoController implements Initializable {
        // if(this.startNodeDisplay != null)
         //    mapPanel.unDraw(this.startNodeDisplay.getId());
         //FIXME: USE BINDINGS
-        this.startNodeDisplay = mapPanel.getNode(startComboBox.getValue()); //getDrawableNode(startComboBox.getValue(), UIConstants.NODE_COLOR, 10);
+        this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue())); //getDrawableNode(startComboBox.getValue(), UIConstants.NODE_COLOR, 10);
 
         mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(startNodeDisplay);
@@ -290,10 +332,10 @@ public class AStarDemoController implements Initializable {
             drawableNode.setFill(color);//UIConstants.NODE_COLOR);
             drawableNode.setRadius(radius);//10);
 
-            drawableNode.radiusProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(drawableNode.getId()).or(endComboBox.valueProperty().isEqualTo(drawableNode.getId()))).then(10).otherwise(5));
+            drawableNode.radiusProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId())).or(endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId())))).then(10).otherwise(5));
 
-            drawableNode.fillProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(drawableNode.getId())).then(Color.ORANGE).otherwise(
-                    Bindings.when(endComboBox.valueProperty().isEqualTo(drawableNode.getId())).then(Color.GREEN).otherwise(UIConstants.NODE_COLOR)
+            drawableNode.fillProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()))).then(Color.ORANGE).otherwise(
+                    Bindings.when(endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()))).then(Color.GREEN).otherwise(UIConstants.NODE_COLOR)
             ));
 
 
@@ -333,7 +375,7 @@ public class AStarDemoController implements Initializable {
 //        if(this.endNodeDisplay != null)
 //            mapPanel.unDraw(this.endNodeDisplay.getId());
         //FIXME: USE BINDINGS?
-        this.endNodeDisplay = mapPanel.getNode(endComboBox.getValue());//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
+        this.endNodeDisplay = mapPanel.getNode(shortNameToID(endComboBox.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
         mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(endNodeDisplay);
         loadRecentlyUsedVertices();
@@ -353,8 +395,8 @@ public class AStarDemoController implements Initializable {
 //        if(this.endNodeDisplay != null)
 //            mapPanel.draw(this.endNodeDisplay);
 
-        final Vertex startVertex = this.graph.getVertex(startComboBox.getValue());
-        final Vertex endVertex = this.graph.getVertex(endComboBox.getValue());
+        final Vertex startVertex = this.graph.getVertex(shortNameToID(startComboBox.getValue()));
+        final Vertex endVertex = this.graph.getVertex(shortNameToID(endComboBox.getValue()));
 
         updateRecentlyUsed(endVertex);
 
@@ -570,7 +612,7 @@ public class AStarDemoController implements Initializable {
         if (angle <= 45 || angle >= 315) {
             return "Look forward";
         } else {
-            if (Math.abs(Math.abs(curAngle - prevAngle) - 180) <= 15) {
+            if (Math.abs(Math.abs(curAngle - prevAngle) - 180) <= 30) {
                 return "Turn around";
             } else if (angle < 180) {
                 return "Turn right";
@@ -741,7 +783,7 @@ public class AStarDemoController implements Initializable {
             Next.setDisable(false);
         }
 
-        if(!pathVertex.get(curStep.get()).getFloor().equals(mapPanel.getFloor().getValue())){
+        if(!pathVertex.get(stops.get(curStep.get())).getFloor().equals(mapPanel.getFloor().getValue())){
             mapPanel.switchMap(pathVertex.get(stops.get(curStep.get())).getFloor());
         }
 

@@ -23,7 +23,7 @@ public class SanitationRequestController {
 
     @FXML private JFXButton submit;
     @FXML private JFXButton cancel;
-    @FXML private JFXTextArea description;
+    @FXML private JFXTextField description;
     @FXML private JFXComboBox<String> loc;
     @FXML private JFXComboBox<String> employeeAssigned;
 
