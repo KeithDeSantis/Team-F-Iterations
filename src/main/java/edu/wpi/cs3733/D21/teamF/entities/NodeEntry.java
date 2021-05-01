@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.entities;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * Class that represents a node, uses SimpleStringProperties so that it can be used in a TableView
@@ -18,9 +19,8 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
     private String nodeType;
     private String longName;
     private String shortName;
-    private final SimpleStringProperty nodeIDProperty;
-    private final SimpleStringProperty shortNameProperty;
-
+    private final StringProperty nodeIDProperty;
+    private final StringProperty shortNameProperty;
 
 
     // KD - Constructor for testing purposes
@@ -83,10 +83,8 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
         this.nodeID = nodeIDProperty;
     }
 
-    public SimpleStringProperty getNodeIDProperty() {
-        return nodeIDProperty;
-    }
-    public SimpleStringProperty getShortNameProperty() {
+    public StringProperty getNodeIDProperty() { return nodeIDProperty; }
+    public StringProperty getShortNameProperty() {
         return shortNameProperty;
     }
 

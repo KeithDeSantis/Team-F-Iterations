@@ -310,7 +310,7 @@ public class AStarDemoController implements Initializable {
        // if(this.startNodeDisplay != null)
         //    mapPanel.unDraw(this.startNodeDisplay.getId());
         //FIXME: USE BINDINGS
-        this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue())); //getDrawableNode(startComboBox.getValue(), UIConstants.NODE_COLOR, 10);
+        this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue()));
 
         mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
         mapPanel.centerNode(startNodeDisplay);
@@ -322,26 +322,25 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
     private DrawableNode getDrawableNode(String nodeID, Color color, double radius) {
-        final NodeEntry startNode = findNodeEntry(nodeID);
+        final NodeEntry node = findNodeEntry(nodeID);
 
-
-        if(startNode != null)
+        if(node != null)
         {
-            final DrawableNode drawableNode = startNode.getDrawable();
+            final DrawableNode drawableNode = node.getDrawable();
             drawableNode.setFill(color);//UIConstants.NODE_COLOR);
             drawableNode.setRadius(radius);//10);
 
             drawableNode.radiusProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId())).or(endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId())))).then(10).otherwise(5));
 
             drawableNode.fillProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()))).then(Color.ORANGE).otherwise(
-                    Bindings.when(endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()))).then(Color.GREEN).otherwise(UIConstants.NODE_COLOR)
+                    Bindings.when(endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()))).then(Color.GREEN).otherwise(getNodeTypeColor(drawableNode.getNodeType()))
             ));
 
 
             Tooltip tt = new JFXTooltip();
-            tt.setText(startNode.getShortName() +
-                        "\nBuilding: " + startNode.getBuilding() +
-                        "\nFloor: " + startNode.getFloor());
+            tt.setText(node.getShortName() +
+                        "\nBuilding: " + node.getBuilding() +
+                        "\nFloor: " + node.getFloor());
 
             tt.setStyle("-fx-font: normal bold 15 Langdon; "
                     + "-fx-base: #AE3522; "
@@ -353,6 +352,41 @@ public class AStarDemoController implements Initializable {
             return drawableNode;
         }
         return null;
+    }
+
+    private Color getNodeTypeColor(String type)
+    {
+        switch (type){
+            case "HALL":
+            case "WALK":
+                return new Color(0, 0, 0, 0);
+            case "CONF":
+                return Color.GREEN;
+            case "DEPT":
+                return Color.BROWN;
+            case "ELEV":
+                return Color.YELLOW;
+            case "INFO":
+                return Color.LIGHTBLUE;
+            case "REST":
+            case "BATH":
+                return Color.BLUE;
+            case "LABS":
+                return Color.LIGHTGREEN;
+            case "STAI":
+                return Color.RED;
+            case "SERV":
+                return Color.GRAY;
+            case "PARK":
+                return Color.BLACK;
+            case "EXIT":
+                return Color.GOLD;
+            case "RETL":
+                return Color.PINK;
+            default:
+                System.out.println(type);
+                return Color.RED.brighter();
+        }
     }
 
     /**
@@ -751,8 +785,8 @@ public class AStarDemoController implements Initializable {
             mapPanel.unDraw(userNodeDisplay.getId());
         mapPanel.draw(this.userNodeDisplay);
 
-        this.startNodeDisplay = mapPanel.getNode(pathVertex.get(0).getID());//getDrawableNode(pathVertex.get(0).getID(), UIConstants.NODE_COLOR, 10);
-        this.endNodeDisplay = mapPanel.getNode(pathVertex.get(pathVertex.size()-1).getID());//getDrawableNode(pathVertex.get(pathVertex.size()-1).getID(), Color.GREEN, 10);
+        this.startNodeDisplay = mapPanel.getNode(pathVertex.get(0).getID());
+        this.endNodeDisplay = mapPanel.getNode(pathVertex.get(pathVertex.size()-1).getID());
         mapPanel.centerNode(userNodeDisplay);
 
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructions)).then("").otherwise(Bindings.stringValueAt(instructions, curStep)));
