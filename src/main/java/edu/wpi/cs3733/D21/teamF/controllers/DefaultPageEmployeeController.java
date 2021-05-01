@@ -71,17 +71,11 @@ public class DefaultPageEmployeeController {
      * @author Keith Desantis, insterted by Leo Morris
      * @param mouseEvent The button hovered over
      */
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
+
 
     /** handles removing highlight on buttons when not hovering
      * @author Keith Desantis, insterted by Leo Morris
      * @param mouseEvent The button hovered off
      */
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
+
 }

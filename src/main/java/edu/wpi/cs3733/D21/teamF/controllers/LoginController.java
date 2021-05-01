@@ -41,6 +41,8 @@ public class LoginController {
         } else if (buttonPushed == signIn) {
             if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
                 DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
+                DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff");
+                DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest");
             }
             boolean authenticated = false;
             String user = username.getText();
@@ -69,13 +71,7 @@ public class LoginController {
             }
 
     }
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
+
+
 }

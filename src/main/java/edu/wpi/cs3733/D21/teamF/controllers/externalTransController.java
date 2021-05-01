@@ -23,7 +23,8 @@ public class externalTransController {
     @FXML private JFXButton submit;
     @FXML private JFXButton Cancel;
 
-    public void goHome(MouseEvent mouseEvent) {
+    public void goHome(MouseEvent mouseEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     @FXML
@@ -48,4 +49,8 @@ public class externalTransController {
     public void cancel(ActionEvent actionEvent) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
+
+
+
+
 }
