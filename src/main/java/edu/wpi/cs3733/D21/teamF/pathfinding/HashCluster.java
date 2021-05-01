@@ -8,6 +8,7 @@ public class HashCluster<Payload> implements Iterable<Payload> {
     private final HashMap<Payload, HashChain<Payload>> chains;
     private final DoublyLinkedHashSet<Payload> ends;
     private int numChains;
+    private HashChain.HashNode<Payload> focus;
 
     /**
      * Creates a new HashCluster
@@ -164,7 +165,7 @@ public class HashCluster<Payload> implements Iterable<Payload> {
     @Override
     public Iterator<Payload> iterator() {
         return new Iterator<Payload>() {
-            private HashChain.HashNode<Payload> currentNode, prevNode;
+            private HashChain.HashNode<Payload> currentNode = HashCluster.this.links.get(HashCluster.this.ends.getIndex(0)), prevNode;
 
             /**
              * Determines whether there is another element left to iterate over in the HashChain
