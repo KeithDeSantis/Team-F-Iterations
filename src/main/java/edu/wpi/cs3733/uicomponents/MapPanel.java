@@ -55,7 +55,15 @@ public class MapPanel extends AnchorPane {
     private final StringProperty floor = new SimpleStringProperty("1");
     private final ObjectProperty<String> fp = new SimpleObjectProperty<>();
 
-    private Image F1Image,F2Image,F3Image,L1Image,L2Image,GImage = null;
+
+
+    //FIXME: DO BETTER!
+    private final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+    private final Image F2Image = new Image(getClass().getResourceAsStream("/maps/02_thesecondfloor.png"));
+    private final Image F3Image = new Image(getClass().getResourceAsStream("/maps/03_thethirdfloor.png"));
+    private final Image L1Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
+    private final Image L2Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel2.png"));
+    private final Image GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
 
     final StringConverter<Double> doubleStringConverter = new StringConverter<Double>() {
         @Override
@@ -133,7 +141,7 @@ public class MapPanel extends AnchorPane {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
-        F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
+        //F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
 
 
         stackPane.prefWidthProperty().bind(this.widthProperty());
@@ -173,19 +181,19 @@ public class MapPanel extends AnchorPane {
 
         this.floor.setValue(floor);
         switch(floor){
-            case "1": if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
+            case "1":
                 map.setImage(F1Image); break;
-            case "2": if (F2Image == null)F2Image = new Image("/maps/02_thesecondfloor.png");
+            case "2":
                 map.setImage(F2Image); break;
-            case "3": if (F3Image == null)F3Image = new Image("/maps/03_thethirdfloor.png");
+            case "3":
                 map.setImage(F3Image); break;
-            case "L1": if (L1Image == null)L1Image = new Image("/maps/00_thelowerlevel1.png");
+            case "L1":
                 map.setImage(L1Image); break;
-            case "L2": if (L2Image == null)L2Image = new Image("/maps/00_thelowerlevel2.png");
+            case "L2":
                 map.setImage(L2Image); break;
-            case "G": if (GImage == null)GImage = new Image("/maps/00_thegroundfloor.png");
+            case "G":
                 map.setImage(GImage); break;
-            default: if (F1Image == null)F1Image = new Image("/maps/01_thefirstfloor.png");
+            default:
                 map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
         }
         //drawNodeOnFloor();

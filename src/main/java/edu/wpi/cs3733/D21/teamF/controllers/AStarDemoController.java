@@ -177,6 +177,7 @@ public class AStarDemoController implements Initializable {
 
             endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
 
+            //FIXME: Make these ones require that thing is visible
             whatsHereMenu.setOnAction(e -> {
                 final NodeEntry nodeEntry = getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel);
 
