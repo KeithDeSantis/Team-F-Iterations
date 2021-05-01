@@ -169,23 +169,28 @@ public class AStarDemoController implements Initializable {
             if(pathFinding.get()){
                 return;
             }
-            contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
+            final NodeEntry currEntry = getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel);
 
-            startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
+            if(currEntry == null)
+                return;
 
-            endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel).getNodeID())));
+            contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
+
+            startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(currEntry.getNodeID())));
+
+            endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(currEntry.getNodeID())));
 
             //FIXME: Make these ones require that thing is visible
             whatsHereMenu.setOnAction(e -> {
-                final NodeEntry nodeEntry = getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel);
+
 
                 final JFXDialog dialog = new JFXDialog();
                 final JFXDialogLayout layout = new JFXDialogLayout();
 
 
-                layout.setHeading(new Text(nodeEntry.getLongName()));
+                layout.setHeading(new Text(currEntry.getLongName()));
 
                 //FIXME: DO BREAKS W/ CSS
                 layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
@@ -198,10 +203,10 @@ public class AStarDemoController implements Initializable {
                 closeBtn.setOnAction(a -> dialog.close());
 
                 final JFXButton directionsTo = new JFXButton("Direction To");
-                directionsTo.setOnAction(a -> {startComboBox.setValue(idToShortName(nodeEntry.getNodeID())); dialog.close();});
+                directionsTo.setOnAction(a -> {startComboBox.setValue(idToShortName(currEntry.getNodeID())); dialog.close();});
 
                 final JFXButton directionsFrom = new JFXButton("Directions From");
-                directionsFrom.setOnAction(a ->  {endComboBox.setValue(idToShortName(nodeEntry.getNodeID())); dialog.close();});
+                directionsFrom.setOnAction(a ->  {endComboBox.setValue(idToShortName(currEntry.getNodeID())); dialog.close();});
 
                 layout.setActions(directionsTo, directionsFrom, closeBtn);
 
