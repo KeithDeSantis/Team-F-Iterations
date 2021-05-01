@@ -378,7 +378,12 @@ public class AStarDemoController implements Initializable {
 
             drawableNode.radiusProperty().bind(Bindings.when(isStartOrEndNode).then(10).otherwise(5));
 
-            drawableNode.fillProperty().bind(
+          //  drawableNode.fillProperty().set(new Color(0, 0, 0, 0));
+            drawableNode.setStrokeWidth(2.0);
+
+            drawableNode.fillProperty().bind(Bindings.when(isStartOrEndNode).then(getNodeTypeColor(drawableNode.getNodeType())).otherwise(new Color(0, 0, 0, 0)));
+
+            drawableNode.strokeProperty().bind(
                     Bindings.when(isStartNode).then(Color.ORANGE).otherwise(
                             Bindings.when(isEndNode).then(Color.GREEN).otherwise(getNodeTypeColor(drawableNode.getNodeType()))
             ));

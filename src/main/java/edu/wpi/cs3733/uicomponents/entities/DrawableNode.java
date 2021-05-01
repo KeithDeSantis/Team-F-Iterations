@@ -18,6 +18,8 @@ public class DrawableNode extends Circle implements IMapDrawable
 
     private final SimpleBooleanProperty shouldDisplay;
 
+    private DoubleProperty localRadius;
+
 
     public DrawableNode(int xCoordinate, int yCoordinate, String ID, String floor, String building, String nodeType, String longName, String shortName)
     {
@@ -35,6 +37,7 @@ public class DrawableNode extends Circle implements IMapDrawable
         this.setId(ID);
 
         this.setRadius(UIConstants.NODE_RADIUS);
+        this.localRadius = new SimpleDoubleProperty(this.getRadius());
 
         this.setFill(UIConstants.NODE_COLOR);
     }
@@ -43,6 +46,8 @@ public class DrawableNode extends Circle implements IMapDrawable
     public void bindLocation(DoubleProperty zoomLevel) {
         this.centerXProperty().bind(xCoordinate.divide(zoomLevel));
         this.centerYProperty().bind(yCoordinate.divide(zoomLevel));
+
+        //this.radiusProperty().bind(localRadius.divide(zoomLevel));
     }
 
     @Override
