@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -238,6 +239,8 @@ public class LanguageInterpretationServiceRequestController implements Initializ
        // language.getItems().add("Russian");
         language.getItems().add("Spanish");
        // language.getItems().add("Vietnamese");
+
+        nameLabel.setText(StringEscapeUtils.unescapeJava("\u0627\u0633\u0645"));
     }
     
     private boolean formFilledOut(){
