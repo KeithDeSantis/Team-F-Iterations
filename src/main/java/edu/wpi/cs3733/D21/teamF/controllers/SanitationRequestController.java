@@ -16,7 +16,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SanitationRequestController {
@@ -25,7 +27,7 @@ public class SanitationRequestController {
     @FXML private JFXButton cancel;
     @FXML private JFXTextField description;
     @FXML private JFXComboBox<String> loc;
-    @FXML private JFXComboBox<String> employeeAssigned;
+    @FXML private JFXTextField clientName;
 
 
     @FXML
@@ -45,7 +47,14 @@ public class SanitationRequestController {
 
     }
 
-    public void handleSubmit(ActionEvent actionEvent) throws IOException {
+    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
+        String uuid = UUID.randomUUID().toString();
+        String type = "Sanitation Services";
+        String person = "";
+        String completed = "false";
+        String additionalInfo = "Delivery Location: " + loc.getValue() + "Job Description: " + description.getText();
+        DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
+
         // Loads form submitted window and passes in current stage to return to request home
         FXMLLoader submitedPageLoader = new FXMLLoader();
         submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
