@@ -35,8 +35,9 @@ public class SanitationRequestController {
         //    List<UserEntry> UserEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries(ConnectionHandler.getConnection());
 
             final ObservableList<String> nodeList = FXCollections.observableArrayList();
-            nodeList.addAll(nodeEntries.stream().map(NodeEntry::getShortName)
-                    .sorted().collect(Collectors.toList()));
+            //nodeList.addAll(nodeEntries.stream().map(NodeEntry::getShortName)
+              //      .sorted().collect(Collectors.toList()));
+            for(NodeEntry N: nodeEntries){nodeList.add(N.getShortName());}
             this.loc.setItems(nodeList);
 
         } catch (Exception e) {
