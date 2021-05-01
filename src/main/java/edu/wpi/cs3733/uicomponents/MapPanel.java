@@ -144,14 +144,18 @@ public class MapPanel extends AnchorPane {
         //F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
 
 
-        stackPane.prefWidthProperty().bind(this.widthProperty());
-        stackPane.prefHeightProperty().bind(this.heightProperty());
+
 
         INITIAL_WIDTH.setValue(F1Image.getWidth());
         INITIAL_HEIGHT.setValue(F1Image.getHeight());
 
+
+        stackPane.prefWidthProperty().bind(this.widthProperty());
+        stackPane.prefHeightProperty().bind(this.heightProperty());
+
+
         canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
-        canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
+        canvas.prefHeightProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
 
         map.fitWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
         map.fitHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));

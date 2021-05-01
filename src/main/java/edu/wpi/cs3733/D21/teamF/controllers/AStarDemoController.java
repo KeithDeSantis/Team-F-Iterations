@@ -363,6 +363,8 @@ public class AStarDemoController implements Initializable {
             drawableNode.setFill(color);//UIConstants.NODE_COLOR);
             drawableNode.setRadius(radius);//10);
 
+            drawableNode.setOnContextMenuRequested(mapPanel.getOnContextMenuRequested());
+
             drawableNode.radiusProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId())).or(endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId())))).then(10).otherwise(5));
 
             drawableNode.fillProperty().bind(Bindings.when(startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()))).then(Color.ORANGE).otherwise(
