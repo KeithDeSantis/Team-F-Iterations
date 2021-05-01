@@ -99,6 +99,7 @@ public class ServiceRequestManagerController implements Initializable {
                 public void handle(TreeTableColumn.CellEditEvent<ServiceEntry, String> t) {
                      t.getRowValue().getValue().setAssignedTo(t.getNewValue());
                      saveChanges.setDisable(false);
+                     removeAssignment.setDisable(false);
                 }
         });
 
