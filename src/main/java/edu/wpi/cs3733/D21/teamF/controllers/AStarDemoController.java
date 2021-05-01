@@ -2,7 +2,6 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTooltip;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -218,7 +217,7 @@ public class AStarDemoController implements Initializable {
 
 
         for(NodeEntry e : allNodeEntries)
-          getDrawableNodez(e.getNodeID(), Color.ORANGE, 5);
+          getDrawableNode(e.getNodeID(), Color.ORANGE, 5);
     }
     private void loadFavorites() {
         this.favorites = new DoublyLinkedHashSet<>();
@@ -322,7 +321,7 @@ public class AStarDemoController implements Initializable {
      * @param nodeID the ID of the Node
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
-    private DrawableNode getDrawableNodez(String nodeID, Color color, double radius) {
+    private DrawableNode getDrawableNode(String nodeID, Color color, double radius) {
         final NodeEntry startNode = findNodeEntry(nodeID);
 
 
@@ -390,11 +389,6 @@ public class AStarDemoController implements Initializable {
      */
     private boolean updatePath()
     {
-//        if(this.startNodeDisplay != null)
-//            mapPanel.draw(this.startNodeDisplay);
-//        if(this.endNodeDisplay != null)
-//            mapPanel.draw(this.endNodeDisplay);
-
         final Vertex startVertex = this.graph.getVertex(shortNameToID(startComboBox.getValue()));
         final Vertex endVertex = this.graph.getVertex(shortNameToID(endComboBox.getValue()));
 
