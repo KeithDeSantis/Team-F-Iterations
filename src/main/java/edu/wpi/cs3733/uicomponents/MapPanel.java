@@ -141,9 +141,6 @@ public class MapPanel extends AnchorPane {
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         map.setPreserveRatio(true);
-        //F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
-
-
 
 
         INITIAL_WIDTH.setValue(F1Image.getWidth());
