@@ -11,15 +11,15 @@ import javafx.beans.property.SimpleStringProperty;
 public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
 
     private String nodeID;
-    private String xcoord;
-    private String ycoord;
+    private String xCoordinate;
+    private String yCoordinate;
     private String floor;
     private String building;
     private String nodeType;
     private String longName;
     private String shortName;
-    private SimpleStringProperty nodeIDProperty;
-    private SimpleStringProperty shortNameProperty;
+    private final SimpleStringProperty nodeIDProperty;
+    private final SimpleStringProperty shortNameProperty;
 
 
 
@@ -35,10 +35,10 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
     }
 
     //ahf - constructor for all fields.
-    public NodeEntry(String nodeID, String xcoord, String ycoord, String floor, String building, String nodeType, String longName, String shortName) {
+    public NodeEntry(String nodeID, String xCoordinate, String yCoordinate, String floor, String building, String nodeType, String longName, String shortName) {
         this.nodeID = nodeID;
-        this.xcoord = xcoord;
-        this.ycoord = ycoord;
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
         this.floor = floor;
         this.building = building;
         this.nodeType = nodeType;
@@ -52,11 +52,11 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
         this.nodeID = nodeID;
         this.nodeIDProperty.set(nodeID);
     }
-    public void setXcoord(String xcoord) {
-        this.xcoord = xcoord;
+    public void setXCoordinate(String xCoordinate) {
+        this.xCoordinate = xCoordinate;
     }
-    public void setYcoord(String ycoord) {
-        this.ycoord = ycoord;
+    public void setYCoordinate(String yCoordinate) {
+        this.yCoordinate = yCoordinate;
     }
     public void setFloor(String floor) {
         this.floor = floor;
@@ -93,11 +93,11 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
     public String getNodeID() {
         return nodeID;
     }
-    public String getXcoord() {
-        return xcoord;
+    public String getXCoordinate() {
+        return xCoordinate;
     }
-    public String getYcoord() {
-        return ycoord;
+    public String getYCoordinate() {
+        return yCoordinate;
     }
     public String getFloor() {
         return floor;
@@ -118,8 +118,8 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
 
     public DrawableNode getDrawable() {
         return new DrawableNode(
-                Integer.parseInt(xcoord),
-                Integer.parseInt(ycoord),
+                Integer.parseInt(xCoordinate),
+                Integer.parseInt(yCoordinate),
                 nodeID,
                 floor,
                 building,

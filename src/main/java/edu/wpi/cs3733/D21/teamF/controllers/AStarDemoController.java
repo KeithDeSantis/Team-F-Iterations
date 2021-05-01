@@ -271,7 +271,7 @@ public class AStarDemoController implements Initializable {
             if(!nodeEntry.getFloor().equals(mapPanel.getFloor().getValue()))
                 continue;
 
-            final double currDist2 = Math.pow(x - Integer.parseInt(nodeEntry.getXcoord()), 2) + Math.pow(y - Integer.parseInt(nodeEntry.getYcoord()), 2);
+            final double currDist2 = Math.pow(x - Integer.parseInt(nodeEntry.getXCoordinate()), 2) + Math.pow(y - Integer.parseInt(nodeEntry.getYCoordinate()), 2);
 
             if(currDist2 < minDist2)
             {
