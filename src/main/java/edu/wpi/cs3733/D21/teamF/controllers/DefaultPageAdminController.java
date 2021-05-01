@@ -58,7 +58,7 @@ public class DefaultPageAdminController {
         if (buttonPushed == editMap) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
         } else if (buttonPushed == manageServices) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManager.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManagerView.fxml");
         } else if (buttonPushed == navigation) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {

@@ -58,7 +58,7 @@ public class DefaultPageEmployeeController {
         else if (buttonPushed == serviceManager) {
             // Implement Later
             //TODO Assign to combo box
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManager.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManagerView.fxml");
         }
         else if (buttonPushed == quit) {
             Platform.exit();
