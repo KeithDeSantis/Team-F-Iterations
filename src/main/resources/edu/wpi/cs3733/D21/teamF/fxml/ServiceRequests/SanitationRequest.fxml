@@ -87,7 +87,7 @@
                   </Label>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <children>
-                        <JFXButton fx:id="submit" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
+                        <JFXButton fx:id="submitButton" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
                            <font>
                               <Font name="Montserrat Regular" size="20.0" />
                            </font></JFXButton>

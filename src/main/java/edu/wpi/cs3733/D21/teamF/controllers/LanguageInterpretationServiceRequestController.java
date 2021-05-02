@@ -36,7 +36,6 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     @FXML private JFXComboBox<String> language;
     @FXML private JFXButton help;
     @FXML private JFXButton translate;
-    @FXML private JFXButton submit;
     @FXML private Label nameLabel;
     @FXML private Label dtLabel;
     @FXML private Label appointmentLabel;
@@ -107,17 +106,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
             // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
 
     }

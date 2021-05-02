@@ -63,7 +63,7 @@
                         <Font size="18.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="SUBMIT" HBox.hgrow="SOMETIMES">
+                <JFXButton fx:id="submitButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="SUBMIT" HBox.hgrow="SOMETIMES">
                     <font>
                         <Font size="18.0" />
                     </font>

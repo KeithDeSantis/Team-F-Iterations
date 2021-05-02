@@ -22,7 +22,6 @@ import java.util.UUID;
 
 public class LaundryRequestController extends ServiceRequests {
 
-    @FXML private JFXButton submit;
     @FXML private JFXButton cancel;
     @FXML private JFXButton help;
     @FXML private JFXRadioButton darks;
@@ -70,18 +69,7 @@ public class LaundryRequestController extends ServiceRequests {
             String completed = "false";
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInformation());
 
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
     }
 

@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MaintenenceRequestController extends ServiceRequests {
-    @FXML private JFXButton submit;
     @FXML private JFXComboBox<String> locationField;
     @FXML private JFXComboBox<String> typeComboBox;
     @FXML private ImageView goBack;
@@ -130,18 +129,7 @@ public class MaintenenceRequestController extends ServiceRequests {
             String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
                     "Urgency: " + urgencyComboBox.getValue();
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name,"", "false", additionalInfo);
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
     }
 
