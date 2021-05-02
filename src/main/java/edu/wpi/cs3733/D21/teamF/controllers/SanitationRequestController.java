@@ -22,7 +22,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SanitationRequestController extends ServiceRequests {
-    @FXML private JFXButton cancel;
     @FXML private JFXTextField description;
     @FXML private JFXComboBox<String> loc;
     @FXML private JFXTextField clientName;
@@ -57,19 +56,19 @@ public class SanitationRequestController extends ServiceRequests {
         }
     }
     public void handleClear(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/SanitationRequest.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/SanitationRequest.fxml");
 
     }
     public void handleCancel(ActionEvent actionEvent) throws IOException{
-        if(/*user is admin*/) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
-        }
-        else if (/*user is employee*/){
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
-        }
-        else{
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-        }
+//        if(/*user is admin*/) {
+//            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+//        }
+//        else if (/*user is employee*/){
+//            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
+//        }
+//        else{
+//            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+//        }
     }
     public boolean formFilled() {
         return description.getText().length()>0 && loc.getValue().length()>0 && clientName.getText().length()>0;

@@ -232,13 +232,13 @@
          <children>
             <ButtonBar buttonMinWidth="100.0" prefHeight="40.0" prefWidth="364.0">
                <buttons>
-                  <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmit" prefHeight="28.0" prefWidth="150.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
+                  <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXButton>
                   <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                  <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
+                  <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmit" prefHeight="28.0" prefWidth="150.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
                      <font>
                         <Font size="15.0" />
                      </font>

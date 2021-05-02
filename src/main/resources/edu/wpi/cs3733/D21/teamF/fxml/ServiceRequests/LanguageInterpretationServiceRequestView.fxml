@@ -142,7 +142,7 @@
          <children>
             <ButtonBar prefHeight="44.0" prefWidth="484.0">
                <buttons>
-                  <JFXButton fx:id="submitButton" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
+                  <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" textAlignment="CENTER" fx:id="x">
                      <font>
                         <Font name="Montserrat Regular" size="20.0" />
                      </font>
@@ -153,7 +153,7 @@
                         <Font name="Montserrat Regular" size="20.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" textAlignment="CENTER" fx:id="x">
+                  <JFXButton fx:id="submitButton" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
                      <font>
                         <Font name="Montserrat Regular" size="20.0" />
                      </font>

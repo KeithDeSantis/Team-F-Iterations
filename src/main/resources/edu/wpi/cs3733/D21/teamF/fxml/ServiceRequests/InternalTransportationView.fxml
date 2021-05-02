@@ -130,9 +130,9 @@
          <children>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                  <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
-                  <JFXButton fx:id="clear" buttonType="RAISED" onAction="#handleClear" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                   <JFXButton fx:id="cancel" buttonType="RAISED" onAction="#handleCancel" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                  <JFXButton fx:id="clear" buttonType="RAISED" onAction="#handleClear" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                  <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
               </buttons>
             </ButtonBar>
          </children>

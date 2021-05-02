@@ -188,10 +188,10 @@
                      <children>
                         <ButtonBar prefHeight="40.0" prefWidth="200.0">
                            <buttons>
-                              <JFXButton fx:id="submitButton" alignment="TOP_LEFT" buttonType="RAISED" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
-                              <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                              <JFXButton fx:id="cancel" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
                               <JFXButton fx:id="helpButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" />
+                              <JFXButton fx:id="cancel" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                              <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                              <JFXButton fx:id="submitButton" alignment="TOP_LEFT" buttonType="RAISED" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
                            </buttons>
                         </ButtonBar>
                      </children>

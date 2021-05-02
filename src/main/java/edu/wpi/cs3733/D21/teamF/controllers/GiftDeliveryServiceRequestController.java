@@ -34,15 +34,15 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
 
         }
         public void handleCancel(ActionEvent actionEvent) throws IOException{
-            if(/*user is admin*/) {
-                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
-            }
-            else if (/*user is employee*/){
-                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
-            }
-            else{
-                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-            }
+//            if(/*user is admin*/) {
+//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+//            }
+//            else if (/*user is employee*/){
+//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
+//            }
+//            else{
+//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+//            }
         }
 
         public boolean formFilled() {
