@@ -74,6 +74,11 @@ public class SanitationRequestController extends ServiceRequests {
         return description.getText().length()>0 && loc.getValue().length()>0 && clientName.getText().length()>0;
     }
 
+    @Override
+    public void handleClear(){
+        //TODO: handleClear
+    }
+
 
 
 }

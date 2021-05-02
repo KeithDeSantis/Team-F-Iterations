@@ -139,5 +139,8 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
         btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 
-
+    @Override
+    public void handleClear() {
+        //TODO: handleClear
+    }
 }
