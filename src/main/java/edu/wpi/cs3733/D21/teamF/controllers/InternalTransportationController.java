@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,14 +17,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class InternalTransportationController {
     @FXML private JFXButton submit;
 
     @FXML private JFXButton clear;
-
-    @FXML private JFXTextField employeeName;
 
     @FXML private JFXTextField deliverLocation;
 
@@ -46,7 +47,7 @@ public class InternalTransportationController {
 
     private boolean isFilledOut() {
 
-        employeeName.setStyle("-fx-background-color: transparent"); // set all text field backgrounds to clear to reset any fields that were marked as incomplete - KD
+        // set all text field backgrounds to clear to reset any fields that were marked as incomplete - KD
         deliverLocation.setStyle("-fx-background-color: transparent");
         movingDate.setStyle("-fx-background-color: transparent");
         patientName.setStyle("-fx-background-color: transparent");
@@ -54,9 +55,6 @@ public class InternalTransportationController {
 
         // Check if each field has been filled out, if not do not continue and highlight the text field red - KD
 
-        if(employeeName.getText().length() <= 0) {
-            employeeName.setStyle("-fx-background-color:  #ffbab8");
-        }
         if(deliverLocation.getText().length() <= 0) {
             deliverLocation.setStyle("-fx-background-color:  #ffbab8");
         }
@@ -70,8 +68,7 @@ public class InternalTransportationController {
             patientRoom.setStyle("-fx-background-color:  #ffbab8");
         }
 
-        return employeeName.getText().length() > 0 &&
-                deliverLocation.getText().length() > 0 &&
+        return deliverLocation.getText().length() > 0 &&
                 movingDate.getText().length() > 0 &&
                 patientName.getText().length() > 0 &&
                 patientRoom.getText().length() > 0;
@@ -81,9 +78,17 @@ public class InternalTransportationController {
         SceneContext.getSceneContext().loadDefault();
     }
 
-    public void handleSubmit(ActionEvent e) throws IOException {
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
         if(isFilledOut()) // form is complete
         {
+            String uuid = UUID.randomUUID().toString();
+            String type = "Internal Transport";
+            String person = "";
+            String completed = "false";
+            String additionalInfo = "Delivery Location: " + deliverLocation.getText() + "Delivery Date: " + movingDate.getText()
+                    + "Patient Room: " + patientRoom.getText();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
+
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
             submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
@@ -108,7 +113,6 @@ public class InternalTransportationController {
     }
 
     public void handleClear(ActionEvent actionEvent) {
-        employeeName.setText("");
         deliverLocation.setText("");
         movingDate.setText("");
         patientName.setText("");

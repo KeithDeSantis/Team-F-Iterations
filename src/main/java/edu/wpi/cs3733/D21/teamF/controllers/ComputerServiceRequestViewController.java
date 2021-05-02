@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.UUID;
 
 public class ComputerServiceRequestViewController {
 
@@ -54,9 +57,15 @@ public class ComputerServiceRequestViewController {
 
 
     @FXML
-    public void handleSubmit() throws IOException {
+    public void handleSubmit() throws IOException, SQLException {
         if(validate())
         {
+            String uuid = UUID.randomUUID().toString();
+            String type = "Computer Service";
+            String assignedPerson = "";
+            String additionalInfo = "Computer name: " + computerNameText.getText() + "Computer location: " + computerLocationText.getText()
+                    + "Urgency: " + urgencyComboBox.getValue() + "Requester: " + requesterTextText.getText();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
             submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));

@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +15,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.UUID;
 
 public class externalTransController {
     @FXML private JFXTextField employeeName;
@@ -28,7 +31,13 @@ public class externalTransController {
     }
 
     @FXML
-    public void submitpushed(ActionEvent actionEvent) throws IOException {
+    public void submitpushed(ActionEvent actionEvent) throws IOException, SQLException {
+        String uuid = UUID.randomUUID().toString();
+        String type = "External Transit";
+        String assignedPerson = "";
+        String additionalInfo = "Location: " + loc.getText() + "Transit method: " + methodTrans.getText()
+                + "Special info:" + special.getText();
+        DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
         // Loads form submitted window and passes in current stage to return to request home
         FXMLLoader submitedPageLoader = new FXMLLoader();
         submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
