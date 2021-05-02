@@ -545,14 +545,14 @@ public class MapEditViewController {
                     case "Start Node":
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getStartNode().contains(searchField.getText())) {
-                                if(edgeEntry.getStartNode().equals(nodeEntryTreeItem.getValue().getNodeID()) || edgeEntry.getEndNode().equals(nodeEntryTreeItem.getValue().getNodeID())) return true;
+                                if(edgeEntry.getStartNode().equals(nodeEntryTreeItem.getValue().getNodeID())) return true;
                             }
                         }
                         return false;
                     case "End Node":
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getEndNode().contains(searchField.getText())) {
-                                if(edgeEntry.getStartNode().equals(nodeEntryTreeItem.getValue().getNodeID()) || edgeEntry.getEndNode().equals(nodeEntryTreeItem.getValue().getNodeID())) return true;
+                                if(edgeEntry.getEndNode().equals(nodeEntryTreeItem.getValue().getNodeID())) return true;
                             }
                         }
                         return false;
@@ -587,6 +587,7 @@ public class MapEditViewController {
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getEdgeID().contains(searchField.getText())) {
                                 ((DrawableNode) node).setShouldDisplay(edgeEntry.getEdgeID().contains(node.getId()));
+                                if(edgeEntry.getEdgeID().contains(node.getId())) break;
                             }
                         } // what about when there are no edges that pass?? - KD
                         break;
@@ -594,6 +595,7 @@ public class MapEditViewController {
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getStartNode().contains(searchField.getText())) {
                                 ((DrawableNode) node).setShouldDisplay(edgeEntry.getStartNode().equals(node.getId()));
+                                if(edgeEntry.getStartNode().equals(node.getId())) break;
                             }
                         }
                         break;
@@ -601,6 +603,7 @@ public class MapEditViewController {
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getEndNode().contains(searchField.getText())) {
                                 ((DrawableNode) node).setShouldDisplay(edgeEntry.getEndNode().equals(node.getId()));
+                                if(edgeEntry.getEndNode().equals(node.getId())) break;
                             }
                         }
                         break;
@@ -778,6 +781,7 @@ public class MapEditViewController {
                 }
             }
         }
+        /*
         for (Node node : mapPanel.getCanvas().getChildren()) {
             if (node instanceof DrawableNode) {
                 ((DrawableNode) node).setShouldDisplay(false);
@@ -786,6 +790,7 @@ public class MapEditViewController {
                 }
             }
         }
+         */
 
         if (searchField.getText().length() == 0) {
             for (Node node : mapPanel.getCanvas().getChildren()) {
