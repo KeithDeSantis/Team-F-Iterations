@@ -17,7 +17,9 @@ public class SceneContext {
         private static final SceneContext sceneContext = new SceneContext();
     }
 
-    public static SceneContext getSceneContext() { return SceneContextSingletonHelper.sceneContext; }
+    public static SceneContext getSceneContext() {
+        return SceneContextSingletonHelper.sceneContext;
+    }
 
     public void switchScene(String fxml) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxml));
