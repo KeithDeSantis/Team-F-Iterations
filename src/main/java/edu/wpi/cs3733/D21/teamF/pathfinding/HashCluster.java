@@ -6,8 +6,7 @@ import java.util.Iterator;
 public class HashCluster<Payload> implements Iterable<Payload> {
     private final HashMap<Payload, HashChain.HashNode<Payload>> links;
     private final HashMap<Payload, HashChain<Payload>> chains;
-    private final DoublyLinkedHashSet<Payload> ends;
-    private int numChains;
+    private int numberOfChains;
     public Payload focus;
 
     /**
@@ -17,8 +16,7 @@ public class HashCluster<Payload> implements Iterable<Payload> {
     public HashCluster() {
         this.links = new HashMap<>();
         this.chains = new HashMap<>();
-        this.ends = new DoublyLinkedHashSet<>();
-        this.numChains = 0;
+        this.numberOfChains = 0;
         this.focus = null;
     }
 
@@ -34,8 +32,7 @@ public class HashCluster<Payload> implements Iterable<Payload> {
         HashChain.HashNode<Payload> node = new HashChain.HashNode<>(addend);
         this.links.put(addend, node);
         this.chains.put(addend, new HashChain<>(node, node));
-        this.ends.add(addend);
-        this.numChains++;
+        this.numberOfChains++;
         return true;
     }
 
@@ -49,32 +46,25 @@ public class HashCluster<Payload> implements Iterable<Payload> {
         HashChain<Payload> aChain = this.chains.get(a), bChain = this.chains.get(b);
         if(!(aChain == null || bChain == null || aChain.equals(bChain))) {
             HashChain.HashNode<Payload> aNode = this.links.get(a), bNode = this.links.get(b);
-            this.chains.replace(bChain.getOtherEnd(b).payload, aChain);
             if(aNode.node2 == null) {
                 aNode.node2 = bNode;
-                if(aNode.node1 != null) {
-                    this.chains.replace(a, null);
-                    this.ends.remove(a);
-                }
             } else {
                 aNode.node1 = bNode;
-                this.chains.replace(a, null);
-                this.ends.remove(a);
             }
             if(bNode.node2 == null) {
                 bNode.node2 = aNode;
-                if(bNode.node1 != null) {
-                    this.chains.replace(b, null);
-                    this.ends.remove(b);
-                }
             } else {
                 bNode.node1 = aNode;
-                this.chains.replace(b, null);
-                this.ends.remove(b);
             }
-            aChain.end1 = (aChain.end1 == null) ? aChain.end2 : aChain.end1;
-            aChain.end2 = bChain.getOtherEnd(b);
-            this.numChains--;
+            HashChain.HashNode<Payload> otherA = aChain.getOtherEnd(this.links.get(a));
+            HashChain.HashNode<Payload> otherB = bChain.getOtherEnd(this.links.get(b));
+            this.chains.replace(a, null);
+            this.chains.replace(b, null);
+            this.chains.replace(otherA.payload, aChain);
+            this.chains.replace(otherB.payload, aChain);
+            aChain.end1 = otherA;
+            aChain.end2 = otherB;
+            this.numberOfChains--;
         }
     }
 
@@ -85,13 +75,16 @@ public class HashCluster<Payload> implements Iterable<Payload> {
      * @author Tony Vuolo (bdane)
      */
     public boolean remove(Payload a) {
+        if(a == null) {
+            return false;
+        }
         HashChain.HashNode<Payload> node = this.links.get(a);
         if(node == null) {
             return false;
         }
         HashChain<Payload> chain = this.chains.get(a);
         if(isIsolated(a)) {
-            this.numChains--;
+            this.numberOfChains--;
         }
         if(chain == null) {
             HashChain.HashNode<Payload> node1 = node.node1, node2 = node.node2;
@@ -121,8 +114,19 @@ public class HashCluster<Payload> implements Iterable<Payload> {
         }
         this.links.remove(a);
         this.chains.remove(a);
-        this.ends.remove(a);
+        if(a.equals(this.focus)) {
+            this.focus = null;
+        }
         return true;
+    }
+
+    /**
+     * Finds the number of HashChains in this HashCluster
+     * @return this.numberOfChains
+     * @author Tony Vuolo (bdane)
+     */
+    public int getNumberOfChains() {
+        return this.numberOfChains;
     }
 
     /**
@@ -132,7 +136,7 @@ public class HashCluster<Payload> implements Iterable<Payload> {
      */
     public Payload getOtherEnd(Payload payload) {
         HashChain<Payload> chain = this.chains.get(payload);
-        return chain == null ? null : chain.getOtherEnd(payload).payload;
+        return chain == null ? null : chain.getOtherEnd(this.links.get(payload)).payload;
     }
 
     /**
@@ -164,7 +168,7 @@ public class HashCluster<Payload> implements Iterable<Payload> {
     @Override
     public Iterator<Payload> iterator() {
         return new Iterator<Payload>() {
-            private HashChain.HashNode<Payload> currentNode = HashCluster.this.links.get(HashCluster.this.ends.getIndex(0)), prevNode;
+            private HashChain.HashNode<Payload> currentNode = HashCluster.this.links.get(HashCluster.this.focus), prevNode;
 
             /**
              * Determines whether there is another element left to iterate over in the HashChain
@@ -227,7 +231,7 @@ public class HashCluster<Payload> implements Iterable<Payload> {
          * @return null if neither end is a HashNode containing p, else the end not containing p
          * @author Tony Vuolo (bdane)
          */
-        private HashNode<Payload> getOtherEnd(Payload p) {
+        private HashNode<Payload> getOtherEnd(HashNode<Payload> p) {
             return this.end1.equals(p) ? this.end2 : this.end1;
         }
 
@@ -240,6 +244,10 @@ public class HashCluster<Payload> implements Iterable<Payload> {
         private boolean equals(HashChain<Payload> chain) {
             return (chain.end1.equals(this.end1) && chain.end2.equals(this.end2))
                     || (chain.end2.equals(this.end1) && chain.end1.equals(this.end2));
+        }
+
+        public String toString() {
+            return "[" + this.end1 + " " + this.end2 + "]";
         }
 
         /**

@@ -1,8 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
-import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.AStarImpl;
-import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.BFSImpl;
-import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.DFSImpl;
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.*;
 
 import java.util.*;
 
@@ -126,77 +124,73 @@ public class Graph {
     }
 
     /**
-     * Gets the Path of least weight between two Vertices
-     * @param v the List of Vertices
+     * Edits a array of Vertices to provide the least possible path weight
+     * @param v the array of Vertices
      * @return the Path of least weight that will travel to every Vertex in the List in optimal order
+     * @author Tony Vuolo (bdane)
      */
-    public Path getUnorderedPath(Vertex... v) {
-        List<Path> paths = new LinkedList<>();
+    public List<Vertex> getEfficientOrder(Vertex... v) {
+        Path[] paths = new Path[v.length * (v.length - 1) / 2];
+        int index = 0;
         for(int i = 0; i < v.length; i++) {
             for(int j = i + 1; j < v.length; j++) {
-                paths.add(getPath(v[i], v[j]));
-            }
-        }
-        for(int i = 0; i < paths.size(); i++) {
-            int index = 0;
-            ListIterator<Path> iterator = paths.listIterator();
-            Path prev = null;
-            while(index < paths.size() - i - 1) {
-                Path nextPath = iterator.next();
-                if(prev == null) {
-                    iterator.remove();
-                } else if(prev.getPathCost() < nextPath.getPathCost()) {
-                    iterator.remove();
-                    iterator.add(prev);
-                }
-                prev = nextPath;
+                paths[index] = (getPath(v[i], v[j]));
                 index++;
             }
-            if(prev != null) {
-                iterator.add(prev);
+        }
+        for(int i = 0; i < paths.length; i++) {
+            for(int j = 0; j < paths.length - 1 - i; j++) {
+                if(paths[j].getPathCost() > paths[j + 1].getPathCost()) {
+                    Path proxy = paths[j];
+                    paths[j] = paths[j + 1];
+                    paths[j + 1] = proxy;
+                }
             }
         }
         HashCluster<Vertex> hashCluster = new HashCluster<>();
         for(Vertex vertex : v) {
             hashCluster.add(vertex);
         }
-        int totalClusters = v.length;
         for(Path path : paths) {
             Vertex start = path.getStart(), end = path.getEnd();
-            if(start.equals(v[0]) && end.equals(v[v.length - 1])) {
-                if(totalClusters == 2) {
-                    hashCluster.join(start, end);
-                    totalClusters--;
-                }
-            } else if(start.equals(v[0])) {
-                if(hashCluster.isIsolated(start)) {
-                    hashCluster.join(start, end);
-                    totalClusters--;
-                }
-            } else if(end.equals(v[v.length - 1])) {
-                if(hashCluster.isIsolated(start)) {
-                    hashCluster.join(start, end);
-                    totalClusters--;
-                }
-            } else {
-                Vertex totalStart = hashCluster.getOtherEnd(start), totalEnd = hashCluster.getOtherEnd(end);
-                if(totalStart != null && totalEnd != null) {
-                    if(((totalStart.equals(v[0]) && totalEnd.equals(v[v.length - 1])) ||
-                            (totalStart.equals(v[v.length - 1]) && totalEnd.equals(v[0])))) {
-                        if(totalClusters == 2) {
-                            hashCluster.join(start, end);
-                            totalClusters--;
-                        }
-                    } else {
-                        hashCluster.join(start, end);
-                        totalClusters--;
+            Vertex oppStart = hashCluster.getOtherEnd(start), oppEnd = hashCluster.getOtherEnd(end);
+            if(oppStart != null && oppEnd != null) {
+                Vertex[] candidates = {start, oppStart, end, oppEnd};
+                int possibleStart = -1, possibleEnd = -1, currentIndex = 0;
+                for(Vertex candidate : candidates) {
+                    if(candidate.equals(v[0])) {
+                        possibleStart = currentIndex;
+                    } else if(candidate.equals(v[v.length - 1])) {
+                        possibleEnd = currentIndex;
                     }
+                    currentIndex++;
+                }
+                if(possibleStart >= 0 || possibleEnd >= 0) {
+                    if(Math.abs((possibleStart % 2) * (possibleEnd % 2)) == 1) {
+                        if((hashCluster.getNumberOfChains() == 2) == (possibleStart >= 0 && possibleEnd >= 0)) {
+                            hashCluster.join(start, end);
+                        }
+                    }
+                } else {
+                    hashCluster.join(start, end);
                 }
             }
         }
-        Iterator<Vertex> iterator = hashCluster.iterator();
+        List<Vertex> newOrderedPath = new LinkedList<>();
+        hashCluster.focus = v[0];
+        for (Vertex vertex : hashCluster) {
+            newOrderedPath.add(vertex);
+        }
+        return newOrderedPath;
+    }
 
-        return null;
+    /**
+     * Gets the Path of least weight between two Vertices
+     * @param list the List of Vertices
+     * @return the Path of least weight that will travel to every Vertex in the List in optimal order
+     */
+    public Path getUnorderedPath(List<Vertex> list) {
+        return getPath(getEfficientOrder(list.toArray(new Vertex[0])));
     }
 
     /**

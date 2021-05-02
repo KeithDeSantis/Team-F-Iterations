@@ -497,7 +497,9 @@ public class GraphTest {
     }
 
     /**
-     * Tests HashCluster
+     * Tests HashCluster join() and iterator() methods
+     * @author Tony Vuolo (bdane)
+     * @see HashCluster
      */
     @Test
     public void testHashCluster() {
@@ -508,14 +510,33 @@ public class GraphTest {
         for(int i = 0; i < 6; i++) {
             cluster.join(i, i + 1);
         }
-        for(int i = 10; i < 15; i++) {
+        for(int i = 10; i < 14; i++) {
             cluster.join(i, i + 1);
         }
         cluster.join(7, 10);
-        System.out.println(cluster);
 
+        assertEquals(4, cluster.getNumberOfChains());
+        assertNull(cluster.focus);
+        int index = 0;
+        cluster.focus = 0;
+        for(int i : cluster) {
+            assertEquals(index++, i);
+            assertTrue(i < 7);
+        }
+        cluster.focus = 7;
+        index = 9;
+        for(int i : cluster) {
+            assertEquals((index == 9 ? -2 : 0) + index++, i);
+        }
+    }
 
-
+    /**
+     * Tests switchAfter() in DoublyLinkedHashSet.java
+     * @author Tony Vuolo (bdane)
+     * @see DoublyLinkedHashSet
+     */
+    @Test
+    public void testDLHSSwitchAfter() {
         DoublyLinkedHashSet<Integer> set = new DoublyLinkedHashSet<>();
         for(int i = 0; i < 10; i++) {
             set.add(i);
@@ -523,6 +544,17 @@ public class GraphTest {
         set.switchAfter(5);
         set.switchAfter(5);
         set.switchAfter(5);
-        System.out.println(set);
+        assertEquals("[0, 1, 2, 3, 4, 6, 7, 8, 5, 9]", set.toString());
+    }
+
+    /**
+     * Tests getUnorderedPath() in Graph.java
+     * @author Tony Vuolo (bdane)
+     * @see Graph
+     * @see HashCluster
+     */
+    @Test
+    public void testFindPathWithUnorderedStops() {
+        //TODO
     }
 }
