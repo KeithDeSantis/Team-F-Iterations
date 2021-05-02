@@ -24,13 +24,17 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -39,9 +43,14 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -1080,7 +1089,8 @@ public class AStarDemoController implements Initializable {
 
         //Display instructions
 
-
+        final String initialFloor = mapPanel.getFloor().get();
+        final int initialCurrStep = currentStep.get();
         for(int i = 0; i < stopsList.size(); i++)
         {
             contentStream.beginText();
@@ -1096,8 +1106,43 @@ public class AStarDemoController implements Initializable {
             else
                 contentStream.showText(instruction);
             contentStream.endText();
-        }
 
+
+            final Vertex currVertex = pathVertex.get(stopsList.get(i));
+            mapPanel.switchMap(currVertex.getFloor());
+            mapPanel.centerNode(mapPanel.getNode(currVertex.getID()));
+            currentStep.set(i);
+
+            final SnapshotParameters params = new SnapshotParameters();
+            final int cX = (int) currVertex.getX();
+            final int cY = (int) currVertex.getY();
+
+            final int minX = (int) ((cX/mapPanel.getZoomLevel().get()) - 150);
+            final int minY = (int) ((cY/mapPanel.getZoomLevel().get()) - 150);
+
+            params.setViewport(new Rectangle2D(minX, minY, 300, 300));
+           // System.out.println(params.getViewport());
+
+            final WritableImage image = mapPanel.getCanvas().snapshot(params, null);
+            final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+
+          //  ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
+
+            final double aspect = bufferedImage.getWidth() / bufferedImage.getHeight();
+
+            final Image scaledImage = bufferedImage.getScaledInstance(200, (int) (200 * aspect), Image.SCALE_SMOOTH);
+            final BufferedImage scaledBuffered = new BufferedImage(scaledImage.getWidth(null), scaledImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+            scaledBuffered.getGraphics().drawImage(scaledImage, 0, 0 , null);
+
+            PDImageXObject pdfImage = LosslessFactory.createFromImage(pdfDocument, scaledBuffered);
+
+            contentStream.drawImage(pdfImage, 300, 0 + i * 300);
+
+
+           // ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
+        }
+        currentStep.set(initialCurrStep);
+        mapPanel.switchMap(initialFloor);
         contentStream.close();
 
 
