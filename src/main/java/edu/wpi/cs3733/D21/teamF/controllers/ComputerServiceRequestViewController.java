@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ComputerServiceRequestViewController {
+public class ComputerServiceRequestViewController extends ServiceRequests{
 
     @FXML
     private JFXTextField computerNameText;
@@ -48,14 +48,11 @@ public class ComputerServiceRequestViewController {
         urgencyComboBox.setItems(urgencies);
     }
 
-    @FXML
-    public void handleGoHome() throws IOException { goHome(); }
-
 
 
     @FXML
     public void handleSubmit() throws IOException {
-        if(validate())
+        if(formFilled())
         {
             // Loads form submitted window and passes in current stage to return to request home
             FXMLLoader submitedPageLoader = new FXMLLoader();
@@ -73,18 +70,11 @@ public class ComputerServiceRequestViewController {
     }
 
 
-
-    @FXML
-    public void handleCancel() throws IOException { // Updated to return to service request home instead of default page
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
-
-
     /**
      * Checks if our form has been filled out correctly and sets the components to use the proper style.
      * @return true if the form has been filled out validly; returns false otherwise.
      */
-    private boolean validate()
+    public boolean formFilled()
     {
         boolean accept = true;
 
@@ -156,16 +146,6 @@ public class ComputerServiceRequestViewController {
     {
         for(Node n : components)
             n.setStyle(style);
-    }
-
-
-    /**
-     * Used to return to the home page.
-     *
-     */
-    private void goHome() throws IOException {
-        //FIXME: AT SOME POINT ADD WARNING IF FORM FILLED OUT!
-        SceneContext.getSceneContext().loadDefault();
     }
 
     @FXML
