@@ -56,7 +56,21 @@ public class SanitationRequestController extends ServiceRequests {
             openSuccessWindow();
         }
     }
+    public void handleClear(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/SanitationRequest.fxml");
 
+    }
+    public void handleCancel(ActionEvent actionEvent) throws IOException{
+        if(/*user is admin*/) {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+        }
+        else if (/*user is employee*/){
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
+        }
+        else{
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+        }
+    }
     public boolean formFilled() {
         return description.getText().length()>0 && loc.getValue().length()>0 && clientName.getText().length()>0;
     }

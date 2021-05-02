@@ -24,7 +24,7 @@
                   <children>
                       <ImageView fitHeight="110.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                           <image>
-                              <Image url="/imagesAndLogos/BandWLogo.png" />
+                              <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                           </image>
                       </ImageView>
                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Gift Delivery" wrappingWidth="735.2825317382812">
@@ -50,10 +50,11 @@
                            <font>
                               <Font name="Montserrat Regular" size="14.0" />
                            </font></Label>
-                            <HBox prefHeight="100.0" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                            <HBox prefHeight="100.0" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                 <children>
                                     <GridPane prefHeight="102.0" prefWidth="307.0" HBox.hgrow="ALWAYS">
                                         <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                         </columnConstraints>
@@ -61,11 +62,15 @@
                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         </rowConstraints>
                                         <children>
-                                            <JFXButton fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.halignment="CENTER" />
-                                            <JFXButton fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                            <JFXButton fx:id="cancelButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.halignment="CENTER" />
+                                            <JFXButton fx:id="submitButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                    <JFXButton fx:id="clear" buttonType="RAISED" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                                         </children>
                                     </GridPane>
                                 </children>
+                           <GridPane.margin>
+                              <Insets left="25.0" right="25.0" />
+                           </GridPane.margin>
                             </HBox>
                         </children>
                     </GridPane>
