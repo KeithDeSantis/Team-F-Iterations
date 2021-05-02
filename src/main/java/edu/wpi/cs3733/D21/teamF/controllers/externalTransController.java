@@ -24,6 +24,7 @@ public class externalTransController extends ServiceRequests{
     @FXML private JFXTextField methodTrans;
     @FXML private JFXTextField special;
 
+
     @FXML
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
         if(formFilled()) {
@@ -41,5 +42,10 @@ public class externalTransController extends ServiceRequests{
     @Override
     public boolean formFilled() {
         return employeeName.getText().length()>0 && methodTrans.getText().length()>0 && special.getText().length()>0;
+    }
+
+    @Override
+    public void handleClear() {
+        //TODO: handleClear for this service req
     }
 }

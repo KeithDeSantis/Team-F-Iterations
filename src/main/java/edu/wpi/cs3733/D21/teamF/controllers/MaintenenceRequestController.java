@@ -172,5 +172,10 @@ public class MaintenenceRequestController extends ServiceRequests {
         urgencyComboBox.setStyle("-fx-background-color: #00000000");
     }
 
+    @Override
+    public void handleClear(){
+        //TODO: handleClear
+    }
+
 
 }

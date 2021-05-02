@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -16,13 +17,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LaundryRequestController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LaundryRequestController">
    <children>
       <VBox layoutX="325.0" layoutY="93.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" onMouseClicked="#handleHome" preserveRatio="true">
+                  <ImageView fitHeight="150.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
@@ -185,23 +186,14 @@
                      </children></HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <GridPane prefHeight="193.0" prefWidth="325.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.20001220703125" minWidth="10.0" prefWidth="64.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="69.60003662109375" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.19996337890626" minWidth="10.0" prefWidth="167.19996337890626" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <JFXButton fx:id="submitButton" alignment="TOP_LEFT" buttonType="RAISED" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="2" />
-                              <JFXButton fx:id="cancel" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.columnIndex="1" />
-                              <JFXButton mnemonicParsing="false" text="Help" />
-                              <JFXButton layoutX="10.0" layoutY="98.0" mnemonicParsing="false" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" />
-                              <JFXButton fx:id="help" buttonType="RAISED" layoutX="10.0" layoutY="98.0" mnemonicParsing="false" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" />
-                           </children>
-                        </GridPane>
+                        <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                           <buttons>
+                              <JFXButton fx:id="submitButton" alignment="TOP_LEFT" buttonType="RAISED" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                              <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                              <JFXButton fx:id="cancel" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                              <JFXButton fx:id="helpButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" />
+                           </buttons>
+                        </ButtonBar>
                      </children>
                   </HBox>
                </children>

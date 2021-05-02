@@ -22,7 +22,6 @@ import java.util.UUID;
 
 public class LaundryRequestController extends ServiceRequests {
 
-    @FXML private JFXButton cancel;
     @FXML private JFXButton help;
     @FXML private JFXRadioButton darks;
     @FXML private JFXRadioButton lights;
@@ -92,8 +91,13 @@ public class LaundryRequestController extends ServiceRequests {
         return additionalInfo;
     }
 
+
     public boolean formFilled() {
         return employeeID.getText().length()>0 && clientName.getText().length()>0;
     }
 
+    @Override
+    public void handleClear() {
+        //TODO: handleClear
+    }
 }

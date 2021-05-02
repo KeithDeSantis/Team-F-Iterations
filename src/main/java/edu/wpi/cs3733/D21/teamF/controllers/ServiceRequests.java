@@ -22,6 +22,8 @@ public abstract class ServiceRequests {
     private JFXButton cancelButton;
     @FXML
     private JFXButton helpButton;
+    @FXML
+    private JFXButton clearButton;
 
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {}
 
@@ -52,5 +54,7 @@ public abstract class ServiceRequests {
         submittedStage.initModality(Modality.APPLICATION_MODAL);
         submittedStage.showAndWait();
     }
+
+    public void handleClear(){ }
 
 }

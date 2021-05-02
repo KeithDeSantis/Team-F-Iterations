@@ -111,6 +111,11 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
     }
 
+    @Override
+    public void handleClear(){
+        //TODO: implement handle clear
+    }
+
     /**
      * Sets the drop down options for appointment type and languages
      * @param location

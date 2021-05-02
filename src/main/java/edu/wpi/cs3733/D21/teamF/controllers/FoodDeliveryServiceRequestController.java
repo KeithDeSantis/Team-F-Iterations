@@ -30,8 +30,6 @@ import java.util.UUID;
 public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     @FXML private JFXButton xButton;
-    @FXML private JFXButton cancelButton;
-    @FXML private JFXButton helpButton;
     @FXML private Button helpXButton;
     @FXML private JFXComboBox<String> deliveryLocationField;
     @FXML private JFXTimePicker deliveryTimeField;
@@ -197,5 +195,8 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     }
 
-
+    @Override
+    public void handleClear() {
+        //TODO: handleClear for service req
+    }
 }
