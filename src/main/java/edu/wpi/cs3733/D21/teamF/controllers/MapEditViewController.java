@@ -238,8 +238,6 @@ public class MapEditViewController {
                 updateNode(e.getNodeID(), xCoordinate, yCoordinate);
                 //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
             }
-            //FIXME: DO BETTER
-            drawEdgeNodeOnFloor();
 
         });
 
@@ -255,8 +253,6 @@ public class MapEditViewController {
                 }
                 //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
             }
-            //FIXME: DO BETTER
-            drawEdgeNodeOnFloor();
         });
 
         alignRight.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()));
@@ -271,8 +267,6 @@ public class MapEditViewController {
             }
                 //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
             }
-            //FIXME: DO BETTER
-            drawEdgeNodeOnFloor();
         });
 
         alignTop.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
@@ -288,8 +282,6 @@ public class MapEditViewController {
                             //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
                         }
                     }
-                    //FIXME: DO BETTER
-                    drawEdgeNodeOnFloor();
         });
 
         alignVerticalMiddle.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
@@ -305,8 +297,6 @@ public class MapEditViewController {
                     //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
                 }
             }
-            //FIXME: DO BETTER
-            drawEdgeNodeOnFloor();
         });
 
         alignBottom.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
@@ -322,8 +312,6 @@ public class MapEditViewController {
                     //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
                 }
             }
-            //FIXME: DO BETTER
-            drawEdgeNodeOnFloor();
         });
 
 
@@ -1150,6 +1138,42 @@ public class MapEditViewController {
 
         } catch (Exception exception) {
             exception.printStackTrace();
+        }
+
+        final List<DrawableEdge> startEdges = new ArrayList<>();
+        final List<DrawableEdge> endEdges = new ArrayList<>();
+
+        for(Node node : mapPanel.getCanvas().getChildren()) {
+            if (node instanceof DrawableNode) {
+                if (node.getId().equals(id)) {
+
+                    for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+                        if (edgeEntry.getStartNode().equals(id)) {
+                            startEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
+                        }
+                        if (edgeEntry.getEndNode().equals(id)) {
+                            endEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
+                        }
+                    }
+
+                    ((DrawableNode) node).xCoordinateProperty().set(xCoordinate);
+                    ((DrawableNode) node).yCoordinateProperty().set(yCoordinate);
+
+                    //FIXME: DO BETTER, DO BINDINGS
+
+                    for (DrawableEdge edge : startEdges) {
+                        edge.getMapStartX().set(xCoordinate);
+                        edge.getMapStartY().set(yCoordinate);
+                    }
+
+                    for (DrawableEdge edge : endEdges) {
+                        edge.getMapEndX().set(xCoordinate);
+                        edge.getMapEndY().set(yCoordinate);
+                    }
+
+                }
+
+            }
         }
     }
 
