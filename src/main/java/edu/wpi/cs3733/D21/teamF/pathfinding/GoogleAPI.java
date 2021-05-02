@@ -21,7 +21,7 @@ public class GoogleAPI {
     }
 
     /**
-     * Parses the Google data into a JSONArray of instructions
+     * Parses the Google data into a String of directional instructions
      * @param json the Google data
      * @author Declan Murphy
      */
