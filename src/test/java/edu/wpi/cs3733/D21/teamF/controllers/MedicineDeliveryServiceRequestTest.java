@@ -29,8 +29,6 @@ public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
      */
     @Test
     public void testFormSubmission() {
-        clickOn("#employeeName");
-        write("j");
         clickOn("#clientName");
         write("j");
         clickOn("#clientRoom");
@@ -56,11 +54,9 @@ public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
     @Test
     public void testFailSubmission() {
         clickOn("SUBMIT");
-        verifyThat("#employeeName", Node::isVisible);
 
         clickOn("#clientRoom");
         write("j");
         clickOn("SUBMIT");
-        verifyThat("#employeeName", Node::isVisible);
     }
 }

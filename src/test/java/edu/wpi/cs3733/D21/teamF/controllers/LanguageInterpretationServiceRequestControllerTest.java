@@ -22,7 +22,7 @@ public class LanguageInterpretationServiceRequestControllerTest extends Applicat
 
     @Test
     public void handleClose() {
-        clickOn("#close");
+        clickOn("#x");
         verifyThat("Jay", Node::isVisible);
     }
 

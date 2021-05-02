@@ -107,7 +107,7 @@ public class FloralDeliveryService {
             submittedStage.setTitle("Submission Complete");
             submittedStage.initModality(Modality.APPLICATION_MODAL);
             submittedStage.showAndWait();
-        } else { successField.setText(""); }
+        }
     }
 
     public boolean isFilledOut() {
