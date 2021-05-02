@@ -248,9 +248,11 @@ public class MapEditViewController {
         alignHorizontalMiddle.setOnMouseClicked(x -> {
             for(NodeEntry e : selectedNodes)
             {
-                final int xCoordinate = (int) (rectSelector.xProperty().add(rectSelector.widthProperty().divide(2.0)).get() * mapPanel.getZoomLevel().get());
-                final int yCoordinate = Integer.parseInt(e.getYCoordinate());
-                updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()) {
+                    final int xCoordinate = (int) (rectSelector.xProperty().add(rectSelector.widthProperty().divide(2.0)).get() * mapPanel.getZoomLevel().get());
+                    final int yCoordinate = Integer.parseInt(e.getYCoordinate());
+                    updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                }
                 //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
             }
             //FIXME: DO BETTER
@@ -262,9 +264,11 @@ public class MapEditViewController {
         alignRight.setOnMouseClicked(x -> {
             for(NodeEntry e : selectedNodes)
             {
+                if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()){
                 final int xCoordinate = (int) (rectSelector.xProperty().add(rectSelector.widthProperty()).get() * mapPanel.getZoomLevel().get());
                 final int yCoordinate = Integer.parseInt(e.getYCoordinate());
                 updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+            }
                 //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
             }
             //FIXME: DO BETTER
@@ -277,10 +281,12 @@ public class MapEditViewController {
         alignTop.setOnMouseClicked(x -> {
                     for(NodeEntry e : selectedNodes)
                     {
-                        final int xCoordinate =  Integer.parseInt(e.getXCoordinate());
-                        final int yCoordinate = (int) (rectSelector.yProperty().multiply(mapPanel.getZoomLevel()).get());
-                        updateNode(e.getNodeID(), xCoordinate, yCoordinate);
-                        //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                        if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()) {
+                            final int xCoordinate = Integer.parseInt(e.getXCoordinate());
+                            final int yCoordinate = (int) (rectSelector.yProperty().multiply(mapPanel.getZoomLevel()).get());
+                            updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                            //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                        }
                     }
                     //FIXME: DO BETTER
                     drawEdgeNodeOnFloor();
@@ -292,10 +298,12 @@ public class MapEditViewController {
         alignVerticalMiddle.setOnMouseClicked(x -> {
             for(NodeEntry e : selectedNodes)
             {
-                final int xCoordinate = Integer.parseInt(e.getXCoordinate());
-                final int yCoordinate = (int) (rectSelector.yProperty().add(rectSelector.heightProperty().divide(2.0)).multiply(mapPanel.getZoomLevel()).get());
-                updateNode(e.getNodeID(), xCoordinate, yCoordinate);
-                //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()) {
+                    final int xCoordinate = Integer.parseInt(e.getXCoordinate());
+                    final int yCoordinate = (int) (rectSelector.yProperty().add(rectSelector.heightProperty().divide(2.0)).multiply(mapPanel.getZoomLevel()).get());
+                    updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                    //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                }
             }
             //FIXME: DO BETTER
             drawEdgeNodeOnFloor();
@@ -307,10 +315,12 @@ public class MapEditViewController {
         alignBottom.setOnMouseClicked(x -> {
             for(NodeEntry e : selectedNodes)
             {
-                final int xCoordinate = Integer.parseInt(e.getXCoordinate());
-                final int yCoordinate = (int) (rectSelector.yProperty().add(rectSelector.heightProperty()).multiply(mapPanel.getZoomLevel()).get());
-                updateNode(e.getNodeID(), xCoordinate, yCoordinate);
-                //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()) {
+                    final int xCoordinate = Integer.parseInt(e.getXCoordinate());
+                    final int yCoordinate = (int) (rectSelector.yProperty().add(rectSelector.heightProperty()).multiply(mapPanel.getZoomLevel()).get());
+                    updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                    //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                }
             }
             //FIXME: DO BETTER
             drawEdgeNodeOnFloor();
