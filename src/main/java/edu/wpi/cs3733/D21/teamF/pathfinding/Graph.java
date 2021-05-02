@@ -216,6 +216,14 @@ public class Graph {
             case "breadth-first-search":
                 this.pathfindingAlgorithm = new BFSImpl();
                 return true;
+            case "bestfirst":
+            case "best-first-search":
+                this.pathfindingAlgorithm = new BestFSImpl();
+                return true;
+            case "dijkstra":
+            case "dijkstra's search":
+                this.pathfindingAlgorithm = new DijkstraImpl();
+                return true;
         }
         return false;
     }

@@ -110,7 +110,7 @@ public class ServiceRequestManagerController implements Initializable {
 
 
     public void handleHome(MouseEvent mouseEvent) throws IOException{
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 
     /**

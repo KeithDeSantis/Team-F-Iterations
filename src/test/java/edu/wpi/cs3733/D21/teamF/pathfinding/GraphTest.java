@@ -53,8 +53,6 @@ public class GraphTest {
          */
         final String edgesCSV = "DFSEdges.csv";
         final String nodesCSV = "DFSNodes.csv";
-//        final String edgesCSV = "MapfAllEdges.csv";
-//        final String nodesCSV = "MapfAllNodes.csv";
         graph = GraphLoader.load(nodesCSV, edgesCSV);
 
         //Uses JavaReflection to access classes so that we don't have to change their actual accessibility
@@ -497,8 +495,7 @@ public class GraphTest {
             assertEquals(iterator.next().getID(), v.getID());
         }
     }
-
-    /**
+ /**
      * Tests HashCluster join() and iterator() methods
      * @author Tony Vuolo (bdane)
      * @see HashCluster
@@ -570,5 +567,72 @@ public class GraphTest {
             vertices[i] = this.vertices.get(vertexIDs[i]);
         }
         assertEquals(this.graph.getEfficientOrder(vertices).toString(), "[CHALL002L1, CRETL001L1, CHALL013L1, CDEPT002L1, CREST002L1, CSERV001L1]");
+    }
+  @Test
+    public void testBestFirstWithAStar() {
+        //tests every possibility b/c why not? we have a small dataset
+
+        for (Vertex start : vertices.values()) {
+            for (Vertex end : vertices.values()) {
+                if (! start.equals(end)) {
+
+                    graph.setPathfindingAlgorithm("AStar");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path dfs = graph.getPath(start, end);
+
+                    graph.setPathfindingAlgorithm("bestfirst");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path bfs = graph.getPath(start, end);//.asList();
+
+                    if(dfs != null && bfs != null) {
+
+
+                        Iterator<Vertex> dfsListIterator = dfs.iterator(),
+                                aStarListIterator = bfs.iterator();
+                        while(dfsListIterator.hasNext() && aStarListIterator.hasNext()) {
+                            Vertex dfsElement = dfsListIterator.next(), bfsElement = aStarListIterator.next();
+                            assertTrue(dfsElement.equals(bfsElement));
+                        }
+                        assertFalse(dfsListIterator.hasNext() || aStarListIterator.hasNext());
+                    } else {
+                        assertTrue(dfs == null && bfs == null);
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testDijkstraWithAStar() {
+        //tests every possibility b/c why not? we have a small dataset
+
+        for (Vertex start : vertices.values()) {
+            for (Vertex end : vertices.values()) {
+                if (! start.equals(end)) {
+
+                    graph.setPathfindingAlgorithm("AStar");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path dfs = graph.getPath(start, end);
+
+                    graph.setPathfindingAlgorithm("Dijkstra");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path bfs = graph.getPath(start, end);//.asList();
+
+                    if(dfs != null && bfs != null) {
+
+
+                        Iterator<Vertex> dfsListIterator = dfs.iterator(),
+                                aStarListIterator = bfs.iterator();
+                        while(dfsListIterator.hasNext() && aStarListIterator.hasNext()) {
+                            Vertex dfsElement = dfsListIterator.next(), bfsElement = aStarListIterator.next();
+                            assertTrue(dfsElement.equals(bfsElement));
+                        }
+                        assertFalse(dfsListIterator.hasNext() || aStarListIterator.hasNext());
+                    } else {
+                        assertTrue(dfs == null && bfs == null);
+                    }
+                }
+            }
+        }
     }
 }

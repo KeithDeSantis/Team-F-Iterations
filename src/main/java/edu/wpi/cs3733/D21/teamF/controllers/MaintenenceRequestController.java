@@ -26,8 +26,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MaintenenceRequestController {
-    @FXML private JFXButton submit;
+public class MaintenenceRequestController extends ServiceRequests {
     @FXML private JFXComboBox<String> locationField;
     @FXML private JFXComboBox<String> typeComboBox;
     @FXML private ImageView goBack;
@@ -106,7 +105,7 @@ public class MaintenenceRequestController {
      * @author Leo Morris
      */
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {
-        if(isFilled()) {
+        if(formFilled()) {
             String name = urgencyComboBox.getValue() + ": ";
             if (typeComboBox.getValue().equals("Damage") || typeComboBox.getValue().equals("Safety Hazard") || typeComboBox.getValue().equals("Spill")) {
                 name += typeComboBox.getValue() + " at " + locationField.getValue();
@@ -130,30 +129,11 @@ public class MaintenenceRequestController {
             String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
                     "Urgency: " + urgencyComboBox.getValue();
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name,"", "false", additionalInfo);
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
     }
 
-    public void handleGoHome(MouseEvent mouseEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-    }
-
-    public void handleCancel(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
-
-    public boolean isFilled(){
+    public boolean formFilled(){
         boolean filled = true;
         if(typeComboBox.getValue() == null){
             filled = false;

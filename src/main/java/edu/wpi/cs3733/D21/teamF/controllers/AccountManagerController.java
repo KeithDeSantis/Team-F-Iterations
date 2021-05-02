@@ -137,13 +137,7 @@ public class AccountManagerController implements Initializable {
     public void handleButtonPushed(ActionEvent actionEvent) throws Exception {
         JFXButton buttonPushed = (JFXButton) actionEvent.getSource();
         if (buttonPushed == quit){
-            Stage stage;
-            Parent root;
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Admin Home");
-            stage.show();
+            SceneContext.getSceneContext().loadDefault();
         }
         else if (buttonPushed == deleteUser){
             AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
