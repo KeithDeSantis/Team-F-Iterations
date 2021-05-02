@@ -117,15 +117,9 @@ public class AccountManagerController implements Initializable {
         newUserType.getItems().add("employee");
         newUserType.getItems().add("admin");
     }
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
+
+
 
     public void handleHoverOnDelete(MouseEvent mouseEvent) {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
@@ -143,13 +137,7 @@ public class AccountManagerController implements Initializable {
     public void handleButtonPushed(ActionEvent actionEvent) throws Exception {
         JFXButton buttonPushed = (JFXButton) actionEvent.getSource();
         if (buttonPushed == quit){
-            Stage stage;
-            Parent root;
-            stage = (Stage) buttonPushed.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml"));
-            stage.getScene().setRoot(root);
-            stage.setTitle("Admin Home");
-            stage.show();
+            SceneContext.getSceneContext().loadDefault();
         }
         else if (buttonPushed == deleteUser){
             AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();

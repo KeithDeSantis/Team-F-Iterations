@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,7 @@ public class CSVManager {
      *     <li>List.size() == number of data lines in the CSV (lines excluding the first line)</li>
      * </ol>
      *
-     * @param file
+     * @param file The file ro read
      * @return A List of String[] as described above
      * @throws Exception If there was an error in reading or parsing the file.
      * @author Alex Friedman (ahf)
@@ -40,7 +41,7 @@ public class CSVManager {
      * @param resource A string representing the CSV's location in the JAR
      * @return A List of String[] as described in load(File);
      * @author Alex Friedman (ahf)
-     * @throws Exception
+     * @throws Exception if an error occurred
      */
     public static List<String[]> load(String resource) throws Exception {
         if (resource == null)
@@ -52,26 +53,26 @@ public class CSVManager {
     /**
      * Given an InputStream, this function will read the
      * resource as a CSV and return it.
-     * @param inputStream The inputstream containing the file's data.
+     * @param inputStream The InputStream containing the file's data.
      * @return A List of String[] as described in load(File);
      * @author Alex Friedman (ahf)
-     * @throws Exception
+     * @throws Exception if an error occurred
      */
     public static List<String[]> load(InputStream inputStream) throws Exception {
         if (inputStream == null)
             throw new Exception("InputStream cannot be null!");
 
-        final BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+        final BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
         return load(streamReader);
     }
 
     /**
      * Given an BufferedReader, this function will read the resource as a CSV and return it.
-     * @param fileReader The bufferedreader containing the file's data.
+     * @param fileReader The BufferedReader containing the file's data.
      * @return A List of String[] as described in load(File);
      * @author Alex Friedman (ahf)
-     * @throws Exception
+     * @throws Exception if an error occurred
      */
     public static List<String[]> load(BufferedReader fileReader) throws Exception {
 
@@ -88,7 +89,7 @@ public class CSVManager {
         final List<String[]> csvData = new ArrayList<>();
 
         //Reads in all the vertices.
-        String lineStr = null;
+        String lineStr;
         while ((lineStr = fileReader.readLine()) != null) {
             final String[] currLine = Arrays.stream(lineStr.split(",")).map(String::trim).toArray(String[]::new);
 
@@ -110,7 +111,7 @@ public class CSVManager {
      *                the exception that the list provided here should contain the names of each
      *                column.
      * @author Alex Friedman (ahf)
-     * @throws Exception
+     * @throws Exception if an error occurred
      */
     public static void writeFile(String fileName, List<String[]> csvData) throws Exception {
         CSVManager.writeToFile(new File(fileName), csvData);
@@ -123,7 +124,7 @@ public class CSVManager {
      *                the exception that the list provided here should contain the names of each
      *                column.
      * @author Alex Friedman (ahf)
-     * @throws Exception
+     * @throws Exception if an error occurred
      */
     public static void writeToFile(File file, List<String[]> csvData) throws Exception {
         if(file == null || csvData == null)

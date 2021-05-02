@@ -35,6 +35,6 @@
             <JFXComboBox fx:id="endNode" onAction="#updateEdgeIDLabel" prefWidth="150.0" promptText="End Node ID" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
-      <JFXButton fx:id="ok" onAction="#handleOKClicked" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="OK" />
+      <JFXButton fx:id="ok" onAction="#handleOKClicked" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="OK" />
    </children>
 </VBox>

@@ -22,12 +22,12 @@
          <children>
               <HBox fx:id="header" prefHeight="113.0" prefWidth="614.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                   <children>
-                      <ImageView fitHeight="110.0" pickOnBounds="true" preserveRatio="true">
+                      <ImageView fitHeight="110.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                           <image>
                               <Image url="/imagesAndLogos/BandWLogo.png" />
                           </image>
                       </ImageView>
-                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Gift Delivery" wrappingWidth="748.2825317382812">
+                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Gift Delivery" wrappingWidth="735.2825317382812">
                      <font>
                         <Font name="Volkhov Regular" size="40.0" />
                      </font></Text>
@@ -35,7 +35,7 @@
               </HBox>
             <HBox VBox.vgrow="ALWAYS">
                <children>
-                    <GridPane prefHeight="307.0" prefWidth="150.0" style="-fx-background-color: c6c6c6;" HBox.hgrow="ALWAYS">
+                    <GridPane prefHeight="307.0" prefWidth="150.0" style="-fx-background-color: #e6e6e6;" HBox.hgrow="ALWAYS">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         </columnConstraints>
@@ -45,13 +45,8 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
-                            <JFXTextField maxWidth="200.0" prefWidth="300.0" GridPane.halignment="CENTER" />
-                            <JFXTextField maxWidth="200.0" prefHeight="25.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                            <Label text="Employee Name" GridPane.halignment="CENTER" GridPane.rowSpan="2">
-                           <font>
-                              <Font name="Montserrat Regular" size="14.0" />
-                           </font></Label>
-                            <Label text="Patient Name" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                            <JFXTextField fx:id="name" maxWidth="200.0" prefWidth="300.0" GridPane.halignment="CENTER" />
+                            <Label text="Name" GridPane.halignment="CENTER" GridPane.rowSpan="2">
                            <font>
                               <Font name="Montserrat Regular" size="14.0" />
                            </font></Label>
@@ -66,15 +61,15 @@
                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         </rowConstraints>
                                         <children>
-                                            <JFXButton fx:id="cancel" mnemonicParsing="false" onAction="#handleClose" prefHeight="49.0" prefWidth="118.0" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" textFill="WHITE" GridPane.halignment="CENTER" />
-                                            <JFXButton fx:id="submit" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="49.0" prefWidth="118.0" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                            <JFXButton fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.halignment="CENTER" />
+                                            <JFXButton fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                                         </children>
                                     </GridPane>
                                 </children>
                             </HBox>
                         </children>
                     </GridPane>
-                    <GridPane prefHeight="307.0" prefWidth="307.0" style="-fx-background-color: #c6c6c6;" HBox.hgrow="ALWAYS">
+                    <GridPane prefHeight="307.0" prefWidth="307.0" style="-fx-background-color: #e6e6e6;" HBox.hgrow="ALWAYS">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         </columnConstraints>
@@ -83,12 +78,12 @@
                             <RowConstraints maxHeight="148.3333740234375" minHeight="10.0" prefHeight="88.3333740234375" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
-                            <JFXTextArea maxHeight="159.0" maxWidth="250.0" prefHeight="159.0" prefWidth="250.0" style="-fx-border-color: #000000;" GridPane.halignment="CENTER" />
+                            <JFXTextArea fx:id="specialInstructions" maxHeight="159.0" maxWidth="250.0" prefHeight="159.0" prefWidth="250.0" style="-fx-border-color: #000000;" GridPane.halignment="CENTER" />
                             <Label text="Special Instructions" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                            <font>
                               <Font name="Montserrat Regular" size="14.0" />
                            </font></Label>
-                            <JFXTextField maxWidth="100.0" prefHeight="25.0" prefWidth="297.0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                            <JFXTextField fx:id="csv" maxWidth="100.0" prefHeight="25.0" prefWidth="297.0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                             <Label text="Card Number" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                            <font>
                               <Font name="Montserrat Regular" size="14.0" />
@@ -101,8 +96,8 @@
                            <font>
                               <Font name="Montserrat Regular" size="14.0" />
                            </font></Label>
-                        <JFXTextField layoutX="102.0" layoutY="288.0" maxWidth="100.0" prefHeight="25.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                        <JFXTextField layoutX="10.0" layoutY="104.0" maxWidth="200.0" prefHeight="25.0" prefWidth="100.0" GridPane.rowIndex="1" />
+                        <JFXTextField fx:id="expirationDate" layoutX="102.0" layoutY="288.0" maxWidth="100.0" prefHeight="25.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                        <JFXTextField fx:id="ccNumber" layoutX="10.0" layoutY="104.0" maxWidth="200.0" prefHeight="25.0" prefWidth="100.0" GridPane.rowIndex="1" />
                         </children>
                      <padding>
                         <Insets right="25.0" />

@@ -8,15 +8,17 @@ import javafx.scene.shape.Circle;
 
 public class DrawableNode extends Circle implements IMapDrawable
 {
-    private final SimpleIntegerProperty xCoordinate;
-    private final SimpleIntegerProperty yCoordinate;
-    private StringProperty floor;
-    private StringProperty building;
-    private StringProperty nodeType;
-    private StringProperty longName;
-    private StringProperty shortName;
+    private final IntegerProperty xCoordinate;
+    private final IntegerProperty yCoordinate;
+    private final StringProperty floor;
+    private final StringProperty building;
+    private final StringProperty nodeType;
+    private final StringProperty longName;
+    private final StringProperty shortName;
 
-    private SimpleBooleanProperty shouldDisplay;
+    private final SimpleBooleanProperty shouldDisplay;
+
+    private DoubleProperty localRadius;
 
 
     public DrawableNode(int xCoordinate, int yCoordinate, String ID, String floor, String building, String nodeType, String longName, String shortName)
@@ -35,6 +37,7 @@ public class DrawableNode extends Circle implements IMapDrawable
         this.setId(ID);
 
         this.setRadius(UIConstants.NODE_RADIUS);
+        this.localRadius = new SimpleDoubleProperty(this.getRadius());
 
         this.setFill(UIConstants.NODE_COLOR);
     }
@@ -43,6 +46,8 @@ public class DrawableNode extends Circle implements IMapDrawable
     public void bindLocation(DoubleProperty zoomLevel) {
         this.centerXProperty().bind(xCoordinate.divide(zoomLevel));
         this.centerYProperty().bind(yCoordinate.divide(zoomLevel));
+
+        //this.radiusProperty().bind(localRadius.divide(zoomLevel));
     }
 
     @Override
@@ -55,11 +60,11 @@ public class DrawableNode extends Circle implements IMapDrawable
         return this.floor;
     }
 
-    public SimpleIntegerProperty xCoordinateProperty() {
+    public IntegerProperty xCoordinateProperty() {
         return xCoordinate;
     }
 
-    public SimpleIntegerProperty yCoordinateProperty() {
+    public IntegerProperty yCoordinateProperty() {
         return yCoordinate;
     }
 

@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,23 +42,14 @@ public class LoginController {
         } else if (buttonPushed == signIn) {
             if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
                 DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
+                DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff");
+                DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest");
             }
-            boolean authenticated = false;
             String user = username.getText();
             String pass = password.getText();
 
-            authenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
-            if (authenticated) {
-                AccountEntry userInfo = DatabaseAPI.getDatabaseAPI().getUser(user);
-                errorMessage.setStyle("-fx-text-fill: #c6000000;");
-                if (userInfo.getUserType().equals("administrator")) {
-                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
-                    // set user privileges to employee
-                } else if (userInfo.getUserType().equals("employee")) {
-                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
-                } else{
-                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-                }
+            if (CurrentUser.getCurrentUser().login(user, pass)) {
+                SceneContext.getSceneContext().loadDefault();
             }
             else {
                 errorMessage.setStyle("-fx-text-fill: #c60000FF;");
@@ -65,17 +57,11 @@ public class LoginController {
             }
         }
             else if (buttonPushed == skipSignIn) {
-                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+                SceneContext.getSceneContext().loadDefault();
             }
 
     }
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
+
+
 }

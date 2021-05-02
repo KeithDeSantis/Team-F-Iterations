@@ -1,22 +1,28 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.UUID;
 
-public class ComputerServiceRequestViewController {
+public class ComputerServiceRequestViewController extends ServiceRequests{
 
     @FXML
     private JFXTextField computerNameText;
@@ -47,42 +53,24 @@ public class ComputerServiceRequestViewController {
     }
 
     @FXML
-    public void handleGoHome() throws IOException { goHome(); }
-
-
-
-    @FXML
-    public void handleSubmit() throws IOException {
-        if(validate())
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+        if(formFilled())
         {
-            // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) computerNameText.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.showAndWait();
+            String uuid = UUID.randomUUID().toString();
+            String type = "Computer Service";
+            String assignedPerson = "";
+            String additionalInfo = "Computer name: " + computerNameText.getText() + "Computer location: " + computerLocationText.getText()
+                    + "Urgency: " + urgencyComboBox.getValue() + "Requester: " + requesterTextText.getText();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
+            openSuccessWindow();
         }
     }
-
-
-
-    @FXML
-    public void handleCancel() throws IOException { // Updated to return to service request home instead of default page
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
-
 
     /**
      * Checks if our form has been filled out correctly and sets the components to use the proper style.
      * @return true if the form has been filled out validly; returns false otherwise.
      */
-    private boolean validate()
+    public boolean formFilled()
     {
         boolean accept = true;
 
@@ -156,16 +144,6 @@ public class ComputerServiceRequestViewController {
             n.setStyle(style);
     }
 
-
-    /**
-     * Used to return to the home page.
-     *
-     */
-    private void goHome() throws IOException {
-        //FIXME: AT SOME POINT ADD WARNING IF FORM FILLED OUT!
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
-    }
-
     @FXML
     public void handleClear() {
 
@@ -180,4 +158,8 @@ public class ComputerServiceRequestViewController {
 
          descriptionText.setText("");
     }
+
+
+
+
 }

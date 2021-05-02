@@ -7,3 +7,14 @@
     -fx-alignment: CENTER-LEFT;
     -fx-spacing: 10px;
 }
+
+#goBack{
+    -fx-fit-to-height: 110px;
+}
+
+#title{
+    -fx-font-family: "Sitka Heading";
+    -fx-font-size: 45;
+    -fx-font-style: normal;
+    -fx-fill: #03256c;
+}

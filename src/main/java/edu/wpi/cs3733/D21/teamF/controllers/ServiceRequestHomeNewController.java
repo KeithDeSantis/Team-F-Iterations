@@ -4,9 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,13 +15,13 @@ import java.io.IOException;
 
 public class ServiceRequestHomeNewController {
     @FXML private JFXButton Home;
-    @FXML private JFXButton faciliteisMaitence;
+    @FXML private JFXButton facilitiesMaintenance;
     @FXML private JFXButton laundryServices;
-    @FXML private JFXButton externalPaitintTrans;
+    @FXML private JFXButton externalPatientTrans;
     @FXML private JFXButton floralDelivery;
     @FXML private JFXButton foodDelivery;
-    @FXML private JFXButton computorServices;
-    @FXML private JFXButton launguageInterpretation;
+    @FXML private JFXButton computerServices;
+    @FXML private JFXButton languageInterpretation;
     @FXML private JFXButton internalPatientTrans;
     @FXML private JFXButton sanitationService;
     @FXML private JFXButton medicineDelivery;
@@ -34,7 +32,7 @@ public class ServiceRequestHomeNewController {
     @FXML private ImageView externalImage;
     @FXML private ImageView floralImage;
     @FXML private ImageView foodImage;
-    @FXML private ImageView computorImage;
+    @FXML private ImageView computerImage;
     @FXML private ImageView langImage;
     @FXML private ImageView medicineImage;
     @FXML private ImageView internalImage;
@@ -57,23 +55,23 @@ public class ServiceRequestHomeNewController {
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryServiceRequestView.fxml","Floral Delivery",buttonPushed);
         }
         else if (buttonPushed == Home) {
-            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml","Home Page",buttonPushed);
+            SceneContext.getSceneContext().loadDefault();
         }
 
-        else if (buttonPushed == launguageInterpretation){
+        else if (buttonPushed == languageInterpretation){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml","Language Interpretation",buttonPushed);
         }
 
         else if (buttonPushed == foodDelivery){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryServiceRequestView.fxml","Food Delivery",buttonPushed);
         }
-        else if (buttonPushed == externalPaitintTrans){
+        else if (buttonPushed == externalPatientTrans){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ExternalTrans.fxml","External Patient Transportation",buttonPushed);
         }
-        else if (buttonPushed == faciliteisMaitence){
+        else if (buttonPushed == facilitiesMaintenance){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/maintenanceRequest.fxml", "Facilities Maintenance", buttonPushed);
         }
-        else if (buttonPushed == computorServices){
+        else if (buttonPushed == computerServices){
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceRequestView.fxml", "IT Services", buttonPushed);
         }
         else if (buttonPushed == sanitationService){
@@ -107,7 +105,7 @@ public class ServiceRequestHomeNewController {
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/HomeBlackText.png"));
             homeImage.setImage(image);
         }
-        else if (btn == faciliteisMaitence){
+        else if (btn == facilitiesMaintenance){
             btn.setStyle("-fx-background-color: #F0C808");
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FacilitiesBlackText.png"));
             facilitiesImage.setImage(image);
@@ -117,7 +115,7 @@ public class ServiceRequestHomeNewController {
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/LaundryServicesBlackText.png"));
             laundryImage.setImage(image);
         }
-        else if (btn == externalPaitintTrans){
+        else if (btn == externalPatientTrans){
             btn.setStyle("-fx-background-color: #F0C808");
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/ExtPatientTransportBlackText.png"));
             externalImage.setImage(image);
@@ -132,12 +130,12 @@ public class ServiceRequestHomeNewController {
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FoodDeliveryBlackText.png"));
             foodImage.setImage(image);
         }
-        else if (btn == computorServices){
+        else if (btn == computerServices){
             btn.setStyle("-fx-background-color: #F0C808");
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/ComputerBlackText.png"));
-            computorImage.setImage(image);
+            computerImage.setImage(image);
         }
-        else if (btn == launguageInterpretation){
+        else if (btn == languageInterpretation){
             btn.setStyle("-fx-background-color: #F0C808");
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/LangInterpBlackText.png"));
             langImage.setImage(image);
@@ -172,7 +170,7 @@ public class ServiceRequestHomeNewController {
             Image home = new Image(getClass().getResourceAsStream("/imagesAndLogos/homeWhiteText.png"));
             homeImage.setImage(home);
         }
-        else if (btn == faciliteisMaitence){
+        else if (btn == facilitiesMaintenance){
             btn.setStyle("-fx-background-color: #03256c");
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FacilitiesWhiteText.png"));
             facilitiesImage.setImage(image);
@@ -182,7 +180,7 @@ public class ServiceRequestHomeNewController {
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/LaundryServicesWhiteText.png"));
             laundryImage.setImage(image);
         }
-        else if (btn == externalPaitintTrans){
+        else if (btn == externalPatientTrans){
             btn.setStyle("-fx-background-color: #03256c");
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/ExtPatientTransportWhiteText.png"));
             externalImage.setImage(image);
@@ -197,12 +195,12 @@ public class ServiceRequestHomeNewController {
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/FoodDeliveryWhiteText.png"));
             foodImage.setImage(image);
         }
-        else if (btn == computorServices){
+        else if (btn == computerServices){
             btn.setStyle("-fx-background-color: #03256c");
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/ComputerWhiteText.png"));
-            computorImage.setImage(image);
+            computerImage.setImage(image);
         }
-        else if (btn == launguageInterpretation){
+        else if (btn == languageInterpretation){
             btn.setStyle("-fx-background-color: #03256c");
             Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/LangInterpWhiteText.png"));
             langImage.setImage(image);

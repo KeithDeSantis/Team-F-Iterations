@@ -16,9 +16,9 @@
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox fx:id="header" prefHeight="126.0" prefWidth="960.0" style="-fx-background-color: #94C4F1" stylesheets="/stylesheets/DefaultHeaderBG.css">
+            <HBox fx:id="header" prefHeight="126.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                  <ImageView fx:id="image" fitWidth="100.0" onMouseClicked="#goHome" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="image" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
@@ -26,7 +26,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMENS HOSPITAL EXTERNAL PATIENT TRANSPORTATION" wrappingWidth="840.06640625">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMENS HOSPITAL EXTERNAL PATIENT TRANSPORTATION" wrappingWidth="810.06640625">
                      <font>
                         <Font name="Volkhov Regular" size="40.0" />
                      </font>
@@ -84,8 +84,8 @@
                      </VBox.margin></JFXTextField>
                   <HBox prefHeight="54.0" prefWidth="961.0">
                      <children>
-                        <JFXButton fx:id="submit" buttonType="RAISED" onAction="#submitpushed" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" />
-                        <JFXButton fx:id="Cancel" onAction="#cancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel">
+                        <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>

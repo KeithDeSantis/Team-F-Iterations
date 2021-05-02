@@ -11,8 +11,10 @@ import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
+import edu.wpi.cs3733.uicomponents.entities.DrawableCircle;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
+import edu.wpi.cs3733.uicomponents.entities.DrawableRectSelection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -72,6 +74,12 @@ public class MapEditViewController {
     private Text title;
     @FXML
     private JFXToggleButton edgeCreationToggle;
+    @FXML private Label nodeIDDisplayLabel;
+    @FXML private Label floorDisplayLabel;
+    @FXML private Label buildingDisplayLabel;
+    @FXML private Label nodeTypeDisplayLabel;
+    @FXML private Label longNameDisplayLabel;
+    @FXML private Label shortNameDisplayLabel;
 
     private boolean clickToMakeEdge;
 
@@ -85,10 +93,20 @@ public class MapEditViewController {
 
     List<NodeEntry> nodeList = new ArrayList<>();
 
+    private final DrawableRectSelection rectSelector = new DrawableRectSelection(-1, -1, "N/A");
+
+    //FIXME: DO BETTER!
+    private final DrawableCircle alignLeft = new DrawableCircle(-1, -1, "al", "n/a");
+    private final DrawableCircle alignHorizontalMiddle = new DrawableCircle(-1, -1, "ahm", "n/a");
+    private final DrawableCircle alignRight = new DrawableCircle(-1, -1, "ar", "n/a");
+    private final DrawableCircle alignTop = new DrawableCircle(-1, -1, "at", "n/a");
+    private final DrawableCircle alignVerticalMiddle = new DrawableCircle(-1, -1, "avm", "n/a");
+    private final DrawableCircle alignBottom = new DrawableCircle(-1, -1, "ab", "n/a");
+
     @FXML
     private void initialize() {
         clickToMakeEdge = false;
-        // Set fonts for buttons
+
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
         try {
@@ -108,9 +126,11 @@ public class MapEditViewController {
         JFXTreeTableColumn<NodeEntry, String> idColumn = new JFXTreeTableColumn<>("Node ID");
         idColumn.setPrefWidth(colWidth);
         idColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getNodeIDProperty());
+
         JFXTreeTableColumn<NodeEntry, String> shortColumn = new JFXTreeTableColumn<>("Name");
         shortColumn.setPrefWidth(colWidth);
         shortColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getShortNameProperty());
+
         final TreeItem<NodeEntry> root = new RecursiveTreeItem<>(nodeEntryObservableList, RecursiveTreeObject::getChildren);
         nodeTreeTable.setRoot(root);
         nodeTreeTable.setShowRoot(false);
@@ -128,8 +148,8 @@ public class MapEditViewController {
 
             createNodeMenuItem.setOnAction((ActionEvent e) -> {
                 NodeEntry nodeEntry = new NodeEntry();
-                nodeEntry.setXcoord("" + (int) (event.getX() * mapPanel.getZoomLevel().get()));
-                nodeEntry.setYcoord("" + (int) (event.getY() * mapPanel.getZoomLevel().get()));
+                nodeEntry.setXCoordinate("" + (int) (event.getX() * mapPanel.getZoomLevel().get()));
+                nodeEntry.setYCoordinate("" + (int) (event.getY() * mapPanel.getZoomLevel().get()));
                 nodeEntry.setFloor(mapPanel.getFloor().get());
 
                 try {
@@ -184,6 +204,183 @@ public class MapEditViewController {
         // Set up floor comboBox and draw the nodes and edges on current floor
         drawEdgeNodeOnFloor();
 
+        //Bind selector so that we are always on floor
+        rectSelector.shouldDisplay().set(false);
+        rectSelector.getFloor().bind(mapPanel.getFloor());
+
+        final List<NodeEntry> selectedNodes = new ArrayList<>();
+
+
+
+        alignLeft.getFloor().bind(mapPanel.getFloor());
+        alignHorizontalMiddle.getFloor().bind(mapPanel.getFloor());
+        alignRight.getFloor().bind(mapPanel.getFloor());
+        alignTop.getFloor().bind(mapPanel.getFloor());
+        alignVerticalMiddle.getFloor().bind(mapPanel.getFloor());
+        alignBottom.getFloor().bind(mapPanel.getFloor());
+
+        alignLeft.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignHorizontalMiddle.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignRight.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignTop.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignVerticalMiddle.shouldDisplay().bind(rectSelector.shouldDisplay());
+        alignBottom.shouldDisplay().bind(rectSelector.shouldDisplay());
+
+        final int ALIGN_FLOAT_DIST = 20; //FIXME: DO BETTER
+
+        alignLeft.xCoordinateProperty().bind(rectSelector.xProperty());
+        alignLeft.yCoordinateProperty().bind(rectSelector.yProperty().subtract(ALIGN_FLOAT_DIST));
+        alignLeft.setOnMouseClicked(x -> {
+            for(NodeEntry e : selectedNodes)
+            {
+                final int xCoordinate = (int) (rectSelector.xProperty().get() * mapPanel.getZoomLevel().get());
+                final int yCoordinate = Integer.parseInt(e.getYCoordinate());
+                updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+            }
+
+        });
+
+        alignHorizontalMiddle.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty().divide(2.0)));
+        alignHorizontalMiddle.yCoordinateProperty().bind(rectSelector.yProperty().subtract(ALIGN_FLOAT_DIST));
+        alignHorizontalMiddle.setOnMouseClicked(x -> {
+            for(NodeEntry e : selectedNodes)
+            {
+                if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()) {
+                    final int xCoordinate = (int) (rectSelector.xProperty().add(rectSelector.widthProperty().divide(2.0)).get() * mapPanel.getZoomLevel().get());
+                    final int yCoordinate = Integer.parseInt(e.getYCoordinate());
+                    updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                }
+                //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+            }
+        });
+
+        alignRight.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()));
+        alignRight.yCoordinateProperty().bind(rectSelector.yProperty().subtract(ALIGN_FLOAT_DIST));
+        alignRight.setOnMouseClicked(x -> {
+            for(NodeEntry e : selectedNodes)
+            {
+                if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()){
+                final int xCoordinate = (int) (rectSelector.xProperty().add(rectSelector.widthProperty()).get() * mapPanel.getZoomLevel().get());
+                final int yCoordinate = Integer.parseInt(e.getYCoordinate());
+                updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+            }
+                //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+            }
+        });
+
+        alignTop.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
+        alignTop.yCoordinateProperty().bind(rectSelector.yProperty());
+
+        alignTop.setOnMouseClicked(x -> {
+                    for(NodeEntry e : selectedNodes)
+                    {
+                        if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()) {
+                            final int xCoordinate = Integer.parseInt(e.getXCoordinate());
+                            final int yCoordinate = (int) (rectSelector.yProperty().multiply(mapPanel.getZoomLevel()).get());
+                            updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                            //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                        }
+                    }
+        });
+
+        alignVerticalMiddle.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
+        alignVerticalMiddle.yCoordinateProperty().bind(rectSelector.yProperty().add(rectSelector.heightProperty().divide(2.0)));
+
+        alignVerticalMiddle.setOnMouseClicked(x -> {
+            for(NodeEntry e : selectedNodes)
+            {
+                if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()) {
+                    final int xCoordinate = Integer.parseInt(e.getXCoordinate());
+                    final int yCoordinate = (int) (rectSelector.yProperty().add(rectSelector.heightProperty().divide(2.0)).multiply(mapPanel.getZoomLevel()).get());
+                    updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                    //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                }
+            }
+        });
+
+        alignBottom.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
+        alignBottom.yCoordinateProperty().bind(rectSelector.yProperty().add(rectSelector.heightProperty()));
+
+        alignBottom.setOnMouseClicked(x -> {
+            for(NodeEntry e : selectedNodes)
+            {
+                if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()) {
+                    final int xCoordinate = Integer.parseInt(e.getXCoordinate());
+                    final int yCoordinate = (int) (rectSelector.yProperty().add(rectSelector.heightProperty()).multiply(mapPanel.getZoomLevel()).get());
+                    updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                    //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                }
+            }
+        });
+
+
+        //Starts drawing the rectangle
+        mapPanel.getMap().setOnDragDetected(x -> {
+            rectSelector.x0CoordinateProperty().set((int) (x.getX() * mapPanel.getZoomLevel().get()));
+            rectSelector.y0CoordinateProperty().set((int) (x.getY() * mapPanel.getZoomLevel().get()));
+            rectSelector.x1CoordinateProperty().set((int) (x.getX() * mapPanel.getZoomLevel().get()));
+            rectSelector.y1CoordinateProperty().set((int) (x.getY() * mapPanel.getZoomLevel().get()));
+
+            rectSelector.shouldDisplay().set(true);
+        });
+
+        //Allows for drag to select region
+        mapPanel.getMap().setOnMouseDragged(x -> {
+            rectSelector.x1CoordinateProperty().set((int) (x.getX() * mapPanel.getZoomLevel().get()));
+            rectSelector.y1CoordinateProperty().set((int) (x.getY() * mapPanel.getZoomLevel().get()));
+        });
+
+        //Clears rect on other click
+        mapPanel.getMap().setOnMousePressed(x -> {
+            rectSelector.shouldDisplay().set(false);
+            selectedNodes.clear();
+        });
+
+        mapPanel.getMap().setOnMouseReleased(x -> {
+            if(!rectSelector.isVisible())
+                return;
+
+            selectedNodes.clear();
+
+            final int X0 = (int) (rectSelector.getX() * mapPanel.getZoomLevel().get());
+            final int X1  = (int) ((rectSelector.getX() + rectSelector.getWidth()) * mapPanel.getZoomLevel().get());
+
+            final int Y0 = (int) (rectSelector.getY() * mapPanel.getZoomLevel().get());
+            final int Y1  = (int) ((rectSelector.getY() + rectSelector.getHeight()) * mapPanel.getZoomLevel().get());
+
+
+            //FIXME: DO THIS BETTER
+            //Drag done
+            for(NodeEntry n : nodeEntryObservableList) {
+                final int X = Integer.parseInt(n.getXCoordinate());
+                final int Y = Integer.parseInt(n.getYCoordinate());
+                if (X0 <= X && X <= X1 && Y0 <= Y && Y <= Y1 && mapPanel.getNode(n.getNodeID()).shouldDisplay().get() && mapPanel.getFloor().get().equals(n.getFloor()))//mapPanel.getFloor().get().equals(n.getFloor()))
+                    selectedNodes.add(n);
+            }
+        });
+
+        /*
+          try {
+            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.xCoordinateProperty().get(), "xcoord");
+            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.yCoordinateProperty().get(), "ycoord");
+
+            ///FIXME: BIND PROPERTIES TOGETHER
+
+            for (NodeEntry entry : nodeEntryObservableList) {
+                if (entry.getNodeID().equals(drawableNode.getId())) {
+                    entry.setXCoordinate("" + drawableNode.xCoordinateProperty().get());
+                    entry.setYCoordinate("" + drawableNode.yCoordinateProperty().get());
+                    break;
+                }
+            }
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+         */
+        rectSelector.setMouseTransparent(true);
     }
 
     /**
@@ -346,14 +543,14 @@ public class MapEditViewController {
                     case "Start Node":
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getStartNode().contains(searchField.getText())) {
-                                if(edgeEntry.getStartNode().equals(nodeEntryTreeItem.getValue().getNodeID()) || edgeEntry.getEndNode().equals(nodeEntryTreeItem.getValue().getNodeID())) return true;
+                                if(edgeEntry.getStartNode().equals(nodeEntryTreeItem.getValue().getNodeID())) return true;
                             }
                         }
                         return false;
                     case "End Node":
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getEndNode().contains(searchField.getText())) {
-                                if(edgeEntry.getStartNode().equals(nodeEntryTreeItem.getValue().getNodeID()) || edgeEntry.getEndNode().equals(nodeEntryTreeItem.getValue().getNodeID())) return true;
+                                if(edgeEntry.getEndNode().equals(nodeEntryTreeItem.getValue().getNodeID())) return true;
                             }
                         }
                         return false;
@@ -385,25 +582,37 @@ public class MapEditViewController {
                         ((DrawableNode) node).setShouldDisplay(((DrawableNode) node).getShortName().contains(searchField.getText()));
                         break;
                     case "Edge ID":
+                        boolean edgeExists = false;
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getEdgeID().contains(searchField.getText())) {
+                                edgeExists = true;
                                 ((DrawableNode) node).setShouldDisplay(edgeEntry.getEdgeID().contains(node.getId()));
+                                if(edgeEntry.getEdgeID().contains(node.getId())) break;
                             }
                         } // what about when there are no edges that pass?? - KD
+                        if(!edgeExists) ((DrawableNode) node).setShouldDisplay(false);
                         break;
                     case "Start Node":
+                        boolean edgeExists2 = false;
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getStartNode().contains(searchField.getText())) {
+                                edgeExists2 = true;
                                 ((DrawableNode) node).setShouldDisplay(edgeEntry.getStartNode().equals(node.getId()));
+                                if(edgeEntry.getStartNode().equals(node.getId())) break;
                             }
                         }
+                        if(!edgeExists2) ((DrawableNode) node).setShouldDisplay(false);
                         break;
                     case "End Node":
+                        boolean edgeExists3 = false;
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
+                            edgeExists3 = true;
                             if(edgeEntry.getEndNode().contains(searchField.getText())) {
                                 ((DrawableNode) node).setShouldDisplay(edgeEntry.getEndNode().equals(node.getId()));
+                                if(edgeEntry.getEndNode().equals(node.getId())) break;
                             }
                         }
+                        if(!edgeExists3) ((DrawableNode) node).setShouldDisplay(false);
                         break;
                     default:
                         ((DrawableNode) node).setShouldDisplay(true);
@@ -504,104 +713,57 @@ public class MapEditViewController {
             }
             return true;
         });
-        List<NodeEntry> nodesToKeep = new ArrayList<>();
         for (Node node : mapPanel.getCanvas().getChildren()) {
             if (node instanceof DrawableEdge) {
                 switch (searchComboBox.getValue()) {
                     case "Node ID":
-                        if(((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText())) {
+                        if(((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText())) {
                             ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
-                        if(((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         } else { ((DrawableEdge) node).setShouldDisplay(false); }
                         break;
                     case "Floor":
-                        if(((DrawableEdge) node).getStartNode().getFloor().equals(searchField.getText())) {
+                        if(((DrawableEdge) node).getStartNode().getFloor().equals(searchField.getText()) || ((DrawableEdge) node).getEndNode().getFloor().equals(searchField.getText())) {
                             ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
-                        if(((DrawableEdge) node).getEndNode().getFloor().equals(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         } else { ((DrawableEdge) node).setShouldDisplay(false); }
                         break;
                     case "Building":
-                        if(((DrawableEdge) node).getStartNode().getBuilding().contains(searchField.getText())) {
+                        if(((DrawableEdge) node).getStartNode().getBuilding().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getBuilding().contains(searchField.getText())) {
                             ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
-                        if(((DrawableEdge) node).getEndNode().getBuilding().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         } else { ((DrawableEdge) node).setShouldDisplay(false); }
                         break;
                     case "Node Type":
-                        if(((DrawableEdge) node).getStartNode().getNodeType().contains(searchField.getText())) {
+                        if(((DrawableEdge) node).getStartNode().getNodeType().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeType().contains(searchField.getText())) {
                             ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
-                        if(((DrawableEdge) node).getEndNode().getNodeType().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         } else { ((DrawableEdge) node).setShouldDisplay(false); }
                         break;
                     case "Long Name":
-                        if(((DrawableEdge) node).getStartNode().getLongName().contains(searchField.getText())) {
+                        if(((DrawableEdge) node).getStartNode().getLongName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getLongName().contains(searchField.getText())) {
                             ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
-                        if(((DrawableEdge) node).getEndNode().getLongName().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         } else { ((DrawableEdge) node).setShouldDisplay(false); }
                         break;
                     case "Short Name":
-                        if(((DrawableEdge) node).getStartNode().getShortName().contains(searchField.getText())) {
+                        if(((DrawableEdge) node).getStartNode().getShortName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getShortName().contains(searchField.getText())) {
                             ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
-                        if(((DrawableEdge) node).getEndNode().getShortName().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         } else { ((DrawableEdge) node).setShouldDisplay(false); }
                         break;
                     case "Edge ID":
                         if (node.getId().contains(searchField.getText())) {
                             ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         } else ((DrawableEdge) node).setShouldDisplay(false);
                         break;
                     case "Start Node":
                         if (((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText())) {
                             ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         } else ((DrawableEdge) node).setShouldDisplay(false);
                         break;
                     case "End Node":
                         if (((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText())) {
                             ((DrawableEdge) node).setShouldDisplay(true);
-                            nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                            nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         } else ((DrawableEdge) node).setShouldDisplay(false);
                         break;
                     default:
                         ((DrawableEdge) node).setShouldDisplay(true);
-                        nodesToKeep.add(((DrawableEdge) node).getStartNode());
-                        nodesToKeep.add(((DrawableEdge) node).getEndNode());
                         break;
-                }
-            }
-        }
-        for (Node node : mapPanel.getCanvas().getChildren()) {
-            if (node instanceof DrawableNode) {
-                ((DrawableNode) node).setShouldDisplay(false);
-                for (NodeEntry nodeEntry : nodesToKeep) {
-                    if (node.getId().equals(nodeEntry.getNodeID())) ((DrawableNode) node).setShouldDisplay(true);
                 }
             }
         }
@@ -643,8 +805,8 @@ public class MapEditViewController {
 
                 data.addAll(nodeEntryObservableList.stream().map(node -> new String[]{
                         node.getNodeID(),
-                        node.getXcoord(),
-                        node.getYcoord(),
+                        node.getXCoordinate(),
+                        node.getYCoordinate(),
                         node.getFloor(),
                         node.getBuilding(),
                         node.getNodeType(),
@@ -798,6 +960,7 @@ public class MapEditViewController {
         mapPanel.clearMap();
         nodeEntryObservableList.clear();
         edgeEntryObservableList.clear();
+        searchField.setText("");
 
         List<String[]> nodeData;
         List<String[]> edgeData;
@@ -832,18 +995,19 @@ public class MapEditViewController {
                 drawEdgeNodeOnFloor(); //FIXME do better with queries
             }
         }
-        searchField.setText("");
 
-    } //FIXME sometimes error 'L1NODES' already exists in Schema 'APP' happens and the map isnt drawn
+    }
 
     private DrawableNode getEditableNode(NodeEntry nodeEntry) {
         final DrawableNode drawableNode = nodeEntry.getDrawable();
 
         drawableNode.setOnMouseEntered(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);
+            handleDisplayNodeInfo(drawableNode);
         });
         drawableNode.setOnMouseExited(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR);
+            handleUndisplayNodeInfo();
         });
 
         final List<DrawableEdge> startEdges = new ArrayList<>();
@@ -860,13 +1024,14 @@ public class MapEditViewController {
 
             drawableNode.setOnMousePressed(e -> handleNodeDragMousePressed(drawableNode, nodeEntry, startEdges, endEdges));
 
-            drawableNode.setOnMouseDragged(e -> handleNodeDragMouseDragged(drawableNode, e, startEdges, endEdges));
+            drawableNode.setOnMouseDragged(e -> {
+                handleNodeDragMouseDragged(drawableNode, e, startEdges, endEdges);
+                handleDisplayNodeInfo(drawableNode); // Keeps the Node Info from flickering while dragging - KD
+            });
 
             drawableNode.setOnMouseReleased(e -> {
                 if(!e.isDragDetect())
                 {
-                    selectedCircle.setFill(UIConstants.NODE_COLOR);
-
                     firstCircle = null;
                     secondCircle = null;
                 }
@@ -942,8 +1107,8 @@ public class MapEditViewController {
 
             for (NodeEntry entry : nodeEntryObservableList) {
                 if (entry.getNodeID().equals(drawableNode.getId())) {
-                    entry.setXcoord("" + drawableNode.xCoordinateProperty().get());
-                    entry.setYcoord("" + drawableNode.yCoordinateProperty().get());
+                    entry.setXCoordinate("" + drawableNode.xCoordinateProperty().get());
+                    entry.setYCoordinate("" + drawableNode.yCoordinateProperty().get());
                     break;
                 }
             }
@@ -951,6 +1116,64 @@ public class MapEditViewController {
 
         } catch (Exception exception) {
             exception.printStackTrace();
+        }
+    }
+
+    private void updateNode(String id, int xCoordinate, int yCoordinate)
+    {
+        try {
+            DatabaseAPI.getDatabaseAPI().editNode(id, "" + xCoordinate, "xcoord");
+            DatabaseAPI.getDatabaseAPI().editNode(id, "" + yCoordinate, "ycoord");
+
+            ///FIXME: BIND PROPERTIES TOGETHER
+
+            for (NodeEntry entry : nodeEntryObservableList) {
+                if (entry.getNodeID().equals(id)) {
+                    entry.setXCoordinate("" + xCoordinate);
+                    entry.setYCoordinate("" + yCoordinate);
+                    break;
+                }
+            }
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        final List<DrawableEdge> startEdges = new ArrayList<>();
+        final List<DrawableEdge> endEdges = new ArrayList<>();
+
+        for(Node node : mapPanel.getCanvas().getChildren()) {
+            if (node instanceof DrawableNode) {
+                if (node.getId().equals(id)) {
+
+                    for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+                        if (edgeEntry.getStartNode().equals(id)) {
+                            startEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
+                        }
+                        if (edgeEntry.getEndNode().equals(id)) {
+                            endEdges.add(mapPanel.getNode(edgeEntry.getEdgeID()));
+                        }
+                    }
+
+                    ((DrawableNode) node).xCoordinateProperty().set(xCoordinate);
+                    ((DrawableNode) node).yCoordinateProperty().set(yCoordinate);
+
+                    //FIXME: DO BETTER, DO BINDINGS
+
+                    for (DrawableEdge edge : startEdges) {
+                        edge.getMapStartX().set(xCoordinate);
+                        edge.getMapStartY().set(yCoordinate);
+                    }
+
+                    for (DrawableEdge edge : endEdges) {
+                        edge.getMapEndX().set(xCoordinate);
+                        edge.getMapEndY().set(yCoordinate);
+                    }
+
+                }
+
+            }
         }
     }
 
@@ -987,10 +1210,10 @@ public class MapEditViewController {
 
     private DrawableEdge getEditableEdge(EdgeEntry edge, NodeEntry startNode, NodeEntry endNode) {
         final DrawableEdge drawableEdge = new DrawableEdge(
-                Integer.parseInt(startNode.getXcoord()),
-                Integer.parseInt(startNode.getYcoord()),
-                Integer.parseInt(endNode.getXcoord()),
-                Integer.parseInt(endNode.getYcoord()),
+                Integer.parseInt(startNode.getXCoordinate()),
+                Integer.parseInt(startNode.getYCoordinate()),
+                Integer.parseInt(endNode.getXCoordinate()),
+                Integer.parseInt(endNode.getYCoordinate()),
                 edge.getEdgeID(),
                 startNode.getFloor(),
                 endNode.getFloor(),
@@ -1049,8 +1272,8 @@ public class MapEditViewController {
             return;
 
         String nodeID = nodeEntry.getNodeID();
-        int xCoord = Integer.parseInt(nodeEntry.getXcoord());
-        int yCoord = Integer.parseInt(nodeEntry.getYcoord());
+        int xCoord = Integer.parseInt(nodeEntry.getXCoordinate());
+        int yCoord = Integer.parseInt(nodeEntry.getYCoordinate());
         String nodeFloor = nodeEntry.getFloor();
         String nodeBuilding = nodeEntry.getBuilding();
         String nodeType = nodeEntry.getNodeType();
@@ -1197,7 +1420,7 @@ public class MapEditViewController {
      * @author KD
      */
     public boolean checkNodeEntryNotEmpty(NodeEntry nodeEntry) {
-        return !nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXcoord().isEmpty() && !nodeEntry.getYcoord().isEmpty() &&
+        return !nodeEntry.getNodeID().isEmpty() && !nodeEntry.getXCoordinate().isEmpty() && !nodeEntry.getYCoordinate().isEmpty() &&
                 !nodeEntry.getFloor().isEmpty() && !nodeEntry.getBuilding().isEmpty() && !nodeEntry.getNodeType().isEmpty() &&
                 !nodeEntry.getLongName().isEmpty() && !nodeEntry.getShortName().isEmpty();
     }
@@ -1281,6 +1504,13 @@ public class MapEditViewController {
     private void drawEdgeNodeOnFloor() {
         // Clear canvas
         mapPanel.clearMap();
+        mapPanel.draw(rectSelector);
+        mapPanel.draw(alignLeft);
+        mapPanel.draw(alignHorizontalMiddle);
+        mapPanel.draw(alignRight);
+        mapPanel.draw(alignTop);
+        mapPanel.draw(alignVerticalMiddle);
+        mapPanel.draw(alignBottom);
 
         // Reset selections
         selectedLine = null;
@@ -1353,6 +1583,7 @@ public class MapEditViewController {
             mapPanel.draw(getEditableNode(n));
             // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
         }
+        handleSearch();
     }
 
     /**
@@ -1426,18 +1657,8 @@ public class MapEditViewController {
         }
     }
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
-
     public void handleHome() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 
     public void handleTabChange(Event event) {
@@ -1464,6 +1685,10 @@ public class MapEditViewController {
          */
     }
 
+    /**
+     * Handles when the toggle for editor mode is switched between Click and Drag or Edge Creation
+     * @author KD
+     */
     public void handleToggle() {
         if (edgeCreationToggle.getText().equals("Drag and Drop")) {
             clickToMakeEdge = true;
@@ -1474,6 +1699,45 @@ public class MapEditViewController {
         }
         drawEdgeNodeOnFloor();
         handleSearch();
+    }
+
+    /**
+     * Displays the node currently hovered over's data in the node info section
+     * @param drawableNode the node hovered over
+     * @author KD
+     */
+    public void handleDisplayNodeInfo(DrawableNode drawableNode) {
+        nodeIDDisplayLabel.setText(drawableNode.getId());
+        nodeIDDisplayLabel.setOpacity(1);
+        floorDisplayLabel.setText(drawableNode.getFloor().get());
+        floorDisplayLabel.setOpacity(1);
+        buildingDisplayLabel.setText(drawableNode.getBuilding());
+        buildingDisplayLabel.setOpacity(1);
+        nodeTypeDisplayLabel.setText(drawableNode.getNodeType());
+        nodeTypeDisplayLabel.setOpacity(1);
+        longNameDisplayLabel.setText(drawableNode.getLongName());
+        longNameDisplayLabel.setOpacity(1);
+        shortNameDisplayLabel.setText(drawableNode.getShortName());
+        shortNameDisplayLabel.setOpacity(1);
+    }
+
+    /**
+     * Clears the node info section
+     * @author KD
+     */
+    public void handleUndisplayNodeInfo() {
+        nodeIDDisplayLabel.setText("Node ID");
+        nodeIDDisplayLabel.setOpacity(0.5);
+        floorDisplayLabel.setText("Floor");
+        floorDisplayLabel.setOpacity(0.5);
+        buildingDisplayLabel.setText("Building");
+        buildingDisplayLabel.setOpacity(0.5);
+        nodeTypeDisplayLabel.setText("Node Type");
+        nodeTypeDisplayLabel.setOpacity(0.5);
+        longNameDisplayLabel.setText("Long Name");
+        longNameDisplayLabel.setOpacity(0.5);
+        shortNameDisplayLabel.setText("Short Name");
+        shortNameDisplayLabel.setOpacity(0.5);
     }
 }
 

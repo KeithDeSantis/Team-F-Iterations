@@ -119,8 +119,8 @@ public class GraphLoader {
                 if(vertices.get(nodeID) != null)
                     throw new Exception("nodesCVS lists the same vertex twice: " + nodeID);
 
-                final int xCoordinate = Integer.parseInt(nodeEntry.getXcoord());
-                final int yCoordinate = Integer.parseInt(nodeEntry.getYcoord());
+                final int xCoordinate = Integer.parseInt(nodeEntry.getXCoordinate());
+                final int yCoordinate = Integer.parseInt(nodeEntry.getYCoordinate());
 
                 final Vertex currVertex = new Vertex(nodeID, xCoordinate, yCoordinate, nodeEntry.getFloor());
                 vertices.put(nodeID, currVertex);

@@ -16,11 +16,6 @@ public class ServiceRequestHandler implements DatabaseEntry {
      */
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
-        System.out.println(colValues[0]);
-        System.out.println(colValues[1]);
-        System.out.println(colValues[2]);
-        System.out.println(colValues[3]);
-        System.out.println(colValues[4]);
         final String query = "INSERT INTO service_requests values(?, ?, ?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
         int colCounter = 1;
