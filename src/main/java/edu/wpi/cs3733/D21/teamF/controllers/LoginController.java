@@ -40,9 +40,12 @@ public class LoginController {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         } else if (buttonPushed == signIn) {
             if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
-                DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
-                DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff");
-                DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest");
+                String[] admin = {"admin", "administrator", "admin", "admin"};
+                String[] staff = {"staff", "employee", "staff", "staff"};
+                String[] guest = {"guest", "visitor", "guest", "guest"};
+                DatabaseAPI.getDatabaseAPI().addUser(admin, new String[]{""}, new String[]{""});
+                DatabaseAPI.getDatabaseAPI().addUser(staff, new String[]{""}, new String[]{""});
+                DatabaseAPI.getDatabaseAPI().addUser(guest, new String[]{""}, new String[]{""});
             }
             boolean authenticated = false;
             String user = username.getText();

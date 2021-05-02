@@ -7,10 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,12 +119,8 @@ public class UserHandler implements DatabaseEntry {
         return authenticated;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean addEntry(String[] colValues) throws SQLException {
-        final String query = "INSERT INTO USERS values(?, ?, ?, ?, ?)";
+    public boolean addUser(String colValues[], String[] favorite, String[] recent) throws SQLException {
+        final String query = "INSERT INTO USERS values(?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
 
         byte[] salt = null;
@@ -147,7 +140,14 @@ public class UserHandler implements DatabaseEntry {
             colCounter = colCounter + 1;
         }
         stmt.setBytes(5, salt);
+        stmt.setArray(6, ConnectionHandler.getConnection().createArrayOf("String", favorite));
+        stmt.setArray(7, ConnectionHandler.getConnection().createArrayOf("String", recent));
         return stmt.executeUpdate() != 0;
+    }
+
+    @Override
+    public boolean addEntry(String[] colValues) throws SQLException {
+        return false;
     }
 
     /**
@@ -156,12 +156,35 @@ public class UserHandler implements DatabaseEntry {
     @Override
     public boolean editEntry(String username, String val, String colName) throws Exception{
         boolean success = false;
-        if (colName.equals("username") || colName.equals("type") || colName.equals("password")) {
+        if (colName.equals("username") || colName.equals("type") || colName.equals("password") ||
+                colName.equals("favorite_nodes") || colName.equals("recent_nodes")) {
             String query = String.format("UPDATE USERS SET %s=(?) WHERE USERNAME=(?)", colName);
             try {
                 PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
                 stmt.setString(1, val);
                 stmt.setString(2, username);
+                stmt.executeUpdate();
+                stmt.close();
+                success = true;
+            } catch (SQLException e) {
+                success = false;
+            }
+        }
+        else{
+            throw new Exception("invalid column name");
+        }
+        return success;
+    }
+
+    public boolean editUserNodes(String id, String[] newNodes, String colName) throws Exception
+    {
+        boolean success = false;
+        if (colName.equals("favorite_nodes") || colName.equals("recent_nodes")) {
+            String query = String.format("UPDATE USERS SET %s=(?) WHERE USERNAME=(?)", colName);
+            try {
+                PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+                stmt.setArray(1, ConnectionHandler.getConnection().createArrayOf("String", newNodes));
+                stmt.setString(2, id);
                 stmt.executeUpdate();
                 stmt.close();
                 success = true;
@@ -193,7 +216,8 @@ public class UserHandler implements DatabaseEntry {
     public boolean createTable() {
         boolean success = false;
         final String initUserTable = "CREATE TABLE USERS(userid varchar(200), type varchar(200), " +
-                "username varchar(200), password varchar(200), salt blob(20), primary key(username))";
+                "username varchar(200), password varchar(200), salt blob(20), favorite_nodes varchar(300), " +
+                "recent_nodes varchar(300), primary key(username))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initUserTable);
@@ -232,7 +256,7 @@ public class UserHandler implements DatabaseEntry {
     @Override
     public void populateTable(List<String[]> entries) throws SQLException {
         for (String[] arr : entries) {
-            DatabaseAPI.getDatabaseAPI().addUser(arr);
+            DatabaseAPI.getDatabaseAPI().addUser(arr, new String[]{""}, new String[]{""});
         }
     }
 
@@ -253,8 +277,12 @@ public class UserHandler implements DatabaseEntry {
             String username = rset.getString(3);
             String password = rset.getString(4);
             String usertype = rset.getString(2);
+            Array favorite_nodes = rset.getArray(6);
+            Array recent_nodes = rset.getArray(7);
+            String[] userFavorites = (String[]) favorite_nodes.getArray();
+            String[] userRecents = (String[]) recent_nodes.getArray();
 
-            AccountEntry newEntry = new AccountEntry(username, password, usertype);
+            AccountEntry newEntry = new AccountEntry(username, password, usertype, userFavorites, userRecents);
             entries.add(newEntry);
         }
         rset.close();
@@ -277,7 +305,11 @@ public class UserHandler implements DatabaseEntry {
         while (rset.next()){
             String type = rset.getString(2);
             String password = rset.getString(4);
-            user = new AccountEntry(username, password, type);
+            Array favorite_nodes = rset.getArray(6);
+            Array recent_nodes = rset.getArray(7);
+            String[] userFavorites = (String[]) favorite_nodes.getArray();
+            String[] userRecents = (String[]) recent_nodes.getArray();
+            user = new AccountEntry(username, password, type, userFavorites, userRecents);
         }
         stmt.close();
         rset.close();

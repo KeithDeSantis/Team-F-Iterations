@@ -156,8 +156,9 @@ public class AccountManagerController implements Initializable {
             String userName = addUsername.getText();
             String pass = addPassword.getText();
             String type = (String) newUserType.getValue();
+            String[] user = {userName, type, userName, pass};
 //FIXME add user/account objects
-            DatabaseAPI.getDatabaseAPI().addUser(userName, type, userName, pass);
+            DatabaseAPI.getDatabaseAPI().addUser(user, new String[]{""}, new String[]{""});
             selectUser.getItems().add(userName);
             refreshPage(actionEvent);
         }

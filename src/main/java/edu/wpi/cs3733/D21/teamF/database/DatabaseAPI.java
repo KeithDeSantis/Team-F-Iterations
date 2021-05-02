@@ -126,12 +126,16 @@ public class DatabaseAPI {
         return s.genServiceRequestEntries();
     }
 
-    public boolean addUser(String...colValues) throws SQLException{
-        return userHandler.addEntry(colValues);
+    public boolean addUser(String colValues[], String[] favorites, String[] recents) throws SQLException{
+        return ((UserHandler)this.userHandler).addUser(colValues, favorites, recents);
     }
 
     public boolean editUser(String id, String newVal, String colName) throws Exception {
         return userHandler.editEntry(id, newVal, colName);
+    }
+
+    public boolean editUserNodes(String id, String[] newVal, String colName) throws Exception {
+        return ((UserHandler)this.userHandler).editUserNodes(id, newVal, colName);
     }
 
     public boolean deleteUser(String username) throws SQLException{

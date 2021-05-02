@@ -201,8 +201,10 @@ class DatabaseAPITest {
     @DisplayName("test adding a user")
     public void testAddUser() throws SQLException
     {
+        String[] favorites = {"testnode", "testnode2"};
+        String[] recents = {"sample", "sample2"};
         String[] newUser = {"1", "employee", "declan", "password"};
-        assertTrue(DatabaseAPI.getDatabaseAPI().addUser(newUser));
+        assertTrue(DatabaseAPI.getDatabaseAPI().addUser(newUser, favorites, recents));
     }
 
     @Test
@@ -210,7 +212,9 @@ class DatabaseAPITest {
     public void testDeleteUser() throws SQLException
     {
         String[] newUser = {"1", "employee", "declan", "password"};
-        DatabaseAPI.getDatabaseAPI().addUser(newUser);
+        String[] favorites = {"testnode", "testnode2"};
+        String[] recents = {"sample", "sample2"};
+        DatabaseAPI.getDatabaseAPI().addUser(newUser, favorites, recents);
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUser("declan"));
     }
 
@@ -219,8 +223,22 @@ class DatabaseAPITest {
     public void testEditUser() throws Exception
     {
         String[] newUser = {"1", "employee", "declan", "password"};
-        DatabaseAPI.getDatabaseAPI().addUser(newUser);
+        String[] favorites = {"testnode", "testnode2"};
+        String[] recents = {"sample", "sample2"};
+        DatabaseAPI.getDatabaseAPI().addUser(newUser, favorites, recents);
         assertTrue(DatabaseAPI.getDatabaseAPI().editUser("declan", "password123", "password"));
+    }
+
+    @Test
+    @DisplayName("test editing user favorite and recent node arrays")
+    public void testEditUserNodes() throws Exception
+    {
+        String[] newUser = {"1", "employee", "declan", "password"};
+        String[] favorites = {"testnode", "testnode2"};
+        String[] recents = {"sample", "sample2"};
+        String[] newFavorites = {"test1", "test2"};
+        DatabaseAPI.getDatabaseAPI().addUser(newUser, favorites, recents);
+        assertTrue(DatabaseAPI.getDatabaseAPI().editUserNodes("declan", favorites, "favorite_nodes"));
     }
 
     @Test
@@ -322,7 +340,7 @@ class DatabaseAPITest {
     @DisplayName("Test authentication and encryption")
     public void testAuthentication() throws SQLException{
         String[] newUser = {"1", "admin", "declan", "password"};
-        DatabaseAPI.getDatabaseAPI().addUser(newUser);
+        DatabaseAPI.getDatabaseAPI().addUser(newUser, new String[]{""}, new String[]{""});
         UserHandler handler = new UserHandler();
         assertTrue(handler.authenticate("declan", "password"));
     }
@@ -353,7 +371,7 @@ class DatabaseAPITest {
     @DisplayName("test verifying the admin user entry")
     public void testAdmin() throws SQLException{
         String[] admin = {"admin", "administrator", "admin", "admin"};
-        DatabaseAPI.getDatabaseAPI().addUser(admin);
+        DatabaseAPI.getDatabaseAPI().addUser(admin, new String[]{""}, new String[]{""});
         assertTrue(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
     }
 

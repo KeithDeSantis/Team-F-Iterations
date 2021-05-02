@@ -7,14 +7,18 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
     String username;
     String password;
     String userType;
+    String[] favorite_nodes;
+    String[] recent_nodes;
     SimpleStringProperty usernameProperty;
     SimpleStringProperty passwordProperty;
     SimpleStringProperty userTypeProperty;
 
-    public AccountEntry(String username, String password, String userType) {
+    public AccountEntry(String username, String password, String userType, String[] favorite, String[] recent) {
         this.username = username;
         this.password = password;
         this.userType = userType;
+        this.favorite_nodes = favorite;
+        this.recent_nodes = recent;
         usernameProperty = new SimpleStringProperty(username);
         passwordProperty = new SimpleStringProperty(password);
         userTypeProperty = new SimpleStringProperty(userType);
