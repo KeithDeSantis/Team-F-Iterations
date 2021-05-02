@@ -73,6 +73,8 @@ public class AStarDemoController implements Initializable {
     @FXML
     private Label ETA;
 
+    @FXML
+    public JFXButton viewInstructionsBtn;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -232,6 +234,8 @@ public class AStarDemoController implements Initializable {
         pathVertex.clear();
         Instruction.setVisible(false);
         ETA.setVisible(false);
+
+        viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
 
         direction = null;
 
@@ -984,5 +988,44 @@ public class AStarDemoController implements Initializable {
     public void handleHoverOff(MouseEvent mouseEvent) {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
         btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
+
+    /**
+     * On clicked, displays the whole list of instructions
+     * @author Alex Friedman (ahf)
+     */
+    public void handleViewInstructions() {
+        final JFXDialog dialog = new JFXDialog();
+        final JFXDialogLayout layout = new JFXDialogLayout();
+
+        //TODO: Italics for previously finished instructions?
+        //TODO: better align ETA text.
+        layout.setHeading(new Text("Directions from: " + startComboBox.getValue() + " to " +  endComboBox.getValue()));
+
+        String directions = "";
+        for(int i = 0; i < stopsList.size(); i++)
+        {
+            final String instruction = instructionsList.get(i);
+            final String eta = etaList.get(i);
+
+            if(i < stopsList.size() - 1)
+                directions += instruction + "\t\t(" + eta + ")\n";
+            else
+                directions += instruction;
+        }
+
+        //FIXME: DO BREAKS W/ CSS
+        layout.setBody(new Text(directions));
+
+        final JFXButton closeBtn = new JFXButton("Close");
+        closeBtn.setOnAction(a -> dialog.close());
+
+        final JFXButton printBtn = new JFXButton("Print");
+
+
+        layout.setActions(printBtn, closeBtn);
+
+        dialog.setContent(layout);
+        mapPanel.showDialog(dialog);
     }
 }
