@@ -21,8 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class InternalTransportationController {
-    @FXML private JFXButton submit;
+public class InternalTransportationController extends ServiceRequests {
 
     @FXML private JFXButton clear;
 
@@ -45,7 +44,7 @@ public class InternalTransportationController {
         cancel.setDisableVisualFocus(true); // Clears visual focus from cancel button, cause unknown - LM
     }
 
-    private boolean isFilledOut() {
+    public boolean formFilled() {
 
         // set all text field backgrounds to clear to reset any fields that were marked as incomplete - KD
         deliverLocation.setStyle("-fx-background-color: transparent");
@@ -74,12 +73,8 @@ public class InternalTransportationController {
                 patientRoom.getText().length() > 0;
     }
 
-    public void handleBack(MouseEvent mouseEvent) throws IOException {
-        SceneContext.getSceneContext().loadDefault();
-    }
-
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {
-        if(isFilledOut()) // form is complete
+        if(formFilled()) // form is complete
         {
             String uuid = UUID.randomUUID().toString();
             String type = "Internal Transport";
@@ -90,18 +85,7 @@ public class InternalTransportationController {
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
             // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
-            submittedStage.showAndWait();
+            openSuccessWindow();
         } else { //form not complete
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner((Stage) ( (Button) e.getSource()).getScene().getWindow());  // Show alert
@@ -121,13 +105,4 @@ public class InternalTransportationController {
         doctorCheckBox.setSelected(false);
     }
 
-    /**
-     * Handles returning to the service menu from the cancel button
-     * Requires a different argument than the image view, thus different method
-     * @param actionEvent The node that calls the method
-     * @author Leo Morris
-     */
-    public void handleBack2(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
 }

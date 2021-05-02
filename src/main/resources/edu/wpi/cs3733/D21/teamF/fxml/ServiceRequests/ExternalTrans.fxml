@@ -18,7 +18,7 @@
          <children>
             <HBox fx:id="header" prefHeight="126.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                  <ImageView fx:id="image" fitWidth="100.0" onMouseClicked="#goHome" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="image" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
@@ -84,8 +84,8 @@
                      </VBox.margin></JFXTextField>
                   <HBox prefHeight="54.0" prefWidth="961.0">
                      <children>
-                        <JFXButton fx:id="submit" buttonType="RAISED" onAction="#submitpushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
-                        <JFXButton fx:id="Cancel" buttonType="RAISED" onAction="#cancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
+                        <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>

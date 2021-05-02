@@ -20,7 +20,7 @@
    <children>
       <HBox fx:id="header" prefHeight="153.0" prefWidth="960.0" stylesheets="@../../../../../../../stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" onMouseClicked="#handleHome" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
@@ -159,7 +159,7 @@
                   <Font name="Montserrat Regular" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="submit" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#handleSubmit" prefHeight="40.0" prefWidth="110.0" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
+            <JFXButton fx:id="submitButton" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#handleSubmit" prefHeight="40.0" prefWidth="110.0" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
                <HBox.margin>
                   <Insets left="50.0" />
                </HBox.margin>

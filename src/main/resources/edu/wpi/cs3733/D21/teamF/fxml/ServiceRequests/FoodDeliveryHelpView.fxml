@@ -27,7 +27,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="helpXButton" mnemonicParsing="false" onAction="#handleButtonPushed" text="X" GridPane.halignment="LEFT">
+            <Button fx:id="helpXButton" mnemonicParsing="false" onAction="#handleHelpX" text="X" GridPane.halignment="LEFT">
                <GridPane.margin>
                   <Insets left="30.0" />
                </GridPane.margin>
