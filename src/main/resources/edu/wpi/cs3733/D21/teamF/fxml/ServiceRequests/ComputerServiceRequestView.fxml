@@ -23,12 +23,12 @@
          <children>
             <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                  <ImageView fitHeight="100.0" fitWidth="86.0" onMouseClicked="#handleGoHome" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="120.0" fitWidth="140.0" onMouseClicked="#handleGoHome" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Computer Service Request" wrappingWidth="736.0577087402344">
+                  <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Computer Service Request" wrappingWidth="746.0577087402344">
                      <font>
                         <Font name="Volkhov Regular" size="40.0" />
                      </font>
