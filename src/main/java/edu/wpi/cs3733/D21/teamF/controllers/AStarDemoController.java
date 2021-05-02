@@ -28,11 +28,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -73,6 +84,11 @@ public class AStarDemoController implements Initializable {
     @FXML
     private Label ETA;
 
+    @FXML
+    private ImageView navIcon;
+
+    @FXML
+    public JFXButton viewInstructionsBtn;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -182,7 +198,6 @@ public class AStarDemoController implements Initializable {
             if(currEntry == null)
                 return;
 
-            mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
 
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
@@ -197,6 +212,8 @@ public class AStarDemoController implements Initializable {
 
             //FIXME: Make these ones require that thing is visible
             whatsHereMenu.setOnAction(e -> {
+
+                mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
 
                 final JFXDialog dialog = new JFXDialog();
                 final JFXDialogLayout layout = new JFXDialogLayout();
@@ -239,7 +256,10 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         pathVertex.clear();
         Instruction.setVisible(false);
+        navIcon.setVisible(false);
         ETA.setVisible(false);
+
+        viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
 
         direction = null;
 
@@ -676,7 +696,7 @@ public class AStarDemoController implements Initializable {
             distance = calculateDistance(pathVertex, stopsList.get(stopsList.size() - 2), stopsList.get(stopsList.size() - 1));
             instructionsList.add(prevDirect + " and walk " + Math.round(distance) + " m");
         }
-        instructionsList.add("Arrive at destination!");
+        instructionsList.add("Arrived at destination!");
 
         // Calculate ETA
         for (Integer stop : stopsList) {
@@ -702,20 +722,22 @@ public class AStarDemoController implements Initializable {
     }
 
     private int searchSE(int startIndex){
+        NodeEntry preN;
         NodeEntry curN;
         Vertex preV = pathVertex.get(startIndex);
         Vertex curV;
         for(int i = startIndex + 1; i < pathVertex.size(); i++){
             curV = pathVertex.get(i);
             if(!curV.getID().substring(1, 5).equals(preV.getID().substring(1, 5)) || i == pathVertex.size() - 1){
+                preN = findNodeEntry(preV.getID()); // get previous node to check stair/elevator type
                 curN = findNodeEntry(curV.getID());
+
+
                 if (curN == null) return -1;
-                String type = curN.getNodeType();
-                if (type.equals("STAI"))
-                    type = "Stair";
-                else
-                    type = "Elevator";
-                instructionsList.add("Take " + type + " to Floor " + preV.getFloor());
+                String type = preN.getNodeType();
+                if (type.equals("STAI")) {type = "stairs";}
+                else {type = "elevator";}
+                instructionsList.add("Take the " + type + " to floor " + preV.getFloor());
                 if(i == pathVertex.size() - 1)
                     return pathVertex.size() - 1;
                 else
@@ -866,6 +888,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(false);
         End.setDisable(false);
         Instruction.setVisible(true);
+        navIcon.setVisible(true);
         ETA.setVisible(true);
 
         currentStep.set(0);
@@ -888,6 +911,7 @@ public class AStarDemoController implements Initializable {
 
         currentDirection = "UP";
         drawDirection();
+        setNavIcon();
     }
 
     /**
@@ -913,6 +937,7 @@ public class AStarDemoController implements Initializable {
 
         changeDirectionRevert(instructionsList.get(currentStep.get()));
         drawDirection();
+        setNavIcon();
     }
 
     /**
@@ -937,6 +962,7 @@ public class AStarDemoController implements Initializable {
         mapPanel.centerNode(userNodeDisplay);
 
         drawDirection();
+        setNavIcon();
 
         if(direction != null && currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1))
                 mapPanel.unDraw(this.direction.getId());
@@ -954,6 +980,7 @@ public class AStarDemoController implements Initializable {
         End.setDisable(true);
         Instruction.setVisible(false);
         ETA.setVisible(false);
+        navIcon.setVisible(false);
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
 
@@ -986,7 +1013,7 @@ public class AStarDemoController implements Initializable {
      * @author Leo Morris
      */
     public void handleGoBack() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 
     public void handleHoverOn(MouseEvent mouseEvent) {
@@ -997,5 +1024,151 @@ public class AStarDemoController implements Initializable {
     public void handleHoverOff(MouseEvent mouseEvent) {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
         btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
+
+    /**
+     * Checks the current instruction and applies the corresponding icon to the navigation bar
+     * @author Leo Morris
+     */
+    public void setNavIcon() {
+        String curInstruction = instructionsList.get(currentStep.get()).toLowerCase();
+        Image image = null;
+        if (curInstruction.contains("elevator")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
+        }
+        else if (curInstruction.contains("right")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/turnRightYellow.png"));
+        }
+        else if (curInstruction.contains("left")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/turnLeftYellow.png"));
+        }
+        else if (curInstruction.contains("forward")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goForwardYellow.png"));
+        }
+        else if (curInstruction.contains("around")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/uTurnYellow.png"));
+        }
+        else if(curInstruction.contains("stair")){
+            int nextFloor = Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
+            int currentFloor = Integer.parseInt(pathVertex.get(currentStep.get()-1).getFloor());
+            if(nextFloor > currentFloor){
+                image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
+            } else {
+                image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
+            }
+        }
+        else if (curInstruction.contains("arrived")){
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/stopYellow.png"));
+        }
+        navIcon.setImage(image);
+    }
+
+    /**
+     * On clicked, displays the whole list of instructions
+     * @author Alex Friedman (ahf)
+     */
+    public void handleViewInstructions() {
+        final JFXDialog dialog = new JFXDialog();
+        final JFXDialogLayout layout = new JFXDialogLayout();
+
+        //TODO: Italics for previously finished instructions?
+        //TODO: better align ETA text.
+        layout.setHeading(new Text("Directions from: " + startComboBox.getValue() + " to " +  endComboBox.getValue()));
+
+        String directions = "";
+        for(int i = 0; i < stopsList.size(); i++)
+        {
+            final String instruction = instructionsList.get(i);
+            final String eta = etaList.get(i);
+
+            if(i < stopsList.size() - 1)
+                directions += instruction + "\t\t(" + eta + ")\n";
+            else
+                directions += instruction;
+        }
+
+        //FIXME: DO BREAKS W/ CSS
+        layout.setBody(new Text(directions));
+
+        final JFXButton closeBtn = new JFXButton("Close");
+        closeBtn.setOnAction(a -> dialog.close());
+
+        final JFXButton printBtn = new JFXButton("Print");
+        printBtn.setOnAction(a -> {
+            try {
+                printInstructions();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            dialog.close();});
+
+
+        layout.setActions(printBtn, closeBtn);
+
+        dialog.setContent(layout);
+        mapPanel.showDialog(dialog);
+    }
+
+
+    /**
+     * Prints the current instructions as a PDF file.
+     * @author Alex Friedman (ahf)
+     * @since 05-02-2021 - branch: ahf-fullDirections
+     */
+    private void printInstructions() throws IOException {
+
+        final File file = new File(System.currentTimeMillis() + ".pdf");
+
+        //Create the document
+        final PDDocument pdfDocument = new PDDocument();
+
+        //Create the first page of the document.
+        final PDPage page = new PDPage();
+        pdfDocument.addPage(page);
+
+        //Create the ContentStream so that we can add data to the document
+        final PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page);
+
+        //Begin the text
+
+        contentStream.beginText();
+        contentStream.setLeading(14.5f);
+        contentStream.newLineAtOffset(25, 725);
+        contentStream.setFont(PDType1Font.HELVETICA, 36);
+
+        contentStream.showText("Brigham and Women's Hospital");
+        contentStream.newLine();
+        contentStream.endText();
+
+        //Display instructions
+
+
+        for(int i = 0; i < stopsList.size(); i++)
+        {
+            contentStream.beginText();
+            contentStream.setLeading(14.5f);
+            contentStream.setFont(PDType1Font.HELVETICA, 16);
+            contentStream.newLineAtOffset(25, 675 - ((25 * i)));
+          //  contentStream.newLine();
+            final String instruction = instructionsList.get(i);
+            final String eta = etaList.get(i);
+
+            if(i < stopsList.size() - 1)
+                contentStream.showText(instruction + "     (" + eta + ")");
+            else
+                contentStream.showText(instruction);
+            contentStream.endText();
+        }
+
+        contentStream.close();
+
+
+
+
+        pdfDocument.save(file);
+        pdfDocument.close();
+
+        final Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
     }
 }
