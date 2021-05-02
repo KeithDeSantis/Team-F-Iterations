@@ -10,7 +10,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.aboutPageController">
    <children>
       <VBox prefHeight="540.0" prefWidth="960.0">
@@ -24,7 +23,7 @@
                   </ImageView>
                </children>
             </HBox>
-            <JFXButton fx:id="back" prefHeight="23.0" prefWidth="70.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
+            <JFXButton fx:id="back" onAction="#goBack" prefHeight="23.0" prefWidth="70.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
             <VBox prefHeight="111.0" prefWidth="960.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="WPI computor Science department    CS3733-D21 Software Enginearing     Prof.Wilson Wong        " wrappingWidth="946.263671875">
