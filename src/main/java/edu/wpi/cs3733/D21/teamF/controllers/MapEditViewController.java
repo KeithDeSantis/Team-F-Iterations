@@ -367,7 +367,7 @@ public class MapEditViewController {
             for(NodeEntry n : nodeEntryObservableList) {
                 final int X = Integer.parseInt(n.getXCoordinate());
                 final int Y = Integer.parseInt(n.getYCoordinate());
-                if (X0 <= X && X <= X1 && Y0 <= Y && Y <= Y1)
+                if (X0 <= X && X <= X1 && Y0 <= Y && Y <= Y1 && mapPanel.getNode(n.getNodeID()).shouldDisplay().get() && mapPanel.getFloor().get().equals(n.getFloor()))//mapPanel.getFloor().get().equals(n.getFloor()))
                     selectedNodes.add(n);
             }
         });
