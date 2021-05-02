@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.aboutPageController">
+   <children>
+      <VBox prefHeight="540.0" prefWidth="960.0">
+         <children>
+            <HBox fx:id="Header" prefHeight="134.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
+               <children>
+                  <ImageView fitHeight="121.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <JFXButton fx:id="back" prefHeight="23.0" prefWidth="70.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
+            <VBox prefHeight="111.0" prefWidth="960.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="WPI computor Science department    CS3733-D21 Software Enginearing     Prof.Wilson Wong        " wrappingWidth="946.263671875">
+                     <font>
+                        <Font name="Montserrat Regular" size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team Coach: Zach Wong">
+                     <font>
+                        <Font name="Montserrat Regular" size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" " />
+               </children>
+            </VBox>
+            <HBox prefHeight="252.0" prefWidth="600.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alex Feidman: Lead enginear">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ben Staw: assitant Lead Engear">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tony Voulo: assitsant LeadEngear">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Karen Hou: Product Engear">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Jay Yen: Documentation Spaclist">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Jason Dominguez: Product Manager">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Keith DeSantis: UI enginear">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leo Morris: UI enginear">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ZheCheng Song: Algrothm Enginear">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Johnvanni Perez: Database Enginear">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Declain Murphy: Database Enginear">
+                           <font>
+                              <Font name="Montserrat Regular" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" />
+                  <VBox prefHeight="242.0" prefWidth="303.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thank you to the Bringhjams Women's hosptial for giving all the informtion, related to the project such as the maps and other resourse. From which we would like to thank Andrew Shin for there time to all use to do a project such as this and also for there input into what would be practical for a project such as this ." wrappingWidth="645.5">
+                           <font>
+                              <Font name="Montserrat Regular" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
