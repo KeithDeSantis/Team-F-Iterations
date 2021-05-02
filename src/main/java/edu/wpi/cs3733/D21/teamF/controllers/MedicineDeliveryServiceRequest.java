@@ -141,6 +141,19 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
 
     @Override
     public void handleClear() {
-        //TODO: handleClear
+        clientName.setText("");
+        clientRoom.setText("");
+        medicineInformation.setText("");
+        cardholder.setText("");
+        cardNumber.setText("");
+        cvc.setText("");
+        expirationDate.setText("");
+        clientRoom.setStyle("-fx-background-color: transparent");
+        clientName.setStyle("-fx-background-color: transparent");
+        medicineInformation.setStyle("-fx-background-color: transparent");
+        cardholder.setStyle("-fx-background-color: transparent");
+        cvc.setStyle("-fx-background-color: transparent");
+        cardNumber.setStyle("-fx-background-color: transparent");
+        expirationDate.setStyle("-fx-background-color: transparent");
     }
 }

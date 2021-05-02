@@ -49,10 +49,6 @@ public class SanitationRequestController extends ServiceRequests {
             openSuccessWindow();
         }
     }
-    public void handleClear(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/SanitationRequest.fxml");
-
-    }
     public void handleCancel(ActionEvent actionEvent) throws IOException{
 //        if(/*user is admin*/) {
 //            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
@@ -70,7 +66,11 @@ public class SanitationRequestController extends ServiceRequests {
 
     @Override
     public void handleClear(){
-        //TODO: handleClear
+        description.setText("");
+        clientName.setText("");
+        loc.setValue(null);
+        description.setStyle("-fx-background-color: transparent");
+        clientName.setStyle("-fx-background-color: transparent");
     }
 
 
