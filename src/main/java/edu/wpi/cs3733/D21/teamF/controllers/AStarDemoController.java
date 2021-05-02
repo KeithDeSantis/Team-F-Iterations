@@ -722,9 +722,9 @@ public class AStarDemoController implements Initializable {
 
                 if (curN == null) return -1;
                 String type = preN.getNodeType();
-                if (type.equals("STAI")) {type = "Stairs";}
-                else {type = "Elevator";}
-                instructionsList.add("Take " + type + " to Floor " + preV.getFloor());
+                if (type.equals("STAI")) {type = "stairs";}
+                else {type = "elevator";}
+                instructionsList.add("Take the " + type + " to floor " + preV.getFloor());
                 if(i == pathVertex.size() - 1)
                     return pathVertex.size() - 1;
                 else
@@ -1043,6 +1043,9 @@ public class AStarDemoController implements Initializable {
             } else {
                 image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
             }
+        }
+        else if (curInstruction.contains("arrived")){
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/stopYellow.png"));
         }
         navIcon.setImage(image);
     }
