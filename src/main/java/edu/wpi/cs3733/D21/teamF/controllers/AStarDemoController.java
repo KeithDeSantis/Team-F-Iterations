@@ -103,6 +103,8 @@ public class AStarDemoController implements Initializable {
     private final ObservableList<String> etaList = FXCollections.observableArrayList();
     private final IntegerProperty currentStep = new SimpleIntegerProperty(0);
 
+    // List of intermediate vertices for multi-stop pathfinding - LM
+    private ArrayList<Vertex> vertices = new ArrayList<>();
 
     private DrawableNode direction;
 
@@ -162,11 +164,12 @@ public class AStarDemoController implements Initializable {
 
         //FIXME: CHANGE TEXT TO BE MORE ACCESSIBLE
         final MenuItem startPathMenu = new MenuItem("Path from Here");
+        final MenuItem addStopMenu = new MenuItem("Add stop here");
         final MenuItem endPathMenu = new MenuItem("Path end Here");
 
         final MenuItem whatsHereMenu = new MenuItem("What's here?");
 
-        contextMenu.getItems().addAll(startPathMenu, endPathMenu, new SeparatorMenuItem(), whatsHereMenu);
+        contextMenu.getItems().addAll(startPathMenu,addStopMenu, endPathMenu, new SeparatorMenuItem(), whatsHereMenu);
 
         mapPanel.getMap().setOnContextMenuRequested(event -> {
             if(isCurrentlyNavigating.get()){
@@ -184,6 +187,11 @@ public class AStarDemoController implements Initializable {
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
             startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(currEntry.getNodeID())));
+
+            addStopMenu.setOnAction(e -> {
+                vertices.add(graph.getVertex(currEntry.getNodeID()));
+                checkInput();
+            });
 
             endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(currEntry.getNodeID())));
 
@@ -263,6 +271,7 @@ public class AStarDemoController implements Initializable {
         for(NodeEntry e : allNodeEntries)
           getDrawableNode(e.getNodeID());
     }
+
     private void loadFavorites() {
         this.favorites = new DoublyLinkedHashSet<>();
         //TODO: load recentlyUsed
@@ -494,7 +503,11 @@ public class AStarDemoController implements Initializable {
 
         if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
         {
-            final Path path = this.graph.getPath(startVertex, endVertex);
+            vertices.add(0,startVertex);
+            vertices.add(endVertex);
+            final Path path = this.graph.getUnorderedPath(vertices);
+
+
             pathVertex.clear();
             if(path != null)
             {
