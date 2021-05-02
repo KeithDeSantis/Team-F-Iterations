@@ -1,8 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
-import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.AStarImpl;
-import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.BFSImpl;
-import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.DFSImpl;
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.*;
 
 import java.util.*;
 
@@ -147,6 +145,14 @@ public class Graph {
             case "bfs":
             case "breadth-first-search":
                 this.pathfindingAlgorithm = new BFSImpl();
+                return true;
+            case "bestfirst":
+            case "best-first-search":
+                this.pathfindingAlgorithm = new BestFSImpl();
+                return true;
+            case "dijkstra":
+            case "dijkstra's search":
+                this.pathfindingAlgorithm = new DijkstraImpl();
                 return true;
         }
         return false;

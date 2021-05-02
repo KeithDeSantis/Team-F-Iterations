@@ -495,4 +495,72 @@ public class GraphTest {
             assertEquals(iterator.next().getID(), v.getID());
         }
     }
+
+    @Test
+    public void testBestFirstWithAStar() {
+        //tests every possibility b/c why not? we have a small dataset
+
+        for (Vertex start : vertices.values()) {
+            for (Vertex end : vertices.values()) {
+                if (! start.equals(end)) {
+
+                    graph.setPathfindingAlgorithm("AStar");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path dfs = graph.getPath(start, end);
+
+                    graph.setPathfindingAlgorithm("bestfirst");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path bfs = graph.getPath(start, end);//.asList();
+
+                    if(dfs != null && bfs != null) {
+
+
+                        Iterator<Vertex> dfsListIterator = dfs.iterator(),
+                                aStarListIterator = bfs.iterator();
+                        while(dfsListIterator.hasNext() && aStarListIterator.hasNext()) {
+                            Vertex dfsElement = dfsListIterator.next(), bfsElement = aStarListIterator.next();
+                            assertTrue(dfsElement.equals(bfsElement));
+                        }
+                        assertFalse(dfsListIterator.hasNext() || aStarListIterator.hasNext());
+                    } else {
+                        assertTrue(dfs == null && bfs == null);
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testDijkstraWithAStar() {
+        //tests every possibility b/c why not? we have a small dataset
+
+        for (Vertex start : vertices.values()) {
+            for (Vertex end : vertices.values()) {
+                if (! start.equals(end)) {
+
+                    graph.setPathfindingAlgorithm("AStar");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path dfs = graph.getPath(start, end);
+
+                    graph.setPathfindingAlgorithm("Dijkstra");
+                    assertDoesNotThrow(() -> graph.getPath(start, end));
+                    final Path bfs = graph.getPath(start, end);//.asList();
+
+                    if(dfs != null && bfs != null) {
+
+
+                        Iterator<Vertex> dfsListIterator = dfs.iterator(),
+                                aStarListIterator = bfs.iterator();
+                        while(dfsListIterator.hasNext() && aStarListIterator.hasNext()) {
+                            Vertex dfsElement = dfsListIterator.next(), bfsElement = aStarListIterator.next();
+                            assertTrue(dfsElement.equals(bfsElement));
+                        }
+                        assertFalse(dfsListIterator.hasNext() || aStarListIterator.hasNext());
+                    } else {
+                        assertTrue(dfs == null && bfs == null);
+                    }
+                }
+            }
+        }
+    }
 }
