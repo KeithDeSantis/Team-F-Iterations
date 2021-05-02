@@ -960,6 +960,7 @@ public class MapEditViewController {
         mapPanel.clearMap();
         nodeEntryObservableList.clear();
         edgeEntryObservableList.clear();
+        searchField.setText("");
 
         List<String[]> nodeData;
         List<String[]> edgeData;
@@ -994,9 +995,8 @@ public class MapEditViewController {
                 drawEdgeNodeOnFloor(); //FIXME do better with queries
             }
         }
-        searchField.setText("");
 
-    } //FIXME sometimes error 'L1NODES' already exists in Schema 'APP' happens and the map isnt drawn
+    }
 
     private DrawableNode getEditableNode(NodeEntry nodeEntry) {
         final DrawableNode drawableNode = nodeEntry.getDrawable();
