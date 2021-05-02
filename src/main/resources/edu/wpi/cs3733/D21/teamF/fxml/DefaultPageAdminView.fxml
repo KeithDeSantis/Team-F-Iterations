@@ -43,42 +43,42 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <JFXButton fx:id="editMap" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Edit Map" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <JFXButton fx:id="editMap" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="260.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Edit Map" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="manageServices" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Manage Services" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <JFXButton fx:id="manageServices" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="260.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Manage Services" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="navigation" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Navigation" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <JFXButton fx:id="navigation" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="260.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Navigation" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="manageAccount" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Account Management" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <JFXButton fx:id="manageAccount" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="260.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Account Management" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="serviceRequest" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Request Service" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <JFXButton fx:id="serviceRequest" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="260.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Request Service" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="quit" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Close" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <JFXButton fx:id="quit" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="260.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Close" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="signOut" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Sign Out" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <JFXButton fx:id="signOut" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="260.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Sign Out" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="pathfindingSettingButton" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="40.0" prefWidth="260.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Pathfinding Settings" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <JFXButton fx:id="pathfindingSettingButton" alignment="CENTER" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="40.0" prefWidth="260.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Pathfinding Settings" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>

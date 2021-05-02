@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,22 +13,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.commons.text.StringEscapeUtils;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.text.Normalizer;
-import java.util.*;
-
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.SQLException;
+import java.util.*;
 
 
 public class LanguageInterpretationServiceRequestController implements Initializable {
@@ -45,27 +42,14 @@ public class LanguageInterpretationServiceRequestController implements Initializ
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
     /**
      * closes the Language Interpretation Request form and returns to home
      * @param actionEvent
      * @throws IOException
      * @author Jay
      */
-    public void handleClose(ActionEvent actionEvent) throws IOException {
-        Stage currentStage = (Stage)close.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
-        Scene homeScene = new Scene(root);
-        currentStage.setScene(homeScene);
-        currentStage.show();
+    public void handleCancel(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
     /**
@@ -84,7 +68,6 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
         submittedStage.showAndWait();
     }
-
     /**
      * Calls translate function when translate button is clicked
      * @param actionEvent
@@ -256,6 +239,8 @@ public class LanguageInterpretationServiceRequestController implements Initializ
        // language.getItems().add("Russian");
         language.getItems().add("Spanish");
        // language.getItems().add("Vietnamese");
+
+        nameLabel.setText(StringEscapeUtils.unescapeJava("\u0627\u0633\u0645"));
     }
     
     private boolean formFilledOut(){
@@ -334,4 +319,5 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         in.close();
         return response.toString();
     }
+
 }

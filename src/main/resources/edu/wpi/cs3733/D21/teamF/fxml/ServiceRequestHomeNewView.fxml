@@ -65,7 +65,7 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton fx:id="faciliteisMaitence" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="123.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                  <JFXButton fx:id="facilitiesMaintenance" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="123.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -77,12 +77,12 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton fx:id="computorServices" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="122.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                  <JFXButton fx:id="computerServices" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="122.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
                      <graphic>
-                        <ImageView fx:id="computorImage" fitHeight="106.0" fitWidth="181.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="computerImage" fitHeight="106.0" fitWidth="181.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../../../imagesAndLogos/ComputerWhiteText.png" />
                            </image>
@@ -137,7 +137,7 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton fx:id="externalPaitintTrans" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="121.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                  <JFXButton fx:id="externalPatientTrans" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="121.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -149,7 +149,7 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton fx:id="launguageInterpretation" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="121.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                  <JFXButton fx:id="languageInterpretation" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="121.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                      <font>
                         <Font size="15.0" />
                      </font>

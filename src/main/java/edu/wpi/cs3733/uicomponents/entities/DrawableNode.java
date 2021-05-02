@@ -8,25 +8,36 @@ import javafx.scene.shape.Circle;
 
 public class DrawableNode extends Circle implements IMapDrawable
 {
-    private final SimpleIntegerProperty xCoordinate;
-    private final SimpleIntegerProperty yCoordinate;
-    private StringProperty floor;
+    private final IntegerProperty xCoordinate;
+    private final IntegerProperty yCoordinate;
+    private final StringProperty floor;
+    private final StringProperty building;
+    private final StringProperty nodeType;
+    private final StringProperty longName;
+    private final StringProperty shortName;
 
-    private SimpleBooleanProperty shouldDisplay;
+    private final SimpleBooleanProperty shouldDisplay;
+
+    private DoubleProperty localRadius;
 
 
-    public DrawableNode(int xCoordinate, int yCoordinate, String ID, String floor)
+    public DrawableNode(int xCoordinate, int yCoordinate, String ID, String floor, String building, String nodeType, String longName, String shortName)
     {
         this.xCoordinate = new SimpleIntegerProperty(xCoordinate);
         this.yCoordinate = new SimpleIntegerProperty(yCoordinate);
 
         this.floor = new SimpleStringProperty(floor);
+        this.building = new SimpleStringProperty(building);
+        this.nodeType = new SimpleStringProperty(nodeType);
+        this.longName = new SimpleStringProperty(longName);
+        this.shortName = new SimpleStringProperty(shortName);
 
         this.shouldDisplay = new SimpleBooleanProperty(true); //FIXME: DO BETTER!
 
         this.setId(ID);
 
         this.setRadius(UIConstants.NODE_RADIUS);
+        this.localRadius = new SimpleDoubleProperty(this.getRadius());
 
         this.setFill(UIConstants.NODE_COLOR);
     }
@@ -35,6 +46,8 @@ public class DrawableNode extends Circle implements IMapDrawable
     public void bindLocation(DoubleProperty zoomLevel) {
         this.centerXProperty().bind(xCoordinate.divide(zoomLevel));
         this.centerYProperty().bind(yCoordinate.divide(zoomLevel));
+
+        //this.radiusProperty().bind(localRadius.divide(zoomLevel));
     }
 
     @Override
@@ -47,11 +60,37 @@ public class DrawableNode extends Circle implements IMapDrawable
         return this.floor;
     }
 
-    public SimpleIntegerProperty xCoordinateProperty() {
+    public IntegerProperty xCoordinateProperty() {
         return xCoordinate;
     }
 
-    public SimpleIntegerProperty yCoordinateProperty() {
+    public IntegerProperty yCoordinateProperty() {
         return yCoordinate;
     }
+
+    public void setShouldDisplay(boolean shouldDisplay) {
+        this.shouldDisplay.set(shouldDisplay);
+    }
+
+    public void setFloor(String floor) {
+        this.floor.set(floor);
+    }
+
+
+    public String getBuilding() {
+        return building.get();
+    }
+
+    public String getNodeType() {
+        return nodeType.get();
+    }
+
+    public String getLongName() {
+        return longName.get();
+    }
+
+    public String getShortName() {
+        return shortName.get();
+    }
+
 }

@@ -6,12 +6,6 @@ import javafx.beans.property.StringProperty;
 
 public interface IMapDrawable {
 
-    /*
-    private IMouseClickedBehavior mouseClickedBehavior;
-    private IMouseEnteredBehavior mouseEnteredBehavior;
-    private IMouseExitBehavior mouseExitBehavior;
-    */
-
     void bindLocation(DoubleProperty zoomLevel);
 
     BooleanProperty shouldDisplay();
