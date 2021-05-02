@@ -49,7 +49,7 @@
                   <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label fx:id="nameLabel" lineSpacing="8.0" prefHeight="29.0" prefWidth="97.0" text="Name:">
+                  <Label fx:id="nameLabel" lineSpacing="8.0" prefHeight="29.0" prefWidth="97.0" text="Name">
                      <font>
                         <Font name="Montserrat Regular" size="24.0" />
                      </font>
@@ -68,7 +68,7 @@
                         <Insets left="25.0" right="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
-                  <Label fx:id="dtLabel" text="Appointment Date and Time:" GridPane.rowIndex="2">
+                  <Label fx:id="dtLabel" text="Appointment Date and Time" GridPane.rowIndex="2">
                      <font>
                         <Font name="Montserrat Regular" size="24.0" />
                      </font>
@@ -95,7 +95,7 @@
                         <Insets left="25.0" right="25.0" />
                      </GridPane.margin>
                   </HBox>
-                  <Label fx:id="appointmentLabel" text="Type of Appointment:" GridPane.columnIndex="2">
+                  <Label fx:id="appointmentLabel" text="Type of Appointment" GridPane.columnIndex="2">
                      <font>
                         <Font name="Montserrat Regular" size="24.0" />
                      </font>
@@ -114,7 +114,7 @@
                         <Insets left="25.0" />
                      </GridPane.margin>
                   </JFXComboBox>
-                  <Label fx:id="languageLabel" text="Language:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                  <Label fx:id="languageLabel" text="Language" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <font>
                         <Font name="Montserrat Regular" size="24.0" />
                      </font>
