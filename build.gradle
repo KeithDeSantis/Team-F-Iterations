@@ -15,6 +15,7 @@ plugins {
 }
 mainClassName = 'edu.wpi.cs3733.D21.teamF.Main'
 
+compileJava.options.encoding = 'UTF-8'
 
 //These are the repositories where Gradle looks for dependencies.
 // You likely won't have to change these unless you add a cool, new dependency that isn't listed on Maven
