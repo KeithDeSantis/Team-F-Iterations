@@ -594,31 +594,37 @@ public class MapEditViewController {
                         ((DrawableNode) node).setShouldDisplay(((DrawableNode) node).getShortName().contains(searchField.getText()));
                         break;
                     case "Edge ID":
+                        boolean edgeExists = false;
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getEdgeID().contains(searchField.getText())) {
+                                edgeExists = true;
                                 ((DrawableNode) node).setShouldDisplay(edgeEntry.getEdgeID().contains(node.getId()));
                                 if(edgeEntry.getEdgeID().contains(node.getId())) break;
                             }
                         } // what about when there are no edges that pass?? - KD
-                        ((DrawableNode) node).setShouldDisplay(false);
+                        if(!edgeExists) ((DrawableNode) node).setShouldDisplay(false);
                         break;
                     case "Start Node":
+                        boolean edgeExists2 = false;
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getStartNode().contains(searchField.getText())) {
+                                edgeExists2 = true;
                                 ((DrawableNode) node).setShouldDisplay(edgeEntry.getStartNode().equals(node.getId()));
                                 if(edgeEntry.getStartNode().equals(node.getId())) break;
                             }
                         }
-                        ((DrawableNode) node).setShouldDisplay(false);
+                        if(!edgeExists2) ((DrawableNode) node).setShouldDisplay(false);
                         break;
                     case "End Node":
+                        boolean edgeExists3 = false;
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
+                            edgeExists3 = true;
                             if(edgeEntry.getEndNode().contains(searchField.getText())) {
                                 ((DrawableNode) node).setShouldDisplay(edgeEntry.getEndNode().equals(node.getId()));
                                 if(edgeEntry.getEndNode().equals(node.getId())) break;
                             }
                         }
-                        ((DrawableNode) node).setShouldDisplay(false);
+                        if(!edgeExists3) ((DrawableNode) node).setShouldDisplay(false);
                         break;
                     default:
                         ((DrawableNode) node).setShouldDisplay(true);
