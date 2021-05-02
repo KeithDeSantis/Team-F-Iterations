@@ -174,7 +174,13 @@ public class MaintenenceRequestController extends ServiceRequests {
 
     @Override
     public void handleClear(){
-        //TODO: handleClear
+        locationField.setValue(null);
+        typeComboBox.setValue(null);
+        descriptionField.setText("");
+        urgencyComboBox.setValue(null);
+        dateOfIncident.setValue(null);
+        assignment.setValue(null);
+        descriptionField.setStyle("-fx-background-color: transparent");
     }
 
 

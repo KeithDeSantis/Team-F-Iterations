@@ -98,6 +98,23 @@ public class LaundryRequestController extends ServiceRequests {
 
     @Override
     public void handleClear() {
-        //TODO: handleClear
+        both.setSelected(false);
+        lights.setSelected(false);
+        darks.setSelected(false);
+        hot.setSelected(false);
+        cold.setSelected(false);
+        folded.setSelected(false);
+        employeeID.setText("");
+        clientName.setText("");
+        additionalInstructions.setText("");
+        both.setStyle("-fx-text-fill: #000000");
+        lights.setStyle("-fx-text-fill: #000000");
+        darks.setStyle("-fx-text-fill: #000000");
+        hot.setStyle("-fx-text-fill: #000000");
+        cold.setStyle("-fx-text-fill: #000000");
+        folded.setStyle("-fx-text-fill: #000000");
+        employeeID.setStyle("-fx-background-color: transparent");
+        clientName.setStyle("-fx-background-color: transparent");
+        additionalInstructions.setStyle("-fx-background-color: transparent");
     }
 }

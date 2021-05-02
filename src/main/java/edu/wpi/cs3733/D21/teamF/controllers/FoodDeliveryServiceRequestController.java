@@ -197,6 +197,26 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     @Override
     public void handleClear() {
-        //TODO: handleClear for service req
+        deliveryLocationField.setValue(null);
+        deliveryTimeField.setValue(null);
+        allergyField.setText("");
+        specialInstructionsField.setText("");
+        rButtonDrink1.setSelected(false);
+        rButtonDrink2.setSelected(false);
+        rButtonDrink3.setSelected(false);
+        rButtonDrink4.setSelected(false);
+        rButtonFood1.setSelected(false);
+        rButtonFood2.setSelected(false);
+        rButtonFood3.setSelected(false);
+        rButtonFood4.setSelected(false);
+        cbSide1.setSelected(false);
+        cbSide2.setSelected(false);
+        cbSide3.setSelected(false);
+        cbSide4.setSelected(false);
+        allergyField.setStyle("-fx-background-color: transparent");
+        specialInstructionsField.setStyle("-fx-background-color: transparent");
+        rb
+
+
     }
 }
