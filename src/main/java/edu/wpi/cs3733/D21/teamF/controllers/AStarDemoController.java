@@ -28,6 +28,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -72,6 +73,9 @@ public class AStarDemoController implements Initializable {
 
     @FXML
     private Label ETA;
+
+    @FXML
+    private ImageView navIcon;
 
 
     //FIXME: DO BETTER
@@ -231,6 +235,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(true);
         pathVertex.clear();
         Instruction.setVisible(false);
+        navIcon.setVisible(false);
         ETA.setVisible(false);
 
         direction = null;
@@ -663,7 +668,7 @@ public class AStarDemoController implements Initializable {
             distance = calculateDistance(pathVertex, stopsList.get(stopsList.size() - 2), stopsList.get(stopsList.size() - 1));
             instructionsList.add(prevDirect + " and walk " + Math.round(distance) + " m");
         }
-        instructionsList.add("Arrive at destination!");
+        instructionsList.add("Arrived at destination!");
 
         // Calculate ETA
         for (Integer stop : stopsList) {
@@ -689,19 +694,21 @@ public class AStarDemoController implements Initializable {
     }
 
     private int searchSE(int startIndex){
+        NodeEntry preN;
         NodeEntry curN;
         Vertex preV = pathVertex.get(startIndex);
         Vertex curV;
         for(int i = startIndex + 1; i < pathVertex.size(); i++){
             curV = pathVertex.get(i);
             if(!curV.getID().substring(1, 5).equals(preV.getID().substring(1, 5)) || i == pathVertex.size() - 1){
+                preN = findNodeEntry(preV.getID()); // get previous node to check stair/elevator type
                 curN = findNodeEntry(curV.getID());
+
+
                 if (curN == null) return -1;
-                String type = curN.getNodeType();
-                if (type.equals("STAI"))
-                    type = "Stair";
-                else
-                    type = "Elevator";
+                String type = preN.getNodeType();
+                if (type.equals("STAI")) {type = "Stairs";}
+                else {type = "Elevator";}
                 instructionsList.add("Take " + type + " to Floor " + preV.getFloor());
                 if(i == pathVertex.size() - 1)
                     return pathVertex.size() - 1;
@@ -853,6 +860,7 @@ public class AStarDemoController implements Initializable {
         Next.setDisable(false);
         End.setDisable(false);
         Instruction.setVisible(true);
+        navIcon.setVisible(true);
         ETA.setVisible(true);
 
         currentStep.set(0);
@@ -875,6 +883,7 @@ public class AStarDemoController implements Initializable {
 
         currentDirection = "UP";
         drawDirection();
+        setNavIcon();
     }
 
     /**
@@ -900,6 +909,7 @@ public class AStarDemoController implements Initializable {
 
         changeDirectionRevert(instructionsList.get(currentStep.get()));
         drawDirection();
+        setNavIcon();
     }
 
     /**
@@ -924,6 +934,7 @@ public class AStarDemoController implements Initializable {
         mapPanel.centerNode(userNodeDisplay);
 
         drawDirection();
+        setNavIcon();
 
         if(direction != null && currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1))
                 mapPanel.unDraw(this.direction.getId());
@@ -941,6 +952,7 @@ public class AStarDemoController implements Initializable {
         End.setDisable(true);
         Instruction.setVisible(false);
         ETA.setVisible(false);
+        navIcon.setVisible(false);
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
 
@@ -984,5 +996,39 @@ public class AStarDemoController implements Initializable {
     public void handleHoverOff(MouseEvent mouseEvent) {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
         btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    }
+
+    /**
+     * Checks the current instruction and applies the corresponding icon to the navigation bar
+     * @author Leo Morris
+     */
+    public void setNavIcon() {
+        String curInstruction = instructionsList.get(currentStep.get()).toLowerCase();
+        Image image = null;
+        if (curInstruction.contains("elevator")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
+        }
+        else if (curInstruction.contains("right")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/turnRightYellow.png"));
+        }
+        else if (curInstruction.contains("left")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/turnLeftYellow.png"));
+        }
+        else if (curInstruction.contains("forward")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goForwardYellow.png"));
+        }
+        else if (curInstruction.contains("around")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/uTurnYellow.png"));
+        }
+        else if(curInstruction.contains("stair")){
+            int nextFloor = Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
+            int currentFloor = Integer.parseInt(pathVertex.get(currentStep.get()-1).getFloor());
+            if(nextFloor > currentFloor){
+                image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
+            } else {
+                image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
+            }
+        }
+        navIcon.setImage(image);
     }
 }
