@@ -23,7 +23,7 @@ import java.util.UUID;
  * Controller for Floral Delivery Service View
  * @author keithdesantis
  */
-public class FloralDeliveryService {
+public class FloralDeliveryService extends ServiceRequests{
 
     @FXML private JFXRadioButton bouquetButton;
     @FXML private JFXRadioButton vaseButton;
@@ -66,29 +66,12 @@ public class FloralDeliveryService {
     }
 
     /**
-     * When back button is pressed
-     * @author KD
-     */
-    public void handleBack() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
-
-    /**
-     * Return to Home when it is decided where home is
-     * @param mouseEvent
-     * @author KD
-     */
-    public void handleHome(MouseEvent mouseEvent) throws IOException {
-        SceneContext.getSceneContext().loadDefault();
-    }
-
-    /**
      * Will eventually save the request to DB
      * @param actionEvent
      * @author KD
      */
     public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException {
-        if(isFilledOut()) {
+        if(formFilled()) {
             String type = "Flower Delivery";
             String uuid = UUID.randomUUID().toString();
             String additionalInfo = "Date: " + dateField.getValue() + "Deliver to: " + deliveryField.getText() +
@@ -107,10 +90,10 @@ public class FloralDeliveryService {
             submittedStage.setTitle("Submission Complete");
             submittedStage.initModality(Modality.APPLICATION_MODAL);
             submittedStage.showAndWait();
-        } else { successField.setText(""); }
+        }
     }
 
-    public boolean isFilledOut() {
+    public boolean formFilled() {
         boolean isFilled = true;
         if(!(bouquetButton.isSelected() || vaseButton.isSelected() || potButton.isSelected())) {
             isFilled = false;

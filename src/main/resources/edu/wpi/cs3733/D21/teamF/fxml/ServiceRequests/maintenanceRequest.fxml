@@ -23,7 +23,7 @@
          <children>
             <HBox fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                  <ImageView fx:id="goBack" fitHeight="118.0" fitWidth="100.0" onMouseClicked="#handleGoHome" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="goBack" fitHeight="118.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>

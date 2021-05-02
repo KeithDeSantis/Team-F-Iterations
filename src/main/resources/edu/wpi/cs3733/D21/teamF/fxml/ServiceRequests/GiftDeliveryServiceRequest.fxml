@@ -22,7 +22,7 @@
          <children>
               <HBox fx:id="header" prefHeight="113.0" prefWidth="614.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                   <children>
-                      <ImageView fitHeight="110.0" onMouseClicked="#handleBack" pickOnBounds="true" preserveRatio="true">
+                      <ImageView fitHeight="110.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                           <image>
                               <Image url="/imagesAndLogos/BandWLogo.png" />
                           </image>
@@ -61,7 +61,7 @@
                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         </rowConstraints>
                                         <children>
-                                            <JFXButton fx:id="cancel" mnemonicParsing="false" onAction="#handleClose" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.halignment="CENTER" />
+                                            <JFXButton fx:id="cancel" mnemonicParsing="false" onAction="#handleCancel" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.halignment="CENTER" />
                                             <JFXButton fx:id="submit" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                                         </children>
                                     </GridPane>

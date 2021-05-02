@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MaintenenceRequestController {
+public class MaintenenceRequestController extends ServiceRequests {
     @FXML private JFXButton submit;
     @FXML private JFXComboBox<String> locationField;
     @FXML private JFXComboBox<String> typeComboBox;
@@ -106,7 +106,7 @@ public class MaintenenceRequestController {
      * @author Leo Morris
      */
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {
-        if(isFilled()) {
+        if(formFilled()) {
             String name = urgencyComboBox.getValue() + ": ";
             if (typeComboBox.getValue().equals("Damage") || typeComboBox.getValue().equals("Safety Hazard") || typeComboBox.getValue().equals("Spill")) {
                 name += typeComboBox.getValue() + " at " + locationField.getValue();
@@ -145,15 +145,7 @@ public class MaintenenceRequestController {
         }
     }
 
-    public void handleGoHome(MouseEvent mouseEvent) throws IOException {
-        SceneContext.getSceneContext().loadDefault();
-    }
-
-    public void handleCancel(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
-
-    public boolean isFilled(){
+    public boolean formFilled(){
         boolean filled = true;
         if(typeComboBox.getValue() == null){
             filled = false;

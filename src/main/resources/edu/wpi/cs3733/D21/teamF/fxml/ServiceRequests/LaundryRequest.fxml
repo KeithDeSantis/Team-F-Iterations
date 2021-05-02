@@ -22,7 +22,7 @@
          <children>
             <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" onMouseClicked="#handleHome" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
@@ -195,8 +195,8 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <JFXButton fx:id="submit" alignment="TOP_LEFT" buttonType="RAISED" contentDisplay="TOP" mnemonicParsing="false" onAction="#submitReq" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="2" />
-                              <JFXButton fx:id="cancel" buttonType="RAISED" mnemonicParsing="false" onAction="#cancelReq" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.columnIndex="1" />
+                              <JFXButton fx:id="submit" alignment="TOP_LEFT" buttonType="RAISED" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="2" />
+                              <JFXButton fx:id="cancel" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.columnIndex="1" />
                               <JFXButton mnemonicParsing="false" text="Help" />
                               <JFXButton layoutX="10.0" layoutY="98.0" mnemonicParsing="false" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" />
                               <JFXButton fx:id="help" buttonType="RAISED" layoutX="10.0" layoutY="98.0" mnemonicParsing="false" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" />

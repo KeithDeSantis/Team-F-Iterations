@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-public class LanguageInterpretationServiceRequestController implements Initializable {
+public class LanguageInterpretationServiceRequestController extends ServiceRequests implements Initializable {
     @FXML private JFXButton close;
     @FXML private JFXTextField name;
     @FXML private JFXDatePicker date;
@@ -41,16 +41,6 @@ public class LanguageInterpretationServiceRequestController implements Initializ
     @FXML private Label dtLabel;
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
-
-    /**
-     * closes the Language Interpretation Request form and returns to home
-     * @param actionEvent
-     * @throws IOException
-     * @author Jay
-     */
-    public void handleCancel(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
 
     /**
      * Opens the help window
@@ -109,7 +99,7 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      * @author Jay Yen
      */
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
-        if(formFilledOut()) {
+        if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
                     " Name: " + name.getText() + " Appointment: " + (String) appointment.getValue() + " Language: " + language.getValue();
@@ -243,7 +233,7 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         nameLabel.setText(StringEscapeUtils.unescapeJava("\u0627\u0633\u0645"));
     }
     
-    private boolean formFilledOut(){
+    public boolean formFilled(){
         boolean isFilled = true;
         if(name.getText().trim().isEmpty()){
             name.setStyle("-fx-border-color: red");
