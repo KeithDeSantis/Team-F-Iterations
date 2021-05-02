@@ -33,7 +33,6 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
     @FXML private JFXButton cancelButton;
     @FXML private JFXButton helpButton;
     @FXML private Button helpXButton;
-    @FXML private JFXButton submitButton;
     @FXML private JFXComboBox<String> deliveryLocationField;
     @FXML private JFXTimePicker deliveryTimeField;
     @FXML private JFXTextField allergyField;
@@ -97,17 +96,7 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
             // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) rButtonFood1.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
     }
 

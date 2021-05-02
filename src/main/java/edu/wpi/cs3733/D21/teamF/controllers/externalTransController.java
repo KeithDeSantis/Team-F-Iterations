@@ -23,8 +23,6 @@ public class externalTransController extends ServiceRequests{
     @FXML private JFXTextField loc;
     @FXML private JFXTextField methodTrans;
     @FXML private JFXTextField special;
-    @FXML private JFXButton submit;
-    @FXML private JFXButton Cancel;
 
     @FXML
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
@@ -36,18 +34,7 @@ public class externalTransController extends ServiceRequests{
                     + "Special info:" + special.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
             // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
     }
 

@@ -126,7 +126,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <children>
-                        <JFXButton fx:id="submit" buttonType="RAISED" onAction="#handleSubmit" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="3">

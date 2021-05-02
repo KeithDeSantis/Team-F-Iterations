@@ -61,8 +61,8 @@
                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         </rowConstraints>
                                         <children>
-                                            <JFXButton fx:id="cancel" mnemonicParsing="false" onAction="#handleCancel" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.halignment="CENTER" />
-                                            <JFXButton fx:id="submit" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                            <JFXButton fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.halignment="CENTER" />
+                                            <JFXButton fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="49.0" prefWidth="118.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                                         </children>
                                     </GridPane>
                                 </children>

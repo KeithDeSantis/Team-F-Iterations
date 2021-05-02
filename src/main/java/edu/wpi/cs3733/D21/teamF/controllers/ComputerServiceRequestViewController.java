@@ -8,6 +8,7 @@ import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -52,7 +53,7 @@ public class ComputerServiceRequestViewController extends ServiceRequests{
     }
 
     @FXML
-    public void handleSubmit() throws IOException, SQLException {
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
         if(formFilled())
         {
             String uuid = UUID.randomUUID().toString();
@@ -61,18 +62,7 @@ public class ComputerServiceRequestViewController extends ServiceRequests{
             String additionalInfo = "Computer name: " + computerNameText.getText() + "Computer location: " + computerLocationText.getText()
                     + "Urgency: " + urgencyComboBox.getValue() + "Requester: " + requesterTextText.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
-            // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) computerNameText.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
     }
 

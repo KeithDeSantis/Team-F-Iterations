@@ -104,7 +104,7 @@
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                      <children>
-                        <JFXButton buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" fx:id="submitButton" />
                         <JFXButton buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                         <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
                      </children>
