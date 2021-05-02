@@ -1091,11 +1091,13 @@ public class AStarDemoController implements Initializable {
 
         final String initialFloor = mapPanel.getFloor().get();
         final int initialCurrStep = currentStep.get();
+        final double initZoomLevel = mapPanel.getZoomLevel().get();
+        mapPanel.getZoomLevel().set(2);
         for(int i = 0; i < stopsList.size(); i++)
         {
             contentStream.beginText();
             contentStream.setLeading(14.5f);
-            contentStream.setFont(PDType1Font.HELVETICA, 16);
+            contentStream.setFont(PDType1Font.HELVETICA, 14);
             contentStream.newLineAtOffset(25, 675 - ((25 * i)));
           //  contentStream.newLine();
             final String instruction = instructionsList.get(i);
@@ -1117,10 +1119,12 @@ public class AStarDemoController implements Initializable {
             final int cX = (int) currVertex.getX();
             final int cY = (int) currVertex.getY();
 
-            final int minX = (int) ((cX/mapPanel.getZoomLevel().get()) - 150);
-            final int minY = (int) ((cY/mapPanel.getZoomLevel().get()) - 150);
+            final int captureWidth = 200;
 
-            params.setViewport(new Rectangle2D(minX, minY, 300, 300));
+            final int minX = (int) ((cX/mapPanel.getZoomLevel().get()) - captureWidth/2);
+            final int minY = (int) ((cY/mapPanel.getZoomLevel().get()) - captureWidth/2);
+
+            params.setViewport(new Rectangle2D(minX, minY, captureWidth, captureWidth));
            // System.out.println(params.getViewport());
 
             final WritableImage image = mapPanel.getCanvas().snapshot(params, null);
@@ -1130,19 +1134,20 @@ public class AStarDemoController implements Initializable {
 
             final double aspect = bufferedImage.getWidth() / bufferedImage.getHeight();
 
-            final Image scaledImage = bufferedImage.getScaledInstance(200, (int) (200 * aspect), Image.SCALE_SMOOTH);
+            final Image scaledImage = bufferedImage.getScaledInstance(100, (int) (100 * aspect), Image.SCALE_SMOOTH);
             final BufferedImage scaledBuffered = new BufferedImage(scaledImage.getWidth(null), scaledImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
             scaledBuffered.getGraphics().drawImage(scaledImage, 0, 0 , null);
 
             PDImageXObject pdfImage = LosslessFactory.createFromImage(pdfDocument, scaledBuffered);
 
-            contentStream.drawImage(pdfImage, 300, 0 + i * 300);
+            contentStream.drawImage(pdfImage, 320 + (i/6) * 110, 600 - (i%6) * 110);
 
 
            // ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
         }
         currentStep.set(initialCurrStep);
         mapPanel.switchMap(initialFloor);
+        mapPanel.getZoomLevel().set(initZoomLevel);
         contentStream.close();
 
 
