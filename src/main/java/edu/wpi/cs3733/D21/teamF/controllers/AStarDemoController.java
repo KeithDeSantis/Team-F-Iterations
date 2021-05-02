@@ -28,11 +28,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -181,7 +191,6 @@ public class AStarDemoController implements Initializable {
             if(currEntry == null)
                 return;
 
-            mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
 
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
@@ -191,6 +200,8 @@ public class AStarDemoController implements Initializable {
 
             //FIXME: Make these ones require that thing is visible
             whatsHereMenu.setOnAction(e -> {
+
+                mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
 
                 final JFXDialog dialog = new JFXDialog();
                 final JFXDialogLayout layout = new JFXDialogLayout();
@@ -1021,11 +1032,81 @@ public class AStarDemoController implements Initializable {
         closeBtn.setOnAction(a -> dialog.close());
 
         final JFXButton printBtn = new JFXButton("Print");
+        printBtn.setOnAction(a -> {
+            try {
+                printInstructions();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            dialog.close();});
 
 
         layout.setActions(printBtn, closeBtn);
 
         dialog.setContent(layout);
         mapPanel.showDialog(dialog);
+    }
+
+
+    /**
+     * Prints the current instructions as a PDF file.
+     * @author Alex Friedman (ahf)
+     * @since 05-02-2021 - branch: ahf-fullDirections
+     */
+    private void printInstructions() throws IOException {
+
+        final File file = new File(System.currentTimeMillis() + ".pdf");
+
+        //Create the document
+        final PDDocument pdfDocument = new PDDocument();
+
+        //Create the first page of the document.
+        final PDPage page = new PDPage();
+        pdfDocument.addPage(page);
+
+        //Create the ContentStream so that we can add data to the document
+        final PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page);
+
+        //Begin the text
+
+        contentStream.beginText();
+        contentStream.setLeading(14.5f);
+        contentStream.newLineAtOffset(25, 725);
+        contentStream.setFont(PDType1Font.HELVETICA, 36);
+
+        contentStream.showText("Brigham and Women's Hospital");
+        contentStream.newLine();
+        contentStream.endText();
+
+        //Display instructions
+
+
+        for(int i = 0; i < stopsList.size(); i++)
+        {
+            contentStream.beginText();
+            contentStream.setLeading(14.5f);
+            contentStream.setFont(PDType1Font.HELVETICA, 16);
+            contentStream.newLineAtOffset(25, 675 - ((25 * i)));
+          //  contentStream.newLine();
+            final String instruction = instructionsList.get(i);
+            final String eta = etaList.get(i);
+
+            if(i < stopsList.size() - 1)
+                contentStream.showText(instruction + "     (" + eta + ")");
+            else
+                contentStream.showText(instruction);
+            contentStream.endText();
+        }
+
+        contentStream.close();
+
+
+
+
+        pdfDocument.save(file);
+        pdfDocument.close();
+
+        final Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
     }
 }
