@@ -53,6 +53,8 @@ public class GraphTest {
          */
         final String edgesCSV = "DFSEdges.csv";
         final String nodesCSV = "DFSNodes.csv";
+//        final String edgesCSV = "MapfAllEdges.csv";
+//        final String nodesCSV = "MapfAllNodes.csv";
         graph = GraphLoader.load(nodesCSV, edgesCSV);
 
         //Uses JavaReflection to access classes so that we don't have to change their actual accessibility
@@ -555,6 +557,18 @@ public class GraphTest {
      */
     @Test
     public void testFindPathWithUnorderedStops() {
-        //TODO
+        String[] vertexIDs = {
+                "CHALL002L1",
+                "CREST002L1",
+                "CRETL001L1",
+                "CHALL013L1",
+                "CDEPT002L1",
+                "CSERV001L1"
+        };
+        Vertex[] vertices = new Vertex[vertexIDs.length];
+        for(int i = 0; i < vertices.length; i++) {
+            vertices[i] = this.vertices.get(vertexIDs[i]);
+        }
+        assertEquals(this.graph.getEfficientOrder(vertices).toString(), "[CHALL002L1, CRETL001L1, CHALL013L1, CDEPT002L1, CREST002L1, CSERV001L1]");
     }
 }
