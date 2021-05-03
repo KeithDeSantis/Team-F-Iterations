@@ -58,7 +58,7 @@ public class SanitationRequestController extends ServiceRequests {
             isFilled = false;
             setTextErrorStyle(description);
         }
-        if(loc.getValue().length() == 0){
+        if(loc.getValue() == null){
             isFilled = false;
             setTextErrorStyle(loc);
         }

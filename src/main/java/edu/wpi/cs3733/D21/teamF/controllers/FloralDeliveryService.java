@@ -93,7 +93,7 @@ public class FloralDeliveryService extends ServiceRequests{
         }
         if(!(roseCheckBox.isSelected() || tulipCheckBox.isSelected() || violetCheckBox.isSelected() || sunflowerCheckBox.isSelected() || orchidCheckBox.isSelected() || daisyCheckBox.isSelected())) {
             isFilled = false;
-            setButtonErrorStyle(roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox, orchidCheckBox);
+            setButtonErrorStyle(roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox, orchidCheckBox,daisyCheckBox);
         }
         if(deliveryField.getText().length() == 0) {
             isFilled = false;

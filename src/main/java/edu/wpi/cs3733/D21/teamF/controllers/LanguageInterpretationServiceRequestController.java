@@ -113,7 +113,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
     @Override
     public void handleClear(){
-        name.
+        name.setText("");
+        date.setValue(null);
+        time.setValue(null);
+        appointment.setValue(null);
+        language.setValue(null);
+        setNormalStyle(name, date, time, appointment, language);
     }
 
     /**
@@ -244,6 +249,11 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         if(language.getValue() == null)
         {
             setTextErrorStyle(language);
+            isFilled = false;
+        }
+        if(appointment.getValue() == null)
+        {
+            setTextErrorStyle(appointment);
             isFilled = false;
         }
         return isFilled;
