@@ -71,9 +71,6 @@ public class AStarDemoController implements Initializable {
     private JFXButton Go;
 
     @FXML
-    private JFXButton End;
-
-    @FXML
     private JFXButton Prev;
 
     @FXML
@@ -90,6 +87,9 @@ public class AStarDemoController implements Initializable {
 
     @FXML
     public JFXButton viewInstructionsBtn;
+
+    @FXML
+    public JFXToggleButton optimize;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -202,15 +202,19 @@ public class AStarDemoController implements Initializable {
 
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
+            // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
+            // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
             startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(currEntry.getNodeID())));
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
+            // No combo box update so we call checkInput()
             addStopMenu.setOnAction(e -> {
                 vertices.add(graph.getVertex(currEntry.getNodeID()));
                 drawStop(currEntry);
                 checkInput();
             });
 
+            // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(currEntry.getNodeID())));
 
             //FIXME: Make these ones require that thing is visible
@@ -254,9 +258,8 @@ public class AStarDemoController implements Initializable {
         endComboBox.disableProperty().bind(isCurrentlyNavigating);
 
         Go.setDisable(true);
-        End.setDisable(true);
-        Prev.setDisable(true);
-        Next.setDisable(true);
+        Prev.setVisible(false);
+        Next.setVisible(false);
         pathVertex.clear();
         Instruction.setVisible(false);
         navIcon.setVisible(false);
@@ -545,13 +548,36 @@ public class AStarDemoController implements Initializable {
         final Vertex startVertex = this.graph.getVertex(shortNameToID(startComboBox.getValue()));
         final Vertex endVertex = this.graph.getVertex(shortNameToID(endComboBox.getValue()));
 
+
+        List<Vertex> pathVertices = new ArrayList<>();
+        pathVertices.clear();
+        pathVertices.addAll(vertices);
+
         updateRecentlyUsed(endVertex);
+
+        final Path path;
 
         if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
         {
-            vertices.add(0,startVertex);
-            vertices.add(endVertex);
-            final Path path = this.graph.getUnorderedPath(vertices);
+            if(!pathVertices.isEmpty()) {
+                if (pathVertices.get(0) != startVertex) {
+                    pathVertices.add(0, startVertex);
+                }
+                if (pathVertices.get(pathVertices.size() - 1) != endVertex) {
+                    pathVertices.add(endVertex);
+                }
+            } else {
+                pathVertices.add(0, startVertex);
+                pathVertices.add(endVertex);
+            }
+
+
+
+            if(optimize.isSelected()) {
+                path = this.graph.getUnorderedPath(pathVertices);
+            } else {
+                path = this.graph.getPath(pathVertices);
+            }
 
 
             pathVertex.clear();
@@ -626,7 +652,7 @@ public class AStarDemoController implements Initializable {
      *
      * @author Alex Friedman (ahf)
      */
-    private void checkInput() {
+    @FXML private void checkInput() {
         if (startComboBox.getValue() == null || endComboBox.getValue() == null){
           mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
         }else{
@@ -910,9 +936,11 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void startNavigation() {
-        Go.setDisable(true);
+        Next.setVisible(true);
         Next.setDisable(false);
-        End.setDisable(false);
+        Prev.setVisible(true);
+        Prev.setDisable(true);
+        optimize.setDisable(true);
         Instruction.setVisible(true);
         navIcon.setVisible(true);
         ETA.setVisible(true);
@@ -938,6 +966,7 @@ public class AStarDemoController implements Initializable {
         currentDirection = "UP";
         drawDirection();
         setNavIcon();
+        Go.setText("End Navigation");
     }
 
     /**
@@ -1000,21 +1029,21 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void endNavigation() {
-        Go.setDisable(false);
-        Prev.setDisable(true);
-        Next.setDisable(true);
-        End.setDisable(true);
+        Prev.setVisible(false);
+        Next.setVisible(false);
         Instruction.setVisible(false);
         ETA.setVisible(false);
         navIcon.setVisible(false);
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
+        optimize.setDisable(false);
 
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
 
         mapPanel.switchMap(pathVertex.get(0).getFloor());
         mapPanel.centerNode(startNodeDisplay);
+        Go.setText("Start Navigation");
     }
 
     /**
@@ -1190,7 +1219,7 @@ public class AStarDemoController implements Initializable {
     }
 
     /**
-     * Clears all node selections
+     * Clears all node selections and exits pathfinding mode
      * @author Leo Morris
      */
     public void clearList() {
@@ -1198,8 +1227,19 @@ public class AStarDemoController implements Initializable {
         startComboBox.getSelectionModel().clearSelection();
         endComboBox.getSelectionModel().clearSelection();
         mapPanel.clearMap();
+        Go.setDisable(true);
 
         for(NodeEntry e : allNodeEntries)
             getDrawableNode(e.getNodeID());
+
+        endNavigation();
+    }
+
+    public void toggleNavigation() {
+        if(isCurrentlyNavigating.get()){
+            endNavigation();
+        } else {
+            startNavigation();
+        }
     }
 }

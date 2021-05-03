@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -10,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
-<VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="840.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
+
+<VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
       <HBox fx:id="header" prefHeight="85.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
          <children>
@@ -36,17 +37,15 @@
          <children>
             <HBox alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
                <children>
-                  <JFXComboBox fx:id="startComboBox" focusColor="#f0c808" onAction="#handleStartBoxAction" prefWidth="200.0" promptText="Select Start Location" unFocusColor="#03256c" />
-                  <JFXComboBox fx:id="endComboBox" focusColor="#f0c808" onAction="#handleEndBoxAction" prefWidth="200.0" promptText="Select End Location" unFocusColor="#03256c">
+                  <JFXComboBox fx:id="startComboBox" focusColor="#f0c808" onAction="#handleStartBoxAction" prefWidth="180.0" promptText="Select Start Location" unFocusColor="#03256c" />
+                  <JFXComboBox fx:id="endComboBox" focusColor="#f0c808" onAction="#handleEndBoxAction" prefWidth="180.0" promptText="Select End Location" unFocusColor="#03256c">
                      <padding>
                         <Insets left="16.0" />
                      </padding>
                   </JFXComboBox>
-                  <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear"/>
-                  <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation"/>
-                  <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="End Navigation"/>
-                  <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Previous"/>
-                  <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Next"/>
+                  <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                  <JFXButton fx:id="Go" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation" />
+                  <JFXToggleButton fx:id="optimize" prefHeight="30.0" text="Optimize Route" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" onAction="#checkInput"/>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0">
@@ -68,6 +67,14 @@
                      <font>
                         <Font size="20.0" />
                      </font></Label>
+                  <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Previous">
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin></JFXButton>
+                  <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Next">
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin></JFXButton>
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" />
