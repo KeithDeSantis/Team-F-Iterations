@@ -38,4 +38,5 @@ public class LanguageInterpretationRequestHelpController {
 
     public void handleTranslate(ActionEvent actionEvent) {
     }
+
 }

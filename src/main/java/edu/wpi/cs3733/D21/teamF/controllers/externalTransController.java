@@ -65,6 +65,8 @@ public class externalTransController extends ServiceRequests{
         loc.setText("");
         methodTrans.setText("");
         special.setText("");
-        setNormalStyle(patientName, loc, methodTrans, special);
+        special.setStyle("-fx-text-fill: #000000");
+        loc.setStyle("-fx-text-fill: #000000");
+        methodTrans.setStyle("-fx-text-fill: #000000");
     }
 }
