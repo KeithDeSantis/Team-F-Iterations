@@ -67,7 +67,7 @@
                               <Font name="Montserrat Regular" size="12.0" />
                            </font>
                         </JFXRadioButton>
-                        <JFXRadioButton fx:id="lights" mnemonicParsing="false" onAction="#handleRadialButtonPush" text="Lights">
+                        <JFXRadioButton fx:id="lights" mnemonicParsing="false" onAction="#handleRadialButtonPushed" text="Lights">
                            <padding>
                               <Insets top="10.0" />
                            </padding>

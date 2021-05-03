@@ -113,16 +113,16 @@ public class LaundryRequestController extends ServiceRequests {
     public boolean formFilled() {
         boolean isFilled = true;
 
-        setNormalStyle(employeeID, clientName, hot, cold, darks, lights, both);
+        setNormalStyle(employeeID, hot, cold, darks, lights, both);
 
         if(employeeID.getText().length() == 0){
             isFilled = false;
             setTextErrorStyle(employeeID);
         }
-        if(clientName.getText().length() == 0){
-            isFilled = false;
-            setTextErrorStyle(clientName);
-        }
+//        if(clientName.getText().length() == 0){
+//            isFilled = false;
+//            setTextErrorStyle(clientName);
+//        }
         if(! (hot.isSelected() || cold.isSelected())){
             isFilled = false;
             setButtonErrorStyle(hot, cold);
@@ -144,8 +144,8 @@ public class LaundryRequestController extends ServiceRequests {
         cold.setSelected(false);
         folded.setSelected(false);
         employeeID.setText("");
-        clientName.setText("");
+        //clientName.setText("");
         additionalInstructions.setText("");
-        setNormalStyle(both, lights, darks, hot, cold, folded, employeeID, clientName, additionalInstructions);
+        setNormalStyle(both, lights, darks, hot, cold, folded, employeeID, additionalInstructions);
     }
 }

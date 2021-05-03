@@ -39,7 +39,7 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
         public boolean formFilled() {
             boolean isFilled = true;
 
-            setNormalStyle(name, ccNumber, csv, expirationDate, specialInstructions);
+            setNormalStyle(name, ccNumber, csv, expirationDate);
 
             if(name.getText().length() == 0){
                 isFilled = false;
