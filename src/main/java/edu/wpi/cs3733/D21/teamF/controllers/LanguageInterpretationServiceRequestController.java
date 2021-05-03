@@ -230,20 +230,20 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     public boolean formFilled(){
         boolean isFilled = true;
         if(name.getText().trim().isEmpty()){
-            name.setStyle("-fx-border-color: red");
+            setTextErrorStyle(name);
             isFilled = false;
         }
         if(date.getValue() == null){
-            date.setStyle("-fx-border-color: red");
+            setTextErrorStyle(date);
             isFilled = false;
         }
         if(time.getValue() == null){
-            time.setStyle("-fx-border-color: red");
+            setTextErrorStyle(time);
             isFilled = false;
         }
         if(language.getValue() == null)
         {
-            language.setStyle("-fx-border-color: red");
+            setTextErrorStyle(language);
             isFilled = false;
         }
         return isFilled;
