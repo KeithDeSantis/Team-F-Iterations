@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-image: url('imagesAndLogos/BWHExterior.jpg'); -fx-background-size: 1920; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.DefaultPageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-image: url('imagesAndLogos/photo.jpeg'); -fx-background-size: 1920; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.DefaultPageController">
    <children>
       <HBox fx:id="header" alignment="CENTER_LEFT" prefHeight="120.0" prefWidth="960.0" spacing="10.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
          <children>
