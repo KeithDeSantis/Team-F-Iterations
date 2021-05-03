@@ -27,6 +27,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
@@ -240,6 +241,10 @@ public class MapEditViewController {
             }
 
         });
+        alignLeft.setOnMouseEntered(e -> {
+            alignLeft.setFill(Paint.valueOf("#F0C808"));
+        });
+        colorAlignmentCircles(alignLeft);
 
         alignHorizontalMiddle.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty().divide(2.0)));
         alignHorizontalMiddle.yCoordinateProperty().bind(rectSelector.yProperty().subtract(ALIGN_FLOAT_DIST));
@@ -254,6 +259,7 @@ public class MapEditViewController {
                 //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
             }
         });
+        colorAlignmentCircles(alignHorizontalMiddle);
 
         alignRight.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()));
         alignRight.yCoordinateProperty().bind(rectSelector.yProperty().subtract(ALIGN_FLOAT_DIST));
@@ -268,10 +274,10 @@ public class MapEditViewController {
                 //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
             }
         });
+        colorAlignmentCircles(alignRight);
 
         alignTop.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
         alignTop.yCoordinateProperty().bind(rectSelector.yProperty());
-
         alignTop.setOnMouseClicked(x -> {
                     for(NodeEntry e : selectedNodes)
                     {
@@ -283,10 +289,10 @@ public class MapEditViewController {
                         }
                     }
         });
+        colorAlignmentCircles(alignTop);
 
         alignVerticalMiddle.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
         alignVerticalMiddle.yCoordinateProperty().bind(rectSelector.yProperty().add(rectSelector.heightProperty().divide(2.0)));
-
         alignVerticalMiddle.setOnMouseClicked(x -> {
             for(NodeEntry e : selectedNodes)
             {
@@ -298,10 +304,10 @@ public class MapEditViewController {
                 }
             }
         });
+        colorAlignmentCircles(alignVerticalMiddle);
 
         alignBottom.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty()).add(ALIGN_FLOAT_DIST));
         alignBottom.yCoordinateProperty().bind(rectSelector.yProperty().add(rectSelector.heightProperty()));
-
         alignBottom.setOnMouseClicked(x -> {
             for(NodeEntry e : selectedNodes)
             {
@@ -313,6 +319,7 @@ public class MapEditViewController {
                 }
             }
         });
+        colorAlignmentCircles(alignBottom);
 
 
         //Starts drawing the rectangle
@@ -381,6 +388,16 @@ public class MapEditViewController {
         }
          */
         rectSelector.setMouseTransparent(true);
+    }
+
+    private void colorAlignmentCircles(DrawableCircle drawableCircle) {
+        drawableCircle.setOnMouseEntered(e -> {
+            drawableCircle.setFill(Color.GOLDENROD.brighter());
+        });
+        drawableCircle.setOnMouseExited(e -> {
+            drawableCircle.setFill(Color.GRAY.darker());
+        });
+
     }
 
     /**
