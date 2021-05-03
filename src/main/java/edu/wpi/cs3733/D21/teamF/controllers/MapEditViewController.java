@@ -1729,5 +1729,14 @@ public class MapEditViewController {
         shortNameDisplayLabel.setText("Short Name");
         shortNameDisplayLabel.setOpacity(0.5);
     }
+
+    public void handleFavorite() {
+        if(selectedCircle.getFill().equals(Color.GREEN) && mapPanel.getNode(selectedCircle.getId()).shouldDisplay().get()) {
+            NodeEntry favNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue();
+            //TODO add to favorites
+            //TODO make sure duplicate favorites aren't added
+            System.out.println("FAVORITED");
+        }
+    }
 }
 
