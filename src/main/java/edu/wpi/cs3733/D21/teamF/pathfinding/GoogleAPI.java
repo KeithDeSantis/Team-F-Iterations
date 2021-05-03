@@ -21,20 +21,25 @@ public class GoogleAPI {
     }
 
     /**
-     * Parses the Google data into a JSONArray of instructions
+     * Parses the Google data into a String of directional instructions
      * @param json the Google data
      * @author Declan Murphy
      */
-    private void parseGoogleData(String json) {
-        final JSONArray steps = new JSONObject(json).getJSONArray("steps");
+    public void parseGoogleData(String json) {
+        final JSONObject parsed = new JSONObject(json);
+        final JSONObject route = (JSONObject) (parsed.getJSONArray("routes")).get(0);
+        final JSONObject leg = (JSONObject) (route.getJSONArray("legs")).get(0);
+        final JSONArray steps = leg.getJSONArray("steps");
         StringBuilder directions = new StringBuilder();
         for (int i=0; i< steps.length(); i++){
-            String temp = steps.getJSONObject(i).getString("html_instructions");
+            String temp = ((JSONObject) steps.get(i)).getString("html_instructions");
             if (temp != null) {
-                directions.append(temp);
+                directions.append(temp+ "\n");
             }
         }
-        System.out.println(directions);
+        String results = directions.toString();
+        results = results.replaceAll("\\<.*?\\>", "");
+        System.out.println(results);
     }
 
     /**
@@ -71,7 +76,7 @@ public class GoogleAPI {
         BufferedReader data = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String temp;
         while ((temp = data.readLine()) != null){
-            apiResponse.append(temp);
+            apiResponse.append(temp + "\n");
         }
         data.close();
         return apiResponse.toString();
