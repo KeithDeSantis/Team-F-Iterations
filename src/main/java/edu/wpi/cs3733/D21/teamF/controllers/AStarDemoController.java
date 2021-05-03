@@ -41,14 +41,11 @@ import javafx.scene.text.Text;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -1022,20 +1019,20 @@ public class AStarDemoController implements Initializable {
         //TODO: better align ETA text.
         layout.setHeading(new Text("Directions from: " + startComboBox.getValue() + " to " +  endComboBox.getValue()));
 
-        String directions = "";
+        StringBuilder directions = new StringBuilder();
         for(int i = 0; i < stopsList.size(); i++)
         {
             final String instruction = instructionsList.get(i);
             final String eta = etaList.get(i);
 
             if(i < stopsList.size() - 1)
-                directions += instruction + "\t\t(" + eta + ")\n";
+                directions.append(instruction).append("\t\t(").append(eta).append(")\n");
             else
-                directions += instruction;
+                directions.append(instruction);
         }
 
         //FIXME: DO BREAKS W/ CSS
-        layout.setBody(new Text(directions));
+        layout.setBody(new Text(directions.toString()));
 
         final JFXButton closeBtn = new JFXButton("Close");
         closeBtn.setOnAction(a -> dialog.close());
@@ -1080,9 +1077,8 @@ public class AStarDemoController implements Initializable {
         mapPanel.getZoomLevel().set(2);
 
         final int numPages = (int) Math.ceil((double) stopsList.size()/INSTRUCTIONS_PER_PAGE);
-        System.out.println(stopsList.size() + " : " + Math.ceil(stopsList.size()/INSTRUCTIONS_PER_PAGE));
+
         for(int p = 0; p < numPages; p++) {
-            System.out.println("NEW PAGE!!!");
             //Create the first page of the document.
             final PDPage page = new PDPage();
             pdfDocument.addPage(page);
@@ -1097,28 +1093,34 @@ public class AStarDemoController implements Initializable {
              */
             contentStream.beginText();
             contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(25, 740);
+            contentStream.newLineAtOffset(25 + 64, 740);
             contentStream.setFont(PDType1Font.HELVETICA, 36);
 
             contentStream.showText("Brigham and Women's Hospital");
             contentStream.newLine();
             contentStream.endText();
 
+            final BufferedImage logoImage = ImageIO.read(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
+            PDImageXObject pdfLogo = LosslessFactory.createFromImage(pdfDocument,logoImage);
+            contentStream.drawImage(pdfLogo, 25, 720, 55, 64);
+
             /*
              * Instruction Information
              */
             contentStream.beginText();
             contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(25, 710);
+            contentStream.newLineAtOffset(25, 690);
             contentStream.setFont(PDType1Font.HELVETICA, 14);
 
             contentStream.showText("Directions from: " + startComboBox.getValue());
             contentStream.newLine();
             contentStream.endText();
 
+
+
             contentStream.beginText();
             contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(25, 690);
+            contentStream.newLineAtOffset(25, 670);
             contentStream.setFont(PDType1Font.HELVETICA, 14);
 
             contentStream.showText("To: " + endComboBox.getValue());
@@ -1140,11 +1142,10 @@ public class AStarDemoController implements Initializable {
             //Display instructions
 
             for (int i = p * INSTRUCTIONS_PER_PAGE; i < Math.min(stopsList.size(), (p + 1) * INSTRUCTIONS_PER_PAGE); i++) {
-                System.out.println("INSTR: " + i);
                 contentStream.beginText();
                 contentStream.setLeading(14.5f);
                 contentStream.setFont(PDType1Font.HELVETICA, 14);
-                contentStream.newLineAtOffset(25, 650 - ((110 * (i % INSTRUCTIONS_PER_PAGE))));
+                contentStream.newLineAtOffset(25, 630 - ((110 * (i % INSTRUCTIONS_PER_PAGE))));
                 //  contentStream.newLine();
                 final String instruction = instructionsList.get(i);
                 final String eta = etaList.get(i);
@@ -1186,7 +1187,7 @@ public class AStarDemoController implements Initializable {
 
                 PDImageXObject pdfImage = LosslessFactory.createFromImage(pdfDocument, scaledBuffered);
 
-                contentStream.drawImage(pdfImage, 320, 575 - (i % INSTRUCTIONS_PER_PAGE) * 110);
+                contentStream.drawImage(pdfImage, 320, 555 - (i % INSTRUCTIONS_PER_PAGE) * 110);
 
 
                 // ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
