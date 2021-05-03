@@ -7,6 +7,7 @@ import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseAPI {
@@ -17,6 +18,7 @@ public class DatabaseAPI {
     private final DatabaseEntry serviceRequestHandler;
     private final DatabaseEntry userHandler;
     private final DatabaseEntry systemHandler;
+    private final CollectionHandler collectionHandler;
 
     public DatabaseAPI() {
         this.nodeHandler = new NodeHandler();
@@ -24,6 +26,7 @@ public class DatabaseAPI {
         this.userHandler = new UserHandler();
         this.serviceRequestHandler = new ServiceRequestHandler();
         this.systemHandler = new SystemPreferences();
+        this.collectionHandler = new CollectionHandler();
     }
 
     public boolean createNodesTable() {
@@ -188,6 +191,22 @@ public class DatabaseAPI {
 
     public String getCurrentAlgorithm() throws SQLException{
         return ((SystemPreferences)this.systemHandler).getAlgorithm();
+    }
+
+    public boolean createCollectionsTable(){
+        return collectionHandler.createCollectionTable();
+    }
+
+    public boolean dropCollectionsTable(){
+        return collectionHandler.dropCollectionsTable();
+    }
+
+    public boolean addCollecionEntry(String user, String node, String type) throws SQLException{
+        return collectionHandler.addEntry(user, node, type);
+    }
+
+    public ArrayList<String> getUserNodes(String type, String userID) throws SQLException{
+        return collectionHandler.getUserNodes(type, userID);
     }
 
     private static class DatabaseSingletonHelper{

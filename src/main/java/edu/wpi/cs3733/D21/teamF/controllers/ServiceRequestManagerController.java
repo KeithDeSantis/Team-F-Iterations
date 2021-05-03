@@ -32,6 +32,7 @@ public class ServiceRequestManagerController implements Initializable {
     @FXML private JFXButton removeAssignment;
     @FXML private ImageView goBack;
     @FXML private JFXTreeTableView<ServiceEntry> requestView;
+    @FXML private JFXButton delete;
 
     private ObservableList<ServiceEntry> services = FXCollections.observableArrayList();
     private ServiceEntry selectedEntry;
@@ -106,11 +107,12 @@ public class ServiceRequestManagerController implements Initializable {
         markAsComplete.setDisable(true);
         saveChanges.setDisable(true);
         removeAssignment.setDisable(true);
+        delete.setDisable(true);
     }
 
 
     public void handleHome(MouseEvent mouseEvent) throws IOException{
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 
     /**
@@ -169,6 +171,17 @@ public class ServiceRequestManagerController implements Initializable {
     }
 
     /**
+     * Delete a service request from the DB
+     * @throws SQLException
+     * @author KD
+     */
+    public void handleDelete() throws SQLException {
+        DatabaseAPI.getDatabaseAPI().deleteServiceRequest(selectedEntry.getUuid());
+        services.remove(selectedEntry);
+        delete.setDisable(true);
+    }
+
+    /**
      * Handles when a selection is made on the tree table view
      * @param mouseEvent The event that triggers the method
      * @author Leo Morris
@@ -190,8 +203,11 @@ public class ServiceRequestManagerController implements Initializable {
             markAsComplete.setText("Mark Complete");
             markAsComplete.setDisable(true);
             removeAssignment.setDisable(true);
+            delete.setDisable(true);
             index = -1;
         }
+
+        delete.setDisable(false);
 
         // Enable mark complete button and set appropriate text
         if(selectedEntry.getCompleteStatus().equals("false")){

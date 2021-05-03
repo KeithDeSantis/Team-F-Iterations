@@ -61,7 +61,7 @@ public class UserHandler implements DatabaseEntry {
     {
         String cipherText = "";
         try{
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(salt);
             byte[] bytes = md.digest(plainText.getBytes());
             StringBuilder builder = new StringBuilder();
@@ -192,7 +192,7 @@ public class UserHandler implements DatabaseEntry {
     @Override
     public boolean createTable() {
         boolean success = false;
-        final String initUserTable = "CREATE TABLE USERS(userid varchar(200), type varchar(200), " +
+        final String initUserTable = "CREATE TABLE USERS(userid varchar(50), type varchar(200), " +
                 "username varchar(200), password varchar(200), salt blob(20), primary key(username))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();

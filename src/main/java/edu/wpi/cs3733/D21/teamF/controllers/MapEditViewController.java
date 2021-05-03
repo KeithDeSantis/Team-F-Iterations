@@ -1658,7 +1658,7 @@ public class MapEditViewController {
     }
 
     public void handleHome() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 
     public void handleTabChange(Event event) {
