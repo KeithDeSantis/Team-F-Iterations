@@ -93,7 +93,28 @@ public class LaundryRequestController extends ServiceRequests {
 
 
     public boolean formFilled() {
-        return employeeID.getText().length()>0 && clientName.getText().length()>0;
+        boolean isFilled = true;
+
+        setNormalStyle(employeeID, clientName, hot, cold, darks, lights, both);
+
+        if(employeeID.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(employeeID);
+        }
+        if(clientName.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(clientName);
+        }
+        if(! (hot.isSelected() || cold.isSelected())){
+            isFilled = false;
+            setButtonErrorStyle(hot, cold);
+        }
+        if (! (darks.isSelected() || lights.isSelected() || both.isSelected())) {
+            isFilled = false;
+            setButtonErrorStyle(darks, lights, both);
+        }
+
+        return isFilled;
     }
 
     @Override
@@ -107,14 +128,6 @@ public class LaundryRequestController extends ServiceRequests {
         employeeID.setText("");
         clientName.setText("");
         additionalInstructions.setText("");
-        both.setStyle("-fx-text-fill: #000000");
-        lights.setStyle("-fx-text-fill: #000000");
-        darks.setStyle("-fx-text-fill: #000000");
-        hot.setStyle("-fx-text-fill: #000000");
-        cold.setStyle("-fx-text-fill: #000000");
-        folded.setStyle("-fx-text-fill: #000000");
-        employeeID.setStyle("-fx-background-color: transparent");
-        clientName.setStyle("-fx-background-color: transparent");
-        additionalInstructions.setStyle("-fx-background-color: transparent");
+        setNormalStyle(both, lights, darks, hot, cold, folded, employeeID, clientName, additionalInstructions);
     }
 }
