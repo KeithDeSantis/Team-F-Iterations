@@ -41,6 +41,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import sun.reflect.generics.tree.Tree;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -125,6 +126,18 @@ public class AStarDemoController implements Initializable {
     private String currentDirection;
 
     final ObservableList<String> nodeList = FXCollections.observableArrayList();
+
+    // List of all nodes in each category
+    List<String> conferenceRooms = new ArrayList<>();
+    List<String> departments = new ArrayList<>();
+    List<String> entrances = new ArrayList<>();
+    List<String> information = new ArrayList<>();
+    List<String> labs = new ArrayList<>();
+    List<String> parking = new ArrayList<>();
+    List<String> restrooms = new ArrayList<>();
+    List<String> retail = new ArrayList<>();
+    List<String> service = new ArrayList<>();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -302,9 +315,44 @@ public class AStarDemoController implements Initializable {
 
         mapPanel.draw(this.userNodeDisplay);
 
-
         for(NodeEntry e : allNodeEntries)
           getDrawableNode(e.getNodeID());
+
+        TreeItem rootItem = new TreeItem("shortNames");
+
+        for (NodeEntry node: allNodeEntries) {
+            switch (node.getNodeType()){
+                case "CONF":
+                    conferenceRooms.add(node.getShortName());
+                    break;
+                case "DEPT":
+                    departments.add(node.getShortName());
+                    break;
+                case "EXIT":
+                    entrances.add(node.getShortName());
+                    break;
+                case "INFO":
+                    information.add(node.getShortName());
+                    break;
+                case "LABS":
+                    labs.add(node.getShortName());
+                    break;
+                case "PARK":
+                    parking.add(node.getShortName());
+                    break;
+                case "RETL":
+                    retail.add(node.getShortName());
+                    break;
+                case "SERV":
+                    service.add(node.getShortName());
+                    break;
+                case "REST":
+                    restrooms.add(node.getShortName());
+                    break;
+            }
+        }
+
+
     }
 
     /**
@@ -389,7 +437,6 @@ public class AStarDemoController implements Initializable {
         }
         return closest;
     }
-
 
     /**
      * Handles the pushing of a button on the screen
