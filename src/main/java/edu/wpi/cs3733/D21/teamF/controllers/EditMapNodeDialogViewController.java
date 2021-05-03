@@ -1,21 +1,12 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 /**
  * Controller for the pop-up dialog to edit or create a new node in the node editor
@@ -56,18 +47,7 @@ public class EditMapNodeDialogViewController {
      */
     @FXML
     private void initialize() {
-        Font buttonDefault = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 18);
-        nodeIDLabel.setFont(buttonDefault);
-        xCoordLabel.setFont(buttonDefault);
-        yCoordLabel.setFont(buttonDefault);
-        floorLabel.setFont(buttonDefault);
-        buildingLabel.setFont(buttonDefault);
-        nodeTypeLabel.setFont(buttonDefault);
-        longNameLabel.setFont(buttonDefault);
-        shortNameLabel.setFont(buttonDefault);
 
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 24);
-        title.setFont(titleFont);
     }
 
 
@@ -82,8 +62,8 @@ public class EditMapNodeDialogViewController {
         {
             node.setNodeID(nodeIDField.getText()); // set all the fields of our node object to the new values given by the user - KD
             node.setNodeIDProperty(nodeIDField.getText());
-            node.setXcoord(xCoordField.getText());
-            node.setYcoord(yCoordField.getText());
+            node.setXCoordinate(xCoordField.getText());
+            node.setYCoordinate(yCoordField.getText());
             node.setFloor(floorField.getText());
             node.setBuilding(buildingField.getText());
             node.setNodeType(nodeTypeField.getText());
@@ -166,8 +146,8 @@ public class EditMapNodeDialogViewController {
     public void setTheNode(NodeEntry theNode) {
         node = theNode;
         nodeIDField.setText(node.getNodeID());
-        xCoordField.setText(node.getXcoord());
-        yCoordField.setText(node.getYcoord());
+        xCoordField.setText(node.getXCoordinate());
+        yCoordField.setText(node.getYCoordinate());
         floorField.setText(node.getFloor());
         buildingField.setText(node.getBuilding());
         nodeTypeField.setText(node.getNodeType());
@@ -217,13 +197,7 @@ public class EditMapNodeDialogViewController {
         return true;
     }
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
+
+
 }

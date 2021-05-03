@@ -125,6 +125,23 @@ public class Path implements Iterable<Vertex> {
      */
     public boolean contains(Vertex vertex) { return this.vertices.containsKey(vertex); }
 
+    /**
+     * Links two paths together
+     * @param path the augend path
+     * @author Tony Vuolo (bdane)
+     */
+    public void concatenate(Path path) {
+        if(path != null) {
+            if(path.vertices.getHead() != null && this.vertices.getTail() != null) {
+                if(this.vertices.getTail().equals(path.vertices.getHead())) {
+                    removeVertexFromPath(this.vertices.getTail(), 0);
+                }
+            }
+            this.vertices.concatenate(path.vertices);
+            this.pathCost += path.pathCost;
+        }
+    }
+
 
     /**
      * Gets the current cost of the path
@@ -152,6 +169,24 @@ public class Path implements Iterable<Vertex> {
     @Override
     public Iterator<Vertex> iterator() {
         return this.vertices.iterator();
+    }
+
+    /**
+     * Returns the first Vertex in this Path
+     * @return the first Vertex in this.vertices
+     * @author Tony Vuolo (bdane)
+     */
+    public Vertex getStart() {
+        return this.vertices.getHead();
+    }
+
+    /**
+     * Returns the last Vertex in this Path
+     * @return ths last Vertex in this.vertices
+     * @author Tony Vuolo (bdane)
+     */
+    public Vertex getEnd() {
+        return this.vertices.getTail();
     }
 
     /**

@@ -4,8 +4,6 @@ import edu.wpi.cs3733.D21.teamF.pathfinding.*;
 
 public class DFSImpl implements IPathfindingAlgorithm {
 
-    private Graph graph;
-
 
     /**
      * Performs Depth-First Search on adjacency matrix
@@ -14,11 +12,8 @@ public class DFSImpl implements IPathfindingAlgorithm {
      */
     @Override
     public Path getPath(Graph graph, Vertex a, Vertex b) {
-        this.graph = graph;
         if (graph.contains(a) && graph.contains(b)) { //FIXME: NULL CHECK
-            final Path path = DFS_Recur(a, b, new Path());
-
-            return path;
+            return DFS_Recur(a, b, new Path());
         }
         return null;
     }

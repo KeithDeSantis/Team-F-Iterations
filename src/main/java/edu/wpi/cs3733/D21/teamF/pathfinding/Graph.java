@@ -1,8 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
-import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.AStarImpl;
-import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.BFSImpl;
-import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.DFSImpl;
+import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.*;
 
 import java.util.*;
 
@@ -97,13 +95,108 @@ public class Graph {
     }
 
     /**
-     * Finds the path of least weight between two Vertices using an A* algorithm
+     * Finds the path of least weight between two Vertices
      * @param a the start Vertex
      * @param b the endpoint Vertex
      * @return the List of Vertices spanning the path of least weight from Vertex a to Vertex b
-     * @author Tony Vuolo
+     * @author Tony Vuolo, Alex Friedman (ahf)
      */
-    public Path getPath(Vertex a, Vertex b) { return pathfindingAlgorithm.getPath(this, a, b); }
+    public Path getPath(Vertex a, Vertex b) {
+        return pathfindingAlgorithm.getPath(this, a, b);
+    }
+
+    /**
+     * Gets the Path of least weight between two vertices
+     * @param v the (ordered) List of Vertices to be reached
+     * @return the Path of least weight that will travel to every Vertex in the List in order
+     */
+    public Path getPath(List<Vertex> v) {
+        Path path = new Path();
+        ListIterator<Vertex> iterator = v.listIterator();
+        Vertex prev = iterator.next(), current;
+        path.addVertexToPath(prev, 0);
+        while(iterator.hasNext()) {
+            current = iterator.next();
+
+            final Path currentSegment = getPath(prev, current);
+            if(currentSegment == null)
+                return null;
+
+            path.concatenate(currentSegment);
+            prev = current;
+        }
+        return path;
+    }
+
+    /**
+     * Edits a array of Vertices to provide the least possible path weight
+     * @param v the array of Vertices
+     * @return the Path of least weight that will travel to every Vertex in the List in optimal order
+     * @author Tony Vuolo (bdane)
+     */
+    public List<Vertex> getEfficientOrder(Vertex... v) {
+        Path[] paths = new Path[v.length * (v.length - 1) / 2];
+        int index = 0;
+        for(int i = 0; i < v.length; i++) {
+            for(int j = i + 1; j < v.length; j++) {
+                paths[index] = (getPath(v[i], v[j]));
+                index++;
+            }
+        }
+        for(int i = 0; i < paths.length; i++) {
+            for(int j = 0; j < paths.length - 1 - i; j++) {
+                if(paths[j].getPathCost() > paths[j + 1].getPathCost()) {
+                    Path proxy = paths[j];
+                    paths[j] = paths[j + 1];
+                    paths[j + 1] = proxy;
+                }
+            }
+        }
+        HashCluster<Vertex> hashCluster = new HashCluster<>();
+        for(Vertex vertex : v) {
+            hashCluster.add(vertex);
+        }
+        for(Path path : paths) {
+            Vertex start = path.getStart(), end = path.getEnd();
+            Vertex oppStart = hashCluster.getOtherEnd(start), oppEnd = hashCluster.getOtherEnd(end);
+            if(oppStart != null && oppEnd != null) {
+                Vertex[] candidates = {start, oppStart, end, oppEnd};
+                int possibleStart = -1, possibleEnd = -1, currentIndex = 0;
+                for(Vertex candidate : candidates) {
+                    if(candidate.equals(v[0])) {
+                        possibleStart = currentIndex;
+                    } else if(candidate.equals(v[v.length - 1])) {
+                        possibleEnd = currentIndex;
+                    }
+                    currentIndex++;
+                }
+                if(possibleStart >= 0 || possibleEnd >= 0) {
+                    if(Math.abs((possibleStart % 2) * (possibleEnd % 2)) == 1) {
+                        if((hashCluster.getNumberOfChains() == 2) == (possibleStart >= 0 && possibleEnd >= 0)) {
+                            hashCluster.join(start, end);
+                        }
+                    }
+                } else {
+                    hashCluster.join(start, end);
+                }
+            }
+        }
+        List<Vertex> newOrderedPath = new LinkedList<>();
+        hashCluster.focus = v[0];
+        for (Vertex vertex : hashCluster) {
+            newOrderedPath.add(vertex);
+        }
+        return newOrderedPath;
+    }
+
+    /**
+     * Gets the Path of least weight between two Vertices
+     * @param list the List of Vertices
+     * @return the Path of least weight that will travel to every Vertex in the List in optimal order
+     */
+    public Path getUnorderedPath(List<Vertex> list) {
+        return getPath(getEfficientOrder(list.toArray(new Vertex[0])));
+    }
 
     /**
      * Used to change the pathfinding algorithm type.
@@ -117,13 +210,24 @@ public class Graph {
         {
             case "astar":
             case "a*":
+            case "a star":
                 this.pathfindingAlgorithm = new AStarImpl();
                 return true;
             case "dfs":
+            case "depth-first-search":
                 this.pathfindingAlgorithm = new DFSImpl();
                 return true;
             case "bfs":
+            case "breadth-first-search":
                 this.pathfindingAlgorithm = new BFSImpl();
+                return true;
+            case "bestfirst":
+            case "best-first-search":
+                this.pathfindingAlgorithm = new BestFSImpl();
+                return true;
+            case "dijkstra":
+            case "dijkstra's search":
+                this.pathfindingAlgorithm = new DijkstraImpl();
                 return true;
         }
         return false;

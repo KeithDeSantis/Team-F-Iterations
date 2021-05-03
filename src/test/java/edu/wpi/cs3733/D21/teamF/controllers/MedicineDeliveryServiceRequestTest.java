@@ -1,13 +1,15 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
-import javafx.fxml.FXMLLoader;
+
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
+
 import java.io.IOException;
+
 import static org.testfx.api.FxAssert.verifyThat;
+
 public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
 
     /**
@@ -18,10 +20,8 @@ public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml"));
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        SceneContext.getSceneContext().setStage(primaryStage);
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");
     }
 
     /**

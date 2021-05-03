@@ -4,8 +4,10 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -57,7 +59,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <JFXButton fx:id="resetFromDB" buttonType="RAISED" onAction="#handleReset" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Reset From Database" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <JFXButton fx:id="resetFromDB" buttonType="RAISED" onAction="#handleReset" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Reset" GridPane.columnSpan="2" GridPane.rowIndex="2">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -65,7 +67,7 @@
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </JFXButton>
-                        <JFXButton fx:id="saveButton" buttonType="RAISED" onAction="#handleSave" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Save CSV" textFill="WHITE" GridPane.rowIndex="1">
+                        <JFXButton fx:id="saveButton" buttonType="RAISED" onAction="#handleSave" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Save CSV" GridPane.rowIndex="1">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -73,7 +75,7 @@
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </JFXButton>
-                        <JFXButton fx:id="loadButton" buttonType="RAISED" onAction="#handleLoad" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="2000.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Load CSV" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <JFXButton fx:id="loadButton" buttonType="RAISED" onAction="#handleLoad" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Load CSV" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -100,9 +102,13 @@
                   <Insets bottom="-25.0" left="25.0" right="25.0" top="28.0" />
                </HBox.margin>
             </MapPanel>
-            <VBox alignment="CENTER" minHeight="120.0" minWidth="120.0" prefWidth="120.0" spacing="5.0">
+            <VBox alignment="CENTER" minHeight="120.0" minWidth="120.0" prefHeight="502.0" prefWidth="176.0" spacing="5.0">
                <children>
-                  <JFXButton fx:id="newButton" buttonType="RAISED" onAction="#handleNew" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="New..." textFill="WHITE">
+                  <JFXToggleButton fx:id="edgeCreationToggle" onAction="#handleToggle" prefHeight="61.0" prefWidth="133.0" text="Drag and Drop" textAlignment="CENTER" toggleColor="#f0c808" toggleLineColor="#f0e808" unToggleColor="#03256b" unToggleLineColor="#03256b80" wrapText="true">
+                     <font>
+                        <Font size="11.0" />
+                     </font></JFXToggleButton>
+                  <JFXButton fx:id="newButton" buttonType="RAISED" onAction="#handleNew" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="New...">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -110,7 +116,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="editButton" buttonType="RAISED" layoutX="10.0" layoutY="10.0" onAction="#handleEdit" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Edit..." textFill="WHITE">
+                  <JFXButton fx:id="editButton" buttonType="RAISED" layoutX="10.0" layoutY="10.0" onAction="#handleEdit" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Edit...">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -118,7 +124,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="deleteButton" buttonType="RAISED" layoutX="10.0" layoutY="39.0" onAction="#handleDelete" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefWidth="100.0" style="-fx-background-color: #03256c;" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete" textFill="WHITE">
+                  <JFXButton fx:id="deleteButton" buttonType="RAISED" layoutX="10.0" layoutY="39.0" onAction="#handleDelete" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -126,6 +132,55 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </JFXButton>
+                  <GridPane prefHeight="201.0" prefWidth="120.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                           <children>
+                              <Label text="Node ID:" textAlignment="CENTER" underline="true" wrapText="true" />
+                              <Label fx:id="nodeIDDisplayLabel" opacity="0.5" text="Node ID" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1">
+                           <children>
+                              <Label text="Floor:" textAlignment="CENTER" underline="true" wrapText="true" />
+                              <Label fx:id="floorDisplayLabel" opacity="0.5" text="Floor" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Building:" textAlignment="CENTER" underline="true" wrapText="true" />
+                              <Label fx:id="buildingDisplayLabel" opacity="0.5" text="Building" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Node Type:" textAlignment="CENTER" underline="true" wrapText="true" />
+                              <Label fx:id="nodeTypeDisplayLabel" opacity="0.5" text="Node Type" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Long Name:" textAlignment="CENTER" underline="true" wrapText="true" />
+                              <Label fx:id="longNameDisplayLabel" opacity="0.5" text="Long Name" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Short Name:" textAlignment="CENTER" underline="true" wrapText="true" />
+                              <Label fx:id="shortNameDisplayLabel" opacity="0.5" text="Short Name" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
                </children>
                <HBox.margin>
                   <Insets />

@@ -5,8 +5,6 @@ import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
-import edu.wpi.cs3733.D21.teamF.pathfinding.AStarGraph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
@@ -15,7 +13,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -36,8 +33,6 @@ public class EditMapEdgeDialogueViewController {
     @FXML
     private JFXButton ok;
 
-    @FXML private Label title;
-
     private EdgeEntry edge = new EdgeEntry();
     private Stage dialogueStage;
     public boolean okClicked;
@@ -48,14 +43,6 @@ public class EditMapEdgeDialogueViewController {
     @FXML
     private void initialize(){
         // Load in fonts
-        Font font = Font.loadFont("file:src/main/resources/fonts/Montserrat-Regular.ttf", 15);
-        edgeID.setFont(font);
-        ok.setFont(font);
-
-        Font titleFont = Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 24);
-        title.setFont(titleFont);
-
-
         Graph graph = new Graph();
         try {
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
@@ -98,14 +85,7 @@ public class EditMapEdgeDialogueViewController {
         edgeID.setStyle("-fx-border-width: 0px");
         startNode.setStyle("-fx-border-width: 0px");
         endNode.setStyle("-fx-border-width: 0px");
-/*
-        //check each field for filled out
-        if(edgeID.getText().length() <=0 || !isUniqueNodeID(edgeID.getText())){
-            edgeID.setStyle("-fx-border-widge: 2px");
-            edgeID.setStyle("-fx-border-color: red");
-        }
 
- */
         if(startNode.getValue().length() <=0){
             startNode.setStyle("-fx-border-widge: 2px");
             startNode.setStyle("-fx-border-color: red");

@@ -4,15 +4,9 @@ import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,13 +16,12 @@ import java.util.UUID;
  * Controller for Floral Delivery Service View
  * @author keithdesantis
  */
-public class FloralDeliveryService {
+public class FloralDeliveryService extends ServiceRequests{
 
     @FXML private JFXRadioButton bouquetButton;
     @FXML private JFXRadioButton vaseButton;
     @FXML private JFXRadioButton potButton;
     @FXML private JFXButton clearButton;
-    @FXML private JFXButton submitButton;
     @FXML private JFXTextField deliveryField;
     @FXML private JFXDatePicker dateField;
     @FXML private JFXTextField nameField;
@@ -53,38 +46,14 @@ public class FloralDeliveryService {
 
     /**
      * Handles the push of a radio button (sets up Toggle Groups)
-     * @param actionEvent button being pushed
      * @author KeithDeSantis
      */
     @FXML
-    private void handleRadioButtonClicked(ActionEvent actionEvent) {
+    private void handleRadioButtonClicked() {
         ToggleGroup groupContainer = new ToggleGroup(); // group for container buttons
         bouquetButton.setToggleGroup(groupContainer);
         vaseButton.setToggleGroup(groupContainer);
         potButton.setToggleGroup(groupContainer);
-    }
-
-    /**
-     * When back button is pressed
-     * @param mouseEvent
-     * @author KD
-     */
-    public void handleBack(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) bouquetButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml")); //FIXME Go to service request home
-        stage.getScene().setRoot(root);
-        stage.show();
-    }
-
-    /**
-     * Return to Home when it is decided where home is
-     * @param mouseEvent
-     * @author KD
-     */
-    public void handleHome(MouseEvent mouseEvent) throws IOException {
-        Stage stage = (Stage) submitButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-        stage.getScene().setRoot(root);
     }
 
     /**
@@ -93,28 +62,18 @@ public class FloralDeliveryService {
      * @author KD
      */
     public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException {
-        if(isFilledOut()) {
+        if(formFilled()) {
             String type = "Flower Delivery";
-            String name = nameField.getText();
             String uuid = UUID.randomUUID().toString();
-            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, name, "false");
-            //successField.setText("Request Submitted!");
+            String additionalInfo = "Date: " + dateField.getValue() + "Deliver to: " + deliveryField.getText() +
+            "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", additionalInfo);
             // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submitButton.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.showAndWait();
-        } else { successField.setText(""); }
+            openSuccessWindow();
+        }
     }
 
-    public boolean isFilledOut() {
+    public boolean formFilled() {
         boolean isFilled = true;
         if(!(bouquetButton.isSelected() || vaseButton.isSelected() || potButton.isSelected())) {
             isFilled = false;
@@ -187,16 +146,6 @@ public class FloralDeliveryService {
             dateField.setStyle("-fx-background-color: transparent;");
         }
         return isFilled;
-    }
-
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000");
-    }
-
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF");
     }
 
     public void handleClear() {

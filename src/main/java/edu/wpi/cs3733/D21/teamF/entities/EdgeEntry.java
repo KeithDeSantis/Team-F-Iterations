@@ -69,7 +69,7 @@ public class EdgeEntry extends RecursiveTreeObject<EdgeEntry> {
 
     /**
      * Setter to input a new edge ID, will update the starting and end nodes for consistency
-     * @param newEdgeID New edge ID formatted as [NODEID]_[NODEID]
+     * @param newEdgeID New edge ID formatted as [NODE ID]_[NODE ID]
      * @author Leo Morris
      */
     public void setEdgeID(String newEdgeID){

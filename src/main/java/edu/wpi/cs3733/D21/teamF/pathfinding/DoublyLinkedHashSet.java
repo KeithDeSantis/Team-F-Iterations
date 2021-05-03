@@ -168,6 +168,98 @@ public class DoublyLinkedHashSet<Payload> implements Iterable<Payload> {
     }
 
     /**
+     * Links this DoublyLinkedHashSets with another one
+     * @param set the augend set
+     * @author Tony Vuolo (bdane)
+     */
+    public void concatenate(DoublyLinkedHashSet<Payload> set) {
+        if(set != null) {
+            if(this.tail != null) {
+                set.head.prev = this.tail;
+                this.tail.next = set.head;
+            } else {
+                this.head = set.head;
+            }
+            this.tail = set.tail;
+            this.map.putAll(set.map);
+        }
+    }
+
+    /**
+     * Gets the head of this DoublyLinkedHashSet
+     * @return this.head
+     * @author Tony Vuolo (bdane)
+     */
+    public Payload getHead() {
+        return this.head == null ? null : this.head.payload;
+    }
+
+    /**
+     * Gets the tail of this DoublyLinkedHashSet
+     * @return this.tail
+     * @author Tony Vuolo (bdane)
+     */
+    public Payload getTail() {
+        return this.tail == null ? null : this.tail.payload;
+    }
+
+    /**
+     * Switches a Payload with the value after it
+     * @param payload the target Payload
+     * @author Tony Vuolo (bdane)
+     */
+    public void switchAfter(Payload payload) {
+        HashNode<Payload> node = this.map.get(payload);
+        if(node.next != null) {
+            Payload nextPayload = node.next.payload;
+            remove(payload);
+            insertAfter(nextPayload, payload);
+        }
+    }
+
+    /**
+     * Inserts a Payload before another target Value in this HashList
+     * @param target the target Value
+     * @param value the new Value to be added to this HashList
+     * @return true if the target value exists in this HashList, else false
+     * @author Tony Vuolo (bdane)
+     */
+    public boolean insertBefore(Payload target, Payload value) {
+        HashNode<Payload> hashNode = this.map.get(target);
+        if(hashNode == null) {
+            return false;
+        }
+        HashNode<Payload> newNode = new HashNode<>(value);
+        newNode.prev = hashNode.prev;
+        newNode.next = hashNode;
+        if(hashNode.prev != null) {
+            hashNode.prev.next = newNode;
+        }
+        hashNode.prev = newNode;
+        this.map.put(value, newNode);
+        return true;
+    }
+
+    /**
+     * Inserts a Value after another target Value in this HashList
+     * @param target the target Value
+     * @param payload the new Value to be added to this HashList
+     * @return true if the target payload exists in this HashList, else false
+     * @author Tony Vuolo (bdane)
+     */
+    public boolean insertAfter(Payload target, Payload payload) {
+        HashNode<Payload> hashNode = this.map.get(target);
+        if(hashNode == null) {
+            return false;
+        } else if(hashNode.next == null) {
+            add(payload);
+            return true;
+        } else {
+            return insertBefore(hashNode.next.payload, payload);
+        }
+    }
+
+    /**
      * Finds the size of this DoublyLinkedHashSet
      * @return this.map.size
      */

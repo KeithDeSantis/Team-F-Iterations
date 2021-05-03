@@ -1,19 +1,11 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
-import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-public class AStarGraph implements IPathfindingAlgos {
-    /**
-     * Finds the path of least weight between two Vertices using an A* algorithm
-     * @param a the start Vertex
-     * @param b the endpoint Vertex
-     * @return the List of Vertices spanning the path of least weight from Vertex a to Vertex b
-     * @author Tony Vuolo
-     */
-    public Path getPath(Graph graph, Vertex a, Vertex b) {
+public abstract class AbstractPathfindingAlgorithm implements IPathfindingAlgorithm{
+    public Path getPath(Graph graph, Vertex a, Vertex b){
         if (!graph.contains(a) || !graph.contains(b)) {
             return null;
         }
@@ -41,17 +33,9 @@ public class AStarGraph implements IPathfindingAlgos {
                     }
                 }
             }
-            Vertex next = null;
-            for(String key : weights.keySet()) {
-                Vertex vertex = graph.getVertex(key);
-                if((graph.doesNotContain(exhaustedVertices, vertex))) {
-                    if(next == null) {
-                        next = vertex;
-                    } else if(weights.get(vertex.getID()) + vertex.heuristic(b) < weights.get(next.getID()) + next.heuristic(b)) {
-                        next = vertex;
-                    }
-                }
-            }
+
+            Vertex next = getNext(graph, b, weights, exhaustedVertices);
+
             if(next == null) {
                 continueGraphSearchIteration = false;
             } else {
@@ -61,29 +45,6 @@ public class AStarGraph implements IPathfindingAlgos {
                 }
             }
         }
-//        List<Vertex> pathList = null;
-//        if(proxy.equals(b)) {
-//            pathList = new LinkedList<>();
-//            boolean continueBackwardPathGeneration = true;
-//            while(continueBackwardPathGeneration) {
-//                proxy = linkages.get(proxy.getID());
-//                if (proxy == null) {
-//                    continueBackwardPathGeneration = false;
-//                } else {
-//                    pathList.add(0, proxy);
-//                }
-//            }
-//        }
-//        Path path = new Path();
-//        if(pathList == null) {
-//            path = null;
-//        } else {
-//            for(Vertex vertex : pathList) {
-//                path.addVertexToPath(vertex, 0);
-//            }
-//            path.addVertexToPath(b, weights.get(b.getID()));
-//        }
-//        return path == null ? null : path.asList();
 
         Path path = null;
         if(proxy.equals(b)) {
@@ -98,4 +59,5 @@ public class AStarGraph implements IPathfindingAlgos {
         return path;
     }
 
+    public abstract Vertex getNext(Graph graph, Vertex goal, HashMap<String, Double> weights, List<Vertex> exhaustedVertices);
 }

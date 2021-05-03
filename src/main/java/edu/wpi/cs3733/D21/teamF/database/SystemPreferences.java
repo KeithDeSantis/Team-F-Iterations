@@ -19,7 +19,6 @@ public class SystemPreferences implements DatabaseEntry{
 
     @Override
     public boolean editEntry(String id, String val, String colName) throws Exception {
-        boolean success = false;
         if (colName.equals("algorithm") || colName.equals("id")) {
             String query = String.format("UPDATE SYSTEM_PREFERENCES SET %s=(?) WHERE id=(?)", colName);
             try {
@@ -28,15 +27,14 @@ public class SystemPreferences implements DatabaseEntry{
                 stmt.setString(2, id);
                 stmt.executeUpdate();
                 stmt.close();
-                success = true;
             } catch (SQLException e) {
-                success = false;
+               return false;
             }
         }
         else{
             throw new Exception("Invalid column name");
         }
-        return success;
+        return true;
     }
 
     @Override
@@ -49,7 +47,7 @@ public class SystemPreferences implements DatabaseEntry{
 
     @Override
     public boolean createTable() {
-        boolean success = false;
+        boolean success;
         final String initNodesTable = "CREATE TABLE SYSTEM_PREFERENCES(ID varchar(200), " +
                 "ALGORITHM varchar(200), primary key(ID))";
         try{
@@ -66,7 +64,7 @@ public class SystemPreferences implements DatabaseEntry{
 
     @Override
     public boolean dropTable() {
-        boolean success = false;
+        boolean success;
         String query = "DROP TABLE SYSTEM_PREFERENCES";
         try {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
@@ -79,20 +77,19 @@ public class SystemPreferences implements DatabaseEntry{
         return success;
     }
 
-    public String getAlgorithm(String id) throws SQLException{
+    public String getAlgorithm() throws SQLException{
         String query = "SELECT * FROM SYSTEM_PREFERENCES WHERE ID=(?)";
-        ResultSet rset;
+        ResultSet resultSet;
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
-        stmt.setString(1, id);
-        rset = stmt.executeQuery();
-        if (rset.next()){
-            return rset.getString(2);
+        stmt.setString(1, "MASTER");
+        resultSet = stmt.executeQuery();
+        if (resultSet.next()){
+            return resultSet.getString(2);
         }
         return null;
     }
 
     @Override
-    public void populateTable(List<String[]> entries) throws SQLException {
-        return;
+    public void populateTable(List<String[]> entries) {
     }
 }

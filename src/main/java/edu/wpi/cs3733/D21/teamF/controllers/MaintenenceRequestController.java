@@ -1,32 +1,28 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class MaintenenceRequestController {
-    @FXML private JFXButton submit;
+public class MaintenenceRequestController extends ServiceRequests {
     @FXML private JFXComboBox<String> locationField;
     @FXML private JFXComboBox<String> typeComboBox;
     @FXML private ImageView goBack;
@@ -54,18 +50,6 @@ public class MaintenenceRequestController {
 
     @FXML
     public void initialize(){
-        // Setup fonts
-        Font defaultFont = Font.loadFont("file:src/main/resources/fonts/Montserrat-SemiBold.ttf", 20);
-        submit.setFont(defaultFont);
-        cancel.setFont(defaultFont);
-        typeLabel.setFont(defaultFont);
-        locationLabel.setFont(defaultFont);
-        descLabel.setFont(defaultFont);
-        urgencyLabel.setFont(defaultFont);
-        dateLabel.setFont(defaultFont);
-        assignmentLabel.setFont(defaultFont);
-
-        title.setFont(Font.loadFont("file:src/main/resources/fonts/Volkhov-Regular.ttf", 40));
 
         // Insert problem types and urgency into combo boxes
         typeComboBox.setItems(problemTypes);
@@ -103,6 +87,10 @@ public class MaintenenceRequestController {
         // Set list to assignment Combo Box
         assignment.setItems(employeeList);
 
+        assignment.setVisible(false);
+        assignment.setDisable(true);
+        assignmentLabel.setVisible(false);
+
     }
 
     /**
@@ -113,7 +101,7 @@ public class MaintenenceRequestController {
      * @author Leo Morris
      */
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {
-        if(isFilled()) {
+        if(formFilled()) {
             String name = urgencyComboBox.getValue() + ": ";
             if (typeComboBox.getValue().equals("Damage") || typeComboBox.getValue().equals("Safety Hazard") || typeComboBox.getValue().equals("Spill")) {
                 name += typeComboBox.getValue() + " at " + locationField.getValue();
@@ -134,55 +122,14 @@ public class MaintenenceRequestController {
                 // Leave assigned employee blank
             }
 
-            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name, employee,
-                    "false");//, name + ": " + descriptionField.getText()); FIXME Re-add instructions to addServiceReq after merge
-            // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
-            submittedStage.showAndWait();
+            String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
+                    "Urgency: " + urgencyComboBox.getValue();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name,"", "false", additionalInfo);
+            openSuccessWindow();
         }
     }
 
-    public void handleGoHome(MouseEvent mouseEvent) throws IOException {
-        Stage stage;
-        Parent root;
-        stage = (Stage) goBack.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Default Page");
-        stage.show();
-    }
-
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
-
-    public void handleCancel(ActionEvent actionEvent) throws IOException {
-        Stage stage;
-        Parent root;
-        stage = (Stage) goBack.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml"));
-        stage.getScene().setRoot(root);
-        stage.setTitle("Service Request Home");
-        stage.show();
-    }
-
-    public boolean isFilled(){
+    public boolean formFilled(){
         boolean filled = true;
         if(typeComboBox.getValue() == null){
             filled = false;
@@ -207,14 +154,14 @@ public class MaintenenceRequestController {
         return filled;
     }
 
-    public void reset(KeyEvent keyEvent) {
+    public void reset() {
         locationField.setStyle("-fx-background-color: #00000000");
         descriptionField.setStyle("-fx-background-color: #00000000");
         typeComboBox.setStyle("-fx-background-color: #00000000");
         urgencyComboBox.setStyle("-fx-background-color: #00000000");
     }
 
-    public void reset2(ActionEvent actionEvent) {
+    public void reset2() {
         locationField.setStyle("-fx-background-color: #00000000");
         descriptionField.setStyle("-fx-background-color: #00000000");
         typeComboBox.setStyle("-fx-background-color: #00000000");
