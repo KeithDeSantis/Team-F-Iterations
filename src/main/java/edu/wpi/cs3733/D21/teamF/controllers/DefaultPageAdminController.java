@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -78,6 +79,7 @@ public class DefaultPageAdminController {
         else if (buttonPushed == quit) {
             Platform.exit();
         } else if (buttonPushed == signOut){
+            CurrentUser.getCurrentUser().logout();
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
     }
