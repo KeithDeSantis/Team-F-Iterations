@@ -41,7 +41,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import sun.reflect.generics.tree.Tree;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -88,7 +87,7 @@ public class AStarDemoController implements Initializable {
     public JFXToggleButton optimize;
 
     @FXML
-    private JFXTreeView treeView;
+    private JFXTreeView<String> treeView;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -188,13 +187,13 @@ public class AStarDemoController implements Initializable {
         isCurrentlyNavigating.set(false);
 
         final ContextMenu contextMenu = new ContextMenu();
+        final ContextMenu treeViewMenu = new ContextMenu();
 
         //FIXME: CHANGE TEXT TO BE MORE ACCESSIBLE
-        final MenuItem startPathMenu = new MenuItem("Path from Here");
-        final MenuItem addStopMenu = new MenuItem("Add stop here");
-        final MenuItem endPathMenu = new MenuItem("Path end Here");
-
-        final MenuItem whatsHereMenu = new MenuItem("What's here?");
+        final MenuItem startPathMenu = new MenuItem("Path From Here");
+        final MenuItem addStopMenu = new MenuItem("Add Stop Here");
+        final MenuItem endPathMenu = new MenuItem("Path End Here");
+        final MenuItem whatsHereMenu = new MenuItem("What's Here?");
 
         contextMenu.getItems().addAll(startPathMenu,addStopMenu, endPathMenu, new SeparatorMenuItem(), whatsHereMenu);
 
@@ -209,6 +208,9 @@ public class AStarDemoController implements Initializable {
 
             if(currEntry == null)
                 return;
+
+            // Set whats here menu text back to what it should be on the map
+            whatsHereMenu.setText("What's Here?");
 
             if(vertices.contains(graph.getVertex(currEntry.getNodeID()))){
                 addStopMenu.setText("Remove Stop");
@@ -323,10 +325,10 @@ public class AStarDemoController implements Initializable {
 
         //~~~~~~~~~ Tree View Setup ~~~~~~~~
 
-        // Set root tree item (will be hidden)
+        // Create root tree item (will be hidden later)
         TreeItem rootItem = new TreeItem("shortNames");
 
-        // categorize node short names and add them to appropriate tree view
+        // categorize node short names and add them to appropriate tree view (root items declared before initialize)
         for (NodeEntry node: allNodeEntries) {
             switch (node.getNodeType()){
                 case "CONF":
@@ -359,11 +361,109 @@ public class AStarDemoController implements Initializable {
             }
         }
 
-        // add tree items to root item
+        // add tree items to root item (shown in order of addition)
         rootItem.getChildren().addAll(conferenceItem, departmentItem, entranceItem, infoItem,
                 labItem, parkingItem, retailItem, serviceItem, restroomItem);
+
+        // Set the root item
         treeView.setRoot(rootItem);
 
+        // Hide root item (we dont need it visible, we always want to list to be there
+        treeView.setShowRoot(false);
+
+        // Add a context menu to the tree view for when an item is selected
+        treeView.setOnContextMenuRequested(event -> {
+            // If navigating: do nothing
+            if(isCurrentlyNavigating.get()){ return; }
+
+            //FIXME kind of an ugly work around to pull from the DB
+            NodeEntry nodeFromDB = null;
+            try {
+                nodeFromDB = DatabaseAPI.getDatabaseAPI().getNode(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue()));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace(); // Print stack trace
+            }
+            final NodeEntry currEntry = nodeFromDB;
+
+            // If null do nothing
+            if(currEntry == null){ return; }
+
+            // Replace text on the whats here menu to make a little more sense
+            whatsHereMenu.setText("What's This?");
+
+            // Swap text on the add stop item based on if selected node in in the list
+            if(vertices.contains(graph.getVertex(currEntry.getNodeID()))){
+                addStopMenu.setText("Remove Stop");
+            } else {
+                addStopMenu.setText("Add Stop");
+            }
+
+            // Show context menu
+            contextMenu.show(treeView, event.getScreenX(), event.getScreenY());
+
+            // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
+            // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
+            startPathMenu.setOnAction(e -> {
+                startNode.set(idToShortName(currEntry.getNodeID()));
+                handleStartBoxAction();
+            });
+
+            // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
+            // No combo box update so we call checkInput()
+            addStopMenu.setOnAction(e -> {
+                if(addStopMenu.getText().equals("Add Stop")) {
+                    vertices.add(graph.getVertex(currEntry.getNodeID()));
+                    drawStop(currEntry);
+                } else {
+                    vertices.remove(graph.getVertex(currEntry.getNodeID()));
+                    mapPanel.unDraw(currEntry.getNodeID());
+                    getDrawableNode(currEntry.getNodeID());
+                }
+                checkInput();
+            });
+
+            // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
+            endPathMenu.setOnAction(e -> {
+                endNode.set(idToShortName(currEntry.getNodeID()));
+                handleEndBoxAction();
+            });
+
+            //FIXME: Make these ones require that thing is visible
+            whatsHereMenu.setOnAction(e -> {
+
+                mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
+
+                final JFXDialog dialog = new JFXDialog();
+                final JFXDialogLayout layout = new JFXDialogLayout();
+
+
+                layout.setHeading(new Text(currEntry.getLongName()));
+
+                //FIXME: DO BREAKS W/ CSS
+                layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
+                        "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
+                        "may also be prone to contain information about running to the second arrangement (it's only the\n" +
+                        "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
+                        "avenue by Radio City."));
+
+                final JFXButton closeBtn = new JFXButton("Close");
+                closeBtn.setOnAction(a -> dialog.close());
+
+                final JFXButton directionsTo = new JFXButton("Direction To");
+                directionsTo.setOnAction(a -> {endNode.set(idToShortName(currEntry.getNodeID())); dialog.close();});
+
+                final JFXButton directionsFrom = new JFXButton("Directions From");
+                directionsFrom.setOnAction(a ->  {
+                    startNode.set(idToShortName(currEntry.getNodeID())); dialog.close();});
+
+                final JFXButton toggleFavorite = new JFXButton("FIXME: Add Favorite");
+
+                layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+
+                dialog.setContent(layout);
+                mapPanel.showDialog(dialog);
+            });
+        });
     }
 
     /**
@@ -384,6 +484,8 @@ public class AStarDemoController implements Initializable {
         stop.setScaleY(1.5);
         stop.setMouseTransparent(true);
         mapPanel.draw(stop);
+        mapPanel.switchMap(nodeEntry.getFloor());
+        mapPanel.centerNode(stop);
     }
 
     private void loadFavorites() {
@@ -1105,8 +1207,8 @@ public class AStarDemoController implements Initializable {
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
 
-        mapPanel.switchMap(pathVertex.get(0).getFloor());
-        mapPanel.centerNode(startNodeDisplay);
+        //mapPanel.switchMap(pathVertex.get(0).getFloor());
+        //mapPanel.centerNode(startNodeDisplay);
         Go.setText("Start Navigation");
     }
 
