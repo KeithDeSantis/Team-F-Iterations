@@ -495,8 +495,80 @@ public class GraphTest {
             assertEquals(iterator.next().getID(), v.getID());
         }
     }
-
+ /**
+     * Tests HashCluster join() and iterator() methods
+     * @author Tony Vuolo (bdane)
+     * @see HashCluster
+     */
     @Test
+    public void testHashCluster() {
+        HashCluster<Integer> cluster = new HashCluster<>();
+        for(int i = 0; i < 15; i++) {
+            cluster.add(i);
+        }
+        for(int i = 0; i < 6; i++) {
+            cluster.join(i, i + 1);
+        }
+        for(int i = 10; i < 14; i++) {
+            cluster.join(i, i + 1);
+        }
+        cluster.join(7, 10);
+
+        assertEquals(4, cluster.getNumberOfChains());
+        assertNull(cluster.focus);
+        int index = 0;
+        cluster.focus = 0;
+        for(int i : cluster) {
+            assertEquals(index++, i);
+            assertTrue(i < 7);
+        }
+        cluster.focus = 7;
+        index = 9;
+        for(int i : cluster) {
+            assertEquals((index == 9 ? -2 : 0) + index++, i);
+        }
+    }
+
+    /**
+     * Tests switchAfter() in DoublyLinkedHashSet.java
+     * @author Tony Vuolo (bdane)
+     * @see DoublyLinkedHashSet
+     */
+    @Test
+    public void testDLHSSwitchAfter() {
+        DoublyLinkedHashSet<Integer> set = new DoublyLinkedHashSet<>();
+        for(int i = 0; i < 10; i++) {
+            set.add(i);
+        }
+        set.switchAfter(5);
+        set.switchAfter(5);
+        set.switchAfter(5);
+        assertEquals("[0, 1, 2, 3, 4, 6, 7, 8, 5, 9]", set.toString());
+    }
+
+    /**
+     * Tests getUnorderedPath() in Graph.java
+     * @author Tony Vuolo (bdane)
+     * @see Graph
+     * @see HashCluster
+     */
+    @Test
+    public void testFindPathWithUnorderedStops() {
+        String[] vertexIDs = {
+                "CHALL002L1",
+                "CREST002L1",
+                "CRETL001L1",
+                "CHALL013L1",
+                "CDEPT002L1",
+                "CSERV001L1"
+        };
+        Vertex[] vertices = new Vertex[vertexIDs.length];
+        for(int i = 0; i < vertices.length; i++) {
+            vertices[i] = this.vertices.get(vertexIDs[i]);
+        }
+        assertEquals(this.graph.getEfficientOrder(vertices).toString(), "[CHALL002L1, CRETL001L1, CHALL013L1, CDEPT002L1, CREST002L1, CSERV001L1]");
+    }
+  @Test
     public void testBestFirstWithAStar() {
         //tests every possibility b/c why not? we have a small dataset
 

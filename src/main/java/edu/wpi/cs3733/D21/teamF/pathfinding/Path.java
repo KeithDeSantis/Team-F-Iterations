@@ -172,6 +172,24 @@ public class Path implements Iterable<Vertex> {
     }
 
     /**
+     * Returns the first Vertex in this Path
+     * @return the first Vertex in this.vertices
+     * @author Tony Vuolo (bdane)
+     */
+    public Vertex getStart() {
+        return this.vertices.getHead();
+    }
+
+    /**
+     * Returns the last Vertex in this Path
+     * @return ths last Vertex in this.vertices
+     * @author Tony Vuolo (bdane)
+     */
+    public Vertex getEnd() {
+        return this.vertices.getTail();
+    }
+
+    /**
      * Finds the length of this Path, equal to the number of vertices
      * @return the size of this.vertices
      */
