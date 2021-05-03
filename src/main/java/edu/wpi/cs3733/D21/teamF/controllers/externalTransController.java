@@ -46,6 +46,12 @@ public class externalTransController extends ServiceRequests{
 
     @Override
     public void handleClear() {
-        //TODO: handleClear for this service req
+        employeeName.setText("");
+        loc.setText("");
+        methodTrans.setText("");
+        special.setText("");
+        special.setStyle("-fx-text-fill: #000000");
+        loc.setStyle("-fx-text-fill: #000000");
+        methodTrans.setStyle("-fx-text-fill: #000000");
     }
 }
