@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
+
 public class GiftDeliveryServiceRequestController extends ServiceRequests {
         @FXML private JFXTextField name;
         @FXML private JFXTextField ccNumber;
@@ -29,20 +31,9 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
             }
         }
 
+
         public void handleClear(ActionEvent actionEvent) throws IOException {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GiftDeliveryServiceRequest.fxml");
-
-        }
-        public void handleCancel(ActionEvent actionEvent) throws IOException{
-//            if(/*user is admin*/) {
-//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
-//            }
-//            else if (/*user is employee*/){
-//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
-//            }
-//            else{
-//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-//            }
         }
 
         public boolean formFilled() {
