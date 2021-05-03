@@ -45,7 +45,7 @@
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
                      <HBox.margin>
-                        <Insets left="25.0" />
+                        <Insets />
                      </HBox.margin>
                   </Label>
                   <JFXTextField fx:id="employeeID" prefHeight="31.0" prefWidth="520.0">
@@ -64,7 +64,7 @@
                               <Insets top="50.0" />
                            </VBox.margin>
                            <font>
-                              <Font name="Montserrat Regular" size="12.0" />
+                              <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </JFXRadioButton>
                         <JFXRadioButton fx:id="lights" mnemonicParsing="false" text="Lights">
@@ -75,7 +75,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                            <font>
-                              <Font name="Montserrat Regular" size="12.0" />
+                              <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </JFXRadioButton>
                         <JFXRadioButton fx:id="both" mnemonicParsing="false" text="Both">
@@ -83,7 +83,7 @@
                               <Insets top="10.0" />
                            </padding>
                            <font>
-                              <Font name="Montserrat Regular" size="12.0" />
+                              <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </JFXRadioButton>
                      </children>
@@ -98,7 +98,7 @@
                               <Font name="Montserrat Regular" size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets bottom="5.0" top="10.0" />
                            </VBox.margin>
                         </Label>
                         <JFXRadioButton fx:id="hot" mnemonicParsing="false" text="Hot">
@@ -106,7 +106,7 @@
                               <Insets left="10.0" top="10.0" />
                            </VBox.margin>
                            <font>
-                              <Font name="Montserrat Regular" size="12.0" />
+                              <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </JFXRadioButton>
                         <JFXRadioButton fx:id="cold" mnemonicParsing="false" text="Cold">
@@ -114,7 +114,7 @@
                               <Insets left="10.0" top="10.0" />
                            </VBox.margin>
                            <font>
-                              <Font name="Montserrat Regular" size="12.0" />
+                              <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </JFXRadioButton>
                      </children>
@@ -126,7 +126,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                            <font>
-                              <Font name="Montserrat Regular" size="12.0" />
+                              <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </JFXRadioButton>
                      </children>
@@ -159,8 +159,8 @@
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
                <buttons>
                   <JFXButton fx:id="cancel" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
-                  <JFXButton fx:id="helpButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" />
                   <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                  <JFXButton fx:id="helpButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" />
                   <JFXButton fx:id="submitButton" alignment="TOP_LEFT" buttonType="RAISED" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
                </buttons>
             </ButtonBar>

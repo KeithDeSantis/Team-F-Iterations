@@ -29,7 +29,7 @@
                   <Insets />
                </HBox.margin>
             </ImageView>
-            <Label fx:id="title" prefHeight="110.0" prefWidth="783.0" text="BRIGHAM AND WOMEN'S HOSPITAL Language Interpretation Request" wrapText="true">
+            <Label fx:id="title" prefHeight="152.0" prefWidth="783.0" text="BRIGHAM AND WOMEN'S HOSPITAL Language Interpretation Request" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
@@ -144,21 +144,21 @@
                <buttons>
                   <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" textAlignment="CENTER" fx:id="x">
                      <font>
-                        <Font name="Montserrat Regular" size="20.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </JFXButton>
                   <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                  <JFXButton fx:id="translate" buttonType="RAISED" onAction="#handleTranslate" prefHeight="40.0" prefWidth="144.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Translate">
+                  <JFXButton fx:id="help" buttonType="RAISED" maxWidth="-Infinity" minWidth="-Infinity" onAction="#handleHelp" prefWidth="40.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?">
                      <font>
-                        <Font name="Montserrat Regular" size="20.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="translate" buttonType="RAISED" onAction="#handleTranslate" prefWidth="144.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Translate">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </JFXButton>
                   <JFXButton fx:id="submitButton" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
-                     <font>
-                        <Font name="Montserrat Regular" size="20.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton fx:id="help" buttonType="RAISED" maxWidth="-Infinity" minWidth="-Infinity" onAction="#handleHelp" prefHeight="40.0" prefWidth="40.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?">
                      <font>
                         <Font name="Montserrat Regular" size="20.0" />
                      </font>

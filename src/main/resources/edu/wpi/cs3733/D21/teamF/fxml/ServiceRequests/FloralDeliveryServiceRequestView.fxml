@@ -158,7 +158,7 @@
                </GridPane.margin></JFXDatePicker>
             <Label text="Name:" GridPane.rowIndex="1">
                <font>
-                  <Font name="Montserrat Regular" size="14.0" />
+                  <Font name="Montserrat Regular" size="15.0" />
                </font>
                <GridPane.margin>
                   <Insets left="10.0" />
@@ -183,7 +183,7 @@
             </Label>
             <JFXTextField fx:id="cardNumberField" alignment="CENTER" promptText="Card Number">
                <font>
-                  <Font name="Montserrat Regular" size="14.0" />
+                  <Font name="Montserrat Regular" size="15.0" />
                </font>
                <HBox.margin>
                   <Insets left="35.0" />
@@ -191,7 +191,7 @@
             </JFXTextField>
             <JFXTextField fx:id="cardExpField" alignment="CENTER" promptText="MM/YYYY">
                <font>
-                  <Font name="Montserrat Regular" size="14.0" />
+                  <Font name="Montserrat Regular" size="15.0" />
                </font>
                <HBox.margin>
                   <Insets left="35.0" />
@@ -199,7 +199,7 @@
             </JFXTextField>
             <JFXTextField fx:id="cardCVCField" alignment="CENTER" promptText="CVC">
                <font>
-                  <Font name="Montserrat Regular" size="14.0" />
+                  <Font name="Montserrat Regular" size="15.0" />
                </font>
                <HBox.margin>
                   <Insets left="35.0" />

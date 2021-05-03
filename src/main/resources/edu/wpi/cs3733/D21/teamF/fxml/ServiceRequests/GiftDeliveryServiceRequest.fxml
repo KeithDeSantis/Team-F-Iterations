@@ -15,7 +15,7 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.GiftDeliveryServiceRequestController">
     <children>
-        <HBox fx:id="header" prefHeight="113.0" prefWidth="614.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
+        <HBox fx:id="header" prefHeight="117.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
             <children>
                 <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -29,7 +29,7 @@
             </Text>
             </children>
         </HBox>
-      <VBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
+      <VBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
          <children>
             <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                <children>
@@ -37,6 +37,9 @@
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
                   </Label>
                       <JFXTextField fx:id="name" maxWidth="224.0" prefHeight="31.0" prefWidth="224.0">
                      <HBox.margin>
@@ -45,7 +48,7 @@
                   </JFXTextField>
                </children>
                <VBox.margin>
-                  <Insets left="25.0" />
+                  <Insets left="25.0" top="10.0" />
                </VBox.margin>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0">
@@ -54,6 +57,9 @@
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
                   </Label>
                   <JFXTextArea prefHeight="75.0" prefWidth="580.0">
                      <opaqueInsets>
@@ -68,7 +74,7 @@
                   <Insets left="25.0" top="25.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                <children>
                       <Label text="Card Number:">
                      <font>
@@ -78,7 +84,7 @@
                         <Insets left="25.0" />
                      </HBox.margin>
                   </Label>
-                  <JFXTextField fx:id="ccNumber" maxWidth="200.0" prefHeight="25.0" prefWidth="100.0">
+                  <JFXTextField fx:id="ccNumber" maxWidth="200.0" prefHeight="31.0" prefWidth="140.0">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -91,7 +97,7 @@
                         <Insets left="25.0" />
                      </HBox.margin>
                   </Label>
-                  <JFXTextField fx:id="expirationDate" maxWidth="100.0" prefHeight="25.0" prefWidth="100.0">
+                  <JFXTextField fx:id="expirationDate" maxWidth="138.0" prefHeight="31.0" prefWidth="138.0">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -104,14 +110,14 @@
                         <Insets left="25.0" />
                      </HBox.margin>
                   </Label>
-                      <JFXTextField fx:id="csv" maxWidth="100.0" prefHeight="25.0" prefWidth="297.0">
+                      <JFXTextField fx:id="csv" maxWidth="132.0" prefHeight="31.0" prefWidth="132.0">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
                   </JFXTextField>
                </children>
                <VBox.margin>
-                  <Insets top="25.0" />
+                  <Insets left="25.0" top="25.0" />
                </VBox.margin>
             </HBox>
          </children>

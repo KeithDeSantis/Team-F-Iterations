@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class externalTransController extends ServiceRequests{
-    @FXML private JFXTextField employeeName;
+    @FXML private JFXTextField patientName;
     @FXML private JFXTextField loc;
     @FXML private JFXTextField methodTrans;
     @FXML private JFXTextField special;
@@ -41,12 +41,12 @@ public class externalTransController extends ServiceRequests{
 
     @Override
     public boolean formFilled() {
-        return employeeName.getText().length()>0 && methodTrans.getText().length()>0 && special.getText().length()>0;
+        return patientName.getText().length()>0 && methodTrans.getText().length()>0 && special.getText().length()>0;
     }
 
     @Override
     public void handleClear() {
-        employeeName.setText("");
+        patientName.setText("");
         loc.setText("");
         methodTrans.setText("");
         special.setText("");

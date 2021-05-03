@@ -36,7 +36,7 @@
             <Insets bottom="10.0" left="10.0" top="10.0" />
          </padding>
       </HBox>
-      <VBox layoutX="313.0" layoutY="141.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="120.0">
+      <VBox layoutX="313.0" layoutY="141.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="150.0">
          <children>
             <AnchorPane prefHeight="429.0" prefWidth="760.0">
                <children>
@@ -75,7 +75,7 @@
                         </JFXTextField>
                         <Label text="Requestor: " GridPane.rowIndex="2">
                            <font>
-                              <Font name="Montserrat Regular" size="14.0" />
+                              <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </Label>
                         <JFXTextField fx:id="requesterTextText" alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="31.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -85,10 +85,10 @@
                         </JFXTextField>
                         <Label text="Urgency:" GridPane.rowIndex="3">
                            <font>
-                              <Font name="Montserrat Regular" size="14.0" />
+                              <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </Label>
-                        <JFXComboBox fx:id="urgencyComboBox" promptText="Select urgency..." GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <JFXComboBox fx:id="urgencyComboBox" prefHeight="31.0" prefWidth="170.0" promptText="Select urgency" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets left="25.0" />
                            </GridPane.margin>
@@ -100,7 +100,7 @@
                         </JFXTextArea>
                         <Label text="Description" GridPane.rowIndex="4">
                            <font>
-                              <Font name="Montserrat Regular" size="14.0" />
+                              <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </Label>
                      </children>
@@ -113,6 +113,9 @@
                      </children>
                   </HBox>
                </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </AnchorPane>
          </children>
       </VBox>

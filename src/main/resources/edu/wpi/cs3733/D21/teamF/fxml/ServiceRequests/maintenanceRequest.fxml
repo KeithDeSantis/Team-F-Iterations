@@ -20,7 +20,7 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MaintenenceRequestController">
    <children>
-      <HBox fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css">
+      <HBox fx:id="header" prefHeight="137.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
          <children>
             <ImageView fx:id="goBack" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -42,6 +42,7 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="210.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="210.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="806.0" minWidth="10.0" />
+            <ColumnConstraints />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="192.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
@@ -52,7 +53,7 @@
                <children>
                   <Label fx:id="typeLabel" prefHeight="21.0" prefWidth="241.0" text="Type of Problem:">
                      <font>
-                        <Font name="Montserrat Regular" size="20.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                      <VBox.margin>
                         <Insets left="25.0" />
@@ -65,15 +66,18 @@
                   </JFXComboBox>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxWidth="200.0" prefHeight="100.0" prefWidth="200.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <VBox maxWidth="200.0" prefHeight="100.0" prefWidth="200.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <children>
                   <Label fx:id="locationLabel" text="Location:">
                      <font>
-                        <Font name="Montserrat Regular" size="20.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                      <VBox.margin>
                         <Insets left="25.0" />
                      </VBox.margin>
+                     <padding>
+                        <Insets top="25.0" />
+                     </padding>
                   </Label>
                   <JFXComboBox fx:id="locationField" focusColor="#f0c808" minWidth="200.0" onAction="#reset2" prefHeight="31.0" prefWidth="200.0" unFocusColor="#03256c">
                      <VBox.margin>
@@ -82,17 +86,17 @@
                   </JFXComboBox>
                </children>
             </VBox>
-            <VBox alignment="BOTTOM_LEFT" maxHeight="150.0" prefHeight="100.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS">
+            <VBox maxHeight="150.0" prefHeight="100.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS">
                <children>
                   <Label fx:id="descLabel" text="Description of the Problem:">
                      <font>
-                        <Font name="Montserrat Regular" size="20.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                      <VBox.margin>
-                        <Insets left="25.0" />
+                        <Insets left="25.0" top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="descriptionField" focusColor="#f0c808" onKeyReleased="#reset" prefColumnCount="30" unFocusColor="#03256c" VBox.vgrow="NEVER">
+                  <JFXTextArea fx:id="descriptionField" focusColor="#f0c808" onKeyReleased="#reset" prefColumnCount="30" prefHeight="0.0" prefWidth="592.0" unFocusColor="#03256c" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets left="25.0" right="25.0" top="10.0" />
                      </VBox.margin>
@@ -103,7 +107,7 @@
                <children>
                   <Label fx:id="urgencyLabel" text="Urgency:">
                      <font>
-                        <Font name="Montserrat Regular" size="20.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                      <VBox.margin>
                         <Insets left="25.0" />
@@ -120,7 +124,7 @@
                <children>
                   <Label fx:id="dateLabel" prefHeight="26.0" prefWidth="293.0" text="Date of Incident (optional):">
                      <font>
-                        <Font name="Montserrat Regular" size="20.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                      <VBox.margin>
                         <Insets left="25.0" />
