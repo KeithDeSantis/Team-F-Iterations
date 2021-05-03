@@ -41,7 +41,6 @@ public class externalTransController extends ServiceRequests{
 
     @Override
     public boolean formFilled() {
-        return patientName.getText().length()>0 && methodTrans.getText().length()>0 && special.getText().length()>0;
         boolean isFilled = true;
 
         setNormalStyle(patientName, methodTrans, special, loc);

@@ -76,25 +76,6 @@ public class MaintenenceRequestController extends ServiceRequests {
         // Set location combo box to use long names
         locationField.setItems(locations);
 
-        // Load in employee list from database TODO Replace with UserEntry after merge W/ updated DB
-        List<NodeEntry> employees = new ArrayList<>();
-        try {
-            employees = DatabaseAPI.getDatabaseAPI().genNodeEntries();
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-
-        employees.stream().sorted(Comparator.comparing(NodeEntry::getShortName)).collect(Collectors.toList()).forEach(employee ->{
-            employeeList.add(employee.getShortName());
-        });
-
-        // Set list to assignment Combo Box
-        assignment.setItems(employeeList);
-
-        assignment.setVisible(false);
-        assignment.setDisable(true);
-        assignmentLabel.setVisible(false);
-
     }
 
     /**
