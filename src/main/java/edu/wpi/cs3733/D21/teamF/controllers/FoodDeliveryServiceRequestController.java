@@ -215,7 +215,6 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
         cbSide4.setSelected(false);
         allergyField.setStyle("-fx-background-color: transparent");
         specialInstructionsField.setStyle("-fx-background-color: transparent");
-        rb
 
 
     }
