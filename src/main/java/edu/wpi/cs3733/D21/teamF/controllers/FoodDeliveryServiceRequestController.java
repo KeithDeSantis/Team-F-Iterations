@@ -196,21 +196,9 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
         cbSide2.setSelected(false);
         cbSide3.setSelected(false);
         cbSide4.setSelected(false);
-        allergyField.setStyle("-fx-background-color: transparent");
-        specialInstructionsField.setStyle("-fx-background-color: transparent");
-        rButtonFood1.setStyle("-fx-background-color: #000000");
-        rButtonFood2.setStyle("-fx-background-color: #000000");
-        rButtonFood3.setStyle("-fx-background-color: #000000");
-        rButtonFood4.setStyle("-fx-background-color: #000000");
-        rButtonDrink1.setStyle("-fx-background-color: #000000");
-        rButtonDrink2.setStyle("-fx-background-color: #000000");
-        rButtonDrink3.setStyle("-fx-background-color: #000000");
-        rButtonDrink4.setStyle("-fx-background-color: #000000");
-        cbSide1.setStyle("-fx-background-color: #000000");
-        cbSide2.setStyle("-fx-background-color: #000000");
-        cbSide3.setStyle("-fx-background-color: #000000");
-        cbSide4.setStyle("-fx-background-color: #000000");
-
+        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, specialInstructionsField,
+                rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
+                rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
 
     }
 }
