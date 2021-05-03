@@ -87,6 +87,9 @@ public class AStarDemoController implements Initializable {
     @FXML
     public JFXToggleButton optimize;
 
+    @FXML
+    private JFXTreeView treeView;
+
     //FIXME: DO BETTER
     private Graph graph;
 
@@ -128,15 +131,15 @@ public class AStarDemoController implements Initializable {
     final ObservableList<String> nodeList = FXCollections.observableArrayList();
 
     // List of all nodes in each category
-    List<String> conferenceRooms = new ArrayList<>();
-    List<String> departments = new ArrayList<>();
-    List<String> entrances = new ArrayList<>();
-    List<String> information = new ArrayList<>();
-    List<String> labs = new ArrayList<>();
-    List<String> parking = new ArrayList<>();
-    List<String> restrooms = new ArrayList<>();
-    List<String> retail = new ArrayList<>();
-    List<String> service = new ArrayList<>();
+    TreeItem conferenceItem = new TreeItem("Conference Rooms");
+    TreeItem departmentItem = new TreeItem("Departments");
+    TreeItem entranceItem = new TreeItem("Entrances");
+    TreeItem infoItem = new TreeItem("Information");
+    TreeItem labItem = new TreeItem("Labs");
+    TreeItem parkingItem = new TreeItem("Parking");
+    TreeItem restroomItem = new TreeItem("Restrooms");
+    TreeItem retailItem = new TreeItem("Retail");
+    TreeItem serviceItem = new TreeItem("Services");
 
 
     @Override
@@ -318,40 +321,48 @@ public class AStarDemoController implements Initializable {
         for(NodeEntry e : allNodeEntries)
           getDrawableNode(e.getNodeID());
 
+        //~~~~~~~~~ Tree View Setup ~~~~~~~~
+
+        // Set root tree item (will be hidden)
         TreeItem rootItem = new TreeItem("shortNames");
 
+        // categorize node short names and add them to appropriate tree view
         for (NodeEntry node: allNodeEntries) {
             switch (node.getNodeType()){
                 case "CONF":
-                    conferenceRooms.add(node.getShortName());
+                    conferenceItem.getChildren().add(new TreeItem(node.getShortName()));
                     break;
                 case "DEPT":
-                    departments.add(node.getShortName());
+                    departmentItem.getChildren().add(new TreeItem(node.getShortName()));
                     break;
                 case "EXIT":
-                    entrances.add(node.getShortName());
+                    entranceItem.getChildren().add(new TreeItem(node.getShortName()));
                     break;
                 case "INFO":
-                    information.add(node.getShortName());
+                    infoItem.getChildren().add(new TreeItem(node.getShortName()));
                     break;
                 case "LABS":
-                    labs.add(node.getShortName());
+                    labItem.getChildren().add(new TreeItem(node.getShortName()));
                     break;
                 case "PARK":
-                    parking.add(node.getShortName());
+                    parkingItem.getChildren().add(new TreeItem(node.getShortName()));
                     break;
                 case "RETL":
-                    retail.add(node.getShortName());
+                    retailItem.getChildren().add(new TreeItem(node.getShortName()));
                     break;
                 case "SERV":
-                    service.add(node.getShortName());
+                    serviceItem.getChildren().add(new TreeItem(node.getShortName()));
                     break;
                 case "REST":
-                    restrooms.add(node.getShortName());
+                    restroomItem.getChildren().add(new TreeItem(node.getShortName()));
                     break;
             }
         }
 
+        // add tree items to root item
+        rootItem.getChildren().addAll(conferenceItem, departmentItem, entranceItem, infoItem,
+                labItem, parkingItem, retailItem, serviceItem, restroomItem);
+        treeView.setRoot(rootItem);
 
     }
 
