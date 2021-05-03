@@ -1,24 +1,12 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class InternalTransportationController extends ServiceRequests {
@@ -27,7 +15,9 @@ public class InternalTransportationController extends ServiceRequests {
 
     @FXML private JFXTextField deliverLocation;
 
-    @FXML private JFXTextField movingDate;
+    @FXML private JFXDatePicker movingDate;
+
+    @FXML private JFXTimePicker movingTime;
 
     @FXML private JFXTextField patientName;
 
@@ -53,9 +43,13 @@ public class InternalTransportationController extends ServiceRequests {
             isFilled = false;
             setTextErrorStyle(deliverLocation);
         }
-        if(movingDate.getText().length() <= 0) {
+        if(movingDate.getValue() == null) {
             isFilled = false;
             setTextErrorStyle(movingDate);
+        }
+        if(movingTime.getValue() == null) {
+            isFilled = false;
+            setTextErrorStyle(movingTime);
         }
         if(patientName.getText().length() <= 0) {
             isFilled = false;
@@ -76,25 +70,19 @@ public class InternalTransportationController extends ServiceRequests {
             String type = "Internal Transport";
             String person = "";
             String completed = "false";
-            String additionalInfo = "Delivery Location: " + deliverLocation.getText() + "Delivery Date: " + movingDate.getText()
+            String additionalInfo = "Delivery Location: " + deliverLocation.getText() + "Delivery Date: " + movingDate.getValue() + "Delivery Time: " + movingTime.getValue()
                     + "Patient Room: " + patientRoom.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
-        } else { //form not complete
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner((Stage) ( (Button) e.getSource()).getScene().getWindow());  // Show alert
-            alert.setTitle("Form not filled.");
-            alert.setHeaderText("Form incomplete");
-            alert.setContentText("Please fill out at least the Location, Type of Flowers, Containers, and Payment fields."); //??? TODO: fix this
-            alert.showAndWait();
         }
     }
 
     public void handleClear(ActionEvent actionEvent) {
         deliverLocation.setText("");
-        movingDate.setText("");
+        movingDate.setValue(null);
+        movingTime.setValue(null);
         patientName.setText("");
         patientRoom.setText("");
         relativesCheckBox.setSelected(false);

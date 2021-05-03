@@ -27,7 +27,7 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <Text fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL SERVICE REQUEST SYSTEMS " wrappingWidth="785.13671875">
+                  <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL SERVICE REQUEST SYSTEMS " wrappingWidth="785.13671875">
                      <font>
                         <Font size="45.0" />
                      </font>

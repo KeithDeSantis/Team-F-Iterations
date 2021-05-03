@@ -26,7 +26,7 @@
                   <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Label fx:id="title" contentDisplay="CENTER" prefHeight="138.0" prefWidth="747.0" text="BRIGHAM AND WOMEN'S HOSPITAL Floral Delivery Request" wrapText="true">
+            <Label fx:id="title" contentDisplay="CENTER" prefHeight="138.0" prefWidth="747.0" text="BRIGHAM AND WOMEN'S HOSPITAL Floral Delivery Request" textFill="#03256c" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>

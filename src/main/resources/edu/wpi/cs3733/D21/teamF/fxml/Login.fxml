@@ -21,7 +21,7 @@
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Label text="Brigham and Women's Hospital">
+            <Label fx:id="title" text="Brigham and Women's Hospital">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
@@ -72,7 +72,7 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="skipSignIn" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back" >
+            <JFXButton fx:id="skipSignIn" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

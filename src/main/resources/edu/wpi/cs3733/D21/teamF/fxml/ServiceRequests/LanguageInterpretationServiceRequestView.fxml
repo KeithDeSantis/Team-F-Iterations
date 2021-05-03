@@ -29,7 +29,7 @@
                   <Insets />
                </HBox.margin>
             </ImageView>
-            <Label fx:id="title" prefHeight="152.0" prefWidth="783.0" text="BRIGHAM AND WOMEN'S HOSPITAL Language Interpretation Request" wrapText="true">
+            <Label fx:id="title" prefHeight="152.0" prefWidth="783.0" text="BRIGHAM AND WOMEN'S HOSPITAL Language Interpretation Request" textFill="#03256c" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
@@ -58,7 +58,7 @@
                         <Insets left="25.0" />
                      </GridPane.margin>
                   </Label>
-                  <JFXTextField fx:id="name" focusColor="#94c4f1" prefHeight="29.0" prefWidth="269.0" promptText="Name" unFocusColor="#03256c" GridPane.rowIndex="1">
+                  <JFXTextField fx:id="name" focusColor="#03256c" prefHeight="29.0" prefWidth="269.0" promptText="Name" unFocusColor="BLACK" GridPane.rowIndex="1">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -107,7 +107,7 @@
                         <Insets left="25.0" />
                      </GridPane.margin>
                   </Label>
-                  <JFXComboBox fx:id="appointment" focusColor="#94c4f1" prefHeight="26.0" prefWidth="164.0" promptText="Appointment" unFocusColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                  <JFXComboBox fx:id="appointment" focusColor="#03256c" prefHeight="26.0" prefWidth="164.0" promptText="Appointment" unFocusColor="BLACK" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <padding>
                         <Insets top="10.0" />
                      </padding>
@@ -126,7 +126,7 @@
                         <Insets left="25.0" />
                      </GridPane.margin>
                   </Label>
-                  <JFXComboBox fx:id="language" focusColor="#94c4f1" promptText="Language" unFocusColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                  <JFXComboBox fx:id="language" focusColor="#03256c" promptText="Language" unFocusColor="BLACK" GridPane.columnIndex="2" GridPane.rowIndex="3">
                      <padding>
                         <Insets top="10.0" />
                      </padding>
