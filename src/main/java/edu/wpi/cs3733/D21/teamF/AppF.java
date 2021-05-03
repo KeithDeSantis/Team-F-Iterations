@@ -6,8 +6,10 @@ import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -20,6 +22,8 @@ public class  AppF extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
+
+    primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png")));
     if (DatabaseAPI.getDatabaseAPI().createNodesTable())
     {
         DatabaseAPI.getDatabaseAPI().populateNodes(CSVManager.load("MapfAllNodes.csv"));
