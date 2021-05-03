@@ -25,14 +25,14 @@ public class DFSImpl implements IPathfindingAlgorithm {
         if(curr == null) //FIXME: DO MORE NULL CHECKS, END SHOULDN'T BE ABLE TO BE NULL ANYWAYS
             return null;
 
-        path.addVertexToPath(curr, 0.0);
+        if(path.equals(new Path()))
+            path.addVertexToPath(curr, 0.0);
         //path.add(curr);
 
         if(curr == end)
             return path;
 
-        Path acceptedPath = null;
-
+        //Path acceptedPath = null;
         for(Edge e : curr.getEdges())
         {
             final Vertex n = curr.getNeighbor(e);
@@ -45,7 +45,10 @@ public class DFSImpl implements IPathfindingAlgorithm {
                 path.addVertexToPath(n, e.getWeight());
 
                 final Path currPath = DFS_Recur(n, end, path); //duplicated);
-
+                if(currPath != null && currPath.contains(end)){
+                    return currPath;
+                }
+                /*
                 //FIXME: DO BETTER HEURISTIC CHECK ON PATH SIZES TO ENSURE WE DON'T TEST ALL. MAKE PATH CLASS
                 if(currPath != null) {
                     if (acceptedPath == null)
@@ -56,9 +59,10 @@ public class DFSImpl implements IPathfindingAlgorithm {
                     }
                 }
                 path.removeVertexFromPath(n, e.getWeight());
+                */
             }
         }
 
-        return acceptedPath;
+        return null;
     }
 }
