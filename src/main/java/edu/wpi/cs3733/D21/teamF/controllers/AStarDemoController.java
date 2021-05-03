@@ -24,14 +24,18 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -39,11 +43,13 @@ import javafx.scene.text.Text;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -1135,20 +1141,20 @@ public class AStarDemoController implements Initializable {
         //TODO: better align ETA text.
         layout.setHeading(new Text("Directions from: " + startComboBox.getValue() + " to " +  endComboBox.getValue()));
 
-        String directions = "";
+        StringBuilder directions = new StringBuilder();
         for(int i = 0; i < stopsList.size(); i++)
         {
             final String instruction = instructionsList.get(i);
             final String eta = etaList.get(i);
 
             if(i < stopsList.size() - 1)
-                directions += instruction + "\t\t(" + eta + ")\n";
+                directions.append(instruction).append("\t\t(").append(eta).append(")\n");
             else
-                directions += instruction;
+                directions.append(instruction);
         }
 
         //FIXME: DO BREAKS W/ CSS
-        layout.setBody(new Text(directions));
+        layout.setBody(new Text(directions.toString()));
 
         final JFXButton closeBtn = new JFXButton("Close");
         closeBtn.setOnAction(a -> dialog.close());
@@ -1177,50 +1183,143 @@ public class AStarDemoController implements Initializable {
      */
     private void printInstructions() throws IOException {
 
+        final int INSTRUCTIONS_PER_PAGE = 5;
+
+
+        final String initialFloor = mapPanel.getFloor().get();
+        final int initialCurrStep = currentStep.get();
+        final double initZoomLevel = mapPanel.getZoomLevel().get();
+
         final File file = new File(System.currentTimeMillis() + ".pdf");
 
         //Create the document
         final PDDocument pdfDocument = new PDDocument();
 
-        //Create the first page of the document.
-        final PDPage page = new PDPage();
-        pdfDocument.addPage(page);
 
-        //Create the ContentStream so that we can add data to the document
-        final PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page);
+        mapPanel.getZoomLevel().set(2);
 
-        //Begin the text
+        final int numPages = (int) Math.ceil((double) stopsList.size()/INSTRUCTIONS_PER_PAGE);
 
-        contentStream.beginText();
-        contentStream.setLeading(14.5f);
-        contentStream.newLineAtOffset(25, 725);
-        contentStream.setFont(PDType1Font.HELVETICA, 36);
+        for(int p = 0; p < numPages; p++) {
+            //Create the first page of the document.
+            final PDPage page = new PDPage();
+            pdfDocument.addPage(page);
 
-        contentStream.showText("Brigham and Women's Hospital");
-        contentStream.newLine();
-        contentStream.endText();
+            //Create the ContentStream so that we can add data to the document
+            final PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page);
 
-        //Display instructions
+            //Begin the text
 
-
-        for(int i = 0; i < stopsList.size(); i++)
-        {
+            /*
+             * Page title
+             */
             contentStream.beginText();
             contentStream.setLeading(14.5f);
-            contentStream.setFont(PDType1Font.HELVETICA, 16);
-            contentStream.newLineAtOffset(25, 675 - ((25 * i)));
-          //  contentStream.newLine();
-            final String instruction = instructionsList.get(i);
-            final String eta = etaList.get(i);
+            contentStream.newLineAtOffset(25 + 64, 740);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 36);
 
-            if(i < stopsList.size() - 1)
-                contentStream.showText(instruction + "     (" + eta + ")");
-            else
-                contentStream.showText(instruction);
+            contentStream.showText("Brigham and Women's Hospital");
+            contentStream.newLine();
             contentStream.endText();
-        }
 
-        contentStream.close();
+            final BufferedImage logoImage = ImageIO.read(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
+            PDImageXObject pdfLogo = LosslessFactory.createFromImage(pdfDocument,logoImage);
+            contentStream.drawImage(pdfLogo, 25, 720, 55, 64);
+
+            /*
+             * Instruction Information
+             */
+            contentStream.beginText();
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(25, 690);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+
+            contentStream.showText("Directions from: " + startComboBox.getValue());
+            contentStream.newLine();
+            contentStream.endText();
+
+
+
+            contentStream.beginText();
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(25, 670);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+
+            contentStream.showText("To: " + endComboBox.getValue());
+            contentStream.newLine();
+            contentStream.endText();
+
+            /*
+             * Page numbers
+             */
+            contentStream.beginText();
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(480, 30);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+
+            contentStream.showText("Page " + (p + 1) + " of " + numPages);
+            contentStream.newLine();
+            contentStream.endText();
+
+            //Display instructions
+
+            for (int i = p * INSTRUCTIONS_PER_PAGE; i < Math.min(stopsList.size(), (p + 1) * INSTRUCTIONS_PER_PAGE); i++) {
+                contentStream.beginText();
+                contentStream.setLeading(14.5f);
+                contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+                contentStream.newLineAtOffset(25, 630 - ((110 * (i % INSTRUCTIONS_PER_PAGE))));
+                //  contentStream.newLine();
+                final String instruction = instructionsList.get(i);
+                final String eta = etaList.get(i);
+
+                if (i < stopsList.size() - 1)
+                    contentStream.showText(instruction + "     (" + eta + ")");
+                else
+                    contentStream.showText(instruction);
+                contentStream.endText();
+
+
+                final Vertex currVertex = pathVertex.get(stopsList.get(i));
+                mapPanel.switchMap(currVertex.getFloor());
+                mapPanel.centerNode(mapPanel.getNode(currVertex.getID()));
+                currentStep.set(i);
+
+                final SnapshotParameters params = new SnapshotParameters();
+                final int cX = (int) currVertex.getX();
+                final int cY = (int) currVertex.getY();
+
+                final int captureWidth = 200;
+
+                final int minX = (int) ((cX / mapPanel.getZoomLevel().get()) - captureWidth / 2);
+                final int minY = (int) ((cY / mapPanel.getZoomLevel().get()) - captureWidth / 2);
+
+                params.setViewport(new Rectangle2D(minX, minY, captureWidth, captureWidth));
+                // System.out.println(params.getViewport());
+
+                final WritableImage image = mapPanel.getCanvas().snapshot(params, null);
+                final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+
+                //  ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
+
+                final double aspect = bufferedImage.getWidth() / bufferedImage.getHeight();
+
+                final Image scaledImage = bufferedImage.getScaledInstance(100, (int) (100 * aspect), Image.SCALE_SMOOTH);
+                final BufferedImage scaledBuffered = new BufferedImage(scaledImage.getWidth(null), scaledImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                scaledBuffered.getGraphics().drawImage(scaledImage, 0, 0, null);
+
+                PDImageXObject pdfImage = LosslessFactory.createFromImage(pdfDocument, scaledBuffered);
+
+                contentStream.drawImage(pdfImage, 320, 555 - (i % INSTRUCTIONS_PER_PAGE) * 110);
+
+
+                // ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
+            }
+            contentStream.close();
+        }
+        currentStep.set(initialCurrStep);
+        mapPanel.switchMap(initialFloor);
+        mapPanel.getZoomLevel().set(initZoomLevel);
+
 
 
 
