@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-public class LanguageInterpretationServiceRequestController implements Initializable {
+public class LanguageInterpretationServiceRequestController extends ServiceRequests implements Initializable {
     @FXML private JFXButton close;
     @FXML private JFXTextField name;
     @FXML private JFXDatePicker date;
@@ -36,21 +36,10 @@ public class LanguageInterpretationServiceRequestController implements Initializ
     @FXML private JFXComboBox<String> language;
     @FXML private JFXButton help;
     @FXML private JFXButton translate;
-    @FXML private JFXButton submit;
     @FXML private Label nameLabel;
     @FXML private Label dtLabel;
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
-
-    /**
-     * closes the Language Interpretation Request form and returns to home
-     * @param actionEvent
-     * @throws IOException
-     * @author Jay
-     */
-    public void handleCancel(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
 
     /**
      * Opens the help window
@@ -109,7 +98,7 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      * @author Jay Yen
      */
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
-        if(formFilledOut()) {
+        if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
                     " Name: " + name.getText() + " Appointment: " + (String) appointment.getValue() + " Language: " + language.getValue();
@@ -117,19 +106,14 @@ public class LanguageInterpretationServiceRequestController implements Initializ
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
             // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
 
+    }
+
+    @Override
+    public void handleClear(){
+        name.
     }
 
     /**
@@ -243,23 +227,23 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         nameLabel.setText(StringEscapeUtils.unescapeJava("\u0627\u0633\u0645"));
     }
     
-    private boolean formFilledOut(){
+    public boolean formFilled(){
         boolean isFilled = true;
         if(name.getText().trim().isEmpty()){
-            name.setStyle("-fx-border-color: red");
+            setTextErrorStyle(name);
             isFilled = false;
         }
         if(date.getValue() == null){
-            date.setStyle("-fx-border-color: red");
+            setTextErrorStyle(date);
             isFilled = false;
         }
         if(time.getValue() == null){
-            time.setStyle("-fx-border-color: red");
+            setTextErrorStyle(time);
             isFilled = false;
         }
         if(language.getValue() == null)
         {
-            language.setStyle("-fx-border-color: red");
+            setTextErrorStyle(language);
             isFilled = false;
         }
         return isFilled;

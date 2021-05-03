@@ -26,6 +26,8 @@ public class PreferedPathfindingAlgoController {
         algoList.add("A Star");
         algoList.add("Breadth-First-Search");
         algoList.add("Depth-First-Search");
+        algoList.add("Best-first-search");
+        algoList.add("Dijkstra");
 
         algorithmComboBox.setItems(algoList);
         algorithmComboBox.setValue(DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm());

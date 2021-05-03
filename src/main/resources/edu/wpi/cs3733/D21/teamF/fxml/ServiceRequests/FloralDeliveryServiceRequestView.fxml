@@ -21,12 +21,12 @@
    <children>
       <HBox fx:id="header" layoutX="25.0" layoutY="3.0" spacing="10.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="logoHome" fitHeight="126.0" fitWidth="105.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="logoHome" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Label contentDisplay="CENTER" prefHeight="138.0" prefWidth="747.0" text="BRIGHAM AND WOMEN'S HOSPITAL Floral Delivery Request" wrapText="true">
+            <Label fx:id="title" contentDisplay="CENTER" prefHeight="138.0" prefWidth="747.0" text="BRIGHAM AND WOMEN'S HOSPITAL Floral Delivery Request" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
@@ -35,128 +35,134 @@
       </HBox>
       <GridPane layoutX="67.0" layoutY="152.0" prefHeight="278.0" prefWidth="821.0" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="67.0" AnchorPane.rightAnchor="72.0" AnchorPane.topAnchor="152.0">
         <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="1.0" prefWidth="1.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="149.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="138.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="25.0" minWidth="1.0" prefWidth="19.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="137.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="122.0" minWidth="10.0" prefWidth="118.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Delivery Location">
+            <Label text="Delivery Location:">
                <font>
-                  <Font name="Montserrat Regular" size="14.0" />
+                  <Font name="Montserrat Regular" size="15.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </Label>
             <JFXCheckBox fx:id="roseCheckBox" checkedColor="#f0c808" text="Roses" unCheckedColor="#03256c" GridPane.columnIndex="4">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </JFXCheckBox>
             <JFXCheckBox fx:id="tulipCheckBox" checkedColor="#f0c808" text="Tulips" unCheckedColor="#03256c" GridPane.columnIndex="5">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </JFXCheckBox>
             <JFXCheckBox fx:id="violetCheckBox" checkedColor="#f0c808" text="Violets" unCheckedColor="#03256c" GridPane.columnIndex="6">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </JFXCheckBox>
             <JFXCheckBox fx:id="sunflowerCheckBox" checkedColor="#f0c808" text="Sunflowers" unCheckedColor="#03256c" GridPane.columnIndex="4" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </JFXCheckBox>
             <JFXCheckBox fx:id="orchidCheckBox" checkedColor="#f0c808" text="Orchids" unCheckedColor="#03256c" GridPane.columnIndex="5" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </JFXCheckBox>
             <JFXCheckBox fx:id="daisyCheckBox" checkedColor="#f0c808" text="Daisies" unCheckedColor="#03256c" GridPane.columnIndex="6" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </JFXCheckBox>
             <JFXRadioButton fx:id="bouquetButton" onAction="#handleRadioButtonClicked" text="Bouquet" GridPane.columnIndex="4" GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </JFXRadioButton>
             <JFXRadioButton fx:id="vaseButton" onAction="#handleRadioButtonClicked" text="Vase" GridPane.columnIndex="5" GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </JFXRadioButton>
             <JFXRadioButton fx:id="potButton" onAction="#handleRadioButtonClicked" text="Pot" GridPane.columnIndex="6" GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </JFXRadioButton>
             <JFXTextField fx:id="deliveryField" focusColor="#03256c" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </JFXTextField>
-            <JFXTextField fx:id="cardNumberField" alignment="CENTER" promptText="Card Number" GridPane.columnIndex="4" GridPane.rowIndex="3">
+            <Label text="Delivery Date:" GridPane.rowIndex="2">
                <font>
-                  <Font name="Montserrat Regular" size="14.0" />
+                  <Font name="Montserrat Regular" size="15.0" />
                </font>
                <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets left="10.0" />
                </GridPane.margin>
-            </JFXTextField>
-            <JFXTextField fx:id="cardExpField" alignment="CENTER" promptText="MM/YYYY" GridPane.columnIndex="5" GridPane.rowIndex="3">
+            </Label>
+            <Label text="Flower Type:" GridPane.columnIndex="3">
                <font>
-                  <Font name="Montserrat Regular" size="14.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
-               </GridPane.margin>
-            </JFXTextField>
-            <JFXTextField fx:id="cardCVCField" alignment="CENTER" promptText="CVC" GridPane.columnIndex="6" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Montserrat Regular" size="14.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
-               </GridPane.margin>
-            </JFXTextField>
-            <Label text="Delivery Date" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Montserrat Regular" size="14.0" />
+                  <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Label>
-            <Label text="Flower Type" GridPane.columnIndex="3">
+            <Label text="Container Type:" GridPane.columnIndex="3" GridPane.rowIndex="2">
                <font>
-                  <Font name="Montserrat Regular" size="14.0" />
-               </font>
-            </Label>
-            <Label text="Container Type" GridPane.columnIndex="3" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Montserrat Regular" size="14.0" />
-               </font>
-            </Label>
-            <Label text="Payment Info" GridPane.columnIndex="3" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Montserrat Regular" size="14.0" />
+                  <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Label>
             <JFXDatePicker fx:id="dateField" defaultColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin></JFXDatePicker>
-            <Label text="Name" GridPane.rowIndex="1">
+            <Label text="Name:" GridPane.rowIndex="1">
                <font>
-                  <Font name="Montserrat Regular" size="14.0" />
+                  <Font name="Montserrat Regular" size="15.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
             </Label>
             <JFXTextField fx:id="nameField" focusColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
@@ -165,11 +171,47 @@
             </JFXTextField>
          </children>
       </GridPane>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="425.0">
+         <children>
+            <Label text="Payment Info:">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+            </Label>
+            <JFXTextField fx:id="cardNumberField" alignment="CENTER" promptText="Card Number">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="35.0" />
+               </HBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="cardExpField" alignment="CENTER" promptText="MM/YYYY">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="35.0" />
+               </HBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="cardCVCField" alignment="CENTER" promptText="CVC">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="35.0" />
+               </HBox.margin>
+            </JFXTextField>
+         </children>
+      </HBox>
       <HBox alignment="BOTTOM_CENTER" layoutX="81.0" layoutY="417.0" prefHeight="48.0" prefWidth="960.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <ButtonBar buttonMinWidth="100.0" prefHeight="51.0" prefWidth="384.0">
               <buttons>
-                  <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmit" prefHeight="28.0" prefWidth="150.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Submit" textFill="WHITE">
+                  <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleCancel" prefHeight="28.0" prefWidth="150.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -179,7 +221,7 @@
                         <Font size="14.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleBack" prefHeight="28.0" prefWidth="150.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" textFill="WHITE">
+                  <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmit" prefHeight="28.0" prefWidth="150.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Submit" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>

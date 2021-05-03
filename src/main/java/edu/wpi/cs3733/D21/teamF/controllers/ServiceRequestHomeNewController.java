@@ -55,7 +55,7 @@ public class ServiceRequestHomeNewController {
             goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryServiceRequestView.fxml","Floral Delivery",buttonPushed);
         }
         else if (buttonPushed == Home) {
-            goToScreen(actionEvent,"/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml","Home Page",buttonPushed);
+            SceneContext.getSceneContext().loadDefault();
         }
 
         else if (buttonPushed == languageInterpretation){

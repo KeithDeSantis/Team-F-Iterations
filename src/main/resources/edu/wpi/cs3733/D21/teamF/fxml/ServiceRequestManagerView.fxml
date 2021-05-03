@@ -37,16 +37,16 @@
             </JFXTreeTableView>
             <ButtonBar maxHeight="-Infinity" prefHeight="43.0" prefWidth="810.0">
               <buttons>
-                  <JFXButton fx:id="markAsComplete" buttonType="RAISED" onAction="#handleMarkAsComplete" prefHeight="31.0" prefWidth="304.0" style="-fx-background-color: #03256C;" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Mark Complete" textFill="WHITE">
+                  <JFXButton fx:id="markAsComplete" buttonType="RAISED" onAction="#handleMarkAsComplete" prefHeight="31.0" prefWidth="304.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Mark Complete">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font></JFXButton>
-                  <JFXButton fx:id="removeAssignment" buttonType="RAISED" cancelButton="true" minWidth="38.0" onAction="#removeAssignment" prefHeight="29.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Remove Assignment" textFill="WHITE">
+                  <JFXButton fx:id="removeAssignment" buttonType="RAISED" cancelButton="true" minWidth="38.0" onAction="#removeAssignment" prefHeight="29.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Remove Assignment">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="saveChanges" buttonType="RAISED" defaultButton="true" onAction="#saveAssignments" style="-fx-background-color: #03256C;" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Save Assignments" textFill="WHITE">
+                  <JFXButton fx:id="saveChanges" buttonType="RAISED" defaultButton="true" onAction="#saveAssignments" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Save Assignments">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
