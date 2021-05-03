@@ -55,8 +55,8 @@ public class CurrentUser {
     public boolean isAuthenticated() { return isAuthenticated; }
 
     /**
-     * Method to get the current auhorization level of the logged in user
-     * @return AuthorizationLevel enumeration ADMIN, EMPLOYEE, USER, GUEST
+     * Method to get the current AccountEntry of the logged in user
+     * @return AccountEntry
      * @author Leo Morris
      */
     public AccountEntry getLoggedIn(){ return loggedIn; }

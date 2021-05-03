@@ -42,10 +42,11 @@
                         <Insets left="16.0" />
                      </padding>
                   </JFXComboBox>
-                  <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Start Navigation" textFill="WHITE" />
-                  <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="End Navigation" textFill="WHITE" />
-                  <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Prev" textFill="WHITE" />
-                  <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" ripplerFill="WHITE" style="-fx-background-color: #03256C;" text="Next" textFill="WHITE" />
+                  <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear"/>
+                  <JFXButton fx:id="Go" buttonType="RAISED" onAction="#startNavigation" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation"/>
+                  <JFXButton fx:id="End" buttonType="RAISED" onAction="#endNavigation" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="End Navigation"/>
+                  <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Previous"/>
+                  <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Next"/>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0">

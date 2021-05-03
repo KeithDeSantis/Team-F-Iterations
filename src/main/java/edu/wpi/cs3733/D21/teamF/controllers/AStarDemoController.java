@@ -34,6 +34,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -203,8 +204,10 @@ public class AStarDemoController implements Initializable {
 
             startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(currEntry.getNodeID())));
 
+            // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             addStopMenu.setOnAction(e -> {
                 vertices.add(graph.getVertex(currEntry.getNodeID()));
+                drawStop(currEntry);
                 checkInput();
             });
 
@@ -290,6 +293,25 @@ public class AStarDemoController implements Initializable {
 
         for(NodeEntry e : allNodeEntries)
           getDrawableNode(e.getNodeID());
+    }
+
+    /**
+     * Draws an intermediate stop on the map
+     * @param nodeEntry The NodeEntry of the stop being drawn
+     * @author Leo Morris
+     */
+    private void drawStop(NodeEntry nodeEntry) {
+        DrawableNode stop = new DrawableNode(Integer.parseInt(nodeEntry.getXCoordinate()),
+                Integer.parseInt(nodeEntry.getYCoordinate()),
+                nodeEntry.getNodeID(), nodeEntry.getFloor(), nodeEntry.getBuilding(), nodeEntry.getNodeType(),
+                nodeEntry.getLongName(), nodeEntry.getShortName());
+
+        stop.setStrokeWidth(2.0);
+        stop.setFill(new Color(0.75,0,0,1));
+        stop.setStroke(new Color(1,0,0,1));
+        stop.setScaleX(1.5);
+        stop.setScaleY(1.5);
+        mapPanel.draw(stop);
     }
 
     private void loadFavorites() {
@@ -383,11 +405,13 @@ public class AStarDemoController implements Initializable {
        // if(this.startNodeDisplay != null)
         //    mapPanel.unDraw(this.startNodeDisplay.getId());
         //FIXME: USE BINDINGS
-        this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue()));
+        if(!(startComboBox.getValue() == null)) {
+            this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue()));
 
-        mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
-        mapPanel.centerNode(startNodeDisplay);
-        loadRecentlyUsedVertices();
+            mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
+            mapPanel.centerNode(startNodeDisplay);
+            loadRecentlyUsedVertices();
+        }
     }
     /**
      * Helper function used to draw the startNode with given ID, snatched from handleStartBoxAction()
@@ -501,10 +525,12 @@ public class AStarDemoController implements Initializable {
 //        if(this.endNodeDisplay != null)
 //            mapPanel.unDraw(this.endNodeDisplay.getId());
         //FIXME: USE BINDINGS?
-        this.endNodeDisplay = mapPanel.getNode(shortNameToID(endComboBox.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
-        mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
-        mapPanel.centerNode(endNodeDisplay);
-        loadRecentlyUsedVertices();
+        if(!(endComboBox.getValue() == null)) {
+            this.endNodeDisplay = mapPanel.getNode(shortNameToID(endComboBox.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
+            mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
+            mapPanel.centerNode(endNodeDisplay);
+            loadRecentlyUsedVertices();
+        }
     }
 
 
@@ -1016,15 +1042,6 @@ public class AStarDemoController implements Initializable {
         SceneContext.getSceneContext().loadDefault();
     }
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
 
     /**
      * Checks the current instruction and applies the corresponding icon to the navigation bar
@@ -1170,5 +1187,19 @@ public class AStarDemoController implements Initializable {
 
         final Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
+    }
+
+    /**
+     * Clears all node selections
+     * @author Leo Morris
+     */
+    public void clearList() {
+        vertices.clear();
+        startComboBox.getSelectionModel().clearSelection();
+        endComboBox.getSelectionModel().clearSelection();
+        mapPanel.clearMap();
+
+        for(NodeEntry e : allNodeEntries)
+            getDrawableNode(e.getNodeID());
     }
 }
