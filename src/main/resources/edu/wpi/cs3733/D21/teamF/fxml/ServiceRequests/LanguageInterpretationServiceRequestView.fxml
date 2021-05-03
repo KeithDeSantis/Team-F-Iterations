@@ -29,7 +29,7 @@
                   <Insets />
                </HBox.margin>
             </ImageView>
-            <Label prefHeight="110.0" prefWidth="783.0" text="BRIGHAM AND WOMEN'S HOSPITAL Language Interpretation Request" wrapText="true">
+            <Label fx:id="title" prefHeight="110.0" prefWidth="783.0" text="BRIGHAM AND WOMEN'S HOSPITAL Language Interpretation Request" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>

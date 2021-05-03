@@ -21,7 +21,7 @@
          <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
              <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
          </ImageView>
-         <Label text="BRIGHAM AND WOMEN'S HOSPITAL MEDICINE DELIVERY" wrapText="true">
+         <Label fx:id="title" text="BRIGHAM AND WOMEN'S HOSPITAL MEDICINE DELIVERY" wrapText="true">
              <font>
                  <Font name="Volkhov Regular" size="40.0" />
              </font>
@@ -115,6 +115,7 @@
                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         <ColumnConstraints />
            </columnConstraints>
            <rowConstraints>
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
