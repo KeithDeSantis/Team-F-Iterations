@@ -1094,7 +1094,7 @@ public class AStarDemoController implements Initializable {
             contentStream.beginText();
             contentStream.setLeading(14.5f);
             contentStream.newLineAtOffset(25 + 64, 740);
-            contentStream.setFont(PDType1Font.HELVETICA, 36);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 36);
 
             contentStream.showText("Brigham and Women's Hospital");
             contentStream.newLine();
@@ -1110,7 +1110,7 @@ public class AStarDemoController implements Initializable {
             contentStream.beginText();
             contentStream.setLeading(14.5f);
             contentStream.newLineAtOffset(25, 690);
-            contentStream.setFont(PDType1Font.HELVETICA, 14);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
             contentStream.showText("Directions from: " + startComboBox.getValue());
             contentStream.newLine();
@@ -1121,7 +1121,7 @@ public class AStarDemoController implements Initializable {
             contentStream.beginText();
             contentStream.setLeading(14.5f);
             contentStream.newLineAtOffset(25, 670);
-            contentStream.setFont(PDType1Font.HELVETICA, 14);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
             contentStream.showText("To: " + endComboBox.getValue());
             contentStream.newLine();
@@ -1133,7 +1133,7 @@ public class AStarDemoController implements Initializable {
             contentStream.beginText();
             contentStream.setLeading(14.5f);
             contentStream.newLineAtOffset(480, 30);
-            contentStream.setFont(PDType1Font.HELVETICA, 14);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
             contentStream.showText("Page " + (p + 1) + " of " + numPages);
             contentStream.newLine();
@@ -1144,7 +1144,7 @@ public class AStarDemoController implements Initializable {
             for (int i = p * INSTRUCTIONS_PER_PAGE; i < Math.min(stopsList.size(), (p + 1) * INSTRUCTIONS_PER_PAGE); i++) {
                 contentStream.beginText();
                 contentStream.setLeading(14.5f);
-                contentStream.setFont(PDType1Font.HELVETICA, 14);
+                contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
                 contentStream.newLineAtOffset(25, 630 - ((110 * (i % INSTRUCTIONS_PER_PAGE))));
                 //  contentStream.newLine();
                 final String instruction = instructionsList.get(i);
