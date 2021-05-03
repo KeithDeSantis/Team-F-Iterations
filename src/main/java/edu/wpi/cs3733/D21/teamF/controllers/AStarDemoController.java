@@ -642,10 +642,6 @@ public class AStarDemoController implements Initializable {
                 return true;
             }
         }
-        else
-        {
-            //FIXME: INFORM USER OF ERROR
-        }
 
         return false; //We had an error
     }
@@ -674,10 +670,11 @@ public class AStarDemoController implements Initializable {
           mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
         }else{
             mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
-            updatePath();
-            ETA.textProperty().unbind();
-            ETA.setText("ETA"); //FIXME: DO BETTER EVENTUALLY
-            Go.setDisable(false);
+            if(updatePath()) {
+                ETA.textProperty().unbind();
+                ETA.setText("ETA"); //FIXME: DO BETTER EVENTUALLY
+                Go.setDisable(false);
+            }
         }
     }
 
