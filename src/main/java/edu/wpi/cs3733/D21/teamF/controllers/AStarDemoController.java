@@ -36,9 +36,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -127,7 +125,7 @@ public class AStarDemoController implements Initializable {
     private final IntegerProperty currentStep = new SimpleIntegerProperty(0);
 
     // List of intermediate vertices for multi-stop pathfinding - LM
-    private ArrayList<Vertex> vertices = new ArrayList<>();
+    private final ArrayList<Vertex> vertices = new ArrayList<>();
 
     private DrawableNode direction;
 
@@ -224,13 +222,12 @@ public class AStarDemoController implements Initializable {
                 if(addStopMenu.getText().equals("Add Stop")) {
                     vertices.add(graph.getVertex(currEntry.getNodeID()));
                     drawStop(currEntry);
-                    checkInput();
                 } else {
                     vertices.remove(graph.getVertex(currEntry.getNodeID()));
                     mapPanel.unDraw(currEntry.getNodeID());
                     getDrawableNode(currEntry.getNodeID());
-                    checkInput();
                 }
+                checkInput();
             });
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
@@ -1288,12 +1285,12 @@ public class AStarDemoController implements Initializable {
                 final int cX = (int) currVertex.getX();
                 final int cY = (int) currVertex.getY();
 
-                final int captureWidth = 200;
+                final int captureDimensions = 200;
 
-                final int minX = (int) ((cX / mapPanel.getZoomLevel().get()) - captureWidth / 2);
-                final int minY = (int) ((cY / mapPanel.getZoomLevel().get()) - captureWidth / 2);
+                final int minX = (int) ((cX / mapPanel.getZoomLevel().get()) - captureDimensions / 2);
+                final int minY = (int) ((cY / mapPanel.getZoomLevel().get()) - captureDimensions / 2);
 
-                params.setViewport(new Rectangle2D(minX, minY, captureWidth, captureWidth));
+                params.setViewport(new Rectangle2D(minX, minY, captureDimensions, captureDimensions));
                 // System.out.println(params.getViewport());
 
                 final WritableImage image = mapPanel.getCanvas().snapshot(params, null);
@@ -1301,9 +1298,9 @@ public class AStarDemoController implements Initializable {
 
                 //  ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
 
-                final double aspect = bufferedImage.getWidth() / bufferedImage.getHeight();
+                final double aspect = (double) bufferedImage.getWidth() / bufferedImage.getHeight();
 
-                final Image scaledImage = bufferedImage.getScaledInstance(100, (int) (100 * aspect), Image.SCALE_SMOOTH);
+                final java.awt.Image scaledImage = bufferedImage.getScaledInstance(100, (int) (100 * aspect), java.awt.Image.SCALE_SMOOTH);
                 final BufferedImage scaledBuffered = new BufferedImage(scaledImage.getWidth(null), scaledImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
                 scaledBuffered.getGraphics().drawImage(scaledImage, 0, 0, null);
 
