@@ -42,6 +42,22 @@ public class externalTransController extends ServiceRequests{
     @Override
     public boolean formFilled() {
         return patientName.getText().length()>0 && methodTrans.getText().length()>0 && special.getText().length()>0;
+        boolean isFilled = true;
+
+        setNormalStyle(patientName, methodTrans, special, loc);
+        if(patientName.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(patientName);
+        }
+        if(methodTrans.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(methodTrans);
+        }
+        if(loc.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(loc);
+        }
+        return isFilled;
     }
 
     @Override
@@ -50,8 +66,6 @@ public class externalTransController extends ServiceRequests{
         loc.setText("");
         methodTrans.setText("");
         special.setText("");
-        special.setStyle("-fx-text-fill: #000000");
-        loc.setStyle("-fx-text-fill: #000000");
-        methodTrans.setStyle("-fx-text-fill: #000000");
+        setNormalStyle(patientName, loc, methodTrans, special);
     }
 }

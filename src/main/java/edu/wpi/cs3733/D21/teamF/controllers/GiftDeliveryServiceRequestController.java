@@ -37,7 +37,27 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
         }
 
         public boolean formFilled() {
-            return name.getText().length()>0 && ccNumber.getText().length()>0 && csv.getText().length()>0 && expirationDate.getText().length()>0 && specialInstructions.getText().length()>0;
+            boolean isFilled = true;
+
+            setNormalStyle(name, ccNumber, csv, expirationDate);
+
+            if(name.getText().length() == 0){
+                isFilled = false;
+                setTextErrorStyle(name);
+            }
+            if(ccNumber.getText().length() == 0){
+                isFilled = false;
+                setTextErrorStyle(ccNumber);
+            }
+            if(csv.getText().length() == 0){
+                isFilled = false;
+                setTextErrorStyle(csv);
+            }
+            if(expirationDate.getText().length() == 0){
+                isFilled = false;
+                setTextErrorStyle(expirationDate);
+            }
+            return isFilled;
         }
 
 }

@@ -83,75 +83,41 @@ public class FloralDeliveryService extends ServiceRequests{
 
     public boolean formFilled() {
         boolean isFilled = true;
+
+        setNormalStyle(bouquetButton, vaseButton, potButton, roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox,
+                orchidCheckBox, daisyCheckBox, deliveryField, nameField, cardNumberField, cardCVCField, cardExpField, dateField);
+
         if(!(bouquetButton.isSelected() || vaseButton.isSelected() || potButton.isSelected())) {
             isFilled = false;
-            bouquetButton.setStyle("-fx-text-fill: #e8321e");
-            vaseButton.setStyle("-fx-text-fill: #e8321e");
-            potButton.setStyle("-fx-text-fill: #e8321e");
-        }
-        else {
-            bouquetButton.setStyle("-fx-text-fill: #000000");
-            vaseButton.setStyle("-fx-text-fill: #000000");
-            potButton.setStyle("-fx-text-fill: #000000");
+            setButtonErrorStyle(bouquetButton, vaseButton, potButton);
         }
         if(!(roseCheckBox.isSelected() || tulipCheckBox.isSelected() || violetCheckBox.isSelected() || sunflowerCheckBox.isSelected() || orchidCheckBox.isSelected() || daisyCheckBox.isSelected())) {
             isFilled = false;
-            roseCheckBox.setStyle("-fx-text-fill: #e8321e");
-            tulipCheckBox.setStyle("-fx-text-fill: #e8321e");
-            violetCheckBox.setStyle("-fx-text-fill: #e8321e");
-            sunflowerCheckBox.setStyle("-fx-text-fill: #e8321e");
-            orchidCheckBox.setStyle("-fx-text-fill: #e8321e");
-            daisyCheckBox.setStyle("-fx-text-fill: #e8321e");
-        }
-        else {
-            roseCheckBox.setStyle("-fx-text-fill: #000000");
-            tulipCheckBox.setStyle("-fx-text-fill: #000000");
-            violetCheckBox.setStyle("-fx-text-fill: #000000");
-            sunflowerCheckBox.setStyle("-fx-text-fill: #000000");
-            orchidCheckBox.setStyle("-fx-text-fill: #000000");
-            daisyCheckBox.setStyle("-fx-text-fill: #000000");
+            setButtonErrorStyle(roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox, orchidCheckBox);
         }
         if(deliveryField.getText().length() == 0) {
             isFilled = false;
-            deliveryField.setStyle("-fx-background-color: #ffbab8;");
-        }
-        else {
-            deliveryField.setStyle("-fx-background-color: transparent;");
+            setTextErrorStyle(deliveryField);
         }
         if(nameField.getText().length() == 0) {
             isFilled = false;
-            nameField.setStyle("-fx-background-color: #ffbab8;");
-        }
-        else {
-            nameField.setStyle("-fx-background-color: transparent;");
+            setTextErrorStyle(nameField);
         }
         if(cardNumberField.getText().length() == 0) {
             isFilled = false;
-            cardNumberField.setStyle("-fx-background-color: #ffbab8;");
-        }
-        else {
-            cardNumberField.setStyle("-fx-background-color: transparent;");
+            setTextErrorStyle(cardNumberField);
         }
         if(cardCVCField.getText().length() == 0) {
             isFilled = false;
-            cardCVCField.setStyle("-fx-background-color: #ffbab8;");
-        }
-        else {
-            cardCVCField.setStyle("-fx-background-color: transparent;");
+            setTextErrorStyle(cardCVCField);
         }
         if(cardExpField.getText().length() == 0) {
             isFilled = false;
-            cardExpField.setStyle("-fx-background-color: #ffbab8;");
-        }
-        else {
-            cardExpField.setStyle("-fx-background-color: transparent;");
+            setTextErrorStyle(cardExpField);
         }
         if(dateField.getValue() == null) {
             isFilled = false;
-            dateField.setStyle("-fx-background-color: #ffbab8;");
-        }
-        else {
-            dateField.setStyle("-fx-background-color: transparent;");
+            setTextErrorStyle(dateField);
         }
         return isFilled;
     }
@@ -172,21 +138,9 @@ public class FloralDeliveryService extends ServiceRequests{
         cardExpField.setText("");
         cardCVCField.setText("");
         dateField.setValue(null);
-        bouquetButton.setStyle("-fx-text-fill: #000000");
-        vaseButton.setStyle("-fx-text-fill: #000000");
-        potButton.setStyle("-fx-text-fill: #000000");
-        roseCheckBox.setStyle("-fx-text-fill: #000000");
-        tulipCheckBox.setStyle("-fx-text-fill: #000000");
-        violetCheckBox.setStyle("-fx-text-fill: #000000");
-        sunflowerCheckBox.setStyle("-fx-text-fill: #000000");
-        orchidCheckBox.setStyle("-fx-text-fill: #000000");
-        daisyCheckBox.setStyle("-fx-text-fill: #000000");
-        deliveryField.setStyle("-fx-background-color: transparent;");
-        nameField.setStyle("-fx-background-color: transparent;");
-        cardNumberField.setStyle("-fx-background-color: transparent;");
-        cardCVCField.setStyle("-fx-background-color: transparent;");
-        cardExpField.setStyle("-fx-background-color: transparent;");
-        dateField.setStyle("-fx-background-color: transparent;");
+
+        setNormalStyle(bouquetButton, vaseButton, potButton, roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox,
+                orchidCheckBox, daisyCheckBox, deliveryField, nameField, cardNumberField, cardCVCField, cardExpField, dateField);
     }
 }
 

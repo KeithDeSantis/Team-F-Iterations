@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -91,9 +92,47 @@ public class LaundryRequestController extends ServiceRequests {
         return additionalInfo;
     }
 
+    /**
+     * handles radial button groups
+     * @param e
+     */
+    @FXML
+    private void handleRadialButtonPushed(ActionEvent e){
+        ToggleGroup tempGroup = new ToggleGroup();
+        hot.setToggleGroup(tempGroup);
+        cold.setToggleGroup(tempGroup);
 
+        ToggleGroup colorGroup = new ToggleGroup();
+        darks.setToggleGroup(colorGroup);
+        lights.setToggleGroup(colorGroup);
+        both.setToggleGroup(colorGroup);
+    }
+
+
+    @Override
     public boolean formFilled() {
-        return employeeID.getText().length()>0 && clientName.getText().length()>0;
+        boolean isFilled = true;
+
+        setNormalStyle(employeeID, hot, cold, darks, lights, both);
+
+        if(employeeID.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(employeeID);
+        }
+//        if(clientName.getText().length() == 0){
+//            isFilled = false;
+//            setTextErrorStyle(clientName);
+//        }
+        if(! (hot.isSelected() || cold.isSelected())){
+            isFilled = false;
+            setButtonErrorStyle(hot, cold);
+        }
+        if (! (darks.isSelected() || lights.isSelected() || both.isSelected())) {
+            isFilled = false;
+            setButtonErrorStyle(darks, lights, both);
+        }
+
+        return isFilled;
     }
 
     @Override
@@ -105,16 +144,8 @@ public class LaundryRequestController extends ServiceRequests {
         cold.setSelected(false);
         folded.setSelected(false);
         employeeID.setText("");
-        clientName.setText("");
+        //clientName.setText("");
         additionalInstructions.setText("");
-        both.setStyle("-fx-text-fill: #000000");
-        lights.setStyle("-fx-text-fill: #000000");
-        darks.setStyle("-fx-text-fill: #000000");
-        hot.setStyle("-fx-text-fill: #000000");
-        cold.setStyle("-fx-text-fill: #000000");
-        folded.setStyle("-fx-text-fill: #000000");
-        employeeID.setStyle("-fx-background-color: transparent");
-        clientName.setStyle("-fx-background-color: transparent");
-        additionalInstructions.setStyle("-fx-background-color: transparent");
+        setNormalStyle(both, lights, darks, hot, cold, folded, employeeID, additionalInstructions);
     }
 }

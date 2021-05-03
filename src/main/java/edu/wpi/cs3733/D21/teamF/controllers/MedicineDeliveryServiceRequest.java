@@ -72,16 +72,14 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
                     System.out.println("Unexpected case reached.");
                     break;
             }
-            if(node.getText().length() > 0) {
-                node.setStyle("-fx-border-color: transparent");
-                node.setStyle("-fx-background-color: transparent");
+            if(node.getText().length() > 0) {  //currently works because nodes are only text fields
+                setNormalStyle(node);
             } else {
                 submitSuccessful = false;
-                node.setStyle("-fx-border-color: #FF0000");
-                node.setStyle("-fx-background-color: #FF000088");
+                setTextErrorStyle(node);
             }
         }
-        if(submitSuccessful) {
+        if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String type = "Medicine Delivery";
             String person = "";
@@ -117,27 +115,7 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     }
     */
 
-    /**
-     * Changes the style of a Button when moused over
-     * @param mouseEvent the event signalling that the mouse is over the JFXButton
-     * @author Tony Vuolo (bdane)
-     */
-    @FXML
-    private void mouseOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    /**
-     * Reverts the style of a Button back to its original settings
-     * @param mouseEvent the event signalling that the mouse is no longer over the JFXButton
-     * @author Tony Vuolo (bdane)
-     */
-    @FXML
-    private void mouseOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
 
     @Override
     public void handleClear() {
@@ -148,12 +126,6 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
         cardNumber.setText("");
         cvc.setText("");
         expirationDate.setText("");
-        clientRoom.setStyle("-fx-background-color: transparent");
-        clientName.setStyle("-fx-background-color: transparent");
-        medicineInformation.setStyle("-fx-background-color: transparent");
-        cardholder.setStyle("-fx-background-color: transparent");
-        cvc.setStyle("-fx-background-color: transparent");
-        cardNumber.setStyle("-fx-background-color: transparent");
-        expirationDate.setStyle("-fx-background-color: transparent");
+        setNormalStyle(clientRoom, clientName, medicineInformation, cardholder, cvc, cardNumber, expirationDate);
     }
 }

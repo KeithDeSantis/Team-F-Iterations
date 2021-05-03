@@ -121,53 +121,30 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
      */
     public boolean formFilled() {
         boolean isFilled = true;
-        if(! (rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected())){
+
+        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, specialInstructionsField,
+                rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
+                rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
+
+        if(! (rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected())) {
             isFilled = false;
-            rButtonFood1.setStyle("-fx-text-fill: #e8321e");
-            rButtonFood2.setStyle("-fx-text-fill: #e8321e");
-            rButtonFood3.setStyle("-fx-text-fill: #e8321e");
-            rButtonFood4.setStyle("-fx-text-fill: #e8321e");
-        } else {
-            rButtonFood1.setStyle("-fx-text-fill: #000000");
-            rButtonFood2.setStyle("-fx-text-fill: #000000");
-            rButtonFood3.setStyle("-fx-text-fill: #000000");
-            rButtonFood4.setStyle("-fx-text-fill: #000000");
+            setButtonErrorStyle(rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4);
         }
         if(! (rButtonDrink1.isSelected() || rButtonDrink2.isSelected() || rButtonDrink3.isSelected() || rButtonDrink4.isSelected())){
             isFilled = false;
-            rButtonDrink1.setStyle("-fx-text-fill: #e8321e");
-            rButtonDrink2.setStyle("-fx-text-fill: #e8321e");
-            rButtonDrink3.setStyle("-fx-text-fill: #e8321e");
-            rButtonDrink4.setStyle("-fx-text-fill: #e8321e");
-        } else {
-            rButtonDrink1.setStyle("-fx-text-fill: #000000");
-            rButtonDrink2.setStyle("-fx-text-fill: #000000");
-            rButtonDrink3.setStyle("-fx-text-fill: #000000");
-            rButtonDrink4.setStyle("-fx-text-fill: #000000");
+            setButtonErrorStyle(rButtonDrink1, rButtonDrink2, rButtonDrink3, rButtonDrink4);
         }
         if(! (cbSide1.isSelected() || cbSide2.isSelected() || cbSide3.isSelected() || cbSide4.isSelected())){
             isFilled = false;
-            cbSide1.setStyle("-fx-text-fill: #e8321e");
-            cbSide2.setStyle("-fx-text-fill: #e8321e");
-            cbSide3.setStyle("-fx-text-fill: #e8321e");
-            cbSide4.setStyle("-fx-text-fill: #e8321e");
-        } else {
-            cbSide1.setStyle("-fx-text-fill: #000000");
-            cbSide2.setStyle("-fx-text-fill: #000000");
-            cbSide3.setStyle("-fx-text-fill: #000000");
-            cbSide4.setStyle("-fx-text-fill: #000000");
+            setButtonErrorStyle(cbSide1, cbSide2, cbSide3, cbSide4);
         }
         if(deliveryLocationField.getValue() == null){
             isFilled = false;
-            deliveryLocationField.setStyle("-fx-background-color: #ffbab8");
-        } else {
-            deliveryLocationField.setStyle("-fx-background-color: transparent");
+            setTextErrorStyle(deliveryLocationField);
         }
         if(deliveryTimeField.getValue() == null){
             isFilled = false;
-            deliveryTimeField.setStyle("-fx-background-color: #ffbab8");
-        } else {
-            deliveryTimeField.setStyle("-fx-background-color: transparent");
+            setTextErrorStyle(deliveryTimeField);
         }
 
         return isFilled;
@@ -212,21 +189,9 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
         cbSide2.setSelected(false);
         cbSide3.setSelected(false);
         cbSide4.setSelected(false);
-        allergyField.setStyle("-fx-background-color: transparent");
-        specialInstructionsField.setStyle("-fx-background-color: transparent");
-        rButtonFood1.setStyle("-fx-background-color: #000000");
-        rButtonFood2.setStyle("-fx-background-color: #000000");
-        rButtonFood3.setStyle("-fx-background-color: #000000");
-        rButtonFood4.setStyle("-fx-background-color: #000000");
-        rButtonDrink1.setStyle("-fx-background-color: #000000");
-        rButtonDrink2.setStyle("-fx-background-color: #000000");
-        rButtonDrink3.setStyle("-fx-background-color: #000000");
-        rButtonDrink4.setStyle("-fx-background-color: #000000");
-        cbSide1.setStyle("-fx-background-color: #000000");
-        cbSide2.setStyle("-fx-background-color: #000000");
-        cbSide3.setStyle("-fx-background-color: #000000");
-        cbSide4.setStyle("-fx-background-color: #000000");
-
+        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, specialInstructionsField,
+                rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
+                rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
 
     }
 }
