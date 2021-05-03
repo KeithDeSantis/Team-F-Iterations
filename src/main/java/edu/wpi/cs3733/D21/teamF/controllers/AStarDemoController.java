@@ -18,10 +18,7 @@ import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -61,12 +58,6 @@ public class AStarDemoController implements Initializable {
 
     @FXML
     private ImageView goBack;
-
-    @FXML
-    private JFXComboBox<String> startComboBox;
-
-    @FXML
-    private JFXComboBox<String> endComboBox;
 
     @FXML
     private MapPanel mapPanel;
@@ -126,6 +117,8 @@ public class AStarDemoController implements Initializable {
 
     // List of intermediate vertices for multi-stop pathfinding - LM
     private final ArrayList<Vertex> vertices = new ArrayList<>();
+    private SimpleStringProperty startNode = new SimpleStringProperty("");
+    private SimpleStringProperty endNode = new SimpleStringProperty("");
 
     private DrawableNode direction;
 
@@ -176,9 +169,6 @@ public class AStarDemoController implements Initializable {
         }
         nodeList.addAll(shortNameList.stream().sorted().collect(Collectors.toList()));
 
-        startComboBox.setItems(nodeList);
-        endComboBox.setItems(nodeList);
-
         isCurrentlyNavigating.set(false);
 
         final ContextMenu contextMenu = new ContextMenu();
@@ -214,7 +204,10 @@ public class AStarDemoController implements Initializable {
 
             // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
             // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
-            startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(currEntry.getNodeID())));
+            startPathMenu.setOnAction(e -> {
+                startNode.set(idToShortName(currEntry.getNodeID()));
+                handleStartBoxAction();
+            });
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
@@ -231,7 +224,10 @@ public class AStarDemoController implements Initializable {
             });
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
-            endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(currEntry.getNodeID())));
+            endPathMenu.setOnAction(e -> {
+                endNode.set(idToShortName(currEntry.getNodeID()));
+                handleEndBoxAction();
+            });
 
             //FIXME: Make these ones require that thing is visible
             whatsHereMenu.setOnAction(e -> {
@@ -255,10 +251,11 @@ public class AStarDemoController implements Initializable {
                 closeBtn.setOnAction(a -> dialog.close());
 
                 final JFXButton directionsTo = new JFXButton("Direction To");
-                directionsTo.setOnAction(a -> {startComboBox.setValue(idToShortName(currEntry.getNodeID())); dialog.close();});
+                directionsTo.setOnAction(a -> {endNode.set(idToShortName(currEntry.getNodeID())); dialog.close();});
 
                 final JFXButton directionsFrom = new JFXButton("Directions From");
-                directionsFrom.setOnAction(a ->  {endComboBox.setValue(idToShortName(currEntry.getNodeID())); dialog.close();});
+                directionsFrom.setOnAction(a ->  {
+                    startNode.set(idToShortName(currEntry.getNodeID())); dialog.close();});
 
                 final JFXButton toggleFavorite = new JFXButton("FIXME: Add Favorite");
 
@@ -268,10 +265,6 @@ public class AStarDemoController implements Initializable {
                 mapPanel.showDialog(dialog);
             });
         });
-
-
-        startComboBox.disableProperty().bind(isCurrentlyNavigating);
-        endComboBox.disableProperty().bind(isCurrentlyNavigating);
 
         Go.setDisable(true);
         Prev.setVisible(false);
@@ -425,8 +418,8 @@ public class AStarDemoController implements Initializable {
        // if(this.startNodeDisplay != null)
         //    mapPanel.unDraw(this.startNodeDisplay.getId());
         //FIXME: USE BINDINGS
-        if(!(startComboBox.getValue() == null)) {
-            this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue()));
+        if(!(startNode.getValue().isEmpty())) {
+            this.startNodeDisplay = mapPanel.getNode(shortNameToID(startNode.get()));
 
             mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
             mapPanel.centerNode(startNodeDisplay);
@@ -448,8 +441,8 @@ public class AStarDemoController implements Initializable {
 
             drawableNode.setOnContextMenuRequested(mapPanel.getMap().getOnContextMenuRequested());
 
-            final BooleanBinding isStartNode = startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()));
-            final BooleanBinding isEndNode = endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()));
+            final BooleanBinding isStartNode = Bindings.equal(startNode, idToShortName(drawableNode.getId()));
+            final BooleanBinding isEndNode = Bindings.equal(endNode, idToShortName(drawableNode.getId()));
             final BooleanBinding isStartOrEndNode = isStartNode.or(isEndNode);
 
             drawableNode.radiusProperty().bind(Bindings.when(isStartOrEndNode).then(10).otherwise(5));
@@ -545,14 +538,13 @@ public class AStarDemoController implements Initializable {
 //        if(this.endNodeDisplay != null)
 //            mapPanel.unDraw(this.endNodeDisplay.getId());
         //FIXME: USE BINDINGS?
-        if(!(endComboBox.getValue() == null)) {
-            this.endNodeDisplay = mapPanel.getNode(shortNameToID(endComboBox.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
+        if(!(endNode.getValue().isEmpty())) {
+            this.endNodeDisplay = mapPanel.getNode(shortNameToID(endNode.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
             mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
             mapPanel.centerNode(endNodeDisplay);
             loadRecentlyUsedVertices();
         }
     }
-
 
 
     /**
@@ -562,8 +554,8 @@ public class AStarDemoController implements Initializable {
      */
     private boolean updatePath()
     {
-        final Vertex startVertex = this.graph.getVertex(shortNameToID(startComboBox.getValue()));
-        final Vertex endVertex = this.graph.getVertex(shortNameToID(endComboBox.getValue()));
+        final Vertex startVertex = this.graph.getVertex(shortNameToID(startNode.getValue()));
+        final Vertex endVertex = this.graph.getVertex(shortNameToID(endNode.getValue()));
 
 
         List<Vertex> pathVertices = new ArrayList<>();
@@ -666,7 +658,7 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf)
      */
     @FXML private void checkInput() {
-        if (startComboBox.getValue() == null || endComboBox.getValue() == null){
+        if (startNode.getValue().isEmpty() || endNode.getValue().isEmpty()){
           mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
         }else{
             mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
@@ -1133,7 +1125,7 @@ public class AStarDemoController implements Initializable {
 
         //TODO: Italics for previously finished instructions?
         //TODO: better align ETA text.
-        layout.setHeading(new Text("Directions from: " + startComboBox.getValue() + " to " +  endComboBox.getValue()));
+        layout.setHeading(new Text("Directions from: " + startNode.getValue() + " to " +  endNode.getValue()));
 
         StringBuilder directions = new StringBuilder();
         for(int i = 0; i < stopsList.size(); i++)
@@ -1228,7 +1220,7 @@ public class AStarDemoController implements Initializable {
             contentStream.newLineAtOffset(25, 690);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("Directions from: " + startComboBox.getValue());
+            contentStream.showText("Directions from: " + startNode.getValue());
             contentStream.newLine();
             contentStream.endText();
 
@@ -1239,7 +1231,7 @@ public class AStarDemoController implements Initializable {
             contentStream.newLineAtOffset(25, 670);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("To: " + endComboBox.getValue());
+            contentStream.showText("To: " + endNode.getValue());
             contentStream.newLine();
             contentStream.endText();
 
@@ -1331,8 +1323,8 @@ public class AStarDemoController implements Initializable {
      */
     public void clearList() {
         vertices.clear();
-        startComboBox.getSelectionModel().clearSelection();
-        endComboBox.getSelectionModel().clearSelection();
+        startNode.set("");
+        endNode.set("");
         mapPanel.clearMap();
         Go.setDisable(true);
 

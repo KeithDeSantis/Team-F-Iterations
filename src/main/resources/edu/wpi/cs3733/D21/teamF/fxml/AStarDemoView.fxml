@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXToggleButton?>
+<?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -11,8 +11,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import edu.wpi.cs3733.uicomponents.MapPanel?>
 
+<?import edu.wpi.cs3733.uicomponents.MapPanel?>
 <VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
       <HBox fx:id="header" prefHeight="85.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
@@ -28,59 +28,66 @@
                </font>
             </Text>
          </children></HBox>
-      <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS">
-         <VBox.margin>
-            <Insets left="25.0" right="25.0" top="10.0" />
-         </VBox.margin>
-      </MapPanel>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+      <HBox VBox.vgrow="ALWAYS">
          <children>
-            <HBox alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
+            <JFXTreeView fx:id="treeView" />
+            <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <JFXComboBox fx:id="startComboBox" focusColor="#f0c808" onAction="#handleStartBoxAction" prefWidth="180.0" promptText="Select Start Location" unFocusColor="#03256c" />
-                  <JFXComboBox fx:id="endComboBox" focusColor="#f0c808" onAction="#handleEndBoxAction" prefWidth="180.0" promptText="Select End Location" unFocusColor="#03256c">
-                     <padding>
-                        <Insets left="16.0" />
-                     </padding>
-                  </JFXComboBox>
-                  <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                  <JFXButton fx:id="Go" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation" />
-                  <JFXToggleButton fx:id="optimize" prefHeight="30.0" text="Optimize Route" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" onAction="#checkInput"/>
+                  <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS"/>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
+                           <children>
+                              <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                              <JFXButton fx:id="Go" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation" />
+                              <JFXToggleButton fx:id="optimize" onAction="#checkInput" prefHeight="30.0" text="Optimize Route" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0">
+                           <children>
+                              <JFXButton fx:id="viewInstructionsBtn" buttonType="RAISED" onAction="#handleViewInstructions" stylesheets="/stylesheets/DefaultButtonStyle.css" text="View List">
+                                 <HBox.margin>
+                                    <Insets right="25.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="300.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="BLACK">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="navIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets right="25.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label fx:id="ETA" alignment="CENTER" contentDisplay="CENTER" prefWidth="150.0" style="-fx-background-color: #F0C808;" text="ETA" textFill="BLACK">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Previous">
+                                 <HBox.margin>
+                                    <Insets left="25.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Next">
+                                 <HBox.margin>
+                                    <Insets left="25.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0">
-               <children>
-                  <JFXButton fx:id="viewInstructionsBtn" buttonType="RAISED" onAction="#handleViewInstructions" stylesheets="/stylesheets/DefaultButtonStyle.css" text="View List">
-                     <HBox.margin>
-                        <Insets right="25.0" />
-                     </HBox.margin></JFXButton>
-                  <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="300.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="BLACK">
-                     <font>
-                        <Font size="20.0" />
-                     </font></Label>
-                  <ImageView fx:id="navIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets right="25.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <Label fx:id="ETA" alignment="CENTER" contentDisplay="CENTER" prefWidth="150.0" style="-fx-background-color: #F0C808;" text="ETA" textFill="BLACK">
-                     <font>
-                        <Font size="20.0" />
-                     </font></Label>
-                  <JFXButton fx:id="Prev" buttonType="RAISED" onAction="#goToPrevNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Previous">
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin></JFXButton>
-                  <JFXButton fx:id="Next" buttonType="RAISED" onAction="#goToNextNode" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Next">
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin></JFXButton>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </HBox>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </VBox>
          </children>
-      </VBox>
+      </HBox>
    </children>
 </VBox>
