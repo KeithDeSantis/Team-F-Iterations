@@ -121,37 +121,30 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
      */
     public boolean formFilled() {
         boolean isFilled = true;
+
+        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, specialInstructionsField,
+                rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
+                rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
+
         if(! (rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected())) {
             isFilled = false;
             setButtonErrorStyle(rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4);
-        } else {
-            setNormalStyle(rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4);
         }
-
         if(! (rButtonDrink1.isSelected() || rButtonDrink2.isSelected() || rButtonDrink3.isSelected() || rButtonDrink4.isSelected())){
             isFilled = false;
             setButtonErrorStyle(rButtonDrink1, rButtonDrink2, rButtonDrink3, rButtonDrink4);
-        } else {
-            setNormalStyle(rButtonDrink1, rButtonDrink2, rButtonDrink3, rButtonDrink4);
         }
-
         if(! (cbSide1.isSelected() || cbSide2.isSelected() || cbSide3.isSelected() || cbSide4.isSelected())){
             isFilled = false;
             setButtonErrorStyle(cbSide1, cbSide2, cbSide3, cbSide4);
-        } else {
-            setNormalStyle(cbSide1, cbSide2, cbSide3, cbSide4);
         }
         if(deliveryLocationField.getValue() == null){
             isFilled = false;
             setTextErrorStyle(deliveryLocationField);
-        } else {
-            setNormalStyle(deliveryLocationField);
         }
         if(deliveryTimeField.getValue() == null){
             isFilled = false;
             setTextErrorStyle(deliveryTimeField);
-        } else {
-            setNormalStyle(deliveryTimeField);
         }
 
         return isFilled;
