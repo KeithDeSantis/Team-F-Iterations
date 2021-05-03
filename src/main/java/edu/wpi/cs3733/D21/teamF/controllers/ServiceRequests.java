@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -29,7 +28,7 @@ public abstract class ServiceRequests {
 
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {}
 
-    public void handleCancel(ActionEvent e) throws IOException {
+    public void handleCancel() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 

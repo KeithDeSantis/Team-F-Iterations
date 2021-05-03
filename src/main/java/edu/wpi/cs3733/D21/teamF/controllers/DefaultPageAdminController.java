@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -9,8 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -34,8 +33,7 @@ public class DefaultPageAdminController {
     private JFXButton signOut;
     @FXML
     private JFXButton pathfindingSettingButton;
-    @FXML
-    private Text title;
+
     @FXML
     private void initialize(){
         // Set fonts - LM
@@ -52,8 +50,6 @@ public class DefaultPageAdminController {
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
 
         if (buttonPushed == editMap) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
@@ -67,36 +63,19 @@ public class DefaultPageAdminController {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
         } else if(buttonPushed == pathfindingSettingButton) {
             FXMLLoader dialogLoader = new FXMLLoader();
-            dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/PreferedPathfindingAlgoView.fxml"));
+            dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/PreferredPathfindingAlgoView.fxml"));
             Stage dialogStage = new Stage();
             Parent root2 = dialogLoader.load();
             dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
-            dialogStage.initOwner((Stage) pathfindingSettingButton.getScene().getWindow());
+            dialogStage.initOwner(pathfindingSettingButton.getScene().getWindow());
             dialogStage.setScene(new Scene(root2)); // set scene - KD
             dialogStage.showAndWait();
         }
         else if (buttonPushed == quit) {
             Platform.exit();
         } else if (buttonPushed == signOut){
+            CurrentUser.getCurrentUser().logout();
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
-    }
-
-    /** handles highlighting buttons when hovering
-     * @author Keith Desantis, insterted by Leo Morris
-     * @param mouseEvent The button hovered over
-     */
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    /** handles removing highlight on buttons when not hovering
-     * @author Keith Desantis, insterted by Leo Morris
-     * @param mouseEvent The button hovered off
-     */
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 }

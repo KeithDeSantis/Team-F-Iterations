@@ -24,24 +24,30 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -69,9 +75,6 @@ public class AStarDemoController implements Initializable {
     private JFXButton Go;
 
     @FXML
-    private JFXButton End;
-
-    @FXML
     private JFXButton Prev;
 
     @FXML
@@ -84,7 +87,13 @@ public class AStarDemoController implements Initializable {
     private Label ETA;
 
     @FXML
+    private ImageView navIcon;
+
+    @FXML
     public JFXButton viewInstructionsBtn;
+
+    @FXML
+    public JFXToggleButton optimize;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -115,6 +124,8 @@ public class AStarDemoController implements Initializable {
     private final ObservableList<String> etaList = FXCollections.observableArrayList();
     private final IntegerProperty currentStep = new SimpleIntegerProperty(0);
 
+    // List of intermediate vertices for multi-stop pathfinding - LM
+    private final ArrayList<Vertex> vertices = new ArrayList<>();
 
     private DrawableNode direction;
 
@@ -174,16 +185,18 @@ public class AStarDemoController implements Initializable {
 
         //FIXME: CHANGE TEXT TO BE MORE ACCESSIBLE
         final MenuItem startPathMenu = new MenuItem("Path from Here");
+        final MenuItem addStopMenu = new MenuItem("Add stop here");
         final MenuItem endPathMenu = new MenuItem("Path end Here");
 
         final MenuItem whatsHereMenu = new MenuItem("What's here?");
 
-        contextMenu.getItems().addAll(startPathMenu, endPathMenu, new SeparatorMenuItem(), whatsHereMenu);
+        contextMenu.getItems().addAll(startPathMenu,addStopMenu, endPathMenu, new SeparatorMenuItem(), whatsHereMenu);
 
         mapPanel.getMap().setOnContextMenuRequested(event -> {
             if(isCurrentlyNavigating.get()){
                 return;
             }
+
 
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
             final NodeEntry currEntry = getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel);
@@ -191,11 +204,33 @@ public class AStarDemoController implements Initializable {
             if(currEntry == null)
                 return;
 
+            if(vertices.contains(graph.getVertex(currEntry.getNodeID()))){
+                addStopMenu.setText("Remove Stop");
+            } else {
+                addStopMenu.setText("Add Stop");
+            }
 
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
+            // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
+            // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
             startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(currEntry.getNodeID())));
 
+            // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
+            // No combo box update so we call checkInput()
+            addStopMenu.setOnAction(e -> {
+                if(addStopMenu.getText().equals("Add Stop")) {
+                    vertices.add(graph.getVertex(currEntry.getNodeID()));
+                    drawStop(currEntry);
+                } else {
+                    vertices.remove(graph.getVertex(currEntry.getNodeID()));
+                    mapPanel.unDraw(currEntry.getNodeID());
+                    getDrawableNode(currEntry.getNodeID());
+                }
+                checkInput();
+            });
+
+            // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(currEntry.getNodeID())));
 
             //FIXME: Make these ones require that thing is visible
@@ -239,11 +274,11 @@ public class AStarDemoController implements Initializable {
         endComboBox.disableProperty().bind(isCurrentlyNavigating);
 
         Go.setDisable(true);
-        End.setDisable(true);
-        Prev.setDisable(true);
-        Next.setDisable(true);
+        Prev.setVisible(false);
+        Next.setVisible(false);
         pathVertex.clear();
         Instruction.setVisible(false);
+        navIcon.setVisible(false);
         ETA.setVisible(false);
 
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
@@ -278,6 +313,27 @@ public class AStarDemoController implements Initializable {
         for(NodeEntry e : allNodeEntries)
           getDrawableNode(e.getNodeID());
     }
+
+    /**
+     * Draws an intermediate stop on the map
+     * @param nodeEntry The NodeEntry of the stop being drawn
+     * @author Leo Morris
+     */
+    private void drawStop(NodeEntry nodeEntry) {
+        DrawableNode stop = new DrawableNode(Integer.parseInt(nodeEntry.getXCoordinate()),
+                Integer.parseInt(nodeEntry.getYCoordinate()),
+                nodeEntry.getNodeID(), nodeEntry.getFloor(), nodeEntry.getBuilding(), nodeEntry.getNodeType(),
+                nodeEntry.getLongName(), nodeEntry.getShortName());
+
+        stop.setStrokeWidth(2.0);
+        stop.setFill(new Color(0.75,0,0,1));
+        stop.setStroke(new Color(1,0,0,1));
+        stop.setScaleX(1.5);
+        stop.setScaleY(1.5);
+        stop.setMouseTransparent(true);
+        mapPanel.draw(stop);
+    }
+
     private void loadFavorites() {
         this.favorites = new DoublyLinkedHashSet<>();
         //TODO: load recentlyUsed
@@ -369,11 +425,13 @@ public class AStarDemoController implements Initializable {
        // if(this.startNodeDisplay != null)
         //    mapPanel.unDraw(this.startNodeDisplay.getId());
         //FIXME: USE BINDINGS
-        this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue()));
+        if(!(startComboBox.getValue() == null)) {
+            this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue()));
 
-        mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
-        mapPanel.centerNode(startNodeDisplay);
-        loadRecentlyUsedVertices();
+            mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
+            mapPanel.centerNode(startNodeDisplay);
+            loadRecentlyUsedVertices();
+        }
     }
     /**
      * Helper function used to draw the startNode with given ID, snatched from handleStartBoxAction()
@@ -487,10 +545,12 @@ public class AStarDemoController implements Initializable {
 //        if(this.endNodeDisplay != null)
 //            mapPanel.unDraw(this.endNodeDisplay.getId());
         //FIXME: USE BINDINGS?
-        this.endNodeDisplay = mapPanel.getNode(shortNameToID(endComboBox.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
-        mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
-        mapPanel.centerNode(endNodeDisplay);
-        loadRecentlyUsedVertices();
+        if(!(endComboBox.getValue() == null)) {
+            this.endNodeDisplay = mapPanel.getNode(shortNameToID(endComboBox.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
+            mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
+            mapPanel.centerNode(endNodeDisplay);
+            loadRecentlyUsedVertices();
+        }
     }
 
 
@@ -505,11 +565,38 @@ public class AStarDemoController implements Initializable {
         final Vertex startVertex = this.graph.getVertex(shortNameToID(startComboBox.getValue()));
         final Vertex endVertex = this.graph.getVertex(shortNameToID(endComboBox.getValue()));
 
+
+        List<Vertex> pathVertices = new ArrayList<>();
+        pathVertices.clear();
+        pathVertices.addAll(vertices);
+
         updateRecentlyUsed(endVertex);
+
+        final Path path;
 
         if(startVertex != null && endVertex != null && !startVertex.equals(endVertex))
         {
-            final Path path = this.graph.getPath(startVertex, endVertex);
+            if(!pathVertices.isEmpty()) {
+                if (pathVertices.get(0) != startVertex) {
+                    pathVertices.add(0, startVertex);
+                }
+                if (pathVertices.get(pathVertices.size() - 1) != endVertex) {
+                    pathVertices.add(endVertex);
+                }
+            } else {
+                pathVertices.add(0, startVertex);
+                pathVertices.add(endVertex);
+            }
+
+
+
+            if(optimize.isSelected()) {
+                path = this.graph.getUnorderedPath(pathVertices);
+            } else {
+                path = this.graph.getPath(pathVertices);
+            }
+
+
             pathVertex.clear();
             if(path != null)
             {
@@ -555,10 +642,6 @@ public class AStarDemoController implements Initializable {
                 return true;
             }
         }
-        else
-        {
-            //FIXME: INFORM USER OF ERROR
-        }
 
         return false; //We had an error
     }
@@ -582,15 +665,16 @@ public class AStarDemoController implements Initializable {
      *
      * @author Alex Friedman (ahf)
      */
-    private void checkInput() {
+    @FXML private void checkInput() {
         if (startComboBox.getValue() == null || endComboBox.getValue() == null){
           mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
         }else{
             mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
-            updatePath();
-            ETA.textProperty().unbind();
-            ETA.setText("ETA"); //FIXME: DO BETTER EVENTUALLY
-            Go.setDisable(false);
+            if(updatePath()) {
+                ETA.textProperty().unbind();
+                ETA.setText("ETA"); //FIXME: DO BETTER EVENTUALLY
+                Go.setDisable(false);
+            }
         }
     }
 
@@ -678,7 +762,7 @@ public class AStarDemoController implements Initializable {
             distance = calculateDistance(pathVertex, stopsList.get(stopsList.size() - 2), stopsList.get(stopsList.size() - 1));
             instructionsList.add(prevDirect + " and walk " + Math.round(distance) + " m");
         }
-        instructionsList.add("Arrive at destination!");
+        instructionsList.add("Arrived at destination!");
 
         // Calculate ETA
         for (Integer stop : stopsList) {
@@ -704,20 +788,22 @@ public class AStarDemoController implements Initializable {
     }
 
     private int searchSE(int startIndex){
+        NodeEntry preN;
         NodeEntry curN;
         Vertex preV = pathVertex.get(startIndex);
         Vertex curV;
         for(int i = startIndex + 1; i < pathVertex.size(); i++){
             curV = pathVertex.get(i);
             if(!curV.getID().substring(1, 5).equals(preV.getID().substring(1, 5)) || i == pathVertex.size() - 1){
+                preN = findNodeEntry(preV.getID()); // get previous node to check stair/elevator type
                 curN = findNodeEntry(curV.getID());
+
+
                 if (curN == null) return -1;
-                String type = curN.getNodeType();
-                if (type.equals("STAI"))
-                    type = "Stair";
-                else
-                    type = "Elevator";
-                instructionsList.add("Take " + type + " to Floor " + preV.getFloor());
+                String type = preN.getNodeType();
+                if (type.equals("STAI")) {type = "stairs";}
+                else {type = "elevator";}
+                instructionsList.add("Take the " + type + " to floor " + preV.getFloor());
                 if(i == pathVertex.size() - 1)
                     return pathVertex.size() - 1;
                 else
@@ -864,10 +950,13 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void startNavigation() {
-        Go.setDisable(true);
+        Next.setVisible(true);
         Next.setDisable(false);
-        End.setDisable(false);
+        Prev.setVisible(true);
+        Prev.setDisable(true);
+        optimize.setDisable(true);
         Instruction.setVisible(true);
+        navIcon.setVisible(true);
         ETA.setVisible(true);
 
         currentStep.set(0);
@@ -890,6 +979,8 @@ public class AStarDemoController implements Initializable {
 
         currentDirection = "UP";
         drawDirection();
+        setNavIcon();
+        Go.setText("End Navigation");
     }
 
     /**
@@ -915,6 +1006,7 @@ public class AStarDemoController implements Initializable {
 
         changeDirectionRevert(instructionsList.get(currentStep.get()));
         drawDirection();
+        setNavIcon();
     }
 
     /**
@@ -939,6 +1031,7 @@ public class AStarDemoController implements Initializable {
         mapPanel.centerNode(userNodeDisplay);
 
         drawDirection();
+        setNavIcon();
 
         if(direction != null && currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1))
                 mapPanel.unDraw(this.direction.getId());
@@ -950,20 +1043,21 @@ public class AStarDemoController implements Initializable {
      * @author ZheCheng Song
      */
     public void endNavigation() {
-        Go.setDisable(false);
-        Prev.setDisable(true);
-        Next.setDisable(true);
-        End.setDisable(true);
+        Prev.setVisible(false);
+        Next.setVisible(false);
         Instruction.setVisible(false);
         ETA.setVisible(false);
+        navIcon.setVisible(false);
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
+        optimize.setDisable(false);
 
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
 
         mapPanel.switchMap(pathVertex.get(0).getFloor());
         mapPanel.centerNode(startNodeDisplay);
+        Go.setText("Start Navigation");
     }
 
     /**
@@ -991,14 +1085,42 @@ public class AStarDemoController implements Initializable {
         SceneContext.getSceneContext().loadDefault();
     }
 
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
 
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
+    /**
+     * Checks the current instruction and applies the corresponding icon to the navigation bar
+     * @author Leo Morris
+     */
+    public void setNavIcon() {
+        String curInstruction = instructionsList.get(currentStep.get()).toLowerCase();
+        Image image = null;
+        if (curInstruction.contains("elevator")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
+        }
+        else if (curInstruction.contains("right")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/turnRightYellow.png"));
+        }
+        else if (curInstruction.contains("left")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/turnLeftYellow.png"));
+        }
+        else if (curInstruction.contains("forward")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goForwardYellow.png"));
+        }
+        else if (curInstruction.contains("around")) {
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/uTurnYellow.png"));
+        }
+        else if(curInstruction.contains("stair")){
+            int nextFloor = Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
+            int currentFloor = Integer.parseInt(pathVertex.get(currentStep.get()-1).getFloor());
+            if(nextFloor > currentFloor){
+                image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
+            } else {
+                image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
+            }
+        }
+        else if (curInstruction.contains("arrived")){
+            image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/stopYellow.png"));
+        }
+        navIcon.setImage(image);
     }
 
     /**
@@ -1013,20 +1135,20 @@ public class AStarDemoController implements Initializable {
         //TODO: better align ETA text.
         layout.setHeading(new Text("Directions from: " + startComboBox.getValue() + " to " +  endComboBox.getValue()));
 
-        String directions = "";
+        StringBuilder directions = new StringBuilder();
         for(int i = 0; i < stopsList.size(); i++)
         {
             final String instruction = instructionsList.get(i);
             final String eta = etaList.get(i);
 
             if(i < stopsList.size() - 1)
-                directions += instruction + "\t\t(" + eta + ")\n";
+                directions.append(instruction).append("\t\t(").append(eta).append(")\n");
             else
-                directions += instruction;
+                directions.append(instruction);
         }
 
         //FIXME: DO BREAKS W/ CSS
-        layout.setBody(new Text(directions));
+        layout.setBody(new Text(directions.toString()));
 
         final JFXButton closeBtn = new JFXButton("Close");
         closeBtn.setOnAction(a -> dialog.close());
@@ -1055,50 +1177,143 @@ public class AStarDemoController implements Initializable {
      */
     private void printInstructions() throws IOException {
 
+        final int INSTRUCTIONS_PER_PAGE = 5;
+
+
+        final String initialFloor = mapPanel.getFloor().get();
+        final int initialCurrStep = currentStep.get();
+        final double initZoomLevel = mapPanel.getZoomLevel().get();
+
         final File file = new File(System.currentTimeMillis() + ".pdf");
 
         //Create the document
         final PDDocument pdfDocument = new PDDocument();
 
-        //Create the first page of the document.
-        final PDPage page = new PDPage();
-        pdfDocument.addPage(page);
 
-        //Create the ContentStream so that we can add data to the document
-        final PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page);
+        mapPanel.getZoomLevel().set(2);
 
-        //Begin the text
+        final int numPages = (int) Math.ceil((double) stopsList.size()/INSTRUCTIONS_PER_PAGE);
 
-        contentStream.beginText();
-        contentStream.setLeading(14.5f);
-        contentStream.newLineAtOffset(25, 725);
-        contentStream.setFont(PDType1Font.HELVETICA, 36);
+        for(int p = 0; p < numPages; p++) {
+            //Create the first page of the document.
+            final PDPage page = new PDPage();
+            pdfDocument.addPage(page);
 
-        contentStream.showText("Brigham and Women's Hospital");
-        contentStream.newLine();
-        contentStream.endText();
+            //Create the ContentStream so that we can add data to the document
+            final PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page);
 
-        //Display instructions
+            //Begin the text
 
-
-        for(int i = 0; i < stopsList.size(); i++)
-        {
+            /*
+             * Page title
+             */
             contentStream.beginText();
             contentStream.setLeading(14.5f);
-            contentStream.setFont(PDType1Font.HELVETICA, 16);
-            contentStream.newLineAtOffset(25, 675 - ((25 * i)));
-          //  contentStream.newLine();
-            final String instruction = instructionsList.get(i);
-            final String eta = etaList.get(i);
+            contentStream.newLineAtOffset(25 + 64, 740);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 36);
 
-            if(i < stopsList.size() - 1)
-                contentStream.showText(instruction + "     (" + eta + ")");
-            else
-                contentStream.showText(instruction);
+            contentStream.showText("Brigham and Women's Hospital");
+            contentStream.newLine();
             contentStream.endText();
-        }
 
-        contentStream.close();
+            final BufferedImage logoImage = ImageIO.read(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
+            PDImageXObject pdfLogo = LosslessFactory.createFromImage(pdfDocument,logoImage);
+            contentStream.drawImage(pdfLogo, 25, 720, 55, 64);
+
+            /*
+             * Instruction Information
+             */
+            contentStream.beginText();
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(25, 690);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+
+            contentStream.showText("Directions from: " + startComboBox.getValue());
+            contentStream.newLine();
+            contentStream.endText();
+
+
+
+            contentStream.beginText();
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(25, 670);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+
+            contentStream.showText("To: " + endComboBox.getValue());
+            contentStream.newLine();
+            contentStream.endText();
+
+            /*
+             * Page numbers
+             */
+            contentStream.beginText();
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(480, 30);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+
+            contentStream.showText("Page " + (p + 1) + " of " + numPages);
+            contentStream.newLine();
+            contentStream.endText();
+
+            //Display instructions
+
+            for (int i = p * INSTRUCTIONS_PER_PAGE; i < Math.min(stopsList.size(), (p + 1) * INSTRUCTIONS_PER_PAGE); i++) {
+                contentStream.beginText();
+                contentStream.setLeading(14.5f);
+                contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+                contentStream.newLineAtOffset(25, 630 - ((110 * (i % INSTRUCTIONS_PER_PAGE))));
+                //  contentStream.newLine();
+                final String instruction = instructionsList.get(i);
+                final String eta = etaList.get(i);
+
+                if (i < stopsList.size() - 1)
+                    contentStream.showText(instruction + "     (" + eta + ")");
+                else
+                    contentStream.showText(instruction);
+                contentStream.endText();
+
+
+                final Vertex currVertex = pathVertex.get(stopsList.get(i));
+                mapPanel.switchMap(currVertex.getFloor());
+                mapPanel.centerNode(mapPanel.getNode(currVertex.getID()));
+                currentStep.set(i);
+
+                final SnapshotParameters params = new SnapshotParameters();
+                final int cX = (int) currVertex.getX();
+                final int cY = (int) currVertex.getY();
+
+                final int captureDimensions = 200;
+
+                final int minX = (int) ((cX / mapPanel.getZoomLevel().get()) - captureDimensions / 2);
+                final int minY = (int) ((cY / mapPanel.getZoomLevel().get()) - captureDimensions / 2);
+
+                params.setViewport(new Rectangle2D(minX, minY, captureDimensions, captureDimensions));
+                // System.out.println(params.getViewport());
+
+                final WritableImage image = mapPanel.getCanvas().snapshot(params, null);
+                final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+
+                //  ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
+
+                final double aspect = (double) bufferedImage.getWidth() / bufferedImage.getHeight();
+
+                final java.awt.Image scaledImage = bufferedImage.getScaledInstance(100, (int) (100 * aspect), java.awt.Image.SCALE_SMOOTH);
+                final BufferedImage scaledBuffered = new BufferedImage(scaledImage.getWidth(null), scaledImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                scaledBuffered.getGraphics().drawImage(scaledImage, 0, 0, null);
+
+                PDImageXObject pdfImage = LosslessFactory.createFromImage(pdfDocument, scaledBuffered);
+
+                contentStream.drawImage(pdfImage, 320, 555 - (i % INSTRUCTIONS_PER_PAGE) * 110);
+
+
+                // ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
+            }
+            contentStream.close();
+        }
+        currentStep.set(initialCurrStep);
+        mapPanel.switchMap(initialFloor);
+        mapPanel.getZoomLevel().set(initZoomLevel);
+
 
 
 
@@ -1108,5 +1323,30 @@ public class AStarDemoController implements Initializable {
 
         final Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
+    }
+
+    /**
+     * Clears all node selections and exits pathfinding mode
+     * @author Leo Morris
+     */
+    public void clearList() {
+        vertices.clear();
+        startComboBox.getSelectionModel().clearSelection();
+        endComboBox.getSelectionModel().clearSelection();
+        mapPanel.clearMap();
+        Go.setDisable(true);
+
+        for(NodeEntry e : allNodeEntries)
+            getDrawableNode(e.getNodeID());
+
+        endNavigation();
+    }
+
+    public void toggleNavigation() {
+        if(isCurrentlyNavigating.get()){
+            endNavigation();
+        } else {
+            startNavigation();
+        }
     }
 }

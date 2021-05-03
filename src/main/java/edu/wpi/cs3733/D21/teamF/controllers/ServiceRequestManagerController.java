@@ -11,14 +11,11 @@ import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,8 +29,9 @@ public class ServiceRequestManagerController implements Initializable {
     @FXML private JFXButton removeAssignment;
     @FXML private ImageView goBack;
     @FXML private JFXTreeTableView<ServiceEntry> requestView;
+    @FXML private JFXButton delete;
 
-    private ObservableList<ServiceEntry> services = FXCollections.observableArrayList();
+    private final ObservableList<ServiceEntry> services = FXCollections.observableArrayList();
     private ServiceEntry selectedEntry;
     private int index;
 
@@ -42,9 +40,7 @@ public class ServiceRequestManagerController implements Initializable {
         List<ServiceEntry> data;
         try {
             data = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
-            for (ServiceEntry e : data) {
-                services.add(e);
-            }
+            services.addAll(data);
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -82,16 +78,13 @@ public class ServiceRequestManagerController implements Initializable {
         }
 
         assign.setCellFactory(ComboBoxTreeTableCell.forTreeTableColumn(employees));
-        assign.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<ServiceEntry, String>>() {
-            @Override
-                public void handle(TreeTableColumn.CellEditEvent<ServiceEntry, String> t) {
-                     t.getRowValue().getValue().setAssignedTo(t.getNewValue());
-                     saveChanges.setDisable(false);
-                     removeAssignment.setDisable(false);
-                }
-        });
+        assign.setOnEditCommit(t -> {
+                 t.getRowValue().getValue().setAssignedTo(t.getNewValue());
+                 saveChanges.setDisable(false);
+                 removeAssignment.setDisable(false);
+            });
 
-        final TreeItem<ServiceEntry> root = new RecursiveTreeItem<ServiceEntry>(services, RecursiveTreeObject::getChildren);
+        final TreeItem<ServiceEntry> root = new RecursiveTreeItem<>(services, RecursiveTreeObject::getChildren);
         //JFXTreeTableView<ServiceEntry> requestView = new JFXTreeTableView<ServiceEntry>(root);
         requestView.setEditable(true);
         requestView.setRoot(root);
@@ -102,10 +95,11 @@ public class ServiceRequestManagerController implements Initializable {
         markAsComplete.setDisable(true);
         saveChanges.setDisable(true);
         removeAssignment.setDisable(true);
+        delete.setDisable(true);
     }
 
 
-    public void handleHome(MouseEvent mouseEvent) throws IOException{
+    public void handleHome() throws IOException{
         SceneContext.getSceneContext().loadDefault();
     }
 
@@ -131,9 +125,7 @@ public class ServiceRequestManagerController implements Initializable {
         services.clear();
         try {
             List<ServiceEntry> data = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
-            for (ServiceEntry e : data) {
-                services.add(e);
-            }
+            services.addAll(data);
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -165,11 +157,21 @@ public class ServiceRequestManagerController implements Initializable {
     }
 
     /**
+     * Delete a service request from the DB
+     * @throws SQLException
+     * @author KD
+     */
+    public void handleDelete() throws SQLException {
+        DatabaseAPI.getDatabaseAPI().deleteServiceRequest(selectedEntry.getUuid());
+        services.remove(selectedEntry);
+        delete.setDisable(true);
+    }
+
+    /**
      * Handles when a selection is made on the tree table view
-     * @param mouseEvent The event that triggers the method
      * @author Leo Morris
      */
-    public void handleSelection(MouseEvent mouseEvent){
+    public void handleSelection(){
         getSelection();
     }
 
@@ -186,8 +188,11 @@ public class ServiceRequestManagerController implements Initializable {
             markAsComplete.setText("Mark Complete");
             markAsComplete.setDisable(true);
             removeAssignment.setDisable(true);
+            delete.setDisable(true);
             index = -1;
         }
+
+        delete.setDisable(false);
 
         // Enable mark complete button and set appropriate text
         if(selectedEntry.getCompleteStatus().equals("false")){
@@ -199,12 +204,7 @@ public class ServiceRequestManagerController implements Initializable {
         }
 
         // Enable remove assignment button if a person is assigned
-        if(!selectedEntry.getAssignedTo().isEmpty()){
-            removeAssignment.setDisable(false);
-        } else{
-            removeAssignment.setDisable(true);
-        }
-
+        removeAssignment.setDisable(selectedEntry.getAssignedTo().isEmpty());
     }
 
 }

@@ -4,6 +4,8 @@ import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -79,7 +81,7 @@ public class InternalTransportationController extends ServiceRequests {
         }
     }
 
-    public void handleClear(ActionEvent actionEvent) {
+    public void handleClear() {
         deliverLocation.setText("");
         movingDate.setValue(null);
         movingTime.setValue(null);

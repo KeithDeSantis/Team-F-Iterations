@@ -51,6 +51,11 @@
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </JFXButton>
+                  <JFXButton fx:id="delete" buttonType="RAISED" onAction="#handleDelete" prefHeight="31.0" prefWidth="304.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Delete Request">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                  </JFXButton>
               </buttons>
                <VBox.margin>
                   <Insets left="25.0" right="50.0" top="25.0" />
