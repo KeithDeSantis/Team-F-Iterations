@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -91,7 +92,24 @@ public class LaundryRequestController extends ServiceRequests {
         return additionalInfo;
     }
 
+    /**
+     * handles radial button groups
+     * @param e
+     */
+    @FXML
+    private void handleRadialButtonPushed(ActionEvent e){
+        ToggleGroup tempGroup = new ToggleGroup();
+        hot.setToggleGroup(tempGroup);
+        cold.setToggleGroup(tempGroup);
 
+        ToggleGroup colorGroup = new ToggleGroup();
+        darks.setToggleGroup(colorGroup);
+        lights.setToggleGroup(colorGroup);
+        both.setToggleGroup(colorGroup);
+    }
+
+
+    @Override
     public boolean formFilled() {
         boolean isFilled = true;
 
