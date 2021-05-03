@@ -4,21 +4,13 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class InternalTransportationController extends ServiceRequests {
@@ -84,7 +76,7 @@ public class InternalTransportationController extends ServiceRequests {
             openSuccessWindow();
         } else { //form not complete
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner((Stage) ( (Button) e.getSource()).getScene().getWindow());  // Show alert
+            alert.initOwner(( (Button) e.getSource()).getScene().getWindow());  // Show alert
             alert.setTitle("Form not filled.");
             alert.setHeaderText("Form incomplete");
             alert.setContentText("Please fill out at least the Location, Type of Flowers, Containers, and Payment fields."); //??? TODO: fix this
@@ -92,7 +84,7 @@ public class InternalTransportationController extends ServiceRequests {
         }
     }
 
-    public void handleClear(ActionEvent actionEvent) {
+    public void handleClear() {
         deliverLocation.setText("");
         movingDate.setText("");
         patientName.setText("");

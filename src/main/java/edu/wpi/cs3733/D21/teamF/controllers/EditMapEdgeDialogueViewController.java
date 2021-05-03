@@ -33,8 +33,6 @@ public class EditMapEdgeDialogueViewController {
     @FXML
     private JFXButton ok;
 
-    @FXML private Label title;
-
     private EdgeEntry edge = new EdgeEntry();
     private Stage dialogueStage;
     public boolean okClicked;
@@ -87,14 +85,7 @@ public class EditMapEdgeDialogueViewController {
         edgeID.setStyle("-fx-border-width: 0px");
         startNode.setStyle("-fx-border-width: 0px");
         endNode.setStyle("-fx-border-width: 0px");
-/*
-        //check each field for filled out
-        if(edgeID.getText().length() <=0 || !isUniqueNodeID(edgeID.getText())){
-            edgeID.setStyle("-fx-border-widge: 2px");
-            edgeID.setStyle("-fx-border-color: red");
-        }
 
- */
         if(startNode.getValue().length() <=0){
             startNode.setStyle("-fx-border-widge: 2px");
             startNode.setStyle("-fx-border-color: red");
