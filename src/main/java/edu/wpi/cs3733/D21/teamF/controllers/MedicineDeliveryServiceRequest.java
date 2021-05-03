@@ -1,19 +1,11 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextInputControl;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -116,28 +108,6 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
         submittedStage.showAndWait();
     }
     */
-
-    /**
-     * Changes the style of a Button when moused over
-     * @param mouseEvent the event signalling that the mouse is over the JFXButton
-     * @author Tony Vuolo (bdane)
-     */
-    @FXML
-    private void mouseOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    /**
-     * Reverts the style of a Button back to its original settings
-     * @param mouseEvent the event signalling that the mouse is no longer over the JFXButton
-     * @author Tony Vuolo (bdane)
-     */
-    @FXML
-    private void mouseOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
 
 
 }

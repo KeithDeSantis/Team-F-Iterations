@@ -3,7 +3,6 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,9 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -112,7 +109,7 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
         helpPopUpStage.showAndWait();
     }
 
-    public void handleHelpX(ActionEvent e) {
+    public void handleHelpX() {
         Stage popUpStage = (Stage) helpXButton.getScene().getWindow();
         popUpStage.close();
     }
@@ -178,11 +175,10 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     /**
      * Handles radial button groups
-     * @param e is the button being pushed
      * @author KH
      */
     @FXML
-    private void handleRadialButtonPushed(ActionEvent e){
+    private void handleRadialButtonPushed(){
         ToggleGroup foodGroup = new ToggleGroup(); //group for foods
         rButtonFood1.setToggleGroup(foodGroup);
         rButtonFood2.setToggleGroup(foodGroup);

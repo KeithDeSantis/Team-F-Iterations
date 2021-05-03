@@ -30,7 +30,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -71,8 +70,6 @@ public class MapEditViewController {
     private JFXTreeTableView<EdgeEntry> edgeTreeTable;
     @FXML
     private MapPanel mapPanel;
-    @FXML
-    private Text title;
     @FXML
     private JFXToggleButton edgeCreationToggle;
     @FXML private Label nodeIDDisplayLabel;
@@ -241,9 +238,7 @@ public class MapEditViewController {
             }
 
         });
-        alignLeft.setOnMouseEntered(e -> {
-            alignLeft.setFill(Paint.valueOf("#F0C808"));
-        });
+        alignLeft.setOnMouseEntered(e -> alignLeft.setFill(Paint.valueOf("#F0C808")));
         colorAlignmentCircles(alignLeft);
 
         alignHorizontalMiddle.xCoordinateProperty().bind(rectSelector.xProperty().add(rectSelector.widthProperty().divide(2.0)));
@@ -391,12 +386,8 @@ public class MapEditViewController {
     }
 
     private void colorAlignmentCircles(DrawableCircle drawableCircle) {
-        drawableCircle.setOnMouseEntered(e -> {
-            drawableCircle.setFill(Color.GOLDENROD.brighter());
-        });
-        drawableCircle.setOnMouseExited(e -> {
-            drawableCircle.setFill(Color.GRAY.darker());
-        });
+        drawableCircle.setOnMouseEntered(e -> drawableCircle.setFill(Color.GOLDENROD.brighter()));
+        drawableCircle.setOnMouseExited(e -> drawableCircle.setFill(Color.GRAY.darker()));
 
     }
 
@@ -734,49 +725,31 @@ public class MapEditViewController {
             if (node instanceof DrawableEdge) {
                 switch (searchComboBox.getValue()) {
                     case "Node ID":
-                        if(((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
+                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText()));
                         break;
                     case "Floor":
-                        if(((DrawableEdge) node).getStartNode().getFloor().equals(searchField.getText()) || ((DrawableEdge) node).getEndNode().getFloor().equals(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
+                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getFloor().equals(searchField.getText()) || ((DrawableEdge) node).getEndNode().getFloor().equals(searchField.getText()));
                         break;
                     case "Building":
-                        if(((DrawableEdge) node).getStartNode().getBuilding().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getBuilding().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
+                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getBuilding().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getBuilding().contains(searchField.getText()));
                         break;
                     case "Node Type":
-                        if(((DrawableEdge) node).getStartNode().getNodeType().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeType().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
+                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getNodeType().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeType().contains(searchField.getText()));
                         break;
                     case "Long Name":
-                        if(((DrawableEdge) node).getStartNode().getLongName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getLongName().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
+                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getLongName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getLongName().contains(searchField.getText()));
                         break;
                     case "Short Name":
-                        if(((DrawableEdge) node).getStartNode().getShortName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getShortName().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                        } else { ((DrawableEdge) node).setShouldDisplay(false); }
+                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getShortName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getShortName().contains(searchField.getText()));
                         break;
                     case "Edge ID":
-                        if (node.getId().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                        } else ((DrawableEdge) node).setShouldDisplay(false);
+                        ((DrawableEdge) node).setShouldDisplay(node.getId().contains(searchField.getText()));
                         break;
                     case "Start Node":
-                        if (((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                        } else ((DrawableEdge) node).setShouldDisplay(false);
+                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()));
                         break;
                     case "End Node":
-                        if (((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText())) {
-                            ((DrawableEdge) node).setShouldDisplay(true);
-                        } else ((DrawableEdge) node).setShouldDisplay(false);
+                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText()));
                         break;
                     default:
                         ((DrawableEdge) node).setShouldDisplay(true);

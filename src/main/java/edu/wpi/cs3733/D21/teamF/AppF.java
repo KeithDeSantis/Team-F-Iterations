@@ -1,23 +1,17 @@
 package edu.wpi.cs3733.D21.teamF;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
-import javax.xml.crypto.Data;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class  AppF extends Application {
-
-  private static Stage primaryStage;
 
   @Override
   public void init() {
@@ -25,7 +19,7 @@ public class  AppF extends Application {
   }
 
   @Override
-  public void start(Stage primaryStage) throws SQLException, Exception {
+  public void start(Stage primaryStage) throws Exception {
     if (DatabaseAPI.getDatabaseAPI().createNodesTable())
     {
         DatabaseAPI.getDatabaseAPI().populateNodes(CSVManager.load("MapfAllNodes.csv"));
@@ -39,21 +33,16 @@ public class  AppF extends Application {
     DatabaseAPI.getDatabaseAPI().createSystemTable();
     DatabaseAPI.getDatabaseAPI().createCollectionsTable(); //FIXME: DO BETTER
 
-    AppF.primaryStage = primaryStage;
-
     SceneContext.getSceneContext().setStage(primaryStage);
 
     //ConnectionHandler.main(false);
-    Runtime.getRuntime().addShutdownHook(new Thread(){
-      @Override
-      public void run() {
-        try {
-          ConnectionHandler.getConnection().close();
-        } catch (SQLException throwables) {
-          throwables.printStackTrace();
-        }
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      try {
+        ConnectionHandler.getConnection().close();
+      } catch (SQLException exception) {
+        exception.printStackTrace();
       }
-    });
+    }));
     try {
       SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     } catch (IOException e) {
@@ -61,21 +50,6 @@ public class  AppF extends Application {
       Platform.exit();
     }
   }
-
-  /**
-   * Gets primary stage of AppF
-   * @return primary stage
-   * @author keithdesantis
-   */
-  public static Stage getPrimaryStage(){
-    return primaryStage;
-  }
-
-  /**
-   * Sets primary stage of AppF
-   * @author keithdesantis
-   */
-  public static void setPrimaryStage(Stage stage) { primaryStage = stage; }
 
 
   @Override

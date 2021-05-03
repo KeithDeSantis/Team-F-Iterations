@@ -63,8 +63,8 @@ public class DatabaseAPI {
         return node.getNode(id);
     }
 
-    public boolean addEdge(String...colVals) throws SQLException{
-        return edgeHandler.addEntry(colVals);
+    public boolean addEdge(String...colValues) throws SQLException{
+        return edgeHandler.addEntry(colValues);
     }
 
     public boolean editEdge(String id, String newVal, String colName) throws Exception{

@@ -34,7 +34,7 @@ public class CurrentUser {
 
     /**
      * Attempts to log out a user
-     * @return True if successful log out. False otherwise (eg. if we wern't logged in to start with!)
+     * @return True if successful log out. False otherwise (eg. if we weren't logged in to start with!)
      */
     public boolean logout()
     {

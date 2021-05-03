@@ -16,15 +16,15 @@ public class CollectionHandler {
      */
     public ArrayList<String> getUserNodes(String type, String id) throws SQLException{
         final String query = "SELECT * FROM COLLECTIONS";
-        ResultSet rset;
+        ResultSet resultSet;
         ArrayList<String> userNodes = new ArrayList<>();
 
         Statement stmt = ConnectionHandler.getConnection().createStatement();
-        rset = stmt.executeQuery(query);
-        while(rset.next()){
-            String userID = rset.getString(2);
-            String nodeID = rset.getString(3);
-            String entryType = rset.getString(4);
+        resultSet = stmt.executeQuery(query);
+        while(resultSet.next()){
+            String userID = resultSet.getString(2);
+            String nodeID = resultSet.getString(3);
+            String entryType = resultSet.getString(4);
             if (entryType.equals(type) && userID.equals(id)){
                 userNodes.add(nodeID);
             }
@@ -35,7 +35,7 @@ public class CollectionHandler {
     /**
      * adds a node entry to the collections table
      * @param user the user associated with the node
-     * @param node the nodeid to insert
+     * @param node the nodeID to insert
      * @param type the type either favorite or recent
      * @return true on success, false otherwise
      * @throws SQLException on error with DB operations
@@ -54,18 +54,16 @@ public class CollectionHandler {
      * @return true on success false otherwise
      */
     public boolean dropCollectionsTable(){
-        boolean success = false;
         String query = "DROP TABLE COLLECTIONS";
         try {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(query);
             stmt.close();
-            success = true;
         }
         catch (SQLException e){
             return false;
         }
-        return success;
+        return true;
     }
 
     /**
@@ -73,7 +71,6 @@ public class CollectionHandler {
      * @return true on success false otherwise
      */
     public boolean createCollectionTable(){
-        boolean success = false;
         final String initNodesTable = "CREATE TABLE COLLECTIONS(id int GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
                 "user_id varchar(30), node_id varchar(50), " +
                 "relation_type varchar(30))";
@@ -81,12 +78,10 @@ public class CollectionHandler {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initNodesTable);
             stmt.close();
-            success = true;
         }
         catch (SQLException e){
-            success = false;
-            return success;
+            return false;
         }
-        return success;
+        return true;
     }
 }

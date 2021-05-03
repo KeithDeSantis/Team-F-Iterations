@@ -3,7 +3,6 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -65,7 +65,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      */
     public void handleTranslate(ActionEvent actionEvent) throws IOException{
         if(language.getValue() != null) {
-            List<Label> labelList = new ArrayList<Label>(); //list of labels that need to get fixed
+            List<Label> labelList = new ArrayList<>(); //list of labels that need to get fixed
             labelList.add(nameLabel);
             labelList.add(dtLabel);
             labelList.add(appointmentLabel);
@@ -83,7 +83,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner((Stage) ( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
+            alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
             alert.setTitle("Language Missing");
             alert.setHeaderText("Specify language");
             alert.setContentText("Please select a language from the dropdown list.");
@@ -101,7 +101,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
-                    " Name: " + name.getText() + " Appointment: " + (String) appointment.getValue() + " Language: " + language.getValue();
+                    " Name: " + name.getText() + " Appointment: " + appointment.getValue() + " Language: " + language.getValue();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
@@ -151,7 +151,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Infectious Disease");
         appointment.getItems().add("Interventional Cardiology");
         appointment.getItems().add("Interventional Radiology");
-        appointment.getItems().add("Lung Dancer Sceening (Low Dose CT)");
+        appointment.getItems().add("Lung Dancer Screening (Low Dose CT)");
         appointment.getItems().add("Lung Transplantation Program");
         appointment.getItems().add("Lupus Center");
         appointment.getItems().add("Magnetic Resonance Imaging (MRI)");
@@ -248,7 +248,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Johvanni Perez
      */
     public static HashMap<String, String> codeMap(){
-        HashMap<String, String> langCodes = new HashMap<String, String>();
+        HashMap<String, String> langCodes = new HashMap<>();
 
         langCodes.put("Arabic", "ar");
         langCodes.put("Dutch", "nl");
@@ -288,10 +288,10 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         StringBuilder response = new StringBuilder();
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-        String inputline;
-        while((inputline = in.readLine()) != null){
-            response.append(StringEscapeUtils.unescapeHtml4(inputline));
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+        String inputLine;
+        while((inputLine = in.readLine()) != null){
+            response.append(StringEscapeUtils.unescapeHtml4(inputLine));
         }
         in.close();
         return response.toString();
