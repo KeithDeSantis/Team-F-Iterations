@@ -204,22 +204,20 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
 
-       // language.getItems().add("Arabic");
-       // language.getItems().add("Dutch");
+        language.getItems().add("Arabic");
+        language.getItems().add("Dutch");
         language.getItems().add("English");
         language.getItems().add("French");
-       // language.getItems().add("German");
-       // language.getItems().add("Greek");
-       // language.getItems().add("Haitian Creole");
+        language.getItems().add("German");
+        language.getItems().add("Greek");
+        language.getItems().add("Haitian Creole");
         language.getItems().add("Italian");
-       // language.getItems().add("Japanese");
-       // language.getItems().add("Korean");
+        language.getItems().add("Japanese");
+        language.getItems().add("Korean");
         language.getItems().add("Portuguese");
-       // language.getItems().add("Russian");
+        language.getItems().add("Russian");
         language.getItems().add("Spanish");
-       // language.getItems().add("Vietnamese");
-
-        nameLabel.setText(StringEscapeUtils.unescapeJava("\u0627\u0633\u0645"));
+        language.getItems().add("Vietnamese");
     }
     
     public boolean formFilled(){
@@ -290,10 +288,10 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         StringBuilder response = new StringBuilder();
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
         String inputline;
         while((inputline = in.readLine()) != null){
-            response.append(inputline);
+            response.append(StringEscapeUtils.unescapeHtml4(inputline));
         }
         in.close();
         return response.toString();
