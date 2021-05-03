@@ -1,6 +1,7 @@
-package edu.wpi.cs3733.D21.teamF.controllers;
+package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
@@ -23,7 +24,7 @@ import java.util.UUID;
  * Controller for Floral Delivery Service View
  * @author keithdesantis
  */
-public class FloralDeliveryService extends ServiceRequests{
+public class FloralDeliveryService extends ServiceRequests {
 
     @FXML private JFXRadioButton bouquetButton;
     @FXML private JFXRadioButton vaseButton;
@@ -141,6 +142,11 @@ public class FloralDeliveryService extends ServiceRequests{
 
         setNormalStyle(bouquetButton, vaseButton, potButton, roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox,
                 orchidCheckBox, daisyCheckBox, deliveryField, nameField, cardNumberField, cardCVCField, cardExpField, dateField);
+    }
+
+
+    public void getHelp(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/floralHelpPageNewView.fxml");
     }
 }
 

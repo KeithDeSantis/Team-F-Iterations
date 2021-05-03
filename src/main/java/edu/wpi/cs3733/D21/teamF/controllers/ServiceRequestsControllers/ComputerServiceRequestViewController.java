@@ -1,9 +1,10 @@
-package edu.wpi.cs3733.D21.teamF.controllers;
+package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
@@ -22,7 +23,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class ComputerServiceRequestViewController extends ServiceRequests{
+public class ComputerServiceRequestViewController extends ServiceRequests {
 
     @FXML
     private JFXTextField computerNameText;
