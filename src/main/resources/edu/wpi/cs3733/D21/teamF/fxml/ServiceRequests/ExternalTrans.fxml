@@ -13,13 +13,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.externalTransController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.externalTransController">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="header" prefHeight="126.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                  <ImageView fx:id="image" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="image" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
@@ -27,7 +27,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMENS HOSPITAL EXTERNAL PATIENT TRANSPORTATION" wrappingWidth="810.06640625">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMENS HOSPITAL External Patient Transportation" wrappingWidth="772.06640625">
                      <font>
                         <Font name="Volkhov Regular" size="40.0" />
                      </font>
@@ -44,7 +44,7 @@
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                      <font>
-                        <Font name="Montserrat Regular" size="14.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font></Text>
                   <JFXTextField fx:id="employeeName" prefHeight="22.0" prefWidth="961.0" GridPane.valignment="TOP">
                      <VBox.margin>
@@ -55,7 +55,7 @@
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                      <font>
-                        <Font name="Montserrat Regular" size="14.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font></Text>
                   <JFXTextField fx:id="methodTrans" GridPane.rowIndex="3">
                      <VBox.margin>
@@ -66,7 +66,7 @@
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                      <font>
-                        <Font name="Montserrat Regular" size="14.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font></Text>
                   <JFXTextField fx:id="loc" GridPane.rowIndex="5">
                      <VBox.margin>
@@ -77,20 +77,23 @@
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                      <font>
-                        <Font name="Montserrat Regular" size="14.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font></Text>
                   <JFXTextField fx:id="special" prefHeight="0.0" prefWidth="961.0" GridPane.rowIndex="7">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </VBox.margin></JFXTextField>
-                  <HBox prefHeight="54.0" prefWidth="961.0">
+                  <HBox alignment="CENTER" prefHeight="54.0" prefWidth="601.0">
                      <children>
-                        <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                        <ButtonBar prefHeight="54.0" prefWidth="87.0">
                           <buttons>
                               <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
                               <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                              <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                              <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" prefHeight="31.0" prefWidth="104.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
                           </buttons>
+                           <HBox.margin>
+                              <Insets right="25.0" />
+                           </HBox.margin>
                         </ButtonBar>
                      </children>
                      <VBox.margin>
@@ -98,6 +101,9 @@
                      </VBox.margin>
                   </HBox>
                </children>
+               <padding>
+                  <Insets left="25.0" right="25.0" />
+               </padding>
             </VBox>
          </children>
       </VBox>

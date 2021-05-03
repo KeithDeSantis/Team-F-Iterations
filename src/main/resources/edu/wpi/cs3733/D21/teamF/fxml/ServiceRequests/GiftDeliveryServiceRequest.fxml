@@ -8,109 +8,132 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.GiftDeliveryServiceRequestController">
     <children>
-      <VBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox fx:id="header" prefHeight="113.0" prefWidth="614.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
+            <children>
+                <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                    </image>
+                </ImageView>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Gift Delivery" wrappingWidth="735.2825317382812">
+               <font>
+                  <Font name="Volkhov Regular" size="40.0" />
+               </font>
+            </Text>
+            </children>
+        </HBox>
+      <VBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
          <children>
-              <HBox fx:id="header" prefHeight="113.0" prefWidth="614.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
-                  <children>
-                      <ImageView fitHeight="110.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
-                          <image>
-                              <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
-                          </image>
-                      </ImageView>
-                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Gift Delivery" wrappingWidth="735.2825317382812">
-                     <font>
-                        <Font name="Volkhov Regular" size="40.0" />
-                     </font></Text>
-                  </children>
-              </HBox>
-            <HBox VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                <children>
-                    <GridPane prefHeight="307.0" prefWidth="150.0" style="-fx-background-color: #e6e6e6;" HBox.hgrow="ALWAYS">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        </rowConstraints>
-                        <children>
-                            <JFXTextField fx:id="name" maxWidth="200.0" prefWidth="300.0" GridPane.halignment="CENTER" />
-                            <Label text="Name" GridPane.halignment="CENTER" GridPane.rowSpan="2">
-                           <font>
-                              <Font name="Montserrat Regular" size="14.0" />
-                           </font></Label>
-                            <HBox prefHeight="100.0" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                                <children>
-                                    <GridPane prefHeight="102.0" prefWidth="307.0" HBox.hgrow="ALWAYS">
-                                        <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                        </columnConstraints>
-                                        <rowConstraints>
-                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        </rowConstraints>
-                                        <children>
-                                            <JFXButton fx:id="cancelButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" GridPane.halignment="CENTER" />
-                                            <JFXButton fx:id="submitButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                                    <JFXButton fx:id="clear" buttonType="RAISED" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                                        </children>
-                                    </GridPane>
-                                </children>
-                           <GridPane.margin>
-                              <Insets left="25.0" right="25.0" />
-                           </GridPane.margin>
-                            </HBox>
-                        </children>
-                    </GridPane>
-                    <GridPane prefHeight="307.0" prefWidth="307.0" style="-fx-background-color: #e6e6e6;" HBox.hgrow="ALWAYS">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints maxHeight="218.6666259765625" minHeight="10.0" prefHeight="218.6666259765625" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="148.3333740234375" minHeight="10.0" prefHeight="88.3333740234375" vgrow="SOMETIMES" />
-                        </rowConstraints>
-                        <children>
-                            <JFXTextArea fx:id="specialInstructions" maxHeight="159.0" maxWidth="250.0" prefHeight="159.0" prefWidth="250.0" style="-fx-border-color: #000000;" GridPane.halignment="CENTER" />
-                            <Label text="Special Instructions" GridPane.halignment="CENTER" GridPane.valignment="TOP">
-                           <font>
-                              <Font name="Montserrat Regular" size="14.0" />
-                           </font></Label>
-                            <JFXTextField fx:id="csv" maxWidth="100.0" prefHeight="25.0" prefWidth="297.0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                            <Label text="Card Number" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                           <font>
-                              <Font name="Montserrat Regular" size="14.0" />
-                           </font></Label>
-                            <Label text="Expiration Date" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                           <font>
-                              <Font name="Montserrat Regular" size="14.0" />
-                           </font></Label>
-                            <Label prefHeight="17.0" prefWidth="38.0" text="CSV" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                           <font>
-                              <Font name="Montserrat Regular" size="14.0" />
-                           </font></Label>
-                        <JFXTextField fx:id="expirationDate" layoutX="102.0" layoutY="288.0" maxWidth="100.0" prefHeight="25.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                        <JFXTextField fx:id="ccNumber" layoutX="10.0" layoutY="104.0" maxWidth="200.0" prefHeight="25.0" prefWidth="100.0" GridPane.rowIndex="1" />
-                        </children>
-                     <padding>
-                        <Insets right="25.0" />
-                     </padding>
-                    </GridPane>
+                      <Label text="Name:">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                  </Label>
+                      <JFXTextField fx:id="name" maxWidth="224.0" prefHeight="31.0" prefWidth="224.0">
+                     <HBox.margin>
+                        <Insets left="120.0" right="25.0" />
+                     </HBox.margin>
+                  </JFXTextField>
                </children>
+               <VBox.margin>
+                  <Insets left="25.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                      <Label text="Special Instructions:">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                  </Label>
+                  <JFXTextArea prefHeight="75.0" prefWidth="580.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                  </JFXTextArea>
+               </children>
+               <VBox.margin>
+                  <Insets left="25.0" top="25.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                      <Label text="Card Number:">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                  </Label>
+                  <JFXTextField fx:id="ccNumber" maxWidth="200.0" prefHeight="25.0" prefWidth="100.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+                      <Label text="Expiration Date:">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                  </Label>
+                  <JFXTextField fx:id="expirationDate" maxWidth="100.0" prefHeight="25.0" prefWidth="100.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+                      <Label prefHeight="17.0" prefWidth="38.0" text="CSV:">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                  </Label>
+                      <JFXTextField fx:id="csv" maxWidth="100.0" prefHeight="25.0" prefWidth="297.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+               </children>
+               <VBox.margin>
+                  <Insets top="25.0" />
+               </VBox.margin>
             </HBox>
          </children>
       </VBox>
+      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+                    <JFXButton fx:id="cancelButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel">
+               <HBox.margin>
+                  <Insets left="25.0" />
+               </HBox.margin>
+            </JFXButton>
+            <JFXButton fx:id="clear" buttonType="RAISED" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear">
+               <HBox.margin>
+                  <Insets left="25.0" />
+               </HBox.margin>
+            </JFXButton>
+                    <JFXButton fx:id="submitButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
+               <HBox.margin>
+                  <Insets left="25.0" />
+               </HBox.margin>
+            </JFXButton>
+         </children>
+      </HBox>
     </children>
 </AnchorPane>

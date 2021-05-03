@@ -22,12 +22,12 @@
          <children>
             <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: 94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL SANITATION REQUEST" wrappingWidth="747.5380859375">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Sanitation Request" wrappingWidth="747.5380859375">
                      <font>
                         <Font name="Volkhov Regular" size="40.0" />
                      </font>
@@ -53,7 +53,7 @@
                         <Font name="Montserrat Regular" size="18.0" />
                      </font>
                      <GridPane.margin>
-                        <Insets left="10.0" />
+                        <Insets left="25.0" />
                      </GridPane.margin>
                   </Label>
                   <Label text="Location" GridPane.columnIndex="1">
@@ -63,25 +63,31 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding>
+                     <GridPane.margin>
+                        <Insets left="25.0" />
+                     </GridPane.margin>
                   </Label>
                   <JFXComboBox fx:id="loc" prefHeight="31.0" prefWidth="185.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
-                        <Insets left="10.0" />
+                        <Insets left="25.0" />
                      </GridPane.margin></JFXComboBox>
                   <Label text="Client Name" GridPane.columnIndex="2">
                      <font>
                         <Font name="Montserrat Regular" size="18.0" />
                      </font>
                      <GridPane.margin>
-                        <Insets left="10.0" />
+                        <Insets left="25.0" />
                      </GridPane.margin>
                   </Label>
                   <JFXTextField fx:id="description" GridPane.rowIndex="1">
                      <GridPane.margin>
-                        <Insets right="10.0" />
+                        <Insets left="25.0" right="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
-                  <JFXTextField fx:id="clientName" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <JFXTextField fx:id="clientName" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="25.0" right="25.0" />
+                     </GridPane.margin></JFXTextField>
                </children>
                <padding>
                   <Insets left="10.0" />

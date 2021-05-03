@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -48,6 +47,9 @@ public class SanitationRequestController extends ServiceRequests {
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
         }
+    }
+    public void handleHome(ActionEvent actionEvent) throws IOException, SQLException {
+
     }
     public void handleCancel(ActionEvent actionEvent) throws IOException{
 //        if(/*user is admin*/) {

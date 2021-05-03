@@ -17,13 +17,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.FoodDeliveryServiceRequestController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: E6E6E6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.FoodDeliveryServiceRequestController">
    <children>
       <HBox fx:id="header" prefHeight="120" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView fitHeight="110.0" fitWidth="84.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
@@ -40,12 +41,12 @@
             <Font size="18.0" />
          </font>
       </JFXButton>
-      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="125.0">
          <children>
-            <GridPane prefHeight="290.0" prefWidth="300.0">
+            <GridPane prefHeight="290.0" prefWidth="350.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="159.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="158.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -59,24 +60,24 @@
                <children>
                   <Label fx:id="locLabel" text="Delivery Location:">
                      <font>
-                        <Font size="15.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </Label>
                   <Label fx:id="delLabel" text="Delivery Time:" GridPane.rowIndex="1">
                      <font>
-                        <Font size="15.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </Label>
                   <Label fx:id="allLabel" text="List Any Allergies:" GridPane.rowIndex="2">
                      <font>
-                        <Font size="15.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </Label>
                   <JFXTimePicker fx:id="deliveryTimeField" defaultColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <JFXTextField fx:id="allergyField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label fx:id="siLabel" text="Special Instructions:" GridPane.rowIndex="3">
                      <font>
-                        <Font size="15.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </Label>
                   <JFXTextField fx:id="specialInstructionsField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -92,157 +93,169 @@
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="32.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="31.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <HBox.margin>
-                  <Insets left="25.0" right="25.0" top="10.0" />
+                  <Insets left="50.0" right="25.0" top="10.0" />
                </HBox.margin>
                <children>
                   <Label fx:id="mealLabel" text="Select Meal:">
                      <font>
-                        <Font size="15.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="sideLabel" text="Select Side (up to two):" GridPane.rowIndex="2">
+                  <Label fx:id="sideLabel" text="Select Side (up to two):" GridPane.rowIndex="3">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="drinkLabel" text="Select Drink:" GridPane.rowIndex="4">
+                  <Label fx:id="drinkLabel" text="Select Drink:" GridPane.rowIndex="6">
                      <font>
-                        <Font size="15.0" />
+                        <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </Label>
                   <JFXRadioButton fx:id="rButtonFood1" onAction="#handleRadialButtonPushed" text="Steak and Veggies" GridPane.columnIndex="1">
                      <unSelectedColor>
-                        <Color red="0.0117647061124444" green="0.14509804546833038" blue="0.42352941632270813" />
+                        <Color blue="0.42352941632270813" green="0.14509804546833038" red="0.0117647061124444" />
                      </unSelectedColor>
                      <font>
                         <Font size="15.0" />
                      </font>
                      <selectedColor>
-                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                        <Color blue="0.0313725508749485" green="0.7843137383460999" red="0.9411764740943909" />
                      </selectedColor>
                   </JFXRadioButton>
                   <JFXRadioButton fx:id="rButtonFood2" onAction="#handleRadialButtonPushed" text="Caesar Salad" GridPane.columnIndex="2">
                      <unSelectedColor>
-                        <Color red="0.0117647061124444" green="0.14509804546833038" blue="0.42352941632270813" />
+                        <Color blue="0.42352941632270813" green="0.14509804546833038" red="0.0117647061124444" />
                      </unSelectedColor>
                      <font>
                         <Font size="15.0" />
                      </font>
                      <selectedColor>
-                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                        <Color blue="0.0313725508749485" green="0.7843137383460999" red="0.9411764740943909" />
                      </selectedColor>
                   </JFXRadioButton>
                   <JFXRadioButton fx:id="rButtonFood3" onAction="#handleRadialButtonPushed" text="Beef Stir-fry" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <unSelectedColor>
-                        <Color red="0.0117647061124444" green="0.14509804546833038" blue="0.42352941632270813" />
+                        <Color blue="0.42352941632270813" green="0.14509804546833038" red="0.0117647061124444" />
                      </unSelectedColor>
                      <font>
                         <Font size="15.0" />
                      </font>
                      <selectedColor>
-                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                        <Color blue="0.0313725508749485" green="0.7843137383460999" red="0.9411764740943909" />
                      </selectedColor>
                   </JFXRadioButton>
                   <JFXRadioButton fx:id="rButtonFood4" onAction="#handleRadialButtonPushed" text="Shrimp Paella" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <unSelectedColor>
-                        <Color red="0.0117647061124444" green="0.14509804546833038" blue="0.42352941632270813" />
+                        <Color blue="0.42352941632270813" green="0.14509804546833038" red="0.0117647061124444" />
                      </unSelectedColor>
                      <font>
                         <Font size="15.0" />
                      </font>
                      <selectedColor>
-                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                        <Color blue="0.0313725508749485" green="0.7843137383460999" red="0.9411764740943909" />
                      </selectedColor>
                   </JFXRadioButton>
-                  <JFXCheckBox fx:id="cbSide1" checkedColor="#f0c808" text="Potato Chips" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <JFXCheckBox fx:id="cbSide1" checkedColor="#f0c808" text="Potato Chips" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXCheckBox>
-                  <JFXCheckBox fx:id="cbSide2" checkedColor="#f0c808" text="Side Salad" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                  <JFXCheckBox fx:id="cbSide2" checkedColor="#f0c808" text="Side Salad" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="3">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXCheckBox>
-                  <JFXCheckBox fx:id="cbSide3" checkedColor="#f0c808" text="French Fries" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <JFXCheckBox fx:id="cbSide3" checkedColor="#f0c808" text="French Fries" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXCheckBox>
-                  <JFXCheckBox fx:id="cbSide4" checkedColor="#f0c808" text="Brownie" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                  <JFXCheckBox fx:id="cbSide4" checkedColor="#f0c808" text="Brownie" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="4">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXCheckBox>
-                  <JFXRadioButton fx:id="rButtonDrink1" onAction="#handleRadialButtonPushed" text="Bottled Water" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                  <JFXRadioButton fx:id="rButtonDrink1" onAction="#handleRadialButtonPushed" text="Bottled Water" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <unSelectedColor>
-                        <Color red="0.0117647061124444" green="0.14509804546833038" blue="0.42352941632270813" />
+                        <Color blue="0.42352941632270813" green="0.14509804546833038" red="0.0117647061124444" />
                      </unSelectedColor>
                      <font>
                         <Font size="15.0" />
                      </font>
                      <selectedColor>
-                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                        <Color blue="0.0313725508749485" green="0.7843137383460999" red="0.9411764740943909" />
                      </selectedColor>
                   </JFXRadioButton>
-                  <JFXRadioButton fx:id="rButtonDrink3" onAction="#handleRadialButtonPushed" text="Iced Tea" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                  <JFXRadioButton fx:id="rButtonDrink3" onAction="#handleRadialButtonPushed" text="Iced Tea" GridPane.columnIndex="1" GridPane.rowIndex="7">
                      <unSelectedColor>
-                        <Color red="0.0117647061124444" green="0.14509804546833038" blue="0.42352941632270813" />
+                        <Color blue="0.42352941632270813" green="0.14509804546833038" red="0.0117647061124444" />
                      </unSelectedColor>
                      <font>
                         <Font size="15.0" />
                      </font>
                      <selectedColor>
-                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                        <Color blue="0.0313725508749485" green="0.7843137383460999" red="0.9411764740943909" />
                      </selectedColor>
                   </JFXRadioButton>
-                  <JFXRadioButton fx:id="rButtonDrink4" onAction="#handleRadialButtonPushed" text="Sprite" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                  <JFXRadioButton fx:id="rButtonDrink4" onAction="#handleRadialButtonPushed" text="Sprite" GridPane.columnIndex="2" GridPane.rowIndex="7">
                      <unSelectedColor>
-                        <Color red="0.0117647061124444" green="0.14509804546833038" blue="0.42352941632270813" />
+                        <Color blue="0.42352941632270813" green="0.14509804546833038" red="0.0117647061124444" />
                      </unSelectedColor>
                      <font>
                         <Font size="15.0" />
                      </font>
                      <selectedColor>
-                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                        <Color blue="0.0313725508749485" green="0.7843137383460999" red="0.9411764740943909" />
                      </selectedColor>
                   </JFXRadioButton>
-                  <JFXRadioButton fx:id="rButtonDrink2" onAction="#handleRadialButtonPushed" text="Lemonade" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                  <JFXRadioButton fx:id="rButtonDrink2" onAction="#handleRadialButtonPushed" text="Lemonade" GridPane.columnIndex="2" GridPane.rowIndex="6">
                      <font>
                         <Font size="15.0" />
                      </font>
                      <unSelectedColor>
-                        <Color red="0.0117647061124444" green="0.14509804546833038" blue="0.42352941632270813" />
+                        <Color blue="0.42352941632270813" green="0.14509804546833038" red="0.0117647061124444" />
                      </unSelectedColor>
                      <selectedColor>
-                        <Color red="0.9411764740943909" green="0.7843137383460999" blue="0.0313725508749485" />
+                        <Color blue="0.0313725508749485" green="0.7843137383460999" red="0.9411764740943909" />
                      </selectedColor>
                   </JFXRadioButton>
+                  <Line endX="175.0" startX="-75.0" stroke="#03256c" strokeWidth="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="25.0" />
+                     </GridPane.margin>
+                  </Line>
+                  <Line endX="175.0" endY="3.54766845703125E-4" startX="-75.0" stroke="#03256c" strokeWidth="5.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                     <GridPane.margin>
+                        <Insets left="25.0" />
+                     </GridPane.margin>
+                  </Line>
                </children>
             </GridPane>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="430.0">
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="440.0">
          <children>
-            <ButtonBar buttonMinWidth="100.0" prefHeight="40.0" prefWidth="364.0">
+            <ButtonBar buttonMinWidth="100.0" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="364.0">
                <buttons>
                   <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                   <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmit" prefHeight="28.0" prefWidth="150.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </JFXButton>
+                  <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                </buttons>
             </ButtonBar>
          </children>

@@ -18,129 +18,141 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MaintenenceRequestController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MaintenenceRequestController">
    <children>
-      <VBox layoutX="327.0" layoutY="180.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css">
          <children>
-            <HBox fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css">
-               <children>
-                  <ImageView fx:id="goBack" fitHeight="118.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
-                     </image>
-                  </ImageView>
-                  <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Maintenance Service Request" wrappingWidth="766.26953125">
-                     <font>
-                        <Font name="Volkhov Regular" size="40.0" />
-                     </font>
-                  </Text>
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" top="10.0" />
-               </padding>
-            </HBox>
-            <GridPane hgap="20.0" prefHeight="300.0" prefWidth="909.0" vgap="10.0" VBox.vgrow="ALWAYS">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="210.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="210.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="806.0" minWidth="10.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="806.0" minWidth="10.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="192.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="192.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="235.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="122.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                     <children>
-                        <JFXComboBox fx:id="typeComboBox" focusColor="#f0c808" onAction="#reset2" prefWidth="200.0" unFocusColor="#03256c" />
-                        <Label fx:id="typeLabel" prefHeight="21.0" prefWidth="241.0" text="Type of Problem">
-                           <font>
-                              <Font name="Montserrat Regular" size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER_LEFT" maxWidth="200.0" prefHeight="100.0" prefWidth="200.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                     <children>
-                        <JFXComboBox fx:id="locationField" focusColor="#f0c808" minWidth="200.0" onAction="#reset2" prefHeight="31.0" prefWidth="200.0" unFocusColor="#03256c" />
-                        <Label fx:id="locationLabel" text="Location">
-                           <font>
-                              <Font name="Montserrat Regular" size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <VBox alignment="BOTTOM_LEFT" maxHeight="150.0" prefHeight="100.0" prefWidth="500.0" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS">
-                     <children>
-                        <JFXTextArea fx:id="descriptionField" focusColor="#f0c808" onKeyReleased="#reset" prefColumnCount="30" unFocusColor="#03256c" VBox.vgrow="NEVER" />
-                        <Label fx:id="descLabel" text="Description of the Problem">
-                           <font>
-                              <Font name="Montserrat Regular" size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
-                     <children>
-                        <JFXComboBox fx:id="urgencyComboBox" focusColor="#f0c808" onAction="#reset2" prefWidth="200.0" unFocusColor="#03256c" />
-                        <Label fx:id="urgencyLabel" text="Urgency">
-                           <font>
-                              <Font name="Montserrat Regular" size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER_LEFT" GridPane.columnIndex="2">
-                     <children>
-                        <JFXDatePicker fx:id="dateOfIncident" defaultColor="#03256c" onAction="#reset2" prefWidth="200.0" promptText="DD/MM/YYYY" />
-                        <Label fx:id="dateLabel" prefHeight="26.0" prefWidth="293.0" text="Date of Incident (optional)">
-                           <font>
-                              <Font name="Montserrat Regular" size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                     <children>
-                        <JFXComboBox fx:id="assignment" focusColor="#f0c808" minWidth="200.0" onAction="#reset2" prefHeight="31.0" prefWidth="200.0" unFocusColor="#03256c" />
-                        <Label fx:id="assignmentLabel" text="Employee to Assign (optional)">
-                           <font>
-                              <Font name="Montserrat Regular" size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-               </children>
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" />
-               </VBox.margin>
-            </GridPane>
-            <HBox alignment="CENTER" prefHeight="81.0" prefWidth="960.0" spacing="20.0">
-               <children>
-                  <ButtonBar prefHeight="53.0" prefWidth="400.0">
-                     <buttons>
-                        <JFXButton fx:id="cancel" alignment="CENTER" buttonType="RAISED" onAction="#handleCancel" prefWidth="120.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
-                           <font>
-                              <Font name="Montserrat SemiBold" size="20.0" />
-                           </font>
-                        </JFXButton>
-                        <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                        <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" onAction="#handleSubmit" prefWidth="120.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
-                           <font>
-                              <Font name="Montserrat SemiBold" size="20.0" />
-                           </font>
-                        </JFXButton>
-                     </buttons>
-                  </ButtonBar>
-               </children>
-            </HBox>
+            <ImageView fx:id="goBack" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Maintenance Service Request" wrappingWidth="766.26953125">
+               <font>
+                  <Font name="Volkhov Regular" size="40.0" />
+               </font>
+            </Text>
          </children>
-      </VBox>
+         <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+         </padding>
+      </HBox>
+      <GridPane hgap="20.0" prefHeight="300.0" prefWidth="909.0" vgap="10.0" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="210.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="210.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="806.0" minWidth="10.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="192.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="192.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <children>
+                  <Label fx:id="typeLabel" prefHeight="21.0" prefWidth="241.0" text="Type of Problem:">
+                     <font>
+                        <Font name="Montserrat Regular" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXComboBox fx:id="typeComboBox" focusColor="#f0c808" onAction="#reset2" prefWidth="200.0" unFocusColor="#03256c">
+                     <VBox.margin>
+                        <Insets left="25.0" top="10.0" />
+                     </VBox.margin>
+                  </JFXComboBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" maxWidth="200.0" prefHeight="100.0" prefWidth="200.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <children>
+                  <Label fx:id="locationLabel" text="Location:">
+                     <font>
+                        <Font name="Montserrat Regular" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXComboBox fx:id="locationField" focusColor="#f0c808" minWidth="200.0" onAction="#reset2" prefHeight="31.0" prefWidth="200.0" unFocusColor="#03256c">
+                     <VBox.margin>
+                        <Insets left="25.0" right="25.0" top="10.0" />
+                     </VBox.margin>
+                  </JFXComboBox>
+               </children>
+            </VBox>
+            <VBox alignment="BOTTOM_LEFT" maxHeight="150.0" prefHeight="100.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS">
+               <children>
+                  <Label fx:id="descLabel" text="Description of the Problem:">
+                     <font>
+                        <Font name="Montserrat Regular" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXTextArea fx:id="descriptionField" focusColor="#f0c808" onKeyReleased="#reset" prefColumnCount="30" unFocusColor="#03256c" VBox.vgrow="NEVER">
+                     <VBox.margin>
+                        <Insets left="25.0" right="25.0" top="10.0" />
+                     </VBox.margin>
+                  </JFXTextArea>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+               <children>
+                  <Label fx:id="urgencyLabel" text="Urgency:">
+                     <font>
+                        <Font name="Montserrat Regular" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXComboBox fx:id="urgencyComboBox" focusColor="#f0c808" onAction="#reset2" prefWidth="200.0" unFocusColor="#03256c">
+                     <VBox.margin>
+                        <Insets left="25.0" top="10.0" />
+                     </VBox.margin>
+                  </JFXComboBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" GridPane.columnIndex="2">
+               <children>
+                  <Label fx:id="dateLabel" prefHeight="26.0" prefWidth="293.0" text="Date of Incident (optional):">
+                     <font>
+                        <Font name="Montserrat Regular" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXDatePicker fx:id="dateOfIncident" defaultColor="#03256c" onAction="#reset2" prefWidth="200.0" promptText="DD/MM/YYYY">
+                     <VBox.margin>
+                        <Insets left="25.0" top="10.0" />
+                     </VBox.margin>
+                  </JFXDatePicker>
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+      <HBox alignment="CENTER" prefHeight="81.0" prefWidth="960.0" spacing="20.0" AnchorPane.bottomAnchor="25.0" AnchorPane.topAnchor="425.0">
+         <children>
+            <ButtonBar prefHeight="53.0" prefWidth="400.0">
+               <buttons>
+                  <JFXButton fx:id="cancel" alignment="CENTER" buttonType="RAISED" onAction="#handleCancel" prefWidth="120.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="20.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                  <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" onAction="#handleSubmit" prefWidth="120.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="20.0" />
+                     </font>
+                  </JFXButton>
+               </buttons>
+            </ButtonBar>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
