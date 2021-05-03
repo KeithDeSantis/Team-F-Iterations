@@ -16,10 +16,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MedicineDeliveryServiceRequest">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MedicineDeliveryServiceRequest">
     <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <HBox fx:id="header" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" onMouseClicked="#handleHome" preserveRatio="true">
                 <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
             </ImageView>
             <Label text="BRIGHAM AND WOMEN'S HOSPITAL MEDICINE DELIVERY" wrapText="true">
@@ -43,21 +43,6 @@
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <JFXTextField fx:id="employeeName">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </JFXTextField>
-                <Label text="Employee Name">
-                    <font>
-                        <Font name="Montserrat Regular" size="18.0" />
-                    </font>
-                </Label>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
-                <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                </padding>
                 <JFXTextField fx:id="clientName">
                     <font>
                         <Font size="18.0" />
@@ -73,12 +58,12 @@
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <JFXButton alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onAction="#cancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="CANCEL" HBox.hgrow="SOMETIMES">
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="CANCEL" HBox.hgrow="SOMETIMES">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onAction="#submit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="SUBMIT" HBox.hgrow="SOMETIMES">
+                <JFXButton fx:id="submitButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="SUBMIT" HBox.hgrow="SOMETIMES">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -147,7 +132,7 @@
                     </children>
                 </GridPane>
             </VBox>
-            <GridPane hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
+            <GridPane hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

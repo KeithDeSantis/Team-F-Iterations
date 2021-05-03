@@ -23,13 +23,12 @@ import java.util.UUID;
  * Controller for Floral Delivery Service View
  * @author keithdesantis
  */
-public class FloralDeliveryService {
+public class FloralDeliveryService extends ServiceRequests{
 
     @FXML private JFXRadioButton bouquetButton;
     @FXML private JFXRadioButton vaseButton;
     @FXML private JFXRadioButton potButton;
     @FXML private JFXButton clearButton;
-    @FXML private JFXButton submitButton;
     @FXML private JFXTextField deliveryField;
     @FXML private JFXDatePicker dateField;
     @FXML private JFXTextField nameField;
@@ -66,51 +65,23 @@ public class FloralDeliveryService {
     }
 
     /**
-     * When back button is pressed
-     * @author KD
-     */
-    public void handleBack() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
-
-    /**
-     * Return to Home when it is decided where home is
-     * @param mouseEvent
-     * @author KD
-     */
-    public void handleHome(MouseEvent mouseEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-    }
-
-    /**
      * Will eventually save the request to DB
      * @param actionEvent
      * @author KD
      */
     public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException {
-        if(isFilledOut()) {
+        if(formFilled()) {
             String type = "Flower Delivery";
             String uuid = UUID.randomUUID().toString();
             String additionalInfo = "Date: " + dateField.getValue() + "Deliver to: " + deliveryField.getText() +
             "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", additionalInfo);
-            //successField.setText("Request Submitted!");
             // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submitButton.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.showAndWait();
-        } else { successField.setText(""); }
+            openSuccessWindow();
+        }
     }
 
-    public boolean isFilledOut() {
+    public boolean formFilled() {
         boolean isFilled = true;
         if(!(bouquetButton.isSelected() || vaseButton.isSelected() || potButton.isSelected())) {
             isFilled = false;

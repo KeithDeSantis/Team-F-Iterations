@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,12 +25,14 @@ class DatabaseAPITest {
         DatabaseAPI.getDatabaseAPI().dropUsersTable();
         DatabaseAPI.getDatabaseAPI().dropServiceRequestTable();
         DatabaseAPI.getDatabaseAPI().dropSystemTable();
+        DatabaseAPI.getDatabaseAPI().dropCollectionsTable();
 
         DatabaseAPI.getDatabaseAPI().createNodesTable();
         DatabaseAPI.getDatabaseAPI().createEdgesTable();
         DatabaseAPI.getDatabaseAPI().createUserTable();
         DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
         DatabaseAPI.getDatabaseAPI().createSystemTable();
+        DatabaseAPI.getDatabaseAPI().createCollectionsTable();
 
         /*
         //FIXME: DO BETTER!
@@ -394,5 +397,38 @@ class DatabaseAPITest {
     public void testGetAlgorithm() throws SQLException{
         DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", "A*");
         assertEquals(DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm(), "A*");
+    }
+
+    @Test
+    @DisplayName("test creating collections table")
+    public void testCreateCollections(){
+        DatabaseAPI.getDatabaseAPI().dropCollectionsTable();
+        assertTrue(DatabaseAPI.getDatabaseAPI().createCollectionsTable());
+    }
+
+    @Test
+    @DisplayName("test dropping collections table")
+    public void testDropCollections(){
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropCollectionsTable());
+    }
+
+    @Test
+    @DisplayName("test adding a collections entry")
+    public void testAddingCollectionEntry() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().addCollecionEntry("testuser", "testnode", "favorite"));
+    }
+
+    @Test
+    @DisplayName("test database compression")
+    public void testDatabaseCompression() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node1", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node2", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node3", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("michael", "node4", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node5", "recent");
+        ArrayList<String> actual = DatabaseAPI.getDatabaseAPI().getUserNodes("favorite", "declan");
+        assertEquals(actual.get(0), "node1");
+        assertEquals(actual.get(1), "node2");
+        assertEquals(actual.get(2), "node3");
     }
 }
