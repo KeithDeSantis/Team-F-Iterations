@@ -48,22 +48,25 @@ public class SanitationRequestController extends ServiceRequests {
             openSuccessWindow();
         }
     }
-    public void handleHome(ActionEvent actionEvent) throws IOException, SQLException {
 
-    }
-    public void handleCancel(ActionEvent actionEvent) throws IOException{
-//        if(/*user is admin*/) {
-//            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
-//        }
-//        else if (/*user is employee*/){
-//            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
-//        }
-//        else{
-//            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-//        }
-    }
     public boolean formFilled() {
-        return description.getText().length()>0 && loc.getValue().length()>0 && clientName.getText().length()>0;
+        boolean isFilled = true;
+
+        setNormalStyle(description, clientName, loc);
+
+        if(description.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(description);
+        }
+        if(loc.getValue().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(loc);
+        }
+        if(clientName.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(clientName);
+        }
+        return isFilled;
     }
 
     @Override
@@ -71,8 +74,7 @@ public class SanitationRequestController extends ServiceRequests {
         description.setText("");
         clientName.setText("");
         loc.setValue(null);
-        description.setStyle("-fx-background-color: transparent");
-        clientName.setStyle("-fx-background-color: transparent");
+        setNormalStyle(description, clientName, loc);
     }
 
 
