@@ -193,12 +193,18 @@ public class AStarDemoController implements Initializable {
                 return;
             }
 
+
             final double zoomLevel = mapPanel.getZoomLevel().getValue();
             final NodeEntry currEntry = getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel);
 
             if(currEntry == null)
                 return;
 
+            if(vertices.contains(graph.getVertex(currEntry.getNodeID()))){
+                addStopMenu.setText("Remove Stop");
+            } else {
+                addStopMenu.setText("Add Stop");
+            }
 
             contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
@@ -209,9 +215,16 @@ public class AStarDemoController implements Initializable {
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
             addStopMenu.setOnAction(e -> {
-                vertices.add(graph.getVertex(currEntry.getNodeID()));
-                drawStop(currEntry);
-                checkInput();
+                if(addStopMenu.getText().equals("Add Stop")) {
+                    vertices.add(graph.getVertex(currEntry.getNodeID()));
+                    drawStop(currEntry);
+                    checkInput();
+                } else {
+                    vertices.remove(graph.getVertex(currEntry.getNodeID()));
+                    mapPanel.unDraw(currEntry.getNodeID());
+                    getDrawableNode(currEntry.getNodeID());
+                    checkInput();
+                }
             });
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
@@ -314,6 +327,7 @@ public class AStarDemoController implements Initializable {
         stop.setStroke(new Color(1,0,0,1));
         stop.setScaleX(1.5);
         stop.setScaleY(1.5);
+        stop.setMouseTransparent(true);
         mapPanel.draw(stop);
     }
 
