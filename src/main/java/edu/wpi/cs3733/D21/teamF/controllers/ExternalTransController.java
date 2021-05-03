@@ -11,7 +11,6 @@ import java.util.UUID;
 
 public class ExternalTransController extends ServiceRequests{
     @FXML private JFXTextField patientName;
-    @FXML private JFXTextField employeeName;
     @FXML private JFXTextField loc;
     @FXML private JFXTextField methodTrans;
     @FXML private JFXTextField special;
@@ -35,6 +34,8 @@ public class ExternalTransController extends ServiceRequests{
     public boolean formFilled() {
             boolean isFilled = true;
             setNormalStyle(patientName, methodTrans, special, loc);
+
+        setNormalStyle(patientName, methodTrans, special, loc);
         if(patientName.getText().length() == 0){
             isFilled = false;
             setTextErrorStyle(patientName);

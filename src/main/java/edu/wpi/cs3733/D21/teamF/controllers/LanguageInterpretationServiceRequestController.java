@@ -113,7 +113,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
     @Override
     public void handleClear(){
-        //TODO: implement handle clear
+        name.
     }
 
     /**
