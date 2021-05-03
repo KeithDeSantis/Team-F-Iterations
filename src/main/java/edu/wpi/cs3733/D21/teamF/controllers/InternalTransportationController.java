@@ -46,31 +46,27 @@ public class InternalTransportationController extends ServiceRequests {
 
     public boolean formFilled() {
 
-        // set all text field backgrounds to clear to reset any fields that were marked as incomplete - KD
-        deliverLocation.setStyle("-fx-background-color: transparent");
-        movingDate.setStyle("-fx-background-color: transparent");
-        patientName.setStyle("-fx-background-color: transparent");
-        patientRoom.setStyle("-fx-background-color: transparent");
-
-        // Check if each field has been filled out, if not do not continue and highlight the text field red - KD
+        boolean isFilled = true;
+        setNormalStyle(deliverLocation, movingDate, patientName, patientRoom);
 
         if(deliverLocation.getText().length() <= 0) {
-            deliverLocation.setStyle("-fx-background-color:  #ffbab8");
+            isFilled = false;
+            setTextErrorStyle(deliverLocation);
         }
         if(movingDate.getText().length() <= 0) {
-            movingDate.setStyle("-fx-background-color:  #ffbab8");
+            isFilled = false;
+            setTextErrorStyle(movingDate);
         }
         if(patientName.getText().length() <= 0) {
-            patientName.setStyle("-fx-background-color:  #ffbab8");
+            isFilled = false;
+            setTextErrorStyle(patientName);
         }
         if(patientRoom.getText().length() <= 0) {
-            patientRoom.setStyle("-fx-background-color:  #ffbab8");
+            isFilled = false;
+            setTextErrorStyle(patientRoom);
         }
 
-        return deliverLocation.getText().length() > 0 &&
-                movingDate.getText().length() > 0 &&
-                patientName.getText().length() > 0 &&
-                patientRoom.getText().length() > 0;
+        return isFilled;
     }
 
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {
@@ -91,7 +87,7 @@ public class InternalTransportationController extends ServiceRequests {
             alert.initOwner((Stage) ( (Button) e.getSource()).getScene().getWindow());  // Show alert
             alert.setTitle("Form not filled.");
             alert.setHeaderText("Form incomplete");
-            alert.setContentText("Please fill out at least the Location, Type of Flowers, Containers, and Payment fields.");
+            alert.setContentText("Please fill out at least the Location, Type of Flowers, Containers, and Payment fields."); //??? TODO: fix this
             alert.showAndWait();
         }
     }
@@ -103,6 +99,7 @@ public class InternalTransportationController extends ServiceRequests {
         patientRoom.setText("");
         relativesCheckBox.setSelected(false);
         doctorCheckBox.setSelected(false);
+        setNormalStyle(deliverLocation, movingDate, patientName, patientRoom, relativesCheckBox, doctorCheckBox);
     }
 
 }
