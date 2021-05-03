@@ -1,0 +1,28 @@
+.tree-table-view{
+    -fx-tree-table-color: #FFEC8B;
+    -fx-tree-table-rippler-color : #F0C808;
+}
+.tree-table-view:focused .tree-table-row-cell:selected {
+    -fx-background-color: #FFEC8B ;
+}
+.tree-table-view .jfx-rippler {
+    -fx-rippler-fill: white;
+}
+.tree-table-view .column-header .label {
+    -fx-text-fill : black;
+    -fx-padding : 16 0 16 0 ;
+}
+.tree-table-view .column-header-background{
+    -fx-background-color: #F0C808;
+}
+.tree-table-view .scroll-bar {
+    -fx-background-color: #F0C808;
+}
+.tree-table-view .scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb,
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow,
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow{
+    -fx-background-color: #d1d1d1;
+}

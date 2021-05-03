@@ -33,6 +33,8 @@ public class DefaultPageAdminController {
     private JFXButton signOut;
     @FXML
     private JFXButton pathfindingSettingButton;
+    @FXML
+    private JFXButton favoriteNodes;
 
     @FXML
     private void initialize(){
@@ -70,6 +72,8 @@ public class DefaultPageAdminController {
             dialogStage.initOwner(pathfindingSettingButton.getScene().getWindow());
             dialogStage.setScene(new Scene(root2)); // set scene - KD
             dialogStage.showAndWait();
+        } else if (buttonPushed == favoriteNodes) {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/FavoriteNodeSelectionView.fxml");
         }
         else if (buttonPushed == quit) {
             Platform.exit();

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="540.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.FavoriteNodeSelectionController">
+   <children>
+      <VBox layoutX="268.0" layoutY="252.0" prefHeight="540.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultPageStyleSheet.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
+               <children>
+                  <ImageView fx:id="handleHome" onMouseClicked="#handleHome" fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S FAVORITE NODE SELECTION" wrappingWidth="743.4801025390625">
+                     <font>
+                        <Font name="Volkhov Regular" size="40.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="368.0" prefWidth="877.0" spacing="100.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <JFXTreeTableView fx:id="allNodeView" prefHeight="349.0" prefWidth="400.0" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
+                  <JFXTreeTableView fx:id="favoriteNodeView" prefHeight="349.0" prefWidth="400.0" stylesheets="/stylesheets/FavoriteTreeTableStyle.css" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin></HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
+               <children>
+                  <JFXButton fx:id="addButton" onAction="#handleAdd" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Add To Favorites" />
+                  <JFXButton fx:id="removeButton" onAction="#handleRemove" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Remove Favorite" />
+                  <JFXButton fx:id="clearButton" onAction="#handleClear" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear Favorites" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
