@@ -2,7 +2,10 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,8 +32,7 @@ public class FloralDeliveryService extends ServiceRequests{
     @FXML private JFXRadioButton bouquetButton;
     @FXML private JFXRadioButton vaseButton;
     @FXML private JFXRadioButton potButton;
-    @FXML private JFXButton clearButton;
-    @FXML private JFXTextField deliveryField;
+    @FXML private JFXComboBox<String> deliveryField;
     @FXML private JFXDatePicker dateField;
     @FXML private JFXTextField nameField;
     @FXML private JFXTextField cardNumberField;
@@ -49,6 +52,19 @@ public class FloralDeliveryService extends ServiceRequests{
     public void initialize() {
         Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
         logoHome.setImage(img);
+
+        try{
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+
+            final ObservableList<String> nodeList = FXCollections.observableArrayList();
+            for(NodeEntry n: nodeEntries){
+                nodeList.add(n.getShortName());
+            }
+            this.deliveryField.setItems(nodeList);
+
+        } catch(Exception e){
+
+        }
     }
 
     /**
@@ -73,7 +89,7 @@ public class FloralDeliveryService extends ServiceRequests{
         if(formFilled()) {
             String type = "Flower Delivery";
             String uuid = UUID.randomUUID().toString();
-            String additionalInfo = "Date: " + dateField.getValue() + "Deliver to: " + deliveryField.getText() +
+            String additionalInfo = "Date: " + dateField.getValue() + "Deliver to: " + deliveryField.getValue() +
             "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", additionalInfo);
             // Loads form submitted window and passes in current stage to return to request home
@@ -95,7 +111,7 @@ public class FloralDeliveryService extends ServiceRequests{
             isFilled = false;
             setButtonErrorStyle(roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox, orchidCheckBox,daisyCheckBox);
         }
-        if(deliveryField.getText().length() == 0) {
+        if(deliveryField.getValue() == null) {
             isFilled = false;
             setTextErrorStyle(deliveryField);
         }
@@ -132,7 +148,7 @@ public class FloralDeliveryService extends ServiceRequests{
         sunflowerCheckBox.setSelected(false);
         orchidCheckBox.setSelected(false);
         daisyCheckBox.setSelected(false);
-        deliveryField.setText("");
+        deliveryField.setValue(null);
         nameField.setText("");
         cardNumberField.setText("");
         cardExpField.setText("");

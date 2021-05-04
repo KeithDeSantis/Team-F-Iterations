@@ -1,11 +1,11 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTimePicker;
+import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,13 +18,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
     public JFXTextField clientName;
     @FXML
-    public JFXTextField clientRoom;
+    public JFXComboBox<String> clientRoom;
     @FXML
     public JFXTimePicker deliveryTime;
     @FXML
@@ -38,6 +39,23 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
     public JFXTextField cardholder;
 
+
+    @FXML
+    public void initialize(){
+        try{
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+
+            final ObservableList<String> nodeList = FXCollections.observableArrayList();
+            for(NodeEntry n: nodeEntries){
+                nodeList.add(n.getShortName());
+            }
+            this.clientRoom.setItems(nodeList);
+
+        } catch(Exception e){
+
+        }
+    }
+
     /**
      * Submits a medicine delivery form
      * @param actionEvent the event signalling that the Submit button has been pressed
@@ -48,28 +66,25 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
         boolean submitSuccessful = true;
         setNormalStyle(clientRoom, clientName, deliveryTime, medicineInformation, cardholder, cardNumber, cvc, expirationDate);
-        for(int i = 0; i < 7; i++) {
+        for(int i = 0; i < 6; i++) {
             TextInputControl node = null;
             switch(i) {
                 case 0:
                     node = clientName;
                     break;
                 case 1:
-                    node = clientRoom;
-                    break;
-                case 2:
                     node = medicineInformation;
                     break;
-                case 3:
+                case 2:
                     node = cardNumber;
                     break;
-                case 4:
+                case 3:
                     node = cvc;
                     break;
-                case 5:
+                case 4:
                     node = expirationDate;
                     break;
-                case 6:
+                case 5:
                     node = cardholder;
                     break;
                 default:
@@ -86,13 +101,17 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
                 submitSuccessful = false;
                 setTextErrorStyle(deliveryTime);
             }
+            if(clientRoom.getValue() == null){
+                submitSuccessful = false;
+                setTextErrorStyle(clientRoom);
+            }
         }
         if(submitSuccessful) {
             String uuid = UUID.randomUUID().toString();
             String type = "Medicine Delivery";
             String person = "";
             String completed = "false";
-            String additionalInfo = "Delivery Location: " + clientRoom.getText() + "Medicine Info: " + medicineInformation.getText()
+            String additionalInfo = "Delivery Location: " + clientRoom.getValue() + "Medicine Info: " + medicineInformation.getText()
                     + "Card Number: " + cardNumber.getText() + "Card Holder: " + cardholder.getText() + "CVC: " + cvc.getText()
                     + "Expiration Date: " + expirationDate.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
@@ -128,7 +147,7 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @Override
     public void handleClear() {
         clientName.setText("");
-        clientRoom.setText("");
+        clientRoom.setValue(null);
         medicineInformation.setText("");
         cardholder.setText("");
         cardNumber.setText("");

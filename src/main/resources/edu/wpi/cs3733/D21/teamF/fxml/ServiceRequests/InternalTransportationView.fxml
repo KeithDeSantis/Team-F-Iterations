@@ -2,6 +2,8 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonBar?>
@@ -16,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.InternalTransportationController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.InternalTransportationController">
    <children>
       <HBox fx:id="header" prefHeight="137.0" prefWidth="960.0" spacing="10.0" style="-fx-background-color: #94C4F1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
          <children>
@@ -56,11 +58,7 @@
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="movingDate" alignment="CENTER" promptText="Moving Date">
-                     <font>
-                        <Font name="Montserrat Regular" size="15.0" />
-                     </font>
-                  </JFXTextField>
+                  <JFXDatePicker fx:id="movingDate" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
@@ -84,11 +82,7 @@
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="patientRoom" alignment="CENTER" promptText="Room of Patient">
-                     <font>
-                        <Font name="Montserrat Regular" size="15.0" />
-                     </font>
-                  </JFXTextField>
+                  <JFXComboBox fx:id="patientRoom" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
@@ -98,11 +92,7 @@
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="deliverLocation" alignment="CENTER" promptText="Deliver Room">
-                     <font>
-                        <Font name="Montserrat Regular" size="15.0" />
-                     </font>
-                  </JFXTextField>
+                  <JFXComboBox fx:id="deliverLocation" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">

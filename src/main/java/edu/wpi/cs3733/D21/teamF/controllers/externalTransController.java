@@ -1,9 +1,13 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,14 +20,31 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 public class externalTransController extends ServiceRequests{
     @FXML private JFXTextField patientName;
-    @FXML private JFXTextField loc;
+    @FXML private JFXComboBox<String> loc;
     @FXML private JFXTextField methodTrans;
     @FXML private JFXTextField special;
 
+
+    @FXML
+    public void initialize(){
+        try{
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+
+            final ObservableList<String> nodeList = FXCollections.observableArrayList();
+            for(NodeEntry n: nodeEntries){
+                nodeList.add(n.getShortName());
+            }
+            this.loc.setItems(nodeList);
+
+        } catch(Exception e){
+
+        }
+    }
 
     @FXML
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
@@ -31,7 +52,7 @@ public class externalTransController extends ServiceRequests{
             String uuid = UUID.randomUUID().toString();
             String type = "External Transit";
             String assignedPerson = "";
-            String additionalInfo = "Location: " + loc.getText() + "Transit method: " + methodTrans.getText()
+            String additionalInfo = "Location: " + loc.getValue() + "Transit method: " + methodTrans.getText()
                     + "Special info:" + special.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
             // Loads form submitted window and passes in current stage to return to request home
@@ -52,7 +73,7 @@ public class externalTransController extends ServiceRequests{
             isFilled = false;
             setTextErrorStyle(methodTrans);
         }
-        if(loc.getText().length() == 0){
+        if(loc.getValue() == null){
             isFilled = false;
             setTextErrorStyle(loc);
         }
@@ -62,11 +83,9 @@ public class externalTransController extends ServiceRequests{
     @Override
     public void handleClear() {
         patientName.setText("");
-        loc.setText("");
+        loc.setValue(null);
         methodTrans.setText("");
         special.setText("");
-        special.setStyle("-fx-text-fill: #000000");
-        loc.setStyle("-fx-text-fill: #000000");
-        methodTrans.setStyle("-fx-text-fill: #000000");
+        setNormalStyle(patientName, loc, methodTrans, special);
     }
 }
