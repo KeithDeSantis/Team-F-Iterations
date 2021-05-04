@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -306,6 +307,17 @@ class DatabaseAPITest {
         DatabaseAPI.getDatabaseAPI().addServiceReq(newService);
         List<ServiceEntry> actual = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
         assertEquals(expected.get(0).getUuid(), actual.get(0).getUuid());
+    }
+
+    @Test
+    @DisplayName("test get individual service request")
+    public void testGetServiceRequest() throws SQLException{
+        String uuid = UUID.randomUUID().toString();
+        DatabaseAPI.getDatabaseAPI().addServiceReq("123", "meme", "test", "truefalse", "stuff");
+        DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, "language stuff", "test", "false", "be smart");
+        ServiceEntry actual = DatabaseAPI.getDatabaseAPI().getServiceEntry(uuid);
+        assertEquals(actual.getUuid(), uuid);
+        assertEquals("language stuff", actual.getRequestType());
     }
 
     @Test

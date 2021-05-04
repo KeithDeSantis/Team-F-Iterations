@@ -6,6 +6,7 @@ import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 
+import javax.xml.ws.Service;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +128,10 @@ public class DatabaseAPI {
     public List<ServiceEntry> genServiceRequestEntries() throws SQLException{
         ServiceRequestHandler s = new ServiceRequestHandler();
         return s.genServiceRequestEntries();
+    }
+
+    public ServiceEntry getServiceEntry(String uuid) throws SQLException{
+        return ((ServiceRequestHandler)this.serviceRequestHandler).getServiceRequest(uuid);
     }
 
     public boolean addUser(String...colValues) throws SQLException{

@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
+import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 
 import java.sql.PreparedStatement;
@@ -90,6 +91,41 @@ public class ServiceRequestHandler implements DatabaseEntry {
             DatabaseAPI.getDatabaseAPI().addServiceReq(arr);
         }
     }
+
+    /**
+     * Generates a ServiceEntry object for a service entry given the uuid
+     * @param uuid the uuid of the service request/ticket to fetch
+     * @return the ServiceEntry object for the row
+     * @throws SQLException on error with DB operations
+     */
+    public ServiceEntry getServiceRequest(String uuid) throws SQLException{
+        final String sql = "SELECT * FROM SERVICE_REQUESTS WHERE uuid=(?)";
+        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+        stmt.setString(1, uuid);
+
+        ResultSet rset;
+        try {
+            rset = stmt.executeQuery();
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Table/View 'L1NODES' does not exist."))
+                return null;
+            else
+                e.printStackTrace();
+            return null;
+        }
+        while (rset.next()) {
+            String requestID = rset.getString(1);
+            String requestName = rset.getString(2);
+            String requestPerson = rset.getString(3);
+            String requestCompleted = rset.getString(4);
+            String requestInfo = rset.getString(5);
+            rset.close();
+            return new ServiceEntry(requestID, requestName, requestPerson, requestCompleted, requestInfo);
+        }
+        rset.close();
+        return null;
+    }
+
 
     /**
      * Generate a list of ServiceEntry objects based on current database entries
