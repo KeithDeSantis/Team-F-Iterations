@@ -116,4 +116,12 @@ public class InternalTransportationController extends ServiceRequests {
         setNormalStyle(deliverLocation, movingDate, patientName, patientRoom, relativesCheckBox, doctorCheckBox);
     }
 
+    public void handleHelp(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/InternalTransportationHelpView.fxml");
+    }
+
+    public void goBack(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/InternalTransportationView.fxml");
+    }
+
 }
