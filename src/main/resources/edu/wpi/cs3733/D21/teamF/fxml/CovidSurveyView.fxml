@@ -33,7 +33,7 @@
             </Label>
          </children>
       </HBox>
-      <HBox prefHeight="340.0" prefWidth="960.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
+      <HBox prefHeight="340.0" prefWidth="960.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
          <children>
             <GridPane prefHeight="340.0" prefWidth="378.0">
               <columnConstraints>
