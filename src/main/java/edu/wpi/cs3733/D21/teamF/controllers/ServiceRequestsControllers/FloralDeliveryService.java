@@ -47,8 +47,6 @@ public class FloralDeliveryService extends ServiceRequests {
     public void initialize() {
 //        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
 //        logoHome.setImage(img);
-        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
-        logoHome.setImage(img);
 
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
