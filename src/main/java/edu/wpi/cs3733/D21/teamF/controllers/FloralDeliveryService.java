@@ -2,18 +2,11 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -53,11 +46,10 @@ public class FloralDeliveryService extends ServiceRequests{
 
     /**
      * Handles the push of a radio button (sets up Toggle Groups)
-     * @param actionEvent button being pushed
      * @author KeithDeSantis
      */
     @FXML
-    private void handleRadioButtonClicked(ActionEvent actionEvent) {
+    private void handleRadioButtonClicked() {
         ToggleGroup groupContainer = new ToggleGroup(); // group for container buttons
         bouquetButton.setToggleGroup(groupContainer);
         vaseButton.setToggleGroup(groupContainer);
