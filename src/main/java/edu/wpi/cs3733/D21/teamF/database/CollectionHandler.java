@@ -39,14 +39,12 @@ public class CollectionHandler {
      * @return true on success, false otherwise
      * @throws SQLException on error with DB operations
      */
-    public boolean deleteNodeEntry(String nodeID, String type) throws SQLException{
-        if (!(type.equals("recent")) || (!(type.equals("favorite")))){
-            return false;
-        }
-        final String query = "DELETE FROM COLLECTIONS WHERE NODEID=(?) AND RELATION_TYPE=(?)";
+    public boolean deleteNodeEntry(String nodeID, String username, String type) throws SQLException{
+        final String query = "DELETE FROM COLLECTIONS WHERE NODE_ID=(?) AND RELATION_TYPE=(?) AND USER_ID=(?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
         stmt.setString(1, nodeID);
         stmt.setString(2, type);
+        stmt.setString(3, username);
         return stmt.executeUpdate() != 0;
     }
 

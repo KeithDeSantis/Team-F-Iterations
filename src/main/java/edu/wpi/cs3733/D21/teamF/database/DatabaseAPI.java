@@ -209,6 +209,10 @@ public class DatabaseAPI {
         return collectionHandler.getUserNodes(type, userID);
     }
 
+    public boolean deleteUserNode(String nodeID, String username, String type) throws SQLException{
+        return collectionHandler.deleteNodeEntry(nodeID, username, type);
+    }
+
     private static class DatabaseSingletonHelper{
         private static final DatabaseAPI databaseAPI1 = new DatabaseAPI();
     }
