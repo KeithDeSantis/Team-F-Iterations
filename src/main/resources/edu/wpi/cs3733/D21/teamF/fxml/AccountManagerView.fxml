@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
@@ -16,38 +17,31 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AccountManagerController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AccountManagerController">
    <children>
-      <HBox fx:id="header" prefHeight="100.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
+      <HBox fx:id="header" layoutY="-6.0" prefHeight="120.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Label text="Brigham and Women's Hospital">
+            <Label fx:id="title" prefHeight="120.0" prefWidth="755.0" text="BRIGHAM AND WOMEN'S HOSPITAL Account Manager" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
             </Label>
          </children></HBox>
-      <JFXButton fx:id="quit" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="30.0" prefWidth="30.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="x" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="150.0">
-         <font>
-            <Font name="Montserrat Regular" size="15.0" />
-         </font>
-      </JFXButton>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="50.0" layoutY="54.0" prefHeight="67.0" prefWidth="421.0" text="Account Manager" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
-         <font>
-            <Font name="Volkhov Regular" size="40.0" />
-         </font>
-      </Label>
-      <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
+      <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="135.0">
          <children>
-            <JFXComboBox fx:id="selectUser" focusColor="#03256c" onAction="#handleUserSearch" promptText="Select User">
+            <HBox alignment="CENTER">
+               <children>
+                  <JFXTreeTableView fx:id="accountView" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="860.0" />
+               </children>
                <VBox.margin>
-                  <Insets top="25.0" />
+                  <Insets />
                </VBox.margin>
-            </JFXComboBox>
+            </HBox>
             <GridPane alignment="CENTER">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -104,7 +98,7 @@
       </VBox>
       <ButtonBar layoutX="608.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="56.0" prefWidth="725.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
         <buttons>
-            <JFXButton buttonType="RAISED" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" >
+            <JFXButton buttonType="RAISED" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

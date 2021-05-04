@@ -1,22 +1,18 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -39,11 +35,11 @@ public class AccountManagerController implements Initializable {
     @FXML
     private JFXButton home;
     @FXML
-    private JFXComboBox selectUser;
+    private JFXComboBox<String> selectUser;
     @FXML
-    private JFXComboBox changeUserType;
+    private JFXComboBox<String> changeUserType;
     @FXML
-    private JFXComboBox newUserType;
+    private JFXComboBox<String> newUserType;
     @FXML
     private JFXTextField username;
     @FXML
@@ -53,21 +49,21 @@ public class AccountManagerController implements Initializable {
     @FXML
     private JFXTextField addUsername;
 
-    private String fieldChanged = "";
+    //private String fieldChanged = "";
     @FXML
     private JFXTreeTableView<AccountEntry> accountView;
-    private ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
+    private final ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
 
     public void initialize(URL location, ResourceBundle resources) {
-        /*
-        int colWidth = 300;
+
+        int colWidth = 430;
         JFXTreeTableColumn<AccountEntry, String> username = new JFXTreeTableColumn<>("Username");
         username.setPrefWidth(colWidth);
         username.setCellValueFactory(cellData -> cellData.getValue().getValue().getUsernameProperty());
 
-        JFXTreeTableColumn<AccountEntry, String> password = new JFXTreeTableColumn<>("Password");
-        password.setPrefWidth(colWidth);
-        password.setCellValueFactory(cellData -> cellData.getValue().getValue().getPasswordProperty());
+//        JFXTreeTableColumn<AccountEntry, String> password = new JFXTreeTableColumn<>("Password");
+//        password.setPrefWidth(colWidth);
+//        password.setCellValueFactory(cellData -> cellData.getValue().getValue().getPasswordProperty());
 
         JFXTreeTableColumn<AccountEntry, String> userType = new JFXTreeTableColumn<>("User Type");
         userType.setPrefWidth(colWidth);
@@ -76,7 +72,7 @@ public class AccountManagerController implements Initializable {
         final TreeItem<AccountEntry> root = new RecursiveTreeItem<AccountEntry>(accounts, RecursiveTreeObject::getChildren);
         accountView.setRoot(root);
         accountView.setShowRoot(false);
-        accountView.getColumns().setAll(username, password, userType);
+        accountView.getColumns().setAll(username, userType);
 
         List<AccountEntry> data;
         try {
@@ -90,24 +86,24 @@ public class AccountManagerController implements Initializable {
             e.printStackTrace();
         }
 
-         */
+
 
         //add table entries like in account manager
         //syntax of adding item: services.add(new ServiceEntry("Request Type", "Assigned To", "Status));
 
-        List<String> allUsers;
-        try {
-            UserHandler userHandler = new UserHandler();
-            allUsers = userHandler.listAllUsers();
-            for (String s : allUsers)
-            {
-                selectUser.getItems().add(s);
-            }
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+//        List<String> allUsers;
+//        try {
+//            UserHandler userHandler = new UserHandler();
+//            allUsers = userHandler.listAllUsers();
+//            for (String s : allUsers)
+//            {
+//                selectUser.getItems().add(s);
+//            }
+//        }
+//        catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//        }
 
         changeUserType.getItems().add("guest");
         changeUserType.getItems().add("employee");
@@ -119,18 +115,6 @@ public class AccountManagerController implements Initializable {
     }
 
 
-
-
-    public void handleHoverOnDelete(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #d30000;");
-    }
-
-    public void handleHoverOffDelete(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #d30000; -fx-text-fill: #FFFFFF;");
-    }
-
     public void handleUserSearch(ActionEvent actionEvent) {
     }
 
@@ -139,62 +123,85 @@ public class AccountManagerController implements Initializable {
         if (buttonPushed == quit){
             SceneContext.getSceneContext().loadDefault();
         }
-        else if (buttonPushed == deleteUser){
+        else if (buttonPushed == deleteUser && accountView.getSelectionModel().getSelectedIndex() >= 0){
             AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
             DatabaseAPI.getDatabaseAPI().deleteUser(user.getUsername());
-            refreshPage(actionEvent);
+            refreshPage();
         }
-        else if (buttonPushed == addUser){
-            //AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
-            //AccountEntry newUser = new AccountEntry(user.getUsername(), user.getPassword(), user.getUserType());
+        else if (buttonPushed == addUser && !addUsername.getText().isEmpty() && !addPassword.getText().isEmpty() && !(newUserType.getValue()==null)){
+
             String userName = addUsername.getText();
             String pass = addPassword.getText();
-            String type = (String) newUserType.getValue();
-//FIXME add user/account objects
-            DatabaseAPI.getDatabaseAPI().addUser(userName, type, userName, pass);
-            selectUser.getItems().add(userName);
-            refreshPage(actionEvent);
+            String type = newUserType.getValue();
+
+            DatabaseAPI.getDatabaseAPI().addUser(userName, type, userName, pass, "true");
+            AccountEntry newUser = new AccountEntry(userName, pass, type, "true");
+            accounts.add(newUser);
+            refreshPage();
         }
-        else if (buttonPushed == saveChanges){
-            String targetUser = "";
-            String newVal = "";
-            if (fieldChanged.equals("username")){
-                targetUser = (String) selectUser.getValue();
+        else if (buttonPushed == saveChanges && accountView.getSelectionModel().getSelectedIndex() >= 0){
+
+            String  targetUser = accountView.getSelectionModel().getSelectedItem().getValue().getUsername();;
+            String newVal;
+
+            if(!username.getText().isEmpty()) {
                 newVal = username.getText();
                 DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "username");
+                accountView.getSelectionModel().getSelectedItem().getValue().setUsername(newVal);
             }
-            else if (fieldChanged.equals("password")){
-                targetUser = (String) selectUser.getValue();
+            if(!password.getText().isEmpty()) {
                 newVal = password.getText();
                 DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "password");
+                accountView.getSelectionModel().getSelectedItem().getValue().setPassword(newVal);
             }
-            else if (fieldChanged.equals("type")){
-                targetUser = (String) selectUser.getValue();
-                newVal = (String) changeUserType.getValue();
+            if(!(changeUserType.getValue() == null)) {
+                newVal = changeUserType.getValue();
                 DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "type");
+                accountView.getSelectionModel().getSelectedItem().getValue().setUserType(newVal);
+            }
+
+            /*
+            switch (fieldChanged) {
+                case "username":
+                    newVal = username.getText();
+                    DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "username");
+                    accountView.getSelectionModel().getSelectedItem().getValue().setUsername(newVal);
+                    break;
+                case "password":
+                    newVal = password.getText();
+                    DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "password");
+                    accountView.getSelectionModel().getSelectedItem().getValue().setPassword(newVal);
+                    break;
+                case "type":
+                    newVal = changeUserType.getValue();
+                    DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "type");
+                    accountView.getSelectionModel().getSelectedItem().getValue().setUserType(newVal);
+                    break;
             }
             fieldChanged = "";
-
-            refreshPage(actionEvent);
+             */
+            refreshPage();
         }
         else if (buttonPushed == home){
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
         }
     }
 
-    private void refreshPage(ActionEvent actionEvent) throws IOException {
+    private void refreshPage() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
     }
 
+
     public void changingUsername(MouseEvent mouseEvent) throws SQLException{
-        fieldChanged = "username";
+        //fieldChanged = "username";
     }
 
     public void changingPassword(MouseEvent mouseEvent) throws SQLException{
-        fieldChanged = "password";
+        //fieldChanged = "password";
     }
 
-    public void changingUserType(MouseEvent mouseEvent) {
-        fieldChanged = "type";
+    public void changingUserType(MouseEvent mouseEvent) throws SQLException{
+        //fieldChanged = "type";
     }
+
 }

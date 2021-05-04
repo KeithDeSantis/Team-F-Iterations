@@ -490,7 +490,7 @@ public class GraphTest {
         }
         assertEquals(totalPathList.size(), fragmentedPathList.size());
         assertEquals(totalPath.getPathCost(), length, 0.1);
-        ListIterator<Vertex> iterator = totalPathList.listIterator();;
+        ListIterator<Vertex> iterator = totalPathList.listIterator();
         for(Vertex v : fragmentedPathList) {
             assertEquals(iterator.next().getID(), v.getID());
         }

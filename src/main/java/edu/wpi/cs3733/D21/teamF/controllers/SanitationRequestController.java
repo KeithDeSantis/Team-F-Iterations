@@ -1,28 +1,23 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class SanitationRequestController extends ServiceRequests {
-    @FXML private JFXButton cancel;
     @FXML private JFXTextField description;
     @FXML private JFXComboBox<String> loc;
     @FXML private JFXTextField clientName;
@@ -58,7 +53,31 @@ public class SanitationRequestController extends ServiceRequests {
     }
 
     public boolean formFilled() {
-        return description.getText().length()>0 && loc.getValue().length()>0 && clientName.getText().length()>0;
+        boolean isFilled = true;
+
+        setNormalStyle(description, clientName, loc);
+
+        if(description.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(description);
+        }
+        if(loc.getValue().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(loc);
+        }
+        if(clientName.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(clientName);
+        }
+        return isFilled;
+    }
+
+    @Override
+    public void handleClear(){
+        description.setText("");
+        clientName.setText("");
+        loc.setValue(null);
+        setNormalStyle(description, clientName, loc);
     }
 
 

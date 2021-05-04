@@ -1,19 +1,11 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextInputControl;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -72,16 +64,14 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
                     System.out.println("Unexpected case reached.");
                     break;
             }
-            if(node.getText().length() > 0) {
-                node.setStyle("-fx-border-color: transparent");
-                node.setStyle("-fx-background-color: transparent");
+            if(node.getText().length() > 0) {  //currently works because nodes are only text fields
+                setNormalStyle(node);
             } else {
                 submitSuccessful = false;
-                node.setStyle("-fx-border-color: #FF0000");
-                node.setStyle("-fx-background-color: #FF000088");
+                setTextErrorStyle(node);
             }
         }
-        if(submitSuccessful) {
+        if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String type = "Medicine Delivery";
             String person = "";
@@ -117,27 +107,17 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     }
     */
 
-    /**
-     * Changes the style of a Button when moused over
-     * @param mouseEvent the event signalling that the mouse is over the JFXButton
-     * @author Tony Vuolo (bdane)
-     */
-    @FXML
-    private void mouseOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
+
+
+    @Override
+    public void handleClear() {
+        clientName.setText("");
+        clientRoom.setText("");
+        medicineInformation.setText("");
+        cardholder.setText("");
+        cardNumber.setText("");
+        cvc.setText("");
+        expirationDate.setText("");
+        setNormalStyle(clientRoom, clientName, medicineInformation, cardholder, cvc, cardNumber, expirationDate);
     }
-
-    /**
-     * Reverts the style of a Button back to its original settings
-     * @param mouseEvent the event signalling that the mouse is no longer over the JFXButton
-     * @author Tony Vuolo (bdane)
-     */
-    @FXML
-    private void mouseOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
-
-
 }

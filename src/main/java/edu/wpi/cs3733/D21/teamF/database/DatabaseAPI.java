@@ -6,7 +6,9 @@ import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 
+import javax.xml.ws.Service;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseAPI {
@@ -17,6 +19,7 @@ public class DatabaseAPI {
     private final DatabaseEntry serviceRequestHandler;
     private final DatabaseEntry userHandler;
     private final DatabaseEntry systemHandler;
+    private final CollectionHandler collectionHandler;
 
     public DatabaseAPI() {
         this.nodeHandler = new NodeHandler();
@@ -24,6 +27,7 @@ public class DatabaseAPI {
         this.userHandler = new UserHandler();
         this.serviceRequestHandler = new ServiceRequestHandler();
         this.systemHandler = new SystemPreferences();
+        this.collectionHandler = new CollectionHandler();
     }
 
     public boolean createNodesTable() {
@@ -39,6 +43,11 @@ public class DatabaseAPI {
     }
 
     public boolean addNode(String...colValues) throws SQLException {
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return nodeHandler.addEntry(colValues);
     }
 
@@ -60,8 +69,13 @@ public class DatabaseAPI {
         return node.getNode(id);
     }
 
-    public boolean addEdge(String...colVals) throws SQLException{
-        return edgeHandler.addEntry(colVals);
+    public boolean addEdge(String...colValues) throws SQLException{
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
+        return edgeHandler.addEntry(colValues);
     }
 
     public boolean editEdge(String id, String newVal, String colName) throws Exception{
@@ -98,6 +112,11 @@ public class DatabaseAPI {
     }
 
     public boolean addServiceReq(String...colValues) throws SQLException{
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return serviceRequestHandler.addEntry(colValues);
     }
 
@@ -126,7 +145,16 @@ public class DatabaseAPI {
         return s.genServiceRequestEntries();
     }
 
+    public ServiceEntry getServiceEntry(String uuid) throws SQLException{
+        return ((ServiceRequestHandler)this.serviceRequestHandler).getServiceRequest(uuid);
+    }
+
     public boolean addUser(String...colValues) throws SQLException{
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return userHandler.addEntry(colValues);
     }
 
@@ -167,6 +195,11 @@ public class DatabaseAPI {
     }
 
     public boolean addSystemPreferences(String...colValues) throws SQLException{
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return systemHandler.addEntry(colValues);
     }
 
@@ -189,6 +222,48 @@ public class DatabaseAPI {
     public String getCurrentAlgorithm() throws SQLException{
         return ((SystemPreferences)this.systemHandler).getAlgorithm();
     }
+
+    public boolean createCollectionsTable(){
+        return collectionHandler.createCollectionTable();
+    }
+
+    public boolean dropCollectionsTable(){
+        return collectionHandler.dropCollectionsTable();
+    }
+
+    public boolean addCollecionEntry(String user, String node, String type) throws SQLException{
+        String[] input = {user, node, type};
+        for (String s: input){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
+        return collectionHandler.addEntry(user, node, type);
+    }
+
+    public ArrayList<String> getUserNodes(String type, String userID) throws SQLException{
+        return collectionHandler.getUserNodes(type, userID);
+    }
+
+    public boolean deleteUserNode(String nodeID, String username, String type) throws SQLException{
+        return collectionHandler.deleteNodeEntry(nodeID, username, type);
+    }
+ /**
+     * Filters user input to prevent SQL injections
+     * @param input the user input
+     * @return true if safe, false otherwise
+     */
+    public boolean filterInput(String input){
+        char[] blacklist = {'\'', '-', '\"', '#', '(', ')', '|'};
+        for (char c : blacklist){
+            if (!(input.indexOf(c) == -1)){
+                System.out.println("WARNING: Possible SQL Injection: " + input);
+                return true;
+            }
+        }
+        return true;
+    }
+
 
     private static class DatabaseSingletonHelper{
         private static final DatabaseAPI databaseAPI1 = new DatabaseAPI();

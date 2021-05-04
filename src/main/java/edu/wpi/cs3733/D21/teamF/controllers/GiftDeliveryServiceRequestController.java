@@ -2,22 +2,14 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
+
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 
 public class GiftDeliveryServiceRequestController extends ServiceRequests {
         @FXML private JFXTextField name;
@@ -38,9 +30,36 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
             }
         }
 
+        public void handleClear(ActionEvent actionEvent) throws IOException {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GiftDeliveryServiceRequest.fxml");
+
+        }
+        public void handleCancel(ActionEvent actionEvent) throws IOException{
+//            if(/*user is admin*/) {
+//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+//            }
+//            else if (/*user is employee*/){
+//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
+//            }
+//            else{
+//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+//            }
+        }
+
         public boolean formFilled() {
             return name.getText().length()>0 && ccNumber.getText().length()>0 && csv.getText().length()>0 && expirationDate.getText().length()>0 && specialInstructions.getText().length()>0;
         }
+
+         @FXML
+         public void handleClear() {
+            name.setText("");
+            ccNumber.setText("");
+            expirationDate.setText("");
+            csv.setText("");
+            specialInstructions.setText("");
+
+         }
+
 
 }
 

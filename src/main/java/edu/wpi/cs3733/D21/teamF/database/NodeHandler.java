@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NodeHandler implements DatabaseEntry {
-
     /**
      * {@inheritDoc}
      */
@@ -31,7 +30,7 @@ public class NodeHandler implements DatabaseEntry {
      */
     @Override
     public boolean editEntry(String id, String newVal, String colName) throws Exception{
-        boolean success = false;
+        boolean success;
         if (colName.equals("nodeid") || colName.equals("xcoord") || colName.equals("ycoord") || colName.equals("floor")
         || colName.equals("building") || colName.equals("nodetype") || colName.equals("longname") || colName.equals("shortname")) {
             String query = String.format("UPDATE AllNodes SET %s=(?) WHERE NODEID=(?)", colName);
@@ -68,7 +67,6 @@ public class NodeHandler implements DatabaseEntry {
      */
     @Override
     public boolean createTable() {
-        boolean success = false;
         final String initNodesTable = "CREATE TABLE AllNodes(NodeID varchar(200), " +
                 "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
                 "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
@@ -76,13 +74,11 @@ public class NodeHandler implements DatabaseEntry {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initNodesTable);
             stmt.close();
-            success = true;
         }
         catch (SQLException e){
-            success = false;
-            return success;
+            return false;
         }
-        return success;
+        return true;
     }
 
     /**
@@ -90,18 +86,16 @@ public class NodeHandler implements DatabaseEntry {
      */
     @Override
     public boolean dropTable() {
-        boolean success = false;
         String query = "DROP TABLE AllNodes";
         try {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(query);
             stmt.close();
-            success = true;
         }
         catch (SQLException e){
             return false;
         }
-        return success;
+        return true;
     }
 
     /**

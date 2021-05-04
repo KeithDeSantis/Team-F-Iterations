@@ -117,7 +117,12 @@ public class Graph {
         path.addVertexToPath(prev, 0);
         while(iterator.hasNext()) {
             current = iterator.next();
-            path.concatenate(getPath(prev, current));
+
+            final Path currentSegment = getPath(prev, current);
+            if(currentSegment == null)
+                return null;
+
+            path.concatenate(currentSegment);
             prev = current;
         }
         return path;

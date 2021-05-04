@@ -1,29 +1,25 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class MaintenenceRequestController extends ServiceRequests {
@@ -50,7 +46,7 @@ public class MaintenenceRequestController extends ServiceRequests {
 
     ObservableList<String> locations = FXCollections.observableArrayList();
 
-    ObservableList<String> employeeList = FXCollections.observableArrayList();
+    //ObservableList<String> employeeList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize(){
@@ -76,25 +72,6 @@ public class MaintenenceRequestController extends ServiceRequests {
         // Set location combo box to use long names
         locationField.setItems(locations);
 
-        // Load in employee list from database TODO Replace with UserEntry after merge W/ updated DB
-        List<NodeEntry> employees = new ArrayList<>();
-        try {
-            employees = DatabaseAPI.getDatabaseAPI().genNodeEntries();
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-
-        employees.stream().sorted(Comparator.comparing(NodeEntry::getShortName)).collect(Collectors.toList()).forEach(employee ->{
-            employeeList.add(employee.getShortName());
-        });
-
-        // Set list to assignment Combo Box
-        assignment.setItems(employeeList);
-
-        assignment.setVisible(false);
-        assignment.setDisable(true);
-        assignmentLabel.setVisible(false);
-
     }
 
     /**
@@ -119,12 +96,12 @@ public class MaintenenceRequestController extends ServiceRequests {
                 //Do Nothing
             }
 
-            String employee = "";
-            try{
-                employee = assignment.getValue();
-            } catch (NullPointerException nullPointerException){
-                // Leave assigned employee blank
-            }
+//            String employee = "";
+//            try{
+//                employee = assignment.getValue();
+//            } catch (NullPointerException nullPointerException){
+//                // Leave assigned employee blank
+//            }
 
             String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
                     "Urgency: " + urgencyComboBox.getValue();
@@ -158,18 +135,29 @@ public class MaintenenceRequestController extends ServiceRequests {
         return filled;
     }
 
-    public void reset(KeyEvent keyEvent) {
+    public void reset() {
         locationField.setStyle("-fx-background-color: #00000000");
         descriptionField.setStyle("-fx-background-color: #00000000");
         typeComboBox.setStyle("-fx-background-color: #00000000");
         urgencyComboBox.setStyle("-fx-background-color: #00000000");
     }
 
-    public void reset2(ActionEvent actionEvent) {
+    public void reset2() {
         locationField.setStyle("-fx-background-color: #00000000");
         descriptionField.setStyle("-fx-background-color: #00000000");
         typeComboBox.setStyle("-fx-background-color: #00000000");
         urgencyComboBox.setStyle("-fx-background-color: #00000000");
+    }
+
+    @Override
+    public void handleClear(){
+        locationField.setValue(null);
+        typeComboBox.setValue(null);
+        descriptionField.setText("");
+        urgencyComboBox.setValue(null);
+        dateOfIncident.setValue(null);
+        assignment.setValue(null);
+        descriptionField.setStyle("-fx-background-color: transparent");
     }
 
 

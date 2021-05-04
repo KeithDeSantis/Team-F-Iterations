@@ -10,9 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,22 +23,14 @@ class DatabaseAPITest {
         DatabaseAPI.getDatabaseAPI().dropUsersTable();
         DatabaseAPI.getDatabaseAPI().dropServiceRequestTable();
         DatabaseAPI.getDatabaseAPI().dropSystemTable();
+        DatabaseAPI.getDatabaseAPI().dropCollectionsTable();
 
         DatabaseAPI.getDatabaseAPI().createNodesTable();
         DatabaseAPI.getDatabaseAPI().createEdgesTable();
         DatabaseAPI.getDatabaseAPI().createUserTable();
         DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
         DatabaseAPI.getDatabaseAPI().createSystemTable();
-
-        /*
-        //FIXME: DO BETTER!
-        try {
-            DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        */
+        DatabaseAPI.getDatabaseAPI().createCollectionsTable();
     }
 
     @Test()
@@ -201,7 +192,7 @@ class DatabaseAPITest {
     @DisplayName("test adding a user")
     public void testAddUser() throws SQLException
     {
-        String[] newUser = {"1", "employee", "declan", "password"};
+        String[] newUser = {"1", "employee", "declan", "password", "false"};
         assertTrue(DatabaseAPI.getDatabaseAPI().addUser(newUser));
     }
 
@@ -209,7 +200,7 @@ class DatabaseAPITest {
     @DisplayName("test deleting a user")
     public void testDeleteUser() throws SQLException
     {
-        String[] newUser = {"1", "employee", "declan", "password"};
+        String[] newUser = {"1", "employee", "declan", "password", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(newUser);
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUser("declan"));
     }
@@ -218,7 +209,7 @@ class DatabaseAPITest {
     @DisplayName("test editing a user")
     public void testEditUser() throws Exception
     {
-        String[] newUser = {"1", "employee", "declan", "password"};
+        String[] newUser = {"1", "employee", "declan", "password", "false"};
         DatabaseAPI.getDatabaseAPI().addUser(newUser);
         assertTrue(DatabaseAPI.getDatabaseAPI().editUser("declan", "password123", "password"));
     }
@@ -241,14 +232,22 @@ class DatabaseAPITest {
     public void testPopulateUsers() throws SQLException
     {
         ArrayList<String[]> users = new ArrayList<>();
-        String[] user1 = {"1", "admin", "username", "password"};
-        String[] user2 = {"2", "employee", "testuser", "testpass"};
+        String[] user1 = {"1", "admin", "username", "password", "false"};
+        String[] user2 = {"2", "employee", "testuser", "testpass", "not-assigned"};
         users.add(user1);
         users.add(user2);
 
         DatabaseAPI.getDatabaseAPI().populateUsers(users);
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUser("testuser"));
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUser("username"));
+    }
+
+    @Test
+    @DisplayName("test authenticaion fail via covid status")
+    public void testCovidAuthFail() throws SQLException{
+        String[] infected = {"1", "admin", "username", "password", "false"};
+        DatabaseAPI.getDatabaseAPI().addUser(infected);
+        assertFalse(DatabaseAPI.getDatabaseAPI().authenticate("username", "password"));
     }
 
     @Test
@@ -319,9 +318,20 @@ class DatabaseAPITest {
     }
 
     @Test
+    @DisplayName("test get individual service request")
+    public void testGetServiceRequest() throws SQLException{
+        String uuid = UUID.randomUUID().toString();
+        DatabaseAPI.getDatabaseAPI().addServiceReq("123", "meme", "test", "truefalse", "stuff");
+        DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, "language stuff", "test", "false", "be smart");
+        ServiceEntry actual = DatabaseAPI.getDatabaseAPI().getServiceEntry(uuid);
+        assertEquals(actual.getUuid(), uuid);
+        assertEquals("language stuff", actual.getRequestType());
+    }
+
+    @Test
     @DisplayName("Test authentication and encryption")
     public void testAuthentication() throws SQLException{
-        String[] newUser = {"1", "admin", "declan", "password"};
+        String[] newUser = {"1", "admin", "declan", "password", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(newUser);
         UserHandler handler = new UserHandler();
         assertTrue(handler.authenticate("declan", "password"));
@@ -352,7 +362,7 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test verifying the admin user entry")
     public void testAdmin() throws SQLException{
-        String[] admin = {"admin", "administrator", "admin", "admin"};
+        String[] admin = {"admin", "administrator", "admin", "admin", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(admin);
         assertTrue(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
     }
@@ -378,13 +388,13 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test dropping system preferences table")
-    public void testDropSystemPreferences() throws SQLException{
+    public void testDropSystemPreferences() {
         assertTrue(DatabaseAPI.getDatabaseAPI().dropSystemTable());
     }
 
     @Test
     @DisplayName("test creating system preferences table")
-    public void testCreatingSystemTable() throws SQLException{
+    public void testCreatingSystemTable() {
         DatabaseAPI.getDatabaseAPI().dropSystemTable();
         assertTrue(DatabaseAPI.getDatabaseAPI().createSystemTable());
     }
@@ -394,5 +404,61 @@ class DatabaseAPITest {
     public void testGetAlgorithm() throws SQLException{
         DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", "A*");
         assertEquals(DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm(), "A*");
+    }
+
+    @Test
+    @DisplayName("test creating collections table")
+    public void testCreateCollections(){
+        DatabaseAPI.getDatabaseAPI().dropCollectionsTable();
+        assertTrue(DatabaseAPI.getDatabaseAPI().createCollectionsTable());
+    }
+
+    @Test
+    @DisplayName("test dropping collections table")
+    public void testDropCollections(){
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropCollectionsTable());
+    }
+
+    @Test
+    @DisplayName("test adding a collections entry")
+    public void testAddingCollectionEntry() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().addCollecionEntry("testuser", "testnode", "favorite"));
+    }
+
+    @Test
+    @DisplayName("test database compression")
+    public void testDatabaseCompression() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node1", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node2", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node3", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("michael", "node4", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node5", "recent");
+        ArrayList<String> actual = DatabaseAPI.getDatabaseAPI().getUserNodes("favorite", "declan");
+        assertEquals(actual.get(0), "node1");
+        assertEquals(actual.get(1), "node2");
+        assertEquals(actual.get(2), "node3");
+    }
+
+    @Test
+    @DisplayName("test SQL Injection filter")
+    public void testInjection(){
+        assertTrue(DatabaseAPI.getDatabaseAPI().filterInput("test"));
+    }
+
+    @Test
+    @DisplayName("test bad user input")
+    public void testInjectionBad(){
+        assertFalse(DatabaseAPI.getDatabaseAPI().filterInput(")'DROP TABLE USERS--"));
+    }
+ @Test
+    @DisplayName("test deleting a favorite and recent node")
+    public void testDeleteUserNodes() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node1", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("ben", "node2", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node3", "recent");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("ben", "node4", "recent");
+
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteUserNode("node1", "declan", "favorite"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteUserNode("node4", "ben", "recent"));
     }
 }

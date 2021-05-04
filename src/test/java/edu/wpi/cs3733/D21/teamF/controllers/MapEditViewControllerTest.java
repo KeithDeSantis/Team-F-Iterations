@@ -8,19 +8,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.testfx.api.FxAssert.verifyThat;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.testfx.api.FxAssert.verifyThat;
 
 public class MapEditViewControllerTest extends ApplicationTest {
 
@@ -77,13 +74,13 @@ public class MapEditViewControllerTest extends ApplicationTest {
         clickOn("#FEXIT00201");
         verifyThat("FEXIT00201", Node::isVisible);
         clickOn("Delete");
-        for(int index = 0; index<nodeEntryObservableList.size(); index++) {
-            assertFalse(nodeEntryObservableList.get(index).getNodeID().equals("FEXIT00201"));
+        for (NodeEntry nodeEntry : nodeEntryObservableList) {
+            assertNotEquals(nodeEntry.getNodeID(), "FEXIT00201");
         }
-        for(int index = 0; index<edgeEntryObservableList.size(); index++) {
-            assertFalse(edgeEntryObservableList.get(index).getStartNode().equals("FEXIT00201"));
-            if(edgeEntryObservableList.get(index).getEndNode().equals("FEXIT00201"))
-                assertFalse(edgeEntryObservableList.get(index).getEndNode().equals("FEXIT00201"));
+        for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+            assertNotEquals(edgeEntry.getStartNode(), "FEXIT00201");
+            if (edgeEntry.getEndNode().equals("FEXIT00201"))
+                assertNotEquals(edgeEntry.getEndNode(), "FEXIT00201");
         }
     }
 
@@ -114,8 +111,11 @@ public class MapEditViewControllerTest extends ApplicationTest {
         clickOn("OK");
         verifyThat("#TestNode", Node::isVisible);
         boolean isMade = false;
-        for(int index = 0; index<nodeEntryObservableList.size(); index++) {
-            if(nodeEntryObservableList.get(index).getNodeID().equals("TestNode")) isMade = true;
+        for (NodeEntry nodeEntry : nodeEntryObservableList) {
+            if (nodeEntry.getNodeID().equals("TestNode")) {
+                isMade = true;
+                break;
+            }
         }
         assertTrue(isMade);
     }
@@ -233,8 +233,8 @@ public class MapEditViewControllerTest extends ApplicationTest {
     public void deleteEdgeTest() {
         clickOn("#FHALL01401_FHALL01101");
         clickOn("Delete");
-        for (int index = 0; index < edgeEntryObservableList.size(); index++) {
-            assertFalse(edgeEntryObservableList.get(index).getEdgeID().equals("FHALL01401_FHALL01101"));
+        for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+            assertNotEquals(edgeEntry.getEdgeID(), "FHALL01401_FHALL01101");
         }
     }
 
@@ -248,8 +248,8 @@ public class MapEditViewControllerTest extends ApplicationTest {
         clickOn("ACONF00103");
         clickOn("OK");
         boolean wasAdded = false;
-        for (int index = 0; index < edgeEntryObservableList.size(); index++) {
-            if(edgeEntryObservableList.get(index).getEdgeID().equals("ACONF00102_ACONF00103")) wasAdded = true;
+        for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+            if (edgeEntry.getEdgeID().equals("ACONF00102_ACONF00103")) wasAdded = true;
         }
         assertTrue(wasAdded);
     }
@@ -264,8 +264,8 @@ public class MapEditViewControllerTest extends ApplicationTest {
         clickOn("ADEPT00101");
         clickOn("OK");
         boolean wasEdited = false;
-        for (int index = 0; index < edgeEntryObservableList.size(); index++) {
-            if(edgeEntryObservableList.get(index).getEdgeID().equals("ADEPT00301_ADEPT00101")) wasEdited = true;
+        for (EdgeEntry edgeEntry : edgeEntryObservableList) {
+            if (edgeEntry.getEdgeID().equals("ADEPT00301_ADEPT00101")) wasEdited = true;
         }
         assertTrue(wasEdited);
     }

@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
-import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -24,15 +23,15 @@ public class UserHandler implements DatabaseEntry {
     public boolean verifyAdmin() throws SQLException{
         boolean exists = false;
         String sql = "SELECT * FROM USERS WHERE USERNAME='admin'";
-        ResultSet rset;
+        ResultSet resultSet;
         Statement stmt = ConnectionHandler.getConnection().createStatement();
-        rset = stmt.executeQuery(sql);
-        while (rset.next()){
-            if (rset.getString(1).equals("admin") && rset.getString(2).equals("administrator")){
+        resultSet = stmt.executeQuery(sql);
+        while (resultSet.next()){
+            if (resultSet.getString(1).equals("admin") && resultSet.getString(2).equals("administrator")){
                 exists = true;
             }
         }
-        rset.close();
+        resultSet.close();
 
         return exists;
     }
@@ -61,13 +60,12 @@ public class UserHandler implements DatabaseEntry {
     {
         String cipherText = "";
         try{
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(salt);
             byte[] bytes = md.digest(plainText.getBytes());
             StringBuilder builder = new StringBuilder();
-            for (int i=0; i<bytes.length; i++)
-            {
-                builder.append(Integer.toString((bytes[i] & 0xFF) + 0x100, 16).substring(1));
+            for (byte aByte : bytes) {
+                builder.append(Integer.toString((aByte & 0xFF) + 0x100, 16).substring(1));
             }
             cipherText = builder.toString();
         }
@@ -85,13 +83,13 @@ public class UserHandler implements DatabaseEntry {
     public List<String> listAllUsers() throws SQLException {
         List<String> allUsernames = new ArrayList<>();
         String query = "SELECT * FROM USERS";
-        ResultSet rset;
+        ResultSet resultSet;
         Statement stmt = ConnectionHandler.getConnection().createStatement();
-        rset = stmt.executeQuery(query);
-        while (rset.next()) {
-            allUsernames.add(rset.getString(3));
+        resultSet = stmt.executeQuery(query);
+        while (resultSet.next()) {
+            allUsernames.add(resultSet.getString(3));
         }
-        rset.close();
+        resultSet.close();
         return allUsernames;
     }
 
@@ -106,19 +104,20 @@ public class UserHandler implements DatabaseEntry {
     {
         boolean authenticated = false;
         String query = "SELECT * FROM USERS WHERE USERNAME=(?)";
-        ResultSet rset;
+        ResultSet resultSet;
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
         stmt.setString(1, username);
-        rset = stmt.executeQuery();
+        resultSet = stmt.executeQuery();
 
         byte[] salt;
-        if (rset.next()) {
-            salt = rset.getBytes(5);
-            if (encryptPassword(password, salt).equals(rset.getString(4))) {
+        if (resultSet.next()) {
+            salt = resultSet.getBytes(6);
+            if (encryptPassword(password, salt).equals(resultSet.getString(4)) &&
+                    resultSet.getString(5).equals("true")) {
                 authenticated = true;
             }
         }
-        rset.close();
+        resultSet.close();
         return authenticated;
     }
 
@@ -127,7 +126,7 @@ public class UserHandler implements DatabaseEntry {
      */
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
-        final String query = "INSERT INTO USERS values(?, ?, ?, ?, ?)";
+        final String query = "INSERT INTO USERS values(?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
 
         byte[] salt = null;
@@ -146,7 +145,7 @@ public class UserHandler implements DatabaseEntry {
             stmt.setString(colCounter, s);
             colCounter = colCounter + 1;
         }
-        stmt.setBytes(5, salt);
+        stmt.setBytes(6, salt);
         return stmt.executeUpdate() != 0;
     }
 
@@ -155,8 +154,8 @@ public class UserHandler implements DatabaseEntry {
      */
     @Override
     public boolean editEntry(String username, String val, String colName) throws Exception{
-        boolean success = false;
-        if (colName.equals("username") || colName.equals("type") || colName.equals("password")) {
+        boolean success;
+        if (colName.equals("username") || colName.equals("type") || colName.equals("password") || colName.equals("cleared")) {
             String query = String.format("UPDATE USERS SET %s=(?) WHERE USERNAME=(?)", colName);
             try {
                 PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
@@ -191,9 +190,9 @@ public class UserHandler implements DatabaseEntry {
      */
     @Override
     public boolean createTable() {
-        boolean success = false;
-        final String initUserTable = "CREATE TABLE USERS(userid varchar(200), type varchar(200), " +
-                "username varchar(200), password varchar(200), salt blob(20), primary key(username))";
+        boolean success;
+        final String initUserTable = "CREATE TABLE USERS(userid varchar(50), type varchar(200), " +
+                "username varchar(200), password varchar(200), cleared varchar(20), salt blob(20), primary key(username))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initUserTable);
@@ -212,7 +211,7 @@ public class UserHandler implements DatabaseEntry {
      */
     @Override
     public boolean dropTable() {
-        boolean success = false;
+        boolean success;
         String query = "DROP TABLE USERS";
         try {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
@@ -244,20 +243,21 @@ public class UserHandler implements DatabaseEntry {
     public List<AccountEntry> genAccountEntryObjects() throws SQLException {
         List<AccountEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM USERS";
-        ResultSet rset;
+        ResultSet resultSet;
         Statement stmt = ConnectionHandler.getConnection().createStatement();
-        rset = stmt.executeQuery(query);
+        resultSet = stmt.executeQuery(query);
 
-        while (rset.next())
+        while (resultSet.next())
         {
-            String username = rset.getString(3);
-            String password = rset.getString(4);
-            String usertype = rset.getString(2);
+            String username = resultSet.getString(3);
+            String password = resultSet.getString(4);
+            String usertype = resultSet.getString(2);
+            String status = resultSet.getString(5);
 
-            AccountEntry newEntry = new AccountEntry(username, password, usertype);
+            AccountEntry newEntry = new AccountEntry(username, password, usertype, status);
             entries.add(newEntry);
         }
-        rset.close();
+        resultSet.close();
         return entries;
     }
 
@@ -271,16 +271,17 @@ public class UserHandler implements DatabaseEntry {
         String sql = "SELECT * FROM USERS WHERE USERNAME=(?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, username);
-        ResultSet rset;
+        ResultSet resultSet;
         AccountEntry user = null;
-        rset = stmt.executeQuery();
-        while (rset.next()){
-            String type = rset.getString(2);
-            String password = rset.getString(4);
-            user = new AccountEntry(username, password, type);
+        resultSet = stmt.executeQuery();
+        while (resultSet.next()){
+            String type = resultSet.getString(2);
+            String password = resultSet.getString(4);
+            String status = resultSet.getString(5);
+            user = new AccountEntry(username, password, type, status);
         }
         stmt.close();
-        rset.close();
+        resultSet.close();
         return user;
     }
 

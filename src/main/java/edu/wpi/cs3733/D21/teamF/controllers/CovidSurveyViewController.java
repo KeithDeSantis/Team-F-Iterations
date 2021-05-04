@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -58,7 +57,7 @@ public class CovidSurveyViewController {
      * @throws IOException
      * @author kh
      */
-    public void handleBack(MouseEvent mouseEvent) throws IOException{
+    public void handleHome(MouseEvent mouseEvent) throws IOException{
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 

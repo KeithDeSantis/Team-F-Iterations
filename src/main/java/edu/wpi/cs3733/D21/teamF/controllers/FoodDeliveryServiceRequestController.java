@@ -3,7 +3,6 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,10 +10,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -30,8 +30,6 @@ import java.util.UUID;
 public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     @FXML private JFXButton xButton;
-    @FXML private JFXButton cancelButton;
-    @FXML private JFXButton helpButton;
     @FXML private Button helpXButton;
     @FXML private JFXComboBox<String> deliveryLocationField;
     @FXML private JFXTimePicker deliveryTimeField;
@@ -112,7 +110,7 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
         helpPopUpStage.showAndWait();
     }
 
-    public void handleHelpX(ActionEvent e) {
+    public void handleHelpX() {
         Stage popUpStage = (Stage) helpXButton.getScene().getWindow();
         popUpStage.close();
     }
@@ -124,53 +122,30 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
      */
     public boolean formFilled() {
         boolean isFilled = true;
-        if(! (rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected())){
+
+        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, specialInstructionsField,
+                rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
+                rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
+
+        if(! (rButtonFood1.isSelected() || rButtonFood2.isSelected() || rButtonFood3.isSelected() || rButtonFood4.isSelected())) {
             isFilled = false;
-            rButtonFood1.setStyle("-fx-text-fill: #e8321e");
-            rButtonFood2.setStyle("-fx-text-fill: #e8321e");
-            rButtonFood3.setStyle("-fx-text-fill: #e8321e");
-            rButtonFood4.setStyle("-fx-text-fill: #e8321e");
-        } else {
-            rButtonFood1.setStyle("-fx-text-fill: #000000");
-            rButtonFood2.setStyle("-fx-text-fill: #000000");
-            rButtonFood3.setStyle("-fx-text-fill: #000000");
-            rButtonFood4.setStyle("-fx-text-fill: #000000");
+            setButtonErrorStyle(rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4);
         }
         if(! (rButtonDrink1.isSelected() || rButtonDrink2.isSelected() || rButtonDrink3.isSelected() || rButtonDrink4.isSelected())){
             isFilled = false;
-            rButtonDrink1.setStyle("-fx-text-fill: #e8321e");
-            rButtonDrink2.setStyle("-fx-text-fill: #e8321e");
-            rButtonDrink3.setStyle("-fx-text-fill: #e8321e");
-            rButtonDrink4.setStyle("-fx-text-fill: #e8321e");
-        } else {
-            rButtonDrink1.setStyle("-fx-text-fill: #000000");
-            rButtonDrink2.setStyle("-fx-text-fill: #000000");
-            rButtonDrink3.setStyle("-fx-text-fill: #000000");
-            rButtonDrink4.setStyle("-fx-text-fill: #000000");
+            setButtonErrorStyle(rButtonDrink1, rButtonDrink2, rButtonDrink3, rButtonDrink4);
         }
         if(! (cbSide1.isSelected() || cbSide2.isSelected() || cbSide3.isSelected() || cbSide4.isSelected())){
             isFilled = false;
-            cbSide1.setStyle("-fx-text-fill: #e8321e");
-            cbSide2.setStyle("-fx-text-fill: #e8321e");
-            cbSide3.setStyle("-fx-text-fill: #e8321e");
-            cbSide4.setStyle("-fx-text-fill: #e8321e");
-        } else {
-            cbSide1.setStyle("-fx-text-fill: #000000");
-            cbSide2.setStyle("-fx-text-fill: #000000");
-            cbSide3.setStyle("-fx-text-fill: #000000");
-            cbSide4.setStyle("-fx-text-fill: #000000");
+            setButtonErrorStyle(cbSide1, cbSide2, cbSide3, cbSide4);
         }
         if(deliveryLocationField.getValue() == null){
             isFilled = false;
-            deliveryLocationField.setStyle("-fx-background-color: #ffbab8");
-        } else {
-            deliveryLocationField.setStyle("-fx-background-color: transparent");
+            setTextErrorStyle(deliveryLocationField);
         }
         if(deliveryTimeField.getValue() == null){
             isFilled = false;
-            deliveryTimeField.setStyle("-fx-background-color: #ffbab8");
-        } else {
-            deliveryTimeField.setStyle("-fx-background-color: transparent");
+            setTextErrorStyle(deliveryTimeField);
         }
 
         return isFilled;
@@ -178,11 +153,10 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     /**
      * Handles radial button groups
-     * @param e is the button being pushed
      * @author KH
      */
     @FXML
-    private void handleRadialButtonPushed(ActionEvent e){
+    private void handleRadialButtonPushed(){
         ToggleGroup foodGroup = new ToggleGroup(); //group for foods
         rButtonFood1.setToggleGroup(foodGroup);
         rButtonFood2.setToggleGroup(foodGroup);
@@ -197,5 +171,27 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     }
 
+    @Override
+    public void handleClear() {
+        deliveryLocationField.setValue(null);
+        deliveryTimeField.setValue(null);
+        allergyField.setText("");
+        specialInstructionsField.setText("");
+        rButtonDrink1.setSelected(false);
+        rButtonDrink2.setSelected(false);
+        rButtonDrink3.setSelected(false);
+        rButtonDrink4.setSelected(false);
+        rButtonFood1.setSelected(false);
+        rButtonFood2.setSelected(false);
+        rButtonFood3.setSelected(false);
+        rButtonFood4.setSelected(false);
+        cbSide1.setSelected(false);
+        cbSide2.setSelected(false);
+        cbSide3.setSelected(false);
+        cbSide4.setSelected(false);
+        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, specialInstructionsField,
+                rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
+                rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
 
+    }
 }

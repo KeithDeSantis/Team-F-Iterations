@@ -4,33 +4,33 @@
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <VBox prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" stylesheets="/stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestManagerController">
    <children>
       <HBox fx:id="header" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="goBack" fitHeight="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="goBack" fitHeight="120.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Text fx:id="title" text="Brigham and Women's Hospital Service Request Manager" wrappingWidth="631.199951171875">
+            <Label fx:id="title" prefHeight="153.0" prefWidth="845.0" text="BRIGHAM AND WOMEN'S HOSPITAL Service Request Manager" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
-            </Text>
+            </Label>
          </children>
       </HBox>
       <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0" VBox.vgrow="ALWAYS">
          <children>
-            <JFXTreeTableView fx:id="requestView" editable="true" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" onMouseClicked="#handleSelection">
+            <JFXTreeTableView fx:id="requestView" editable="true" onMouseClicked="#handleSelection" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" top="25.0" />
                </VBox.margin>
@@ -47,6 +47,11 @@
                      </font>
                   </JFXButton>
                   <JFXButton fx:id="saveChanges" buttonType="RAISED" defaultButton="true" onAction="#saveAssignments" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Save Assignments">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="delete" buttonType="RAISED" onAction="#handleDelete" prefHeight="31.0" prefWidth="304.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Delete Request">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>

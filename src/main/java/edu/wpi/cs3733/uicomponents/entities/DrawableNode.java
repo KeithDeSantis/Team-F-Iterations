@@ -40,6 +40,7 @@ public class DrawableNode extends Circle implements IMapDrawable
         this.localRadius = new SimpleDoubleProperty(this.getRadius());
 
         this.setFill(UIConstants.NODE_COLOR);
+        this.setOpacity(0.5);
     }
 
     @Override
