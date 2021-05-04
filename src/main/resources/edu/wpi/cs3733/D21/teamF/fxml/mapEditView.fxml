@@ -108,6 +108,11 @@
                      <font>
                         <Font size="11.0" />
                      </font></JFXToggleButton>
+                  <JFXToggleButton fx:id="favoriteToggle" onAction="#handleFavoriteToggle" prefHeight="61.0" prefWidth="133.0" text="Favorites Only" textAlignment="CENTER" toggleColor="#f0c808" toggleLineColor="#f0e808" unToggleColor="#03256b" unToggleLineColor="#03256b80" wrapText="true">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </JFXToggleButton>
                   <JFXButton fx:id="newButton" buttonType="RAISED" onAction="#handleNew" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="New...">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
@@ -132,7 +137,12 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </JFXButton>
-                  <GridPane prefHeight="201.0" prefWidth="120.0">
+                  <JFXButton fx:id="favoriteButton" buttonType="RAISED" onAction="#handleFavorite" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Favorite">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <GridPane prefHeight="244.0" prefWidth="176.0">
                     <columnConstraints>
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -140,6 +150,8 @@
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="76.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="22.0" valignment="CENTER" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
@@ -177,6 +189,24 @@
                            <children>
                               <Label text="Short Name:" textAlignment="CENTER" underline="true" wrapText="true" />
                               <Label fx:id="shortNameDisplayLabel" opacity="0.5" text="Short Name" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                           <children>
+                              <Label text="Edge ID:" textAlignment="CENTER" underline="true" wrapText="true" />
+                              <Label fx:id="edgeIDDisplayLabel" opacity="0.5" text="Edge ID" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="3">
+                           <children>
+                              <Label text="Start Node:" textAlignment="CENTER" underline="true" wrapText="true" />
+                              <Label fx:id="startNodeDisplayLabel" opacity="0.5" text="Start Node" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <children>
+                              <Label text="End Node:" textAlignment="CENTER" underline="true" wrapText="true" />
+                              <Label fx:id="endNodeDisplayLabel" opacity="0.5" text="Edge ID" textAlignment="CENTER" wrapText="true" />
                            </children>
                         </VBox>
                      </children>

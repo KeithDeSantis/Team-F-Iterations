@@ -1539,6 +1539,7 @@ public class AStarDemoController implements Initializable {
      * @author Leo Morris
      */
     public void clearList() {
+
         vertices.clear();
         startNode.set("");
         endNode.set("");
@@ -1548,7 +1549,9 @@ public class AStarDemoController implements Initializable {
         for(NodeEntry e : allNodeEntries)
             getDrawableNode(e.getNodeID());
 
-        endNavigation();
+        if(pathVertex.size() != 0) {
+            endNavigation();
+        }
     }
 
     /**
@@ -1562,6 +1565,10 @@ public class AStarDemoController implements Initializable {
         } else {
             startNavigation();
         }
+    }
+
+    public void gotoAboutPage(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AboutpageView.fxml");
     }
 
     public List<String> getUserFavorites() throws SQLException {
