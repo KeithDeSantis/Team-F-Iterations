@@ -40,8 +40,8 @@ AINFO001L2,1681,2747,L2,BTM,INFO,BTM Security Desk,Security
 ALABS00103,1611,2678,3,BTM,LABS,Innovation Hub,Innovation Hub
 ALABS001L2,1667,2682,L2,BTM,LABS,MRI CT Scan Imaging,MRI CT Imaging
 ALABS00203,1671,2695,3,BTM,LABS,Clinical Trials,Clinical Trials
-AREST00101,1556,2604,1,BTM,REST,Restroom S elevator 1st floor,Restroom
-AREST00103,1552,2854,3,BTM,REST,Restroom BTM conference center 3rd floor,Restroom
+AREST00101,1556,2604,1,BTM,REST,Restroom S elevator 1st floor,BTM F1 Restroom
+AREST00103,1552,2854,3,BTM,REST,Restroom BTM conference center 3rd floor,BTM F3 Restroom
 ARETL00101,1619,2522,1,BTM,RETL,Cafe,Cafe
 ASTAI00101,1642,2596,1,BTM,STAI,Cafe Stairs,Cafe Staris
 ASTAI00102,1650,2602,2,BTM,STAI,Stairs Floor 2,Stairs Floor 2

@@ -280,7 +280,7 @@ public class AStarDemoController implements Initializable {
 
                     //FIXME: Make these ones require that thing is visible
                     whatsHereMenu.setOnAction(e -> {
-
+                        mapPanel.switchMap(currEntry.getFloor());
                         mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
 
                         final JFXDialog dialog = new JFXDialog();
@@ -517,7 +517,7 @@ public class AStarDemoController implements Initializable {
 
             //FIXME: Make these ones require that thing is visible
             whatsHereMenu.setOnAction(e -> {
-
+                mapPanel.switchMap(currEntry.getFloor());
                 mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
 
                 final JFXDialog dialog = new JFXDialog();
