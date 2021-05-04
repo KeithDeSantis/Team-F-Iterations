@@ -1766,8 +1766,6 @@ public class MapEditViewController {
 
             DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), favNode.getNodeID(), "favorite");
             favoriteList.add(favNode);
-
-            System.out.println("FAVORITED\n");
         }
     }
 
