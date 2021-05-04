@@ -4,7 +4,6 @@ import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -84,7 +84,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner((Stage) ( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
+            alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
             alert.setTitle("Language Missing");
             alert.setHeaderText("Specify language");
             alert.setContentText("Please select a language from the dropdown list.");
@@ -102,7 +102,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
-                    " Name: " + name.getText() + " Appointment: " + (String) appointment.getValue() + " Language: " + language.getValue();
+                    " Name: " + name.getText() + " Appointment: " + appointment.getValue() + " Language: " + language.getValue();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
@@ -162,7 +162,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Infectious Disease");
         appointment.getItems().add("Interventional Cardiology");
         appointment.getItems().add("Interventional Radiology");
-        appointment.getItems().add("Lung Dancer Sceening (Low Dose CT)");
+        appointment.getItems().add("Lung Cancer Screening (Low Dose CT)");
         appointment.getItems().add("Lung Transplantation Program");
         appointment.getItems().add("Lupus Center");
         appointment.getItems().add("Magnetic Resonance Imaging (MRI)");
@@ -215,22 +215,20 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
 
-       // language.getItems().add("Arabic");
-       // language.getItems().add("Dutch");
+        language.getItems().add("Arabic");
+        language.getItems().add("Dutch");
         language.getItems().add("English");
         language.getItems().add("French");
-       // language.getItems().add("German");
-       // language.getItems().add("Greek");
-       // language.getItems().add("Haitian Creole");
+        language.getItems().add("German");
+        language.getItems().add("Greek");
+        language.getItems().add("Haitian Creole");
         language.getItems().add("Italian");
-       // language.getItems().add("Japanese");
-       // language.getItems().add("Korean");
+        language.getItems().add("Japanese");
+        language.getItems().add("Korean");
         language.getItems().add("Portuguese");
-       // language.getItems().add("Russian");
+        language.getItems().add("Russian");
         language.getItems().add("Spanish");
-       // language.getItems().add("Vietnamese");
-
-        nameLabel.setText(StringEscapeUtils.unescapeJava("\u0627\u0633\u0645"));
+        language.getItems().add("Vietnamese");
     }
     
     public boolean formFilled(){
@@ -306,10 +304,10 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         StringBuilder response = new StringBuilder();
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputline;
-        while((inputline = in.readLine()) != null){
-            response.append(inputline);
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+        String inputLine;
+        while((inputLine = in.readLine()) != null){
+            response.append(StringEscapeUtils.unescapeHtml4(inputLine));
         }
         in.close();
         return response.toString();

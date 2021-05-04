@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTimePicker?>
@@ -62,14 +63,11 @@
                      <Insets left="25.0" />
                   </HBox.margin>
                     </Label>
-                    <JFXTextField fx:id="clientRoom" prefHeight="39.0" prefWidth="259.0">
-                        <font>
-                            <Font size="18.0" />
-                        </font>
+               <JFXComboBox fx:id="clientRoom" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0">
                   <HBox.margin>
-                     <Insets left="25.0" right="25.0" />
+                     <Insets left="25.0" />
                   </HBox.margin>
-                    </JFXTextField>
+               </JFXComboBox>
             </children>
             <VBox.margin>
                <Insets left="25.0" top="10.0" />

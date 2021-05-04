@@ -4,13 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Modality;
@@ -82,15 +77,15 @@ public class LaundryRequestController extends ServiceRequests {
         rButtons.add(hot);
         rButtons.add(cold);
         rButtons.add(folded);
-        String additionalInfo = "Laundry Instructions: ";
+        StringBuilder additionalInfo = new StringBuilder("Laundry Instructions: ");
 
         for(JFXRadioButton r: rButtons){
             if(r.isSelected()){
-                additionalInfo = additionalInfo + ", " + r.getText();
+                additionalInfo.append(", ").append(r.getText());
             }
         }
 
-        return additionalInfo;
+        return additionalInfo.toString();
     }
 
     /**

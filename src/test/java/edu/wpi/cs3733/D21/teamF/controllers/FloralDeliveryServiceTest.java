@@ -1,14 +1,11 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
+
 import java.io.IOException;
-import static org.testfx.api.FxAssert.verifyThat;
 
 public class FloralDeliveryServiceTest extends ApplicationTest {
 

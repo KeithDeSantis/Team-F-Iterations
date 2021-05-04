@@ -151,7 +151,7 @@ public class MapPanel extends AnchorPane {
 
 
         canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
-        canvas.prefHeightProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
+        canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
 
         map.fitWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
         map.fitHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));

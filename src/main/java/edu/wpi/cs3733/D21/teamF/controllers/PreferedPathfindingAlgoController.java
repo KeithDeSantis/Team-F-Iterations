@@ -5,11 +5,8 @@ import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
@@ -26,7 +23,7 @@ public class PreferedPathfindingAlgoController {
         algoList.add("A Star");
         algoList.add("Breadth-First-Search");
         algoList.add("Depth-First-Search");
-        algoList.add("Best-first-search");
+        algoList.add("Best-First-Search");
         algoList.add("Dijkstra");
 
         algorithmComboBox.setItems(algoList);
@@ -38,15 +35,5 @@ public class PreferedPathfindingAlgoController {
         DatabaseAPI.getDatabaseAPI().deleteSystemPreference("MASTER");
         DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", algorithmComboBox.getValue());
         stage.close();
-    }
-
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000");
-    }
-
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF");
     }
 }

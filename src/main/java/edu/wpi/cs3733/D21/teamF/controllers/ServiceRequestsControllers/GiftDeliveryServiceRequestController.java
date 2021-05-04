@@ -3,9 +3,9 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,7 +33,7 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
         }
 
         public void handleClear(ActionEvent actionEvent) throws IOException {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GiftDeliveryServiceRequest.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
 
         }
 
