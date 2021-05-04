@@ -72,10 +72,10 @@ public class InternalTransportationController extends ServiceRequests {
             isFilled = false;
             setTextErrorStyle(movingDate);
         }
-        if(movingTime.getValue() == null) {
-            isFilled = false;
-            setTextErrorStyle(movingTime);
-        }
+//        if(movingTime.getValue() == null) {
+//            isFilled = false;
+//            setTextErrorStyle(movingTime);
+//        }
         if(patientName.getText().length() <= 0) {
             isFilled = false;
             setTextErrorStyle(patientName);
