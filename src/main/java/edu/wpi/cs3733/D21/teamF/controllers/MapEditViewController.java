@@ -79,6 +79,9 @@ public class MapEditViewController {
     @FXML private Label nodeTypeDisplayLabel;
     @FXML private Label longNameDisplayLabel;
     @FXML private Label shortNameDisplayLabel;
+    @FXML private Label edgeIDDisplayLabel;
+    @FXML private Label startNodeDisplayLabel;
+    @FXML private Label endNodeDisplayLabel;
 
     private boolean clickToMakeEdge;
     private boolean favoriteOnly = false;
@@ -1567,13 +1570,16 @@ public class MapEditViewController {
                 }
 
 
-                Line l = mapPanel.draw(getEditableEdge(e, startNode, endNode));
+                DrawableEdge edge = getEditableEdge(e, startNode, endNode);
+                Line l = mapPanel.draw(edge);
 
                 l.setOnMouseEntered(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);
+                    handleDisplayEdgeInfo(edge);
                 });
                 l.setOnMouseExited(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.LINE_COLOR);
+                    handleUndisplayEdgeInfo();
                 });
                 l.setOnMouseClicked(event -> {
                     if (selectedLine != null)
@@ -1792,5 +1798,32 @@ public class MapEditViewController {
         return isFavorite;
     }
 
+
+    /**
+     * Displays the edge currently hovered over's data in the edge info section
+     * @param drawableEdge the node hovered over
+     * @author KD
+     */
+    public void handleDisplayEdgeInfo(DrawableEdge drawableEdge) {
+        edgeIDDisplayLabel.setText(drawableEdge.getId());
+        edgeIDDisplayLabel.setOpacity(1);
+        startNodeDisplayLabel.setText(drawableEdge.getStartNode().getNodeID());
+        startNodeDisplayLabel.setOpacity(1);
+        endNodeDisplayLabel.setText(drawableEdge.getEndNode().getNodeID());
+        endNodeDisplayLabel.setOpacity(1);
+    }
+
+    /**
+     * Clears the edge info section
+     * @author KD
+     */
+    public void handleUndisplayEdgeInfo() {
+        edgeIDDisplayLabel.setText("Edge ID");
+        edgeIDDisplayLabel.setOpacity(0.5);
+        startNodeDisplayLabel.setText("Start Node");
+        startNodeDisplayLabel.setOpacity(0.5);
+        endNodeDisplayLabel.setText("End Node");
+        endNodeDisplayLabel.setOpacity(0.5);
+    }
 }
 
