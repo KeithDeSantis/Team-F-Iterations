@@ -305,13 +305,21 @@ public class AStarDemoController implements Initializable {
 
                         final JFXButton directionsTo = new JFXButton("Direction To");
                         directionsTo.setOnAction(a -> {
-                            endNode.set(idToShortName(currEntry.getNodeID()));
+                            endNode.set(idToShortName(currEntry.getNodeID()));try {
+                                handleEndNodeChange();
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
                             dialog.close();
                         });
 
                         final JFXButton directionsFrom = new JFXButton("Directions From");
                         directionsFrom.setOnAction(a -> {
-                            startNode.set(idToShortName(currEntry.getNodeID()));
+                            startNode.set(idToShortName(currEntry.getNodeID()));try {
+                                handleStartNodeChange();
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
                             dialog.close();
                         });
 
@@ -566,11 +574,24 @@ public class AStarDemoController implements Initializable {
                 closeBtn.setOnAction(a -> dialog.close());
 
                 final JFXButton directionsTo = new JFXButton("Direction To");
-                directionsTo.setOnAction(a -> {endNode.set(idToShortName(currEntry.getNodeID())); dialog.close();});
+                directionsTo.setOnAction(a -> {
+                    endNode.set(idToShortName(currEntry.getNodeID()));
+                    try {
+                        handleEndNodeChange();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    dialog.close();});
 
                 final JFXButton directionsFrom = new JFXButton("Directions From");
                 directionsFrom.setOnAction(a ->  {
-                    startNode.set(idToShortName(currEntry.getNodeID())); dialog.close();});
+                    startNode.set(idToShortName(currEntry.getNodeID()));
+                    try {
+                        handleStartNodeChange();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    dialog.close();});
 
                 if(CurrentUser.getCurrentUser().isAuthenticated()) {
                     final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
