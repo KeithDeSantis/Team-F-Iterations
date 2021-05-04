@@ -2,6 +2,8 @@ package edu.wpi.cs3733.D21.teamF.entities;
 
 
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.sql.SQLException;
 
@@ -10,7 +12,7 @@ public class CurrentUser {
     /**
      * Tracks if the user has been authenticated
      */
-    private boolean isAuthenticated = false;
+    private final BooleanProperty isAuthenticated = new SimpleBooleanProperty(false);
     private AccountEntry loggedIn = null;
 
     /**
@@ -23,13 +25,13 @@ public class CurrentUser {
      */
     public boolean login(String user, String pass) throws SQLException {
 
-        this.isAuthenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
-        if(isAuthenticated){
+        this.isAuthenticated.set(DatabaseAPI.getDatabaseAPI().authenticate(user, pass));
+        if(isAuthenticated.get()){
             loggedIn = DatabaseAPI.getDatabaseAPI().getUser(user);
         } else {
             loggedIn = null;
         }
-        return this.isAuthenticated;
+        return this.isAuthenticated.get();
     }
 
     /**
@@ -38,10 +40,10 @@ public class CurrentUser {
      */
     public boolean logout()
     {
-        if(!isAuthenticated)
+        if(!isAuthenticated.get())
             return false;
 
-        isAuthenticated = false;
+        isAuthenticated.set(false);
 
         loggedIn = null;
         return true;
@@ -52,7 +54,9 @@ public class CurrentUser {
      * test if we are currently logged in. Then, use auth tokens to determine if we are authenticated.
      * @return True if the current user is logged in, false otherwise.
      */
-    public boolean isAuthenticated() { return isAuthenticated; }
+    public boolean isAuthenticated() { return isAuthenticated.get(); }
+
+    public BooleanProperty authenticatedProperty() { return isAuthenticated; }
 
     /**
      * Method to get the current AccountEntry of the logged in user
