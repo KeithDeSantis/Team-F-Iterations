@@ -54,7 +54,7 @@ public class ServiceRequestManagerController implements Initializable {
         assign.setPrefWidth(colWidth);
         assign.setCellValueFactory(cellData -> cellData.getValue().getValue().getAssignedToProperty());
 
-        JFXTreeTableColumn<ServiceEntry, String> status = new JFXTreeTableColumn<>("Completed");
+        JFXTreeTableColumn<ServiceEntry, String> status = new JFXTreeTableColumn<>("Completed/Cleared");
         status.setPrefWidth(colWidth);
         status.setCellValueFactory(cellData -> cellData.getValue().getValue().getCompleteStatusProperty());
 

@@ -1,6 +1,8 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
@@ -16,7 +18,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class CovidSurveyViewController {
 
@@ -49,53 +53,39 @@ public class CovidSurveyViewController {
     @FXML private JFXButton submit;
     @FXML private JFXButton cancel;
     @FXML private JFXButton employeeSignIn;
-
-
+    @FXML private JFXTextField generatedID;
 
 
     /**
-     * handles the back button (image icon) being pushed
-     * @param mouseEvent
-     * @throws IOException
-     * @author kh
+     * generates a UUID for the survey and displays it.
      */
-    public void handleHome(MouseEvent mouseEvent) throws IOException{
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+    private void initialize(){
+        String ticketNumber = UUID.randomUUID().toString();
+        generatedID.setText(ticketNumber);
     }
 
+
     /**
-     * handles the submit button being pushed
+     * creates a service request and puts it in the database, then changes to the submitted view
      * @param e
      * @throws IOException
      */
-    @FXML private void handleSubmitPushed(ActionEvent e) throws IOException{
-        FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
+    @FXML private void handleSubmitPushed(ActionEvent e) throws IOException, SQLException {
+        //create service request, put in database
+        DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "false", "form details etc");
+        ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
+        //change view to survey submitted page
+        FXMLLoader submittedPageLoader = new FXMLLoader();
+        submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
         Stage submittedStage = new Stage();
-        Parent root = submitedPageLoader.load();
-        CovidFormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+        Parent root = submittedPageLoader.load();
+        CovidFormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
         formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
         Scene submitScene = new Scene(root);
         submittedStage.setScene(submitScene);
         submittedStage.setTitle("Submission Complete");
         submittedStage.initModality(Modality.APPLICATION_MODAL);
         submittedStage.showAndWait();
-    }
-
-
-    /**
-     * handles cancel button being pushed and returns to home page
-     * @param e
-     * @throws IOException
-     * @Author kh
-     */
-    @FXML
-    private void handleCancelPushed(ActionEvent e) throws IOException {
-        Button buttonPushed = (Button) e.getSource();
-
-        if (buttonPushed == cancel) { // is cancel button
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-        }
     }
 
     /**
@@ -115,6 +105,11 @@ public class CovidSurveyViewController {
         no2.setToggleGroup(question2);
     }
 
+    /**
+     * allows employees and admins to bypass the survey
+     * @param actionEvent
+     * @throws IOException
+     */
     public void handleEmployeeSignIn(ActionEvent actionEvent) throws IOException{
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
     }

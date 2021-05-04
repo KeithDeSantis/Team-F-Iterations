@@ -16,9 +16,9 @@
    <children>
       <HBox fx:id="header" prefHeight="100.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
          <children>
-            <ImageView fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
             <Label fx:id="title" text="Brigham and Women's Hospital">
@@ -35,7 +35,7 @@
       </Label>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="623.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
-            <Label fx:id="errorMessage" text="Username and/or password do not match our records" textFill="#c6000000">
+            <Label fx:id="errorMessage" text="Username and/or password do not match our employee/admin records" textFill="#c6000000">
                <VBox.margin>
                   <Insets top="25.0" />
                </VBox.margin>
@@ -67,7 +67,7 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="back" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back">
+            <JFXButton fx:id="skipSignIn" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

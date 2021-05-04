@@ -21,7 +21,7 @@
    <children>
       <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
@@ -33,7 +33,7 @@
             </Label>
          </children>
       </HBox>
-      <HBox prefHeight="340.0" prefWidth="960.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+      <HBox prefHeight="340.0" prefWidth="960.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="135.0">
          <children>
             <GridPane prefHeight="340.0" prefWidth="378.0">
               <columnConstraints>
@@ -211,6 +211,9 @@
                               <Font name="Montserrat Regular" size="15.0" />
                            </font></JFXCheckBox>
                      </children>
+                     <VBox.margin>
+                        <Insets right="10.0" />
+                     </VBox.margin>
                   </GridPane>
                </children>
                <HBox.margin>
@@ -221,7 +224,21 @@
             <Insets left="25.0" right="25.0" top="10.0" />
          </padding>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="91.0" prefWidth="960.0" spacing="25.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="475.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="450.0">
+         <children>
+            <Label text="If you do not have an account, keep this ID safe:">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="generatedID" editable="false" prefHeight="31.0" prefWidth="300.0">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </JFXTextField>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutY="496.0" prefHeight="34.0" prefWidth="960.0" spacing="25.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="496.0">
          <children>
             <JFXButton fx:id="submit" buttonType="RAISED" onAction="#handleSubmitPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
                <font>
@@ -231,11 +248,6 @@
             <JFXButton fx:id="employeeSignIn" buttonType="RAISED" onAction="#handleEmployeeSignIn" text="Sign in as employee/admin" textFill="#03256c" underline="true">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
-               </font>
-            </JFXButton>
-            <JFXButton fx:id="cancel" buttonType="RAISED" onAction="#handleCancelPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
-               <font>
-                  <Font size="20.0" />
                </font>
             </JFXButton>
          </children>

@@ -1,38 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="200.0" prefWidth="350.0" style="-fx-background-color: e6e6e6; -fx-border-color: #03256C; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidFormSubmittedViewController">
+<AnchorPane prefHeight="525.0" prefWidth="475.0" style="-fx-background-color: e6e6e6; -fx-border-color: #03256C; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidFormSubmittedViewController">
     <children>
-        <GridPane layoutX="33.0" layoutY="70.0" maxWidth="-Infinity" prefHeight="200.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <children>
-                <Label text="Successfully submitted request!">
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+                <Label text="Successfully submitted COVID Survey!">
                     <font>
                         <Font name="Montserrat Regular" size="18.0" />
                     </font>
+               <VBox.margin>
+                  <Insets top="25.0" />
+               </VBox.margin>
                 </Label>
-                <JFXButton fx:id="okButton" buttonType="RAISED" onAction="#okButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="OK" GridPane.rowIndex="1">
+            <Label text="If you have an account, please log in:">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="25.0" />
+               </VBox.margin>
+            </Label>
+            <Text fx:id="errorMessage" fill="#c4000000" strokeType="OUTSIDE" strokeWidth="0.0" text="Username and password do not match our records">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </Text>
+            <JFXTextField fx:id="username" promptText="Username">
+               <VBox.margin>
+                  <Insets left="25.0" right="25.0" top="25.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="password" promptText="Password">
+               <VBox.margin>
+                  <Insets left="25.0" right="25.0" top="10.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXButton fx:id="login" onAction="#handleLogin" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Log in">
+               <VBox.margin>
+                  <Insets top="25.0" />
+               </VBox.margin>
+            </JFXButton>
+            <Label text="Type in your ticket number or username to check your status:" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="25.0" right="25.0" top="25.0" />
+               </VBox.margin>
+            </Label>
+            <Text fx:id="waitMessage" fill="#c6000000" strokeType="OUTSIDE" strokeWidth="0.0" text="We will clear you shortly, thank you for your patience!">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Text>
+            <JFXTextField fx:id="enterToCheck">
+               <VBox.margin>
+                  <Insets left="25.0" right="25.0" top="10.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <Text fill="#c4000000" strokeType="OUTSIDE" strokeWidth="0.0" text="Please login first!">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </Text>
+                <JFXButton fx:id="checkButton" buttonType="RAISED" onAction="#handleCheck" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Check">
                     <font>
                         <Font name="Montserrat Regular" size="15.0" />
                     </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" top="10.0" />
+               </VBox.margin>
                 </JFXButton>
-            </children>
-        </GridPane>
+         </children>
+      </VBox>
     </children>
 </AnchorPane>
-

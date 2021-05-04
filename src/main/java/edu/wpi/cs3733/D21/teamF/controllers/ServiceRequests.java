@@ -80,11 +80,11 @@ public abstract class ServiceRequests {
     }
 
     public void openSuccessWindow() throws IOException {
-        FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
+        FXMLLoader submittedPageLoader = new FXMLLoader();
+        submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
         Stage submittedStage = new Stage();
-        Parent root = submitedPageLoader.load();
-        FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+        Parent root = submittedPageLoader.load();
+        FormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
         formSubmittedViewController.changeStage((Stage) submitButton.getScene().getWindow());
         Scene submitScene = new Scene(root);
         submittedStage.setScene(submitScene);
