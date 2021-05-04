@@ -66,13 +66,12 @@ public class DefaultPageController {
         }
     }
 
-    public void handleCovidVaccine(ActionEvent actionEvent) throws IOException {
+    public void handleCovidVaccine() throws IOException {
         final FXMLLoader dialogLoader = new FXMLLoader();
         dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidVaccineDialog.fxml"));
         final Stage dialogStage = new Stage();
         final Parent root = dialogLoader.load();
 
-        final CovidVaccineDialogController dialogController = dialogLoader.getController();
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.initOwner(covidSurvey.getScene().getWindow());
         dialogStage.setScene(new Scene(root));

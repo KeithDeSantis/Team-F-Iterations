@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.IntegerValidator;
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import java.awt.*;
@@ -46,7 +45,7 @@ public class CovidVaccineDialogController {
     }
 
     /**
-     * Used to view the CDC's website.
+     * Used to view the CDC 's website.
      * @throws IOException If an error somehow occurred.
      */
     public void onVaccineInfoClicked() throws IOException {
