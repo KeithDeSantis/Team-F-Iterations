@@ -23,6 +23,7 @@ public class  AppF extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
 
+    primaryStage.setTitle("Brigham and Women's Hospital Kiosk | Fuchsia Falcons ");
     primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png")));
     if (DatabaseAPI.getDatabaseAPI().createNodesTable())
     {
