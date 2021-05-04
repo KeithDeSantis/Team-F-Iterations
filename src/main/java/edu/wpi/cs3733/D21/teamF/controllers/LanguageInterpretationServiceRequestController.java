@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,7 +66,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      */
     public void handleTranslate(ActionEvent actionEvent) throws IOException{
         if(language.getValue() != null) {
-            List<Label> labelList = new ArrayList<>(); //list of labels that need to get fixed
+            List<Label> labelList = new ArrayList<Label>(); //list of labels that need to get fixed
             labelList.add(nameLabel);
             labelList.add(dtLabel);
             labelList.add(appointmentLabel);
@@ -113,7 +114,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
     @Override
     public void handleClear(){
-       // name.
+        name.setText("");
+        date.setValue(null);
+        time.setValue(null);
+        appointment.setValue(null);
+        language.setValue(null);
+        setNormalStyle(name, date, time, appointment, language);
     }
 
     /**
@@ -244,6 +250,11 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
             setTextErrorStyle(language);
             isFilled = false;
         }
+        if(appointment.getValue() == null)
+        {
+            setTextErrorStyle(appointment);
+            isFilled = false;
+        }
         return isFilled;
     }
 
@@ -253,7 +264,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Johvanni Perez
      */
     public static HashMap<String, String> codeMap(){
-        HashMap<String, String> langCodes = new HashMap<>();
+        HashMap<String, String> langCodes = new HashMap<String, String>();
 
         langCodes.put("Arabic", "ar");
         langCodes.put("Dutch", "nl");
