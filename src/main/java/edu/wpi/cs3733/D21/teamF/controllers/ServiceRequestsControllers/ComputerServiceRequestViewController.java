@@ -47,10 +47,12 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
 
     @FXML
     public void initialize(){
-        // Set up floor comboBox and draw nodes on that floor
-        final ObservableList<String> urgencies = FXCollections.observableArrayList();
-        urgencies.addAll(LOW_URGENCY, MEDIUM_URGENCY, HIGH_URGENCY);
-        urgencyComboBox.setItems(urgencies);
+        try {
+            // Set up floor comboBox and draw nodes on that floor
+            final ObservableList<String> urgencies = FXCollections.observableArrayList();
+            urgencies.addAll(LOW_URGENCY, MEDIUM_URGENCY, HIGH_URGENCY);
+            urgencyComboBox.setItems(urgencies);
+        } catch(Exception e){}
     }
 
     @FXML
@@ -65,6 +67,16 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
             openSuccessWindow();
         }
+    }
+
+    @FXML
+    public void handleHelp(ActionEvent e) throws IOException{
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceHelpView.fxml");
+    }
+
+    @FXML
+    public void goBack(ActionEvent actionEvent)throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceRequestView.fxml");
     }
 
     /**

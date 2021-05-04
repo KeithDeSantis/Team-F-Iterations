@@ -95,11 +95,6 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
     }
 
 
-    public void handleHelp(ActionEvent e) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryHelpView.fxml");
-    }
-
-
     /**
      * Helper that checks if form is acceptably filled out
      * @return true if form is filled out
@@ -181,7 +176,7 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     }
 
-    public void getHelp(ActionEvent actionEvent)throws IOException{
+    public void handleHelp(ActionEvent e) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryHelpView.fxml");
     }
 

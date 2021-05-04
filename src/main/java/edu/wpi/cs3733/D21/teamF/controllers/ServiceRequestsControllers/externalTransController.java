@@ -70,4 +70,12 @@ public class externalTransController extends ServiceRequests {
         loc.setStyle("-fx-text-fill: #000000");
         methodTrans.setStyle("-fx-text-fill: #000000");
     }
+
+    public void handleHelp(ActionEvent e) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ExternalTransHelpView.fxml");
+    }
+
+    public void goBack(ActionEvent actionEvent)throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ExternalTrans.fxml");
+    }
 }

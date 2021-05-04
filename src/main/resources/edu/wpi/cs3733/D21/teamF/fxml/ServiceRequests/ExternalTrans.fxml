@@ -95,6 +95,7 @@
                     <buttons>
                         <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
                         <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                        <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
                         <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" prefHeight="31.0" prefWidth="104.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
                     </buttons>
                      <HBox.margin>

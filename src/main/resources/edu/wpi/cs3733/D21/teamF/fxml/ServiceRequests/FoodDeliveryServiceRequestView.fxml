@@ -251,7 +251,7 @@
                      </font>
                   </JFXButton>
                   <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                  <JFXButton fx:id="help" buttonType="RAISED" onAction="#getHelp" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="?" />
+                  <JFXButton fx:id="help" buttonType="RAISED" onAction="#handleHelp" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="?" />
                   <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmit" prefHeight="28.0" prefWidth="150.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit">
                      <font>
                         <Font size="15.0" />
