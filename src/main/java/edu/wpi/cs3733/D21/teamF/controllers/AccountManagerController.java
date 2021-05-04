@@ -8,18 +8,11 @@ import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.TreeItem;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,11 +32,11 @@ public class AccountManagerController implements Initializable {
     @FXML
     private JFXButton home;
     @FXML
-    private JFXComboBox selectUser;
+    private JFXComboBox<String> selectUser;
     @FXML
-    private JFXComboBox changeUserType;
+    private JFXComboBox<String> changeUserType;
     @FXML
-    private JFXComboBox newUserType;
+    private JFXComboBox<String> newUserType;
     @FXML
     private JFXTextField username;
     @FXML
@@ -56,7 +49,7 @@ public class AccountManagerController implements Initializable {
     private String fieldChanged = "";
     @FXML
     private JFXTreeTableView<AccountEntry> accountView;
-    private ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
+    private final ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
 
     public void initialize(URL location, ResourceBundle resources) {
         /*
@@ -119,18 +112,6 @@ public class AccountManagerController implements Initializable {
     }
 
 
-
-
-    public void handleHoverOnDelete(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #d30000;");
-    }
-
-    public void handleHoverOffDelete(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #d30000; -fx-text-fill: #FFFFFF;");
-    }
-
     public void handleUserSearch(ActionEvent actionEvent) {
     }
 
@@ -142,59 +123,61 @@ public class AccountManagerController implements Initializable {
         else if (buttonPushed == deleteUser){
             AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
             DatabaseAPI.getDatabaseAPI().deleteUser(user.getUsername());
-            refreshPage(actionEvent);
+            refreshPage();
         }
         else if (buttonPushed == addUser){
             //AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
             //AccountEntry newUser = new AccountEntry(user.getUsername(), user.getPassword(), user.getUserType());
             String userName = addUsername.getText();
             String pass = addPassword.getText();
-            String type = (String) newUserType.getValue();
+            String type = newUserType.getValue();
 //FIXME add user/account objects
             DatabaseAPI.getDatabaseAPI().addUser(userName, type, userName, pass);
             selectUser.getItems().add(userName);
-            refreshPage(actionEvent);
+            refreshPage();
         }
         else if (buttonPushed == saveChanges){
-            String targetUser = "";
-            String newVal = "";
-            if (fieldChanged.equals("username")){
-                targetUser = (String) selectUser.getValue();
-                newVal = username.getText();
-                DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "username");
-            }
-            else if (fieldChanged.equals("password")){
-                targetUser = (String) selectUser.getValue();
-                newVal = password.getText();
-                DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "password");
-            }
-            else if (fieldChanged.equals("type")){
-                targetUser = (String) selectUser.getValue();
-                newVal = (String) changeUserType.getValue();
-                DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "type");
+            String targetUser;
+            String newVal;
+            switch (fieldChanged) {
+                case "username":
+                    targetUser = selectUser.getValue();
+                    newVal = username.getText();
+                    DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "username");
+                    break;
+                case "password":
+                    targetUser = selectUser.getValue();
+                    newVal = password.getText();
+                    DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "password");
+                    break;
+                case "type":
+                    targetUser = selectUser.getValue();
+                    newVal = changeUserType.getValue();
+                    DatabaseAPI.getDatabaseAPI().editUser(targetUser, newVal, "type");
+                    break;
             }
             fieldChanged = "";
 
-            refreshPage(actionEvent);
+            refreshPage();
         }
         else if (buttonPushed == home){
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
         }
     }
 
-    private void refreshPage(ActionEvent actionEvent) throws IOException {
+    private void refreshPage() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
     }
 
-    public void changingUsername(MouseEvent mouseEvent) throws SQLException{
+    public void changingUsername() {
         fieldChanged = "username";
     }
 
-    public void changingPassword(MouseEvent mouseEvent) throws SQLException{
+    public void changingPassword() {
         fieldChanged = "password";
     }
 
-    public void changingUserType(MouseEvent mouseEvent) {
+    public void changingUserType() {
         fieldChanged = "type";
     }
 }

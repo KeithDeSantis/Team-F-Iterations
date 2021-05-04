@@ -3,7 +3,6 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,11 +22,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
 
 
-public class LanguageInterpretationServiceRequestController implements Initializable {
+public class LanguageInterpretationServiceRequestController extends ServiceRequests implements Initializable {
     @FXML private JFXButton close;
     @FXML private JFXTextField name;
     @FXML private JFXDatePicker date;
@@ -36,21 +36,10 @@ public class LanguageInterpretationServiceRequestController implements Initializ
     @FXML private JFXComboBox<String> language;
     @FXML private JFXButton help;
     @FXML private JFXButton translate;
-    @FXML private JFXButton submit;
     @FXML private Label nameLabel;
     @FXML private Label dtLabel;
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
-
-    /**
-     * closes the Language Interpretation Request form and returns to home
-     * @param actionEvent
-     * @throws IOException
-     * @author Jay
-     */
-    public void handleCancel(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-    }
 
     /**
      * Opens the help window
@@ -76,7 +65,7 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      */
     public void handleTranslate(ActionEvent actionEvent) throws IOException{
         if(language.getValue() != null) {
-            List<Label> labelList = new ArrayList<Label>(); //list of labels that need to get fixed
+            List<Label> labelList = new ArrayList<>(); //list of labels that need to get fixed
             labelList.add(nameLabel);
             labelList.add(dtLabel);
             labelList.add(appointmentLabel);
@@ -94,7 +83,7 @@ public class LanguageInterpretationServiceRequestController implements Initializ
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner((Stage) ( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
+            alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
             alert.setTitle("Language Missing");
             alert.setHeaderText("Specify language");
             alert.setContentText("Please select a language from the dropdown list.");
@@ -109,25 +98,15 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      * @author Jay Yen
      */
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
-        if(formFilledOut()) {
+        if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
-                    " Name: " + name.getText() + " Appointment: " + (String) appointment.getValue() + " Language: " + language.getValue();
+                    " Name: " + name.getText() + " Appointment: " + appointment.getValue() + " Language: " + language.getValue();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
             // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
 
     }
@@ -172,7 +151,7 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         appointment.getItems().add("Infectious Disease");
         appointment.getItems().add("Interventional Cardiology");
         appointment.getItems().add("Interventional Radiology");
-        appointment.getItems().add("Lung Dancer Sceening (Low Dose CT)");
+        appointment.getItems().add("Lung Dancer Screening (Low Dose CT)");
         appointment.getItems().add("Lung Transplantation Program");
         appointment.getItems().add("Lupus Center");
         appointment.getItems().add("Magnetic Resonance Imaging (MRI)");
@@ -225,25 +204,23 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
 
-       // language.getItems().add("Arabic");
-       // language.getItems().add("Dutch");
+        language.getItems().add("Arabic");
+        language.getItems().add("Dutch");
         language.getItems().add("English");
         language.getItems().add("French");
-       // language.getItems().add("German");
-       // language.getItems().add("Greek");
-       // language.getItems().add("Haitian Creole");
+        language.getItems().add("German");
+        language.getItems().add("Greek");
+        language.getItems().add("Haitian Creole");
         language.getItems().add("Italian");
-       // language.getItems().add("Japanese");
-       // language.getItems().add("Korean");
+        language.getItems().add("Japanese");
+        language.getItems().add("Korean");
         language.getItems().add("Portuguese");
-       // language.getItems().add("Russian");
+        language.getItems().add("Russian");
         language.getItems().add("Spanish");
-       // language.getItems().add("Vietnamese");
-
-        nameLabel.setText(StringEscapeUtils.unescapeJava("\u0627\u0633\u0645"));
+        language.getItems().add("Vietnamese");
     }
     
-    private boolean formFilledOut(){
+    public boolean formFilled(){
         boolean isFilled = true;
         if(name.getText().trim().isEmpty()){
             name.setStyle("-fx-border-color: red");
@@ -271,7 +248,7 @@ public class LanguageInterpretationServiceRequestController implements Initializ
      * @author Johvanni Perez
      */
     public static HashMap<String, String> codeMap(){
-        HashMap<String, String> langCodes = new HashMap<String, String>();
+        HashMap<String, String> langCodes = new HashMap<>();
 
         langCodes.put("Arabic", "ar");
         langCodes.put("Dutch", "nl");
@@ -311,10 +288,10 @@ public class LanguageInterpretationServiceRequestController implements Initializ
         StringBuilder response = new StringBuilder();
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputline;
-        while((inputline = in.readLine()) != null){
-            response.append(inputline);
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+        String inputLine;
+        while((inputLine = in.readLine()) != null){
+            response.append(StringEscapeUtils.unescapeHtml4(inputLine));
         }
         in.close();
         return response.toString();

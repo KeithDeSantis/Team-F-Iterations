@@ -3,16 +3,9 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -20,9 +13,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 
-public class LaundryRequestController {
+public class LaundryRequestController extends ServiceRequests {
 
-    @FXML private JFXButton submit;
     @FXML private JFXButton cancel;
     @FXML private JFXButton help;
     @FXML private JFXRadioButton darks;
@@ -61,26 +53,17 @@ public class LaundryRequestController {
     }
 
     @FXML
-    public void submitReq(ActionEvent e) throws IOException, SQLException {
-        // Loads form submitted window and passes in current stage to return to request home
-        String uuid = UUID.randomUUID().toString();
-        String type = "Laundry Request";
-        String person = "";
-        String completed = "false";
-        DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInformation());
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+        if(formFilled()) {
+            // Loads form submitted window and passes in current stage to return to request home
+            String uuid = UUID.randomUUID().toString();
+            String type = "Laundry Request";
+            String person = "";
+            String completed = "false";
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInformation());
 
-        FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-        Stage submittedStage = new Stage();
-        Parent root = submitedPageLoader.load();
-        FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-        formSubmittedViewController.changeStage((Stage) submit.getScene().getWindow());
-        Scene submitScene = new Scene(root);
-        submittedStage.setScene(submitScene);
-        submittedStage.setTitle("Submission Complete");
-        submittedStage.initModality(Modality.APPLICATION_MODAL);
-        submittedStage.initOwner(((Button) e.getSource()).getScene().getWindow());
-        submittedStage.showAndWait();
+            openSuccessWindow();
+        }
     }
 
     private String additionalInformation(){
@@ -91,19 +74,19 @@ public class LaundryRequestController {
         rButtons.add(hot);
         rButtons.add(cold);
         rButtons.add(folded);
-        String additionalInfo = "Laundry Instructions: ";
+        StringBuilder additionalInfo = new StringBuilder("Laundry Instructions: ");
 
         for(JFXRadioButton r: rButtons){
             if(r.isSelected()){
-                additionalInfo = additionalInfo + ", " + r.getText();
+                additionalInfo.append(", ").append(r.getText());
             }
         }
 
-        return additionalInfo;
+        return additionalInfo.toString();
     }
 
-    @FXML
-    public void cancelReq(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
+    public boolean formFilled() {
+        return employeeID.getText().length()>0 && clientName.getText().length()>0;
     }
+
 }

@@ -10,9 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,22 +22,14 @@ class DatabaseAPITest {
         DatabaseAPI.getDatabaseAPI().dropUsersTable();
         DatabaseAPI.getDatabaseAPI().dropServiceRequestTable();
         DatabaseAPI.getDatabaseAPI().dropSystemTable();
+        DatabaseAPI.getDatabaseAPI().dropCollectionsTable();
 
         DatabaseAPI.getDatabaseAPI().createNodesTable();
         DatabaseAPI.getDatabaseAPI().createEdgesTable();
         DatabaseAPI.getDatabaseAPI().createUserTable();
         DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
         DatabaseAPI.getDatabaseAPI().createSystemTable();
-
-        /*
-        //FIXME: DO BETTER!
-        try {
-            DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        */
+        DatabaseAPI.getDatabaseAPI().createCollectionsTable();
     }
 
     @Test()
@@ -378,13 +368,13 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test dropping system preferences table")
-    public void testDropSystemPreferences() throws SQLException{
+    public void testDropSystemPreferences() {
         assertTrue(DatabaseAPI.getDatabaseAPI().dropSystemTable());
     }
 
     @Test
     @DisplayName("test creating system preferences table")
-    public void testCreatingSystemTable() throws SQLException{
+    public void testCreatingSystemTable() {
         DatabaseAPI.getDatabaseAPI().dropSystemTable();
         assertTrue(DatabaseAPI.getDatabaseAPI().createSystemTable());
     }
@@ -394,5 +384,38 @@ class DatabaseAPITest {
     public void testGetAlgorithm() throws SQLException{
         DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", "A*");
         assertEquals(DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm(), "A*");
+    }
+
+    @Test
+    @DisplayName("test creating collections table")
+    public void testCreateCollections(){
+        DatabaseAPI.getDatabaseAPI().dropCollectionsTable();
+        assertTrue(DatabaseAPI.getDatabaseAPI().createCollectionsTable());
+    }
+
+    @Test
+    @DisplayName("test dropping collections table")
+    public void testDropCollections(){
+        assertTrue(DatabaseAPI.getDatabaseAPI().dropCollectionsTable());
+    }
+
+    @Test
+    @DisplayName("test adding a collections entry")
+    public void testAddingCollectionEntry() throws SQLException{
+        assertTrue(DatabaseAPI.getDatabaseAPI().addCollecionEntry("testuser", "testnode", "favorite"));
+    }
+
+    @Test
+    @DisplayName("test database compression")
+    public void testDatabaseCompression() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node1", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node2", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node3", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("michael", "node4", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node5", "recent");
+        ArrayList<String> actual = DatabaseAPI.getDatabaseAPI().getUserNodes("favorite", "declan");
+        assertEquals(actual.get(0), "node1");
+        assertEquals(actual.get(1), "node2");
+        assertEquals(actual.get(2), "node3");
     }
 }

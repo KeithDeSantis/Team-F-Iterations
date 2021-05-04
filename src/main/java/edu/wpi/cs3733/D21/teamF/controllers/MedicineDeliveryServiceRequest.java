@@ -1,25 +1,17 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextInputControl;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class MedicineDeliveryServiceRequest {
+public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
     public JFXTextField clientName;
     @FXML
@@ -42,7 +34,7 @@ public class MedicineDeliveryServiceRequest {
      * @author Tony Vuolo (bdane)
      */
     @FXML
-    private void submit(ActionEvent actionEvent) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
         boolean submitSuccessful = true;
         for(int i = 0; i < 7; i++) {
             TextInputControl node = null;
@@ -92,29 +84,8 @@ public class MedicineDeliveryServiceRequest {
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
             // Loads form submitted window and passes in current stage to return to request home
-            FXMLLoader submitedPageLoader = new FXMLLoader();
-            submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
-            Stage submittedStage = new Stage();
-            Parent root = submitedPageLoader.load();
-            FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) clientName.getScene().getWindow());
-            Scene submitScene = new Scene(root);
-            submittedStage.setScene(submitScene);
-            submittedStage.setTitle("Submission Complete");
-            submittedStage.initModality(Modality.APPLICATION_MODAL);
-            submittedStage.showAndWait();
+            openSuccessWindow();
         }
-    }
-
-    /**
-     * Cancels this service request
-     * @param actionEvent the event signalling that the Cancel button has been pressed
-     * @throws IOException if the new file resource is invalid
-     * @author Tony Vuolo (bdane)
-     */
-    @FXML // Replaced close method with this (See comment on close) - LM
-    private void cancel(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
     /*  REMOVED: Caused duplicate window instead of closing request page- LM
@@ -137,28 +108,6 @@ public class MedicineDeliveryServiceRequest {
         submittedStage.showAndWait();
     }
     */
-
-    /**
-     * Changes the style of a Button when moused over
-     * @param mouseEvent the event signalling that the mouse is over the JFXButton
-     * @author Tony Vuolo (bdane)
-     */
-    @FXML
-    private void mouseOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    /**
-     * Reverts the style of a Button back to its original settings
-     * @param mouseEvent the event signalling that the mouse is no longer over the JFXButton
-     * @author Tony Vuolo (bdane)
-     */
-    @FXML
-    private void mouseOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
-    }
 
 
 }

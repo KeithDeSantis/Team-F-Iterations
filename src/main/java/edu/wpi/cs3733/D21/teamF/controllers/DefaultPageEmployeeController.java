@@ -1,15 +1,12 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -25,8 +22,6 @@ public class DefaultPageEmployeeController {
     private JFXButton serviceRequest;
     @FXML
     private JFXButton quit;
-    @FXML
-    private Text title;
 
     @FXML private JFXButton serviceManager;
 
@@ -43,12 +38,11 @@ public class DefaultPageEmployeeController {
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
 
         if (buttonPushed == editMap) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
         } else if (buttonPushed == signOut) {
+            CurrentUser.getCurrentUser().logout();
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         } else if (buttonPushed == navigation) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
@@ -63,25 +57,5 @@ public class DefaultPageEmployeeController {
         else if (buttonPushed == quit) {
             Platform.exit();
         }
-        else if(buttonPushed == signOut){
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-        }
-    }
-    /** handles highlighting buttons when hovering
-     * @author Keith Desantis, insterted by Leo Morris
-     * @param mouseEvent The button hovered over
-     */
-    public void handleHoverOn(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #F0C808; -fx-text-fill: #000000;");
-    }
-
-    /** handles removing highlight on buttons when not hovering
-     * @author Keith Desantis, insterted by Leo Morris
-     * @param mouseEvent The button hovered off
-     */
-    public void handleHoverOff(MouseEvent mouseEvent) {
-        JFXButton btn = (JFXButton) mouseEvent.getSource();
-        btn.setStyle("-fx-background-color: #03256C; -fx-text-fill: #FFFFFF;");
     }
 }

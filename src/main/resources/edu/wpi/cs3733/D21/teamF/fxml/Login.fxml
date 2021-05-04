@@ -28,11 +28,6 @@
             </Label>
          </children>
       </HBox>
-      <JFXButton fx:id="closeLogin" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="x" textAlignment="CENTER" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="150.0">
-         <font>
-            <Font name="Montserrat Regular" size="15.0" />
-         </font>
-      </JFXButton>
       <Label alignment="CENTER" contentDisplay="CENTER" lineSpacing="8.0" text="Welcome!" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="150.0">
          <font>
             <Font name="Volkhov Regular" size="40.0" />
@@ -72,7 +67,7 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="skipSignIn" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back" >
+            <JFXButton fx:id="skipSignIn" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

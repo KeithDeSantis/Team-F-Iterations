@@ -7,18 +7,13 @@ public class ConnectionHandler {
     private ConnectionHandler() {}
 
     //FIXME: at some point, refactor better, probably move into helper
-    private static Connection establishConnection(boolean createDB)
+    private static Connection establishConnection()
     {
-        String driver = "org.apache.derby.jdbc.EmbeddedDriver";
         String protocol = "jdbc:derby:";
         String URL;
 
-        if (createDB)
-        {
-            URL = protocol + "projectC1;create=true";
-        }
-        else {URL = protocol + "projectC1";}
-        
+        URL = protocol + "projectC1;create=true";
+
         try {
             return DriverManager.getConnection(URL);
         } catch (SQLException e) {
@@ -29,7 +24,7 @@ public class ConnectionHandler {
     }
 
     private static class ConnectionSingletonHelper {
-        private static final Connection connection = establishConnection(true);
+        private static final Connection connection = establishConnection();
     }
 
     public static Connection getConnection() {

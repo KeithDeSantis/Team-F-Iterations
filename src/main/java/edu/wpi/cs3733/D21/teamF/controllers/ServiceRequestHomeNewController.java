@@ -4,12 +4,10 @@ import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -48,50 +46,48 @@ public class ServiceRequestHomeNewController {
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
 
         if(buttonPushed == floralDelivery){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryServiceRequestView.fxml","Floral Delivery",buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryServiceRequestView.fxml");
         }
         else if (buttonPushed == Home) {
             SceneContext.getSceneContext().loadDefault();
         }
 
         else if (buttonPushed == languageInterpretation){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml","Language Interpretation",buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml");
         }
 
         else if (buttonPushed == foodDelivery){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryServiceRequestView.fxml","Food Delivery",buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryServiceRequestView.fxml");
         }
         else if (buttonPushed == externalPatientTrans){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ExternalTrans.fxml","External Patient Transportation",buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ExternalTrans.fxml");
         }
         else if (buttonPushed == facilitiesMaintenance){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/maintenanceRequest.fxml", "Facilities Maintenance", buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/maintenanceRequest.fxml");
         }
         else if (buttonPushed == computerServices){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceRequestView.fxml", "IT Services", buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceRequestView.fxml");
         }
         else if (buttonPushed == sanitationService){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/SanitationRequest.fxml", "Sanitation Services", buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/SanitationRequest.fxml");
         }
         else if (buttonPushed == laundryServices){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LaundryRequest.fxml", "Laundry Service", buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LaundryRequest.fxml");
         }
         else if (buttonPushed == medicineDelivery){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml", "Medicine Delivery", buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");
         }
         else if (buttonPushed == giftDelivery){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml", "Gift Delivery", buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
         }
         else if (buttonPushed == internalPatientTrans){
-            goToScreen(actionEvent, "/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/InternalTransportationView.fxml", "Internal Patient Transport", buttonPushed);
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/InternalTransportationView.fxml");
         }
     }
 
-    public void goToScreen(ActionEvent e, String URL, String Title, Button currentScreen)throws IOException{
+    public void goToScreen(String URL)throws IOException{
         SceneContext.getSceneContext().switchScene(URL);
     }
 
