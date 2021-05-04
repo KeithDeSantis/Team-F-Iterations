@@ -25,13 +25,20 @@
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Label prefHeight="110.0" prefWidth="762.0" text="BRIGHAM AND WOMEN'S HOSPITAL Account Manager" textFill="#03256c" wrapText="true">
+
+            <Label fx:id="title" prefHeight="108.0" prefWidth="746.0" text="BRIGHAM AND WOMEN'S HOSPITAL Account Manager" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
             </Label>
          </children></HBox>
       <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+      <JFXButton fx:id="quit" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="30.0" prefWidth="30.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="x" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="150.0">
+         <font>
+            <Font name="Montserrat Regular" size="15.0" />
+         </font>
+      </JFXButton>
+      <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
             <JFXComboBox fx:id="selectUser" focusColor="#03256c" onAction="#handleUserSearch" promptText="Select User">
                <VBox.margin>

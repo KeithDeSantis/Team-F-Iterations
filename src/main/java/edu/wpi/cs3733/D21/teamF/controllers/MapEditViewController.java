@@ -5,6 +5,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.EdgeHandler;
 import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
@@ -55,6 +56,8 @@ public class MapEditViewController {
     @FXML
     private JFXButton deleteButton;
     @FXML
+    private JFXButton favoriteButton;
+    @FXML
     private JFXComboBox<String> searchComboBox;
     @FXML
     private JFXTextField searchField;
@@ -78,11 +81,16 @@ public class MapEditViewController {
     @FXML private Label nodeTypeDisplayLabel;
     @FXML private Label longNameDisplayLabel;
     @FXML private Label shortNameDisplayLabel;
+    @FXML private Label edgeIDDisplayLabel;
+    @FXML private Label startNodeDisplayLabel;
+    @FXML private Label endNodeDisplayLabel;
 
     private boolean clickToMakeEdge;
+    private boolean favoriteOnly = false;
 
     private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
     private final ObservableList<NodeEntry> nodeEntryObservableList = FXCollections.observableArrayList();
+    private List<NodeEntry> favoriteList = new ArrayList<NodeEntry>();
     private Circle selectedCircle = null;
 
     private Line selectedLine = null;
@@ -102,7 +110,7 @@ public class MapEditViewController {
     private final DrawableCircle alignBottom = new DrawableCircle(-1, -1, "ab", "n/a");
 
     @FXML
-    private void initialize() {
+    private void initialize() throws SQLException {
         clickToMakeEdge = false;
 
         // Node initialization
@@ -383,6 +391,14 @@ public class MapEditViewController {
         }
          */
         rectSelector.setMouseTransparent(true);
+
+        ArrayList<String> favList = DatabaseAPI.getDatabaseAPI().getUserNodes("favorite", CurrentUser.getCurrentUser().getLoggedIn().getUsername());
+
+        for(NodeEntry nodeEntry : nodeEntryObservableList) {
+            for(String favID : favList) {
+                if(nodeEntry.getNodeID().equals(favID)) favoriteList.add(nodeEntry);
+            }
+        }
     }
 
     private void colorAlignmentCircles(DrawableCircle drawableCircle) {
@@ -527,6 +543,9 @@ public class MapEditViewController {
      */
     public void handleSearch() {
         nodeTreeTable.setPredicate(nodeEntryTreeItem -> {
+            if(favoriteOnly) {
+                if(!isInFavorites(nodeEntryTreeItem.getValue().getNodeID())) return false;
+            }
             if (searchField.getText().length() > 0) {
                 switch (searchComboBox.getValue()) {
                     case "Node ID":
@@ -570,31 +589,33 @@ public class MapEditViewController {
         });
         for (Node node : mapPanel.getCanvas().getChildren()) {
             if (node instanceof DrawableNode) {
+                boolean isFavorite = true;
+                if(favoriteOnly) isFavorite = isInFavorites(node.getId());
                 switch (searchComboBox.getValue()) {
                     case "Node ID":
-                        ((DrawableNode) node).setShouldDisplay(node.getId().contains(searchField.getText()));
+                        ((DrawableNode) node).setShouldDisplay(isFavorite && node.getId().contains(searchField.getText()));
                         break;
                     case "Floor":
-                        ((DrawableNode) node).setShouldDisplay(((DrawableNode) node).getFloor().get().equals(searchField.getText()));
+                        ((DrawableNode) node).setShouldDisplay(isFavorite && ((DrawableNode) node).getFloor().get().equals(searchField.getText()));
                         break;
                     case "Building":
-                        ((DrawableNode) node).setShouldDisplay(((DrawableNode) node).getBuilding().contains(searchField.getText()));
+                        ((DrawableNode) node).setShouldDisplay(isFavorite && ((DrawableNode) node).getBuilding().contains(searchField.getText()));
                         break;
                     case "Node Type":
-                        ((DrawableNode) node).setShouldDisplay(((DrawableNode) node).getNodeType().contains(searchField.getText()));
+                        ((DrawableNode) node).setShouldDisplay(isFavorite && ((DrawableNode) node).getNodeType().contains(searchField.getText()));
                         break;
                     case "Long Name":
-                        ((DrawableNode) node).setShouldDisplay(((DrawableNode) node).getLongName().contains(searchField.getText()));
+                        ((DrawableNode) node).setShouldDisplay(isFavorite && ((DrawableNode) node).getLongName().contains(searchField.getText()));
                         break;
                     case "Short Name":
-                        ((DrawableNode) node).setShouldDisplay(((DrawableNode) node).getShortName().contains(searchField.getText()));
+                        ((DrawableNode) node).setShouldDisplay(isFavorite && ((DrawableNode) node).getShortName().contains(searchField.getText()));
                         break;
                     case "Edge ID":
                         boolean edgeExists = false;
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getEdgeID().contains(searchField.getText())) {
                                 edgeExists = true;
-                                ((DrawableNode) node).setShouldDisplay(edgeEntry.getEdgeID().contains(node.getId()));
+                                ((DrawableNode) node).setShouldDisplay(isFavorite && edgeEntry.getEdgeID().contains(node.getId()));
                                 if(edgeEntry.getEdgeID().contains(node.getId())) break;
                             }
                         } // what about when there are no edges that pass?? - KD
@@ -605,7 +626,7 @@ public class MapEditViewController {
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             if(edgeEntry.getStartNode().contains(searchField.getText())) {
                                 edgeExists2 = true;
-                                ((DrawableNode) node).setShouldDisplay(edgeEntry.getStartNode().equals(node.getId()));
+                                ((DrawableNode) node).setShouldDisplay(isFavorite && edgeEntry.getStartNode().equals(node.getId()));
                                 if(edgeEntry.getStartNode().equals(node.getId())) break;
                             }
                         }
@@ -616,7 +637,7 @@ public class MapEditViewController {
                         for(EdgeEntry edgeEntry : edgeEntryObservableList) {
                             edgeExists3 = true;
                             if(edgeEntry.getEndNode().contains(searchField.getText())) {
-                                ((DrawableNode) node).setShouldDisplay(edgeEntry.getEndNode().equals(node.getId()));
+                                ((DrawableNode) node).setShouldDisplay(isFavorite && edgeEntry.getEndNode().equals(node.getId()));
                                 if(edgeEntry.getEndNode().equals(node.getId())) break;
                             }
                         }
@@ -628,34 +649,36 @@ public class MapEditViewController {
                 }
             }
             if (node instanceof DrawableEdge) {
+                boolean isFavorite = true;
+                if(favoriteOnly) isFavorite = isInFavorites(((DrawableEdge) node).getStartNode().getNodeID()) || isInFavorites(((DrawableEdge) node).getStartNode().getNodeID());
                 switch (searchComboBox.getValue()) {
                     case "Node ID":
-                        ((DrawableEdge) node).setShouldDisplay(node.getId().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && node.getId().contains(searchField.getText()));
                         break;
                     case "Floor":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getFloor().get().equals(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && ((DrawableEdge) node).getFloor().get().equals(searchField.getText()));
                         break;
                     case "Building":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getBuilding().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getBuilding().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && ((DrawableEdge) node).getStartNode().getBuilding().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getBuilding().contains(searchField.getText()));
                         break;
                     case "Node Type":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getNodeType().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeType().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && ((DrawableEdge) node).getStartNode().getNodeType().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeType().contains(searchField.getText()));
                         break;
                     case "Long Name":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getLongName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getLongName().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && ((DrawableEdge) node).getStartNode().getLongName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getLongName().contains(searchField.getText()));
                         break;
                     case "Short Name":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getShortName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getShortName().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && ((DrawableEdge) node).getStartNode().getShortName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getShortName().contains(searchField.getText()));
                         break;
                     case "Edge ID":
                         String edgeID = ((DrawableEdge) node).getStartNode().getNodeID() + "_" + ((DrawableEdge) node).getEndNode().getNodeID();
-                        ((DrawableEdge) node).setShouldDisplay(edgeID.contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && edgeID.contains(searchField.getText()));
                         break;
                     case "Start Node":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && ((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()));
                         break;
                     case "End Node":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && ((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText()));
                         break;
                     default:
                         ((DrawableEdge) node).setShouldDisplay(true);
@@ -665,6 +688,9 @@ public class MapEditViewController {
         }
 
         edgeTreeTable.setPredicate(edgeEntryTreeItem -> {
+            if(favoriteOnly) {
+                if(!(isInFavorites(edgeEntryTreeItem.getValue().getStartNode()) || isInFavorites(edgeEntryTreeItem.getValue().getEndNode()))) return false;
+            }
             if (searchField.getText().length() > 0) {
                 switch (searchComboBox.getValue()) {
                     case "Edge ID":
@@ -723,33 +749,35 @@ public class MapEditViewController {
         });
         for (Node node : mapPanel.getCanvas().getChildren()) {
             if (node instanceof DrawableEdge) {
+                boolean isFavorite = true;
+                if(favoriteOnly) isFavorite = isInFavorites(((DrawableEdge) node).getStartNode().getNodeID()) || isInFavorites(((DrawableEdge) node).getEndNode().getNodeID());
                 switch (searchComboBox.getValue()) {
                     case "Node ID":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && (((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText())));
                         break;
                     case "Floor":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getFloor().equals(searchField.getText()) || ((DrawableEdge) node).getEndNode().getFloor().equals(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && (((DrawableEdge) node).getStartNode().getFloor().equals(searchField.getText()) || ((DrawableEdge) node).getEndNode().getFloor().equals(searchField.getText())));
                         break;
                     case "Building":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getBuilding().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getBuilding().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && (((DrawableEdge) node).getStartNode().getBuilding().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getBuilding().contains(searchField.getText())));
                         break;
                     case "Node Type":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getNodeType().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeType().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && (((DrawableEdge) node).getStartNode().getNodeType().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getNodeType().contains(searchField.getText())));
                         break;
                     case "Long Name":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getLongName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getLongName().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && (((DrawableEdge) node).getStartNode().getLongName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getLongName().contains(searchField.getText())));
                         break;
                     case "Short Name":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getShortName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getShortName().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && (((DrawableEdge) node).getStartNode().getShortName().contains(searchField.getText()) || ((DrawableEdge) node).getEndNode().getShortName().contains(searchField.getText())));
                         break;
                     case "Edge ID":
-                        ((DrawableEdge) node).setShouldDisplay(node.getId().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && node.getId().contains(searchField.getText()));
                         break;
                     case "Start Node":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && ((DrawableEdge) node).getStartNode().getNodeID().contains(searchField.getText()));
                         break;
                     case "End Node":
-                        ((DrawableEdge) node).setShouldDisplay(((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText()));
+                        ((DrawableEdge) node).setShouldDisplay(isFavorite && ((DrawableEdge) node).getEndNode().getNodeID().contains(searchField.getText()));
                         break;
                     default:
                         ((DrawableEdge) node).setShouldDisplay(true);
@@ -760,8 +788,8 @@ public class MapEditViewController {
 
         if (searchField.getText().length() == 0) {
             for (Node node : mapPanel.getCanvas().getChildren()) {
-                if (node instanceof DrawableNode) ((DrawableNode) node).setShouldDisplay(true);
-                if (node instanceof DrawableEdge) ((DrawableEdge) node).setShouldDisplay(true);
+                if (node instanceof DrawableNode && !favoriteOnly) ((DrawableNode) node).setShouldDisplay(true); // added here and below - KD
+                if (node instanceof DrawableEdge && !favoriteOnly) ((DrawableEdge) node).setShouldDisplay(true);
             }
         }
 
@@ -1544,13 +1572,16 @@ public class MapEditViewController {
                 }
 
 
-                Line l = mapPanel.draw(getEditableEdge(e, startNode, endNode));
+                DrawableEdge edge = getEditableEdge(e, startNode, endNode);
+                Line l = mapPanel.draw(edge);
 
                 l.setOnMouseEntered(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);
+                    handleDisplayEdgeInfo(edge);
                 });
                 l.setOnMouseExited(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.LINE_COLOR);
+                    handleUndisplayEdgeInfo();
                 });
                 l.setOnMouseClicked(event -> {
                     if (selectedLine != null)
@@ -1728,6 +1759,82 @@ public class MapEditViewController {
         longNameDisplayLabel.setOpacity(0.5);
         shortNameDisplayLabel.setText("Short Name");
         shortNameDisplayLabel.setOpacity(0.5);
+    }
+
+    /**
+     * Adds selected node to the favorites list of current user
+     * @throws SQLException
+     * @author KD
+     */
+    public void handleFavorite() throws SQLException {
+        if(selectedCircle.getFill().equals(Color.GREEN) && mapPanel.getNode(selectedCircle.getId()).shouldDisplay().get()) {
+            NodeEntry favNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue();
+            if(favoriteButton.getText().equals("Favorite")) {
+                if (isInFavorites(favNode.getNodeID())) return; // dont want duplicate favorite - KD
+                DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), favNode.getNodeID(), "favorite");
+                favoriteList.add(favNode);
+            } else if(favoriteButton.getText().equals("Unfavorite")) {
+                DatabaseAPI.getDatabaseAPI().deleteUserNode(favNode.getNodeID(), CurrentUser.getCurrentUser().getLoggedIn().getUsername(), "favorite"); //?
+                favoriteList.remove(favNode);
+                handleSearch();
+            }
+        }
+    }
+
+    /**
+     * Changes favorite only mode
+     * @author KD
+     */
+    public void handleFavoriteToggle() {
+        favoriteOnly = !favoriteOnly;
+        if(favoriteButton.getText().equals("Favorite")) {
+            favoriteButton.setText("Unfavorite");
+        } else if(favoriteButton.getText().equals("Unfavorite")) {
+            favoriteButton.setText("Favorite");
+        }
+        handleSearch();
+    }
+
+    /**
+     * Helper that returns true if the given ID is a favorite
+     * @param nodeID
+     * @return
+     * @author KD
+     */
+    public boolean isInFavorites(String nodeID) {
+        boolean isFavorite = false;
+        for(NodeEntry nodeEntry : favoriteList) {
+            if(nodeEntry.getNodeID().equals(nodeID)) isFavorite = true;
+        }
+        return isFavorite;
+    }
+
+
+    /**
+     * Displays the edge currently hovered over's data in the edge info section
+     * @param drawableEdge the node hovered over
+     * @author KD
+     */
+    public void handleDisplayEdgeInfo(DrawableEdge drawableEdge) {
+        edgeIDDisplayLabel.setText(drawableEdge.getId());
+        edgeIDDisplayLabel.setOpacity(1);
+        startNodeDisplayLabel.setText(drawableEdge.getStartNode().getNodeID());
+        startNodeDisplayLabel.setOpacity(1);
+        endNodeDisplayLabel.setText(drawableEdge.getEndNode().getNodeID());
+        endNodeDisplayLabel.setOpacity(1);
+    }
+
+    /**
+     * Clears the edge info section
+     * @author KD
+     */
+    public void handleUndisplayEdgeInfo() {
+        edgeIDDisplayLabel.setText("Edge ID");
+        edgeIDDisplayLabel.setOpacity(0.5);
+        startNodeDisplayLabel.setText("Start Node");
+        startNodeDisplayLabel.setOpacity(0.5);
+        endNodeDisplayLabel.setText("End Node");
+        endNodeDisplayLabel.setOpacity(0.5);
     }
 }
 

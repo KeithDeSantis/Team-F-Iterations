@@ -50,7 +50,7 @@ public class MaintenanceRequestController extends ServiceRequests {
 
     ObservableList<String> locations = FXCollections.observableArrayList();
 
-    ObservableList<String> employeeList = FXCollections.observableArrayList();
+    //ObservableList<String> employeeList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize(){
@@ -104,12 +104,12 @@ public class MaintenanceRequestController extends ServiceRequests {
                 //Do Nothing
             }
 
-            String employee = "";
-            try{
-                employee = assignment.getValue();
-            } catch (NullPointerException nullPointerException){
-                // Leave assigned employee blank
-            }
+//            String employee = "";
+//            try{
+//                employee = assignment.getValue();
+//            } catch (NullPointerException nullPointerException){
+//                // Leave assigned employee blank
+//            }
 
             String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
                     "Urgency: " + urgencyComboBox.getValue();

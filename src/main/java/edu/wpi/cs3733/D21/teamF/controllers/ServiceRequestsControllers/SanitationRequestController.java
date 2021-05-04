@@ -4,6 +4,11 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 
+<<<<<<< HEAD:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/ServiceRequestsControllers/SanitationRequestController.java
+=======
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
+>>>>>>> 36feac4258d4a4a8524aa7bf407aedce348127a4:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/SanitationRequestController.java
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;

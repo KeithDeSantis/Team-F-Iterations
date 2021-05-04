@@ -1,0 +1,28 @@
+.tree-cell .selection-bar{
+    -fx-background-color: #F0C808;
+}
+
+.tree-cell{
+    -fx-background-color: #c6c6c6;
+}
+
+.tree-cell:selected{
+    -fx-background-color: #03256c;
+    -fx-border-color: transparent;
+    -fx-outline: none;
+}
+
+.tree-view .scroll-bar:horizontal,
+.scroll-bar:vertical{
+    -fx-background-color: #03256c;
+}
+
+
+.tree-view .scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb,
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow,
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow{
+    -fx-background-color: #d1d1d1;
+}

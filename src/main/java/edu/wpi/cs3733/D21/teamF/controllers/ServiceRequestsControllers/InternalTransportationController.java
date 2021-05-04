@@ -1,10 +1,13 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 
+<<<<<<< HEAD:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/ServiceRequestsControllers/InternalTransportationController.java
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
+=======
+>>>>>>> 36feac4258d4a4a8524aa7bf407aedce348127a4:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/InternalTransportationController.java
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -29,6 +32,11 @@ public class InternalTransportationController extends ServiceRequests {
     @FXML private JFXComboBox<String> deliverLocation;
 
     @FXML private JFXDatePicker movingDate;
+<<<<<<< HEAD:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/ServiceRequestsControllers/InternalTransportationController.java
+=======
+
+    @FXML private JFXTimePicker movingTime;
+>>>>>>> 36feac4258d4a4a8524aa7bf407aedce348127a4:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/InternalTransportationController.java
 
     @FXML private JFXTextField patientName;
 
@@ -70,6 +78,10 @@ public class InternalTransportationController extends ServiceRequests {
             isFilled = false;
             setTextErrorStyle(movingDate);
         }
+        if(movingTime.getValue() == null) {
+            isFilled = false;
+            setTextErrorStyle(movingTime);
+        }
         if(patientName.getText().length() <= 0) {
             isFilled = false;
             setTextErrorStyle(patientName);
@@ -89,26 +101,30 @@ public class InternalTransportationController extends ServiceRequests {
             String type = "Internal Transport";
             String person = "";
             String completed = "false";
+<<<<<<< HEAD:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/ServiceRequestsControllers/InternalTransportationController.java
             String additionalInfo = "Delivery Location: " + deliverLocation.getValue() + "Delivery Date: " + movingDate.getValue()
                     + "Patient Room: " + patientRoom.getValue();
+=======
+            String additionalInfo = "Delivery Location: " + deliverLocation.getText() + "Delivery Date: " + movingDate.getValue() + "Delivery Time: " + movingTime.getValue()
+                    + "Patient Room: " + patientRoom.getText();
+>>>>>>> 36feac4258d4a4a8524aa7bf407aedce348127a4:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/InternalTransportationController.java
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
-        } else { //form not complete
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(( (Button) e.getSource()).getScene().getWindow());  // Show alert
-            alert.setTitle("Form not filled.");
-            alert.setHeaderText("Form incomplete");
-            alert.setContentText("Please fill out at least the Location, Type of Flowers, Containers, and Payment fields."); //??? TODO: fix this
-            alert.showAndWait();
         }
     }
 
 
     public void handleClear() {
+<<<<<<< HEAD:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/ServiceRequestsControllers/InternalTransportationController.java
         deliverLocation.setValue(null);
         movingDate.setValue(null);
+=======
+        deliverLocation.setText("");
+        movingDate.setValue(null);
+        movingTime.setValue(null);
+>>>>>>> 36feac4258d4a4a8524aa7bf407aedce348127a4:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/InternalTransportationController.java
         patientName.setText("");
         patientRoom.setValue(null);
         relativesCheckBox.setSelected(false);

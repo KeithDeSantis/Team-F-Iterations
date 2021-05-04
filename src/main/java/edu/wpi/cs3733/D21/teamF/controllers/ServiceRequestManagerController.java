@@ -35,10 +35,6 @@ public class ServiceRequestManagerController implements Initializable {
     private ServiceEntry selectedEntry;
     private int index;
 
-
-
-
-
     public void initialize(URL location, ResourceBundle resources) {
         //TreeTable
         List<ServiceEntry> data;

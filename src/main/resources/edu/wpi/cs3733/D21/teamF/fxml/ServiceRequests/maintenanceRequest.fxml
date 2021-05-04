@@ -59,7 +59,7 @@
                         <Insets left="25.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="typeComboBox" focusColor="#f0c808" onAction="#reset2" prefWidth="200.0" unFocusColor="#03256c">
+                  <JFXComboBox fx:id="typeComboBox" focusColor="#03256c" onAction="#reset2" prefWidth="200.0" unFocusColor="BLACK">
                      <VBox.margin>
                         <Insets left="25.0" top="10.0" />
                      </VBox.margin>
@@ -79,7 +79,7 @@
                         <Insets top="25.0" />
                      </padding>
                   </Label>
-                  <JFXComboBox fx:id="locationField" focusColor="#f0c808" minWidth="200.0" onAction="#reset2" prefHeight="31.0" prefWidth="200.0" unFocusColor="#03256c">
+                  <JFXComboBox fx:id="locationField" focusColor="#03256c" minWidth="200.0" onAction="#reset2" prefHeight="31.0" prefWidth="200.0" unFocusColor="BLACK">
                      <VBox.margin>
                         <Insets left="25.0" right="25.0" top="10.0" />
                      </VBox.margin>
@@ -96,7 +96,7 @@
                         <Insets left="25.0" top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="descriptionField" focusColor="#f0c808" onKeyReleased="#reset" prefColumnCount="30" prefHeight="0.0" prefWidth="592.0" unFocusColor="#03256c" VBox.vgrow="NEVER">
+                  <JFXTextArea fx:id="descriptionField" focusColor="#03256c" onKeyReleased="#reset" prefColumnCount="30" prefHeight="0.0" prefWidth="592.0" unFocusColor="BLACK" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets left="25.0" right="25.0" top="10.0" />
                      </VBox.margin>
@@ -113,7 +113,7 @@
                         <Insets left="25.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="urgencyComboBox" focusColor="#f0c808" onAction="#reset2" prefWidth="200.0" unFocusColor="#03256c">
+                  <JFXComboBox fx:id="urgencyComboBox" focusColor="#03256c" onAction="#reset2" prefWidth="200.0" unFocusColor="BLACK">
                      <VBox.margin>
                         <Insets left="25.0" top="10.0" />
                      </VBox.margin>

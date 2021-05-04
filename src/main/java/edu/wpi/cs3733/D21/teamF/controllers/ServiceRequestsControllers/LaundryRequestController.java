@@ -20,6 +20,7 @@ import java.util.UUID;
 
 public class LaundryRequestController extends ServiceRequests {
 
+    @FXML private JFXButton cancel;
     @FXML private JFXButton help;
     @FXML private JFXRadioButton darks;
     @FXML private JFXRadioButton lights;
