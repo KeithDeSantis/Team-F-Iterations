@@ -6,6 +6,9 @@ import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -85,8 +88,60 @@ public class LaundryRequestController extends ServiceRequests {
         return additionalInfo.toString();
     }
 
-    public boolean formFilled() {
-        return employeeID.getText().length()>0 && clientName.getText().length()>0;
+    /**
+     * handles radial button groups
+     * @param e
+     */
+    @FXML
+    private void handleRadialButtonPushed(ActionEvent e){
+        ToggleGroup tempGroup = new ToggleGroup();
+        hot.setToggleGroup(tempGroup);
+        cold.setToggleGroup(tempGroup);
+
+        ToggleGroup colorGroup = new ToggleGroup();
+        darks.setToggleGroup(colorGroup);
+        lights.setToggleGroup(colorGroup);
+        both.setToggleGroup(colorGroup);
     }
 
+
+    @Override
+    public boolean formFilled() {
+        boolean isFilled = true;
+
+        setNormalStyle(employeeID, hot, cold, darks, lights, both);
+
+        if(employeeID.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(employeeID);
+        }
+//        if(clientName.getText().length() == 0){
+//            isFilled = false;
+//            setTextErrorStyle(clientName);
+//        }
+        if(! (hot.isSelected() || cold.isSelected())){
+            isFilled = false;
+            setButtonErrorStyle(hot, cold);
+        }
+        if (! (darks.isSelected() || lights.isSelected() || both.isSelected())) {
+            isFilled = false;
+            setButtonErrorStyle(darks, lights, both);
+        }
+
+        return isFilled;
+    }
+
+    @Override
+    public void handleClear() {
+        both.setSelected(false);
+        lights.setSelected(false);
+        darks.setSelected(false);
+        hot.setSelected(false);
+        cold.setSelected(false);
+        folded.setSelected(false);
+        employeeID.setText("");
+        //clientName.setText("");
+        additionalInstructions.setText("");
+        setNormalStyle(both, lights, darks, hot, cold, folded, employeeID, additionalInstructions);
+    }
 }

@@ -19,7 +19,7 @@
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL" wrappingWidth="489.7598876953125">
+            <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL" wrappingWidth="749.7598876953125">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
