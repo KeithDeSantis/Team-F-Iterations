@@ -32,7 +32,7 @@
                </font>
             </Label>
          </children></HBox>
-      <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+      <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0"></VBox>
       <JFXButton fx:id="quit" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleButtonPushed" prefHeight="30.0" prefWidth="30.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="x" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="150.0">
          <font>
             <Font name="Montserrat Regular" size="15.0" />
