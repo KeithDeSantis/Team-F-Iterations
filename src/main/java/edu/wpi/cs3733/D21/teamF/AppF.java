@@ -49,7 +49,7 @@ public class  AppF extends Application {
       }
     }));
     try {
-      SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+      SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");//DefaultPageView.fxml");
     } catch (IOException e) {
       e.printStackTrace();
       Platform.exit();
