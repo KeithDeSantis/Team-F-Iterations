@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class ExternalTransController extends ServiceRequests{
-    @FXML private JFXTextField employeeName;
+    @FXML private JFXTextField patientName;
     @FXML private JFXTextField loc;
     @FXML private JFXTextField methodTrans;
     @FXML private JFXTextField special;

@@ -162,14 +162,14 @@ public class AccountManagerController implements Initializable {
             }
             fieldChanged = "";
 
-            refreshPage(actionEvent);
+            refreshPage();
         }
         else if (buttonPushed == home){
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
         }
     }
 
-    private void refreshPage(ActionEvent actionEvent) throws IOException {
+    private void refreshPage() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
     }
 
