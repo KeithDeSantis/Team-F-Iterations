@@ -1352,4 +1352,8 @@ public class AStarDemoController implements Initializable {
             startNavigation();
         }
     }
+
+    public void gotoAboutPage(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AboutpageView.fxml");
+    }
 }

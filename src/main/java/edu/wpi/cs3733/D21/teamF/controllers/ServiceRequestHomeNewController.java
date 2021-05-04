@@ -162,8 +162,8 @@ public class ServiceRequestHomeNewController {
         JFXButton btn = (JFXButton) mouseEvent.getSource();
 
         if (btn == Home){
-            btn.setStyle("-fx-background-color: #03256c");
-            Image home = new Image(getClass().getResourceAsStream("/imagesAndLogos/homeWhiteText.png"));
+            btn.setStyle("-fx-background-color: #94C4F1");
+            Image home = new Image(getClass().getResourceAsStream("/imagesAndLogos/homeBlackText.png"));
             homeImage.setImage(home);
         }
         else if (btn == facilitiesMaintenance){
