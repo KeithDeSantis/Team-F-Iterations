@@ -111,8 +111,9 @@ public class UserHandler implements DatabaseEntry {
 
         byte[] salt;
         if (resultSet.next()) {
-            salt = resultSet.getBytes(5);
-            if (encryptPassword(password, salt).equals(resultSet.getString(4))) {
+            salt = resultSet.getBytes(6);
+            if (encryptPassword(password, salt).equals(resultSet.getString(4)) &&
+                    resultSet.getString(5).equals("true")) {
                 authenticated = true;
             }
         }
@@ -125,7 +126,7 @@ public class UserHandler implements DatabaseEntry {
      */
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
-        final String query = "INSERT INTO USERS values(?, ?, ?, ?, ?)";
+        final String query = "INSERT INTO USERS values(?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
 
         byte[] salt = null;
@@ -144,7 +145,7 @@ public class UserHandler implements DatabaseEntry {
             stmt.setString(colCounter, s);
             colCounter = colCounter + 1;
         }
-        stmt.setBytes(5, salt);
+        stmt.setBytes(6, salt);
         return stmt.executeUpdate() != 0;
     }
 
@@ -154,7 +155,7 @@ public class UserHandler implements DatabaseEntry {
     @Override
     public boolean editEntry(String username, String val, String colName) throws Exception{
         boolean success;
-        if (colName.equals("username") || colName.equals("type") || colName.equals("password")) {
+        if (colName.equals("username") || colName.equals("type") || colName.equals("password") || colName.equals("cleared")) {
             String query = String.format("UPDATE USERS SET %s=(?) WHERE USERNAME=(?)", colName);
             try {
                 PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
@@ -191,7 +192,7 @@ public class UserHandler implements DatabaseEntry {
     public boolean createTable() {
         boolean success;
         final String initUserTable = "CREATE TABLE USERS(userid varchar(50), type varchar(200), " +
-                "username varchar(200), password varchar(200), salt blob(20), primary key(username))";
+                "username varchar(200), password varchar(200), cleared varchar(20), salt blob(20), primary key(username))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initUserTable);
@@ -251,8 +252,9 @@ public class UserHandler implements DatabaseEntry {
             String username = resultSet.getString(3);
             String password = resultSet.getString(4);
             String usertype = resultSet.getString(2);
+            String status = resultSet.getString(5);
 
-            AccountEntry newEntry = new AccountEntry(username, password, usertype);
+            AccountEntry newEntry = new AccountEntry(username, password, usertype, status);
             entries.add(newEntry);
         }
         resultSet.close();
@@ -275,7 +277,8 @@ public class UserHandler implements DatabaseEntry {
         while (resultSet.next()){
             String type = resultSet.getString(2);
             String password = resultSet.getString(4);
-            user = new AccountEntry(username, password, type);
+            String status = resultSet.getString(5);
+            user = new AccountEntry(username, password, type, status);
         }
         stmt.close();
         resultSet.close();

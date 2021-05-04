@@ -192,7 +192,7 @@ class DatabaseAPITest {
     @DisplayName("test adding a user")
     public void testAddUser() throws SQLException
     {
-        String[] newUser = {"1", "employee", "declan", "password"};
+        String[] newUser = {"1", "employee", "declan", "password", "false"};
         assertTrue(DatabaseAPI.getDatabaseAPI().addUser(newUser));
     }
 
@@ -200,7 +200,7 @@ class DatabaseAPITest {
     @DisplayName("test deleting a user")
     public void testDeleteUser() throws SQLException
     {
-        String[] newUser = {"1", "employee", "declan", "password"};
+        String[] newUser = {"1", "employee", "declan", "password", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(newUser);
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUser("declan"));
     }
@@ -209,7 +209,7 @@ class DatabaseAPITest {
     @DisplayName("test editing a user")
     public void testEditUser() throws Exception
     {
-        String[] newUser = {"1", "employee", "declan", "password"};
+        String[] newUser = {"1", "employee", "declan", "password", "false"};
         DatabaseAPI.getDatabaseAPI().addUser(newUser);
         assertTrue(DatabaseAPI.getDatabaseAPI().editUser("declan", "password123", "password"));
     }
@@ -232,8 +232,8 @@ class DatabaseAPITest {
     public void testPopulateUsers() throws SQLException
     {
         ArrayList<String[]> users = new ArrayList<>();
-        String[] user1 = {"1", "admin", "username", "password"};
-        String[] user2 = {"2", "employee", "testuser", "testpass"};
+        String[] user1 = {"1", "admin", "username", "password", "false"};
+        String[] user2 = {"2", "employee", "testuser", "testpass", "not-assigned"};
         users.add(user1);
         users.add(user2);
 
@@ -323,7 +323,7 @@ class DatabaseAPITest {
     @Test
     @DisplayName("Test authentication and encryption")
     public void testAuthentication() throws SQLException{
-        String[] newUser = {"1", "admin", "declan", "password"};
+        String[] newUser = {"1", "admin", "declan", "password", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(newUser);
         UserHandler handler = new UserHandler();
         assertTrue(handler.authenticate("declan", "password"));
@@ -354,7 +354,7 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test verifying the admin user entry")
     public void testAdmin() throws SQLException{
-        String[] admin = {"admin", "administrator", "admin", "admin"};
+        String[] admin = {"admin", "administrator", "admin", "admin", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(admin);
         assertTrue(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
     }
