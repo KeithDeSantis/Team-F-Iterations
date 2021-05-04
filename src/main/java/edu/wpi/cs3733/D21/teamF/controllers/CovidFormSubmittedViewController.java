@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
@@ -22,7 +21,7 @@ public class CovidFormSubmittedViewController {
     @FXML
     private void okButtonPushed() throws IOException {
         ( (Stage) okButton.getScene().getWindow()).close();
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+        //SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
 
