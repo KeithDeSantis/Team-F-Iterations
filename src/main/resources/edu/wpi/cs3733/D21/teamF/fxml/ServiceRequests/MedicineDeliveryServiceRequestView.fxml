@@ -200,6 +200,7 @@
             <Font size="18.0" />
          </font>
       </JFXButton>
+      <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
           <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" HBox.hgrow="SOMETIMES">
               <font>
                   <Font size="18.0" />

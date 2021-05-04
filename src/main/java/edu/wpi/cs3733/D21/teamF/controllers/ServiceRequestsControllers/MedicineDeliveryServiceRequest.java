@@ -162,4 +162,12 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
         expirationDate.setText("");
         setNormalStyle(clientRoom, clientName, medicineInformation, deliveryTime, cardholder, cvc, cardNumber, expirationDate);
     }
+
+    public void handleHelp(ActionEvent e) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryHelpView.fxml");
+    }
+
+    public void goBack(ActionEvent actionEvent)throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");
+    }
 }
