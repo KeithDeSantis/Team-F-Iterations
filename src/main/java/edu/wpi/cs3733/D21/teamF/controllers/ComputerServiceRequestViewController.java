@@ -73,69 +73,37 @@ public class ComputerServiceRequestViewController extends ServiceRequests{
 
         if(computerNameText.getText().trim().isEmpty())
         {
-            setErrorStyle(computerNameText);
+            setTextErrorStyle(computerNameText);
             accept = false;
         }
 
         if(computerLocationText.getText().trim().isEmpty())
         {
-            setErrorStyle(computerLocationText);
+            setTextErrorStyle(computerLocationText);
             accept = false;
         }
 
         if(requesterTextText.getText().trim().isEmpty())
         {
-            setErrorStyle(requesterTextText);
+            setTextErrorStyle(requesterTextText);
             accept = false;
         }
 
         if(urgencyComboBox.getValue() == null)
         {
-            setErrorStyle(urgencyComboBox);
+            setTextErrorStyle(urgencyComboBox);
             accept = false;
         }
 
         if(descriptionText.getText().trim().isEmpty())
         {
-            setErrorStyle(descriptionText);
+            setTextErrorStyle(descriptionText);
             accept = false;
         }
 
         return accept;
     }
 
-    /**
-     * Applies the 'normal' style to the given components
-     * @param components The nodes to apply the style to
-     * @author Alex Friedman (ahf)
-     */
-    private void setNormalStyle(Node...components)
-    {
-        setStyle("-fx-border-width: 0px", components);
-    }
-
-    /**
-     * Used to set the given components to use the error/invalid input style
-     * @param components The components to apply the style to
-     * @author Alex Friedman (ahf)
-     */
-    private void setErrorStyle(Node...components)
-    {
-        setStyle("-fx-border-width: 2px", components);
-        setStyle("-fx-border-color: red", components);
-    }
-
-    /**
-     * Used to set the components in the given list to have the given style.
-     * @param style The string style to apply
-     * @param components The components to apply the style to
-     * @author Alex Friedman (ahf)
-     */
-    private void setStyle(String style, Node...components)
-    {
-        for(Node n : components)
-            n.setStyle(style);
-    }
 
     @FXML
     public void handleClear() {

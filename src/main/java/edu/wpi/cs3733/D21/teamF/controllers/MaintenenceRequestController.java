@@ -46,7 +46,7 @@ public class MaintenenceRequestController extends ServiceRequests {
 
     ObservableList<String> locations = FXCollections.observableArrayList();
 
-    ObservableList<String> employeeList = FXCollections.observableArrayList();
+    //ObservableList<String> employeeList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize(){
@@ -72,25 +72,6 @@ public class MaintenenceRequestController extends ServiceRequests {
         // Set location combo box to use long names
         locationField.setItems(locations);
 
-        // Load in employee list from database TODO Replace with UserEntry after merge W/ updated DB
-        List<NodeEntry> employees = new ArrayList<>();
-        try {
-            employees = DatabaseAPI.getDatabaseAPI().genNodeEntries();
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-
-        employees.stream().sorted(Comparator.comparing(NodeEntry::getShortName)).collect(Collectors.toList()).forEach(employee ->{
-            employeeList.add(employee.getShortName());
-        });
-
-        // Set list to assignment Combo Box
-        assignment.setItems(employeeList);
-
-        assignment.setVisible(false);
-        assignment.setDisable(true);
-        assignmentLabel.setVisible(false);
-
     }
 
     /**
@@ -115,12 +96,12 @@ public class MaintenenceRequestController extends ServiceRequests {
                 //Do Nothing
             }
 
-            String employee = "";
-            try{
-                employee = assignment.getValue();
-            } catch (NullPointerException nullPointerException){
-                // Leave assigned employee blank
-            }
+//            String employee = "";
+//            try{
+//                employee = assignment.getValue();
+//            } catch (NullPointerException nullPointerException){
+//                // Leave assigned employee blank
+//            }
 
             String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
                     "Urgency: " + urgencyComboBox.getValue();
@@ -166,6 +147,17 @@ public class MaintenenceRequestController extends ServiceRequests {
         descriptionField.setStyle("-fx-background-color: #00000000");
         typeComboBox.setStyle("-fx-background-color: #00000000");
         urgencyComboBox.setStyle("-fx-background-color: #00000000");
+    }
+
+    @Override
+    public void handleClear(){
+        locationField.setValue(null);
+        typeComboBox.setValue(null);
+        descriptionField.setText("");
+        urgencyComboBox.setValue(null);
+        dateOfIncident.setValue(null);
+        assignment.setValue(null);
+        descriptionField.setStyle("-fx-background-color: transparent");
     }
 
 
