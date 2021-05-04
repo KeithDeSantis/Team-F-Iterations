@@ -26,6 +26,8 @@ public abstract class ServiceRequests {
     private JFXButton helpButton;
     @FXML
     private JFXButton clearButton;
+    @FXML
+    private JFXButton back;
 
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {}
 
@@ -38,6 +40,8 @@ public abstract class ServiceRequests {
     public void handleHome(MouseEvent e) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
+
+    public void goBack(ActionEvent actionEvent) throws IOException {}
 
     public boolean formFilled() {
         return false;

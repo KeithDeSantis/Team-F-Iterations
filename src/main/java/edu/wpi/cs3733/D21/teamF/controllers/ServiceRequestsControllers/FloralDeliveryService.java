@@ -29,7 +29,6 @@ public class FloralDeliveryService extends ServiceRequests {
     @FXML private JFXRadioButton bouquetButton;
     @FXML private JFXRadioButton vaseButton;
     @FXML private JFXRadioButton potButton;
-    @FXML private JFXButton clearButton;
     @FXML private JFXTextField deliveryField;
     @FXML private JFXDatePicker dateField;
     @FXML private JFXTextField nameField;
@@ -48,8 +47,8 @@ public class FloralDeliveryService extends ServiceRequests {
 
     @FXML
     public void initialize() {
-        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
-        logoHome.setImage(img);
+//        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
+//        logoHome.setImage(img);
     }
 
     /**
@@ -145,8 +144,12 @@ public class FloralDeliveryService extends ServiceRequests {
     }
 
 
-    public void getHelp(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/floralHelpPageNewView.fxml");
+    public void handleHelp(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryHelpView.fxml");
+    }
+
+    public void goBack(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryServiceRequestView.fxml");
     }
 }
 
