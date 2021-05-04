@@ -34,6 +34,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -127,6 +128,9 @@ public class AStarDemoController implements Initializable {
 
     final ObservableList<String> nodeList = FXCollections.observableArrayList();
 
+
+    // Create root tree item (will be hidden later)
+    TreeItem<String> rootTreeViewItem = new TreeItem<>("shortNames");
     // List of all nodes in each category
     TreeItem<String> conferenceItem = new TreeItem<>("Conference Rooms");
     TreeItem<String> departmentItem = new TreeItem<>("Departments");
@@ -311,9 +315,39 @@ public class AStarDemoController implements Initializable {
                             dialog.close();
                         });
 
-                        final JFXButton toggleFavorite = new JFXButton("FIXME: Add Favorite");
 
-                        layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+                        if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                            final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
+                            try{
+                                if(getUserFavorites().contains(currEntry.getNodeID())){
+                                    toggleFavorite.setText("Remove Favorite");
+                                }
+                            } catch (SQLException throwables){
+                                throwables.printStackTrace();
+                            }
+                            toggleFavorite.setOnAction(a -> {
+                                if (toggleFavorite.getText().equals("Add To Favorites")) {
+                                    try {
+                                        addNodeToFavorites(currEntry);
+                                    } catch (SQLException throwables) {
+                                        throwables.printStackTrace();
+                                    }
+                                } else {
+                                    try {
+                                        removeNodeFromFavorites(currEntry);
+                                    } catch (SQLException throwables) {
+                                        throwables.printStackTrace();
+                                    }
+                                }
+                                dialog.close();
+                            });
+
+                            layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+                        } else {
+                            layout.setActions(directionsTo, directionsFrom, closeBtn);
+                        }
+
+
 
                         dialog.setContent(layout);
                         mapPanel.showDialog(dialog);
@@ -373,11 +407,6 @@ public class AStarDemoController implements Initializable {
           getDrawableNode(e.getNodeID());
 
         //~~~~~~~~~ Tree View Setup ~~~~~~~~
-
-        // Create root tree item (will be hidden later)
-        TreeItem<String> rootTreeViewItem = new TreeItem<>("shortNames");
-
-
 
         // categorize node short names and add them to appropriate tree view (root items declared before initialize)
         for (NodeEntry node: allNodeEntries) {
@@ -543,10 +572,35 @@ public class AStarDemoController implements Initializable {
                 directionsFrom.setOnAction(a ->  {
                     startNode.set(idToShortName(currEntry.getNodeID())); dialog.close();});
 
-                final JFXButton toggleFavorite = new JFXButton("FIXME: Add Favorite");
-
-                layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
-
+                if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                    final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
+                    try{
+                        if(getUserFavorites().contains(currEntry.getNodeID())){
+                            toggleFavorite.setText("Remove Favorite");
+                        }
+                    } catch (SQLException throwables){
+                        throwables.printStackTrace();
+                    }
+                    toggleFavorite.setOnAction(a -> {
+                        if (toggleFavorite.getText().equals("Add To Favorites")) {
+                            try {
+                                addNodeToFavorites(currEntry);
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        } else {
+                            try {
+                                removeNodeFromFavorites(currEntry);
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        }
+                        dialog.close();
+                    });
+                    layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+                } else {
+                    layout.setActions(directionsTo, directionsFrom, closeBtn);
+                }
                 dialog.setContent(layout);
                 mapPanel.showDialog(dialog);
             });
@@ -1624,6 +1678,20 @@ public class AStarDemoController implements Initializable {
                 DatabaseAPI.getDatabaseAPI().deleteUserNode(IDtoRemove, CurrentUser.getCurrentUser().getLoggedIn().getUsername(), "recent");
                 recentItem.getChildren().remove(MAX_RECENTLY_USED);
             }
+        }
+    }
+
+
+    /**
+     * Centers map on a node when selected from the tree view without opening the "What's this?" menu
+     * @author Leo Morris
+     */
+    public void handleListSelection() {
+        if(treeView.getSelectionModel().getSelectedItem()!=null &&
+                !treeView.getSelectionModel().getSelectedItem().getParent().equals(rootTreeViewItem) &&
+                !treeView.getSelectionModel().getSelectedItem().equals(rootTreeViewItem)) { // Do not center on drop downs, root item or null items, only actual nodes
+            mapPanel.switchMap(findNodeEntry(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue())).getFloor());
+            mapPanel.centerNode(mapPanel.getNode(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue())));
         }
     }
 }

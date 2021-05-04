@@ -29,7 +29,7 @@
          </children></HBox>
       <HBox VBox.vgrow="ALWAYS">
          <children>
-            <JFXTreeView fx:id="treeView" stylesheets="/stylesheets/TreeViewStyle.css" prefWidth="250"/>
+            <JFXTreeView fx:id="treeView" stylesheets="/stylesheets/TreeViewStyle.css" prefWidth="250" onMouseClicked="#handleListSelection"/>
             <VBox HBox.hgrow="ALWAYS">
                <children>
                   <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS"/>
