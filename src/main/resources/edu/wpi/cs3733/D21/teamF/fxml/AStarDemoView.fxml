@@ -12,6 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.AnchorPane?>
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
 <VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
@@ -30,7 +31,7 @@
          </children></HBox>
       <HBox VBox.vgrow="ALWAYS">
          <children>
-            <JFXTreeView fx:id="treeView" />
+            <JFXTreeView fx:id="treeView" stylesheets="/stylesheets/TreeViewStyle.css" prefWidth="250"/>
             <VBox HBox.hgrow="ALWAYS">
                <children>
                   <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS"/>

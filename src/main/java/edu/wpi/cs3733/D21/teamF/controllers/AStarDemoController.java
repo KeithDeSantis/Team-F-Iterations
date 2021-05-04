@@ -222,14 +222,16 @@ public class AStarDemoController implements Initializable {
                     } else {
                         addStopMenu.setText("Add Stop");
                     }
-                    try{
-                        if(getUserFavorites().contains(currEntry.getNodeID())){
-                            addFavoriteMenu.setText("Remove Favorite");
-                        } else {
-                            addFavoriteMenu.setText("Add To Favorites");
+                    if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                        try {
+                            if (getUserFavorites().contains(currEntry.getNodeID())) {
+                                addFavoriteMenu.setText("Remove Favorite");
+                            } else {
+                                addFavoriteMenu.setText("Add To Favorites");
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
-                    } catch (SQLException e){
-                        e.printStackTrace();
                     }
 
 
@@ -458,14 +460,16 @@ public class AStarDemoController implements Initializable {
                 addStopMenu.setText("Add Stop");
             }
 
-            try{
-                if(getUserFavorites().contains(currEntry.getNodeID())){
-                    addFavoriteMenu.setText("Remove Favorite");
-                } else {
-                    addFavoriteMenu.setText("Add To Favorites");
+            if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                try {
+                    if (getUserFavorites().contains(currEntry.getNodeID())) {
+                        addFavoriteMenu.setText("Remove Favorite");
+                    } else {
+                        addFavoriteMenu.setText("Add To Favorites");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException e){
-                e.printStackTrace();
             }
 
             // Show context menu
