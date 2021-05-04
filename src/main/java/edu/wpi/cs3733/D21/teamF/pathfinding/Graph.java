@@ -140,6 +140,9 @@ public class Graph {
         for(int i = 0; i < v.length; i++) {
             for(int j = i + 1; j < v.length; j++) {
                 paths[index] = (getPath(v[i], v[j]));
+                if(paths[index] == null) {
+                    return null;
+                }
                 index++;
             }
         }

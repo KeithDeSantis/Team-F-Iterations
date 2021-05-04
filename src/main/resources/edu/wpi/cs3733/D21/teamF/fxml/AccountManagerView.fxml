@@ -25,7 +25,7 @@
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Label text="Brigham and Women's Hospital">
+            <Label fx:id="title" prefHeight="108.0" prefWidth="746.0" text="BRIGHAM AND WOMEN'S HOSPITAL Account Manager" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
@@ -36,11 +36,6 @@
             <Font name="Montserrat Regular" size="15.0" />
          </font>
       </JFXButton>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="50.0" layoutY="54.0" prefHeight="67.0" prefWidth="421.0" text="Account Manager" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
-         <font>
-            <Font name="Volkhov Regular" size="40.0" />
-         </font>
-      </Label>
       <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
             <JFXComboBox fx:id="selectUser" focusColor="#03256c" onAction="#handleUserSearch" promptText="Select User">
@@ -104,7 +99,7 @@
       </VBox>
       <ButtonBar layoutX="608.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="56.0" prefWidth="725.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
         <buttons>
-            <JFXButton buttonType="RAISED" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" >
+            <JFXButton buttonType="RAISED" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

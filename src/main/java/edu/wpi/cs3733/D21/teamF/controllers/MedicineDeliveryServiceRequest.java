@@ -64,16 +64,14 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
                     System.out.println("Unexpected case reached.");
                     break;
             }
-            if(node.getText().length() > 0) {
-                node.setStyle("-fx-border-color: transparent");
-                node.setStyle("-fx-background-color: transparent");
+            if(node.getText().length() > 0) {  //currently works because nodes are only text fields
+                setNormalStyle(node);
             } else {
                 submitSuccessful = false;
-                node.setStyle("-fx-border-color: #FF0000");
-                node.setStyle("-fx-background-color: #FF000088");
+                setTextErrorStyle(node);
             }
         }
-        if(submitSuccessful) {
+        if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String type = "Medicine Delivery";
             String person = "";
@@ -110,4 +108,16 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     */
 
 
+
+    @Override
+    public void handleClear() {
+        clientName.setText("");
+        clientRoom.setText("");
+        medicineInformation.setText("");
+        cardholder.setText("");
+        cardNumber.setText("");
+        cvc.setText("");
+        expirationDate.setText("");
+        setNormalStyle(clientRoom, clientName, medicineInformation, cardholder, cvc, cardNumber, expirationDate);
+    }
 }

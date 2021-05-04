@@ -1,5 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -16,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class SanitationRequestController extends ServiceRequests {
-    @FXML private JFXButton cancel;
     @FXML private JFXTextField description;
     @FXML private JFXComboBox<String> loc;
     @FXML private JFXTextField clientName;
@@ -52,7 +53,31 @@ public class SanitationRequestController extends ServiceRequests {
     }
 
     public boolean formFilled() {
-        return description.getText().length()>0 && loc.getValue().length()>0 && clientName.getText().length()>0;
+        boolean isFilled = true;
+
+        setNormalStyle(description, clientName, loc);
+
+        if(description.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(description);
+        }
+        if(loc.getValue().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(loc);
+        }
+        if(clientName.getText().length() == 0){
+            isFilled = false;
+            setTextErrorStyle(clientName);
+        }
+        return isFilled;
+    }
+
+    @Override
+    public void handleClear(){
+        description.setText("");
+        clientName.setText("");
+        loc.setValue(null);
+        setNormalStyle(description, clientName, loc);
     }
 
 
