@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -53,25 +52,23 @@ public class CovidSurveyViewController {
 
     /**
      * handles the back button (image icon) being pushed
-     * @param mouseEvent
      * @throws IOException
      * @author kh
      */
-    public void handleHome(MouseEvent mouseEvent) throws IOException{
+    public void handleHome() throws IOException{
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     /**
      * handles the submit button being pushed
-     * @param e
      * @throws IOException
      */
-    @FXML private void handleSubmitPushed(ActionEvent e) throws IOException{
-        FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
+    @FXML private void handleSubmitPushed() throws IOException{
+        FXMLLoader submittedPageLoader = new FXMLLoader();
+        submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
         Stage submittedStage = new Stage();
-        Parent root = submitedPageLoader.load();
-        CovidFormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+        Parent root = submittedPageLoader.load();
+        CovidFormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
         formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
         Scene submitScene = new Scene(root);
         submittedStage.setScene(submitScene);
@@ -85,7 +82,7 @@ public class CovidSurveyViewController {
      * handles cancel button being pushed and returns to home page
      * @param e
      * @throws IOException
-     * @Author kh
+     * @author kh
      */
     @FXML
     private void handleCancelPushed(ActionEvent e) throws IOException {
@@ -98,12 +95,11 @@ public class CovidSurveyViewController {
 
     /**
      * groups radio buttons into the two questions so only one is selected at a time for each
-     * @param e
      * @author kh
      */
 
     @FXML
-    private void handleRadialButtonPushed(ActionEvent e){
+    private void handleRadialButtonPushed(){
         ToggleGroup question1 = new ToggleGroup(); //group for first question
         yes1.setToggleGroup(question1);
         no1.setToggleGroup(question1);

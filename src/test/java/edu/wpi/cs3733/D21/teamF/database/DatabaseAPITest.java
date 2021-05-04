@@ -422,17 +422,17 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test adding a collections entry")
     public void testAddingCollectionEntry() throws SQLException{
-        assertTrue(DatabaseAPI.getDatabaseAPI().addCollecionEntry("testuser", "testnode", "favorite"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().addCollectionEntry("testuser", "testnode", "favorite"));
     }
 
     @Test
     @DisplayName("test database compression")
     public void testDatabaseCompression() throws SQLException{
-        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node1", "favorite");
-        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node2", "favorite");
-        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node3", "favorite");
-        DatabaseAPI.getDatabaseAPI().addCollecionEntry("michael", "node4", "favorite");
-        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node5", "recent");
+        DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node1", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node2", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node3", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollectionEntry("michael", "node4", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node5", "recent");
         ArrayList<String> actual = DatabaseAPI.getDatabaseAPI().getUserNodes("favorite", "declan");
         assertEquals(actual.get(0), "node1");
         assertEquals(actual.get(1), "node2");

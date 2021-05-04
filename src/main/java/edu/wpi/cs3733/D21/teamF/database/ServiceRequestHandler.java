@@ -103,9 +103,9 @@ public class ServiceRequestHandler implements DatabaseEntry {
         final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, uuid);
 
-        ResultSet rset;
+        ResultSet resultSet;
         try {
-            rset = stmt.executeQuery();
+            resultSet = stmt.executeQuery();
         } catch (SQLException e) {
             if (e.getMessage().contains("Table/View 'L1NODES' does not exist."))
                 return null;
@@ -113,16 +113,16 @@ public class ServiceRequestHandler implements DatabaseEntry {
                 e.printStackTrace();
             return null;
         }
-        while (rset.next()) {
-            String requestID = rset.getString(1);
-            String requestName = rset.getString(2);
-            String requestPerson = rset.getString(3);
-            String requestCompleted = rset.getString(4);
-            String requestInfo = rset.getString(5);
-            rset.close();
+        while (resultSet.next()) {
+            String requestID = resultSet.getString(1);
+            String requestName = resultSet.getString(2);
+            String requestPerson = resultSet.getString(3);
+            String requestCompleted = resultSet.getString(4);
+            String requestInfo = resultSet.getString(5);
+            resultSet.close();
             return new ServiceEntry(requestID, requestName, requestPerson, requestCompleted, requestInfo);
         }
-        rset.close();
+        resultSet.close();
         return null;
     }
 

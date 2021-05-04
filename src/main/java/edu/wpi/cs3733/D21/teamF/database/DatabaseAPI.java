@@ -6,8 +6,7 @@ import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 
-import javax.xml.ws.Service;
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -231,7 +230,7 @@ public class DatabaseAPI {
         return collectionHandler.dropCollectionsTable();
     }
 
-    public boolean addCollecionEntry(String user, String node, String type) throws SQLException{
+    public boolean addCollectionEntry(String user, String node, String type) throws SQLException{
         String[] input = {user, node, type};
         for (String s: input){
             if (!(this.filterInput(s))){

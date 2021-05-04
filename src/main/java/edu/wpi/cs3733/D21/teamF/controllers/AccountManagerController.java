@@ -13,10 +13,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -173,15 +169,15 @@ public class AccountManagerController implements Initializable {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
     }
 
-    public void changingUsername(MouseEvent mouseEvent) throws SQLException{
+    public void changingUsername() {
         fieldChanged = "username";
     }
 
-    public void changingPassword(MouseEvent mouseEvent) throws SQLException{
+    public void changingPassword() {
         fieldChanged = "password";
     }
 
-    public void changingUserType(MouseEvent mouseEvent) throws SQLException{
+    public void changingUserType() {
         fieldChanged = "type";
     }
 }

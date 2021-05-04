@@ -114,7 +114,7 @@ public class EdgeHandler implements DatabaseEntry {
     }
 
     /**
-     * Genereates EdgeEntry objects from all rows currently in the database
+     * Generates EdgeEntry objects from all rows currently in the database
      * @return ArrayList of EdgeEntry objects
      * @throws SQLException on error performing DB operations
      */
