@@ -36,7 +36,7 @@ public class SanitationRequestController extends ServiceRequests {
             }
             this.loc.setItems(nodeList);
 
-        } catch (Exception e) {        }
+        } catch (Exception e) { }
 
     }
 

@@ -61,7 +61,7 @@
                         <Insets left="25.0" />
                      </HBox.margin>
                   </Label>
-                  <JFXTextArea prefHeight="75.0" prefWidth="580.0">
+                  <JFXTextArea fx:id="specialInstructions" prefHeight="75.0" prefWidth="580.0">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
