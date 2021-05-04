@@ -32,7 +32,7 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
         }
 
         public void handleClear(ActionEvent actionEvent) throws IOException {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GiftDeliveryServiceRequest.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
 
         }
 

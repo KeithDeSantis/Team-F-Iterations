@@ -156,8 +156,13 @@ public class MaintenenceRequestController extends ServiceRequests {
         descriptionField.setText("");
         urgencyComboBox.setValue(null);
         dateOfIncident.setValue(null);
-        assignment.setValue(null);
-        descriptionField.setStyle("-fx-background-color: transparent");
+        //assignment.setValue(null);
+        setNormalStyle(locationField, typeComboBox, descriptionField, urgencyComboBox, dateOfIncident);
+        typeComboBox.setPromptText("");
+        locationField.setPromptText("");
+        descriptionField.setPromptText("");
+        urgencyComboBox.setPromptText("");
+        dateOfIncident.setPromptText("");
     }
 
 

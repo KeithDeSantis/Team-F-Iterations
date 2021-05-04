@@ -148,11 +148,12 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     public void handleClear() {
         clientName.setText("");
         clientRoom.setValue(null);
+        deliveryTime.setValue(null);
         medicineInformation.setText("");
         cardholder.setText("");
         cardNumber.setText("");
         cvc.setText("");
         expirationDate.setText("");
-        setNormalStyle(clientRoom, clientName, medicineInformation, cardholder, cvc, cardNumber, expirationDate);
+        setNormalStyle(clientRoom, clientName, medicineInformation, deliveryTime, cardholder, cvc, cardNumber, expirationDate);
     }
 }

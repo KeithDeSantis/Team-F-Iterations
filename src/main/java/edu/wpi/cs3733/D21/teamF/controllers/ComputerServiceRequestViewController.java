@@ -4,11 +4,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-<<<<<<< HEAD
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-=======
->>>>>>> 196c5398c9c08344af1e86b7ba9f448e69095966
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -96,7 +93,7 @@ public class ComputerServiceRequestViewController extends ServiceRequests{
             accept = false;
         }
 
-        if(computerLocation.getValue().trim().isEmpty())
+        if(computerLocation.getValue() == null)
         {
             setTextErrorStyle(computerLocation);
             accept = false;
