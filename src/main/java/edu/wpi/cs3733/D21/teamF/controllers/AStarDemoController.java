@@ -2,9 +2,9 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.pathfinding.*;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
@@ -18,10 +18,7 @@ import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -29,6 +26,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -36,6 +34,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -61,12 +60,6 @@ public class AStarDemoController implements Initializable {
 
     @FXML
     private ImageView goBack;
-
-    @FXML
-    private JFXComboBox<String> startComboBox;
-
-    @FXML
-    private JFXComboBox<String> endComboBox;
 
     @FXML
     private MapPanel mapPanel;
@@ -95,6 +88,9 @@ public class AStarDemoController implements Initializable {
     @FXML
     public JFXToggleButton optimize;
 
+    @FXML
+    private JFXTreeView<String> treeView;
+
     //FIXME: DO BETTER
     private Graph graph;
 
@@ -102,11 +98,8 @@ public class AStarDemoController implements Initializable {
 
     private static final double PIXEL_TO_METER_RATIO = 10;
 
-    private DoublyLinkedHashSet<Vertex> recentlyUsed, favorites;
-
     /**
      * These are done for displaying the start & end nodes. This should be done better (eventually)
-     *
      * @author Alex Friedman (ahf)
      */
     private DrawableNode startNodeDisplay;
@@ -126,12 +119,31 @@ public class AStarDemoController implements Initializable {
 
     // List of intermediate vertices for multi-stop pathfinding - LM
     private final ArrayList<Vertex> vertices = new ArrayList<>();
+    private final SimpleStringProperty startNode = new SimpleStringProperty("");
+    private final SimpleStringProperty endNode = new SimpleStringProperty("");
 
     private DrawableNode direction;
 
     private String currentDirection;
 
     final ObservableList<String> nodeList = FXCollections.observableArrayList();
+
+
+    // Create root tree item (will be hidden later)
+    TreeItem<String> rootTreeViewItem = new TreeItem<>("shortNames");
+    // List of all nodes in each category
+    TreeItem<String> conferenceItem = new TreeItem<>("Conference Rooms");
+    TreeItem<String> departmentItem = new TreeItem<>("Departments");
+    TreeItem<String> entranceItem = new TreeItem<>("Entrances");
+    TreeItem<String> infoItem = new TreeItem<>("Information");
+    TreeItem<String> labItem = new TreeItem<>("Labs");
+    TreeItem<String> parkingItem = new TreeItem<>("Parking");
+    TreeItem<String> restroomItem = new TreeItem<>("Restrooms");
+    TreeItem<String> retailItem = new TreeItem<>("Retail");
+    TreeItem<String> serviceItem = new TreeItem<>("Services");
+    TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
+    TreeItem<String> recentItem = new TreeItem<>("Recently Used");
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -176,102 +188,195 @@ public class AStarDemoController implements Initializable {
         }
         nodeList.addAll(shortNameList.stream().sorted().collect(Collectors.toList()));
 
-        startComboBox.setItems(nodeList);
-        endComboBox.setItems(nodeList);
-
         isCurrentlyNavigating.set(false);
 
         final ContextMenu contextMenu = new ContextMenu();
+        final ContextMenu treeViewMenu = new ContextMenu();
 
         //FIXME: CHANGE TEXT TO BE MORE ACCESSIBLE
-        final MenuItem startPathMenu = new MenuItem("Path from Here");
-        final MenuItem addStopMenu = new MenuItem("Add stop here");
-        final MenuItem endPathMenu = new MenuItem("Path end Here");
-
-        final MenuItem whatsHereMenu = new MenuItem("What's here?");
+        final MenuItem startPathMenu = new MenuItem("Path From Here");
+        final MenuItem addStopMenu = new MenuItem("Add Stop Here");
+        final MenuItem endPathMenu = new MenuItem("Path End Here");
+        final MenuItem whatsHereMenu = new MenuItem("What's Here?");
+        final MenuItem addFavoriteMenu = new MenuItem("Add Favorite"); // only added when signed in
 
         contextMenu.getItems().addAll(startPathMenu,addStopMenu, endPathMenu, new SeparatorMenuItem(), whatsHereMenu);
 
+        // if signed in add favorite option
+        if(CurrentUser.getCurrentUser().isAuthenticated()){
+            contextMenu.getItems().add(addFavoriteMenu);
+        }
+
         mapPanel.getMap().setOnContextMenuRequested(event -> {
-            if(isCurrentlyNavigating.get()){
-                return;
-            }
+                    if (isCurrentlyNavigating.get()) {
+                        return;
+                    }
+
+                    final double zoomLevel = mapPanel.getZoomLevel().getValue();
+                    final NodeEntry currEntry = getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel);
+
+                    if (currEntry == null)
+                        return;
+
+                    // Set whats here menu text back to what it should be on the map
+                    whatsHereMenu.setText("What's Here?");
+
+                    // Set add stop text to make sense
+                    if (vertices.contains(graph.getVertex(currEntry.getNodeID()))) {
+                        addStopMenu.setText("Remove Stop");
+                    } else {
+                        addStopMenu.setText("Add Stop");
+                    }
+                    if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                        try {
+                            if (getUserFavorites().contains(currEntry.getNodeID())) {
+                                addFavoriteMenu.setText("Remove Favorite");
+                            } else {
+                                addFavoriteMenu.setText("Add To Favorites");
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
 
-            final double zoomLevel = mapPanel.getZoomLevel().getValue();
-            final NodeEntry currEntry = getClosest(event.getX() * zoomLevel, event.getY() * zoomLevel);
+                    contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
 
-            if(currEntry == null)
-                return;
+                    // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
+                    // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
+                    startPathMenu.setOnAction(e -> {
+                        startNode.set(idToShortName(currEntry.getNodeID()));
+                        try {
+                            handleStartNodeChange();
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    });
 
-            if(vertices.contains(graph.getVertex(currEntry.getNodeID()))){
-                addStopMenu.setText("Remove Stop");
-            } else {
-                addStopMenu.setText("Add Stop");
-            }
+                    // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
+                    // No combo box update so we call checkInput()
+                    addStopMenu.setOnAction(e -> {
+                        if (addStopMenu.getText().equals("Add Stop")) {
+                            vertices.add(graph.getVertex(currEntry.getNodeID()));
+                            drawStop(currEntry);
+                            try {
+                                addNodeToRecent(currEntry);
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        } else {
+                            vertices.remove(graph.getVertex(currEntry.getNodeID()));
+                            mapPanel.unDraw(currEntry.getNodeID());
+                            getDrawableNode(currEntry.getNodeID());
+                        }
+                        checkInput();
+                    });
 
-            contextMenu.show(mapPanel.getMap(), event.getScreenX(), event.getScreenY());
+                    // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
+                    endPathMenu.setOnAction(e -> {
+                        endNode.set(idToShortName(currEntry.getNodeID()));
+                        try {
+                            handleEndNodeChange();
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    });
 
-            // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
-            // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
-            startPathMenu.setOnAction(e -> startComboBox.setValue(idToShortName(currEntry.getNodeID())));
+                    //FIXME: Make these ones require that thing is visible
+                    whatsHereMenu.setOnAction(e -> {
+                        mapPanel.switchMap(currEntry.getFloor());
+                        mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
 
-            // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
-            // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(e -> {
-                if(addStopMenu.getText().equals("Add Stop")) {
-                    vertices.add(graph.getVertex(currEntry.getNodeID()));
-                    drawStop(currEntry);
-                } else {
-                    vertices.remove(graph.getVertex(currEntry.getNodeID()));
-                    mapPanel.unDraw(currEntry.getNodeID());
-                    getDrawableNode(currEntry.getNodeID());
-                }
-                checkInput();
-            });
-
-            // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
-            endPathMenu.setOnAction(e -> endComboBox.setValue(idToShortName(currEntry.getNodeID())));
-
-            //FIXME: Make these ones require that thing is visible
-            whatsHereMenu.setOnAction(e -> {
-
-                mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
-
-                final JFXDialog dialog = new JFXDialog();
-                final JFXDialogLayout layout = new JFXDialogLayout();
-
-
-                layout.setHeading(new Text(currEntry.getLongName()));
-
-                //FIXME: DO BREAKS W/ CSS
-                layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
-                        "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
-                        "may also be prone to contain information about running to the second arrangement (it's only the\n" +
-                        "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
-                        "avenue by Radio City."));
-
-                final JFXButton closeBtn = new JFXButton("Close");
-                closeBtn.setOnAction(a -> dialog.close());
-
-                final JFXButton directionsTo = new JFXButton("Direction To");
-                directionsTo.setOnAction(a -> {startComboBox.setValue(idToShortName(currEntry.getNodeID())); dialog.close();});
-
-                final JFXButton directionsFrom = new JFXButton("Directions From");
-                directionsFrom.setOnAction(a ->  {endComboBox.setValue(idToShortName(currEntry.getNodeID())); dialog.close();});
-
-                final JFXButton toggleFavorite = new JFXButton("FIXME: Add Favorite");
-
-                layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
-
-                dialog.setContent(layout);
-                mapPanel.showDialog(dialog);
-            });
-        });
+                        final JFXDialog dialog = new JFXDialog();
+                        final JFXDialogLayout layout = new JFXDialogLayout();
 
 
-        startComboBox.disableProperty().bind(isCurrentlyNavigating);
-        endComboBox.disableProperty().bind(isCurrentlyNavigating);
+                        layout.setHeading(new Text(currEntry.getLongName()));
+
+                        //FIXME: DO BREAKS W/ CSS
+                        layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
+                                "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
+                                "may also be prone to contain information about running to the second arrangement (it's only the\n" +
+                                "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
+                                "avenue by Radio City."));
+
+                        final JFXButton closeBtn = new JFXButton("Close");
+                        closeBtn.setOnAction(a -> dialog.close());
+
+                        final JFXButton directionsTo = new JFXButton("Direction To");
+                        directionsTo.setOnAction(a -> {
+                            endNode.set(idToShortName(currEntry.getNodeID()));try {
+                                handleEndNodeChange();
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                            dialog.close();
+                        });
+
+                        final JFXButton directionsFrom = new JFXButton("Directions From");
+                        directionsFrom.setOnAction(a -> {
+                            startNode.set(idToShortName(currEntry.getNodeID()));try {
+                                handleStartNodeChange();
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                            dialog.close();
+                        });
+
+
+                        if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                            final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
+                            try{
+                                if(getUserFavorites().contains(currEntry.getNodeID())){
+                                    toggleFavorite.setText("Remove Favorite");
+                                }
+                            } catch (SQLException throwables){
+                                throwables.printStackTrace();
+                            }
+                            toggleFavorite.setOnAction(a -> {
+                                if (toggleFavorite.getText().equals("Add To Favorites")) {
+                                    try {
+                                        addNodeToFavorites(currEntry);
+                                    } catch (SQLException throwables) {
+                                        throwables.printStackTrace();
+                                    }
+                                } else {
+                                    try {
+                                        removeNodeFromFavorites(currEntry);
+                                    } catch (SQLException throwables) {
+                                        throwables.printStackTrace();
+                                    }
+                                }
+                                dialog.close();
+                            });
+
+                            layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+                        } else {
+                            layout.setActions(directionsTo, directionsFrom, closeBtn);
+                        }
+
+
+
+                        dialog.setContent(layout);
+                        mapPanel.showDialog(dialog);
+                    });
+
+                    addFavoriteMenu.setOnAction(e -> {
+                        if (addFavoriteMenu.getText().equals("Add To Favorites")) {
+                            try {
+                                addNodeToFavorites(currEntry);
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        } else {
+                            try {
+                                removeNodeFromFavorites(currEntry);
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        }
+                    });
+                });
 
         Go.setDisable(true);
         Prev.setVisible(false);
@@ -284,9 +389,6 @@ public class AStarDemoController implements Initializable {
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
 
         direction = null;
-
-        loadRecentlyUsedVertices();
-        loadFavorites();
 
         /*
          * initializes user node
@@ -309,9 +411,237 @@ public class AStarDemoController implements Initializable {
 
         mapPanel.draw(this.userNodeDisplay);
 
-
         for(NodeEntry e : allNodeEntries)
           getDrawableNode(e.getNodeID());
+
+        //~~~~~~~~~ Tree View Setup ~~~~~~~~
+
+        // categorize node short names and add them to appropriate tree view (root items declared before initialize)
+        for (NodeEntry node: allNodeEntries) {
+            switch (node.getNodeType()){
+                case "CONF":
+                    conferenceItem.getChildren().add(new TreeItem<>(node.getShortName()));
+                    break;
+                case "DEPT":
+                    departmentItem.getChildren().add(new TreeItem<>(node.getShortName()));
+                    break;
+                case "EXIT":
+                    entranceItem.getChildren().add(new TreeItem<>(node.getShortName()));
+                    break;
+                case "INFO":
+                    infoItem.getChildren().add(new TreeItem<>(node.getShortName()));
+                    break;
+                case "LABS":
+                    labItem.getChildren().add(new TreeItem<>(node.getShortName()));
+                    break;
+                case "PARK":
+                    parkingItem.getChildren().add(new TreeItem<>(node.getShortName()));
+                    break;
+                case "RETL":
+                    retailItem.getChildren().add(new TreeItem<>(node.getShortName()));
+                    break;
+                case "SERV":
+                    serviceItem.getChildren().add(new TreeItem<>(node.getShortName()));
+                    break;
+                case "REST":
+                    restroomItem.getChildren().add(new TreeItem<>(node.getShortName()));
+                    break;
+            }
+        }
+
+
+        // add tree items to root item (shown in order of addition)
+        rootTreeViewItem.getChildren().addAll(conferenceItem, departmentItem, entranceItem, infoItem,
+                labItem, parkingItem, retailItem, serviceItem, restroomItem);
+
+        // Check if a user is signed in a create the Tree Items for favorite and recent if needed
+        if(CurrentUser.getCurrentUser().isAuthenticated()) {
+
+            try {
+                for (String ID : getUserFavorites()) {
+                    favoriteItem.getChildren().add(new TreeItem<>(idToShortName(ID)));
+                }
+                for (String ID : getUserRecent()){
+                    recentItem.getChildren().add(0, new TreeItem<>(idToShortName(ID)));
+                }
+
+                // Add tree items at start of the list of items (Top of the page)
+                rootTreeViewItem.getChildren().add(0, recentItem);
+                rootTreeViewItem.getChildren().add(0, favoriteItem);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+        // Set the root item
+        treeView.setRoot(rootTreeViewItem);
+
+        // Hide root item (we dont need it visible, we always want to list to be there
+        this.treeView.setShowRoot(false);
+
+        // Add a context menu to the tree view for when an item is selected
+        treeView.setOnContextMenuRequested(event -> {
+            // If navigating: do nothing
+            if(isCurrentlyNavigating.get()){ return; }
+
+            final NodeEntry currEntry = findNodeEntry(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue()));
+            if(currEntry == null){return;}
+
+            // Replace text on the whats here menu to make a little more sense
+            whatsHereMenu.setText("What's This?");
+
+            // Swap text on the add stop item based on if selected node in in the list
+            if(vertices.contains(graph.getVertex(currEntry.getNodeID()))){
+                addStopMenu.setText("Remove Stop");
+            } else {
+                addStopMenu.setText("Add Stop");
+            }
+
+            if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                try {
+                    if (getUserFavorites().contains(currEntry.getNodeID())) {
+                        addFavoriteMenu.setText("Remove Favorite");
+                    } else {
+                        addFavoriteMenu.setText("Add To Favorites");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Show context menu
+            contextMenu.show(treeView, event.getScreenX(), event.getScreenY());
+
+            // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
+            // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
+            startPathMenu.setOnAction(e -> {
+                startNode.set(idToShortName(currEntry.getNodeID()));
+                try {
+                    handleStartNodeChange();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            });
+
+            // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
+            // No combo box update so we call checkInput()
+            addStopMenu.setOnAction(e -> {
+                if(addStopMenu.getText().equals("Add Stop")) {
+                    vertices.add(graph.getVertex(currEntry.getNodeID()));
+                    drawStop(currEntry);
+                    try {
+                        addNodeToRecent(currEntry);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                } else {
+                    vertices.remove(graph.getVertex(currEntry.getNodeID()));
+                    mapPanel.unDraw(currEntry.getNodeID());
+                    getDrawableNode(currEntry.getNodeID());
+                }
+                checkInput();
+            });
+
+            // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
+            endPathMenu.setOnAction(e -> {
+                endNode.set(idToShortName(currEntry.getNodeID()));
+                try {
+                    handleEndNodeChange();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            });
+
+            //FIXME: Make these ones require that thing is visible
+            whatsHereMenu.setOnAction(e -> {
+                mapPanel.switchMap(currEntry.getFloor());
+                mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
+
+                final JFXDialog dialog = new JFXDialog();
+                final JFXDialogLayout layout = new JFXDialogLayout();
+
+
+                layout.setHeading(new Text(currEntry.getLongName()));
+
+                //FIXME: DO BREAKS W/ CSS
+                layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
+                        "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
+                        "may also be prone to contain information about running to the second arrangement (it's only the\n" +
+                        "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
+                        "avenue by Radio City."));
+
+                final JFXButton closeBtn = new JFXButton("Close");
+                closeBtn.setOnAction(a -> dialog.close());
+
+                final JFXButton directionsTo = new JFXButton("Direction To");
+                directionsTo.setOnAction(a -> {
+                    endNode.set(idToShortName(currEntry.getNodeID()));
+                    try {
+                        handleEndNodeChange();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    dialog.close();});
+
+                final JFXButton directionsFrom = new JFXButton("Directions From");
+                directionsFrom.setOnAction(a ->  {
+                    startNode.set(idToShortName(currEntry.getNodeID()));
+                    try {
+                        handleStartNodeChange();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    dialog.close();});
+
+                if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                    final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
+                    try{
+                        if(getUserFavorites().contains(currEntry.getNodeID())){
+                            toggleFavorite.setText("Remove Favorite");
+                        }
+                    } catch (SQLException throwables){
+                        throwables.printStackTrace();
+                    }
+                    toggleFavorite.setOnAction(a -> {
+                        if (toggleFavorite.getText().equals("Add To Favorites")) {
+                            try {
+                                addNodeToFavorites(currEntry);
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        } else {
+                            try {
+                                removeNodeFromFavorites(currEntry);
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        }
+                        dialog.close();
+                    });
+                    layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+                } else {
+                    layout.setActions(directionsTo, directionsFrom, closeBtn);
+                }
+                dialog.setContent(layout);
+                mapPanel.showDialog(dialog);
+            });
+
+            addFavoriteMenu.setOnAction(e -> {
+                if (addFavoriteMenu.getText().equals("Add To Favorites")) {
+                    try {
+                        addNodeToFavorites(currEntry);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                } else {
+                    try {
+                        removeNodeFromFavorites(currEntry);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+            });
+        });
     }
 
     /**
@@ -332,11 +662,8 @@ public class AStarDemoController implements Initializable {
         stop.setScaleY(1.5);
         stop.setMouseTransparent(true);
         mapPanel.draw(stop);
-    }
-
-    private void loadFavorites() {
-        this.favorites = new DoublyLinkedHashSet<>();
-        //TODO: load recentlyUsed
+        mapPanel.switchMap(nodeEntry.getFloor());
+        mapPanel.centerNode(stop);
     }
 
     private String shortNameToID(String shortName){
@@ -397,7 +724,6 @@ public class AStarDemoController implements Initializable {
         return closest;
     }
 
-
     /**
      * Handles the pushing of a button on the screen
      *
@@ -420,21 +746,21 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handleStartBoxAction() {
+    public void handleStartNodeChange() throws SQLException {
         checkInput();
        // if(this.startNodeDisplay != null)
         //    mapPanel.unDraw(this.startNodeDisplay.getId());
         //FIXME: USE BINDINGS
-        if(!(startComboBox.getValue() == null)) {
-            this.startNodeDisplay = mapPanel.getNode(shortNameToID(startComboBox.getValue()));
+        if(!(startNode.getValue().isEmpty())) {
+            this.startNodeDisplay = mapPanel.getNode(shortNameToID(startNode.get()));
 
             mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
             mapPanel.centerNode(startNodeDisplay);
-            loadRecentlyUsedVertices();
+            addNodeToRecent(DatabaseAPI.getDatabaseAPI().getNode(shortNameToID(startNode.getValue())));
         }
     }
     /**
-     * Helper function used to draw the startNode with given ID, snatched from handleStartBoxAction()
+     * Helper function used to draw the startNode with given ID, snatched from handleStartNodeChange()
      * @param nodeID the ID of the Node
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
@@ -448,8 +774,8 @@ public class AStarDemoController implements Initializable {
 
             drawableNode.setOnContextMenuRequested(mapPanel.getMap().getOnContextMenuRequested());
 
-            final BooleanBinding isStartNode = startComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()));
-            final BooleanBinding isEndNode = endComboBox.valueProperty().isEqualTo(idToShortName(drawableNode.getId()));
+            final BooleanBinding isStartNode = Bindings.equal(startNode, idToShortName(drawableNode.getId()));
+            final BooleanBinding isEndNode = Bindings.equal(endNode, idToShortName(drawableNode.getId()));
             final BooleanBinding isStartOrEndNode = isStartNode.or(isEndNode);
 
             drawableNode.radiusProperty().bind(Bindings.when(isStartOrEndNode).then(10).otherwise(5));
@@ -526,33 +852,24 @@ public class AStarDemoController implements Initializable {
         }
     }
 
-    /**
-     * Loads recently used vertices from the database into the controller
-     * @author Tony Vuolo (bdane)
-     */
-    private void loadRecentlyUsedVertices() {
-        this.recentlyUsed = new DoublyLinkedHashSet<>();
-        //TODO: load recently used from database
-    }
 
     /**
      *
      * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handleEndBoxAction() {
+    public void handleEndNodeChange() throws SQLException {
         checkInput();
 //        if(this.endNodeDisplay != null)
 //            mapPanel.unDraw(this.endNodeDisplay.getId());
         //FIXME: USE BINDINGS?
-        if(!(endComboBox.getValue() == null)) {
-            this.endNodeDisplay = mapPanel.getNode(shortNameToID(endComboBox.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
+        if(!(endNode.getValue().isEmpty())) {
+            this.endNodeDisplay = mapPanel.getNode(shortNameToID(endNode.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
             mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
             mapPanel.centerNode(endNodeDisplay);
-            loadRecentlyUsedVertices();
+            addNodeToRecent(DatabaseAPI.getDatabaseAPI().getNode(shortNameToID(endNode.getValue())));
         }
     }
-
 
 
     /**
@@ -562,15 +879,13 @@ public class AStarDemoController implements Initializable {
      */
     private boolean updatePath()
     {
-        final Vertex startVertex = this.graph.getVertex(shortNameToID(startComboBox.getValue()));
-        final Vertex endVertex = this.graph.getVertex(shortNameToID(endComboBox.getValue()));
+        final Vertex startVertex = this.graph.getVertex(shortNameToID(startNode.getValue()));
+        final Vertex endVertex = this.graph.getVertex(shortNameToID(endNode.getValue()));
 
 
         List<Vertex> pathVertices = new ArrayList<>();
         pathVertices.clear();
         pathVertices.addAll(vertices);
-
-        updateRecentlyUsed(endVertex);
 
         final Path path;
 
@@ -647,26 +962,12 @@ public class AStarDemoController implements Initializable {
     }
 
     /**
-     * Updates the recently used DLHS with the newest destination Vertex
-     * @param endVertex the new destination to be considered a recently used Vertex
-     * @author Tony Vuolo (bdane)
-     */
-    private void updateRecentlyUsed(Vertex endVertex) {
-        if(this.recentlyUsed.size() == MAX_RECENTLY_USED) {
-            this.recentlyUsed.add(this.recentlyUsed.removeIndex(0));
-        } else if(this.recentlyUsed.containsKey(endVertex)) {
-            this.recentlyUsed.remove(endVertex);
-            this.recentlyUsed.add(endVertex);
-        }
-    }
-
-    /**
      * Used to check if our input is valid to run the pathfinding algorithm or not
      *
      * @author Alex Friedman (ahf)
      */
     @FXML private void checkInput() {
-        if (startComboBox.getValue() == null || endComboBox.getValue() == null){
+        if (startNode.getValue().isEmpty() || endNode.getValue().isEmpty()){
           mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
         }else{
             mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableEdge);
@@ -1055,8 +1356,8 @@ public class AStarDemoController implements Initializable {
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
 
-        mapPanel.switchMap(pathVertex.get(0).getFloor());
-        mapPanel.centerNode(startNodeDisplay);
+        //mapPanel.switchMap(pathVertex.get(0).getFloor());
+        //mapPanel.centerNode(startNodeDisplay);
         Go.setText("Start Navigation");
     }
 
@@ -1078,7 +1379,7 @@ public class AStarDemoController implements Initializable {
     /**
      * Returns user to main page after clicking on the B&W Logo
      * Replaces handleButtonPushed
-     * @throws IOException
+     * @throws IOException If loading the scene fails
      * @author Leo Morris
      */
     public void handleGoBack() throws IOException {
@@ -1133,7 +1434,7 @@ public class AStarDemoController implements Initializable {
 
         //TODO: Italics for previously finished instructions?
         //TODO: better align ETA text.
-        layout.setHeading(new Text("Directions from: " + startComboBox.getValue() + " to " +  endComboBox.getValue()));
+        layout.setHeading(new Text("Directions from: " + startNode.getValue() + " to " +  endNode.getValue()));
 
         StringBuilder directions = new StringBuilder();
         for(int i = 0; i < stopsList.size(); i++)
@@ -1228,7 +1529,7 @@ public class AStarDemoController implements Initializable {
             contentStream.newLineAtOffset(25, 690);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("Directions from: " + startComboBox.getValue());
+            contentStream.showText("Directions from: " + startNode.getValue());
             contentStream.newLine();
             contentStream.endText();
 
@@ -1239,7 +1540,7 @@ public class AStarDemoController implements Initializable {
             contentStream.newLineAtOffset(25, 670);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("To: " + endComboBox.getValue());
+            contentStream.showText("To: " + endNode.getValue());
             contentStream.newLine();
             contentStream.endText();
 
@@ -1332,8 +1633,8 @@ public class AStarDemoController implements Initializable {
     public void clearList() {
 
         vertices.clear();
-        startComboBox.getSelectionModel().clearSelection();
-        endComboBox.getSelectionModel().clearSelection();
+        startNode.set("");
+        endNode.set("");
         mapPanel.clearMap();
         Go.setDisable(true);
 
@@ -1345,6 +1646,11 @@ public class AStarDemoController implements Initializable {
         }
     }
 
+    /**
+     * Calls the appropriate method to change the state of navigation.
+     * Allows the start/end buttons to be one button
+     * @author Leo Morris
+     */
     public void toggleNavigation() {
         if(isCurrentlyNavigating.get()){
             endNavigation();
@@ -1355,5 +1661,58 @@ public class AStarDemoController implements Initializable {
 
     public void gotoAboutPage(ActionEvent actionEvent) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AboutpageView.fxml");
+    }
+
+    public List<String> getUserFavorites() throws SQLException {
+        if(!CurrentUser.getCurrentUser().isAuthenticated()) return null;
+        return DatabaseAPI.getDatabaseAPI().getUserNodes("favorite", CurrentUser.getCurrentUser().getLoggedIn().getUsername());
+    }
+
+    public List<String> getUserRecent() throws SQLException{
+        if(!CurrentUser.getCurrentUser().isAuthenticated()) return null;
+        return DatabaseAPI.getDatabaseAPI().getUserNodes("recent", CurrentUser.getCurrentUser().getLoggedIn().getUsername());
+    }
+
+    public void addNodeToFavorites(NodeEntry node) throws SQLException{
+        if(CurrentUser.getCurrentUser().isAuthenticated()) {
+            if(getUserFavorites().contains(node.getNodeID())){return;}
+            DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "favorite");
+            favoriteItem.getChildren().add(0, new TreeItem<>(node.getShortName()));
+        }
+    }
+
+    public void removeNodeFromFavorites(NodeEntry node) throws SQLException{
+        if(CurrentUser.getCurrentUser().isAuthenticated()){
+            if(!getUserFavorites().contains(node.getNodeID())){return;}
+            DatabaseAPI.getDatabaseAPI().deleteUserNode(node.getNodeID(), CurrentUser.getCurrentUser().getLoggedIn().getUsername(), "favorite");
+            favoriteItem.getChildren().removeIf(t -> t.getValue().equals(node.getShortName())); // Remove any tree item with a matching short name from the list
+        }
+    }
+
+    public void addNodeToRecent(NodeEntry node) throws SQLException{
+        if(CurrentUser.getCurrentUser().isAuthenticated()) {
+            if(!favoriteItem.getChildren().removeIf(t -> t.getValue().equals(node.getShortName()))) // Remove any tree item with a matching short name (prevents duplicates)
+                DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "recent"); // if it wasn't removed, add it to the db list
+            recentItem.getChildren().add(0, new TreeItem<>(node.getShortName()));
+            while(getUserRecent().size() > MAX_RECENTLY_USED){ // Should only run once, just covers a previously missed deletion
+                String IDtoRemove = shortNameToID(recentItem.getChildren().get(MAX_RECENTLY_USED).getValue());
+                DatabaseAPI.getDatabaseAPI().deleteUserNode(IDtoRemove, CurrentUser.getCurrentUser().getLoggedIn().getUsername(), "recent");
+                recentItem.getChildren().remove(MAX_RECENTLY_USED);
+            }
+        }
+    }
+
+
+    /**
+     * Centers map on a node when selected from the tree view without opening the "What's this?" menu
+     * @author Leo Morris
+     */
+    public void handleListSelection() {
+        if(treeView.getSelectionModel().getSelectedItem()!=null &&
+                !treeView.getSelectionModel().getSelectedItem().getParent().equals(rootTreeViewItem) &&
+                !treeView.getSelectionModel().getSelectedItem().equals(rootTreeViewItem)) { // Do not center on drop downs, root item or null items, only actual nodes
+            mapPanel.switchMap(findNodeEntry(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue())).getFloor());
+            mapPanel.centerNode(mapPanel.getNode(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue())));
+        }
     }
 }

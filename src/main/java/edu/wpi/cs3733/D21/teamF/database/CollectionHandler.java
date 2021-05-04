@@ -33,6 +33,22 @@ public class CollectionHandler {
     }
 
     /**
+     * Deletes an entry from the user's favorite or recently used nodes
+     * @param nodeID the ID of the node to remove
+     * @param type the type, favorite or recent
+     * @return true on success, false otherwise
+     * @throws SQLException on error with DB operations
+     */
+    public boolean deleteNodeEntry(String nodeID, String username, String type) throws SQLException{
+        final String query = "DELETE FROM COLLECTIONS WHERE NODE_ID=(?) AND RELATION_TYPE=(?) AND USER_ID=(?)";
+        PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+        stmt.setString(1, nodeID);
+        stmt.setString(2, type);
+        stmt.setString(3, username);
+        return stmt.executeUpdate() != 0;
+    }
+
+    /**
      * adds a node entry to the collections table
      * @param user the user associated with the node
      * @param node the nodeID to insert
