@@ -34,7 +34,7 @@ public class DefaultPageController {
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
-       openSurvey();
+        openSurvey();
     }
     private void openSurvey() throws IOException{
         FXMLLoader surveyLoader = new FXMLLoader();
