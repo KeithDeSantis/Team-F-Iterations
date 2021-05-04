@@ -7,7 +7,12 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -59,5 +64,19 @@ public class DefaultPageController {
         else if (buttonPushed == covidSurvey){
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
         }
+    }
+
+    public void handleCovidVaccine(ActionEvent actionEvent) throws IOException {
+        final FXMLLoader dialogLoader = new FXMLLoader();
+        dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidVaccineDialog.fxml"));
+        final Stage dialogStage = new Stage();
+        final Parent root = dialogLoader.load();
+
+        final CovidVaccineDialogController dialogController = dialogLoader.getController();
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(covidSurvey.getScene().getWindow());
+        dialogStage.setScene(new Scene(root));
+
+        dialogStage.showAndWait();
     }
 }

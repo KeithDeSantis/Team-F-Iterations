@@ -52,6 +52,11 @@
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
+                  <JFXButton fx:id="covidVaccineBtn" buttonType="RAISED" onAction="#handleCovidVaccine" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID Vaccine Information">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
                   <JFXButton fx:id="quit" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Quit">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
