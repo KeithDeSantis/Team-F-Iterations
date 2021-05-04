@@ -31,9 +31,9 @@ public class LoginController {
         Button buttonPushed = (JFXButton) actionEvent.getSource();  //Getting current stage
         if (buttonPushed == signIn) {
             if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
-                DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin");
-                DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff");
-                DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest");
+                DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin", "true");
+                DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff", "true");
+                DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest", "true");
             }
             String user = username.getText();
             String pass = password.getText();

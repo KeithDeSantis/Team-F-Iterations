@@ -47,4 +47,5 @@ public interface DatabaseEntry {
      * @throws SQLException on error with DB operations
      */
     void populateTable(List<String[]> entries) throws SQLException;
+
 }

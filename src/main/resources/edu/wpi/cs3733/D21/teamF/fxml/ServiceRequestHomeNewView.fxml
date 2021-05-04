@@ -27,7 +27,7 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <Text fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL SERVICE REQUEST SYSTEMS " wrappingWidth="785.13671875">
+                  <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL SERVICE REQUEST SYSTEMS " wrappingWidth="785.13671875">
                      <font>
                         <Font size="45.0" />
                      </font>
@@ -53,14 +53,14 @@
                   <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <JFXButton fx:id="Home" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="125.0" prefWidth="230.0" style="-fx-background-color: #03256C;" text=" " textFill="WHITE" GridPane.halignment="CENTER">
+                  <JFXButton fx:id="Home" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="125.0" prefWidth="230.0" style="-fx-background-color: f0c808;" text=" " textFill="WHITE" GridPane.halignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="homeImage" fitHeight="115.0" fitWidth="183.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../imagesAndLogos/homeWhiteText.png" />
+                              <Image url="@../../../../../../imagesAndLogos/HomeBlackText.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -264,6 +264,9 @@
                      </font>
                   </Text>
                </children>
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" top="10.0" />
+               </VBox.margin>
             </GridPane>
          </children>
       </VBox>
