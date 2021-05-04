@@ -134,8 +134,8 @@ public class AccountManagerController implements Initializable {
             String pass = addPassword.getText();
             String type = newUserType.getValue();
 
-            DatabaseAPI.getDatabaseAPI().addUser(userName, type, userName, pass, "false");
-            AccountEntry newUser = new AccountEntry(userName, pass, type, "false");
+            DatabaseAPI.getDatabaseAPI().addUser(userName, type, userName, pass, "true");
+            AccountEntry newUser = new AccountEntry(userName, pass, type, "true");
             accounts.add(newUser);
             refreshPage();
         }
