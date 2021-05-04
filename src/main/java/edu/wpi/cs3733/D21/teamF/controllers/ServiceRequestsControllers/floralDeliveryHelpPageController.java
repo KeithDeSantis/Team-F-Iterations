@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
@@ -12,6 +13,6 @@ public class floralDeliveryHelpPageController {
 
 
     public void goBack(ActionEvent actionEvent) throws IOException {
-        ( (Stage) back.getScene().getWindow()).close();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FloralDeliveryServiceRequestView.fxml");
     }
 }

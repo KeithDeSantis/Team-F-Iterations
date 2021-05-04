@@ -4,6 +4,7 @@ import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -194,5 +195,9 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
                 rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
                 rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
 
+    }
+
+    public void getHelp(ActionEvent actionEvent)throws IOException{
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryHelpNewView.fxml");
     }
 }
