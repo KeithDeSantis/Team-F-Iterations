@@ -50,12 +50,12 @@
                                     <Font name="Tahoma" size="18.0" />
                                  </font>
                               </Label>
-                              <JFXButton fx:id="zoomInButton"  onAction="#handleZoom" buttonType="RAISED" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="+">
+                              <JFXButton fx:id="zoomInButton" buttonType="RAISED" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="+">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="zoomOutButton"  onAction="#handleZoom" buttonType="RAISED" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="-">
+                              <JFXButton fx:id="zoomOutButton" buttonType="RAISED" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="-">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
