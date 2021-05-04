@@ -160,6 +160,16 @@ public class AStarDemoController implements Initializable {
             exception.printStackTrace();
         }
 
+        for(Vertex v : this.graph.getVertices()){
+            if(v.getID().substring(1,5).equals("STAI") || v.getID().substring(1,5).equals("ELEV")) {
+                for (Edge e : v.getEdges()) {
+                    Vertex closeV = v.getNeighbor(e);
+                    if(v.getID().substring(1,5).equals(closeV.getID().substring(1,5))){
+                        e.setWeight(50);
+                    }
+                }
+            }
+        }
 
         List<String> shortNameList = new ArrayList<>();
         for(Vertex vertex : this.graph.getVertices()){

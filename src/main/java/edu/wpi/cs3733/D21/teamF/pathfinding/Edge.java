@@ -2,7 +2,7 @@ package edu.wpi.cs3733.D21.teamF.pathfinding;
 
 public class Edge {
     private final Vertex a, b;
-    private final double weight;
+    private double weight;
 
     /**
      * Creates a new Edge
@@ -62,5 +62,9 @@ public class Edge {
             return checkEnds || checkEndsReverse;
         }
         return false;
+    }
+
+    public void setWeight(double newWeight) {
+        this.weight = newWeight;
     }
 }
