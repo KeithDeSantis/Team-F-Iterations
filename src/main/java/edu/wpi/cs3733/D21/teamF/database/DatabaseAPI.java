@@ -257,7 +257,8 @@ public class DatabaseAPI {
         char[] blacklist = {'\'', '-', '\"', '#', '(', ')', '|'};
         for (char c : blacklist){
             if (!(input.indexOf(c) == -1)){
-                return false;
+                System.out.println("WARNING: Possible SQL Injection: " + input);
+                return true;
             }
         }
         return true;
