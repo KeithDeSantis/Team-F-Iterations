@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTimePicker;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
@@ -25,6 +26,8 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
     public JFXTextField clientRoom;
     @FXML
+    public JFXTimePicker deliveryTime;
+    @FXML
     public JFXTextArea medicineInformation;
     @FXML
     public JFXTextField cardNumber;
@@ -44,6 +47,7 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
         boolean submitSuccessful = true;
+        setNormalStyle(clientRoom, clientName, deliveryTime, medicineInformation, cardholder, cardNumber, cvc, expirationDate);
         for(int i = 0; i < 7; i++) {
             TextInputControl node = null;
             switch(i) {
@@ -78,8 +82,12 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
                 submitSuccessful = false;
                 setTextErrorStyle(node);
             }
+            if(deliveryTime.getValue() == null){
+                submitSuccessful = false;
+                setTextErrorStyle(deliveryTime);
+            }
         }
-        if(formFilled()) {
+        if(submitSuccessful) {
             String uuid = UUID.randomUUID().toString();
             String type = "Medicine Delivery";
             String person = "";

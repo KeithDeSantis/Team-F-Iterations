@@ -14,7 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +21,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -65,7 +63,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      */
     public void handleTranslate(ActionEvent actionEvent) throws IOException{
         if(language.getValue() != null) {
-            List<Label> labelList = new ArrayList<>(); //list of labels that need to get fixed
+            List<Label> labelList = new ArrayList<Label>(); //list of labels that need to get fixed
             labelList.add(nameLabel);
             labelList.add(dtLabel);
             labelList.add(appointmentLabel);
@@ -113,7 +111,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
     @Override
     public void handleClear(){
-        //name.
+        name.setText("");
+        date.setValue(null);
+        time.setValue(null);
+        appointment.setValue(null);
+        language.setValue(null);
+        setNormalStyle(name, date, time, appointment, language);
     }
 
     /**
@@ -156,7 +159,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Infectious Disease");
         appointment.getItems().add("Interventional Cardiology");
         appointment.getItems().add("Interventional Radiology");
-        appointment.getItems().add("Lung Dancer Screening (Low Dose CT)");
+        appointment.getItems().add("Lung Cancer Screening (Low Dose CT)");
         appointment.getItems().add("Lung Transplantation Program");
         appointment.getItems().add("Lupus Center");
         appointment.getItems().add("Magnetic Resonance Imaging (MRI)");
@@ -244,6 +247,11 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
             setTextErrorStyle(language);
             isFilled = false;
         }
+        if(appointment.getValue() == null)
+        {
+            setTextErrorStyle(appointment);
+            isFilled = false;
+        }
         return isFilled;
     }
 
@@ -253,7 +261,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Johvanni Perez
      */
     public static HashMap<String, String> codeMap(){
-        HashMap<String, String> langCodes = new HashMap<>();
+        HashMap<String, String> langCodes = new HashMap<String, String>();
 
         langCodes.put("Arabic", "ar");
         langCodes.put("Dutch", "nl");

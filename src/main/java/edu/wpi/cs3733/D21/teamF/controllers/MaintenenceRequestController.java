@@ -114,22 +114,22 @@ public class MaintenenceRequestController extends ServiceRequests {
         boolean filled = true;
         if(typeComboBox.getValue() == null){
             filled = false;
-            typeComboBox.setStyle("-fx-background-color: #ff000088");
+            setTextErrorStyle(typeComboBox);
             typeComboBox.setPromptText("Specify the problem");
         }
         if(locationField.getValue() == null){
             filled = false;
-            locationField.setStyle("-fx-background-color: #ff000088");
+            setTextErrorStyle(locationField);
             locationField.setPromptText("Please give a location");
         }
         if(descriptionField.getText().isEmpty()){
             filled = false;
-            descriptionField.setStyle("-fx-background-color: #ff000088");
+            setTextErrorStyle(descriptionField);
             descriptionField.setPromptText("Please give a description of the problem");
         }
         if(urgencyComboBox.getValue() == null){
             filled = false;
-            urgencyComboBox.setStyle("-fx-background-color: #ff000088");
+            setTextErrorStyle(urgencyComboBox);
             urgencyComboBox.setPromptText("Please give a location");
         }
         return filled;
