@@ -79,6 +79,11 @@ public class CovidFormSubmittedViewController {
 
 
     public void handleLogin(ActionEvent actionEvent) throws SQLException {
+        if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
+            DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin", "true");
+            DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff", "true");
+            DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest", "true");
+        }
         String user = username.getText();
         String pass = password.getText();
 

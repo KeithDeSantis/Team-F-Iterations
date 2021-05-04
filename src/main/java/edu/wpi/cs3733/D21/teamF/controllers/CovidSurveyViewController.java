@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-public class CovidSurveyViewController {
+public class CovidSurveyViewController extends ServiceRequests{
 
     @FXML private HBox header;
     @FXML private Label title;
@@ -59,7 +59,7 @@ public class CovidSurveyViewController {
     /**
      * generates a UUID for the survey and displays it.
      */
-    private void initialize(){
+    private void initialize(URL location, ResourceBundle resources){
         String ticketNumber = UUID.randomUUID().toString();
         generatedID.setText(ticketNumber);
     }
@@ -71,6 +71,7 @@ public class CovidSurveyViewController {
      * @throws IOException
      */
     @FXML private void handleSubmitPushed(ActionEvent e) throws IOException, SQLException {
+
         //create service request, put in database
         DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "false", "form details etc");
         ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
@@ -86,6 +87,14 @@ public class CovidSurveyViewController {
         submittedStage.setTitle("Submission Complete");
         submittedStage.initModality(Modality.APPLICATION_MODAL);
         submittedStage.showAndWait();
+    }
+    public boolean formFilled(){
+        boolean complete = true;
+        if (temperatureField.getText() == ""){
+            setTextErrorStyle(temperatureField);
+            complete = false;
+        }
+        return complete;
     }
 
     /**
