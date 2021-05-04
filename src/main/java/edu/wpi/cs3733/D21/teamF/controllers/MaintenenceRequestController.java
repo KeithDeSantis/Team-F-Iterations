@@ -1,29 +1,25 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class MaintenenceRequestController extends ServiceRequests {
@@ -139,14 +135,14 @@ public class MaintenenceRequestController extends ServiceRequests {
         return filled;
     }
 
-    public void reset(KeyEvent keyEvent) {
+    public void reset() {
         locationField.setStyle("-fx-background-color: #00000000");
         descriptionField.setStyle("-fx-background-color: #00000000");
         typeComboBox.setStyle("-fx-background-color: #00000000");
         urgencyComboBox.setStyle("-fx-background-color: #00000000");
     }
 
-    public void reset2(ActionEvent actionEvent) {
+    public void reset2() {
         locationField.setStyle("-fx-background-color: #00000000");
         descriptionField.setStyle("-fx-background-color: #00000000");
         typeComboBox.setStyle("-fx-background-color: #00000000");

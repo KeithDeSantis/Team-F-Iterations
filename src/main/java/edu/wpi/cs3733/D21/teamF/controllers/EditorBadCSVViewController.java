@@ -3,15 +3,9 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class EditorBadCSVViewController {
-    @FXML private Label formatErrorTitle;
-    @FXML private Label formatErrorMessage;
-
     @FXML
     public void initialize() {
 

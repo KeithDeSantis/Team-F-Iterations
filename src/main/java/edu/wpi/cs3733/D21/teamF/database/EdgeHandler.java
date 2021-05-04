@@ -32,7 +32,7 @@ public class EdgeHandler implements DatabaseEntry {
     @Override
     public boolean editEntry(String id, String newVal, String colName)
     {
-        boolean success = false;
+        boolean success;
         String query = String.format("UPDATE AllEdges SET %s=(?) WHERE EDGEID=(?)", colName);
         try {
             PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
@@ -53,7 +53,7 @@ public class EdgeHandler implements DatabaseEntry {
      */
     @Override
     public boolean deleteEntry(String id) {
-        boolean success = false;
+        boolean success;
         String query = "DELETE FROM AllEdges WHERE EDGEID=(?)";
         try {
             PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
@@ -73,20 +73,17 @@ public class EdgeHandler implements DatabaseEntry {
      */
     @Override
     public boolean createTable() {
-        boolean success = false;
         final String initNodesTable = "CREATE TABLE AllEdges(EdgeID varchar(200), " +
                 "startNode varchar(200), endNode varchar(200), primary key(EdgeID))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initNodesTable);
             stmt.close();
-            success = true;
         }
         catch (SQLException e){
-            success = false;
-            return success;
+            return false;
         }
-        return success;
+        return true;
     }
 
     /**
@@ -94,18 +91,16 @@ public class EdgeHandler implements DatabaseEntry {
      */
     @Override
     public boolean dropTable() {
-        boolean success = false;
         String query = "DROP TABLE AllEdges";
         try {
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(query);
             stmt.close();
-            success = true;
         }
         catch (SQLException e){
             return false;
         }
-        return success;
+        return true;
     }
 
     /**
@@ -126,20 +121,20 @@ public class EdgeHandler implements DatabaseEntry {
     public List<EdgeEntry> genEdgeEntryObjects() throws SQLException {
         List<EdgeEntry> entries = new ArrayList<>();
         String query = "SELECT * FROM AllEdges";
-        ResultSet rset;
+        ResultSet resultSet;
         Statement stmt = ConnectionHandler.getConnection().createStatement();
-        rset = stmt.executeQuery(query);
+        resultSet = stmt.executeQuery(query);
 
-        while (rset.next())
+        while (resultSet.next())
         {
-            String edgeID = rset.getString(1);
-            String startNode = rset.getString(2);
-            String endNode = rset.getString(3);
+            String edgeID = resultSet.getString(1);
+            String startNode = resultSet.getString(2);
+            String endNode = resultSet.getString(3);
 
             EdgeEntry newEntry = new EdgeEntry(edgeID, startNode, endNode);
             entries.add(newEntry);
         }
-        rset.close();
+        resultSet.close();
         return entries;
     }
 
@@ -155,9 +150,9 @@ public class EdgeHandler implements DatabaseEntry {
         final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
         stmt.setString(1, id);
 
-        ResultSet rset;
+        ResultSet resultSet;
         try {
-            rset = stmt.executeQuery();
+            resultSet = stmt.executeQuery();
         } catch (SQLException e) {
             if (e.getMessage().contains("Table/View 'L1NODES' does not exist."))
                 return null;
@@ -165,14 +160,14 @@ public class EdgeHandler implements DatabaseEntry {
                 e.printStackTrace();
             return null;
         }
-        while (rset.next()) {
-            final String edgeID = rset.getString(1);
-            final String start = rset.getString(2);
-            final String end = rset.getString(3);
-            rset.close();
+        while (resultSet.next()) {
+            final String edgeID = resultSet.getString(1);
+            final String start = resultSet.getString(2);
+            final String end = resultSet.getString(3);
+            resultSet.close();
             return new EdgeEntry(edgeID, start, end);
         }
-        rset.close();
+        resultSet.close();
         return null;
     }
 }

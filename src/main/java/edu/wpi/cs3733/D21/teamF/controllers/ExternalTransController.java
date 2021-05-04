@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -8,22 +9,17 @@ import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-public class externalTransController extends ServiceRequests{
+public class ExternalTransController extends ServiceRequests{
     @FXML private JFXTextField patientName;
     @FXML private JFXComboBox<String> loc;
     @FXML private JFXTextField methodTrans;
@@ -62,7 +58,8 @@ public class externalTransController extends ServiceRequests{
 
     @Override
     public boolean formFilled() {
-        boolean isFilled = true;
+            boolean isFilled = true;
+            setNormalStyle(patientName, methodTrans, special, loc);
 
         setNormalStyle(patientName, methodTrans, special, loc);
         if(patientName.getText().length() == 0){

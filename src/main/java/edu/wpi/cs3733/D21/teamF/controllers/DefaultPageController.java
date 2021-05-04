@@ -1,22 +1,13 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
-import com.sun.javafx.tk.FontLoader;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 
 public class DefaultPageController {
     @FXML
@@ -29,9 +20,6 @@ public class DefaultPageController {
     private JFXButton loginButton;
     @FXML
     private JFXButton covidSurvey;
-    @FXML
-    private Text title;
-
 
     @FXML private void initialize(){
         // Apply fonts to title and buttons
@@ -49,8 +37,6 @@ public class DefaultPageController {
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
-        Stage stage;
-        Parent root;
 
         if (buttonPushed == loginButton) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
