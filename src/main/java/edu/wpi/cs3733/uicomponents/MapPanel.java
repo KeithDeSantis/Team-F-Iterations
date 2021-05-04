@@ -136,6 +136,9 @@ public class MapPanel extends AnchorPane {
 
     @FXML
     public void initialize(){
+        zoomInButton.setOnAction(e -> handleZoom(e));
+        zoomOutButton.setOnAction(e -> handleZoom(e));
+
         // Set button fonts - LM
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
