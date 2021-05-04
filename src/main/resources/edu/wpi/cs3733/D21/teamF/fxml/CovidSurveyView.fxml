@@ -228,6 +228,11 @@
                   <Font size="20.0" />
                </font>
             </JFXButton>
+            <JFXButton fx:id="employeeSignIn" buttonType="RAISED" onAction="#handleEmployeeSignIn" text="Sign in as employee/admin" textFill="#03256c" underline="true">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </JFXButton>
             <JFXButton fx:id="cancel" buttonType="RAISED" onAction="#handleCancelPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel">
                <font>
                   <Font size="20.0" />

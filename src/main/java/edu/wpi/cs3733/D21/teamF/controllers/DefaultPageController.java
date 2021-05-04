@@ -3,11 +3,19 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class DefaultPageController {
     @FXML
@@ -21,11 +29,24 @@ public class DefaultPageController {
     @FXML
     private JFXButton covidSurvey;
 
-    @FXML private void initialize(){
+    @FXML private void initialize(URL location, ResourceBundle resources) throws IOException{
         // Apply fonts to title and buttons
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
+       openSurvey();
+    }
+    private void openSurvey() throws IOException{
+        FXMLLoader surveyLoader = new FXMLLoader();
+        surveyLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml"));
+        Stage dialogStage = new Stage();
+        Parent root = surveyLoader.load();
+        CovidSurveyViewController dialogController = surveyLoader.getController();
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(navigation.getScene().getWindow());
+        dialogStage.setScene(new Scene(root));
+
+        dialogStage.showAndWait();
     }
     /**
      * Handles the pushing of a button on the screen

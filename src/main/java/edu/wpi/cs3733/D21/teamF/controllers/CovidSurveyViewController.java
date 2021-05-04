@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class CovidSurveyViewController {
 
@@ -45,11 +48,10 @@ public class CovidSurveyViewController {
     @FXML private JFXCheckBox fever;
     @FXML private JFXButton submit;
     @FXML private JFXButton cancel;
+    @FXML private JFXButton employeeSignIn;
 
 
-    @FXML
-    private void initialize(){
-    }
+
 
     /**
      * handles the back button (image icon) being pushed
@@ -111,5 +113,9 @@ public class CovidSurveyViewController {
         ToggleGroup question2 = new ToggleGroup(); //group for second question
         yes2.setToggleGroup(question2);
         no2.setToggleGroup(question2);
+    }
+
+    public void handleEmployeeSignIn(ActionEvent actionEvent) throws IOException{
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
     }
 }
