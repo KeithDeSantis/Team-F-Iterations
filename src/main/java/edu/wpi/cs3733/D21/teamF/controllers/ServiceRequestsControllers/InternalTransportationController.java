@@ -30,8 +30,6 @@ public class InternalTransportationController extends ServiceRequests {
 
     @FXML private JFXDatePicker movingDate;
 
-    @FXML private JFXTimePicker movingTime;
-
     @FXML private JFXTextField patientName;
 
     @FXML private JFXComboBox<String> patientRoom;
@@ -109,7 +107,6 @@ public class InternalTransportationController extends ServiceRequests {
     public void handleClear() {
         deliverLocation.setValue(null);
         movingDate.setValue(null);
-        movingTime.setValue(null);
         patientName.setText("");
         patientRoom.setValue(null);
         relativesCheckBox.setSelected(false);
