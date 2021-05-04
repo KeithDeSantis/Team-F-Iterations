@@ -438,4 +438,16 @@ class DatabaseAPITest {
         assertEquals(actual.get(1), "node2");
         assertEquals(actual.get(2), "node3");
     }
+
+    @Test
+    @DisplayName("test SQL Injection filter")
+    public void testInjection(){
+        assertTrue(DatabaseAPI.getDatabaseAPI().filterInput("test"));
+    }
+
+    @Test
+    @DisplayName("test bad user input")
+    public void testInjectionBad(){
+        assertFalse(DatabaseAPI.getDatabaseAPI().filterInput(")'DROP TABLE USERS--"));
+    }
 }

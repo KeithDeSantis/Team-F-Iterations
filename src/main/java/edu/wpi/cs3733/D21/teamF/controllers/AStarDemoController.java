@@ -1330,6 +1330,7 @@ public class AStarDemoController implements Initializable {
      * @author Leo Morris
      */
     public void clearList() {
+
         vertices.clear();
         startComboBox.getSelectionModel().clearSelection();
         endComboBox.getSelectionModel().clearSelection();
@@ -1339,7 +1340,9 @@ public class AStarDemoController implements Initializable {
         for(NodeEntry e : allNodeEntries)
             getDrawableNode(e.getNodeID());
 
-        endNavigation();
+        if(pathVertex.size() != 0) {
+            endNavigation();
+        }
     }
 
     public void toggleNavigation() {
@@ -1348,5 +1351,9 @@ public class AStarDemoController implements Initializable {
         } else {
             startNavigation();
         }
+    }
+
+    public void gotoAboutPage(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AboutpageView.fxml");
     }
 }
