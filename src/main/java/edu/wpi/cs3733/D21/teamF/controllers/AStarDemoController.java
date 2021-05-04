@@ -26,6 +26,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -319,10 +320,18 @@ public class AStarDemoController implements Initializable {
                     });
 
                     addFavoriteMenu.setOnAction(e -> {
-                        try {
-                            addNodeToFavorites(currEntry);
-                        } catch (SQLException throwables) {
-                            throwables.printStackTrace();
+                        if (addFavoriteMenu.getText().equals("Add To Favorites")) {
+                            try {
+                                addNodeToFavorites(currEntry);
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        } else {
+                            try {
+                                removeNodeFromFavorites(currEntry);
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
                         }
                     });
                 });
@@ -543,10 +552,18 @@ public class AStarDemoController implements Initializable {
             });
 
             addFavoriteMenu.setOnAction(e -> {
-                try {
-                    addNodeToFavorites(currEntry);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if (addFavoriteMenu.getText().equals("Add To Favorites")) {
+                    try {
+                        addNodeToFavorites(currEntry);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                } else {
+                    try {
+                        removeNodeFromFavorites(currEntry);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
             });
         });
@@ -1583,17 +1600,30 @@ public class AStarDemoController implements Initializable {
 
     public void addNodeToFavorites(NodeEntry node) throws SQLException{
         if(CurrentUser.getCurrentUser().isAuthenticated()) {
-            if(getUserFavorites().contains(node.getNodeID())){return;}// FIXME Waiting on DB updates to delete/re-add nodes
+            if(getUserFavorites().contains(node.getNodeID())){return;}
             DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "favorite");
             favoriteItem.getChildren().add(0, new TreeItem<>(node.getShortName()));
         }
     }
 
+    public void removeNodeFromFavorites(NodeEntry node) throws SQLException{
+        if(CurrentUser.getCurrentUser().isAuthenticated()){
+            if(!getUserFavorites().contains(node.getNodeID())){return;}
+            DatabaseAPI.getDatabaseAPI().deleteUserNode(node.getNodeID(), CurrentUser.getCurrentUser().getLoggedIn().getUsername(), "favorite");
+            favoriteItem.getChildren().removeIf(t -> t.getValue().equals(node.getShortName())); // Remove any tree item with a matching short name from the list
+        }
+    }
+
     public void addNodeToRecent(NodeEntry node) throws SQLException{
         if(CurrentUser.getCurrentUser().isAuthenticated()) {
-            if(getUserRecent().contains(node.getNodeID())){return;}// FIXME Waiting on DB updates to delete/re-add nodes
-            DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "recent");
+            if(!favoriteItem.getChildren().removeIf(t -> t.getValue().equals(node.getShortName()))) // Remove any tree item with a matching short name (prevents duplicates)
+                DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "recent"); // if it wasn't removed, add it to the db list
             recentItem.getChildren().add(0, new TreeItem<>(node.getShortName()));
+            while(getUserRecent().size() > MAX_RECENTLY_USED){ // Should only run once, just covers a previously missed deletion
+                String IDtoRemove = shortNameToID(recentItem.getChildren().get(MAX_RECENTLY_USED).getValue());
+                DatabaseAPI.getDatabaseAPI().deleteUserNode(IDtoRemove, CurrentUser.getCurrentUser().getLoggedIn().getUsername(), "recent");
+                recentItem.getChildren().remove(MAX_RECENTLY_USED);
+            }
         }
     }
 }
