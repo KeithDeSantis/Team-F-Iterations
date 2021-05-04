@@ -242,7 +242,7 @@ public class AStarDemoController implements Initializable {
                     startPathMenu.setOnAction(e -> {
                         startNode.set(idToShortName(currEntry.getNodeID()));
                         try {
-                            handleStartBoxAction();
+                            handleStartNodeChange();
                         } catch (SQLException throwables) {
                             throwables.printStackTrace();
                         }
@@ -271,7 +271,7 @@ public class AStarDemoController implements Initializable {
                     endPathMenu.setOnAction(e -> {
                         endNode.set(idToShortName(currEntry.getNodeID()));
                         try {
-                            handleEndBoxAction();
+                            handleEndNodeChange();
                         } catch (SQLException throwables) {
                             throwables.printStackTrace();
                         }
@@ -366,7 +366,7 @@ public class AStarDemoController implements Initializable {
         //~~~~~~~~~ Tree View Setup ~~~~~~~~
 
         // Create root tree item (will be hidden later)
-        TreeItem<String> rootTreeViewItem = new TreeItem("shortNames");
+        TreeItem<String> rootTreeViewItem = new TreeItem<>("shortNames");
 
 
 
@@ -438,17 +438,8 @@ public class AStarDemoController implements Initializable {
             // If navigating: do nothing
             if(isCurrentlyNavigating.get()){ return; }
 
-            //FIXME kind of an ugly work around to pull from the DB
-            NodeEntry nodeFromDB = null;
-            try {
-                nodeFromDB = DatabaseAPI.getDatabaseAPI().getNode(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue()));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace(); // Print stack trace
-            }
-            final NodeEntry currEntry = nodeFromDB;
-
-            // If null do nothing
-            if(currEntry == null){ return; }
+            final NodeEntry currEntry = findNodeEntry(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue()));
+            if(currEntry == null){return;}
 
             // Replace text on the whats here menu to make a little more sense
             whatsHereMenu.setText("What's This?");
@@ -480,7 +471,7 @@ public class AStarDemoController implements Initializable {
             startPathMenu.setOnAction(e -> {
                 startNode.set(idToShortName(currEntry.getNodeID()));
                 try {
-                    handleStartBoxAction();
+                    handleStartNodeChange();
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -509,7 +500,7 @@ public class AStarDemoController implements Initializable {
             endPathMenu.setOnAction(e -> {
                 endNode.set(idToShortName(currEntry.getNodeID()));
                 try {
-                    handleEndBoxAction();
+                    handleEndNodeChange();
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -663,7 +654,7 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handleStartBoxAction() throws SQLException {
+    public void handleStartNodeChange() throws SQLException {
         checkInput();
        // if(this.startNodeDisplay != null)
         //    mapPanel.unDraw(this.startNodeDisplay.getId());
@@ -677,7 +668,7 @@ public class AStarDemoController implements Initializable {
         }
     }
     /**
-     * Helper function used to draw the startNode with given ID, snatched from handleStartBoxAction()
+     * Helper function used to draw the startNode with given ID, snatched from handleStartNodeChange()
      * @param nodeID the ID of the Node
      * @author Alex Friedman (ahf) / ZheCheng Song
      */
@@ -775,7 +766,7 @@ public class AStarDemoController implements Initializable {
      * @author Alex Friedman (ahf)
      */
     @FXML
-    public void handleEndBoxAction() throws SQLException {
+    public void handleEndNodeChange() throws SQLException {
         checkInput();
 //        if(this.endNodeDisplay != null)
 //            mapPanel.unDraw(this.endNodeDisplay.getId());
