@@ -243,6 +243,14 @@ class DatabaseAPITest {
     }
 
     @Test
+    @DisplayName("test authenticaion fail via covid status")
+    public void testCovidAuthFail() throws SQLException{
+        String[] infected = {"1", "admin", "username", "password", "false"};
+        DatabaseAPI.getDatabaseAPI().addUser(infected);
+        assertFalse(DatabaseAPI.getDatabaseAPI().authenticate("username", "password"));
+    }
+
+    @Test
     @DisplayName("test adding a service request")
     public void testAddServiceRequest() throws SQLException
     {
