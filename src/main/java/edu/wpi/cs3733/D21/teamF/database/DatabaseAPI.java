@@ -42,6 +42,11 @@ public class DatabaseAPI {
     }
 
     public boolean addNode(String...colValues) throws SQLException {
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return nodeHandler.addEntry(colValues);
     }
 
@@ -64,6 +69,11 @@ public class DatabaseAPI {
     }
 
     public boolean addEdge(String...colValues) throws SQLException{
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return edgeHandler.addEntry(colValues);
     }
 
@@ -101,6 +111,11 @@ public class DatabaseAPI {
     }
 
     public boolean addServiceReq(String...colValues) throws SQLException{
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return serviceRequestHandler.addEntry(colValues);
     }
 
@@ -130,6 +145,11 @@ public class DatabaseAPI {
     }
 
     public boolean addUser(String...colValues) throws SQLException{
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return userHandler.addEntry(colValues);
     }
 
@@ -170,6 +190,11 @@ public class DatabaseAPI {
     }
 
     public boolean addSystemPreferences(String...colValues) throws SQLException{
+        for (String s: colValues){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return systemHandler.addEntry(colValues);
     }
 
@@ -202,11 +227,32 @@ public class DatabaseAPI {
     }
 
     public boolean addCollecionEntry(String user, String node, String type) throws SQLException{
+        String[] input = {user, node, type};
+        for (String s: input){
+            if (!(this.filterInput(s))){
+                return false;
+            }
+        }
         return collectionHandler.addEntry(user, node, type);
     }
 
     public ArrayList<String> getUserNodes(String type, String userID) throws SQLException{
         return collectionHandler.getUserNodes(type, userID);
+    }
+
+    /**
+     * Filters user input to prevent SQL injections
+     * @param input the user input
+     * @return true if safe, false otherwise
+     */
+    public boolean filterInput(String input){
+        char[] blacklist = {'\'', '-', '\"', '#', '(', ')', '|'};
+        for (char c : blacklist){
+            if (!(input.indexOf(c) == -1)){
+                return false;
+            }
+        }
+        return true;
     }
 
     private static class DatabaseSingletonHelper{
