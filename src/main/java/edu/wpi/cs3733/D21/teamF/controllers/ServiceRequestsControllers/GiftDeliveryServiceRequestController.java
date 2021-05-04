@@ -6,10 +6,6 @@ import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-<<<<<<< HEAD:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/ServiceRequestsControllers/GiftDeliveryServiceRequestController.java
-
-=======
->>>>>>> 36feac4258d4a4a8524aa7bf407aedce348127a4:src/main/java/edu/wpi/cs3733/D21/teamF/controllers/GiftDeliveryServiceRequestController.java
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
