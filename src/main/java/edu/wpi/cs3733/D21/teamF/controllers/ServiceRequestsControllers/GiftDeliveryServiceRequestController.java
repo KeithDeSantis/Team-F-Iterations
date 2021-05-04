@@ -71,6 +71,12 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
 
          }
 
+    public void handleHelp(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryHelpView.fxml");
+    }
 
+    public void goBack(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
+    }
 }
 
