@@ -53,7 +53,6 @@ public class DefaultPageController implements Initializable {
         surveyLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml"));
         Stage dialogStage = new Stage();
         Parent root = surveyLoader.load();
-        CovidSurveyViewController dialogController = surveyLoader.getController();
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.initOwner(navigation.getScene().getWindow());
         dialogStage.setScene(new Scene(root));
@@ -64,7 +63,7 @@ public class DefaultPageController implements Initializable {
     @FXML
     private void changeButtons() throws SQLException {
         String ticketID = verifyAgain.getText();
-        if (CurrentUser.getCurrentUser().getLoggedIn().getUsername() == verifyAgain.getText() ||
+        if (CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(verifyAgain.getText()) ||
         DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")){
             buttons.setStyle("visibility: visible");
             covidBox.setStyle("visibility: hidden");

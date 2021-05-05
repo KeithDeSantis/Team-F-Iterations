@@ -1,24 +1,18 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
+import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 public class EmployeeAdminLoginController {
     @FXML
@@ -44,16 +38,16 @@ public class EmployeeAdminLoginController {
             String user = username.getText();
             String pass = password.getText();
 
-            if (DatabaseAPI.getDatabaseAPI().authenticate(user, pass) &&
-                    (DatabaseAPI.getDatabaseAPI().getUser(user).getUserType().equals("administrator") ||
-                            DatabaseAPI.getDatabaseAPI().getUser(user).getUserType().equals("employee"))){
-                SceneContext.getSceneContext().loadDefault();
+            final AccountEntry current = DatabaseAPI.getDatabaseAPI().getUser(user);
+            final boolean isAdmin = current.getUserType().equals("administrator");
+            final boolean isStaff = current.getUserType().equals("employee");
+            if (DatabaseAPI.getDatabaseAPI().authenticate(user, pass) && (isAdmin || isStaff)){
+
+                if(isAdmin)
+                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+                else
+                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
             }
-                /*
-            if (CurrentUser.getCurrentUser().login(user, pass) && (CurrentUser.getCurrentUser().getLoggedIn().getUserType() == "employee" || CurrentUser.getCurrentUser().getLoggedIn().getUserType() == "admin")) {
-                SceneContext.getSceneContext().loadDefault();
-            }
-                 */
             else {
                 errorMessage.setStyle("-fx-text-fill: #c60000FF;");
                 password.setText("");
