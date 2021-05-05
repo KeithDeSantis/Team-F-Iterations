@@ -61,6 +61,7 @@ public class DefaultPageController implements Initializable {
         dialogStage.showAndWait();
     }
 
+    @FXML
     private void changeButtons() throws SQLException {
         String ticketID = verifyAgain.getText();
         if (CurrentUser.getCurrentUser().getLoggedIn().getUsername() == verifyAgain.getText() ||
