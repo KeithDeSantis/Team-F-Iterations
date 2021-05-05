@@ -18,7 +18,7 @@ public class DrawableNode extends Circle implements IMapDrawable
 
     private final SimpleBooleanProperty shouldDisplay;
 
-    private DoubleProperty localRadius;
+    private final DoubleProperty localRadius;
 
 
     public DrawableNode(int xCoordinate, int yCoordinate, String ID, String floor, String building, String nodeType, String longName, String shortName)

@@ -9,13 +9,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
@@ -137,11 +133,10 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     /**
      * Handles radial button groups
-     * @param e is the button being pushed
      * @author KH
      */
     @FXML
-    private void handleRadialButtonPushed(ActionEvent e){
+    private void handleRadialButtonPushed(){
         ToggleGroup foodGroup = new ToggleGroup(); //group for foods
         rButtonFood1.setToggleGroup(foodGroup);
         rButtonFood2.setToggleGroup(foodGroup);
