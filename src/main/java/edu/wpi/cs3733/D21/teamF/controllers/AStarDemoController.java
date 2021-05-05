@@ -136,6 +136,7 @@ public class AStarDemoController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+
         //ahf - yes this should be done better. At some point.
 
         try {

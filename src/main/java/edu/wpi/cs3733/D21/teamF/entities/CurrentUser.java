@@ -13,6 +13,24 @@ public class CurrentUser {
     private boolean isAuthenticated = false;
     private AccountEntry loggedIn = null;
 
+    private String uuid;
+
+    public boolean tempLogin(String uuid)
+    {
+        this.loggedIn = null;
+
+        try {
+            this.uuid = uuid;
+            this.isAuthenticated = DatabaseAPI.getDatabaseAPI().getServiceEntry(uuid) != null;
+        } catch (SQLException exception) {
+            this.isAuthenticated = false;
+            this.uuid = null;
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Attempts to log in a user
      * @param user The username
@@ -23,6 +41,7 @@ public class CurrentUser {
      */
     public boolean login(String user, String pass) throws SQLException {
 
+        this.uuid = null;
         this.isAuthenticated = DatabaseAPI.getDatabaseAPI().authenticate(user, pass);
         if(isAuthenticated){
             loggedIn = DatabaseAPI.getDatabaseAPI().getUser(user);
@@ -45,6 +64,10 @@ public class CurrentUser {
 
         loggedIn = null;
         return true;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     /**
