@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * This class is used to manage translation across the application
@@ -95,12 +96,54 @@ public class Translator {
 
     private Translator() {
 
-
         if(!isProduction)
         {
-            System.out.println((new File("")).getAbsolutePath());
+            final HashMap<String, HashMap<String, String>> initialLookupTables = new HashMap<>();
+            {
+                final String tableDirectory = "src/main/resources/TranslationTables/";
+                final File translationTables = new File(tableDirectory);
+                for(String file : translationTables.list())
+                {
+                    try {
+                        final FileInputStream fileInputStream = new FileInputStream(tableDirectory + file);
+                        final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+                        initialLookupTables.putAll((HashMap<String, HashMap<String, String>>) objectInputStream.readObject());
+                        this.translationLookupTable.putAll(initialLookupTables);
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
+                    for(String lang : translationLookupTable.keySet())
+                    {
+                        if(initialLookupTables.get(lang) != null)
+                        {
+                            final Iterator<String> it = translationLookupTable.get(lang).keySet().iterator();
+                            while(it.hasNext())
+                            {
+                                if(initialLookupTables.get(lang).get(it.next()) != null)
+                                    it.remove();
+
+                            }
+                            /*
+                            for(String s : translationLookupTable.get(lang).keySet())
+                                if(initialLookupTables.get(lang).get(s) != null)
+                                    translationLookupTable.get(lang).remove(s);
+
+                             */
+                        }
+
+                        if(translationLookupTable.get(lang).keySet().isEmpty())
+                            translationLookupTable.remove(lang);
+                    }
+
+                    if(translationLookupTable.keySet().isEmpty())
+                        return;
+
                     System.out.println((new File("")).getAbsolutePath());
                     final FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/TranslationTables/" + System.currentTimeMillis() + ".bin");
 

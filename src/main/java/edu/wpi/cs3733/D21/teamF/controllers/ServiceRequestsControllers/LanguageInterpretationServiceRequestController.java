@@ -37,7 +37,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
 
-    private HashMap<String, String> langCodes = new HashMap<>();
+    private final HashMap<String, String> langCodes = new HashMap<>();
 
     /**
      * Opens the help window
