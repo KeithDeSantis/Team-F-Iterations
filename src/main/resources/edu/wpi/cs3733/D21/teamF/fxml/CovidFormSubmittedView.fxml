@@ -57,7 +57,7 @@
                   <Insets left="25.0" right="25.0" top="25.0" />
                </VBox.margin>
             </Label>
-            <Text fx:id="waitMessage" fill="#c6000000" strokeType="OUTSIDE" strokeWidth="0.0" text="We will clear you shortly, thank you for your patience!">
+            <Text fx:id="waitMessage" fill="#c40000" strokeType="OUTSIDE" strokeWidth="0.0" text="We will clear you shortly, thank you for your patience!" visible="false">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -70,7 +70,7 @@
                   <Insets left="25.0" right="25.0" top="10.0" />
                </VBox.margin>
             </JFXTextField>
-            <Text fill="#c4000000" strokeType="OUTSIDE" strokeWidth="0.0" text="Please login first!">
+            <Text fill="#c20000" strokeType="OUTSIDE" strokeWidth="0.0" text="Please login first!" visible="false">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
