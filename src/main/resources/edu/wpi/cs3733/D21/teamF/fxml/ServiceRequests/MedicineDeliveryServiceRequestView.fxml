@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTimePicker?>
@@ -16,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.MedicineDeliveryServiceRequest">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.MedicineDeliveryServiceRequest">
      <HBox fx:id="header" minWidth="-Infinity" prefHeight="117.0" prefWidth="960.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
          <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
              <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
@@ -62,14 +63,11 @@
                      <Insets left="25.0" />
                   </HBox.margin>
                     </Label>
-                    <JFXTextField fx:id="clientRoom" prefHeight="39.0" prefWidth="259.0">
-                        <font>
-                            <Font size="18.0" />
-                        </font>
+               <JFXComboBox fx:id="clientRoom" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0">
                   <HBox.margin>
-                     <Insets left="25.0" right="25.0" />
+                     <Insets left="25.0" />
                   </HBox.margin>
-                    </JFXTextField>
+               </JFXComboBox>
             </children>
             <VBox.margin>
                <Insets left="25.0" top="10.0" />
@@ -202,6 +200,7 @@
             <Font size="18.0" />
          </font>
       </JFXButton>
+      <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
           <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" HBox.hgrow="SOMETIMES">
               <font>
                   <Font size="18.0" />

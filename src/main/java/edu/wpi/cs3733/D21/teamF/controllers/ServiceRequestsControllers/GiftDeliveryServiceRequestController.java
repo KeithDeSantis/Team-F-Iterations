@@ -1,6 +1,7 @@
-package edu.wpi.cs3733.D21.teamF.controllers;
+package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,7 +32,7 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
         }
 
         public void handleClear(ActionEvent actionEvent) throws IOException {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GiftDeliveryServiceRequest.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
 
         }
 
@@ -69,6 +70,12 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
 
          }
 
+    public void handleHelp(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryHelpView.fxml");
+    }
 
+    public void goBack(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
+    }
 }
 

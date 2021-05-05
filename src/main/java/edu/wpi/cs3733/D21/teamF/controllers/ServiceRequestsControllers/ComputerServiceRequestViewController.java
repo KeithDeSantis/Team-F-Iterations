@@ -1,9 +1,12 @@
-package edu.wpi.cs3733.D21.teamF.controllers;
+package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,15 +16,16 @@ import javafx.scene.Node;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
-public class ComputerServiceRequestViewController extends ServiceRequests{
+public class ComputerServiceRequestViewController extends ServiceRequests {
 
     @FXML
     private JFXTextField computerNameText;
 
     @FXML
-    private JFXTextField computerLocationText;
+    private JFXComboBox<String> computerLocation;
 
     @FXML
     private JFXTextField requesterTextText;
@@ -39,10 +43,25 @@ public class ComputerServiceRequestViewController extends ServiceRequests{
 
     @FXML
     public void initialize(){
-        // Set up floor comboBox and draw nodes on that floor
-        final ObservableList<String> urgencies = FXCollections.observableArrayList();
-        urgencies.addAll(LOW_URGENCY, MEDIUM_URGENCY, HIGH_URGENCY);
-        urgencyComboBox.setItems(urgencies);
+        try {
+            // Set up floor comboBox and draw nodes on that floor
+            final ObservableList<String> urgencies = FXCollections.observableArrayList();
+            urgencies.addAll(LOW_URGENCY, MEDIUM_URGENCY, HIGH_URGENCY);
+            urgencyComboBox.setItems(urgencies);
+        } catch(Exception e){}
+
+        try{
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+
+            final ObservableList<String> nodeList = FXCollections.observableArrayList();
+            for(NodeEntry n: nodeEntries){
+                nodeList.add(n.getShortName());
+            }
+            this.computerLocation.setItems(nodeList);
+
+        } catch(Exception e){
+
+        }
     }
 
     @FXML
@@ -52,11 +71,21 @@ public class ComputerServiceRequestViewController extends ServiceRequests{
             String uuid = UUID.randomUUID().toString();
             String type = "Computer Service";
             String assignedPerson = "";
-            String additionalInfo = "Computer name: " + computerNameText.getText() + "Computer location: " + computerLocationText.getText()
+            String additionalInfo = "Computer name: " + computerNameText.getText() + "Computer location: " + computerLocation.getValue()
                     + "Urgency: " + urgencyComboBox.getValue() + "Requester: " + requesterTextText.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
             openSuccessWindow();
         }
+    }
+
+    @FXML
+    public void handleHelp(ActionEvent e) throws IOException{
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceHelpView.fxml");
+    }
+
+    @FXML
+    public void goBack(ActionEvent actionEvent)throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceRequestView.fxml");
     }
 
     /**
@@ -68,7 +97,7 @@ public class ComputerServiceRequestViewController extends ServiceRequests{
         boolean accept = true;
 
         //Clear old styles
-        setNormalStyle(computerNameText, computerLocationText, requesterTextText, urgencyComboBox,descriptionText);
+        setNormalStyle(computerNameText, computerLocation, requesterTextText, urgencyComboBox,descriptionText);
 
 
         if(computerNameText.getText().trim().isEmpty())
@@ -77,9 +106,9 @@ public class ComputerServiceRequestViewController extends ServiceRequests{
             accept = false;
         }
 
-        if(computerLocationText.getText().trim().isEmpty())
+        if(computerLocation.getValue() == null)
         {
-            setTextErrorStyle(computerLocationText);
+            setTextErrorStyle(computerLocation);
             accept = false;
         }
 
@@ -108,16 +137,14 @@ public class ComputerServiceRequestViewController extends ServiceRequests{
     @FXML
     public void handleClear() {
 
-        setNormalStyle(computerNameText, computerLocationText, requesterTextText, urgencyComboBox,descriptionText);
-        //FIXME: ADD WARNING
+        setNormalStyle(computerNameText, computerLocation, requesterTextText, urgencyComboBox,descriptionText);
         computerNameText.setText("");
-        computerLocationText.setText("");
+        computerLocation.setValue(null);
         requesterTextText.setText("");
 
         urgencyComboBox.setValue(null);
 
-
-         descriptionText.setText("");
+        descriptionText.setText("");
     }
 
 

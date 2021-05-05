@@ -450,4 +450,15 @@ class DatabaseAPITest {
     public void testInjectionBad(){
         assertFalse(DatabaseAPI.getDatabaseAPI().filterInput(")'DROP TABLE USERS--"));
     }
+ @Test
+    @DisplayName("test deleting a favorite and recent node")
+    public void testDeleteUserNodes() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node1", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("ben", "node2", "favorite");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("declan", "node3", "recent");
+        DatabaseAPI.getDatabaseAPI().addCollecionEntry("ben", "node4", "recent");
+
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteUserNode("node1", "declan", "favorite"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().deleteUserNode("node4", "ben", "recent"));
+    }
 }

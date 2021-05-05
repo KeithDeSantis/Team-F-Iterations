@@ -19,17 +19,17 @@
          <children>
             <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                  <ImageView fitHeight="110.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                      <HBox.margin>
-                        <Insets left="10.0" top="10.0" />
+                        <Insets />
                      </HBox.margin>
                   </ImageView>
                   <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL SERVICE REQUEST SYSTEMS " wrappingWidth="785.13671875">
                      <font>
-                        <Font size="45.0" />
+                        <Font name="Volkhov Regular" size="40.0" />
                      </font>
                      <HBox.margin>
                         <Insets left="10.0" />

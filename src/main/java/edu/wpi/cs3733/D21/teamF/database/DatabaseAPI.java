@@ -245,7 +245,10 @@ public class DatabaseAPI {
         return collectionHandler.getUserNodes(type, userID);
     }
 
-    /**
+    public boolean deleteUserNode(String nodeID, String username, String type) throws SQLException{
+        return collectionHandler.deleteNodeEntry(nodeID, username, type);
+    }
+ /**
      * Filters user input to prevent SQL injections
      * @param input the user input
      * @return true if safe, false otherwise
@@ -260,6 +263,7 @@ public class DatabaseAPI {
         }
         return true;
     }
+
 
     private static class DatabaseSingletonHelper{
         private static final DatabaseAPI databaseAPI1 = new DatabaseAPI();

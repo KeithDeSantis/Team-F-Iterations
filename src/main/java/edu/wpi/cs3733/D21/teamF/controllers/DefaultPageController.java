@@ -6,6 +6,7 @@ import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +23,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class DefaultPageController implements Initializable {
+public class DefaultPageController {
     @FXML
     private JFXButton navigation;
     @FXML
@@ -38,14 +39,13 @@ public class DefaultPageController implements Initializable {
     @FXML private VBox buttons;
     @FXML private VBox covidBox;
 
-    @FXML
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML private void initialize(){
         // Apply fonts to title and buttons
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
-//        buttons.setStyle("visibility: hidden");
-//        covidBox.setStyle("visibility: visible");
+	//Bind login/logout
+        loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
     }
 
     private void openSurvey() throws IOException {
@@ -76,24 +76,42 @@ public class DefaultPageController implements Initializable {
      * @param actionEvent the button's push
      * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
      * @author ZheCheng Song
-     */
+    */
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
 
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
 
         if (buttonPushed == loginButton) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
+            if(CurrentUser.getCurrentUser().isAuthenticated())
+                CurrentUser.getCurrentUser().logout();
+            else
+                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
         } else if (buttonPushed == navigation) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
         } else if (buttonPushed == quit) {
             Platform.exit();
-        } else if (buttonPushed == covidSurvey) {
-            openSurvey();
+        }
+        else if (buttonPushed == covidSurvey){
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
         }
     }
+    public void handleCovidVaccine() throws IOException {
+        final FXMLLoader dialogLoader = new FXMLLoader();
+        dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidVaccineDialog.fxml"));
+        final Stage dialogStage = new Stage();
+        final Parent root = dialogLoader.load();
+
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(covidSurvey.getScene().getWindow());
+        dialogStage.setScene(new Scene(root));
+
+        dialogStage.showAndWait();
+    }
+
+
 
 
 }

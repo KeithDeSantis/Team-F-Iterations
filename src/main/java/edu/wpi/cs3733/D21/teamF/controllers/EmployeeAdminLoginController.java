@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,7 +42,7 @@ public class EmployeeAdminLoginController {
             final AccountEntry current = DatabaseAPI.getDatabaseAPI().getUser(user);
             final boolean isAdmin = current.getUserType().equals("administrator");
             final boolean isStaff = current.getUserType().equals("employee");
-            if (DatabaseAPI.getDatabaseAPI().authenticate(user, pass) && (isAdmin || isStaff)){
+            if (CurrentUser.getCurrentUser().login(user, pass) && (isAdmin || isStaff)){
 
                 if(isAdmin)
                     SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");

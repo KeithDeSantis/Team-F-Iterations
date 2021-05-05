@@ -56,6 +56,8 @@ public class MapEditViewController {
     @FXML
     private JFXButton deleteButton;
     @FXML
+    private JFXButton favoriteButton;
+    @FXML
     private JFXComboBox<String> searchComboBox;
     @FXML
     private JFXTextField searchField;
@@ -1767,11 +1769,15 @@ public class MapEditViewController {
     public void handleFavorite() throws SQLException {
         if(selectedCircle.getFill().equals(Color.GREEN) && mapPanel.getNode(selectedCircle.getId()).shouldDisplay().get()) {
             NodeEntry favNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue();
-
-            if(isInFavorites(favNode.getNodeID())) return; // dont want duplicate favorite - KD
-
-            DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), favNode.getNodeID(), "favorite");
-            favoriteList.add(favNode);
+            if(favoriteButton.getText().equals("Favorite")) {
+                if (isInFavorites(favNode.getNodeID())) return; // dont want duplicate favorite - KD
+                DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), favNode.getNodeID(), "favorite");
+                favoriteList.add(favNode);
+            } else if(favoriteButton.getText().equals("Unfavorite")) {
+                DatabaseAPI.getDatabaseAPI().deleteUserNode(favNode.getNodeID(), CurrentUser.getCurrentUser().getLoggedIn().getUsername(), "favorite"); //?
+                favoriteList.remove(favNode);
+                handleSearch();
+            }
         }
     }
 
@@ -1781,6 +1787,11 @@ public class MapEditViewController {
      */
     public void handleFavoriteToggle() {
         favoriteOnly = !favoriteOnly;
+        if(favoriteButton.getText().equals("Favorite")) {
+            favoriteButton.setText("Unfavorite");
+        } else if(favoriteButton.getText().equals("Unfavorite")) {
+            favoriteButton.setText("Favorite");
+        }
         handleSearch();
     }
 

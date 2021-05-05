@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LanguageInterpretationServiceRequestController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.InternalTransportationController">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -24,7 +24,7 @@
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="title" prefHeight="117.0" prefWidth="773.0" text="BRIGHAM AND WOMEN'S HOSPITAL Language Interpretation Help Page" wrapText="true">
+                  <Label fx:id="title" prefHeight="117.0" prefWidth="773.0" text="BRIGHAM AND WOMEN'S HOSPITAL Internal Transportation Help Page" wrapText="true">
                      <font>
                         <Font size="40.0" />
                      </font>
@@ -43,48 +43,62 @@
                       <RowConstraints maxHeight="78.00001271565756" minHeight="10.0" prefHeight="63.33334096272787" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="82.00003051757814" minHeight="10.0" prefHeight="61.33332316080728" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="64.66667683919272" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="64.66667683919272" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="64.66667683919272" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please select the hospital department in the dropdown menu. If your isit is with multiple departments, select &quot;Multiple Departments.&quot;" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="The patient's current room." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label text="Appointment Date and Time:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                        <Label text="Location:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="30.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please use the calendar and clock icons to select the date and time of the appointment." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="The room the patient is being transported to." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label text="Appointment Type:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                        <Label text="Room:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets right="30.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please type in the preferred name of the patient." wrapText="true" GridPane.columnIndex="1">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="The name of the patient being transported." wrapText="true" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label text="Name:" GridPane.halignment="RIGHT">
+                        <Label text="Patient:" GridPane.halignment="RIGHT">
                            <GridPane.margin>
                               <Insets right="30.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label layoutX="171.0" layoutY="193.0" text="Language:" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                        <Label prefHeight="20.0" text="Date:" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets right="30.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please select the name of the language you would like an interpreter for." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="The date the transfer is to take place." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <GridPane.margin>
-                              <Insets right="25.0" />
+                              <Insets right="30.0" />
                            </GridPane.margin>
                         </Label>
+                        <Label text="Relatives/Friends Following:" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets right="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Need Doctor Following:" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+                           <GridPane.margin>
+                              <Insets right="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Check off if the patients relatives or friends will be present during the transfer." GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label text="Check off if the transfer requires a doctor's presence." GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                   <HBox prefHeight="100.0" prefWidth="200.0">

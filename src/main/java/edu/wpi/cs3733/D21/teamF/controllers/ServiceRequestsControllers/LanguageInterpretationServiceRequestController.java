@@ -1,6 +1,7 @@
-package edu.wpi.cs3733.D21.teamF.controllers;
+package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
@@ -42,22 +43,15 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
 
-    /**
-     * Opens the help window
-     * @param actionEvent
-     * @throws IOException
-     * @author Jay Yen
-     */
+
     public void handleHelp(ActionEvent actionEvent) throws IOException {
-        Stage submittedStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml"));
-        Scene helpPopUp = new Scene(root);
-        submittedStage.setScene(helpPopUp);
-        submittedStage.setTitle("Language Interpretation Help");
-        submittedStage.initModality(Modality.APPLICATION_MODAL);
-        submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
-        submittedStage.showAndWait();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml");
     }
+
+    public void goBack(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml");
+    }
+
     /**
      * Calls translate function when translate button is clicked
      * @param actionEvent
@@ -66,7 +60,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      */
     public void handleTranslate(ActionEvent actionEvent) throws IOException{
         if(language.getValue() != null) {
-            List<Label> labelList = new ArrayList<>(); //list of labels that need to get fixed
+            List<Label> labelList = new ArrayList<Label>(); //list of labels that need to get fixed
             labelList.add(nameLabel);
             labelList.add(dtLabel);
             labelList.add(appointmentLabel);
@@ -129,106 +123,108 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Jay Yen
      */
     public void initialize(URL location, ResourceBundle resources){
-        appointment.getItems().add("Non-Specific");
-        appointment.getItems().add("Multiple Departments");
-        appointment.getItems().add("Allergy and Clinical Immunology");
-        appointment.getItems().add("Alzheimer's Center");
-        appointment.getItems().add("Anesthesiology");
-        appointment.getItems().add("Arrhythmia Services");
-        appointment.getItems().add("Arthritis and Joint Diseases Center");
-        appointment.getItems().add("Asthma Center");
-        appointment.getItems().add("Bone Marrow Transplant Program");
-        appointment.getItems().add("Brain Tumor Program");
-        appointment.getItems().add("Breast Center");
-        appointment.getItems().add("Cardiac Surgery");
-        appointment.getItems().add("Cardiology");
-        appointment.getItems().add("Cardiomyopathy and Cardiac Transplantation");
-        appointment.getItems().add("CAT Scan (CT Imaging");
-        appointment.getItems().add("DF/BW Cancer Center");
-        appointment.getItems().add("Dental");
-        appointment.getItems().add("Dermatology");
-        appointment.getItems().add("Diabetes");
-        appointment.getItems().add("Ear, Nose and Throat");
-        appointment.getItems().add("Emergency Medicine");
-        appointment.getItems().add("Endocrinology, Diabetes and Hypertension");
-        appointment.getItems().add("Epilepsy");
-        appointment.getItems().add("Foot and Ankle Center/Faulkner");
-        appointment.getItems().add("Gastroenterology");
-        appointment.getItems().add("General and Gastrointestinal Surgery");
-        appointment.getItems().add("Genetics");
-        appointment.getItems().add("Gynecologic Oncology");
-        appointment.getItems().add("Gynecology (General)");
-        appointment.getItems().add("Hematology");
-        appointment.getItems().add("Infectious Disease");
-        appointment.getItems().add("Interventional Cardiology");
-        appointment.getItems().add("Interventional Radiology");
-        appointment.getItems().add("Lung Dancer Screening (Low Dose CT)");
-        appointment.getItems().add("Lung Transplantation Program");
-        appointment.getItems().add("Lupus Center");
-        appointment.getItems().add("Magnetic Resonance Imaging (MRI)");
-        appointment.getItems().add("Mammography");
-        appointment.getItems().add("Maternal-Fetal Medicine");
-        appointment.getItems().add("Medicine");
-        appointment.getItems().add("Metabolic and Nutrition Support Service");
-        appointment.getItems().add("Multiple Sclerosis");
-        appointment.getItems().add("Neurology");
-        appointment.getItems().add("Neuroradiology");
-        appointment.getItems().add("Newborn Medicine");
-        appointment.getItems().add("Nuclear Medicine");
-        appointment.getItems().add("Nutrition Consultation");
-        appointment.getItems().add("Obstetric Anesthesia Service");
-        appointment.getItems().add("Obstetrics");
-        appointment.getItems().add("Ophthalmology");
-        appointment.getItems().add("Oral Medicine, Oral and Maxillofacial Surgery and Dentistry");
-        appointment.getItems().add("Orthopaedics");
-        appointment.getItems().add("Osteoporosis Center");
-        appointment.getItems().add("Otolaryngology");
-        appointment.getItems().add("Pain Management Center");
-        appointment.getItems().add("Pathology Department");
-        appointment.getItems().add("Pediatric and Adolescent Gynecology");
-        appointment.getItems().add("Pituitary Program");
-        appointment.getItems().add("Plastic Surgery");
-        appointment.getItems().add("Podiatry");
-        appointment.getItems().add("Primary Care");
-        appointment.getItems().add("Prostate Center");
-        appointment.getItems().add("Psychiatry");
-        appointment.getItems().add("Pulmonary and Critical Care Medicine");
-        appointment.getItems().add("Radiation Oncology");
-        appointment.getItems().add("Radiology");
-        appointment.getItems().add("Renal (Kidney)");
-        appointment.getItems().add("Renal (Kidney) Transplantation");
-        appointment.getItems().add("Reproductive Medicine");
-        appointment.getItems().add("Rheumatology, Inflammation and Immunity");
-        appointment.getItems().add("Sleep Medicine");
-        appointment.getItems().add("Spine Center");
-        appointment.getItems().add("Sports Medicine and Rehabilitation Center");
-        appointment.getItems().add("Surgery");
-        appointment.getItems().add("Surgery Oncology");
-        appointment.getItems().add("Thoracic Surgery");
-        appointment.getItems().add("Thyroid");
-        appointment.getItems().add("Trauma and Burn Center");
-        appointment.getItems().add("Urogynecology");
-        appointment.getItems().add("Urology");
-        appointment.getItems().add("Vascular Medicine Services");
-        appointment.getItems().add("Vascular Surgery");
-        appointment.getItems().add("Weight Management");
-        appointment.getItems().add("Women's Health");
-        appointment.getItems().add("Other");
+        try {
+            appointment.getItems().add("Non-Specific");
+            appointment.getItems().add("Multiple Departments");
+            appointment.getItems().add("Allergy and Clinical Immunology");
+            appointment.getItems().add("Alzheimer's Center");
+            appointment.getItems().add("Anesthesiology");
+            appointment.getItems().add("Arrhythmia Services");
+            appointment.getItems().add("Arthritis and Joint Diseases Center");
+            appointment.getItems().add("Asthma Center");
+            appointment.getItems().add("Bone Marrow Transplant Program");
+            appointment.getItems().add("Brain Tumor Program");
+            appointment.getItems().add("Breast Center");
+            appointment.getItems().add("Cardiac Surgery");
+            appointment.getItems().add("Cardiology");
+            appointment.getItems().add("Cardiomyopathy and Cardiac Transplantation");
+            appointment.getItems().add("CAT Scan (CT Imaging");
+            appointment.getItems().add("DF/BW Cancer Center");
+            appointment.getItems().add("Dental");
+            appointment.getItems().add("Dermatology");
+            appointment.getItems().add("Diabetes");
+            appointment.getItems().add("Ear, Nose and Throat");
+            appointment.getItems().add("Emergency Medicine");
+            appointment.getItems().add("Endocrinology, Diabetes and Hypertension");
+            appointment.getItems().add("Epilepsy");
+            appointment.getItems().add("Foot and Ankle Center/Faulkner");
+            appointment.getItems().add("Gastroenterology");
+            appointment.getItems().add("General and Gastrointestinal Surgery");
+            appointment.getItems().add("Genetics");
+            appointment.getItems().add("Gynecologic Oncology");
+            appointment.getItems().add("Gynecology (General)");
+            appointment.getItems().add("Hematology");
+            appointment.getItems().add("Infectious Disease");
+            appointment.getItems().add("Interventional Cardiology");
+            appointment.getItems().add("Interventional Radiology");
+            appointment.getItems().add("Lung Cancer Screening (Low Dose CT)");
+            appointment.getItems().add("Lung Transplantation Program");
+            appointment.getItems().add("Lupus Center");
+            appointment.getItems().add("Magnetic Resonance Imaging (MRI)");
+            appointment.getItems().add("Mammography");
+            appointment.getItems().add("Maternal-Fetal Medicine");
+            appointment.getItems().add("Medicine");
+            appointment.getItems().add("Metabolic and Nutrition Support Service");
+            appointment.getItems().add("Multiple Sclerosis");
+            appointment.getItems().add("Neurology");
+            appointment.getItems().add("Neuroradiology");
+            appointment.getItems().add("Newborn Medicine");
+            appointment.getItems().add("Nuclear Medicine");
+            appointment.getItems().add("Nutrition Consultation");
+            appointment.getItems().add("Obstetric Anesthesia Service");
+            appointment.getItems().add("Obstetrics");
+            appointment.getItems().add("Ophthalmology");
+            appointment.getItems().add("Oral Medicine, Oral and Maxillofacial Surgery and Dentistry");
+            appointment.getItems().add("Orthopaedics");
+            appointment.getItems().add("Osteoporosis Center");
+            appointment.getItems().add("Otolaryngology");
+            appointment.getItems().add("Pain Management Center");
+            appointment.getItems().add("Pathology Department");
+            appointment.getItems().add("Pediatric and Adolescent Gynecology");
+            appointment.getItems().add("Pituitary Program");
+            appointment.getItems().add("Plastic Surgery");
+            appointment.getItems().add("Podiatry");
+            appointment.getItems().add("Primary Care");
+            appointment.getItems().add("Prostate Center");
+            appointment.getItems().add("Psychiatry");
+            appointment.getItems().add("Pulmonary and Critical Care Medicine");
+            appointment.getItems().add("Radiation Oncology");
+            appointment.getItems().add("Radiology");
+            appointment.getItems().add("Renal (Kidney)");
+            appointment.getItems().add("Renal (Kidney) Transplantation");
+            appointment.getItems().add("Reproductive Medicine");
+            appointment.getItems().add("Rheumatology, Inflammation and Immunity");
+            appointment.getItems().add("Sleep Medicine");
+            appointment.getItems().add("Spine Center");
+            appointment.getItems().add("Sports Medicine and Rehabilitation Center");
+            appointment.getItems().add("Surgery");
+            appointment.getItems().add("Surgery Oncology");
+            appointment.getItems().add("Thoracic Surgery");
+            appointment.getItems().add("Thyroid");
+            appointment.getItems().add("Trauma and Burn Center");
+            appointment.getItems().add("Urogynecology");
+            appointment.getItems().add("Urology");
+            appointment.getItems().add("Vascular Medicine Services");
+            appointment.getItems().add("Vascular Surgery");
+            appointment.getItems().add("Weight Management");
+            appointment.getItems().add("Women's Health");
+            appointment.getItems().add("Other");
 
-        language.getItems().add("Arabic");
-        language.getItems().add("Dutch");
-        language.getItems().add("English");
-        language.getItems().add("French");
-        language.getItems().add("German");
-        language.getItems().add("Greek");
-        language.getItems().add("Haitian Creole");
-        language.getItems().add("Italian");
-        language.getItems().add("Japanese");
-        language.getItems().add("Korean");
-        language.getItems().add("Portuguese");
-        language.getItems().add("Russian");
-        language.getItems().add("Spanish");
-        language.getItems().add("Vietnamese");
+            language.getItems().add("Arabic");
+            language.getItems().add("Dutch");
+            language.getItems().add("English");
+            language.getItems().add("French");
+            language.getItems().add("German");
+            language.getItems().add("Greek");
+            language.getItems().add("Haitian Creole");
+            language.getItems().add("Italian");
+            language.getItems().add("Japanese");
+            language.getItems().add("Korean");
+            language.getItems().add("Portuguese");
+            language.getItems().add("Russian");
+            language.getItems().add("Spanish");
+            language.getItems().add("Vietnamese");
+        } catch(Exception e){}
     }
     
     public boolean formFilled(){
@@ -264,7 +260,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Johvanni Perez
      */
     public static HashMap<String, String> codeMap(){
-        HashMap<String, String> langCodes = new HashMap<>();
+        HashMap<String, String> langCodes = new HashMap<String, String>();
 
         langCodes.put("Arabic", "ar");
         langCodes.put("Dutch", "nl");
@@ -314,4 +310,3 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     }
 
 }
-

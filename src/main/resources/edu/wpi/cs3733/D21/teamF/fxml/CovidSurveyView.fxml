@@ -73,7 +73,7 @@
                                     <Color blue="0.42352941632270813" green="0.14509804546833038" red="0.0117647061124444" />
                                  </unSelectedColor>
                                  <font>
-                                    <Font size="15.0" />
+                                    <Font name="Montserrat Regular" size="15.0" />
                                  </font>
                               </JFXRadioButton>
                            </children>

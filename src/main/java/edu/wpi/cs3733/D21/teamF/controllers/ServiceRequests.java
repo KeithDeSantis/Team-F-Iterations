@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -25,18 +26,23 @@ public abstract class ServiceRequests {
     private JFXButton helpButton;
     @FXML
     private JFXButton clearButton;
+    @FXML
+    private JFXButton back;
 
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {}
 
-    public void handleCancel() throws IOException {
+    public void handleCancel(ActionEvent e) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 
     public void handleHelp(ActionEvent e) throws IOException {}
 
-    public void handleHome(ActionEvent e) throws IOException {
+
+    public void handleHome(MouseEvent e) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
+
+    public void goBack(ActionEvent actionEvent) throws IOException {}
 
     public boolean formFilled() {
         return false;

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LanguageInterpretationServiceRequestController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.GiftDeliveryServiceRequestController">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -24,7 +24,7 @@
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="title" prefHeight="117.0" prefWidth="773.0" text="BRIGHAM AND WOMEN'S HOSPITAL Language Interpretation Help Page" wrapText="true">
+                  <Label fx:id="title" prefHeight="117.0" prefWidth="773.0" text="BRIGHAM AND WOMEN'S HOSPITAL Gift Delivery Help Page" wrapText="true">
                      <font>
                         <Font size="40.0" />
                      </font>
@@ -45,27 +45,27 @@
                         <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="64.66667683919272" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please select the hospital department in the dropdown menu. If your isit is with multiple departments, select &quot;Multiple Departments.&quot;" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="The number of the credit card is to be typed where it says &quot;Card Number.&quot; The expiration month/year is to be put where it says &quot;MM/YY&quot;. The CVC number is to be put in &quot;CVC&quot; text location. To find the the CVC number look on the back of the card next to where the card was signed." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label text="Appointment Date and Time:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                        <Label text="Special Instrucitons:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="30.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please use the calendar and clock icons to select the date and time of the appointment." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Any special instructions or requests for the delivery of the gift." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label text="Appointment Type:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                        <Label text="Payment Information:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets right="30.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please type in the preferred name of the patient." wrapText="true" GridPane.columnIndex="1">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="The name of the recipient of the gift." wrapText="true" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
@@ -73,16 +73,6 @@
                         <Label text="Name:" GridPane.halignment="RIGHT">
                            <GridPane.margin>
                               <Insets right="30.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <Label layoutX="171.0" layoutY="193.0" text="Language:" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-                           <GridPane.margin>
-                              <Insets right="30.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please select the name of the language you would like an interpreter for." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <GridPane.margin>
-                              <Insets right="25.0" />
                            </GridPane.margin>
                         </Label>
                      </children>
