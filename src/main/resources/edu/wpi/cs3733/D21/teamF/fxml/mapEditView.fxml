@@ -7,7 +7,6 @@
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -142,75 +141,6 @@
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
                   </JFXButton>
-                  <GridPane prefHeight="244.0" prefWidth="176.0">
-                    <columnConstraints>
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="76.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="22.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                           <children>
-                              <Label text="Node ID:" textAlignment="CENTER" underline="true" wrapText="true" />
-                              <Label fx:id="nodeIDDisplayLabel" opacity="0.5" text="Node ID" textAlignment="CENTER" wrapText="true" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1">
-                           <children>
-                              <Label text="Floor:" textAlignment="CENTER" underline="true" wrapText="true" />
-                              <Label fx:id="floorDisplayLabel" opacity="0.5" text="Floor" textAlignment="CENTER" wrapText="true" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="1">
-                           <children>
-                              <Label text="Building:" textAlignment="CENTER" underline="true" wrapText="true" />
-                              <Label fx:id="buildingDisplayLabel" opacity="0.5" text="Building" textAlignment="CENTER" wrapText="true" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <children>
-                              <Label text="Node Type:" textAlignment="CENTER" underline="true" wrapText="true" />
-                              <Label fx:id="nodeTypeDisplayLabel" opacity="0.5" text="Node Type" textAlignment="CENTER" wrapText="true" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="2">
-                           <children>
-                              <Label text="Long Name:" textAlignment="CENTER" underline="true" wrapText="true" />
-                              <Label fx:id="longNameDisplayLabel" opacity="0.5" text="Long Name" textAlignment="CENTER" wrapText="true" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <children>
-                              <Label text="Short Name:" textAlignment="CENTER" underline="true" wrapText="true" />
-                              <Label fx:id="shortNameDisplayLabel" opacity="0.5" text="Short Name" textAlignment="CENTER" wrapText="true" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
-                           <children>
-                              <Label text="Edge ID:" textAlignment="CENTER" underline="true" wrapText="true" />
-                              <Label fx:id="edgeIDDisplayLabel" opacity="0.5" text="Edge ID" textAlignment="CENTER" wrapText="true" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="3">
-                           <children>
-                              <Label text="Start Node:" textAlignment="CENTER" underline="true" wrapText="true" />
-                              <Label fx:id="startNodeDisplayLabel" opacity="0.5" text="Start Node" textAlignment="CENTER" wrapText="true" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <children>
-                              <Label text="End Node:" textAlignment="CENTER" underline="true" wrapText="true" />
-                              <Label fx:id="endNodeDisplayLabel" opacity="0.5" text="Edge ID" textAlignment="CENTER" wrapText="true" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </GridPane>
                </children>
                <HBox.margin>
                   <Insets />

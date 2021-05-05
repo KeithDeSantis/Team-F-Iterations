@@ -75,15 +75,6 @@ public class MapEditViewController {
     private MapPanel mapPanel;
     @FXML
     private JFXToggleButton edgeCreationToggle;
-    @FXML private Label nodeIDDisplayLabel;
-    @FXML private Label floorDisplayLabel;
-    @FXML private Label buildingDisplayLabel;
-    @FXML private Label nodeTypeDisplayLabel;
-    @FXML private Label longNameDisplayLabel;
-    @FXML private Label shortNameDisplayLabel;
-    @FXML private Label edgeIDDisplayLabel;
-    @FXML private Label startNodeDisplayLabel;
-    @FXML private Label endNodeDisplayLabel;
 
     private boolean clickToMakeEdge;
     private boolean favoriteOnly = false;
@@ -1019,13 +1010,23 @@ public class MapEditViewController {
     private DrawableNode getEditableNode(NodeEntry nodeEntry) {
         final DrawableNode drawableNode = nodeEntry.getDrawable();
 
+        Tooltip tt = new JFXTooltip();
+
+        tt.setText(nodeEntry.getShortName() +
+                "\nBuilding: " + nodeEntry.getBuilding() +
+                "\nNode Type: " + nodeEntry.getNodeType());
+
+        tt.setStyle("-fx-font: normal bold 15 Langdon; "
+                + "-fx-background-color: #03256C; "
+                + "-fx-text-fill: white;");
+
         drawableNode.setOnMouseEntered(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);
-            handleDisplayNodeInfo(drawableNode);
+            Tooltip.install(drawableNode, tt);
         });
         drawableNode.setOnMouseExited(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR);
-            handleUndisplayNodeInfo();
+            Tooltip.uninstall(drawableNode, tt);
         });
 
         final List<DrawableEdge> startEdges = new ArrayList<>();
@@ -1044,7 +1045,6 @@ public class MapEditViewController {
 
             drawableNode.setOnMouseDragged(e -> {
                 handleNodeDragMouseDragged(drawableNode, e, startEdges, endEdges);
-                handleDisplayNodeInfo(drawableNode); // Keeps the Node Info from flickering while dragging - KD
             });
 
             drawableNode.setOnMouseReleased(e -> {
@@ -1575,13 +1575,20 @@ public class MapEditViewController {
                 DrawableEdge edge = getEditableEdge(e, startNode, endNode);
                 Line l = mapPanel.draw(edge);
 
+                Tooltip tt = new JFXTooltip();
+                tt.textProperty().set("Edge: " + e.getEdgeID());
+
+                tt.setStyle("-fx-font: normal bold 15 Langdon; "
+                        + "-fx-background-color: #03256C; "
+                        + "-fx-text-fill: white;");
+
                 l.setOnMouseEntered(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);
-                    handleDisplayEdgeInfo(edge);
+                    Tooltip.install(edge, tt);
                 });
                 l.setOnMouseExited(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.LINE_COLOR);
-                    handleUndisplayEdgeInfo();
+                    Tooltip.uninstall(edge, tt);
                 });
                 l.setOnMouseClicked(event -> {
                     if (selectedLine != null)
@@ -1723,45 +1730,6 @@ public class MapEditViewController {
     }
 
     /**
-     * Displays the node currently hovered over's data in the node info section
-     * @param drawableNode the node hovered over
-     * @author KD
-     */
-    public void handleDisplayNodeInfo(DrawableNode drawableNode) {
-        nodeIDDisplayLabel.setText(drawableNode.getId());
-        nodeIDDisplayLabel.setOpacity(1);
-        floorDisplayLabel.setText(drawableNode.getFloor().get());
-        floorDisplayLabel.setOpacity(1);
-        buildingDisplayLabel.setText(drawableNode.getBuilding());
-        buildingDisplayLabel.setOpacity(1);
-        nodeTypeDisplayLabel.setText(drawableNode.getNodeType());
-        nodeTypeDisplayLabel.setOpacity(1);
-        longNameDisplayLabel.setText(drawableNode.getLongName());
-        longNameDisplayLabel.setOpacity(1);
-        shortNameDisplayLabel.setText(drawableNode.getShortName());
-        shortNameDisplayLabel.setOpacity(1);
-    }
-
-    /**
-     * Clears the node info section
-     * @author KD
-     */
-    public void handleUndisplayNodeInfo() {
-        nodeIDDisplayLabel.setText("Node ID");
-        nodeIDDisplayLabel.setOpacity(0.5);
-        floorDisplayLabel.setText("Floor");
-        floorDisplayLabel.setOpacity(0.5);
-        buildingDisplayLabel.setText("Building");
-        buildingDisplayLabel.setOpacity(0.5);
-        nodeTypeDisplayLabel.setText("Node Type");
-        nodeTypeDisplayLabel.setOpacity(0.5);
-        longNameDisplayLabel.setText("Long Name");
-        longNameDisplayLabel.setOpacity(0.5);
-        shortNameDisplayLabel.setText("Short Name");
-        shortNameDisplayLabel.setOpacity(0.5);
-    }
-
-    /**
      * Adds selected node to the favorites list of current user
      * @throws SQLException
      * @author KD
@@ -1807,34 +1775,6 @@ public class MapEditViewController {
             if(nodeEntry.getNodeID().equals(nodeID)) isFavorite = true;
         }
         return isFavorite;
-    }
-
-
-    /**
-     * Displays the edge currently hovered over's data in the edge info section
-     * @param drawableEdge the node hovered over
-     * @author KD
-     */
-    public void handleDisplayEdgeInfo(DrawableEdge drawableEdge) {
-        edgeIDDisplayLabel.setText(drawableEdge.getId());
-        edgeIDDisplayLabel.setOpacity(1);
-        startNodeDisplayLabel.setText(drawableEdge.getStartNode().getNodeID());
-        startNodeDisplayLabel.setOpacity(1);
-        endNodeDisplayLabel.setText(drawableEdge.getEndNode().getNodeID());
-        endNodeDisplayLabel.setOpacity(1);
-    }
-
-    /**
-     * Clears the edge info section
-     * @author KD
-     */
-    public void handleUndisplayEdgeInfo() {
-        edgeIDDisplayLabel.setText("Edge ID");
-        edgeIDDisplayLabel.setOpacity(0.5);
-        startNodeDisplayLabel.setText("Start Node");
-        startNodeDisplayLabel.setOpacity(0.5);
-        endNodeDisplayLabel.setText("End Node");
-        endNodeDisplayLabel.setOpacity(0.5);
     }
 }
 
