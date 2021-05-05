@@ -1,5 +1,9 @@
 package edu.wpi.cs3733.D21.teamF.Translation;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedReader;
@@ -17,6 +21,28 @@ import java.nio.charset.StandardCharsets;
 public class Translator {
 
 
+    /**
+     * Used to track what language code we are using. Defaults to english.
+     */
+    private final StringProperty language = new SimpleStringProperty("en");
+
+
+
+    public ObservableValue<String> getTranslationBinding(String text) {
+        return Bindings.createStringBinding(() -> translate(text), language);
+    }
+
+    public void setLanguage(String language)
+    {
+        Translator.getTranslator().language.setValue(language);
+    }
+
+
+    public String translate(String text) throws IOException {
+        if(language.get().equals("en")) //Block english to english spam api calls
+            return text;
+        return translate("en", language.get(), text);
+    }
 
     /**
      * web scraper that uses javascript to access a translation generator and return translations
@@ -24,7 +50,7 @@ public class Translator {
      * @param target the language that the translation will be provided in
      * @param text the string that needs to translated
      * @return a translated string
-     * @throws IOException
+     * @throws IOException if an error occurred
      * @author Johvanni Perez
      */
     public String translate(String src, String target, String text) throws IOException {

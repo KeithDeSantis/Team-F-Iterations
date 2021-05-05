@@ -36,6 +36,8 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
 
+    private HashMap<String, String> langCodes = new HashMap<>();
+
     /**
      * Opens the help window
      * @param actionEvent
@@ -55,27 +57,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     /**
      * Calls translate function when translate button is clicked
      * @param actionEvent
-     * @throws IOException
      * @author Johvanni Perez
      */
-    public void handleTranslate(ActionEvent actionEvent) throws IOException{
+    public void handleTranslate(ActionEvent actionEvent) {
         if(language.getValue() != null) {
-            List<Label> labelList = new ArrayList<>(); //list of labels that need to get fixed
-            labelList.add(nameLabel);
-            labelList.add(dtLabel);
-            labelList.add(appointmentLabel);
-            labelList.add(languageLabel);
-
-            HashMap<String, String> codes = codeMap();
-            String src = "";                                //empty string that translator uses to autodetect src lang
-            String target = codes.get(language.getValue()); //gets lang code of the lang specified
-            String text;
-            String transText;
-            for (Label aLabel : labelList) {
-                text = aLabel.getText();
-                transText = Translator.getTranslator().translate(src, target, text);
-                aLabel.setText(transText);
-            }
+            String target = langCodes.get(language.getValue()); //gets lang code of the lang specified
+            Translator.getTranslator().setLanguage(target);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
@@ -223,6 +210,29 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         language.getItems().add("Russian");
         language.getItems().add("Spanish");
         language.getItems().add("Vietnamese");
+
+
+
+        langCodes.put("Arabic", "ar");
+        langCodes.put("Dutch", "nl");
+        langCodes.put("English", "en");
+        langCodes.put("French", "fr");
+        langCodes.put("German", "de");
+        langCodes.put("Greek", "el");
+        langCodes.put("Haitian Creole", "ht");
+        langCodes.put("Italian", "it");
+        langCodes.put("Japanese", "ja");
+        langCodes.put("Korean", "ko");
+        langCodes.put("Portuguese", "pt");
+        langCodes.put("Russian", "ru");
+        langCodes.put("Spanish", "es");
+        langCodes.put("Vietnamese", "vi");
+
+
+        nameLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("name"));
+        dtLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dtLabel.getText()));
+        appointmentLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(appointmentLabel.getText()));
+        languageLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(languageLabel.getText()));
     }
     
     public boolean formFilled(){
@@ -252,30 +262,5 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         return isFilled;
     }
 
-    /**
-     * HashMap containing languages and their lang codes
-     * @return
-     * @author Johvanni Perez
-     */
-    public static HashMap<String, String> codeMap(){
-        HashMap<String, String> langCodes = new HashMap<>();
-
-        langCodes.put("Arabic", "ar");
-        langCodes.put("Dutch", "nl");
-        langCodes.put("English", "en");
-        langCodes.put("French", "fr");
-        langCodes.put("German", "de");
-        langCodes.put("Greek", "el");
-        langCodes.put("Haitian Creole", "ht");
-        langCodes.put("Italian", "it");
-        langCodes.put("Japanese", "ja");
-        langCodes.put("Korean", "ko");
-        langCodes.put("Portuguese", "pt");
-        langCodes.put("Russian", "ru");
-        langCodes.put("Spanish", "es");
-        langCodes.put("Vietnamese", "vi");
-
-        return langCodes;
-    }
 }
 
