@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-public class PreferedPathfindingAlgoController implements IController {
+public class PreferredPathfindingAlgoController implements IController {
 
     @FXML JFXComboBox<String> algorithmComboBox;
     @FXML Label title;

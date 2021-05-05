@@ -112,7 +112,7 @@ public class ServiceRequestManagerController implements Initializable, IControll
         // Updates data base with the new completed status (toggles from current)
 //        DatabaseAPI.getDatabaseAPI().editServiceRequest(selectedEntry.getUuid(),
 //                String.valueOf(!Boolean.parseBoolean(selectedEntry.getCompleteStatus())), "completed");
-        String newBoolean = "";
+        String newBoolean;
         if(selectedEntry.getCompleteStatus().equals("true")){
             newBoolean = "false";
         }
@@ -206,16 +206,13 @@ public class ServiceRequestManagerController implements Initializable, IControll
         delete.setDisable(false);
 
         // Enable mark complete button and set appropriate text
-        if(selectedEntry.getCompleteStatus().equals("false")){
-            markAsComplete.setText("Toggle Status");
-            markAsComplete.setDisable(false);
-        } else if(selectedEntry.getCompleteStatus().equals("true")){
-            markAsComplete.setText("Toggle Status");
-            markAsComplete.setDisable(false);
-        }
-        else if(selectedEntry.getCompleteStatus().equals("")){
-            markAsComplete.setText("Toggle Status");
-            markAsComplete.setDisable(false);
+        switch (selectedEntry.getCompleteStatus()) {
+            case "false":
+            case "true":
+            case "":
+                markAsComplete.setText("Toggle Status");
+                markAsComplete.setDisable(false);
+                break;
         }
 
         // Enable remove assignment button if a person is assigned
