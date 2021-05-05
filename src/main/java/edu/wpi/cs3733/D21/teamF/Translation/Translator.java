@@ -6,13 +6,12 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import org.apache.commons.text.StringEscapeUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 /**
  * This class is used to manage translation across the application
@@ -20,6 +19,8 @@ import java.nio.charset.StandardCharsets;
  */
 public class Translator {
 
+    //FIXME: ALWAYS SET THIS TO BE TRUE FOR JARS!!!!!
+    private static final boolean isProduction = false;
 
     /**
      * Used to track what language code we are using. Defaults to english.
@@ -27,6 +28,7 @@ public class Translator {
     private final StringProperty language = new SimpleStringProperty("en");
 
 
+    private final HashMap<String, HashMap<String, String>> translationLookupTable = new HashMap<>();
 
     public ObservableValue<String> getTranslationBinding(String text) {
         return Bindings.createStringBinding(() -> translate(text), language);
@@ -41,7 +43,25 @@ public class Translator {
     public String translate(String text) throws IOException {
         if(language.get().equals("en")) //Block english to english spam api calls
             return text;
-        return translate("en", language.get(), text);
+
+        /*
+         * Accesses our local cache
+         */
+        final HashMap<String, String> languageLookup = translationLookupTable.get(language.get());
+        if(languageLookup == null)
+            translationLookupTable.put(language.get(), new HashMap<>());
+        else
+        {
+            final String translation = languageLookup.get(text);
+            if(translation != null)
+                return  translation;
+        }
+
+        final String translation = translate("en", language.get(), text);
+
+        translationLookupTable.get(language.get()).put(text, translation);
+
+        return translation;
     }
 
     /**
@@ -73,7 +93,29 @@ public class Translator {
     }
 
 
-    private Translator() {}
+    private Translator() {
+
+
+        if(!isProduction)
+        {
+            System.out.println((new File("")).getAbsolutePath());
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    System.out.println((new File("")).getAbsolutePath());
+                    final FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/TranslationTables/" + System.currentTimeMillis() + ".bin");
+
+                    final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+                    objectOutputStream.writeObject(translationLookupTable);
+                    objectOutputStream.close();
+                    fileOutputStream.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }));
+        }
+    }
 
     private static class TranslatorSingletonHelper{
         private static final Translator translator = new Translator();
