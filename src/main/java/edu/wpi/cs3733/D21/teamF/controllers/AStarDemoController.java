@@ -148,6 +148,7 @@ public class AStarDemoController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        System.out.println(CurrentUser.getCurrentUser().getUuid());
 
         //ahf - yes this should be done better. At some point.
 
@@ -456,7 +457,7 @@ public class AStarDemoController implements Initializable {
                 labItem, parkingItem, retailItem, serviceItem, restroomItem);
 
         // Check if a user is signed in a create the Tree Items for favorite and recent if needed
-        if(CurrentUser.getCurrentUser().isAuthenticated()) {
+        if(CurrentUser.getCurrentUser().getUuid() == null && CurrentUser.getCurrentUser().isAuthenticated()) {
 
             try {
                 for (String ID : getUserFavorites()) {
