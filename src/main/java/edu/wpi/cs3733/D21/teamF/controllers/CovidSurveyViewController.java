@@ -67,7 +67,8 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private void handleSubmitPushed() throws IOException, SQLException {
         if(formFilled()) {
             //create service request, put in database
-            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "form details etc");
+            String covidInfo = temperatureField.getText();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
             ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
             //change view to survey submitted page
 
