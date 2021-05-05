@@ -17,18 +17,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AccountManagerController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AccountManagerController">
    <children>
-      <HBox fx:id="header" layoutY="-6.0" prefHeight="120.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="header" layoutY="-6.0" prefHeight="120.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Label fx:id="title" prefHeight="120.0" prefWidth="755.0" text="BRIGHAM AND WOMEN'S HOSPITAL Account Manager" wrapText="true">
+            <Label fx:id="title" prefHeight="120.0" prefWidth="755.0" text="BWH Account Manager" wrapText="true">
                <font>
-                  <Font name="Volkhov Regular" size="40.0" />
+                  <Font size="36.0" />
                </font>
             </Label>
          </children></HBox>
