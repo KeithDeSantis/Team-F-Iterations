@@ -135,7 +135,7 @@ public class Graph {
      * @author Tony Vuolo (bdane)
      */
     public List<Vertex> getEfficientOrder(Vertex... v) {
-        if(v.length <= 6) {
+        if(v.length <= 8) {
             return TSP(v);
         }
         Path[] paths = new Path[v.length * (v.length - 1) / 2];
@@ -235,11 +235,8 @@ public class Graph {
                 totalLength = length;
             }
 
-//            System.out.println(permutation.toString(currentPermutation) + " " + length);
-
             permutation.makeNextPermutation();
         } while(! permutation.hasCycled());
-//        System.out.println(permutation.toString(currentPermutation));
 
 
         List<Vertex> vertices = new LinkedList<>();
@@ -248,7 +245,6 @@ public class Graph {
             vertices.add(v[j + 1]);
         }
         vertices.add(v[v.length - 1]);
-//        System.out.println(vertices + " " + v[2] + " " + permutation.toString(currentPermutation));
 
         return vertices;
     }
