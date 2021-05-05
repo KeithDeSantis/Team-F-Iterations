@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public abstract class ServiceRequests {
+public abstract class ServiceRequests implements IController{
 
     @FXML
     private JFXButton submitButton;

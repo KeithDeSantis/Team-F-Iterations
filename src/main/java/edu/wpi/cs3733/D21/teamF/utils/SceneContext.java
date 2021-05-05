@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
+import edu.wpi.cs3733.D21.teamF.controllers.IController;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,8 @@ public class SceneContext {
 
     private Stage stage;
 
+    private IController controller;
+
     private SceneContext() {}
 
     private static class SceneContextSingletonHelper {
@@ -24,7 +27,10 @@ public class SceneContext {
     }
 
     public void switchScene(String fxml) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(fxml));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(fxml));
+        this.controller = loader.getController();
+        Parent root = loader.load();
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -49,6 +55,10 @@ public class SceneContext {
             switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
     }
+
+    public IController getController() {return controller; }
+
+    public void setController(IController controller) { this.controller = controller; }
 
     public Stage getStage() {
         return stage;

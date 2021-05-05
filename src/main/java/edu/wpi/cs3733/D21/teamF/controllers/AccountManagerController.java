@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AccountManagerController implements Initializable {
+public class AccountManagerController implements Initializable, IController {
     @FXML
     private JFXButton quit;
     @FXML
