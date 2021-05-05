@@ -30,7 +30,7 @@ public class EmployeeAdminLoginController {
     @FXML
     private Label errorMessage;
     @FXML
-    private JFXButton back;
+    private JFXButton goBack;
 
 
     public void handleButtonPushed(ActionEvent actionEvent) throws IOException, SQLException {
@@ -52,8 +52,8 @@ public class EmployeeAdminLoginController {
                 password.setText("");
             }
         }
-        else if (buttonPushed == back) {
-            SceneContext.getSceneContext().loadDefault();
+        else if (buttonPushed == goBack) {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
         }
 
     }

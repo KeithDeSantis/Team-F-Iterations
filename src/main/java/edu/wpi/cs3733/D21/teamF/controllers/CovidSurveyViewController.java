@@ -1,17 +1,20 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -22,7 +25,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-public class CovidSurveyViewController extends ServiceRequests{
+public class CovidSurveyViewController extends ServiceRequests implements Initializable {
 
     @FXML private HBox header;
     @FXML private Label title;
@@ -59,11 +62,10 @@ public class CovidSurveyViewController extends ServiceRequests{
     /**
      * generates a UUID for the survey and displays it.
      */
-    private void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources){
         String ticketNumber = UUID.randomUUID().toString();
         generatedID.setText(ticketNumber);
     }
-
 
     /**
      * creates a service request and puts it in the database, then changes to the submitted view
@@ -71,26 +73,27 @@ public class CovidSurveyViewController extends ServiceRequests{
      * @throws IOException
      */
     @FXML private void handleSubmitPushed(ActionEvent e) throws IOException, SQLException {
-
-        //create service request, put in database
-        DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "false", "form details etc");
-        ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
-        //change view to survey submitted page
-        FXMLLoader submittedPageLoader = new FXMLLoader();
-        submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
-        Stage submittedStage = new Stage();
-        Parent root = submittedPageLoader.load();
-        CovidFormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
-        formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
-        Scene submitScene = new Scene(root);
-        submittedStage.setScene(submitScene);
-        submittedStage.setTitle("Submission Complete");
-        submittedStage.initModality(Modality.APPLICATION_MODAL);
-        submittedStage.showAndWait();
+        if(formFilled()) {
+            //create service request, put in database
+            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "false", "form details etc");
+            ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
+            //change view to survey submitted page
+            FXMLLoader submittedPageLoader = new FXMLLoader();
+            submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
+            Stage submittedStage = new Stage();
+            Parent root = submittedPageLoader.load();
+            CovidFormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
+            Scene submitScene = new Scene(root);
+            submittedStage.setScene(submitScene);
+            submittedStage.setTitle("Submission Complete");
+            submittedStage.initModality(Modality.APPLICATION_MODAL);
+            submittedStage.showAndWait();
+        }
     }
     public boolean formFilled(){
         boolean complete = true;
-        if (temperatureField.getText() == ""){
+        if (Integer.parseInt(temperatureField.getText())<70 || Integer.parseInt(temperatureField.getText())>115 || temperatureField.getText() == ""){
             setTextErrorStyle(temperatureField);
             complete = false;
         }

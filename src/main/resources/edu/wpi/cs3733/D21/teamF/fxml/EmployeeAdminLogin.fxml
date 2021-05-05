@@ -67,7 +67,7 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="skipSignIn" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back">
+            <JFXButton fx:id="goBack" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

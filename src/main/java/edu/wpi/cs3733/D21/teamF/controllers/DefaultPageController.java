@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,7 +22,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class DefaultPageController {
+public class DefaultPageController implements Initializable {
     @FXML
     private JFXButton navigation;
     @FXML
@@ -38,7 +39,7 @@ public class DefaultPageController {
     @FXML private VBox covidBox;
 
     @FXML
-    private void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources) {
         // Apply fonts to title and buttons
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM

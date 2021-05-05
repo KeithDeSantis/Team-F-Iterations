@@ -117,7 +117,7 @@
                   </VBox>
                   <VBox prefHeight="79.0" prefWidth="440.0" GridPane.rowIndex="2">
                      <children>
-                        <Label fx:id="tempPrompt" prefHeight="49.0" prefWidth="355.0" text="Please take your temperature and type it into the box: " wrapText="true">
+                        <Label fx:id="tempPrompt" prefHeight="49.0" prefWidth="355.0" text="Please take your temperature (degrees F) and type it into the box: " wrapText="true">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
