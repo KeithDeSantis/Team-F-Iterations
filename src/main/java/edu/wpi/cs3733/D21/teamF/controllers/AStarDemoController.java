@@ -26,15 +26,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -175,6 +173,8 @@ public class AStarDemoController implements Initializable {
         }
 
 
+
+
         List<String> shortNameList = new ArrayList<>();
         for(Vertex vertex : this.graph.getVertices()){
             NodeEntry node = findNodeEntry(vertex.getID());
@@ -229,7 +229,7 @@ public class AStarDemoController implements Initializable {
                     } else {
                         addStopMenu.setText("Add Stop");
                     }
-                    if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                    if(CurrentUser.getCurrentUser().getUuid() == null && CurrentUser.getCurrentUser().isAuthenticated()) {
                         try {
                             if (getUserFavorites().contains(currEntry.getNodeID())) {
                                 addFavoriteMenu.setText("Remove Favorite");
@@ -644,6 +644,18 @@ public class AStarDemoController implements Initializable {
                 }
             });
         });
+
+        if(CurrentUser.getCurrentUser().getUuid() != null)
+        {
+            try {
+                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false"))
+                    endNode.set(idToShortName("FEXIT00301"));
+                else
+                    endNode.set(idToShortName("FEXIT00201"));
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     /**
