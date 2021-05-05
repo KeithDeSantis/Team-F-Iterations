@@ -56,12 +56,15 @@
                   </JFXButton>
                </children>
             </VBox>
-            <VBox fx:id="covidBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="100.0">
+            <VBox fx:id="covidBox" alignment="CENTER" layoutX="200.0" layoutY="91.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #FFFFFFFF;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="91.0">
                <children>
                   <Label text="If you've completed the survey, please enter your ticket number">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
                   </Label>
                   <JFXTextField prefHeight="31.0" prefWidth="224.0">
                      <VBox.margin>
@@ -88,6 +91,9 @@
                      <font>
                         <Font name="Montserrat SemiBold" size="40.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
                   </JFXButton>
                </children>
             </VBox>
