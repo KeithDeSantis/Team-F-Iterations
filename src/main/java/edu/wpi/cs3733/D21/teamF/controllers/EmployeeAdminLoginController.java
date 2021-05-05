@@ -44,9 +44,16 @@ public class EmployeeAdminLoginController {
             String user = username.getText();
             String pass = password.getText();
 
+            if (DatabaseAPI.getDatabaseAPI().authenticate(user, pass) &&
+                    (DatabaseAPI.getDatabaseAPI().getUser(user).getUserType().equals("administrator") ||
+                            DatabaseAPI.getDatabaseAPI().getUser(user).getUserType().equals("employee"))){
+                SceneContext.getSceneContext().loadDefault();
+            }
+                /*
             if (CurrentUser.getCurrentUser().login(user, pass) && (CurrentUser.getCurrentUser().getLoggedIn().getUserType() == "employee" || CurrentUser.getCurrentUser().getLoggedIn().getUserType() == "admin")) {
                 SceneContext.getSceneContext().loadDefault();
             }
+                 */
             else {
                 errorMessage.setStyle("-fx-text-fill: #c60000FF;");
                 password.setText("");
