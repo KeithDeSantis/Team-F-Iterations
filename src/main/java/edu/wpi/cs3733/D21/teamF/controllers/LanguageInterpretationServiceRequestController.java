@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import javafx.event.ActionEvent;
@@ -14,15 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.text.StringEscapeUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -78,7 +73,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
             String transText;
             for (Label aLabel : labelList) {
                 text = aLabel.getText();
-                transText = translate(src, target, text);
+                transText = Translator.getTranslator().translate(src, target, text);
                 aLabel.setText(transText);
             }
         } else {
@@ -282,35 +277,5 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
         return langCodes;
     }
-
-    /**
-     * web scraper that uses javascript to access a translation generator and return translations
-     * @param src the original language that needs to be translated
-     * @param target the language that the translation will be provided in
-     * @param text the string that needs to translated
-     * @return a translated string
-     * @throws IOException
-     * @author Johvanni Perez
-     */
-    public String translate(String src, String target, String text) throws IOException {
-
-
-        String urlStr = "https://script.google.com/macros/s/AKfycbzk_1ZP98MqQNuWvs_Yo3UamuN7WCABIG3UiUUighYgCeqIf4ha4qUzubb2jxopuTP7/exec"
-                + "?q=" + URLEncoder.encode(text, "UTF-8") +
-                "&target=" + target +
-                "&source=" + src;
-        URL url = new URL(urlStr);
-        StringBuilder response = new StringBuilder();
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-        String inputLine;
-        while((inputLine = in.readLine()) != null){
-            response.append(StringEscapeUtils.unescapeHtml4(inputLine));
-        }
-        in.close();
-        return response.toString();
-    }
-
 }
 
