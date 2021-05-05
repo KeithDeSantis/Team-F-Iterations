@@ -69,10 +69,9 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
 
     /**
      * creates a service request and puts it in the database, then changes to the submitted view
-     * @param e
      * @throws IOException
      */
-    @FXML private void handleSubmitPushed(ActionEvent e) throws IOException, SQLException {
+    @FXML private void handleSubmitPushed() throws IOException, SQLException {
         if(formFilled()) {
             //create service request, put in database
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "false", "form details etc");
@@ -92,12 +91,40 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
         }
     }
     public boolean formFilled(){
-        boolean complete = true;
-        if (Integer.parseInt(temperatureField.getText())<70 || Integer.parseInt(temperatureField.getText())>115 || temperatureField.getText() == ""){
+        final String tempStr = temperatureField.getText().trim();
+
+        //Empty temperature field
+        if(tempStr.isEmpty()) {
             setTextErrorStyle(temperatureField);
-            complete = false;
+            return false;
         }
-        return complete;
+        //Verify temperature is a number
+        if(!tempStr.matches("\\d*")) {
+            setTextErrorStyle(temperatureField);
+            return false;
+        }
+
+        final int temperature = Integer.parseInt(tempStr);
+
+        if (temperature < 70 || temperature > 115 ){
+            setTextErrorStyle(temperatureField);
+            return false;
+        }
+
+        //FIXME: ADD USER FEEDBACK
+
+        if(!yes1.isSelected() && !no1.isSelected())
+        {
+            return false;
+        }
+
+        if(!yes2.isSelected() && !no2.isSelected())
+        {
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
