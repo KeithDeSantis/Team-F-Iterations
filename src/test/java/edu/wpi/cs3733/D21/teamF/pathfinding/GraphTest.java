@@ -566,7 +566,7 @@ public class GraphTest {
         for(int i = 0; i < vertices.length; i++) {
             vertices[i] = this.vertices.get(vertexIDs[i]);
         }
-        assertEquals(this.graph.getEfficientOrder(vertices).toString(), "[CHALL002L1, CRETL001L1, CHALL013L1, CDEPT002L1, CREST002L1, CSERV001L1]");
+        assertEquals(this.graph.getEfficientOrder(vertices).toString(), "[CREST002L1, CRETL001L1, CHALL013L1, CDEPT002L1, CHALL002L1, CSERV001L1]");
     }
   @Test
     public void testBestFirstWithAStar() {
