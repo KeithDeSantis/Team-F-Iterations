@@ -1674,7 +1674,7 @@ public class AStarDemoController implements Initializable {
     }
 
     public void gotoAboutPage(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AboutpageView.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AboutPageView.fxml");
     }
 
     public List<String> getUserFavorites() throws SQLException {
