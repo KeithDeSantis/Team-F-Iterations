@@ -58,6 +58,7 @@ public class Translator {
                 return  translation;
         }
 
+        System.out.println("Could not translate: " + language.get() + " -> " + text);
         final String translation = translate("en", language.get(), text);
 
         translationLookupTable.get(language.get()).put(text, translation);
@@ -108,37 +109,51 @@ public class Translator {
                         final FileInputStream fileInputStream = new FileInputStream(tableDirectory + file);
                         final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-                        initialLookupTables.putAll((HashMap<String, HashMap<String, String>>) objectInputStream.readObject());
-                        this.translationLookupTable.putAll(initialLookupTables);
+                        final HashMap<String, HashMap<String, String>> currMap = (HashMap<String, HashMap<String, String>>) objectInputStream.readObject();
+
+                        for(String s : currMap.keySet())
+                        {
+                            if(initialLookupTables.get(s) == null)
+                                initialLookupTables.put(s, new HashMap<>());
+
+                            for(String l : currMap.get(s).keySet())
+                                initialLookupTables.get(s).put(l, currMap.get(s).get(l));
+                        }
+
+                        objectInputStream.close();
+                        fileInputStream.close();
+
+
                     } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
+
+                for(String s : initialLookupTables.keySet())
+                    for(String l : initialLookupTables.get(s).keySet())
+                    {
+                       if(translationLookupTable.get(s) == null)
+                           translationLookupTable.put(s, new HashMap<>());
+
+                       System.out.println("ADDING: " + s + " -> " + l);
+                        translationLookupTable.get(s).put(l, initialLookupTables.get(s).get(l));
+                    }
             }
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
-                    for(String lang : translationLookupTable.keySet())
+                    final Iterator<String> langIterator = translationLookupTable.keySet().iterator();
+                    while (langIterator.hasNext())
                     {
+                        final String lang = langIterator.next();
+
                         if(initialLookupTables.get(lang) != null)
                         {
-                            final Iterator<String> it = translationLookupTable.get(lang).keySet().iterator();
-                            while(it.hasNext())
-                            {
-                                if(initialLookupTables.get(lang).get(it.next()) != null)
-                                    it.remove();
-
-                            }
-                            /*
-                            for(String s : translationLookupTable.get(lang).keySet())
-                                if(initialLookupTables.get(lang).get(s) != null)
-                                    translationLookupTable.get(lang).remove(s);
-
-                             */
+                            translationLookupTable.get(lang).keySet().removeIf(s -> initialLookupTables.get(lang).get(s) != null);
                         }
 
                         if(translationLookupTable.get(lang).keySet().isEmpty())
-                            translationLookupTable.remove(lang);
+                           langIterator.remove();
                     }
 
                     if(translationLookupTable.keySet().isEmpty())

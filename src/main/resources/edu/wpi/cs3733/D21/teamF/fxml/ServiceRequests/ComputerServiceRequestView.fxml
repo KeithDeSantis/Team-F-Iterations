@@ -17,8 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.ComputerServiceRequestViewController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.ComputerServiceRequestViewController">
 
    <children>
       <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -55,7 +54,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label prefHeight="19.0" prefWidth="149.0" text="Computer Name:">
+                        <Label fx:id="computerNameLbl" prefHeight="19.0" prefWidth="149.0" text="Computer Name:">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -65,12 +64,12 @@
                               <Insets left="25.0" right="25.0" />
                            </GridPane.margin>
                         </JFXTextField>
-                        <Label text="Computer Location: " GridPane.rowIndex="1">
+                        <Label fx:id="computerLocLbl" text="Computer Location: " GridPane.rowIndex="1">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </Label>
-                        <Label text="Requestor: " GridPane.rowIndex="2">
+                        <Label fx:id="requestorLbl" text="Requestor: " GridPane.rowIndex="2">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -80,7 +79,7 @@
                               <Insets left="25.0" right="25.0" />
                            </GridPane.margin>
                         </JFXTextField>
-                        <Label text="Urgency:" GridPane.rowIndex="3">
+                        <Label fx:id="urgencyLbl" text="Urgency:" GridPane.rowIndex="3">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -95,7 +94,7 @@
                               <Insets left="25.0" right="25.0" />
                            </GridPane.margin>
                         </JFXTextArea>
-                        <Label text="Description" GridPane.rowIndex="4">
+                        <Label fx:id="descLbl" text="Description" GridPane.rowIndex="4">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -108,8 +107,8 @@
                   </GridPane>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="325.0">
                      <children>
-                        <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
-                        <JFXButton buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                        <JFXButton fx:id="cancelBtn" buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                        <JFXButton fx:id="clearBtn" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                         <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
                         <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
                      </children>
