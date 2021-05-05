@@ -250,6 +250,11 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </JFXButton>
+            <JFXButton buttonType="RAISED" onAction="#handleCheckStatus" text="Check Status" textFill="#03256c" underline="true">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </JFXButton>
          </children>
       </HBox>
    </children>

@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -69,6 +70,9 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "form details etc");
             ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
             //change view to survey submitted page
+
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
+            /*
             FXMLLoader submittedPageLoader = new FXMLLoader();
             submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
@@ -85,6 +89,8 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             {
                 DatabaseAPI.getDatabaseAPI().deleteServiceRequest(generatedID.getText());
             }
+
+             */
         }
     }
     public boolean formFilled(){
@@ -146,5 +152,9 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
      */
     public void handleEmployeeSignIn() throws IOException{
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
+    }
+
+    public void handleCheckStatus() throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
     }
 }
