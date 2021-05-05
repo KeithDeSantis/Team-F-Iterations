@@ -9,8 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -92,10 +90,9 @@ public class LaundryRequestController extends ServiceRequests {
 
     /**
      * handles radial button groups
-     * @param e
      */
     @FXML
-    private void handleRadialButtonPushed(ActionEvent e){
+    private void handleRadialButtonPushed(){
         ToggleGroup tempGroup = new ToggleGroup();
         hot.setToggleGroup(tempGroup);
         cold.setToggleGroup(tempGroup);

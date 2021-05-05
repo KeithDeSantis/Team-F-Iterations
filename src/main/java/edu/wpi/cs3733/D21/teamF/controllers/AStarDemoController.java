@@ -250,8 +250,8 @@ public class AStarDemoController implements Initializable {
                         startNode.set(idToShortName(currEntry.getNodeID()));
                         try {
                             handleStartNodeChange();
-                        } catch (SQLException throwables) {
-                            throwables.printStackTrace();
+                        } catch (SQLException sqlException) {
+                            sqlException.printStackTrace();
                         }
                     });
 
@@ -263,8 +263,8 @@ public class AStarDemoController implements Initializable {
                             drawStop(currEntry);
                             try {
                                 addNodeToRecent(currEntry);
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
+                            } catch (SQLException sqlException) {
+                                sqlException.printStackTrace();
                             }
                         } else {
                             vertices.remove(graph.getVertex(currEntry.getNodeID()));
@@ -279,8 +279,8 @@ public class AStarDemoController implements Initializable {
                         endNode.set(idToShortName(currEntry.getNodeID()));
                         try {
                             handleEndNodeChange();
-                        } catch (SQLException throwables) {
-                            throwables.printStackTrace();
+                        } catch (SQLException sqlException) {
+                            sqlException.printStackTrace();
                         }
                     });
 
@@ -309,8 +309,8 @@ public class AStarDemoController implements Initializable {
                         directionsTo.setOnAction(a -> {
                             endNode.set(idToShortName(currEntry.getNodeID()));try {
                                 handleEndNodeChange();
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
+                            } catch (SQLException sqlException) {
+                                sqlException.printStackTrace();
                             }
                             dialog.close();
                         });
@@ -319,8 +319,8 @@ public class AStarDemoController implements Initializable {
                         directionsFrom.setOnAction(a -> {
                             startNode.set(idToShortName(currEntry.getNodeID()));try {
                                 handleStartNodeChange();
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
+                            } catch (SQLException sqlException) {
+                                sqlException.printStackTrace();
                             }
                             dialog.close();
                         });
@@ -332,21 +332,21 @@ public class AStarDemoController implements Initializable {
                                 if(getUserFavorites().contains(currEntry.getNodeID())){
                                     toggleFavorite.setText("Remove Favorite");
                                 }
-                            } catch (SQLException throwables){
-                                throwables.printStackTrace();
+                            } catch (SQLException sqlException){
+                                sqlException.printStackTrace();
                             }
                             toggleFavorite.setOnAction(a -> {
                                 if (toggleFavorite.getText().equals("Add To Favorites")) {
                                     try {
                                         addNodeToFavorites(currEntry);
-                                    } catch (SQLException throwables) {
-                                        throwables.printStackTrace();
+                                    } catch (SQLException sqlException) {
+                                        sqlException.printStackTrace();
                                     }
                                 } else {
                                     try {
                                         removeNodeFromFavorites(currEntry);
-                                    } catch (SQLException throwables) {
-                                        throwables.printStackTrace();
+                                    } catch (SQLException sqlException) {
+                                        sqlException.printStackTrace();
                                     }
                                 }
                                 dialog.close();
@@ -367,14 +367,14 @@ public class AStarDemoController implements Initializable {
                         if (addFavoriteMenu.getText().equals("Add To Favorites")) {
                             try {
                                 addNodeToFavorites(currEntry);
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
+                            } catch (SQLException sqlException) {
+                                sqlException.printStackTrace();
                             }
                         } else {
                             try {
                                 removeNodeFromFavorites(currEntry);
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
+                            } catch (SQLException sqlException) {
+                                sqlException.printStackTrace();
                             }
                         }
                     });
@@ -470,15 +470,15 @@ public class AStarDemoController implements Initializable {
                 // Add tree items at start of the list of items (Top of the page)
                 rootTreeViewItem.getChildren().add(0, recentItem);
                 rootTreeViewItem.getChildren().add(0, favoriteItem);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
             }
         }
 
         // Set the root item
         treeView.setRoot(rootTreeViewItem);
 
-        // Hide root item (we dont need it visible, we always want to list to be there
+        // Hide root item (we don't need it visible, we always want to list to be there
         this.treeView.setShowRoot(false);
 
         // Add a context menu to the tree view for when an item is selected
@@ -520,8 +520,8 @@ public class AStarDemoController implements Initializable {
                 startNode.set(idToShortName(currEntry.getNodeID()));
                 try {
                     handleStartNodeChange();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
                 }
             });
 
@@ -533,8 +533,8 @@ public class AStarDemoController implements Initializable {
                     drawStop(currEntry);
                     try {
                         addNodeToRecent(currEntry);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                    } catch (SQLException sqlException) {
+                        sqlException.printStackTrace();
                     }
                 } else {
                     vertices.remove(graph.getVertex(currEntry.getNodeID()));
@@ -549,8 +549,8 @@ public class AStarDemoController implements Initializable {
                 endNode.set(idToShortName(currEntry.getNodeID()));
                 try {
                     handleEndNodeChange();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
                 }
             });
 
@@ -580,8 +580,8 @@ public class AStarDemoController implements Initializable {
                     endNode.set(idToShortName(currEntry.getNodeID()));
                     try {
                         handleEndNodeChange();
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                    } catch (SQLException sqlException) {
+                        sqlException.printStackTrace();
                     }
                     dialog.close();});
 
@@ -590,8 +590,8 @@ public class AStarDemoController implements Initializable {
                     startNode.set(idToShortName(currEntry.getNodeID()));
                     try {
                         handleStartNodeChange();
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                    } catch (SQLException sqlException) {
+                        sqlException.printStackTrace();
                     }
                     dialog.close();});
 
@@ -601,21 +601,21 @@ public class AStarDemoController implements Initializable {
                         if(getUserFavorites().contains(currEntry.getNodeID())){
                             toggleFavorite.setText("Remove Favorite");
                         }
-                    } catch (SQLException throwables){
-                        throwables.printStackTrace();
+                    } catch (SQLException sqlException){
+                        sqlException.printStackTrace();
                     }
                     toggleFavorite.setOnAction(a -> {
                         if (toggleFavorite.getText().equals("Add To Favorites")) {
                             try {
                                 addNodeToFavorites(currEntry);
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
+                            } catch (SQLException sqlException) {
+                                sqlException.printStackTrace();
                             }
                         } else {
                             try {
                                 removeNodeFromFavorites(currEntry);
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
+                            } catch (SQLException sqlException) {
+                                sqlException.printStackTrace();
                             }
                         }
                         dialog.close();
@@ -632,14 +632,14 @@ public class AStarDemoController implements Initializable {
                 if (addFavoriteMenu.getText().equals("Add To Favorites")) {
                     try {
                         addNodeToFavorites(currEntry);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                    } catch (SQLException sqlException) {
+                        sqlException.printStackTrace();
                     }
                 } else {
                     try {
                         removeNodeFromFavorites(currEntry);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                    } catch (SQLException sqlException) {
+                        sqlException.printStackTrace();
                     }
                 }
             });
@@ -1673,7 +1673,7 @@ public class AStarDemoController implements Initializable {
         }
     }
 
-    public void gotoAboutPage(ActionEvent actionEvent) throws IOException {
+    public void gotoAboutPage() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AboutPageView.fxml");
     }
 
@@ -1690,7 +1690,7 @@ public class AStarDemoController implements Initializable {
     public void addNodeToFavorites(NodeEntry node) throws SQLException{
         if(CurrentUser.getCurrentUser().isAuthenticated()) {
             if(getUserFavorites().contains(node.getNodeID())){return;}
-            DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "favorite");
+            DatabaseAPI.getDatabaseAPI().addCollectionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "favorite");
             favoriteItem.getChildren().add(0, new TreeItem<>(node.getShortName()));
         }
     }
@@ -1706,7 +1706,7 @@ public class AStarDemoController implements Initializable {
     public void addNodeToRecent(NodeEntry node) throws SQLException{
         if(CurrentUser.getCurrentUser().isAuthenticated()) {
             if(!favoriteItem.getChildren().removeIf(t -> t.getValue().equals(node.getShortName()))) // Remove any tree item with a matching short name (prevents duplicates)
-                DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "recent"); // if it wasn't removed, add it to the db list
+                DatabaseAPI.getDatabaseAPI().addCollectionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "recent"); // if it wasn't removed, add it to the db list
             recentItem.getChildren().add(0, new TreeItem<>(node.getShortName()));
             while(getUserRecent().size() > MAX_RECENTLY_USED){ // Should only run once, just covers a previously missed deletion
                 String IDtoRemove = shortNameToID(recentItem.getChildren().get(MAX_RECENTLY_USED).getValue());

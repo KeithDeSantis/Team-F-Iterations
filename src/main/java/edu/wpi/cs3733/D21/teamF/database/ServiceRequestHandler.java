@@ -1,6 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
-import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 
 import java.sql.PreparedStatement;

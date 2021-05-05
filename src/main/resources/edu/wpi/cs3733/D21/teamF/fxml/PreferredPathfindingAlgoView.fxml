@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane prefHeight="200.0" prefWidth="350.0" style="-fx-background-color: #E6E6E6; -fx-border-color: #03256C; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.PreferedPathfindingAlgoController">
+<AnchorPane prefHeight="200.0" prefWidth="350.0" style="-fx-background-color: #E6E6E6; -fx-border-color: #03256C; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.PreferredPathfindingAlgoController">
    <children>
       <VBox alignment="CENTER" layoutX="142.0" prefHeight="220.0" prefWidth="350.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

@@ -81,7 +81,7 @@ public class MapEditViewController {
 
     private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
     private final ObservableList<NodeEntry> nodeEntryObservableList = FXCollections.observableArrayList();
-    private List<NodeEntry> favoriteList = new ArrayList<NodeEntry>();
+    private final List<NodeEntry> favoriteList = new ArrayList<>();
     private Circle selectedCircle = null;
 
     private Line selectedLine = null;
@@ -1739,7 +1739,7 @@ public class MapEditViewController {
             NodeEntry favNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue();
             if(favoriteButton.getText().equals("Favorite")) {
                 if (isInFavorites(favNode.getNodeID())) return; // dont want duplicate favorite - KD
-                DatabaseAPI.getDatabaseAPI().addCollecionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), favNode.getNodeID(), "favorite");
+                DatabaseAPI.getDatabaseAPI().addCollectionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), favNode.getNodeID(), "favorite");
                 favoriteList.add(favNode);
             } else if(favoriteButton.getText().equals("Unfavorite")) {
                 DatabaseAPI.getDatabaseAPI().deleteUserNode(favNode.getNodeID(), CurrentUser.getCurrentUser().getLoggedIn().getUsername(), "favorite"); //?

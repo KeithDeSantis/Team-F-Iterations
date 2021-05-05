@@ -10,7 +10,6 @@ import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,9 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 public class DefaultPageController {
     @FXML
@@ -46,18 +43,6 @@ public class DefaultPageController {
         loginButton.setDisableVisualFocus(true);
 	//Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
-    }
-
-    private void openSurvey() throws IOException {
-        FXMLLoader surveyLoader = new FXMLLoader();
-        surveyLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml"));
-        Stage dialogStage = new Stage();
-        Parent root = surveyLoader.load();
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.initOwner(navigation.getScene().getWindow());
-        dialogStage.setScene(new Scene(root));
-
-        dialogStage.showAndWait();
     }
 
     @FXML
