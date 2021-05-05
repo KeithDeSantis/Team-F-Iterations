@@ -229,10 +229,12 @@ public class MapEditViewController implements IController {
         alignLeft.setOnMouseClicked(x -> {
             for(NodeEntry e : selectedNodes)
             {
-                final int xCoordinate = (int) (rectSelector.xProperty().get() * mapPanel.getZoomLevel().get());
-                final int yCoordinate = Integer.parseInt(e.getYCoordinate());
-                updateNode(e.getNodeID(), xCoordinate, yCoordinate);
-                //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                if(mapPanel.getNode(e.getNodeID()).shouldDisplay().get()) {
+                    final int xCoordinate = (int) (rectSelector.xProperty().get() * mapPanel.getZoomLevel().get());
+                    final int yCoordinate = Integer.parseInt(e.getYCoordinate());
+                    updateNode(e.getNodeID(), xCoordinate, yCoordinate);
+                    //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+                }
             }
 
         });
