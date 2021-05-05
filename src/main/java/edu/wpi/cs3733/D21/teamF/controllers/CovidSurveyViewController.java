@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-public class CovidSurveyViewController extends ServiceRequests implements Initializable {
+public class CovidSurveyViewController extends ServiceRequests implements Initializable, IController {
 
     @FXML private Label posTestPrompt;
     @FXML private Label fifteenPrompt;

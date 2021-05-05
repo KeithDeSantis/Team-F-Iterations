@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class DefaultPageAdminController {
+public class DefaultPageAdminController implements IController {
 
     @FXML
     private JFXButton editMap;

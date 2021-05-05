@@ -10,7 +10,7 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class DefaultPageEmployeeController {
+public class DefaultPageEmployeeController implements IController {
 
     @FXML
     private JFXButton editMap;

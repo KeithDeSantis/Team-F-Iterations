@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-public class LanguageInterpretationServiceRequestController extends ServiceRequests implements Initializable {
+public class LanguageInterpretationServiceRequestController extends ServiceRequests implements Initializable, IController {
     @FXML private JFXButton close;
     @FXML private JFXTextField name;
     @FXML private JFXDatePicker date;

@@ -54,7 +54,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class AStarDemoController implements Initializable {
+public class AStarDemoController implements Initializable, IController {
 
     @FXML
     private ImageView goBack;

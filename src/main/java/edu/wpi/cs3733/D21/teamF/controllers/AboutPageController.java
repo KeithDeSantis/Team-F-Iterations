@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 
 import java.io.IOException;
 
-public class AboutPageController {
+public class AboutPageController implements IController  {
     @FXML JFXButton back;
 
 

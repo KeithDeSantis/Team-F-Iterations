@@ -15,7 +15,7 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class EmployeeAdminLoginController {
+public class EmployeeAdminLoginController implements IController {
     @FXML
     private JFXTextField username;
     @FXML

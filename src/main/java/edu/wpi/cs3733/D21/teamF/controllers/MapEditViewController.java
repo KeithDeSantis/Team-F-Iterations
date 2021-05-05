@@ -41,7 +41,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MapEditViewController {
+public class MapEditViewController implements IController {
 
     @FXML
     private JFXButton saveButton;
@@ -112,7 +112,6 @@ public class MapEditViewController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(node -> {
             mapPanel.draw(getEditableNode(node));
 

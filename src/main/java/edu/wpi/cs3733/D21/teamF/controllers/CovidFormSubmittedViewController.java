@@ -15,7 +15,7 @@ import java.sql.SQLException;
 /**
  * Controller for Form Submitted Pop Up
  */
-public class CovidFormSubmittedViewController {
+public class CovidFormSubmittedViewController implements IController {
     @FXML private JFXTextField username;
     @FXML private JFXTextField password;
     @FXML private JFXTextField displayUuid;
