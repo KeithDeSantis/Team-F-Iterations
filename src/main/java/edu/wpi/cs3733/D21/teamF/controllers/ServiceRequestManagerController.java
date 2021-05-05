@@ -110,8 +110,19 @@ public class ServiceRequestManagerController implements Initializable {
      */
     public void handleMarkAsComplete() throws Exception {
         // Updates data base with the new completed status (toggles from current)
-        DatabaseAPI.getDatabaseAPI().editServiceRequest(selectedEntry.getUuid(),
-                String.valueOf(!Boolean.parseBoolean(selectedEntry.getCompleteStatus())), "completed");
+//        DatabaseAPI.getDatabaseAPI().editServiceRequest(selectedEntry.getUuid(),
+//                String.valueOf(!Boolean.parseBoolean(selectedEntry.getCompleteStatus())), "completed");
+        String newBoolean = "";
+        if(selectedEntry.getCompleteStatus().equals("true")){
+            newBoolean = "false";
+        }
+        else if (selectedEntry.getCompleteStatus().equals("false")){
+            newBoolean = "true";
+        }
+        else{
+            newBoolean = "true";
+        }
+        DatabaseAPI.getDatabaseAPI().editServiceRequest(selectedEntry.getUuid(), newBoolean, "completed");
         refreshTable();
     }
 
@@ -196,10 +207,14 @@ public class ServiceRequestManagerController implements Initializable {
 
         // Enable mark complete button and set appropriate text
         if(selectedEntry.getCompleteStatus().equals("false")){
-            markAsComplete.setText("Mark Complete");
+            markAsComplete.setText("Toggle Status");
             markAsComplete.setDisable(false);
         } else if(selectedEntry.getCompleteStatus().equals("true")){
-            markAsComplete.setText("Mark Incomplete");
+            markAsComplete.setText("Toggle Status");
+            markAsComplete.setDisable(false);
+        }
+        else if(selectedEntry.getCompleteStatus().equals("")){
+            markAsComplete.setText("Toggle Status");
             markAsComplete.setDisable(false);
         }
 
