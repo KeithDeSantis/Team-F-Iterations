@@ -135,6 +135,9 @@ public class Graph {
      * @author Tony Vuolo (bdane)
      */
     public List<Vertex> getEfficientOrder(Vertex... v) {
+        if(v.length <= 6) {
+            return TSP(v);
+        }
         Path[] paths = new Path[v.length * (v.length - 1) / 2];
         int index = 0;
         for(int i = 0; i < v.length; i++) {
@@ -199,6 +202,55 @@ public class Graph {
      */
     public Path getUnorderedPath(List<Vertex> list) {
         return getPath(getEfficientOrder(list.toArray(new Vertex[0])));
+    }
+
+    /**
+     * Gets the Traveling Salesman solution to the
+     * @param v the array of Vertices
+     * @return the least cost path that intersects all vertices in the array, preserving the first and last in order
+     */
+    public List<Vertex> TSP(Vertex... v) {
+        HashMap<UnorderedPair, Path> paths = new HashMap<>();
+        for(int i = 0; i < v.length; i++) {
+            for(int j = i + 1; j < v.length; j++) {
+                Path path = getPath(v[i], v[j]);
+                if(path == null) {
+                    return null;
+                }
+                paths.put(new UnorderedPair(i, j), path);
+            }
+        }
+        Permutation permutation = new Permutation(v.length - 2);
+        int[] currentPermutation = new int[v.length - 2];
+        double totalLength = -1;
+        do {
+            int[] newPermute = permutation.getPermutation();
+            double length = paths.get(new UnorderedPair(0, newPermute[0] + 1)).getPathCost()
+                    + paths.get(new UnorderedPair(newPermute[newPermute.length - 1] + 1, v.length - 1)).getPathCost();
+            for(int i = 1; i < newPermute.length; i++) {
+                length += paths.get(new UnorderedPair(newPermute[i - 1] + 1, newPermute[i] + 1)).getPathCost();
+            }
+            if(totalLength < 0 || totalLength > length) {
+                System.arraycopy(newPermute, 0, currentPermutation, 0, currentPermutation.length);
+                totalLength = length;
+            }
+
+//            System.out.println(permutation.toString(currentPermutation) + " " + length);
+
+            permutation.makeNextPermutation();
+        } while(! permutation.hasCycled());
+//        System.out.println(permutation.toString(currentPermutation));
+
+
+        List<Vertex> vertices = new LinkedList<>();
+        vertices.add(v[0]);
+        for(int j : currentPermutation) {
+            vertices.add(v[j + 1]);
+        }
+        vertices.add(v[v.length - 1]);
+//        System.out.println(vertices + " " + v[2] + " " + permutation.toString(currentPermutation));
+
+        return vertices;
     }
 
     /**

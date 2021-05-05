@@ -555,8 +555,8 @@ public class GraphTest {
     @Test
     public void testFindPathWithUnorderedStops() {
         String[] vertexIDs = {
-                "CHALL002L1",
                 "CREST002L1",
+                "CHALL002L1",
                 "CRETL001L1",
                 "CHALL013L1",
                 "CDEPT002L1",
@@ -634,5 +634,31 @@ public class GraphTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void testPermutation() {
+        Permutation permutation = new Permutation(4);
+        int[] p = permutation.getPermutation();
+        assertEquals(4, p.length);
+        for(int i = 0; i < 24; i++) {
+            permutation.makeNextPermutation();
+        }
+        int[] p2 = permutation.getPermutation();
+        for(int i = 0; i < 4; i++) {
+            assertEquals(i, p2[i]);
+            assertEquals(i, p[i]);
+        }
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void testUnorderedPair() {
+        HashMap<UnorderedPair, Integer> map = new HashMap<>();
+        map.put(new UnorderedPair(2, 4), 5);
+        assertEquals(5, map.get(new UnorderedPair(2, 4)));
+        assertEquals(5, map.get(new UnorderedPair(4, 2)));
     }
 }
