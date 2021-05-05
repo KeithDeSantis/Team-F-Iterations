@@ -38,7 +38,7 @@ public abstract class ServiceRequests {
     public void handleHelp(ActionEvent e) throws IOException {}
 
 
-    public void handleHome(ActionEvent e) throws IOException {
+    public void handleHome(MouseEvent e) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
 

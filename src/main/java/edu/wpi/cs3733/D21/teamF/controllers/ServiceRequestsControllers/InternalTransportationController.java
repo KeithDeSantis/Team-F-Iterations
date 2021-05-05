@@ -42,7 +42,7 @@ public class InternalTransportationController extends ServiceRequests {
 
     @FXML
     public void initialize(){
-        cancel.setDisableVisualFocus(true); // Clears visual focus from cancel button, cause unknown - LM
+        //cancel.setDisableVisualFocus(true); // Clears visual focus from cancel button, cause unknown - LM
 
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
