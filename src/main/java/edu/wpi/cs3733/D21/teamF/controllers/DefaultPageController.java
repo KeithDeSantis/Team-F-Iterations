@@ -44,8 +44,8 @@ public class DefaultPageController implements Initializable {
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
-        buttons.setStyle("visibility: hidden");
-        covidBox.setStyle("visibility: visible");
+//        buttons.setStyle("visibility: hidden");
+//        covidBox.setStyle("visibility: visible");
     }
 
     private void openSurvey() throws IOException {
