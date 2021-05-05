@@ -1,11 +1,18 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -26,6 +33,10 @@ public class DefaultPageController {
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
+
+
+        //Bind login/logout
+        loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
     }
     /**
      * Handles the pushing of a button on the screen
@@ -39,7 +50,10 @@ public class DefaultPageController {
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
 
         if (buttonPushed == loginButton) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
+            if(CurrentUser.getCurrentUser().isAuthenticated())
+                CurrentUser.getCurrentUser().logout();
+            else
+                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
         } else if (buttonPushed == navigation) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
         } else if (buttonPushed == serviceRequest) {
@@ -52,7 +66,16 @@ public class DefaultPageController {
         }
     }
 
+    public void handleCovidVaccine() throws IOException {
+        final FXMLLoader dialogLoader = new FXMLLoader();
+        dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidVaccineDialog.fxml"));
+        final Stage dialogStage = new Stage();
+        final Parent root = dialogLoader.load();
 
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(covidSurvey.getScene().getWindow());
+        dialogStage.setScene(new Scene(root));
 
-
+        dialogStage.showAndWait();
+    }
 }
