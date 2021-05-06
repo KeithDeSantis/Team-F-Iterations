@@ -31,22 +31,9 @@
       </ImageView>
       <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="173.0" prefHeight="502.0" prefWidth="774.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="173.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="240.0">
+            <VBox alignment="CENTER" prefHeight="502.0" prefWidth="895.0" HBox.hgrow="ALWAYS">
                <children>
-                  <JFXTabPane fx:id="tabPane" prefHeight="526.0" prefWidth="240.0" stylesheets="/stylesheets/MapEditorTabViewStyle.css" VBox.vgrow="ALWAYS">
-                     <tabs>
-                        <Tab fx:id="nodesTab" onSelectionChanged="#handleTabChange" text="Nodes">
-                           <content>
-                              <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
-                           </content>
-                        </Tab>
-                        <Tab fx:id="edgesTab" onSelectionChanged="#handleTabChange" text="Edges">
-                           <content>
-                              <JFXTreeTableView fx:id="edgeTreeTable" onMouseClicked="#handleSelectEdge" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
-                           </content>
-                        </Tab>
-                     </tabs>
-                  </JFXTabPane>
+                  <MapPanel fx:id="mapPanel" prefHeight="499.0" prefWidth="378.0" />
                   <GridPane alignment="CENTER" minHeight="130.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0">
                      <columnConstraints>
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -96,12 +83,7 @@
                   </GridPane>
                </children>
             </VBox>
-            <MapPanel fx:id="mapPanel" HBox.hgrow="SOMETIMES">
-               <HBox.margin>
-                  <Insets bottom="-25.0" left="25.0" right="25.0" top="28.0" />
-               </HBox.margin>
-            </MapPanel>
-            <VBox alignment="CENTER" minHeight="120.0" minWidth="120.0" prefHeight="502.0" prefWidth="176.0" spacing="5.0">
+            <VBox alignment="CENTER" minHeight="120.0" minWidth="120.0" prefHeight="502.0" prefWidth="176.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
                   <JFXToggleButton fx:id="edgeCreationToggle" onAction="#handleToggle" prefHeight="61.0" prefWidth="133.0" text="Drag and Drop" textAlignment="CENTER" toggleColor="#f0c808" toggleLineColor="#f0e808" unToggleColor="#03256b" unToggleLineColor="#03256b80" wrapText="true">
                      <font>
@@ -147,14 +129,25 @@
                </HBox.margin>
             </VBox>
          </children>
-         <padding>
-            <Insets left="25.0" right="25.0" />
-         </padding>
       </HBox>
       <Text fx:id="title" fill="#03256c" layoutX="173.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL MAP EDITOR" wrappingWidth="849.9999976158142" AnchorPane.leftAnchor="140.0" AnchorPane.topAnchor="17.0">
          <font>
             <Font size="50.0" />
          </font>
       </Text>
+      <JFXTabPane fx:id="tabPane" layoutX="915.0" layoutY="118.0" prefHeight="0.0" prefWidth="0.0" stylesheets="/stylesheets/MapEditorTabViewStyle.css">
+         <tabs>
+            <Tab fx:id="nodesTab" onSelectionChanged="#handleTabChange" text="Nodes">
+               <content>
+                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
+               </content>
+            </Tab>
+            <Tab fx:id="edgesTab" onSelectionChanged="#handleTabChange" text="Edges">
+               <content>
+                  <JFXTreeTableView fx:id="edgeTreeTable" onMouseClicked="#handleSelectEdge" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
+               </content>
+            </Tab>
+         </tabs>
+      </JFXTabPane>
    </children>
 </AnchorPane>

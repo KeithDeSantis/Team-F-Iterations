@@ -391,6 +391,11 @@ public class MapEditViewController implements IController {
                 if(nodeEntry.getNodeID().equals(favID)) favoriteList.add(nodeEntry);
             }
         }
+
+        tabPane.setVisible(false);
+        nodeTreeTable.setVisible(false);
+        edgeTreeTable.setVisible(false);
+
     }
 
     private void colorAlignmentCircles(DrawableCircle drawableCircle) {
