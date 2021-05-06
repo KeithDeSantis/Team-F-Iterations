@@ -38,6 +38,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -941,7 +943,7 @@ public class AStarDemoController implements Initializable, IController {
 
                 parseRoute();
 
-                final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
+                final Color LINE_STROKE_TRANSPARENT = new Color(Color.DARKGRAY.getRed(), Color.DARKGRAY.getGreen(), Color.DARKGRAY.getBlue(), 0.75);
 
                 for (int i = 0; i < pathVertex.size() - 1; i++)
                 {
@@ -953,11 +955,13 @@ public class AStarDemoController implements Initializable, IController {
                     final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor(), new NodeEntry(), new NodeEntry());
                     edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
-                    edge.getStrokeDashArray().setAll(25d, 25d, 25d, 25d);
+                    edge.getStrokeDashArray().setAll(20d, 20d, 20d, 20d);
+                    edge.setStrokeLineJoin(StrokeLineJoin.ROUND);
+                    edge.setStrokeLineCap(StrokeLineCap.ROUND);
 
                     edge.strokeProperty().bind(
                             Bindings.when(Bindings.isEmpty(stopsList)).then(Color.RED).otherwise(
-                                    Bindings.when(Bindings.integerValueAt(stopsList, currentStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.DARKBLUE)
+                                    Bindings.when(Bindings.integerValueAt(stopsList, currentStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.rgb(0x03, 0x25, 0x6c))
                             )
                     );
 

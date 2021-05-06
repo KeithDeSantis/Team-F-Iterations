@@ -3,12 +3,13 @@
 }
 
 .tree-cell{
-    -fx-background-color: #c6c6c6;
+    -fx-background-color: #e6e6e6;
 }
 
 .tree-cell:selected{
     -fx-background-color: #03256c;
-    -fx-border-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: TRANSPARENT;
     -fx-outline: none;
 }
 
@@ -25,4 +26,16 @@
 .scroll-bar:horizontal .increment-arrow,
 .scroll-bar:horizontal .decrement-arrow{
     -fx-background-color: #d1d1d1;
+}
+
+.tree-view{
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5, 4, 3;
+}
+
+.tree-view:focused{
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5, 4, 3;
 }
