@@ -73,10 +73,8 @@ public class MapEditViewController implements IController {
     private JFXTreeTableView<EdgeEntry> edgeTreeTable;
     @FXML
     private MapPanel mapPanel;
-    //@FXML
-    //private JFXToggleButton edgeCreationToggle;
 
-    private boolean clickToMakeEdge;
+    private boolean isDragging = false;
     private boolean favoriteOnly = false;
 
     private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
@@ -102,7 +100,6 @@ public class MapEditViewController implements IController {
 
     @FXML
     private void initialize() throws SQLException {
-        clickToMakeEdge = false;
 
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
@@ -1033,40 +1030,43 @@ public class MapEditViewController implements IController {
 
         drawableNode.setOnMouseEntered(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);
-            Tooltip.install(drawableNode, tt);
+            if(!isDragging) tt.show(drawableNode, e.getScreenX(), e.getScreenY());
         });
         drawableNode.setOnMouseExited(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR);
-            Tooltip.uninstall(drawableNode, tt);
+            tt.hide();
         });
 
         final List<DrawableEdge> startEdges = new ArrayList<>();
         final List<DrawableEdge> endEdges = new ArrayList<>();
 
-        if (clickToMakeEdge) {
-            drawableNode.setOnMouseClicked(e -> handleCreateEdgeFromNodes(drawableNode));
-        }
-        else {
-            drawableNode.setOnMouseClicked(e -> {
+        drawableNode.setOnMouseClicked(e -> {
                 if(e.isShiftDown())
                     handleCreateEdgeFromNodes(drawableNode);
             });
 
-            drawableNode.setOnMousePressed(e -> handleNodeDragMousePressed(drawableNode, nodeEntry, startEdges, endEdges));
+        drawableNode.setOnMousePressed(e -> handleNodeDragMousePressed(drawableNode, nodeEntry, startEdges, endEdges));
 
-            drawableNode.setOnMouseDragged(e -> {
+        drawableNode.setOnDragDetected(e -> {
+            tt.hide();
+        });
+
+        drawableNode.setOnMouseDragged(e -> {
+                isDragging = true;
+                tt.hide();
                 handleNodeDragMouseDragged(drawableNode, e, startEdges, endEdges);
             });
 
-            drawableNode.setOnMouseReleased(e -> {
+        drawableNode.setOnMouseReleased(e -> {
+                isDragging = false;
                 if(!e.isDragDetect())
                 {
                     firstCircle = null;
                     secondCircle = null;
                 }
                 handleNodeDragMouseReleased(drawableNode);
+                tt.show(drawableNode, e.getScreenX(), e.getScreenY());
             });
-        }
 
         return drawableNode;
     }
@@ -1595,11 +1595,11 @@ public class MapEditViewController implements IController {
 
                 l.setOnMouseEntered(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);
-                    Tooltip.install(edge, tt);
+                    tt.show(l, event.getScreenX(), event.getScreenY());
                 });
                 l.setOnMouseExited(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.LINE_COLOR);
-                    Tooltip.uninstall(edge, tt);
+                    tt.hide();
                 });
                 l.setOnMouseClicked(event -> {
                     if (selectedLine != null)
@@ -1723,24 +1723,6 @@ public class MapEditViewController implements IController {
         }
          */
     }
-
-    /**
-     * Handles when the toggle for editor mode is switched between Click and Drag or Edge Creation
-     * @author KD
-     */
-    /*
-    public void handleToggle() {
-        if (edgeCreationToggle.getText().equals("Drag and Drop")) {
-            clickToMakeEdge = true;
-            edgeCreationToggle.setText("Edge Creation");
-        } else {
-            clickToMakeEdge = false;
-            edgeCreationToggle.setText("Drag and Drop");
-        }
-        drawEdgeNodeOnFloor();
-        handleSearch();
-    }
-     */
 
     /**
      * Adds selected node to the favorites list of current user
