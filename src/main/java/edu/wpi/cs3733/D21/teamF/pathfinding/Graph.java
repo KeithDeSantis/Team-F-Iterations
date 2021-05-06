@@ -215,6 +215,9 @@ public class Graph {
      * @return the least cost path that intersects all vertices in the array, preserving the first and last in order
      */
     public List<Vertex> TSP(Vertex... v) {
+        if(v == null || v.length == 0) {
+            return null;
+        }
         HashMap<UnorderedPair, Path> paths = new HashMap<>();
         for(int i = 0; i < v.length; i++) {
             for(int j = i + 1; j < v.length; j++) {
