@@ -111,6 +111,9 @@ public class Graph {
      * @return the Path of least weight that will travel to every Vertex in the List in order
      */
     public Path getPath(List<Vertex> v) {
+        if(v == null || v.size() == 0) {
+            return null;
+        }
         Path path = new Path();
         ListIterator<Vertex> iterator = v.listIterator();
         Vertex prev = iterator.next(), current;
@@ -135,7 +138,9 @@ public class Graph {
      * @author Tony Vuolo (bdane)
      */
     public List<Vertex> getEfficientOrder(Vertex... v) {
-        if(v.length <= 8) {
+        if(v.length == 0) {
+            return new LinkedList<>();
+        } else if(v.length <= 8) {
             return TSP(v);
         }
         Path[] paths = new Path[v.length * (v.length - 1) / 2];
