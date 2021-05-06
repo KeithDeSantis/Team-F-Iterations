@@ -2,12 +2,11 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXHamburger?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleButton?>
-<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Tab?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -35,9 +34,9 @@
                </font>
             </Text>
          </children></HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="173.0" prefHeight="502.0" prefWidth="774.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="173.0">
+      <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="177.0" prefHeight="498.0" prefWidth="927.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="177.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="502.0" prefWidth="895.0" HBox.hgrow="ALWAYS">
+            <VBox alignment="CENTER" prefHeight="484.0" prefWidth="927.0" HBox.hgrow="ALWAYS">
                <children>
                   <MapPanel fx:id="mapPanel" prefHeight="499.0" prefWidth="378.0" VBox.vgrow="ALWAYS" />
                   <GridPane alignment="CENTER" minHeight="130.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0">
@@ -118,19 +117,7 @@
             </VBox>
          </children>
       </HBox>
-      <JFXTabPane fx:id="tabPane" layoutX="915.0" layoutY="118.0" prefHeight="0.0" prefWidth="0.0" stylesheets="/stylesheets/MapEditorTabViewStyle.css">
-         <tabs>
-            <Tab fx:id="nodesTab" onSelectionChanged="#handleTabChange" text="Nodes">
-               <content>
-                  <JFXTreeTableView fx:id="nodeTreeTable" onMouseClicked="#handleSelectNode" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
-               </content>
-            </Tab>
-            <Tab fx:id="edgesTab" onSelectionChanged="#handleTabChange" text="Edges">
-               <content>
-                  <JFXTreeTableView fx:id="edgeTreeTable" onMouseClicked="#handleSelectEdge" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" />
-               </content>
-            </Tab>
-         </tabs>
-      </JFXTabPane>
+      <JFXHamburger fx:id="hamburger" layoutX="10.0" layoutY="153.0" onMouseClicked="#handleHamburger" />
+      <JFXDrawer fx:id="drawer" defaultDrawerSize="300.0" layoutY="177.0" prefHeight="368.0" prefWidth="300.0" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="177.0" style="-fx-background-color: transparent" />
    </children>
 </AnchorPane>

@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.EdgeHandler;
 import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
@@ -27,6 +28,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -73,6 +75,12 @@ public class MapEditViewController implements IController {
     private JFXTreeTableView<EdgeEntry> edgeTreeTable;
     @FXML
     private MapPanel mapPanel;
+    @FXML
+    private JFXHamburger hamburger;
+    @FXML
+    private JFXDrawer drawer;
+
+    private HamburgerBackArrowBasicTransition hamTransition;
 
     private boolean isDragging = false;
     private boolean favoriteOnly = false;
@@ -99,7 +107,24 @@ public class MapEditViewController implements IController {
     private final DrawableCircle alignBottom = new DrawableCircle(-1, -1, "ab", "n/a");
 
     @FXML
-    private void initialize() throws SQLException {
+    private void initialize() throws SQLException, IOException {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditorTableView.fxml"));
+        TabPane tablePane = loader.load();
+        EditorTableController tablePaneController = loader.getController();
+        tablePaneController.setRealController(this);
+        tabPane = tablePaneController.getTabPane();
+        nodesTab = tablePaneController.getNodesTab();
+        edgesTab = tablePaneController.getEdgesTab();
+        nodeTreeTable = tablePaneController.getNodeTreeTable();
+        edgeTreeTable = tablePaneController.getEdgeTreeTable();
+        drawer.setSidePane(tablePane);
+        drawer.close();
+
+
+        hamTransition = new HamburgerBackArrowBasicTransition(hamburger);
+        hamTransition.setRate(-1);
 
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
@@ -388,10 +413,6 @@ public class MapEditViewController implements IController {
                 if(nodeEntry.getNodeID().equals(favID)) favoriteList.add(nodeEntry);
             }
         }
-
-        tabPane.setVisible(false);
-        nodeTreeTable.setVisible(false);
-        edgeTreeTable.setVisible(false);
 
     }
 
@@ -1700,30 +1721,6 @@ public class MapEditViewController implements IController {
         SceneContext.getSceneContext().loadDefault();
     }
 
-    public void handleTabChange(Event event) {
-        /*
-        Tab theTab = (Tab) event.getSource();
-        if (theTab == nodesTab) {
-            ObservableList<String> searchables = FXCollections.observableArrayList();
-            searchables.add("Node ID");
-            searchables.add("Floor");
-            searchables.add("Building");
-            searchables.add("Node Type");
-            searchables.add("Long Name");
-            searchables.add("Short Name");
-            searchComboBox.setItems(searchables);
-            searchComboBox.setValue("Node ID");
-        } else if (theTab == edgesTab) {
-            ObservableList<String> searchables = FXCollections.observableArrayList();
-            searchables.add("Edge ID");
-            searchables.add("Start Node");
-            searchables.add("End Node");
-            searchComboBox.setItems(searchables);
-            searchComboBox.setValue("Edge ID");
-        }
-         */
-    }
-
     /**
      * Adds selected node to the favorites list of current user
      * @throws SQLException
@@ -1771,6 +1768,19 @@ public class MapEditViewController implements IController {
             if(nodeEntry.getNodeID().equals(nodeID)) isFavorite = true;
         }
         return isFavorite;
+    }
+
+    /**
+     * Opens the side bar that contains the table tree views
+     */
+    public void handleHamburger() {
+        hamTransition.setRate(hamTransition.getRate()*(-1));
+        hamTransition.play();
+        if(drawer.isOpened()) {
+            drawer.close();
+        } else {
+            drawer.open();
+        }
     }
 }
 
