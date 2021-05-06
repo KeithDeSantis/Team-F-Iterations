@@ -158,10 +158,10 @@
             </Text>
          </children>
       </VBox>
-      <HBox maxWidth="-Infinity" prefHeight="110.0" prefWidth="960.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="225.0">
+      <HBox maxWidth="-Infinity" prefHeight="136.0" prefWidth="926.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="225.0">
          <children>
             <VBox prefHeight="252.0" prefWidth="0.0" />
-            <VBox maxHeight="-Infinity" prefHeight="110.0" prefWidth="851.0">
+            <VBox alignment="CENTER" maxHeight="-Infinity" prefHeight="147.0" prefWidth="918.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thank you to Brigham and Women's Hospital and hospital representative Andrew Shin for providing maps all other relevant information. We are grateful for their time and input in making this project possible." wrappingWidth="897.5">
                      <font>
@@ -176,8 +176,13 @@
                         <Font name="Volkhov Regular" size="20.0" />
                      </font>
                      <VBox.margin>
-                        <Insets left="375.0" top="25.0" />
+                        <Insets />
                      </VBox.margin>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="112.0" prefWidth="918.0" text="The Brigham &amp; Women’s Hospital maps and data used in this application are copyrighted and provided for the sole use of educational purposes." textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
                   </Label>
                </children>
             </VBox>
