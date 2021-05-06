@@ -121,6 +121,7 @@ public class MapEditViewController implements IController {
         edgeTreeTable = tablePaneController.getEdgeTreeTable();
         drawer.setSidePane(tablePane);
         drawer.close();
+        drawer.setMouseTransparent(true);
 
 
         hamTransition = new HamburgerBackArrowBasicTransition(hamburger);
@@ -1778,8 +1779,10 @@ public class MapEditViewController implements IController {
         hamTransition.play();
         if(drawer.isOpened()) {
             drawer.close();
+            drawer.setMouseTransparent(true);
         } else {
             drawer.open();
+            drawer.setMouseTransparent(false);
         }
     }
 }
