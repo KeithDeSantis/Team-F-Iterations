@@ -1748,6 +1748,7 @@ public class MapEditViewController implements IController {
      * @author KD
      */
     public void handleFavorite() throws SQLException {
+        if(selectedCircle==null) return;
         if(selectedCircle.getFill().equals(Color.GREEN) && mapPanel.getNode(selectedCircle.getId()).shouldDisplay().get()) {
             NodeEntry favNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue();
             if(favoriteButton.getText().equals("Favorite")) {
