@@ -3,8 +3,11 @@ package edu.wpi.cs3733.D21.teamF.pathfinding;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,11 +24,21 @@ public class GoogleAPI {
     }
 
     /**
+     * URL Encodes parameter
+     * @param param the string to url encode
+     * @return the encoded string
+     * @throws UnsupportedEncodingException with error on encoding
+     */
+    public String urlEncode(String param) throws UnsupportedEncodingException {
+        return URLEncoder.encode(param, String.valueOf(StandardCharsets.UTF_8));
+    }
+
+    /**
      * Parses the Google data into a String of directional instructions
      * @param json the Google data
      * @author Declan Murphy
      */
-    public void parseGoogleData(String json) {
+    public String parseGoogleData(String json) {
         final JSONObject parsed = new JSONObject(json);
         final JSONObject route = (JSONObject) (parsed.getJSONArray("routes")).get(0);
         final JSONObject leg = (JSONObject) (route.getJSONArray("legs")).get(0);
@@ -39,7 +52,7 @@ public class GoogleAPI {
         }
         String results = directions.toString();
         results = results.replaceAll("\\<.*?\\>", "");
-        System.out.println(results);
+        return results;
     }
 
     /**
@@ -49,12 +62,12 @@ public class GoogleAPI {
      * @return the URL of the Google API direction site describing the path from the origin to the destination
      * @author Declan Murphy
      */
-    private String buildUrl(String origin, String destination) {
+    private String buildUrl(String origin, String destination) throws UnsupportedEncodingException {
         StringBuilder url = new StringBuilder();
         String urlBase = "https://maps.googleapis.com/maps/api/directions/json";
         url.append(urlBase);
-        url.append("?origin=").append(origin);
-        url.append("&destination=").append(destination);
+        url.append("?origin=").append(GoogleAPI.getGoogleAPI().urlEncode(origin));
+        url.append("&destination=").append(GoogleAPI.getGoogleAPI().urlEncode(destination));
         String apiKey = ""; //TODO: ADD/REMOVE API KEY HERE
         url.append("&key=").append(apiKey);
         System.out.println(url);
@@ -79,7 +92,7 @@ public class GoogleAPI {
             apiResponse.append(temp + "\n");
         }
         data.close();
-        return apiResponse.toString();
+        return GoogleAPI.getGoogleAPI().parseGoogleData(apiResponse.toString());
     }
 
     private static class googleSingletonHelper {
