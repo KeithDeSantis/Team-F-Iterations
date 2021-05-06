@@ -73,8 +73,8 @@ public class MapEditViewController implements IController {
     private JFXTreeTableView<EdgeEntry> edgeTreeTable;
     @FXML
     private MapPanel mapPanel;
-    @FXML
-    private JFXToggleButton edgeCreationToggle;
+    //@FXML
+    //private JFXToggleButton edgeCreationToggle;
 
     private boolean clickToMakeEdge;
     private boolean favoriteOnly = false;
@@ -412,7 +412,8 @@ public class MapEditViewController implements IController {
 
         NodeEntry selectedNode;
         if (nodesTab.isSelected()) {
-            if (nodeTreeTable.getSelectionModel().getSelectedIndex() < 0) return;
+            int selectedIndex = nodeTreeTable.getSelectionModel().getSelectedIndex(); // get index of table that is selected - KD
+            if (nodeTreeTable.getTreeItem(selectedIndex) == null) return;
             try {
                 selectedNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue(); // get item the is selected - KD
             } catch (NullPointerException e) {
@@ -431,8 +432,9 @@ public class MapEditViewController implements IController {
             drawEdgeNodeOnFloor();
         } else if (edgesTab.isSelected()) {
             // Get the current selected edge index
-            if (edgeTreeTable.getSelectionModel().getSelectedIndex() < 0) return;
+            int index = edgeTreeTable.getSelectionModel().getSelectedIndex();
             EdgeEntry selectedEdge;
+            if(edgeTreeTable.getTreeItem(index) == null) return;
             try {
                 selectedEdge = edgeTreeTable.getSelectionModel().getSelectedItem().getValue();
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -464,6 +466,8 @@ public class MapEditViewController implements IController {
             }
         }
         handleSearch();
+        nodeTreeTable.getSelectionModel().clearSelection();
+        edgeTreeTable.getSelectionModel().clearSelection();
     } //FIXME edited node and node disappeared?
 
     /**
@@ -475,9 +479,7 @@ public class MapEditViewController implements IController {
     public void handleDelete() throws SQLException {
         if (nodesTab.isSelected()) {
             int selectedIndex = nodeTreeTable.getSelectionModel().getSelectedIndex(); // get index of table that is selected - KD
-            if (selectedIndex < 0) {
-                return;
-            }
+            if (nodeTreeTable.getTreeItem(selectedIndex) == null) return;
             deleteAssociatedEdges(nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID()); // delete all edges connected to the node
             String targetID = nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID();
             DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
@@ -485,9 +487,10 @@ public class MapEditViewController implements IController {
             selectedCircle = null;
             mapPanel.unDraw(targetID);
         } else if (edgesTab.isSelected()) {
+
             int index = edgeTreeTable.getSelectionModel().getSelectedIndex();
             EdgeEntry selectedEdge;
-
+            if(edgeTreeTable.getTreeItem(index) == null) return;
             // Check for a valid index (-1 = no selection)
             try {
                 // Remove the edge, this will update the TableView automatically
@@ -507,6 +510,8 @@ public class MapEditViewController implements IController {
                 alert.showAndWait();
             }
         }
+        nodeTreeTable.getSelectionModel().clearSelection();
+        edgeTreeTable.getSelectionModel().clearSelection();
     }
 
     /**
@@ -1723,6 +1728,7 @@ public class MapEditViewController implements IController {
      * Handles when the toggle for editor mode is switched between Click and Drag or Edge Creation
      * @author KD
      */
+    /*
     public void handleToggle() {
         if (edgeCreationToggle.getText().equals("Drag and Drop")) {
             clickToMakeEdge = true;
@@ -1734,6 +1740,7 @@ public class MapEditViewController implements IController {
         drawEdgeNodeOnFloor();
         handleSearch();
     }
+     */
 
     /**
      * Adds selected node to the favorites list of current user

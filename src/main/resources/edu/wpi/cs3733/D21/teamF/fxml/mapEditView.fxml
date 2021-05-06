@@ -81,32 +81,27 @@
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </JFXComboBox>
-                        <JFXToggleButton fx:id="edgeCreationToggle" onAction="#handleToggle" prefHeight="61.0" prefWidth="133.0" text="Drag and Drop" textAlignment="CENTER" toggleColor="#f0c808" toggleLineColor="#f0e808" unToggleColor="#03256b" unToggleLineColor="#03256b80" wrapText="true" GridPane.columnIndex="2">
+                        <JFXToggleButton fx:id="favoriteToggle" onAction="#handleFavoriteToggle" prefHeight="61.0" prefWidth="133.0" text="Favorites Only" textAlignment="CENTER" toggleColor="#f0c808" toggleLineColor="#f0e808" unToggleColor="#03256b" unToggleLineColor="#03256b80" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="2">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </JFXToggleButton>
-                        <JFXToggleButton fx:id="favoriteToggle" onAction="#handleFavoriteToggle" prefHeight="61.0" prefWidth="133.0" text="Favorites Only" textAlignment="CENTER" toggleColor="#f0c808" toggleLineColor="#f0e808" unToggleColor="#03256b" unToggleLineColor="#03256b80" wrapText="true" GridPane.columnIndex="3">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </JFXToggleButton>
-                        <JFXButton fx:id="newButton" buttonType="RAISED" onAction="#handleNew" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="New..." GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <JFXButton fx:id="newButton" buttonType="RAISED" onAction="#handleNew" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="New..." GridPane.columnIndex="2">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="editButton" buttonType="RAISED" onAction="#handleEdit" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Edit..." GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <JFXButton fx:id="editButton" buttonType="RAISED" onAction="#handleEdit" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Edit..." GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="deleteButton" buttonType="RAISED" onAction="#handleDelete" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <JFXButton fx:id="deleteButton" buttonType="RAISED" onAction="#handleDelete" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="favoriteButton" buttonType="RAISED" onAction="#handleFavorite" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Favorite" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                        <JFXButton fx:id="favoriteButton" buttonType="RAISED" onAction="#handleFavorite" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Favorite" GridPane.columnIndex="3" GridPane.rowSpan="2">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
