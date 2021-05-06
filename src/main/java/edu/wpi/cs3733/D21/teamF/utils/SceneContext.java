@@ -1,8 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
 import edu.wpi.cs3733.D21.teamF.controllers.IController;
-import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
-import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,26 +34,6 @@ public class SceneContext {
     }
 
     public void loadDefault() throws IOException {
-        /*
-        AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
-        if(user != null) {
-            switch (user.getUserType()){
-                case "administrator":
-                    this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-                    break;
-
-                case "employee":
-                    this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
-                    break;
-
-                default:
-                    this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-            }
-
-        } else {
-            switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-        }
-        */
         this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
