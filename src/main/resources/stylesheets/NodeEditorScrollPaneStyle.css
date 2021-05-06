@@ -9,3 +9,15 @@
 .scroll-bar:horizontal .decrement-arrow{
     -fx-background-color: #d1d1d1;
 }
+
+.scroll-pane{
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5, 4, 3;
+}
+
+.scroll-pane:focused{
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5, 4, 3;
+}

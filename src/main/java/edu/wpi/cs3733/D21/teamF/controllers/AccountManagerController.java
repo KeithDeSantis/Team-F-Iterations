@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AccountManagerController implements Initializable {
+public class AccountManagerController implements Initializable, IController {
     @FXML
     private JFXButton quit;
     @FXML
@@ -178,7 +178,7 @@ public class AccountManagerController implements Initializable {
             refreshPage();
         }
         else if (buttonPushed == home){
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+            SceneContext.getSceneContext().loadDefault();
         }
     }
 

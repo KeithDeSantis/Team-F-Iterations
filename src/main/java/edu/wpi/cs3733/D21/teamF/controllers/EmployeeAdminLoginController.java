@@ -15,7 +15,7 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class EmployeeAdminLoginController {
+public class EmployeeAdminLoginController implements IController {
     @FXML
     private JFXTextField username;
     @FXML
@@ -43,11 +43,7 @@ public class EmployeeAdminLoginController {
             final boolean isAdmin = current.getUserType().equals("administrator");
             final boolean isStaff = current.getUserType().equals("employee");
             if (CurrentUser.getCurrentUser().login(user, pass) && (isAdmin || isStaff)){
-
-                if(isAdmin)
-                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
-                else
-                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
+                SceneContext.getSceneContext().loadDefault();
             }
             else {
                 errorMessage.setStyle("-fx-text-fill: #c60000FF;");

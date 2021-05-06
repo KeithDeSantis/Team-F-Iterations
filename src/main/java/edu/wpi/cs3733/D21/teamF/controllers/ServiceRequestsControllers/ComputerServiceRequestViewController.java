@@ -1,16 +1,20 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -29,23 +33,59 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
     private JFXTextField requesterTextText;
 
     @FXML
-    private JFXComboBox<String> urgencyComboBox;
+    private JFXComboBox<StringProperty> urgencyComboBox;
 
     @FXML
     private JFXTextArea descriptionText;
 
+    @FXML
+    private Label computerNameLbl;
 
-    private static final String LOW_URGENCY = "Low (fix when possible)";
-    private static final String MEDIUM_URGENCY = "Medium (fix soon)";
-    private static final String HIGH_URGENCY = "High (fix ASAP)";
+    @FXML
+    private Label computerLocLbl;
+
+    @FXML
+    private Label requesterLbl;
+
+    @FXML
+    private Label urgencyLbl;
+
+    @FXML
+    private Label descLbl;
+
+    @FXML
+    private JFXButton cancelBtn;
+
+    @FXML
+    private JFXButton clearBtn;
+
+    @FXML
+    private  JFXButton submitButton;
+
+
+    private static final String LOW_URGENCY = "Low";// (fix when possible)";
+    private static final String MEDIUM_URGENCY = "Medium";// (fix soon)";
+    private static final String HIGH_URGENCY = "High";// (fix ASAP)";
 
     @FXML
     public void initialize(){
+        computerNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(computerNameLbl.getText()));
+        computerLocLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(computerLocLbl.getText()));
+        requesterLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(requesterLbl.getText()));
+        urgencyLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyLbl.getText()));
+        descLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(descLbl.getText()));
+
+        cancelBtn.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelBtn.getText()));
+        clearBtn.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearBtn.getText()));
+        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
+
+        urgencyComboBox.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyComboBox.getPromptText()));
+
+       // urgencyComboBox.
+
         try {
-            // Set up floor comboBox and draw nodes on that floor
-            final ObservableList<String> urgencies = FXCollections.observableArrayList();
-            urgencies.addAll(LOW_URGENCY, MEDIUM_URGENCY, HIGH_URGENCY);
-            urgencyComboBox.setItems(urgencies);
+            urgencyComboBox.setItems(Translator.getTranslator().getTranslationsFor(LOW_URGENCY, MEDIUM_URGENCY, HIGH_URGENCY));
+            urgencyComboBox.setConverter(Translator.getTranslator().getTranslationStringConverter());
         } catch(Exception e){}
 
         try{
@@ -79,11 +119,6 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
     @FXML
     public void handleHelp(ActionEvent e) throws IOException{
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceHelpView.fxml");
-    }
-
-    @FXML
-    public void goBack(ActionEvent actionEvent)throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/ComputerServiceRequestView.fxml");
     }
 
     /**

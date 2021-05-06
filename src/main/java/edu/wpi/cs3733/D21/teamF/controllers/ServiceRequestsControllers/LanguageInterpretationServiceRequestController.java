@@ -1,25 +1,24 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import org.apache.commons.text.StringEscapeUtils;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -38,39 +37,33 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
 
+    private final HashMap<String, String> langCodes = new HashMap<>();
 
+    /**
+     * Opens the help window
+     * @param actionEvent
+     * @throws IOException
+     * @author Jay Yen
+     */
     public void handleHelp(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml");
+        Stage submittedStage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml"));
+        Scene helpPopUp = new Scene(root);
+        submittedStage.setScene(helpPopUp);
+        submittedStage.setTitle("Language Interpretation Help");
+        submittedStage.initModality(Modality.APPLICATION_MODAL);
+        submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
+        submittedStage.showAndWait();
     }
-
-    public void goBack(ActionEvent actionEvent) throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml");
-    }
-
     /**
      * Calls translate function when translate button is clicked
      * @param actionEvent
-     * @throws IOException
      * @author Johvanni Perez
      */
-    public void handleTranslate(ActionEvent actionEvent) throws IOException{
+    public void handleTranslate(ActionEvent actionEvent) {
         if(language.getValue() != null) {
-            List<Label> labelList = new ArrayList<Label>(); //list of labels that need to get fixed
-            labelList.add(nameLabel);
-            labelList.add(dtLabel);
-            labelList.add(appointmentLabel);
-            labelList.add(languageLabel);
-
-            HashMap<String, String> codes = codeMap();
-            String src = "";                                //empty string that translator uses to autodetect src lang
-            String target = codes.get(language.getValue()); //gets lang code of the lang specified
-            String text;
-            String transText;
-            for (Label aLabel : labelList) {
-                text = aLabel.getText();
-                transText = translate(src, target, text);
-                aLabel.setText(transText);
-            }
+            String target = langCodes.get(language.getValue()); //gets lang code of the lang specified
+            Translator.getTranslator().setLanguage(target);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
@@ -118,110 +111,131 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Jay Yen
      */
     public void initialize(URL location, ResourceBundle resources){
-        try {
-            appointment.getItems().add("Non-Specific");
-            appointment.getItems().add("Multiple Departments");
-            appointment.getItems().add("Allergy and Clinical Immunology");
-            appointment.getItems().add("Alzheimer's Center");
-            appointment.getItems().add("Anesthesiology");
-            appointment.getItems().add("Arrhythmia Services");
-            appointment.getItems().add("Arthritis and Joint Diseases Center");
-            appointment.getItems().add("Asthma Center");
-            appointment.getItems().add("Bone Marrow Transplant Program");
-            appointment.getItems().add("Brain Tumor Program");
-            appointment.getItems().add("Breast Center");
-            appointment.getItems().add("Cardiac Surgery");
-            appointment.getItems().add("Cardiology");
-            appointment.getItems().add("Cardiomyopathy and Cardiac Transplantation");
-            appointment.getItems().add("CAT Scan (CT Imaging");
-            appointment.getItems().add("DF/BW Cancer Center");
-            appointment.getItems().add("Dental");
-            appointment.getItems().add("Dermatology");
-            appointment.getItems().add("Diabetes");
-            appointment.getItems().add("Ear, Nose and Throat");
-            appointment.getItems().add("Emergency Medicine");
-            appointment.getItems().add("Endocrinology, Diabetes and Hypertension");
-            appointment.getItems().add("Epilepsy");
-            appointment.getItems().add("Foot and Ankle Center/Faulkner");
-            appointment.getItems().add("Gastroenterology");
-            appointment.getItems().add("General and Gastrointestinal Surgery");
-            appointment.getItems().add("Genetics");
-            appointment.getItems().add("Gynecologic Oncology");
-            appointment.getItems().add("Gynecology (General)");
-            appointment.getItems().add("Hematology");
-            appointment.getItems().add("Infectious Disease");
-            appointment.getItems().add("Interventional Cardiology");
-            appointment.getItems().add("Interventional Radiology");
-            appointment.getItems().add("Lung Cancer Screening (Low Dose CT)");
-            appointment.getItems().add("Lung Transplantation Program");
-            appointment.getItems().add("Lupus Center");
-            appointment.getItems().add("Magnetic Resonance Imaging (MRI)");
-            appointment.getItems().add("Mammography");
-            appointment.getItems().add("Maternal-Fetal Medicine");
-            appointment.getItems().add("Medicine");
-            appointment.getItems().add("Metabolic and Nutrition Support Service");
-            appointment.getItems().add("Multiple Sclerosis");
-            appointment.getItems().add("Neurology");
-            appointment.getItems().add("Neuroradiology");
-            appointment.getItems().add("Newborn Medicine");
-            appointment.getItems().add("Nuclear Medicine");
-            appointment.getItems().add("Nutrition Consultation");
-            appointment.getItems().add("Obstetric Anesthesia Service");
-            appointment.getItems().add("Obstetrics");
-            appointment.getItems().add("Ophthalmology");
-            appointment.getItems().add("Oral Medicine, Oral and Maxillofacial Surgery and Dentistry");
-            appointment.getItems().add("Orthopaedics");
-            appointment.getItems().add("Osteoporosis Center");
-            appointment.getItems().add("Otolaryngology");
-            appointment.getItems().add("Pain Management Center");
-            appointment.getItems().add("Pathology Department");
-            appointment.getItems().add("Pediatric and Adolescent Gynecology");
-            appointment.getItems().add("Pituitary Program");
-            appointment.getItems().add("Plastic Surgery");
-            appointment.getItems().add("Podiatry");
-            appointment.getItems().add("Primary Care");
-            appointment.getItems().add("Prostate Center");
-            appointment.getItems().add("Psychiatry");
-            appointment.getItems().add("Pulmonary and Critical Care Medicine");
-            appointment.getItems().add("Radiation Oncology");
-            appointment.getItems().add("Radiology");
-            appointment.getItems().add("Renal (Kidney)");
-            appointment.getItems().add("Renal (Kidney) Transplantation");
-            appointment.getItems().add("Reproductive Medicine");
-            appointment.getItems().add("Rheumatology, Inflammation and Immunity");
-            appointment.getItems().add("Sleep Medicine");
-            appointment.getItems().add("Spine Center");
-            appointment.getItems().add("Sports Medicine and Rehabilitation Center");
-            appointment.getItems().add("Surgery");
-            appointment.getItems().add("Surgery Oncology");
-            appointment.getItems().add("Thoracic Surgery");
-            appointment.getItems().add("Thyroid");
-            appointment.getItems().add("Trauma and Burn Center");
-            appointment.getItems().add("Urogynecology");
-            appointment.getItems().add("Urology");
-            appointment.getItems().add("Vascular Medicine Services");
-            appointment.getItems().add("Vascular Surgery");
-            appointment.getItems().add("Weight Management");
-            appointment.getItems().add("Women's Health");
-            appointment.getItems().add("Other");
+        appointment.getItems().add("Non-Specific");
+        appointment.getItems().add("Multiple Departments");
+        appointment.getItems().add("Allergy and Clinical Immunology");
+        appointment.getItems().add("Alzheimer's Center");
+        appointment.getItems().add("Anesthesiology");
+        appointment.getItems().add("Arrhythmia Services");
+        appointment.getItems().add("Arthritis and Joint Diseases Center");
+        appointment.getItems().add("Asthma Center");
+        appointment.getItems().add("Bone Marrow Transplant Program");
+        appointment.getItems().add("Brain Tumor Program");
+        appointment.getItems().add("Breast Center");
+        appointment.getItems().add("Cardiac Surgery");
+        appointment.getItems().add("Cardiology");
+        appointment.getItems().add("Cardiomyopathy and Cardiac Transplantation");
+        appointment.getItems().add("CAT Scan (CT Imaging");
+        appointment.getItems().add("DF/BW Cancer Center");
+        appointment.getItems().add("Dental");
+        appointment.getItems().add("Dermatology");
+        appointment.getItems().add("Diabetes");
+        appointment.getItems().add("Ear, Nose and Throat");
+        appointment.getItems().add("Emergency Medicine");
+        appointment.getItems().add("Endocrinology, Diabetes and Hypertension");
+        appointment.getItems().add("Epilepsy");
+        appointment.getItems().add("Foot and Ankle Center/Faulkner");
+        appointment.getItems().add("Gastroenterology");
+        appointment.getItems().add("General and Gastrointestinal Surgery");
+        appointment.getItems().add("Genetics");
+        appointment.getItems().add("Gynecologic Oncology");
+        appointment.getItems().add("Gynecology (General)");
+        appointment.getItems().add("Hematology");
+        appointment.getItems().add("Infectious Disease");
+        appointment.getItems().add("Interventional Cardiology");
+        appointment.getItems().add("Interventional Radiology");
+        appointment.getItems().add("Lung Cancer Screening (Low Dose CT)");
+        appointment.getItems().add("Lung Transplantation Program");
+        appointment.getItems().add("Lupus Center");
+        appointment.getItems().add("Magnetic Resonance Imaging (MRI)");
+        appointment.getItems().add("Mammography");
+        appointment.getItems().add("Maternal-Fetal Medicine");
+        appointment.getItems().add("Medicine");
+        appointment.getItems().add("Metabolic and Nutrition Support Service");
+        appointment.getItems().add("Multiple Sclerosis");
+        appointment.getItems().add("Neurology");
+        appointment.getItems().add("Neuroradiology");
+        appointment.getItems().add("Newborn Medicine");
+        appointment.getItems().add("Nuclear Medicine");
+        appointment.getItems().add("Nutrition Consultation");
+        appointment.getItems().add("Obstetric Anesthesia Service");
+        appointment.getItems().add("Obstetrics");
+        appointment.getItems().add("Ophthalmology");
+        appointment.getItems().add("Oral Medicine, Oral and Maxillofacial Surgery and Dentistry");
+        appointment.getItems().add("Orthopaedics");
+        appointment.getItems().add("Osteoporosis Center");
+        appointment.getItems().add("Otolaryngology");
+        appointment.getItems().add("Pain Management Center");
+        appointment.getItems().add("Pathology Department");
+        appointment.getItems().add("Pediatric and Adolescent Gynecology");
+        appointment.getItems().add("Pituitary Program");
+        appointment.getItems().add("Plastic Surgery");
+        appointment.getItems().add("Podiatry");
+        appointment.getItems().add("Primary Care");
+        appointment.getItems().add("Prostate Center");
+        appointment.getItems().add("Psychiatry");
+        appointment.getItems().add("Pulmonary and Critical Care Medicine");
+        appointment.getItems().add("Radiation Oncology");
+        appointment.getItems().add("Radiology");
+        appointment.getItems().add("Renal (Kidney)");
+        appointment.getItems().add("Renal (Kidney) Transplantation");
+        appointment.getItems().add("Reproductive Medicine");
+        appointment.getItems().add("Rheumatology, Inflammation and Immunity");
+        appointment.getItems().add("Sleep Medicine");
+        appointment.getItems().add("Spine Center");
+        appointment.getItems().add("Sports Medicine and Rehabilitation Center");
+        appointment.getItems().add("Surgery");
+        appointment.getItems().add("Surgery Oncology");
+        appointment.getItems().add("Thoracic Surgery");
+        appointment.getItems().add("Thyroid");
+        appointment.getItems().add("Trauma and Burn Center");
+        appointment.getItems().add("Urogynecology");
+        appointment.getItems().add("Urology");
+        appointment.getItems().add("Vascular Medicine Services");
+        appointment.getItems().add("Vascular Surgery");
+        appointment.getItems().add("Weight Management");
+        appointment.getItems().add("Women's Health");
+        appointment.getItems().add("Other");
 
-            language.getItems().add("Arabic");
-            language.getItems().add("Dutch");
-            language.getItems().add("English");
-            language.getItems().add("French");
-            language.getItems().add("German");
-            language.getItems().add("Greek");
-            language.getItems().add("Haitian Creole");
-            language.getItems().add("Italian");
-            language.getItems().add("Japanese");
-            language.getItems().add("Korean");
-            language.getItems().add("Portuguese");
-            language.getItems().add("Russian");
-            language.getItems().add("Spanish");
-            language.getItems().add("Vietnamese");
-        } catch(Exception e){}
+        language.getItems().add("Arabic");
+        language.getItems().add("Dutch");
+        language.getItems().add("English");
+        language.getItems().add("French");
+        language.getItems().add("German");
+        language.getItems().add("Greek");
+        language.getItems().add("Haitian Creole");
+        language.getItems().add("Italian");
+        language.getItems().add("Japanese");
+        language.getItems().add("Korean");
+        language.getItems().add("Portuguese");
+        language.getItems().add("Russian");
+        language.getItems().add("Spanish");
+        language.getItems().add("Vietnamese");
+
+
+
+        langCodes.put("Arabic", "ar");
+        langCodes.put("Dutch", "nl");
+        langCodes.put("English", "en");
+        langCodes.put("French", "fr");
+        langCodes.put("German", "de");
+        langCodes.put("Greek", "el");
+        langCodes.put("Haitian Creole", "ht");
+        langCodes.put("Italian", "it");
+        langCodes.put("Japanese", "ja");
+        langCodes.put("Korean", "ko");
+        langCodes.put("Portuguese", "pt");
+        langCodes.put("Russian", "ru");
+        langCodes.put("Spanish", "es");
+        langCodes.put("Vietnamese", "vi");
+
+
+        nameLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLabel.getText()));
+        dtLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dtLabel.getText()));
+        appointmentLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(appointmentLabel.getText()));
+        languageLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(languageLabel.getText()));
     }
-    
+
     public boolean formFilled(){
         boolean isFilled = true;
         if(name.getText().trim().isEmpty()){
@@ -249,59 +263,5 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         return isFilled;
     }
 
-    /**
-     * HashMap containing languages and their lang codes
-     * @return
-     * @author Johvanni Perez
-     */
-    public static HashMap<String, String> codeMap(){
-        HashMap<String, String> langCodes = new HashMap<String, String>();
-
-        langCodes.put("Arabic", "ar");
-        langCodes.put("Dutch", "nl");
-        langCodes.put("English", "en");
-        langCodes.put("French", "fr");
-        langCodes.put("German", "de");
-        langCodes.put("Greek", "el");
-        langCodes.put("Haitian Creole", "ht");
-        langCodes.put("Italian", "it");
-        langCodes.put("Japanese", "ja");
-        langCodes.put("Korean", "ko");
-        langCodes.put("Portuguese", "pt");
-        langCodes.put("Russian", "ru");
-        langCodes.put("Spanish", "es");
-        langCodes.put("Vietnamese", "vi");
-
-        return langCodes;
-    }
-
-    /**
-     * web scraper that uses javascript to access a translation generator and return translations
-     * @param src the original language that needs to be translated
-     * @param target the language that the translation will be provided in
-     * @param text the string that needs to translated
-     * @return a translated string
-     * @throws IOException
-     * @author Johvanni Perez
-     */
-    public String translate(String src, String target, String text) throws IOException {
-
-
-        String urlStr = "https://script.google.com/macros/s/AKfycbzk_1ZP98MqQNuWvs_Yo3UamuN7WCABIG3UiUUighYgCeqIf4ha4qUzubb2jxopuTP7/exec"
-                + "?q=" + URLEncoder.encode(text, "UTF-8") +
-                "&target=" + target +
-                "&source=" + src;
-        URL url = new URL(urlStr);
-        StringBuilder response = new StringBuilder();
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-        String inputLine;
-        while((inputLine = in.readLine()) != null){
-            response.append(StringEscapeUtils.unescapeHtml4(inputLine));
-        }
-        in.close();
-        return response.toString();
-    }
-
 }
+
