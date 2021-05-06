@@ -34,25 +34,25 @@
                </font>
             </Text>
          </children></HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="177.0" prefHeight="498.0" prefWidth="927.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="177.0">
+      <HBox alignment="CENTER_LEFT" layoutX="5.0" layoutY="177.0" prefHeight="498.0" prefWidth="966.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="177.0">
          <children>
             <VBox alignment="CENTER" prefHeight="484.0" prefWidth="927.0" HBox.hgrow="ALWAYS">
                <children>
-                  <MapPanel fx:id="mapPanel" prefHeight="499.0" prefWidth="378.0" VBox.vgrow="ALWAYS" />
-                  <GridPane alignment="CENTER" minHeight="130.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0">
+                  <MapPanel fx:id="mapPanel" prefHeight="425.0" prefWidth="927.0" VBox.vgrow="ALWAYS" />
+                  <GridPane alignment="CENTER" minHeight="94.0" minWidth="300.0" prefHeight="94.0" prefWidth="927.0">
                      <columnConstraints>
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="364.0" minWidth="10.0" prefWidth="255.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="499.0" minWidth="10.0" prefWidth="255.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="499.0" minWidth="10.0" prefWidth="255.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="255.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="255.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="255.0" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <JFXButton fx:id="resetFromDB" buttonType="RAISED" onAction="#handleReset" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Reset" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <JFXButton fx:id="resetFromDB" buttonType="RAISED" onAction="#handleReset" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Reset" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -60,7 +60,7 @@
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </JFXButton>
-                        <JFXButton fx:id="saveButton" buttonType="RAISED" onAction="#handleSave" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Save CSV" GridPane.rowIndex="1">
+                        <JFXButton fx:id="saveButton" buttonType="RAISED" onAction="#handleSave" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Save CSV" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -68,7 +68,7 @@
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </JFXButton>
-                        <JFXButton fx:id="loadButton" buttonType="RAISED" onAction="#handleLoad" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Load CSV" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <JFXButton fx:id="loadButton" buttonType="RAISED" onAction="#handleLoad" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Load CSV" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
@@ -76,7 +76,7 @@
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </JFXButton>
-                        <JFXTextField fx:id="searchField" onKeyReleased="#handleSearch" promptText="Search...">
+                        <JFXTextField fx:id="searchField" onKeyReleased="#handleSearch" promptText="Search By...">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
@@ -86,30 +86,42 @@
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </JFXComboBox>
-                        <JFXToggleButton fx:id="favoriteToggle" onAction="#handleFavoriteToggle" prefHeight="61.0" prefWidth="133.0" text="Favorites Only" textAlignment="CENTER" toggleColor="#f0c808" toggleLineColor="#f0e808" unToggleColor="#03256b" unToggleLineColor="#03256b80" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                        <JFXToggleButton fx:id="favoriteToggle" onAction="#handleFavoriteToggle" prefHeight="61.0" prefWidth="133.0" text="Favorites Only" textAlignment="CENTER" toggleColor="#f0c808" toggleLineColor="#f0e808" unToggleColor="#03256b" unToggleLineColor="#03256b80" wrapText="true" GridPane.rowIndex="1">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </JFXToggleButton>
-                        <JFXButton fx:id="newButton" buttonType="RAISED" onAction="#handleNew" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="New..." GridPane.columnIndex="2">
+                        <JFXButton fx:id="newButton" buttonType="RAISED" onAction="#handleNew" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="New..." GridPane.columnIndex="2">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
                         </JFXButton>
-                        <JFXButton fx:id="editButton" buttonType="RAISED" onAction="#handleEdit" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Edit..." GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <JFXButton fx:id="editButton" buttonType="RAISED" onAction="#handleEdit" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Edit..." GridPane.columnIndex="3">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
                         </JFXButton>
-                        <JFXButton fx:id="deleteButton" buttonType="RAISED" onAction="#handleDelete" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <JFXButton fx:id="deleteButton" buttonType="RAISED" onAction="#handleDelete" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete" GridPane.columnIndex="4">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
                         </JFXButton>
-                        <JFXButton fx:id="favoriteButton" buttonType="RAISED" onAction="#handleFavorite" prefWidth="100.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Favorite" GridPane.columnIndex="3" GridPane.rowSpan="2">
+                        <JFXButton fx:id="favoriteButton" buttonType="RAISED" onAction="#handleFavorite" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Favorite" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
                         </JFXButton>
                      </children>
                   </GridPane>
@@ -117,7 +129,7 @@
             </VBox>
          </children>
       </HBox>
-      <JFXHamburger fx:id="hamburger" layoutX="10.0" layoutY="153.0" onMouseClicked="#handleHamburger" />
-      <JFXDrawer fx:id="drawer" defaultDrawerSize="300.0" layoutY="177.0" prefHeight="368.0" prefWidth="300.0" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="177.0" style="-fx-background-color: transparent" />
+      <JFXHamburger fx:id="hamburger" layoutX="5.0" layoutY="151.0" onMouseClicked="#handleHamburger" stylesheets="/stylesheets/HamburgerStyle.css" />
+      <JFXDrawer fx:id="drawer" defaultDrawerSize="300.0" layoutY="177.0" prefHeight="368.0" prefWidth="300.0" style="-fx-background-color: transparent" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="177.0" />
    </children>
 </AnchorPane>
