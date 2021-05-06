@@ -6,6 +6,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.StringConverter;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.*;
@@ -83,6 +84,26 @@ public class Translator {
     public ObservableList<StringProperty> getTranslationsFor(List<String> list)
     {
         return list.stream().map(this::getTranslationFor).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    }
+
+    /**
+     * Used to get a string converter to convert StringProperties to Strings
+     * @return A string converter to convert StringProperties to Strings
+     * @author Alex Friedman (ahf)
+     */
+    public StringConverter<StringProperty> getTranslationStringConverter()
+    {
+        return new StringConverter<StringProperty>() {
+            @Override
+            public String toString(StringProperty object) {
+                return object.get();
+            }
+
+            @Override
+            public StringProperty fromString(String string) {
+                return null;
+            }
+        };
     }
 
     /**
@@ -196,10 +217,10 @@ public class Translator {
                 for(String s : initialLookupTables.keySet())
                     for(String l : initialLookupTables.get(s).keySet())
                     {
-                       if(translationLookupTable.get(s) == null)
-                           translationLookupTable.put(s, new HashMap<>());
+                        if(translationLookupTable.get(s) == null)
+                            translationLookupTable.put(s, new HashMap<>());
 
-                       System.out.println("ADDING: " + s + " -> " + l);
+                        System.out.println("ADDING: " + s + " -> " + l);
                         translationLookupTable.get(s).put(l, initialLookupTables.get(s).get(l));
                     }
             }
@@ -217,7 +238,7 @@ public class Translator {
                         }
 
                         if(translationLookupTable.get(lang).keySet().isEmpty())
-                           langIterator.remove();
+                            langIterator.remove();
                     }
 
                     if(translationLookupTable.keySet().isEmpty())

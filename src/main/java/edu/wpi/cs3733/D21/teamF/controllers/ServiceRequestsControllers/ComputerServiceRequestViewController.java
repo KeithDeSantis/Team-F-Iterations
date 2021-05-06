@@ -15,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -86,18 +85,7 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
 
         try {
             urgencyComboBox.setItems(Translator.getTranslator().getTranslationsFor(LOW_URGENCY, MEDIUM_URGENCY, HIGH_URGENCY));
-
-            urgencyComboBox.setConverter(new StringConverter<StringProperty>() {
-                @Override
-                public String toString(StringProperty object) {
-                    return object.get();
-                }
-
-                @Override
-                public StringProperty fromString(String string) {
-                    return null;
-                }
-            });
+            urgencyComboBox.setConverter(Translator.getTranslator().getTranslationStringConverter());
         } catch(Exception e){}
 
         try{
