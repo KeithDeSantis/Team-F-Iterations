@@ -15,6 +15,10 @@ import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -35,6 +39,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -141,6 +146,9 @@ public class AStarDemoController implements Initializable, IController {
     TreeItem<String> serviceItem = new TreeItem<>("Services");
     TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
     TreeItem<String> recentItem = new TreeItem<>("Recently Used");
+
+
+
 
 
     @Override
@@ -945,11 +953,37 @@ public class AStarDemoController implements Initializable, IController {
                     final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor(), new NodeEntry(), new NodeEntry());
                     edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
+                    edge.getStrokeDashArray().setAll(25d, 25d, 25d, 25d);
+
                     edge.strokeProperty().bind(
                             Bindings.when(Bindings.isEmpty(stopsList)).then(Color.RED).otherwise(
-                                    Bindings.when(Bindings.integerValueAt(stopsList, currentStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE)
+                                    Bindings.when(Bindings.integerValueAt(stopsList, currentStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.DARKBLUE)
                             )
                     );
+
+                    final double maxOffset = edge.getStrokeDashArray().stream().reduce(0d, (a, b) -> a+b);
+
+                    Timeline pathTimeline = new Timeline(
+                            new KeyFrame(
+                                    Duration.ZERO,
+                                    new KeyValue(
+                                            edge.strokeDashOffsetProperty(),0, Interpolator.LINEAR
+                                    )
+                            ),
+                            new KeyFrame(
+                                    Duration.seconds(2),
+                                    new KeyValue(
+                                            edge.strokeDashOffsetProperty(),
+                                            maxOffset,
+                                            Interpolator.LINEAR
+                                    )
+                            )
+                    );
+                    pathTimeline.setRate(-1);
+                    pathTimeline.setCycleCount(Timeline.INDEFINITE);
+                    pathTimeline.play();
+
+
 
                     int localStop;
                     for(localStop = 0; localStop < stopsList.size() - 1; localStop++)
