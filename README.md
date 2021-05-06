@@ -3,6 +3,7 @@
 ----------
 ## Important Updates & Branches:
 * [Version Name] - [Tag] - [Hash]
+* Iteration 3 - iteration-3-master - 5cbea33 
 * Iteration 2 - iteration-2-master - 40525c9
 * Iteration 1 - iteration-1-master - 4dbedee
 

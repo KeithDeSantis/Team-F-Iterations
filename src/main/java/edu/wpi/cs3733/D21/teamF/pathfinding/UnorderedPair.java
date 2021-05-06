@@ -1,7 +1,8 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
 public class UnorderedPair {
-    private int min, max;
+    private final int min;
+    private final int max;
 
     /**
      * Makes a new UnorderedPair

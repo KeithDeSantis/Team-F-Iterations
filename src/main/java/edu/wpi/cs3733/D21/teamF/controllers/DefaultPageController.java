@@ -1,6 +1,8 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
@@ -11,10 +13,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class DefaultPageController {
     @FXML
@@ -27,19 +31,33 @@ public class DefaultPageController {
     private JFXButton loginButton;
     @FXML
     private JFXButton covidSurvey;
+    @FXML
+    JFXTextField verifyAgain;
+    @FXML private VBox buttons;
+    @FXML private VBox covidBox;
 
     @FXML private void initialize(){
         // Apply fonts to title and buttons
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
-
-
-        //Bind login/logout
+	//Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
     }
+
+    @FXML
+    private void changeButtons() throws SQLException {
+        String ticketID = verifyAgain.getText();
+        if (CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(verifyAgain.getText()) ||
+        DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")){
+            buttons.setStyle("visibility: visible");
+            covidBox.setStyle("visibility: hidden");
+        }
+    }
+
     /**
      * Handles the pushing of a button on the screen
+     *
      * @param actionEvent the button's push
      * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
      * @author ZheCheng Song
@@ -65,7 +83,6 @@ public class DefaultPageController {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
         }
     }
-
     public void handleCovidVaccine() throws IOException {
         final FXMLLoader dialogLoader = new FXMLLoader();
         dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidVaccineDialog.fxml"));
@@ -78,4 +95,8 @@ public class DefaultPageController {
 
         dialogStage.showAndWait();
     }
+
+
+
+
 }

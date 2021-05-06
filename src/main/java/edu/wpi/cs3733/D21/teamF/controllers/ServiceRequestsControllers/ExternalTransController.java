@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
@@ -10,8 +9,6 @@ import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import com.jfoenix.controls.JFXTextField;
-import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -19,7 +16,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
-
 
 
 public class ExternalTransController extends ServiceRequests{

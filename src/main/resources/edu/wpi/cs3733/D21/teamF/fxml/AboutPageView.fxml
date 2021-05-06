@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.aboutPageController">
+<AnchorPane maxHeight="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AboutPageController">
    <children>
       <HBox fx:id="header" maxWidth="-Infinity" prefHeight="134.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
          <children>
@@ -51,7 +51,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </GridPane.margin>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ben Staw: Assitant Lead Engineer" GridPane.columnIndex="1">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ben Staw: Assistant Lead Engineer" GridPane.columnIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -59,7 +59,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </GridPane.margin>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tony Voulo: Assistant Lead Engineer" GridPane.columnIndex="2">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tony Vuolo: Assistant Lead Engineer" GridPane.columnIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
