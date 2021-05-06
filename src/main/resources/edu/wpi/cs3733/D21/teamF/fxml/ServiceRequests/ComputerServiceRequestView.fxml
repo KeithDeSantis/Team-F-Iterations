@@ -69,7 +69,7 @@
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="requestorLbl" text="Requestor: " GridPane.rowIndex="2">
+                        <Label fx:id="requesterLbl" text="Requester: " GridPane.rowIndex="2">
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>

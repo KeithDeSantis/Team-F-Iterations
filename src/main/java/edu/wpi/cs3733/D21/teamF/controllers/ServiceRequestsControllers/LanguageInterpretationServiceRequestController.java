@@ -144,7 +144,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Infectious Disease");
         appointment.getItems().add("Interventional Cardiology");
         appointment.getItems().add("Interventional Radiology");
-        appointment.getItems().add("Lung Dancer Screening (Low Dose CT)");
+        appointment.getItems().add("Lung Cancer Screening (Low Dose CT)");
         appointment.getItems().add("Lung Transplantation Program");
         appointment.getItems().add("Lupus Center");
         appointment.getItems().add("Magnetic Resonance Imaging (MRI)");

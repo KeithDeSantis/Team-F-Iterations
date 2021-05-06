@@ -4,6 +4,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.*;
@@ -11,8 +13,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class is used to manage translation across the application
@@ -29,18 +34,76 @@ public class Translator {
     private final StringProperty language = new SimpleStringProperty("en");
 
 
+    /**
+     * Used to cache translations. This works in the format of:
+     * <code>translationLookupTable.get(language).get(textInEnglish)</code>
+     * Assuming that the string has been cached
+     */
     private final HashMap<String, HashMap<String, String>> translationLookupTable = new HashMap<>();
 
+    /**
+     * Used to get a binding to translate a string to
+     * @param text The text in english
+     * @return A binding that binds the text to a string
+     * @author Alex Friedman (ahf)
+     */
     public ObservableValue<String> getTranslationBinding(String text) {
         return Bindings.createStringBinding(() -> translate(text), language);
     }
 
+    /**
+     * Used to set the language that we translate to
+     * @param language The language code that we translate to (eg en for English)
+     * @author Alex Friedman
+     */
     public void setLanguage(String language)
     {
         Translator.getTranslator().language.setValue(language);
     }
 
+    /**
+     * Given a string, returns a StringProperty that is bound to the translate function.
+     * @param text The text to translate.
+     * @return A StringProperty for the corresponding text that is automatically translated
+     * @author Alex Friedman (ahf)
+     */
+    public StringProperty getTranslationFor(String text)
+    {
+        final StringProperty property = new SimpleStringProperty(text);
+        property.bind(getTranslationBinding(text));
+        return property;
+    }
 
+    /**
+     * Used to convert a list of strings to an observable list of strings that are each bound to translate.
+     * @param list The list of strings to bind
+     * @return An ObservableList of StringProperties that are bound to translate
+     * @author Alex Friedman (ahf)
+     */
+    public ObservableList<StringProperty> getTranslationsFor(List<String> list)
+    {
+        return list.stream().map(this::getTranslationFor).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    }
+
+    /**
+     * Used to convert a list of strings to an observable list of strings that are each bound to translate.
+     * @param list The list of strings to bind
+     * @return An ObservableList of StringProperties that are bound to translate
+     * @author Alex Friedman (ahf)
+     */
+    public ObservableList<StringProperty> getTranslationsFor(String...list)
+    {
+        return Arrays.stream(list).map(this::getTranslationFor).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    }
+
+
+    /**
+     * Given a String, translates it from English to the current set language
+     * @param text The text to translate
+     * @return The string of the text in the current Language
+     * @throws IOException If an error occurred w/ the API
+     * @author Alex Friedman (ahf)
+     */
     public String translate(String text) throws IOException {
         if(language.get().equals("en")) //Block english to english spam api calls
             return text;
@@ -97,6 +160,7 @@ public class Translator {
 
     private Translator() {
 
+        //If we're not in production mode, we need to collapse all the files, and track new changes.
         if(!isProduction)
         {
             final HashMap<String, HashMap<String, String>> initialLookupTables = new HashMap<>();
@@ -179,6 +243,11 @@ public class Translator {
         private static final Translator translator = new Translator();
     }
 
+    /**
+     * Gets the translator
+     * @return The singleton instance of the translator
+     * @author Alex Friedman (ahf)
+     */
     public static Translator getTranslator(){
         return TranslatorSingletonHelper.translator;
     }
