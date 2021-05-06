@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,7 +16,7 @@
    <children>
       <HBox fx:id="header" alignment="CENTER_LEFT" prefHeight="120.0" prefWidth="960.0" spacing="10.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
          <children>
-            <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
@@ -30,8 +32,9 @@
          </padding></HBox>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+            <VBox fx:id="buttons" layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
                <children>
+                  <Label fx:id="loginLabel" text="Please Log in!" VBox.vgrow="ALWAYS" />
                   <JFXButton fx:id="loginButton" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Login" VBox.vgrow="ALWAYS">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
@@ -42,25 +45,81 @@
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
+                  <JFXButton fx:id="editMap" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Edit Map">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
                   <JFXButton fx:id="serviceRequest" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Request Service" VBox.vgrow="ALWAYS">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="covidSurvey" buttonType="RAISED" layoutX="10.0" layoutY="78.0" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID-19 Survey">
+                  <JFXButton fx:id="manageServices" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Manage Service">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="covidVaccineBtn" buttonType="RAISED" onAction="#handleCovidVaccine" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID Vaccine Information">
+                  <JFXButton fx:id="manageAccount" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Account Management">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="quit" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Quit">
+                  <JFXButton fx:id="pathfindingSettingButton" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Pathfinding Settings">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" onAction="#handleCovidVaccine" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID-19 Vaccine Information">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="quit" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/QuitButtonStyle.css" text="Quit">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <VBox fx:id="covidBox" alignment="CENTER" layoutX="200.0" layoutY="91.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #FFFFFF;" visible="false" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="91.0">
+               <children>
+                  <Label text="If you've completed the survey, please enter your ticket number">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXTextField prefHeight="31.0" prefWidth="224.0">
+                     <VBox.margin>
+                        <Insets left="50.0" right="50.0" top="10.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXButton fx:id="enterApp" buttonType="RAISED" onAction="#changeButtons" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Enter App">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <Label text="Otherwise, please take the COVID survey">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXButton fx:id="covidSurvey" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="130.0" prefWidth="402.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID-19 Survey">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="40.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
                   </JFXButton>
                </children>
             </VBox>

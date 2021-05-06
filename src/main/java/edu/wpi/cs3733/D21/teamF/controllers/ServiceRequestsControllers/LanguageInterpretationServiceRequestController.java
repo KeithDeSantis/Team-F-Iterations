@@ -1,6 +1,8 @@
-package edu.wpi.cs3733.D21.teamF.controllers;
+package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import javafx.event.ActionEvent;
@@ -14,15 +16,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.text.StringEscapeUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -40,6 +36,8 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     @FXML private Label dtLabel;
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
+
+    private final HashMap<String, String> langCodes = new HashMap<>();
 
     /**
      * Opens the help window
@@ -60,27 +58,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     /**
      * Calls translate function when translate button is clicked
      * @param actionEvent
-     * @throws IOException
      * @author Johvanni Perez
      */
-    public void handleTranslate(ActionEvent actionEvent) throws IOException{
+    public void handleTranslate(ActionEvent actionEvent) {
         if(language.getValue() != null) {
-            List<Label> labelList = new ArrayList<>(); //list of labels that need to get fixed
-            labelList.add(nameLabel);
-            labelList.add(dtLabel);
-            labelList.add(appointmentLabel);
-            labelList.add(languageLabel);
-
-            HashMap<String, String> codes = codeMap();
-            String src = "";                                //empty string that translator uses to autodetect src lang
-            String target = codes.get(language.getValue()); //gets lang code of the lang specified
-            String text;
-            String transText;
-            for (Label aLabel : labelList) {
-                text = aLabel.getText();
-                transText = translate(src, target, text);
-                aLabel.setText(transText);
-            }
+            String target = langCodes.get(language.getValue()); //gets lang code of the lang specified
+            Translator.getTranslator().setLanguage(target);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
@@ -113,7 +96,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
     @Override
     public void handleClear(){
-       // name.
+        name.setText("");
+        date.setValue(null);
+        time.setValue(null);
+        appointment.setValue(null);
+        language.setValue(null);
+        setNormalStyle(name, date, time, appointment, language);
     }
 
     /**
@@ -156,7 +144,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Infectious Disease");
         appointment.getItems().add("Interventional Cardiology");
         appointment.getItems().add("Interventional Radiology");
-        appointment.getItems().add("Lung Dancer Screening (Low Dose CT)");
+        appointment.getItems().add("Lung Cancer Screening (Low Dose CT)");
         appointment.getItems().add("Lung Transplantation Program");
         appointment.getItems().add("Lupus Center");
         appointment.getItems().add("Magnetic Resonance Imaging (MRI)");
@@ -223,8 +211,31 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         language.getItems().add("Russian");
         language.getItems().add("Spanish");
         language.getItems().add("Vietnamese");
+
+
+
+        langCodes.put("Arabic", "ar");
+        langCodes.put("Dutch", "nl");
+        langCodes.put("English", "en");
+        langCodes.put("French", "fr");
+        langCodes.put("German", "de");
+        langCodes.put("Greek", "el");
+        langCodes.put("Haitian Creole", "ht");
+        langCodes.put("Italian", "it");
+        langCodes.put("Japanese", "ja");
+        langCodes.put("Korean", "ko");
+        langCodes.put("Portuguese", "pt");
+        langCodes.put("Russian", "ru");
+        langCodes.put("Spanish", "es");
+        langCodes.put("Vietnamese", "vi");
+
+
+        nameLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLabel.getText()));
+        dtLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dtLabel.getText()));
+        appointmentLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(appointmentLabel.getText()));
+        languageLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(languageLabel.getText()));
     }
-    
+
     public boolean formFilled(){
         boolean isFilled = true;
         if(name.getText().trim().isEmpty()){
@@ -244,62 +255,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
             setTextErrorStyle(language);
             isFilled = false;
         }
-        return isFilled;
-    }
-
-    /**
-     * HashMap containing languages and their lang codes
-     * @return
-     * @author Johvanni Perez
-     */
-    public static HashMap<String, String> codeMap(){
-        HashMap<String, String> langCodes = new HashMap<>();
-
-        langCodes.put("Arabic", "ar");
-        langCodes.put("Dutch", "nl");
-        langCodes.put("English", "en");
-        langCodes.put("French", "fr");
-        langCodes.put("German", "de");
-        langCodes.put("Greek", "el");
-        langCodes.put("Haitian Creole", "ht");
-        langCodes.put("Italian", "it");
-        langCodes.put("Japanese", "ja");
-        langCodes.put("Korean", "ko");
-        langCodes.put("Portuguese", "pt");
-        langCodes.put("Russian", "ru");
-        langCodes.put("Spanish", "es");
-        langCodes.put("Vietnamese", "vi");
-
-        return langCodes;
-    }
-
-    /**
-     * web scraper that uses javascript to access a translation generator and return translations
-     * @param src the original language that needs to be translated
-     * @param target the language that the translation will be provided in
-     * @param text the string that needs to translated
-     * @return a translated string
-     * @throws IOException
-     * @author Johvanni Perez
-     */
-    public String translate(String src, String target, String text) throws IOException {
-
-
-        String urlStr = "https://script.google.com/macros/s/AKfycbzk_1ZP98MqQNuWvs_Yo3UamuN7WCABIG3UiUUighYgCeqIf4ha4qUzubb2jxopuTP7/exec"
-                + "?q=" + URLEncoder.encode(text, "UTF-8") +
-                "&target=" + target +
-                "&source=" + src;
-        URL url = new URL(urlStr);
-        StringBuilder response = new StringBuilder();
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-        String inputLine;
-        while((inputLine = in.readLine()) != null){
-            response.append(StringEscapeUtils.unescapeHtml4(inputLine));
+        if(appointment.getValue() == null)
+        {
+            setTextErrorStyle(appointment);
+            isFilled = false;
         }
-        in.close();
-        return response.toString();
+        return isFilled;
     }
 
 }

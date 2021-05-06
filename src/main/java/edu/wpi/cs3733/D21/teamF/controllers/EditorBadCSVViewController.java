@@ -5,7 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
-public class EditorBadCSVViewController {
+public class EditorBadCSVViewController implements IController {
     @FXML
     public void initialize() {
 

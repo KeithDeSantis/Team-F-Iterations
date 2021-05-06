@@ -4,15 +4,14 @@ import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.fxml.FXML;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
-public class aboutPageController {
+public class AboutPageController implements IController  {
     @FXML JFXButton back;
 
 
 
-    public void goBack(javafx.event.ActionEvent actionEvent) throws IOException {
+    public void goBack() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
     }
 }

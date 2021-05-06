@@ -47,7 +47,7 @@ public class GoogleAPI {
         for (int i=0; i< steps.length(); i++){
             String temp = ((JSONObject) steps.get(i)).getString("html_instructions");
             if (temp != null) {
-                directions.append(temp+ "\n");
+                directions.append(temp).append("\n");
             }
         }
         String results = directions.toString();
@@ -89,7 +89,7 @@ public class GoogleAPI {
         BufferedReader data = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String temp;
         while ((temp = data.readLine()) != null){
-            apiResponse.append(temp + "\n");
+            apiResponse.append(temp).append("\n");
         }
         data.close();
         return GoogleAPI.getGoogleAPI().parseGoogleData(apiResponse.toString());

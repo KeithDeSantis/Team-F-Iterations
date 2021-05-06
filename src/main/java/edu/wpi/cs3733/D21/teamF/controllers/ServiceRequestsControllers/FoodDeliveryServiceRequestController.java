@@ -1,22 +1,18 @@
-package edu.wpi.cs3733.D21.teamF.controllers;
+package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -99,22 +95,6 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
     }
 
 
-    public void handleHelp(ActionEvent e) throws IOException {
-        Stage helpPopUpStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryHelpView.fxml"));
-        Scene helpPopUpScene = new Scene(root);
-        helpPopUpStage.setScene(helpPopUpScene);
-        helpPopUpStage.setTitle("Food Delivery Request Help Menu");
-        helpPopUpStage.initModality(Modality.APPLICATION_MODAL);
-        helpPopUpStage.initOwner(cbSide1.getScene().getWindow());
-        helpPopUpStage.showAndWait();
-    }
-
-    public void handleHelpX() {
-        Stage popUpStage = (Stage) helpXButton.getScene().getWindow();
-        popUpStage.close();
-    }
-
     /**
      * Helper that checks if form is acceptably filled out
      * @return true if form is filled out
@@ -193,5 +173,13 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
                 rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
                 rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
 
+    }
+
+    public void handleHelp(ActionEvent e) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryHelpView.fxml");
+    }
+
+    public void goBack(ActionEvent actionEvent)throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FoodDeliveryServiceRequestView.fxml");
     }
 }

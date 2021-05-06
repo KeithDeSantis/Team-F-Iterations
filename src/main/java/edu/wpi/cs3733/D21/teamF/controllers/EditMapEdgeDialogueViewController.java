@@ -10,7 +10,6 @@ import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
  * Controller for new edge or edit edge pop-up in edge editor
  * @author Karen Hou
  */
-public class EditMapEdgeDialogueViewController {
+public class EditMapEdgeDialogueViewController implements IController {
 
     @FXML private JFXComboBox<String> startNode;
     @FXML private JFXComboBox<String> endNode;
@@ -62,11 +61,10 @@ public class EditMapEdgeDialogueViewController {
 
     /**
      * Updated edge information with new information
-     * @param e is the action event
      * @author Karen Hou
      */
     @FXML
-    private void handleOKClicked(ActionEvent e){
+    private void handleOKClicked(){
         if(formFilled()){
             edge.setStartNode(startNode.getValue());
             edge.setEndNode(endNode.getValue());

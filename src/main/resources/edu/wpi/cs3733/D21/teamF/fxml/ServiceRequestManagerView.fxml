@@ -16,7 +16,7 @@
    <children>
       <HBox fx:id="header" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="goBack" fitHeight="120.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="goBack" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
@@ -37,7 +37,7 @@
             </JFXTreeTableView>
             <ButtonBar maxHeight="-Infinity" prefHeight="43.0" prefWidth="810.0">
               <buttons>
-                  <JFXButton fx:id="markAsComplete" buttonType="RAISED" onAction="#handleMarkAsComplete" prefHeight="31.0" prefWidth="304.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Mark Complete">
+                  <JFXButton fx:id="markAsComplete" buttonType="RAISED" onAction="#handleMarkAsComplete" prefHeight="31.0" prefWidth="304.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Toggle Status">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font></JFXButton>

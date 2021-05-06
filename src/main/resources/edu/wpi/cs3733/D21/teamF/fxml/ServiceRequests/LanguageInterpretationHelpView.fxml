@@ -3,108 +3,102 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6; -fx-border-color: #03256C; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LanguageInterpretationRequestHelpController">
-    <children>
-        <VBox layoutX="91.0" layoutY="52.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
-            <children>
-                <JFXButton fx:id="close" alignment="CENTER" buttonType="RAISED" centerShape="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleClose" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #03256C;" text="x" textAlignment="CENTER" textFill="WHITE">
-                    <font>
-                        <Font name="Tahoma" size="12.0" />
-                    </font>
-                </JFXButton>
-                <Label alignment="CENTER" prefHeight="67.0" prefWidth="919.0" text="Language Interpretation Help">
-                    <font>
-                        <Font name="Volkhov Regular" size="50.0" />
-                    </font>
-                </Label>
-                <Label prefHeight="18.0" prefWidth="154.0" text="Name:" textAlignment="CENTER">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="25.0" />
-                    </VBox.margin>
-                    <font>
-                        <Font name="Montserrat Regular" size="18.0" />
-                    </font>
-                </Label>
-                <Label text="Please type in the preferred name of the patient.">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="30.0" />
-                    </VBox.margin>
-                </Label>
-                <Label text="Appointment Date and Time:">
-                    <font>
-                        <Font name="Montserrat Regular" size="18.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="25.0" />
-                    </VBox.margin>
-                </Label>
-                <Label text="Please use the calendar and clock icons to select the date and time of the appointment.">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="30.0" />
-                    </VBox.margin>
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-                </Label>
-                <Label text="Appointment type:">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="25.0" />
-                    </VBox.margin>
-                    <font>
-                        <Font name="Montserrat Regular" size="18.0" />
-                    </font>
-                </Label>
-                <Label prefHeight="51.0" prefWidth="863.0" text="Please select the hospital department in the dropdown menu.  If your visit is with multiple departments, select &quot;Multiple Departments&quot;." wrapText="true">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="30.0" />
-                    </VBox.margin>
-                </Label>
-                <Label text="Language:">
-                    <font>
-                        <Font name="Montserrat Regular" size="18.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="25.0" />
-                    </VBox.margin>
-                </Label>
-                <Label text="Please type the name of the language you would like the interpreter to use with you.">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="30.0" />
-                    </VBox.margin>
-                </Label>
-                <Label prefHeight="31.0" prefWidth="760.0" text="Please click the &quot;Submit&quot; button when you are finished so we may accomodate you during your visit. " textAlignment="CENTER" underline="true" wrapText="true">
-                    <font>
-                        <Font name="Montserrat Regular" size="15.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="25.0" right="25.0" />
-                    </VBox.margin>
-                </Label>
-            <VBox alignment="TOP_CENTER" prefWidth="100.0">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LanguageInterpretationServiceRequestController">
+   <children>
+      <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="header" prefHeight="120.0" prefWidth="600.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
                <children>
-                      <JFXButton fx:id="back" buttonType="RAISED" onAction="#handleBack" style="-fx-background-color: #03256C;" text="Back to Interpretation Request Form" textFill="WHITE">
-                          <font>
-                              <Font name="Tahoma" size="15.0" />
-                          </font>
-                          <VBox.margin>
-                              <Insets bottom="10.0" />
-                          </VBox.margin>
-                      </JFXButton>
-                      <JFXButton fx:id="translate" buttonType="RAISED" onAction="#handleTranslate" style="-fx-background-color: #03256C;" text="Translate" textFill="WHITE">
-                          <VBox.margin>
-                              <Insets />
-                          </VBox.margin>
-                      </JFXButton>
+                  <ImageView fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="title" prefHeight="117.0" prefWidth="773.0" text="BRIGHAM AND WOMEN'S HOSPITAL Language Interpretation Help Page" wrapText="true">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
                </children>
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" />
-               </VBox.margin>
+            </HBox>
+            <VBox prefHeight="433.0" prefWidth="960.0">
+               <children>
+                  <GridPane prefHeight="316.0" prefWidth="960.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="475.0" minWidth="10.0" prefWidth="293.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="787.0" minWidth="10.0" prefWidth="667.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="72.00001017252605" minHeight="10.0" prefHeight="62.666662851969406" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="78.00001271565756" minHeight="10.0" prefHeight="63.33334096272787" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="82.00003051757814" minHeight="10.0" prefHeight="61.33332316080728" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="64.66667683919272" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please select the hospital department in the dropdown menu. If your isit is with multiple departments, select &quot;Multiple Departments.&quot;" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets right="25.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Appointment Date and Time:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets right="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please use the calendar and clock icons to select the date and time of the appointment." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets right="25.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Appointment Type:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets right="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please type in the preferred name of the patient." wrapText="true" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets right="25.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Name:" GridPane.halignment="RIGHT">
+                           <GridPane.margin>
+                              <Insets right="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label layoutX="171.0" layoutY="193.0" text="Language:" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets right="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please select the name of the language you would like an interpreter for." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets right="25.0" />
+                           </GridPane.margin>
+                        </Label>
+                     </children>
+                  </GridPane>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXButton fx:id="back" buttonType="RAISED" onAction="#goBack" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Back">
+                           <HBox.margin>
+                              <Insets left="450.0" top="20.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+               </children>
             </VBox>
-            </children>
-        </VBox>
-    </children>
+         </children>
+      </VBox>
+   </children>
 </AnchorPane>

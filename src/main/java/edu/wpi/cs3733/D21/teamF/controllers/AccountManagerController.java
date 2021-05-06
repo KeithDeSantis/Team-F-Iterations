@@ -3,7 +3,6 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
@@ -11,11 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,7 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AccountManagerController implements Initializable {
+public class AccountManagerController implements Initializable, IController {
     @FXML
     private JFXButton quit;
     @FXML
@@ -69,7 +64,7 @@ public class AccountManagerController implements Initializable {
         userType.setPrefWidth(colWidth);
         userType.setCellValueFactory(cellData -> cellData.getValue().getValue().getUserTypeProperty());
 
-        final TreeItem<AccountEntry> root = new RecursiveTreeItem<AccountEntry>(accounts, RecursiveTreeObject::getChildren);
+        final TreeItem<AccountEntry> root = new RecursiveTreeItem<>(accounts, RecursiveTreeObject::getChildren);
         accountView.setRoot(root);
         accountView.setShowRoot(false);
         accountView.getColumns().setAll(username, userType);
@@ -141,7 +136,7 @@ public class AccountManagerController implements Initializable {
         }
         else if (buttonPushed == saveChanges && accountView.getSelectionModel().getSelectedIndex() >= 0){
 
-            String  targetUser = accountView.getSelectionModel().getSelectedItem().getValue().getUsername();;
+            String  targetUser = accountView.getSelectionModel().getSelectedItem().getValue().getUsername();
             String newVal;
 
             if(!username.getText().isEmpty()) {
@@ -183,7 +178,7 @@ public class AccountManagerController implements Initializable {
             refreshPage();
         }
         else if (buttonPushed == home){
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+            SceneContext.getSceneContext().loadDefault();
         }
     }
 
@@ -192,15 +187,15 @@ public class AccountManagerController implements Initializable {
     }
 
 
-    public void changingUsername(MouseEvent mouseEvent) throws SQLException{
+    public void changingUsername() {
         //fieldChanged = "username";
     }
 
-    public void changingPassword(MouseEvent mouseEvent) throws SQLException{
+    public void changingPassword() {
         //fieldChanged = "password";
     }
 
-    public void changingUserType(MouseEvent mouseEvent) throws SQLException{
+    public void changingUserType() {
         //fieldChanged = "type";
     }
 

@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ServiceRequestManagerController implements Initializable {
+public class ServiceRequestManagerController implements Initializable, IController {
     @FXML private JFXButton markAsComplete;
     @FXML private JFXButton saveChanges;
     @FXML private JFXButton removeAssignment;
@@ -54,7 +54,7 @@ public class ServiceRequestManagerController implements Initializable {
         assign.setPrefWidth(colWidth);
         assign.setCellValueFactory(cellData -> cellData.getValue().getValue().getAssignedToProperty());
 
-        JFXTreeTableColumn<ServiceEntry, String> status = new JFXTreeTableColumn<>("Completed");
+        JFXTreeTableColumn<ServiceEntry, String> status = new JFXTreeTableColumn<>("Completed/Cleared");
         status.setPrefWidth(colWidth);
         status.setCellValueFactory(cellData -> cellData.getValue().getValue().getCompleteStatusProperty());
 
@@ -110,8 +110,19 @@ public class ServiceRequestManagerController implements Initializable {
      */
     public void handleMarkAsComplete() throws Exception {
         // Updates data base with the new completed status (toggles from current)
-        DatabaseAPI.getDatabaseAPI().editServiceRequest(selectedEntry.getUuid(),
-                String.valueOf(!Boolean.parseBoolean(selectedEntry.getCompleteStatus())), "completed");
+//        DatabaseAPI.getDatabaseAPI().editServiceRequest(selectedEntry.getUuid(),
+//                String.valueOf(!Boolean.parseBoolean(selectedEntry.getCompleteStatus())), "completed");
+        String newBoolean;
+        if(selectedEntry.getCompleteStatus().equals("true")){
+            newBoolean = "false";
+        }
+        else if (selectedEntry.getCompleteStatus().equals("false")){
+            newBoolean = "true";
+        }
+        else{
+            newBoolean = "true";
+        }
+        DatabaseAPI.getDatabaseAPI().editServiceRequest(selectedEntry.getUuid(), newBoolean, "completed");
         refreshTable();
     }
 
@@ -195,12 +206,13 @@ public class ServiceRequestManagerController implements Initializable {
         delete.setDisable(false);
 
         // Enable mark complete button and set appropriate text
-        if(selectedEntry.getCompleteStatus().equals("false")){
-            markAsComplete.setText("Mark Complete");
-            markAsComplete.setDisable(false);
-        } else if(selectedEntry.getCompleteStatus().equals("true")){
-            markAsComplete.setText("Mark Incomplete");
-            markAsComplete.setDisable(false);
+        switch (selectedEntry.getCompleteStatus()) {
+            case "false":
+            case "true":
+            case "":
+                markAsComplete.setText("Toggle Status");
+                markAsComplete.setDisable(false);
+                break;
         }
 
         // Enable remove assignment button if a person is assigned

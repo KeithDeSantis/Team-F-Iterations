@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public abstract class ServiceRequests {
+public abstract class ServiceRequests implements IController{
 
     @FXML
     private JFXButton submitButton;
@@ -25,6 +24,8 @@ public abstract class ServiceRequests {
     private JFXButton helpButton;
     @FXML
     private JFXButton clearButton;
+    @FXML
+    private JFXButton back;
 
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {}
 
@@ -34,9 +35,12 @@ public abstract class ServiceRequests {
 
     public void handleHelp(ActionEvent e) throws IOException {}
 
-    public void handleHome(ActionEvent e) throws IOException {
+
+    public void handleHome() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
     }
+
+    public void goBack(ActionEvent actionEvent) throws IOException {}
 
     public boolean formFilled() {
         return false;
@@ -80,11 +84,11 @@ public abstract class ServiceRequests {
     }
 
     public void openSuccessWindow() throws IOException {
-        FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
+        FXMLLoader submittedPageLoader = new FXMLLoader();
+        submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/FormSubmittedView.fxml"));
         Stage submittedStage = new Stage();
-        Parent root = submitedPageLoader.load();
-        FormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
+        Parent root = submittedPageLoader.load();
+        FormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
         formSubmittedViewController.changeStage((Stage) submitButton.getScene().getWindow());
         Scene submitScene = new Scene(root);
         submittedStage.setScene(submitScene);

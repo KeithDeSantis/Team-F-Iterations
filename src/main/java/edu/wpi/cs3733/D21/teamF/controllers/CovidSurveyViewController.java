@@ -1,24 +1,24 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleGroup;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+import java.util.UUID;
 
-public class CovidSurveyViewController {
+public class CovidSurveyViewController extends ServiceRequests implements Initializable, IController {
 
-    @FXML private HBox header;
-    @FXML private Label title;
     @FXML private Label posTestPrompt;
     @FXML private Label fifteenPrompt;
     @FXML private Label tempPrompt;
@@ -43,67 +43,95 @@ public class CovidSurveyViewController {
     @FXML private JFXCheckBox confusion;
     @FXML private JFXCheckBox stayAwake;
     @FXML private JFXCheckBox fever;
-    @FXML private JFXButton submit;
-    @FXML private JFXButton cancel;
-
-
-    @FXML
-    private void initialize(){
-    }
-
-    /**
-     * handles the back button (image icon) being pushed
-     * @param mouseEvent
-     * @throws IOException
-     * @author kh
-     */
-    public void handleHome(MouseEvent mouseEvent) throws IOException{
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-    }
-
-    /**
-     * handles the submit button being pushed
-     * @param e
-     * @throws IOException
-     */
-    @FXML private void handleSubmitPushed(ActionEvent e) throws IOException{
-        FXMLLoader submitedPageLoader = new FXMLLoader();
-        submitedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
-        Stage submittedStage = new Stage();
-        Parent root = submitedPageLoader.load();
-        CovidFormSubmittedViewController formSubmittedViewController = submitedPageLoader.getController();
-        formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
-        Scene submitScene = new Scene(root);
-        submittedStage.setScene(submitScene);
-        submittedStage.setTitle("Submission Complete");
-        submittedStage.initModality(Modality.APPLICATION_MODAL);
-        submittedStage.showAndWait();
-    }
+    @FXML private JFXTextField generatedID;
 
 
     /**
-     * handles cancel button being pushed and returns to home page
-     * @param e
-     * @throws IOException
-     * @Author kh
+     * generates a UUID for the survey and displays it.
      */
-    @FXML
-    private void handleCancelPushed(ActionEvent e) throws IOException {
-        Button buttonPushed = (Button) e.getSource();
+    public void initialize(URL location, ResourceBundle resources){
+        String ticketNumber = UUID.randomUUID().toString();
+        generatedID.setText(ticketNumber);
+    }
 
-        if (buttonPushed == cancel) { // is cancel button
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+    /**
+     * creates a service request and puts it in the database, then changes to the submitted view
+     * @throws IOException
+     */
+    @FXML private void handleSubmitPushed() throws IOException, SQLException {
+        if(formFilled()) {
+            //create service request, put in database
+            String covidInfo = temperatureField.getText();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
+            ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
+            //change view to survey submitted page
+
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
+            /*
+            FXMLLoader submittedPageLoader = new FXMLLoader();
+            submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
+            Stage submittedStage = new Stage();
+            Parent root = submittedPageLoader.load();
+            CovidFormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
+            formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
+            Scene submitScene = new Scene(root);
+            submittedStage.setScene(submitScene);
+            submittedStage.setTitle("Submission Complete");
+            submittedStage.initModality(Modality.APPLICATION_MODAL);
+            submittedStage.showAndWait();
+
+            if(!formSubmittedViewController.isCompleted)
+            {
+                DatabaseAPI.getDatabaseAPI().deleteServiceRequest(generatedID.getText());
+            }
+
+             */
         }
+    }
+    public boolean formFilled(){
+        final String tempStr = temperatureField.getText().trim();
+
+        //Empty temperature field
+        if(tempStr.isEmpty()) {
+            setTextErrorStyle(temperatureField);
+            return false;
+        }
+        //Verify temperature is a number
+        if(!tempStr.matches("\\d*")) {
+            setTextErrorStyle(temperatureField);
+            return false;
+        }
+
+        final int temperature = Integer.parseInt(tempStr);
+
+        if (temperature < 70 || temperature > 115 ){
+            setTextErrorStyle(temperatureField);
+            return false;
+        }
+
+        //FIXME: ADD USER FEEDBACK
+
+        if(!yes1.isSelected() && !no1.isSelected())
+        {
+            return false;
+        }
+
+        if(!yes2.isSelected() && !no2.isSelected())
+        {
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * groups radio buttons into the two questions so only one is selected at a time for each
-     * @param e
      * @author kh
      */
 
     @FXML
-    private void handleRadialButtonPushed(ActionEvent e){
+    private void handleRadialButtonPushed(){
         ToggleGroup question1 = new ToggleGroup(); //group for first question
         yes1.setToggleGroup(question1);
         no1.setToggleGroup(question1);
@@ -111,5 +139,17 @@ public class CovidSurveyViewController {
         ToggleGroup question2 = new ToggleGroup(); //group for second question
         yes2.setToggleGroup(question2);
         no2.setToggleGroup(question2);
+    }
+
+    /**
+     * allows employees and admins to bypass the survey
+     * @throws IOException
+     */
+    public void handleEmployeeSignIn() throws IOException{
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
+    }
+
+    public void handleCheckStatus() throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
     }
 }

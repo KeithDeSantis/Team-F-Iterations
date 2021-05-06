@@ -1,15 +1,16 @@
-package edu.wpi.cs3733.D21.teamF.controllers;
+package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
+
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
-
-import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 
 public class GiftDeliveryServiceRequestController extends ServiceRequests {
         @FXML private JFXTextField name;
@@ -31,23 +32,32 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
         }
 
         public void handleClear(ActionEvent actionEvent) throws IOException {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GiftDeliveryServiceRequest.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
 
-        }
-        public void handleCancel(ActionEvent actionEvent) throws IOException{
-//            if(/*user is admin*/) {
-//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
-//            }
-//            else if (/*user is employee*/){
-//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
-//            }
-//            else{
-//                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-//            }
         }
 
         public boolean formFilled() {
-            return name.getText().length()>0 && ccNumber.getText().length()>0 && csv.getText().length()>0 && expirationDate.getText().length()>0 && specialInstructions.getText().length()>0;
+
+            boolean isFilled = true;
+            setNormalStyle(name, ccNumber, csv, expirationDate);
+
+            if(name.getText().length() == 0){
+                isFilled = false;
+                setTextErrorStyle(name);
+            }
+            if(ccNumber.getText().length() == 0){
+                isFilled = false;
+                setTextErrorStyle(ccNumber);
+            }
+            if(csv.getText().length() == 0){
+                isFilled = false;
+                setTextErrorStyle(csv);
+            }
+            if(expirationDate.getText().length() == 0){
+                isFilled = false;
+                setTextErrorStyle(expirationDate);
+            }
+            return isFilled;
         }
 
          @FXML
@@ -60,6 +70,12 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
 
          }
 
+    public void handleHelp(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryHelpView.fxml");
+    }
 
+    public void goBack(ActionEvent actionEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
+    }
 }
 

@@ -1,21 +1,32 @@
-package edu.wpi.cs3733.D21.teamF.controllers;
+package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
+
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTimePicker;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextInputControl;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
     public JFXTextField clientName;
     @FXML
-    public JFXTextField clientRoom;
+    public JFXComboBox<String> clientRoom;
+    @FXML
+    public JFXTimePicker deliveryTime;
     @FXML
     public JFXTextArea medicineInformation;
     @FXML
@@ -27,6 +38,23 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
     public JFXTextField cardholder;
 
+
+    @FXML
+    public void initialize(){
+        try{
+            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+
+            final ObservableList<String> nodeList = FXCollections.observableArrayList();
+            for(NodeEntry n: nodeEntries){
+                nodeList.add(n.getShortName());
+            }
+            this.clientRoom.setItems(nodeList);
+
+        } catch(Exception e){
+
+        }
+    }
+
     /**
      * Submits a medicine delivery form
      * @param actionEvent the event signalling that the Submit button has been pressed
@@ -36,28 +64,26 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
         boolean submitSuccessful = true;
-        for(int i = 0; i < 7; i++) {
+        setNormalStyle(clientRoom, clientName, deliveryTime, medicineInformation, cardholder, cardNumber, cvc, expirationDate);
+        for(int i = 0; i < 6; i++) {
             TextInputControl node = null;
             switch(i) {
                 case 0:
                     node = clientName;
                     break;
                 case 1:
-                    node = clientRoom;
-                    break;
-                case 2:
                     node = medicineInformation;
                     break;
-                case 3:
+                case 2:
                     node = cardNumber;
                     break;
-                case 4:
+                case 3:
                     node = cvc;
                     break;
-                case 5:
+                case 4:
                     node = expirationDate;
                     break;
-                case 6:
+                case 5:
                     node = cardholder;
                     break;
                 default:
@@ -70,13 +96,21 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
                 submitSuccessful = false;
                 setTextErrorStyle(node);
             }
+            if(deliveryTime.getValue() == null){
+                submitSuccessful = false;
+                setTextErrorStyle(deliveryTime);
+            }
+            if(clientRoom.getValue() == null){
+                submitSuccessful = false;
+                setTextErrorStyle(clientRoom);
+            }
         }
-        if(formFilled()) {
+        if(submitSuccessful) {
             String uuid = UUID.randomUUID().toString();
             String type = "Medicine Delivery";
             String person = "";
             String completed = "false";
-            String additionalInfo = "Delivery Location: " + clientRoom.getText() + "Medicine Info: " + medicineInformation.getText()
+            String additionalInfo = "Delivery Location: " + clientRoom.getValue() + "Medicine Info: " + medicineInformation.getText()
                     + "Card Number: " + cardNumber.getText() + "Card Holder: " + cardholder.getText() + "CVC: " + cvc.getText()
                     + "Expiration Date: " + expirationDate.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
@@ -112,12 +146,21 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @Override
     public void handleClear() {
         clientName.setText("");
-        clientRoom.setText("");
+        clientRoom.setValue(null);
+        deliveryTime.setValue(null);
         medicineInformation.setText("");
         cardholder.setText("");
         cardNumber.setText("");
         cvc.setText("");
         expirationDate.setText("");
-        setNormalStyle(clientRoom, clientName, medicineInformation, cardholder, cvc, cardNumber, expirationDate);
+        setNormalStyle(clientRoom, clientName, medicineInformation, deliveryTime, cardholder, cvc, cardNumber, expirationDate);
+    }
+
+    public void handleHelp(ActionEvent e) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryHelpView.fxml");
+    }
+
+    public void goBack(ActionEvent actionEvent)throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");
     }
 }
