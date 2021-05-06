@@ -34,6 +34,7 @@
          <children>
             <VBox fx:id="buttons" layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
                <children>
+                  <Label fx:id="loginLabel" text="Please Log in!" VBox.vgrow="ALWAYS" />
                   <JFXButton fx:id="loginButton" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Login" VBox.vgrow="ALWAYS">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
@@ -44,7 +45,27 @@
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
+                  <JFXButton fx:id="editMap" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Edit Map">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
                   <JFXButton fx:id="serviceRequest" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Request Service" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="manageServices" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Manage Service">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="manageAccount" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Account Management">
+                     <font>
+                        <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="pathfindingSettingButton" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Pathfinding Settings">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>

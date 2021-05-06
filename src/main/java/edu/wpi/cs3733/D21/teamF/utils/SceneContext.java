@@ -30,11 +30,12 @@ public class SceneContext {
     }
 
     public void loadDefault() throws IOException {
+        /*
         AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
         if(user != null) {
             switch (user.getUserType()){
                 case "administrator":
-                    this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
+                    this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
                     break;
 
                 case "employee":
@@ -48,6 +49,8 @@ public class SceneContext {
         } else {
             switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
         }
+        */
+        this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     public Stage getStage() {
