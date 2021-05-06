@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
 import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.*;
+import sun.awt.image.ImageWatched;
 
 import java.util.*;
 
@@ -215,8 +216,10 @@ public class Graph {
      * @return the least cost path that intersects all vertices in the array, preserving the first and last in order
      */
     public List<Vertex> TSP(Vertex... v) {
-        if(v == null || v.length == 0) {
+        if(v == null) {
             return null;
+        } else if(v.length <= 2) {
+            return new LinkedList<>(Arrays.asList(v));
         }
         HashMap<UnorderedPair, Path> paths = new HashMap<>();
         for(int i = 0; i < v.length; i++) {

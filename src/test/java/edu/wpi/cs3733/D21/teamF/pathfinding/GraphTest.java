@@ -669,7 +669,6 @@ public class GraphTest {
      */
     @Test
     public void testTSP() {
-        assertNull(this.graph.TSP());
         assertNull(this.graph.TSP(null));
         assertEquals(this.graph.getEfficientOrder().toString(), new LinkedList<>().toString());
     }
