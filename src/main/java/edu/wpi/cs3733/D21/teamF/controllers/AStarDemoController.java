@@ -1327,6 +1327,27 @@ public class AStarDemoController extends AbsController implements Initializable 
         isCurrentlyNavigating.set(true);
 
         parseRoute();
+
+        // Add additional instruction to notice arrive of a stop
+        List<Vertex> allStops = new ArrayList<>();
+        allStops.add(pathVertex.get(0));
+        allStops.addAll(vertices);
+        allStops.add(pathVertex.get(pathVertex.size()-1));
+        if(allStops.size() > 2){
+            if(optimize.isSelected())
+                allStops = graph.getEfficientOrder(allStops.toArray(new Vertex[0]));
+            for(int i = 1; i < allStops.size() - 1; i++){
+                for(int j = 0; j < stopsList.size(); j++){
+                    if(allStops.get(i).getID().equals(pathVertex.get(stopsList.get(j)).getID())){
+                        stopsList.add(j, stopsList.get(j));
+                        instructionsList.add(j, "Reached " + idToShortName(allStops.get(i).getID()));
+                        etaList.add(j, etaList.get(j));
+                        break;
+                    }
+                }
+            }
+        }
+
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
         if(userNodeDisplay != null)
