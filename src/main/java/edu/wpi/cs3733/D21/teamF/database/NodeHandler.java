@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import org.apache.derby.impl.sql.catalog.DD_Version;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NodeHandler implements DatabaseEntry {
+    public String genNodeDescription(String[] values){
+        final String description = "The node ID is, " + values[0] + " located on floor, " + values[1] + "\nIn building, " +
+                values[2] + " of type " + values[3] + "\nWith long and short names, " + values[4] + ", " + values[5];
+        return description;
+    }
     /**
      * {@inheritDoc}
      */
@@ -17,11 +23,14 @@ public class NodeHandler implements DatabaseEntry {
     public boolean addEntry(String[] colValues) throws SQLException {
         final String query = "INSERT INTO AllNodes values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+        final String description = DatabaseAPI.getDatabaseAPI().makeNodeDescription(colValues);
         int colCounter = 1;
         for (String s : colValues){
             stmt.setString(colCounter, s);
             colCounter = colCounter + 1;
         }
+        colCounter = 9;
+        stmt.setString(colCounter, description);
         return stmt.executeUpdate() != 0;
     }
 

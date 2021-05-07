@@ -41,6 +41,10 @@ public class DatabaseAPI {
         nodeHandler.populateTable(entries);
     }
 
+    public String makeNodeDescription(String[] values){
+        return ((NodeHandler)this.nodeHandler).genNodeDescription(values);
+    }
+
     public boolean addNode(String...colValues) throws SQLException {
         for (String s: colValues){
             if (!(this.filterInput(s))){
