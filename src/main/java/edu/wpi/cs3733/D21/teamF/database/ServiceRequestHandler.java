@@ -28,7 +28,7 @@ public class ServiceRequestHandler implements DatabaseEntry {
     @Override
     public boolean editEntry(String id, String newVal, String colName) throws Exception{
         if (colName.equals("name") || colName.equals("assignedperson") || colName.equals("completed") ||
-        colName.equals("Additional instructions")) {
+        colName.equals("additionalInstructions")) {
             String query = String.format("UPDATE service_requests SET %s=(?) WHERE uuid=(?)", colName);
             try {
                 PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
@@ -100,7 +100,7 @@ public class ServiceRequestHandler implements DatabaseEntry {
      */
     public ServiceEntry getServiceRequest(String value, String colName) throws SQLException{
         if (colName.equals("uuid") || colName.equals("name") || colName.equals("assignedperson") || colName.equals("completed") ||
-                colName.equals("Additional instructions")) {
+                colName.equals("additionalInstructions")) {
             final String sql = "SELECT * FROM SERVICE_REQUESTS WHERE " + colName + "=(?)";
             final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
             stmt.setString(1, value);
