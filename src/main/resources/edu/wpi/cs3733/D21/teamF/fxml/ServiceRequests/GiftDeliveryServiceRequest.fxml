@@ -62,8 +62,8 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <JFXDatePicker defaultColor="#03256c" GridPane.columnIndex="1" />
-                        <JFXTimePicker defaultColor="#03256c" prefHeight="25.0" prefWidth="148.0" GridPane.columnIndex="2" />
+                        <JFXDatePicker fx:id="dateField" defaultColor="#03256c" GridPane.columnIndex="1" />
+                        <JFXTimePicker fx:id="timeField" defaultColor="#03256c" prefHeight="25.0" prefWidth="148.0" GridPane.columnIndex="2" />
                         <Label prefHeight="21.0" prefWidth="131.0" text="Schedule Delivery:">
                            <font>
                               <Font size="15.0" />
@@ -111,12 +111,12 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <JFXCheckBox checkedColor="#f0c808" text="Teddy Bear" unCheckedColor="#03256c" GridPane.columnIndex="1" />
-                        <JFXCheckBox checkedColor="#f0c808" text="Puzzles" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <JFXCheckBox checkedColor="#f0c808" text="Balloons" unCheckedColor="#03256c" GridPane.columnIndex="2" />
-                        <JFXCheckBox checkedColor="#f0c808" text="Blanket" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <JFXCheckBox checkedColor="#f0c808" text="Deck of Cards" unCheckedColor="#03256c" GridPane.columnIndex="3" />
-                        <JFXCheckBox checkedColor="#f0c808" text="Magazines" unCheckedColor="#03256c" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <JFXCheckBox fx:id="tbCheckBox" checkedColor="#f0c808" text="Teddy Bear" unCheckedColor="#03256c" GridPane.columnIndex="1" />
+                        <JFXCheckBox fx:id="puzzlesCheckBox" checkedColor="#f0c808" text="Puzzles" unCheckedColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <JFXCheckBox fx:id="balloonsCheckBox" checkedColor="#f0c808" text="Balloons" unCheckedColor="#03256c" GridPane.columnIndex="2" />
+                        <JFXCheckBox fx:id="blanketCheckBox" checkedColor="#f0c808" text="Blanket" unCheckedColor="#03256c" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <JFXCheckBox fx:id="cardsCheckBox" checkedColor="#f0c808" text="Deck of Cards" unCheckedColor="#03256c" GridPane.columnIndex="3" />
+                        <JFXCheckBox fx:id="magazinesCheckBox" checkedColor="#f0c808" text="Magazines" unCheckedColor="#03256c" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </children>
