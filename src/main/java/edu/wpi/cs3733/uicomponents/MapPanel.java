@@ -4,14 +4,17 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXSlider;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -55,6 +58,8 @@ public class MapPanel extends AnchorPane {
     private final StringProperty floor = new SimpleStringProperty("1");
     private final ObjectProperty<String> fp = new SimpleObjectProperty<>();
 
+
+    private final BooleanProperty navigating = new SimpleBooleanProperty(false);
 
     //FIXME: DO BETTER!
     private final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
@@ -140,8 +145,12 @@ public class MapPanel extends AnchorPane {
         zoomOutButton.setOnAction(this::handleZoom);
 
         // Set button fonts - LM
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.hbarPolicyProperty().bind(Bindings.when(navigating)
+                .then(ScrollPane.ScrollBarPolicy.NEVER).otherwise(ScrollPane.ScrollBarPolicy.AS_NEEDED));
+        scroll.vbarPolicyProperty().bind(Bindings.when(navigating)
+                .then(ScrollPane.ScrollBarPolicy.NEVER).otherwise(ScrollPane.ScrollBarPolicy.AS_NEEDED));
+        floorSlider.disableProperty().bind(Bindings.when(navigating).then(true).otherwise(false));
+
         map.setPreserveRatio(true);
 
 
@@ -326,5 +335,17 @@ public class MapPanel extends AnchorPane {
     public void showDialog(JFXDialog dialog)
     {
         dialog.show(stackPane);
+    }
+
+    EventHandler<ScrollEvent> consume = event -> event.consume();
+
+    public void disableInteract(){
+        navigating.setValue(true);
+        scroll.addEventFilter(ScrollEvent.ANY, consume);
+    }
+
+    public void enableInteract() {
+        navigating.setValue(false);
+        scroll.removeEventFilter(ScrollEvent.ANY, consume);
     }
 }
