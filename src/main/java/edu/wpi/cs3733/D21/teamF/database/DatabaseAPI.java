@@ -41,6 +41,10 @@ public class DatabaseAPI {
         nodeHandler.populateTable(entries);
     }
 
+    public String makeNodeDescription(String[] values){
+        return ((NodeHandler)this.nodeHandler).genNodeDescription(values);
+    }
+
     public boolean addNode(String...colValues) throws SQLException {
         for (String s: colValues){
             if (!(this.filterInput(s))){
@@ -144,8 +148,8 @@ public class DatabaseAPI {
         return s.genServiceRequestEntries();
     }
 
-    public ServiceEntry getServiceEntry(String uuid) throws SQLException{
-        return ((ServiceRequestHandler)this.serviceRequestHandler).getServiceRequest(uuid);
+    public ServiceEntry getServiceEntry(String value, String colName) throws SQLException{
+        return ((ServiceRequestHandler)this.serviceRequestHandler).getServiceRequest(value, colName);
     }
 
     public boolean addUser(String...colValues) throws SQLException{
