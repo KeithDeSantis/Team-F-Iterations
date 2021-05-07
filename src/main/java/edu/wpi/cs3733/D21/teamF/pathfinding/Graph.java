@@ -1,5 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.pathfinding;
 
+import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
+import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.pathfinding.algorithms.*;
 
 import java.util.*;
@@ -8,6 +10,9 @@ public class Graph {
     private final List<Edge> edges;
     private final HashMap<String, Vertex> vertices;
 
+    private List<NodeEntry> nodeEntries;
+    private List<EdgeEntry> edgeEntries;
+
     private IPathfindingAlgorithm pathfindingAlgorithm;
 
     /**
@@ -15,11 +20,86 @@ public class Graph {
      * @author Tony Vuolo
      */
     private Graph() {
-        this.edges = new LinkedList<>();
+        this.edges = new LinkedList<>(); //FIXME: CHECK TYPE
         this.vertices = new HashMap<>();
 
         //Default to A*
         this.pathfindingAlgorithm = new AStarImpl();
+    }
+
+    public void clear()
+    {
+        this.edges.clear();
+        this.vertices.clear();
+
+        this.nodeEntries = null;
+        this.edgeEntries = null;
+    }
+
+    public List<NodeEntry> getNodeEntries() {
+        return nodeEntries;
+    }
+
+    public List<EdgeEntry> getEdgeEntries() {
+        return edgeEntries;
+    }
+
+    public void load(List<NodeEntry> nodeEntries, List<EdgeEntry> edgeEntries) throws Exception
+    {
+
+        this.nodeEntries = nodeEntries;
+        this.edgeEntries = edgeEntries;
+        //I would use a HashSet, but HashSets use HashMaps anyways, so this just makes sense.
+        final HashMap<String, Vertex> vertices = new HashMap<>();
+
+
+
+
+        for(NodeEntry nodeEntry : nodeEntries)
+        {
+            //Each line going to be same length b/c of how CSVReader works.
+
+            try {
+                final String nodeID = nodeEntry.getNodeID();
+
+                if(vertices.get(nodeID) != null)
+                    throw new Exception("nodesCVS lists the same vertex twice: " + nodeID);
+
+                final int xCoordinate = Integer.parseInt(nodeEntry.getXCoordinate());
+                final int yCoordinate = Integer.parseInt(nodeEntry.getYCoordinate());
+
+                final Vertex currVertex = new Vertex(nodeID, xCoordinate, yCoordinate, nodeEntry.getFloor());
+                vertices.put(nodeID, currVertex);
+
+                addVertex(currVertex);
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Incorrect node CSV format: " + e.getMessage());
+            }
+        }
+
+
+        //Read in all the edges.
+        for(EdgeEntry edgeEntry : edgeEntries)
+        {
+            final String edgeID = edgeEntry.getEdgeID(); //Currently unused, but will be taken out by compiler anyways.
+
+            final String startNode = edgeEntry.getStartNode();
+            final String endNode = edgeEntry.getEndNode();
+
+            final Vertex startVertex = vertices.get(startNode);
+            if(startVertex == null)
+                throw new Exception("In edge: " + edgeID + ", start vertex (" + startNode + ") is undefined.");
+
+            final Vertex endVertex = vertices.get(endNode);
+            if(endVertex == null)
+                throw new Exception("In edge: " + edgeID + ", end vertex (" + endNode + ") is undefined.");
+
+            final Edge edge = new Edge(startVertex, endVertex); //Edge will automatically add itself to each of the vertices
+
+            addEdge(edge);
+        }
     }
 
     /**
@@ -309,5 +389,14 @@ public class Graph {
             }
         }
         return true;
+    }
+
+
+    private static class GraphSingletonHelper{
+        private static final Graph graph = new Graph();
+    }
+
+    public static Graph getGraph(){
+        return GraphSingletonHelper.graph;
     }
 }

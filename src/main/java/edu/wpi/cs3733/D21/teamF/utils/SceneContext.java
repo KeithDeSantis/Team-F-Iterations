@@ -28,9 +28,20 @@ public class SceneContext {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(fxml));
         this.controller = loader.getController();
-        Parent root = loader.load();
-        stage.setScene(new Scene(root));
-        stage.show();
+        final Thread thread = new Thread(() -> {
+            try {
+                final Parent root = loader.load();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        thread.start();
+//        Parent root = loader.load();
+//        stage.setScene(new Scene(root));
+//        stage.show();
     }
 
     public void loadDefault() throws IOException {

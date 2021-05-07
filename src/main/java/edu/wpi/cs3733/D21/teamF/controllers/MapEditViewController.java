@@ -9,6 +9,7 @@ import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
@@ -125,15 +126,16 @@ public class MapEditViewController extends AbsController {
         hamTransition = new HamburgerBackArrowBasicTransition(hamburger);
         hamTransition.setRate(-1);
 
-        // Node initialization
-        List<NodeEntry> data = new ArrayList<>();
-        try {
-            NodeHandler newNodeHandler = new NodeHandler();
-            data = newNodeHandler.genNodeEntryObjects();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if(Graph.getGraph().getEdgeEntries() == null)
+        {
+            try {
+                Graph.getGraph().load(DatabaseAPI.getDatabaseAPI().genNodeEntries(), DatabaseAPI.getDatabaseAPI().genEdgeEntries());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(node -> {
+
+        Graph.getGraph().getNodeEntries().stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(node -> {
             mapPanel.draw(getEditableNode(node));
 
             nodeEntryObservableList.add(node);
@@ -197,15 +199,7 @@ public class MapEditViewController extends AbsController {
         searchComboBox.setItems(searchables);
         searchComboBox.setValue("Node ID");
 
-        // Edge initialization
-        List<EdgeEntry> edgeData = new ArrayList<>();
-        try {
-            EdgeHandler newEdgeHandler = new EdgeHandler();
-            edgeData = newEdgeHandler.genEdgeEntryObjects();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        edgeEntryObservableList.addAll(edgeData.stream().sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
+        edgeEntryObservableList.addAll(Graph.getGraph().getEdgeEntries().stream().sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
 
 
         // Set up cell factory for the edge ID table

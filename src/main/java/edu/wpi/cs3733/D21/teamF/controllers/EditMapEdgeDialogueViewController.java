@@ -6,7 +6,6 @@ import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
-import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,21 +41,26 @@ public class EditMapEdgeDialogueViewController extends AbsController {
     @FXML
     private void initialize(){
         // Load in fonts
-        Graph graph = new Graph();
-        try {
-            List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
-            List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
+        System.out.println("T0: " + System.currentTimeMillis());
+        if(Graph.getGraph().getNodeEntries() == null) {
+            try {
+                List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
+                List<EdgeEntry> edgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
 
-            graph = GraphLoader.load(nodeEntries, edgeEntries);
-        } catch (Exception e) {
-            e.printStackTrace();
-            //return;
+                Graph.getGraph().load(nodeEntries, edgeEntries);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //return;
+            }
         }
+        System.out.println("T1: " + System.currentTimeMillis());
         final ObservableList<String> nodeList = FXCollections.observableArrayList();
-        nodeList.addAll(graph.getVertices().stream().map(Vertex::getID)
+        nodeList.addAll(Graph.getGraph().getVertices().stream().map(Vertex::getID)
                 .sorted().collect(Collectors.toList()));
+        System.out.println("T2: " + System.currentTimeMillis());
         this.startNode.setItems(nodeList);
         this.endNode.setItems(nodeList);
+        System.out.println("T3: " + System.currentTimeMillis());
     }
 
     /**

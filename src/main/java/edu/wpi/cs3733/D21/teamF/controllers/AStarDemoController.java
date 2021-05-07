@@ -3,10 +3,8 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
-import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Graph;
-import edu.wpi.cs3733.D21.teamF.pathfinding.GraphLoader;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Path;
 import edu.wpi.cs3733.D21.teamF.pathfinding.Vertex;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
@@ -102,9 +100,6 @@ public class AStarDemoController extends AbsController implements Initializable 
     @FXML
     private JFXTreeView<String> treeView;
 
-    //FIXME: DO BETTER
-    private Graph graph;
-
     private final int MAX_RECENTLY_USED = 5;
 
     private static final double PIXEL_TO_METER_RATIO = 10;
@@ -119,8 +114,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     // Global variables for the stepper
     private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
-
-    private List<NodeEntry> allNodeEntries = new ArrayList<>();
 
     private final BooleanProperty isCurrentlyNavigating = new SimpleBooleanProperty(false);
     private final ObservableList<Integer> stopsList = FXCollections.observableArrayList();
@@ -166,15 +159,16 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         //ahf - yes this should be done better. At some point.
 
-        try {
-            allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
-            List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
-            this.graph = GraphLoader.load(allNodeEntries, allEdgeEntries);
-        } catch (Exception e) {
-            this.graph = new Graph();
-            e.printStackTrace();
+        System.out.println("N0: " + System.currentTimeMillis());
+        if(Graph.getGraph().getNodeEntries() == null)
+        {
+            try {
+                Graph.getGraph().load(DatabaseAPI.getDatabaseAPI().genNodeEntries(), DatabaseAPI.getDatabaseAPI().genEdgeEntries());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
+        System.out.println("N1: " + System.currentTimeMillis());
 
         try {
             final String algorithmFromAPI = DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm();
@@ -182,17 +176,17 @@ public class AStarDemoController extends AbsController implements Initializable 
             if(algorithmFromAPI == null)
                 DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", "A Star"); //We default to A* if noting explicitly set
             else
-                graph.setPathfindingAlgorithm(algorithmFromAPI);
+                Graph.getGraph().setPathfindingAlgorithm(algorithmFromAPI);
 
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-
+        System.out.println("N2: " + System.currentTimeMillis());
 
 
 
         List<String> shortNameList = new ArrayList<>();
-        for(Vertex vertex : this.graph.getVertices()){
+        for(Vertex vertex : Graph.getGraph().getVertices()){
             NodeEntry node = findNodeEntry(vertex.getID());
             if (node == null) { continue; } // Error checking
             if(!node.getNodeType().equals("HALL")){
@@ -204,8 +198,10 @@ public class AStarDemoController extends AbsController implements Initializable 
                 }
             }
         }
+        System.out.println("N4: " + System.currentTimeMillis());
         nodeList.addAll(shortNameList.stream().sorted().collect(Collectors.toList()));
 
+        System.out.println("N5: " + System.currentTimeMillis());
         isCurrentlyNavigating.set(false);
 
         final ContextMenu contextMenu = new ContextMenu();
@@ -225,6 +221,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             contextMenu.getItems().add(addFavoriteMenu);
         }
 
+        System.out.println("N6: " + System.currentTimeMillis());
         mapPanel.getMap().setOnContextMenuRequested(event -> {
                     if (isCurrentlyNavigating.get()) {
                         return;
@@ -240,7 +237,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                     whatsHereMenu.setText("What's Here?");
 
                     // Set add stop text to make sense
-                    if (vertices.contains(graph.getVertex(currEntry.getNodeID()))) {
+                    if (vertices.contains(Graph.getGraph().getVertex(currEntry.getNodeID()))) {
                         addStopMenu.setText("Remove Stop");
                     } else {
                         addStopMenu.setText("Add Stop");
@@ -275,7 +272,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                     // No combo box update so we call checkInput()
                     addStopMenu.setOnAction(e -> {
                         if (addStopMenu.getText().equals("Add Stop")) {
-                            vertices.add(graph.getVertex(currEntry.getNodeID()));
+                            vertices.add(Graph.getGraph().getVertex(currEntry.getNodeID()));
                             drawStop(currEntry);
                             try {
                                 addNodeToRecent(currEntry);
@@ -283,7 +280,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                                 sqlException.printStackTrace();
                             }
                         } else {
-                            vertices.remove(graph.getVertex(currEntry.getNodeID()));
+                            vertices.remove(Graph.getGraph().getVertex(currEntry.getNodeID()));
                             mapPanel.unDraw(currEntry.getNodeID());
                             getDrawableNode(currEntry.getNodeID());
                         }
@@ -395,7 +392,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                         }
                     });
                 });
-
+        System.out.println("N7: " + System.currentTimeMillis());
         Go.setDisable(true);
         Prev.setVisible(false);
         Next.setVisible(false);
@@ -429,13 +426,14 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         mapPanel.draw(this.userNodeDisplay);
 
-        for(NodeEntry e : allNodeEntries)
+        for(NodeEntry e : Graph.getGraph().getNodeEntries())
           getDrawableNode(e.getNodeID());
 
+        System.out.println("N8: " + System.currentTimeMillis());
         //~~~~~~~~~ Tree View Setup ~~~~~~~~
 
         // categorize node short names and add them to appropriate tree view (root items declared before initialize)
-        for (NodeEntry node: allNodeEntries) {
+        for (NodeEntry node: Graph.getGraph().getNodeEntries()) {
             switch (node.getNodeType()){
                 case "CONF":
                     conferenceItem.getChildren().add(new TreeItem<>(node.getShortName()));
@@ -467,6 +465,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             }
         }
 
+        System.out.println("N9: " + System.currentTimeMillis());
 
         // add tree items to root item (shown in order of addition)
         rootTreeViewItem.getChildren().addAll(conferenceItem, departmentItem, entranceItem, infoItem,
@@ -491,6 +490,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             }
         }
 
+        System.out.println("N11: " + System.currentTimeMillis());
         // Set the root item
         treeView.setRoot(rootTreeViewItem);
 
@@ -509,7 +509,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             whatsHereMenu.setText("What's This?");
 
             // Swap text on the add stop item based on if selected node in in the list
-            if(vertices.contains(graph.getVertex(currEntry.getNodeID()))){
+            if(vertices.contains(Graph.getGraph().getVertex(currEntry.getNodeID()))){
                 addStopMenu.setText("Remove Stop");
             } else {
                 addStopMenu.setText("Add Stop");
@@ -545,7 +545,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             // No combo box update so we call checkInput()
             addStopMenu.setOnAction(e -> {
                 if(addStopMenu.getText().equals("Add Stop")) {
-                    vertices.add(graph.getVertex(currEntry.getNodeID()));
+                    vertices.add(Graph.getGraph().getVertex(currEntry.getNodeID()));
                     drawStop(currEntry);
                     try {
                         addNodeToRecent(currEntry);
@@ -553,7 +553,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                         sqlException.printStackTrace();
                     }
                 } else {
-                    vertices.remove(graph.getVertex(currEntry.getNodeID()));
+                    vertices.remove(Graph.getGraph().getVertex(currEntry.getNodeID()));
                     mapPanel.unDraw(currEntry.getNodeID());
                     getDrawableNode(currEntry.getNodeID());
                 }
@@ -660,8 +660,9 @@ public class AStarDemoController extends AbsController implements Initializable 
                 }
             });
         });
+        System.out.println("N12: " + System.currentTimeMillis());
 
-        if(CurrentUser.getCurrentUser().getUuid() != null)
+        if(CurrentUser.getCurrentUser().getUuid() != null) //FIXME: TODO: MAKE CONFIGURABLE
         {
             try {
                 if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false"))
@@ -697,7 +698,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     }
 
     private String shortNameToID(String shortName){
-        for(NodeEntry node : allNodeEntries) {
+        for(NodeEntry node : Graph.getGraph().getNodeEntries()) {
             if (node.getShortName().equals(shortName)) {
                 return node.getNodeID();
             }
@@ -909,8 +910,8 @@ public class AStarDemoController extends AbsController implements Initializable 
      */
     private boolean updatePath()
     {
-        final Vertex startVertex = this.graph.getVertex(shortNameToID(startNode.getValue()));
-        final Vertex endVertex = this.graph.getVertex(shortNameToID(endNode.getValue()));
+        final Vertex startVertex = Graph.getGraph().getVertex(shortNameToID(startNode.getValue()));
+        final Vertex endVertex = Graph.getGraph().getVertex(shortNameToID(endNode.getValue()));
 
 
         List<Vertex> pathVertices = new ArrayList<>();
@@ -936,9 +937,9 @@ public class AStarDemoController extends AbsController implements Initializable 
 
 
             if(optimize.isSelected()) {
-                path = this.graph.getUnorderedPath(pathVertices);
+                path = Graph.getGraph().getUnorderedPath(pathVertices);
             } else {
-                path = this.graph.getPath(pathVertices);
+                path = Graph.getGraph().getPath(pathVertices);
             }
 
 
@@ -1044,7 +1045,7 @@ public class AStarDemoController extends AbsController implements Initializable 
      * @author ZheCheng Song
      */
     private NodeEntry findNodeEntry(String nodeID){
-        for(NodeEntry n : allNodeEntries){
+        for(NodeEntry n : Graph.getGraph().getNodeEntries()){
             if (n.getNodeID().equals(nodeID)) {
                 return n;
             }
@@ -1335,7 +1336,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         allStops.add(pathVertex.get(pathVertex.size()-1));
         if(allStops.size() > 2){
             if(optimize.isSelected())
-                allStops = graph.getEfficientOrder(allStops.toArray(new Vertex[0]));
+                allStops = Graph.getGraph().getEfficientOrder(allStops.toArray(new Vertex[0]));
             for(int i = 1; i < allStops.size() - 1; i++){
                 for(int j = 0; j < stopsList.size(); j++){
                     if(allStops.get(i).getID().equals(pathVertex.get(stopsList.get(j)).getID())){
@@ -1725,7 +1726,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         mapPanel.clearMap();
         Go.setDisable(true);
 
-        for(NodeEntry e : allNodeEntries)
+        for(NodeEntry e : Graph.getGraph().getNodeEntries())
             getDrawableNode(e.getNodeID());
 
         if(pathVertex.size() != 0) {
