@@ -365,9 +365,12 @@ public class AStarDemoController extends AbsController implements Initializable 
                                 dialog.close();
                             });
 
-                            layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+                            layout.setActions(toggleFavorite, directionsFrom, closeBtn);
                         } else {
-                            layout.setActions(directionsTo, directionsFrom, closeBtn);
+                            layout.setActions(directionsFrom, closeBtn);
+                        }
+                        if(!filterNodes){
+                            layout.getActions().add(layout.getActions().size() - 2, directionsTo);
                         }
 
 
@@ -590,6 +593,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 final JFXButton closeBtn = new JFXButton("Close");
                 closeBtn.setOnAction(a -> dialog.close());
 
+
                 final JFXButton directionsTo = new JFXButton("Direction To");
                 directionsTo.setOnAction(a -> {
                     endNode.set(idToShortName(currEntry.getNodeID()));
@@ -635,9 +639,12 @@ public class AStarDemoController extends AbsController implements Initializable 
                         }
                         dialog.close();
                     });
-                    layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+                    layout.setActions(toggleFavorite, directionsFrom, closeBtn);
                 } else {
-                    layout.setActions(directionsTo, directionsFrom, closeBtn);
+                    layout.setActions(directionsFrom, closeBtn);
+                }
+                if(!filterNodes){
+                    layout.getActions().add(layout.getActions().size()-3, directionsTo);
                 }
                 dialog.setContent(layout);
                 mapPanel.showDialog(dialog);
@@ -663,15 +670,12 @@ public class AStarDemoController extends AbsController implements Initializable 
             if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "additionalInstructions").getCompleteStatus().equals("false")) {
                 if (DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "uuid").getCompleteStatus().equals("false")) {
                     endNode.set(idToShortName("FEXIT00301"));
-                    contextMenu.getItems().remove(endPathMenu);
-                    contextMenu.getItems().remove(addStopMenu);
-                    filterNodes = true;
                 } else {
                     endNode.set(idToShortName("FEXIT00201"));
-                    contextMenu.getItems().remove(endPathMenu);
-                    contextMenu.getItems().remove(addStopMenu);
-                    filterNodes = true;
                 }
+                contextMenu.getItems().remove(endPathMenu);
+                contextMenu.getItems().remove(addStopMenu);
+                filterNodes = true;
             }
         } catch (SQLException exception) {
             exception.printStackTrace();

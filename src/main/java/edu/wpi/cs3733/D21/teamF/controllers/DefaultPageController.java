@@ -44,10 +44,6 @@ public class DefaultPageController extends AbsController {
     private JFXButton editMap;
     @FXML
     private Label loginLabel;
-    @FXML
-    JFXTextField verifyAgain;
-    @FXML private VBox buttons;
-    @FXML private VBox covidBox;
 
     @FXML private void initialize(){
         loginButton.setDisableVisualFocus(true);
@@ -59,7 +55,7 @@ public class DefaultPageController extends AbsController {
 
     private void resetButtons(){
         AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
-        if(user != null && CurrentUser.getCurrentUser().getUuid() != null) {
+        if(user != null && CurrentUser.getCurrentUser().isAuthenticated()) {
             switch (user.getUserType()){
                 case "administrator":
                     manageServices.setManaged(true);
