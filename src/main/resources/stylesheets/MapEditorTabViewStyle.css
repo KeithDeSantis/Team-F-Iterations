@@ -1,9 +1,15 @@
 .tab-pane {
     -fx-background-color: transparent;
+    -fx-tab-min-width: 145px;
+}
+
+.tab-header-area {
+    -fx-background-color: #e6e6e6;
 }
 
 .tab-header-background {
     -fx-opacity: 0;
+    -fx-background-color: transparent;
 }
 
 .tab .tab-label {
@@ -12,6 +18,7 @@
     -fx-background-color: #03256C;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
+    -fx-tab-min-width: 145px;
 }
 
 .tab:selected .tab-label {
