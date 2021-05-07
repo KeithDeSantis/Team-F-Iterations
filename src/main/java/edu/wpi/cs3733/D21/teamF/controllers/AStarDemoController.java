@@ -312,11 +312,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                         layout.setHeading(new Text(currEntry.getLongName()));
 
                         //FIXME: DO BREAKS W/ CSS
-                        layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
-                                "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
-                                "may also be prone to contain information about running to the second arrangement (it's only the\n" +
-                                "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
-                                "avenue by Radio City."));
+                        layout.setBody(new Text(currEntry.getDescription()));
 
                         final JFXButton closeBtn = new JFXButton("Close");
                         closeBtn.setOnAction(a -> dialog.close());
@@ -582,11 +578,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 layout.setHeading(new Text(currEntry.getLongName()));
 
                 //FIXME: DO BREAKS W/ CSS
-                layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
-                        "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
-                        "may also be prone to contain information about running to the second arrangement (it's only the\n" +
-                        "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
-                        "avenue by Radio City."));
+                layout.setBody(new Text(currEntry.getDescription()));
 
                 final JFXButton closeBtn = new JFXButton("Close");
                 closeBtn.setOnAction(a -> dialog.close());
