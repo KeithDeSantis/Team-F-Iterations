@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.LoginController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox fx:id="header" prefHeight="100.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
          <children>
@@ -19,7 +19,7 @@
                </image>
             </ImageView>
 
-            <Label fx:id="title" prefHeight="117.0" prefWidth="638.0" text="Brigham and Women's Hospital Login" textFill="#03256c" wrapText="true">
+            <Label fx:id="title" prefHeight="117.0" prefWidth="638.0" text="Brigham and Women's Hospital | Fuchsia Falcons Kiosk" textFill="#03256c" wrapText="true">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
