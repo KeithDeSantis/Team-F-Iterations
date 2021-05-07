@@ -11,14 +11,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -34,10 +40,9 @@ public class AccountManagerController extends AbsController implements Initializ
     private JFXButton addUser;
     @FXML
     private JFXButton home;
-
     @FXML
     private JFXTreeTableView<AccountEntry> accountView;
-    private final ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
+    private ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
 
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -122,7 +127,7 @@ public class AccountManagerController extends AbsController implements Initializ
         accountView.setEditable(true);
     }
 
-    public void handleButtonPushed(ActionEvent actionEvent) throws Exception {
+    public void handleButtonPushed(ActionEvent actionEvent) throws SQLException, IOException {
         JFXButton buttonPushed = (JFXButton) actionEvent.getSource();
         if (buttonPushed == quit){
             SceneContext.getSceneContext().loadDefault();
@@ -130,25 +135,41 @@ public class AccountManagerController extends AbsController implements Initializ
         else if (buttonPushed == deleteUser && accountView.getSelectionModel().getSelectedIndex() >= 0){
             AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
             DatabaseAPI.getDatabaseAPI().deleteUser(user.getUsername());
+            accounts.remove(user);
         }
-        else if (buttonPushed == addUser && !addUsername.getText().isEmpty() && !addPassword.getText().isEmpty() && !(newUserType.getValue()==null)){
+        else if (buttonPushed == addUser){
 
-            String userName = addUsername.getText();
-            String pass = addPassword.getText();
-            String type = newUserType.getValue();
+            AccountEntry newAccount = new AccountEntry("","","","");
 
-            DatabaseAPI.getDatabaseAPI().addUser(userName, type, userName, pass, "true");
-            AccountEntry newUser = new AccountEntry(userName, pass, type, "true");
-            accounts.add(newUser);
-            refreshPage();
+            openNewDialog(newAccount);
+
+            if(!(newAccount.getUsername().isEmpty() || newAccount.getPassword().isEmpty() || newAccount.getUserType().isEmpty() || newAccount.getCovidStatus().isEmpty())) {
+                DatabaseAPI.getDatabaseAPI().addUser(newAccount.getUsername(), newAccount.getUserType(), newAccount.getUsername(), newAccount.getUserType(), newAccount.getCovidStatus());
+                accounts.add(newAccount);
+                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
+            }
         }
         else if (buttonPushed == home){
             SceneContext.getSceneContext().loadDefault();
         }
     }
 
-    private void refreshPage() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
+    public void openNewDialog(AccountEntry newAccount) throws IOException {
+        FXMLLoader dialogLoader = new FXMLLoader();
+        dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerNewUserDialog.fxml")); // load in Edit Dialog - KD
+        Stage dialogStage = new Stage();
+        Parent root = dialogLoader.load();
+        AccountManagerNewUserDialogController dialogController = dialogLoader.getController();
+        dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
+        dialogStage.initOwner(addUser.getScene().getWindow());
+        dialogStage.setScene(new Scene(root)); // set scene - KD
+        dialogController.setAccounts(accounts);
+        dialogController.setNewAccount(newAccount);
+        dialogStage.showAndWait(); // open pop up - KD
+    }
+
+    public void handleHome() throws IOException {
+        SceneContext.getSceneContext().loadDefault();
     }
 
 }
