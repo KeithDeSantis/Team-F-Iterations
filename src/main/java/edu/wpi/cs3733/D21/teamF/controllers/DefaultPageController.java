@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class DefaultPageController implements IController {
+public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton navigation;
     @FXML

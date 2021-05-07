@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Controller for Form Submitted Pop Up
  */
-public class FormSubmittedViewController implements IController {
+public class FormSubmittedViewController extends AbsController {
     Stage previousStage = new Stage();
     @FXML private JFXButton okButton;
 
