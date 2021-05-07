@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
+import org.apache.derby.iapi.util.ByteArray;
 
 public class AccountManagerNewUserDialogController {
 
@@ -20,7 +21,7 @@ public class AccountManagerNewUserDialogController {
     @FXML
     private JFXComboBox<String> userTypeComboBox;
 
-    private AccountEntry newAccount = new AccountEntry("","","","");
+    private AccountEntry newAccount = new AccountEntry("","","","", null);
 
     private ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
 

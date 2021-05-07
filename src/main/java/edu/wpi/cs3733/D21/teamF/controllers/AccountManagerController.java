@@ -5,6 +5,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -75,7 +76,8 @@ public class AccountManagerController extends AbsController implements Initializ
             public void handle(TreeTableColumn.CellEditEvent<AccountEntry, String> event) {
                 TreeItem<AccountEntry> selectedAccount = accountView.getTreeItem(event.getTreeTablePosition().getRow());
                 try {
-                    DatabaseAPI.getDatabaseAPI().editUser(selectedAccount.getValue().getUsername(), "", "password");
+                    String newPass = DatabaseAPI.getDatabaseAPI().getEncryptedPass(event.getNewValue(), selectedAccount.getValue().getSalt());
+                    DatabaseAPI.getDatabaseAPI().editUser(selectedAccount.getValue().getUsername(), newPass, "password");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -138,13 +140,12 @@ public class AccountManagerController extends AbsController implements Initializ
             accounts.remove(user);
         }
         else if (buttonPushed == addUser){
-
-            AccountEntry newAccount = new AccountEntry("","","","");
+            AccountEntry newAccount = new AccountEntry("","","","", null);
 
             openNewDialog(newAccount);
 
             if(!(newAccount.getUsername().isEmpty() || newAccount.getPassword().isEmpty() || newAccount.getUserType().isEmpty() || newAccount.getCovidStatus().isEmpty())) {
-                DatabaseAPI.getDatabaseAPI().addUser(newAccount.getUsername(), newAccount.getUserType(), newAccount.getUsername(), newAccount.getUserType(), newAccount.getCovidStatus());
+                DatabaseAPI.getDatabaseAPI().addUser(newAccount.getUsername(), newAccount.getUserType(), newAccount.getUsername(), newAccount.getPassword(), newAccount.getCovidStatus());
                 accounts.add(newAccount);
                 SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
             }
