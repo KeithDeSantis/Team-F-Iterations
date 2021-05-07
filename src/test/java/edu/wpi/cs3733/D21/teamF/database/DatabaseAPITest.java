@@ -445,12 +445,6 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI.getDatabaseAPI().filterInput("test"));
     }
 
-    @Test
-    @DisplayName("test bad user input")
-    public void testInjectionBad(){
-        assertFalse(DatabaseAPI.getDatabaseAPI().filterInput(")'DROP TABLE USERS--"));
-    }
- @Test
     @DisplayName("test deleting a favorite and recent node")
     public void testDeleteUserNodes() throws SQLException{
         DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node1", "favorite");
