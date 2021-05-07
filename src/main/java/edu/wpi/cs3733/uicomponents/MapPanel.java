@@ -53,10 +53,13 @@ public class MapPanel extends AnchorPane {
 
     private final DoubleProperty INITIAL_WIDTH = new SimpleDoubleProperty();
     private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
+    private final DoubleProperty ASPECT_RATIO = new SimpleDoubleProperty();
 
 
     private final StringProperty floor = new SimpleStringProperty("1");
     private final ObjectProperty<String> fp = new SimpleObjectProperty<>();
+
+    private static final double MIN_ZOOM_LEVEL = 8;
 
 
     private final BooleanProperty navigating = new SimpleBooleanProperty(false);
@@ -154,14 +157,24 @@ public class MapPanel extends AnchorPane {
         map.setPreserveRatio(true);
 
 
-        INITIAL_WIDTH.setValue(F1Image.getWidth());
-        INITIAL_HEIGHT.setValue(F1Image.getHeight());
+        ASPECT_RATIO.set(F1Image.getHeight()/F1Image.getWidth());
 
+
+
+        this.widthProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue.doubleValue());
+        });
+        System.out.println(this.widthProperty().get());
+//        INITIAL_WIDTH.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL));//setValue(F1Image.getWidth());
+//        INITIAL_HEIGHT.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL).multiply(ASPECT_RATIO));//setValue(F1Image.getHeight());
+        INITIAL_WIDTH.setValue(F1Image.getWidth() * 0.5);
+        INITIAL_HEIGHT.setValue(F1Image.getHeight());
 
         stackPane.prefWidthProperty().bind(this.widthProperty());
         stackPane.prefHeightProperty().bind(this.heightProperty());
 
-
+        //Weird....Oh... hmmmm...
+        canvas.setStyle("-fx-background-color: #ff0000"); //Yup. Did it a few times before
         canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
         canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
 
@@ -247,7 +260,7 @@ public class MapPanel extends AnchorPane {
                 zoomLevel.setValue(zoomLevel.get()  - 1);
             }
         } else if (btn == zoomOutButton) {
-            if(zoomLevel.get() < 8) {
+            if(zoomLevel.get() < MIN_ZOOM_LEVEL) {
                 zoomLevel.setValue(zoomLevel.get() + 1);
             }
         }
