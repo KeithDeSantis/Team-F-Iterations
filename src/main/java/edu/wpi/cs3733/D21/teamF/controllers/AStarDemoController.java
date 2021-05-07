@@ -159,9 +159,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        System.out.println(CurrentUser.getCurrentUser().getUuid());
-
         //ahf - yes this should be done better. At some point.
 
         try {
