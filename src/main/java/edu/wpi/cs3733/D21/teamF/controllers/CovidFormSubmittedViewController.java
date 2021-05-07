@@ -56,7 +56,7 @@ public class CovidFormSubmittedViewController extends AbsController {
         String complete = "";
 
         if(ticketID.contains("-")){
-            complete = DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus();
+            complete = DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID, "uuid").getCompleteStatus();
             CurrentUser.getCurrentUser().tempLogin(ticketID);
         }
         else if(CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(enterToCheck.getText())){
