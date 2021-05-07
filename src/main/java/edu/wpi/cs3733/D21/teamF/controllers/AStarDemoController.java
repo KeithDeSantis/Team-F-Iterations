@@ -61,7 +61,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class AStarDemoController implements Initializable, IController {
+public class AStarDemoController extends AbsController implements Initializable {
 
     @FXML
     private ImageView goBack;
@@ -77,6 +77,12 @@ public class AStarDemoController implements Initializable, IController {
 
     @FXML
     private JFXButton Next;
+
+    @FXML
+    private JFXButton about;
+
+    @FXML
+    private JFXButton clear;
 
     @FXML
     private Label Instruction;
@@ -658,7 +664,7 @@ public class AStarDemoController implements Initializable, IController {
         if(CurrentUser.getCurrentUser().getUuid() != null)
         {
             try {
-                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false"))
+                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "uuid").getCompleteStatus().equals("false"))
                     endNode.set(idToShortName("FEXIT00301"));
                 else
                     endNode.set(idToShortName("FEXIT00201"));
@@ -1311,12 +1317,37 @@ public class AStarDemoController implements Initializable, IController {
         Instruction.setVisible(true);
         navIcon.setVisible(true);
         ETA.setVisible(true);
+        treeView.setDisable(true);
+        about.setDisable(true);
+        clear.setDisable(true);
+        mapPanel.disableInteract();
 
         currentStep.set(0);
 
         isCurrentlyNavigating.set(true);
 
         parseRoute();
+
+        // Add additional instruction to notice arrive of a stop
+        List<Vertex> allStops = new ArrayList<>();
+        allStops.add(pathVertex.get(0));
+        allStops.addAll(vertices);
+        allStops.add(pathVertex.get(pathVertex.size()-1));
+        if(allStops.size() > 2){
+            if(optimize.isSelected())
+                allStops = graph.getEfficientOrder(allStops.toArray(new Vertex[0]));
+            for(int i = 1; i < allStops.size() - 1; i++){
+                for(int j = 0; j < stopsList.size(); j++){
+                    if(allStops.get(i).getID().equals(pathVertex.get(stopsList.get(j)).getID())){
+                        stopsList.add(j, stopsList.get(j));
+                        instructionsList.add(j, "Reached " + idToShortName(allStops.get(i).getID()));
+                        etaList.add(j, etaList.get(j));
+                        break;
+                    }
+                }
+            }
+        }
+
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
         if(userNodeDisplay != null)
@@ -1404,6 +1435,10 @@ public class AStarDemoController implements Initializable, IController {
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
         optimize.setDisable(false);
+        treeView.setDisable(false);
+        about.setDisable(false);
+        clear.setDisable(false);
+        mapPanel.enableInteract();
 
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
@@ -1462,8 +1497,8 @@ public class AStarDemoController implements Initializable, IController {
             image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/uTurnYellow.png"));
         }
         else if(curInstruction.contains("stair")){
-            int nextFloor = Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
-            int currentFloor = Integer.parseInt(pathVertex.get(currentStep.get()-1).getFloor());
+            final int nextFloor = mapPanel.getDoubleStringConverter().fromString(curInstruction.substring(curInstruction.length()-1)).intValue();//Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
+            final int currentFloor = mapPanel.getDoubleStringConverter().fromString(pathVertex.get(currentStep.get()-1).getFloor()).intValue();
             if(nextFloor > currentFloor){
                 image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
             } else {

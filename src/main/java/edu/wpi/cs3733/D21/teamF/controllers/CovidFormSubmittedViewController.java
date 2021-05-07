@@ -15,7 +15,7 @@ import java.sql.SQLException;
 /**
  * Controller for Form Submitted Pop Up
  */
-public class CovidFormSubmittedViewController implements IController {
+public class CovidFormSubmittedViewController extends AbsController {
     @FXML private JFXTextField username;
     @FXML private JFXTextField password;
     @FXML private JFXTextField displayUuid;
@@ -56,7 +56,7 @@ public class CovidFormSubmittedViewController implements IController {
         String complete = "";
 
         if(ticketID.contains("-")){
-            complete = DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus();
+            complete = DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID, "uuid").getCompleteStatus();
             CurrentUser.getCurrentUser().tempLogin(ticketID);
         }
         else if(CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(enterToCheck.getText())){

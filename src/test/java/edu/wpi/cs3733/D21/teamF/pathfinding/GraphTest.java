@@ -652,7 +652,8 @@ public class GraphTest {
     }
 
     /**
-     *
+     * Tests Unordered Pair
+     * @author Tony Vuolo (bdane)
      */
     @Test
     public void testUnorderedPair() {
@@ -661,4 +662,15 @@ public class GraphTest {
         assertEquals(5, map.get(new UnorderedPair(2, 4)));
         assertEquals(5, map.get(new UnorderedPair(4, 2)));
     }
+
+    /**
+     * Tests null pointer catching in TSP and getEfficientOrder
+     * @author Tony Vuolo
+     */
+    @Test
+    public void testTSP() {
+        assertNull(this.graph.TSP(null));
+        assertEquals(this.graph.getEfficientOrder().toString(), new LinkedList<>().toString());
+    }
+
 }

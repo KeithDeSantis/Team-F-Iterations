@@ -111,6 +111,9 @@ public class Graph {
      * @return the Path of least weight that will travel to every Vertex in the List in order
      */
     public Path getPath(List<Vertex> v) {
+        if(v == null || v.size() == 0) {
+            return null;
+        }
         Path path = new Path();
         ListIterator<Vertex> iterator = v.listIterator();
         Vertex prev = iterator.next(), current;
@@ -135,7 +138,9 @@ public class Graph {
      * @author Tony Vuolo (bdane)
      */
     public List<Vertex> getEfficientOrder(Vertex... v) {
-        if(v.length <= 8) {
+        if(v.length == 0) {
+            return new LinkedList<>();
+        } else if(v.length <= 8) {
             return TSP(v);
         }
         Path[] paths = new Path[v.length * (v.length - 1) / 2];
@@ -210,6 +215,11 @@ public class Graph {
      * @return the least cost path that intersects all vertices in the array, preserving the first and last in order
      */
     public List<Vertex> TSP(Vertex... v) {
+        if(v == null) {
+            return null;
+        } else if(v.length <= 2) {
+            return new LinkedList<>(Arrays.asList(v));
+        }
         HashMap<UnorderedPair, Path> paths = new HashMap<>();
         for(int i = 0; i < v.length; i++) {
             for(int j = i + 1; j < v.length; j++) {

@@ -11,7 +11,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
-public class ServiceRequestHomeNewController implements IController {
+public class ServiceRequestHomeNewController extends AbsController {
     @FXML private JFXButton Home;
     @FXML private JFXButton facilitiesMaintenance;
     @FXML private JFXButton laundryServices;
