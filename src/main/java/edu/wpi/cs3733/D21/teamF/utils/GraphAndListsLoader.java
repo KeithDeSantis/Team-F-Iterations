@@ -63,6 +63,15 @@ public class GraphAndListsLoader {
         return GraphAndListLoaderSingletonHelper.graphAndListsLoader;
     }
 
+    public void reloadGraph() {
+        try {
+            this.graph = GraphLoader.load(DatabaseAPI.getDatabaseAPI().genNodeEntries(), DatabaseAPI.getDatabaseAPI().genEdgeEntries());
+        } catch (Exception e) {
+            this.graph = new Graph();
+            e.printStackTrace();
+        }
+    }
+
     /*
     public void loadFromDB() {
         // Node initialization

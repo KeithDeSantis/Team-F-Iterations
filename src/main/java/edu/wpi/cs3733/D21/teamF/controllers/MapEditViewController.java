@@ -499,6 +499,7 @@ public class MapEditViewController implements IController {
         handleSearch();
         nodeTreeTable.getSelectionModel().clearSelection();
         edgeTreeTable.getSelectionModel().clearSelection();
+        GraphAndListsLoader.getGraphAndListsLoader().reloadGraph(); // KD this is dumb
     } //FIXME edited node and node disappeared?
 
     /**
@@ -543,6 +544,7 @@ public class MapEditViewController implements IController {
         }
         nodeTreeTable.getSelectionModel().clearSelection();
         edgeTreeTable.getSelectionModel().clearSelection();
+        GraphAndListsLoader.getGraphAndListsLoader().reloadGraph();
     }
 
     /**
@@ -567,6 +569,7 @@ public class MapEditViewController implements IController {
             updateEdgeEntry(newEdge);
         }
         handleSearch();
+        GraphAndListsLoader.getGraphAndListsLoader().reloadGraph();
     }
 
     /**
@@ -1047,6 +1050,8 @@ public class MapEditViewController implements IController {
             }
         }
 
+        GraphAndListsLoader.getGraphAndListsLoader().reloadGraph();
+
     }
 
     private DrawableNode getEditableNode(NodeEntry nodeEntry) {
@@ -1180,6 +1185,7 @@ public class MapEditViewController implements IController {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+        GraphAndListsLoader.getGraphAndListsLoader().reloadGraph();
     }
 
     private void updateNode(String id, int xCoordinate, int yCoordinate)
