@@ -44,14 +44,19 @@ public class DefaultPageController {
 	//Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
     }
-
+    // used to see how to toggle visibility
+//    @FXML
+//    private void handleTestVisibility(ActionEvent actionEvent){
+//        buttons.setVisible(true);
+//        covidBox.setVisible(false);
+//    }
     @FXML
     private void changeButtons() throws SQLException {
         String ticketID = verifyAgain.getText();
         if (CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(verifyAgain.getText()) ||
         DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")){
-            buttons.setStyle("visibility: visible");
-            covidBox.setStyle("visibility: hidden");
+            buttons.setVisible(true);
+            covidBox.setVisible(false);
         }
     }
 
