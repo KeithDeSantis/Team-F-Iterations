@@ -155,6 +155,7 @@ public class DefaultPageController implements IController {
             dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
             dialogStage.initOwner(pathfindingSettingButton.getScene().getWindow());
             dialogStage.setScene(new Scene(root2)); // set scene - KD
+            dialogStage.setTitle("Pathfinding Settings");
             dialogStage.showAndWait();
         }
         else if (buttonPushed == quit) {
