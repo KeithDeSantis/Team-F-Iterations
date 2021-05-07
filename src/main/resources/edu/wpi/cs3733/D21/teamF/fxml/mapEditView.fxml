@@ -23,7 +23,7 @@
    <children>
       <HBox fx:id="header" layoutX="273.0" layoutY="74.0" prefHeight="149.0" prefWidth="1164.0" style="-fx-background-color: #94c4f1;" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="goBack" fitHeight="124.0" fitWidth="121.0" onMouseClicked="#handleHome" preserveRatio="true">
+            <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fx:id="goBack" fitHeight="124.0" fitWidth="121.0" onMouseClicked="#handleHome" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>

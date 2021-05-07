@@ -61,7 +61,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class AStarDemoController implements Initializable, IController {
+public class AStarDemoController extends AbsController implements Initializable {
 
     @FXML
     private ImageView goBack;
@@ -77,6 +77,12 @@ public class AStarDemoController implements Initializable, IController {
 
     @FXML
     private JFXButton Next;
+
+    @FXML
+    private JFXButton about;
+
+    @FXML
+    private JFXButton clear;
 
     @FXML
     private Label Instruction;
@@ -1311,6 +1317,10 @@ public class AStarDemoController implements Initializable, IController {
         Instruction.setVisible(true);
         navIcon.setVisible(true);
         ETA.setVisible(true);
+        treeView.setDisable(true);
+        about.setDisable(true);
+        clear.setDisable(true);
+        mapPanel.disableInteract();
 
         currentStep.set(0);
 
@@ -1404,6 +1414,10 @@ public class AStarDemoController implements Initializable, IController {
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
         optimize.setDisable(false);
+        treeView.setDisable(false);
+        about.setDisable(false);
+        clear.setDisable(false);
+        mapPanel.enableInteract();
 
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
