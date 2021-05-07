@@ -142,7 +142,19 @@ public class DefaultPageController extends AbsController {
         } else if (buttonPushed == manageServices) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManagerView.fxml");
         } else if (buttonPushed == navigation) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+            if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+            } else {
+                FXMLLoader submittedPageLoader = new FXMLLoader();
+                submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
+                Stage submittedStage = new Stage();
+                Parent root = submittedPageLoader.load();
+                Scene submitScene = new Scene(root);
+                submittedStage.setScene(submitScene);
+                submittedStage.setTitle("Check COVID Status");
+                submittedStage.initModality(Modality.APPLICATION_MODAL);
+                submittedStage.showAndWait();
+            }
         } else if (buttonPushed == serviceRequest) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
         } else if (buttonPushed == manageAccount) {

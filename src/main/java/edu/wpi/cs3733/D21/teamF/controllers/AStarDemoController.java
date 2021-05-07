@@ -662,25 +662,25 @@ public class AStarDemoController extends AbsController implements Initializable 
                 }
             });
         });
-
-        if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI()
-        {
-            try {
-                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "uuid").getCompleteStatus().equals("false"))
+        try{
+            if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "additionalInstructions").getCompleteStatus().equals("false")) {
+                if (DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "uuid").getCompleteStatus().equals("false")) {
                     endNode.set(idToShortName("FEXIT00301"));
                     contextMenu.getItems().remove(endPathMenu);
                     contextMenu.getItems().remove(addStopMenu);
                     filterNodes = true;
-            }else{
+                } else {
                     endNode.set(idToShortName("FEXIT00201"));
                     contextMenu.getItems().remove(endPathMenu);
                     contextMenu.getItems().remove(addStopMenu);
                     filterNodes = true;
-            }} catch (SQLException exception) {
-                exception.printStackTrace();
+                }
             }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
+
 
     /**
      * Draws an intermediate stop on the map

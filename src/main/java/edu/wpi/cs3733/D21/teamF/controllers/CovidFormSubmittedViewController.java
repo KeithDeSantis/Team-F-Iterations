@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
@@ -18,7 +17,7 @@ import java.sql.SQLException;
 /**
  * Controller for Form Submitted Pop Up
  */
-public class CovidFormSubmittedViewController implements IController {
+public class CovidFormSubmittedViewController{
     @FXML private JFXTextField enterToCheck;
     @FXML private JFXButton checkButton;
     @FXML private Text waitMessage;
@@ -56,16 +55,9 @@ public class CovidFormSubmittedViewController implements IController {
         String ticketID = enterToCheck.getText();
         String complete = "";
 
-        if(ticketID.contains("-")){
+        if (ticketID.contains("-")) {
             complete = DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID, "uuid").getCompleteStatus();
             CurrentUser.getCurrentUser().tempLogin(ticketID);
-        }
-        else if(CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(enterToCheck.getText())){
-          //  complete = DatabaseAPI.getDatabaseAPI().getUser(ticketID).getCovidStatus();
-        }
-        else{
-            //loginMessage.setStyle("-fx-text-fill: #c60000FF;");
-            enterToCheck.setText("");
         }
         return complete;
     }

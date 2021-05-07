@@ -39,13 +39,17 @@ public class EmployeeAdminLoginController extends AbsController {
             String user = username.getText();
             String pass = password.getText();
 
-            final AccountEntry current = DatabaseAPI.getDatabaseAPI().getUser(user);
-            final boolean isAdmin = current.getUserType().equals("administrator");
-            final boolean isStaff = current.getUserType().equals("employee");
-            if (CurrentUser.getCurrentUser().login(user, pass) && (isAdmin || isStaff)){
-                SceneContext.getSceneContext().loadDefault();
-            }
-            else {
+            try {
+                final AccountEntry current = DatabaseAPI.getDatabaseAPI().getUser(user);
+                final boolean isAdmin = current.getUserType().equals("administrator");
+                final boolean isStaff = current.getUserType().equals("employee");
+                if (CurrentUser.getCurrentUser().login(user, pass) && (isAdmin || isStaff)) {
+                    SceneContext.getSceneContext().loadDefault();
+                } else {
+                    errorMessage.setStyle("-fx-text-fill: #c60000FF;");
+                    password.setText("");
+                }
+            } catch (NullPointerException n) {
                 errorMessage.setStyle("-fx-text-fill: #c60000FF;");
                 password.setText("");
             }

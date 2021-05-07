@@ -52,6 +52,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private JFXCheckBox stayAwake;
     @FXML private JFXCheckBox fever;
     @FXML private JFXTextField generatedID;
+    private ClipboardContent content = new ClipboardContent();
 
 
     /**
@@ -60,9 +61,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     public void initialize(URL location, ResourceBundle resources){
         String ticketNumber = UUID.randomUUID().toString();
         generatedID.setText(ticketNumber);
-        ClipboardContent content = new ClipboardContent();
         content.putString(ticketNumber);
-        Clipboard.getSystemClipboard().setContent(content);
     }
 
     /**
@@ -75,11 +74,9 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             String covidInfo = temperatureField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "", "false", generatedID.getText());
-            ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
+            //ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
             //Copy UUID to users clipboard TODO add explicit button for this
-            ClipboardContent content = new ClipboardContent();
-            content.putString(generatedID.getText());
             Clipboard.getSystemClipboard().setContent(content);
 
             //change view to survey submitted page
