@@ -14,7 +14,7 @@ public class Graph {
      * Creates a new Graph
      * @author Tony Vuolo
      */
-    public Graph() {
+    private Graph() {
         this.edges = new LinkedList<>();
         this.vertices = new HashMap<>();
 
