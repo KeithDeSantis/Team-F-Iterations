@@ -149,9 +149,7 @@ public class AStarDemoController implements Initializable, IController {
     TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
     TreeItem<String> recentItem = new TreeItem<>("Recently Used");
 
-
-
-
+    boolean filterNodes = false; // Boolean for filtering user selections to only outdoor nodes
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -229,6 +227,7 @@ public class AStarDemoController implements Initializable, IController {
 
                     if (currEntry == null)
                         return;
+            if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))){return;}
 
                     // Set whats here menu text back to what it should be on the map
                     whatsHereMenu.setText("What's Here?");
@@ -257,6 +256,7 @@ public class AStarDemoController implements Initializable, IController {
                     // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
                     // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
                     startPathMenu.setOnAction(e -> {
+                        if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))) return;
                         startNode.set(idToShortName(currEntry.getNodeID()));
                         try {
                             handleStartNodeChange();
@@ -498,6 +498,7 @@ public class AStarDemoController implements Initializable, IController {
 
             final NodeEntry currEntry = findNodeEntry(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue()));
             if(currEntry == null){return;}
+            if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))){return;}
 
             // Replace text on the whats here menu to make a little more sense
             whatsHereMenu.setText("What's This?");
@@ -527,6 +528,7 @@ public class AStarDemoController implements Initializable, IController {
             // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
             // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
             startPathMenu.setOnAction(e -> {
+                if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))) return;
                 startNode.set(idToShortName(currEntry.getNodeID()));
                 try {
                     handleStartNodeChange();
@@ -658,11 +660,17 @@ public class AStarDemoController implements Initializable, IController {
         if(CurrentUser.getCurrentUser().getUuid() != null)
         {
             try {
-                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false"))
+                if (DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false")){
                     endNode.set(idToShortName("FEXIT00301"));
-                else
+                    contextMenu.getItems().remove(endPathMenu);
+                    contextMenu.getItems().remove(addStopMenu);
+                    filterNodes = true;
+            }else{
                     endNode.set(idToShortName("FEXIT00201"));
-            } catch (SQLException exception) {
+                    contextMenu.getItems().remove(endPathMenu);
+                    contextMenu.getItems().remove(addStopMenu);
+                    filterNodes = true;
+            }} catch (SQLException exception) {
                 exception.printStackTrace();
             }
         }

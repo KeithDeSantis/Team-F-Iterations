@@ -16,14 +16,8 @@ import java.sql.SQLException;
  * Controller for Form Submitted Pop Up
  */
 public class CovidFormSubmittedViewController implements IController {
-    @FXML private JFXTextField username;
-    @FXML private JFXTextField password;
-    @FXML private JFXTextField displayUuid;
     @FXML private JFXTextField enterToCheck;
-    @FXML private JFXButton generateUuid;
     @FXML private JFXButton checkButton;
-    @FXML private JFXButton Button;
-    @FXML private Text errorMessage;
     @FXML private Text waitMessage;
 
     boolean isCompleted;
@@ -69,23 +63,9 @@ public class CovidFormSubmittedViewController implements IController {
         return complete;
     }
 
-
-    public void handleLogin() throws SQLException {
-        if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
-            DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin", "true");
-            DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff", "true");
-            DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest", "true");
-        }
-        String user = username.getText();
-        String pass = password.getText();
-
-        if (CurrentUser.getCurrentUser().login(user, pass)) {
-            //SceneContext.getSceneContext().loadDefault();
-        }
-        else {
-            errorMessage.setStyle("-fx-text-fill: #c60000FF;");
-            password.setText("");
-        }
+    public void autoFill(String ID){
+        enterToCheck.setText(ID);
     }
+
 }
 
