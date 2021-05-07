@@ -48,6 +48,8 @@ public class MapPanel extends AnchorPane {
 
     private final DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
 
+    private final double MIN_ZOOM = 1, MAX_ZOOM = 8;
+
     private final DoubleProperty INITIAL_WIDTH = new SimpleDoubleProperty();
     private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
 
@@ -236,17 +238,14 @@ public class MapPanel extends AnchorPane {
     public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
         JFXButton btn = (JFXButton) actionEvent.getSource();
         if(btn == this.zoomInButton) {
-            if(this.zoomLevel.get() > 1) {
+            if(this.zoomLevel.get() > MIN_ZOOM) {
                 this.zoomLevel.setValue(this.zoomLevel.get()  - 1);
             }
         } else if (btn == this.zoomOutButton) {
-            if(this.zoomLevel.get() < 8) {
+            if(this.zoomLevel.get() < MAX_ZOOM) {
                 this.zoomLevel.setValue(this.zoomLevel.get() + 1);
             }
         }
-
-        Image image = this.map.getImage();
-        this.map.setImage(image);
     }
 
     /**
