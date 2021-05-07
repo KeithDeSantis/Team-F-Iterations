@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
-import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
-import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
+import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,6 +11,8 @@ import java.io.IOException;
 public class SceneContext {
 
     private Stage stage;
+
+    private AbsController controller;
 
     private SceneContext() {}
 
@@ -24,31 +25,21 @@ public class SceneContext {
     }
 
     public void switchScene(String fxml) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(fxml));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(fxml));
+        this.controller = loader.getController();
+        Parent root = loader.load();
         stage.setScene(new Scene(root));
         stage.show();
     }
 
     public void loadDefault() throws IOException {
-        AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
-        if(user != null) {
-            switch (user.getUserType()){
-                case "administrator":
-                    this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageAdminView.fxml");
-                    break;
-
-                case "employee":
-                    this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageEmployeeView.fxml");
-                    break;
-
-                default:
-                    this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-            }
-
-        } else {
-            switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-        }
+        this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
+
+    public AbsController getController() {return controller; }
+
+    public void setController(AbsController controller) { this.controller = controller; }
 
     public Stage getStage() {
         return stage;

@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  * Controller for the pop-up dialog to edit or create a new node in the node editor
  * @author Keith DeSantis
  */
-public class EditMapNodeDialogViewController {
+public class EditMapNodeDialogViewController extends AbsController {
 
     @FXML private TextField nodeIDField;
     @FXML private TextField xCoordField;

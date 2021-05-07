@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class ExternalTransController extends ServiceRequests{
+public class ExternalTransController extends ServiceRequests {
     @FXML private JFXTextField patientName;
     @FXML private JFXTextField loc;
     @FXML private JFXTextField methodTrans;

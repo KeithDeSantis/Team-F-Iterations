@@ -15,6 +15,10 @@ import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -34,7 +38,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -54,7 +61,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class AStarDemoController implements Initializable {
+public class AStarDemoController extends AbsController implements Initializable {
 
     @FXML
     private ImageView goBack;
@@ -70,6 +77,12 @@ public class AStarDemoController implements Initializable {
 
     @FXML
     private JFXButton Next;
+
+    @FXML
+    private JFXButton about;
+
+    @FXML
+    private JFXButton clear;
 
     @FXML
     private Label Instruction;
@@ -142,12 +155,10 @@ public class AStarDemoController implements Initializable {
     TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
     TreeItem<String> recentItem = new TreeItem<>("Recently Used");
 
+    boolean filterNodes = false; // Boolean for filtering user selections to only outdoor nodes
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        System.out.println(CurrentUser.getCurrentUser().getUuid());
-
         //ahf - yes this should be done better. At some point.
 
         try {
@@ -219,6 +230,7 @@ public class AStarDemoController implements Initializable {
 
                     if (currEntry == null)
                         return;
+            if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))){return;}
 
                     // Set whats here menu text back to what it should be on the map
                     whatsHereMenu.setText("What's Here?");
@@ -247,6 +259,7 @@ public class AStarDemoController implements Initializable {
                     // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
                     // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
                     startPathMenu.setOnAction(e -> {
+                        if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))) return;
                         startNode.set(idToShortName(currEntry.getNodeID()));
                         try {
                             handleStartNodeChange();
@@ -352,9 +365,12 @@ public class AStarDemoController implements Initializable {
                                 dialog.close();
                             });
 
-                            layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+                            layout.setActions(toggleFavorite, directionsFrom, closeBtn);
                         } else {
-                            layout.setActions(directionsTo, directionsFrom, closeBtn);
+                            layout.setActions(directionsFrom, closeBtn);
+                        }
+                        if(!filterNodes){
+                            layout.getActions().add(layout.getActions().size() - 2, directionsTo);
                         }
 
 
@@ -488,6 +504,7 @@ public class AStarDemoController implements Initializable {
 
             final NodeEntry currEntry = findNodeEntry(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue()));
             if(currEntry == null){return;}
+            if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))){return;}
 
             // Replace text on the whats here menu to make a little more sense
             whatsHereMenu.setText("What's This?");
@@ -517,6 +534,7 @@ public class AStarDemoController implements Initializable {
             // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
             // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
             startPathMenu.setOnAction(e -> {
+                if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))) return;
                 startNode.set(idToShortName(currEntry.getNodeID()));
                 try {
                     handleStartNodeChange();
@@ -575,6 +593,7 @@ public class AStarDemoController implements Initializable {
                 final JFXButton closeBtn = new JFXButton("Close");
                 closeBtn.setOnAction(a -> dialog.close());
 
+
                 final JFXButton directionsTo = new JFXButton("Direction To");
                 directionsTo.setOnAction(a -> {
                     endNode.set(idToShortName(currEntry.getNodeID()));
@@ -620,9 +639,12 @@ public class AStarDemoController implements Initializable {
                         }
                         dialog.close();
                     });
-                    layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
+                    layout.setActions(toggleFavorite, directionsFrom, closeBtn);
                 } else {
-                    layout.setActions(directionsTo, directionsFrom, closeBtn);
+                    layout.setActions(directionsFrom, closeBtn);
+                }
+                if(!filterNodes){
+                    layout.getActions().add(layout.getActions().size()-3, directionsTo);
                 }
                 dialog.setContent(layout);
                 mapPanel.showDialog(dialog);
@@ -644,19 +666,22 @@ public class AStarDemoController implements Initializable {
                 }
             });
         });
-
-        if(CurrentUser.getCurrentUser().getUuid() != null)
-        {
-            try {
-                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false"))
+        try{
+            if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "additionalInstructions").getCompleteStatus().equals("false")) {
+                if (DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "uuid").getCompleteStatus().equals("false")) {
                     endNode.set(idToShortName("FEXIT00301"));
-                else
+                } else {
                     endNode.set(idToShortName("FEXIT00201"));
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+                }
+                contextMenu.getItems().remove(endPathMenu);
+                contextMenu.getItems().remove(addStopMenu);
+                filterNodes = true;
             }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
+
 
     /**
      * Draws an intermediate stop on the map
@@ -933,7 +958,7 @@ public class AStarDemoController implements Initializable {
 
                 parseRoute();
 
-                final Color LINE_STROKE_TRANSPARENT = new Color(UIConstants.LINE_COLOR.getRed(), UIConstants.LINE_COLOR.getGreen(), UIConstants.LINE_COLOR.getBlue(), 0.4);
+                final Color LINE_STROKE_TRANSPARENT = new Color(Color.DARKGRAY.getRed(), Color.DARKGRAY.getGreen(), Color.DARKGRAY.getBlue(), 0.75);
 
                 for (int i = 0; i < pathVertex.size() - 1; i++)
                 {
@@ -945,11 +970,39 @@ public class AStarDemoController implements Initializable {
                     final DrawableEdge edge = new DrawableEdge((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY(), start.getID() + "_" + end.getID(), start.getFloor(), end.getFloor(), new NodeEntry(), new NodeEntry());
                     edge.setStrokeWidth(UIConstants.LINE_STROKE_WIDTH);
 
+                    edge.getStrokeDashArray().setAll(20d, 20d, 20d, 20d);
+                    edge.setStrokeLineJoin(StrokeLineJoin.ROUND);
+                    edge.setStrokeLineCap(StrokeLineCap.ROUND);
+
                     edge.strokeProperty().bind(
                             Bindings.when(Bindings.isEmpty(stopsList)).then(Color.RED).otherwise(
-                                    Bindings.when(Bindings.integerValueAt(stopsList, currentStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.ORANGE)
+                                    Bindings.when(Bindings.integerValueAt(stopsList, currentStep).greaterThan(i)).then(LINE_STROKE_TRANSPARENT).otherwise(Color.rgb(0x03, 0x25, 0x6c))
                             )
                     );
+
+                    final double maxOffset = edge.getStrokeDashArray().stream().reduce(0d, (a, b) -> a+b);
+
+                    Timeline pathTimeline = new Timeline(
+                            new KeyFrame(
+                                    Duration.ZERO,
+                                    new KeyValue(
+                                            edge.strokeDashOffsetProperty(),0, Interpolator.LINEAR
+                                    )
+                            ),
+                            new KeyFrame(
+                                    Duration.seconds(2),
+                                    new KeyValue(
+                                            edge.strokeDashOffsetProperty(),
+                                            maxOffset,
+                                            Interpolator.LINEAR
+                                    )
+                            )
+                    );
+                    pathTimeline.setRate(-1);
+                    pathTimeline.setCycleCount(Timeline.INDEFINITE);
+                    pathTimeline.play();
+
+
 
                     int localStop;
                     for(localStop = 0; localStop < stopsList.size() - 1; localStop++)
@@ -1273,12 +1326,37 @@ public class AStarDemoController implements Initializable {
         Instruction.setVisible(true);
         navIcon.setVisible(true);
         ETA.setVisible(true);
+        treeView.setDisable(true);
+        about.setDisable(true);
+        clear.setDisable(true);
+        mapPanel.disableInteract();
 
         currentStep.set(0);
 
         isCurrentlyNavigating.set(true);
 
         parseRoute();
+
+        // Add additional instruction to notice arrive of a stop
+        List<Vertex> allStops = new ArrayList<>();
+        allStops.add(pathVertex.get(0));
+        allStops.addAll(vertices);
+        allStops.add(pathVertex.get(pathVertex.size()-1));
+        if(allStops.size() > 2){
+            if(optimize.isSelected())
+                allStops = graph.getEfficientOrder(allStops.toArray(new Vertex[0]));
+            for(int i = 1; i < allStops.size() - 1; i++){
+                for(int j = 0; j < stopsList.size(); j++){
+                    if(allStops.get(i).getID().equals(pathVertex.get(stopsList.get(j)).getID())){
+                        stopsList.add(j, stopsList.get(j));
+                        instructionsList.add(j, "Reached " + idToShortName(allStops.get(i).getID()));
+                        etaList.add(j, etaList.get(j));
+                        break;
+                    }
+                }
+            }
+        }
+
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
         if(userNodeDisplay != null)
@@ -1366,6 +1444,10 @@ public class AStarDemoController implements Initializable {
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
         optimize.setDisable(false);
+        treeView.setDisable(false);
+        about.setDisable(false);
+        clear.setDisable(false);
+        mapPanel.enableInteract();
 
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
@@ -1424,8 +1506,8 @@ public class AStarDemoController implements Initializable {
             image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/uTurnYellow.png"));
         }
         else if(curInstruction.contains("stair")){
-            int nextFloor = Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
-            int currentFloor = Integer.parseInt(pathVertex.get(currentStep.get()-1).getFloor());
+            final int nextFloor = mapPanel.getDoubleStringConverter().fromString(curInstruction.substring(curInstruction.length()-1)).intValue();//Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
+            final int currentFloor = mapPanel.getDoubleStringConverter().fromString(pathVertex.get(currentStep.get()-1).getFloor()).intValue();
             if(nextFloor > currentFloor){
                 image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
             } else {
@@ -1644,7 +1726,7 @@ public class AStarDemoController implements Initializable {
      * Clears all node selections and exits pathfinding mode
      * @author Leo Morris
      */
-    public void clearList() {
+    public void clearList() throws SQLException {
 
         vertices.clear();
         startNode.set("");
@@ -1657,6 +1739,14 @@ public class AStarDemoController implements Initializable {
 
         if(pathVertex.size() != 0) {
             endNavigation();
+        }
+
+        if(filterNodes && CurrentUser.getCurrentUser().getUuid() != null){
+            if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "uuid").getCompleteStatus().equals("false")){
+                endNode.set(idToShortName("FEXIT00301"));
+            } else {
+                endNode.set(idToShortName("FEXIT00201"));
+            }
         }
     }
 

@@ -18,7 +18,7 @@
    <children>
       <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+            <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fitHeight="150.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>

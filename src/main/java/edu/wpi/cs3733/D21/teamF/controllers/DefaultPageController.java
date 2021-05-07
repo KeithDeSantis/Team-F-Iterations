@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
@@ -13,6 +14,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -20,7 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class DefaultPageController {
+public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton navigation;
     @FXML
@@ -30,19 +33,28 @@ public class DefaultPageController {
     @FXML
     private JFXButton loginButton;
     @FXML
-    private JFXButton covidSurvey;
+    private JFXButton surveyButton;
+    @FXML
+    private JFXButton manageServices;
     @FXML
     JFXTextField verifyAgain;
     @FXML private VBox buttons;
     @FXML private VBox covidBox;
+    @FXML
+    private JFXButton pathfindingSettingButton;
+    @FXML
+    private JFXButton manageAccount;
+    @FXML
+    private JFXButton editMap;
+    @FXML
+    private Label loginLabel;
 
     @FXML private void initialize(){
-        // Apply fonts to title and buttons
-
-        // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
 	//Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
+
+        resetButtons();
     }
     // used to see how to toggle visibility
 //    @FXML
@@ -57,6 +69,62 @@ public class DefaultPageController {
         DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")){
             buttons.setVisible(true);
             covidBox.setVisible(false);
+
+    private void resetButtons(){
+        AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
+        if(user != null && CurrentUser.getCurrentUser().isAuthenticated()) {
+            switch (user.getUserType()){
+                case "administrator":
+                    manageServices.setManaged(true);
+                    manageServices.setVisible(true);
+                    editMap.setManaged(true);
+                    editMap.setVisible(true);
+                    pathfindingSettingButton.setManaged(true);
+                    pathfindingSettingButton.setVisible(true);
+                    manageAccount.setManaged(true);
+                    manageAccount.setVisible(true);
+                    surveyButton.setManaged(false);
+                    surveyButton.setVisible(false);
+                    break;
+
+                case "employee":
+                    manageServices.setManaged(true);
+                    manageServices.setVisible(true);
+                    editMap.setManaged(true);
+                    editMap.setVisible(true);
+                    pathfindingSettingButton.setManaged(false);
+                    pathfindingSettingButton.setVisible(false);
+                    manageAccount.setManaged(false);
+                    manageAccount.setVisible(false);
+                    surveyButton.setManaged(false);
+                    surveyButton.setVisible(false);
+                    break;
+
+                default:
+                    manageServices.setManaged(false);
+                    manageServices.setVisible(false);
+                    editMap.setManaged(false);
+                    editMap.setVisible(false);
+                    pathfindingSettingButton.setManaged(false);
+                    pathfindingSettingButton.setVisible(false);
+                    manageAccount.setManaged(false);
+                    manageAccount.setVisible(false);
+                    surveyButton.setManaged(false);
+                    surveyButton.setVisible(false);
+            }
+            loginLabel.setText("Hello, " + user.getUsername() + "!");
+        } else {
+            manageServices.setManaged(false);
+            manageServices.setVisible(false);
+            editMap.setManaged(false);
+            editMap.setVisible(false);
+            pathfindingSettingButton.setManaged(false);
+            pathfindingSettingButton.setVisible(false);
+            manageAccount.setManaged(false);
+            manageAccount.setVisible(false);
+            surveyButton.setManaged(true);
+            surveyButton.setVisible(true);
+            loginLabel.setText("Please Log In!");
         }
     }
 
@@ -73,18 +141,47 @@ public class DefaultPageController {
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
 
         if (buttonPushed == loginButton) {
-            if(CurrentUser.getCurrentUser().isAuthenticated())
+            if(CurrentUser.getCurrentUser().isAuthenticated()) {
                 CurrentUser.getCurrentUser().logout();
-            else
+                resetButtons();
+            }else
                 SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
+        } else if (buttonPushed == editMap) {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
+        } else if (buttonPushed == manageServices) {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManagerView.fxml");
         } else if (buttonPushed == navigation) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+            if(CurrentUser.getCurrentUser().isAuthenticated()) {
+                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+            } else {
+                FXMLLoader submittedPageLoader = new FXMLLoader();
+                submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
+                Stage submittedStage = new Stage();
+                Parent root = submittedPageLoader.load();
+                Scene submitScene = new Scene(root);
+                submittedStage.setScene(submitScene);
+                submittedStage.setTitle("Check COVID Status");
+                submittedStage.initModality(Modality.APPLICATION_MODAL);
+                submittedStage.showAndWait();
+            }
         } else if (buttonPushed == serviceRequest) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
-        } else if (buttonPushed == quit) {
+        } else if (buttonPushed == manageAccount) {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
+        } else if(buttonPushed == pathfindingSettingButton) {
+            FXMLLoader dialogLoader = new FXMLLoader();
+            dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/PreferredPathfindingAlgoView.fxml"));
+            Stage dialogStage = new Stage();
+            Parent root2 = dialogLoader.load();
+            dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
+            dialogStage.initOwner(pathfindingSettingButton.getScene().getWindow());
+            dialogStage.setScene(new Scene(root2)); // set scene - KD
+            dialogStage.showAndWait();
+        }
+        else if (buttonPushed == quit) {
             Platform.exit();
         }
-        else if (buttonPushed == covidSurvey){
+        else if (buttonPushed == surveyButton){
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
         }
     }
@@ -95,13 +192,10 @@ public class DefaultPageController {
         final Parent root = dialogLoader.load();
 
         dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.initOwner(covidSurvey.getScene().getWindow());
+        dialogStage.initOwner(surveyButton.getScene().getWindow());
         dialogStage.setScene(new Scene(root));
 
         dialogStage.showAndWait();
     }
-
-
-
 
 }

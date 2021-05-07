@@ -4,12 +4,23 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,6 +55,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private JFXCheckBox stayAwake;
     @FXML private JFXCheckBox fever;
     @FXML private JFXTextField generatedID;
+    private ClipboardContent content = new ClipboardContent();
 
 
     /**
@@ -52,6 +64,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     public void initialize(URL location, ResourceBundle resources){
         String ticketNumber = UUID.randomUUID().toString();
         generatedID.setText(ticketNumber);
+        content.putString(ticketNumber);
     }
 
     /**
@@ -63,29 +76,33 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             //create service request, put in database
             String covidInfo = temperatureField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
-            ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
-            //change view to survey submitted page
+            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "", "false", generatedID.getText());
+            //ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
-            /*
+            //Copy UUID to users clipboard TODO add explicit button for this
+            Clipboard.getSystemClipboard().setContent(content);
+
+            //change view to survey submitted page
             FXMLLoader submittedPageLoader = new FXMLLoader();
             submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
             Parent root = submittedPageLoader.load();
             CovidFormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
+            formSubmittedViewController.autoFill(generatedID.getText());
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
             submittedStage.initModality(Modality.APPLICATION_MODAL);
             submittedStage.showAndWait();
-
+/*
             if(!formSubmittedViewController.isCompleted)
             {
                 DatabaseAPI.getDatabaseAPI().deleteServiceRequest(generatedID.getText());
             }
 
-             */
+ */
+
+
         }
     }
     public boolean formFilled(){
@@ -150,6 +167,20 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     }
 
     public void handleCheckStatus() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
+        FXMLLoader submittedPageLoader = new FXMLLoader();
+        submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
+        Stage submittedStage = new Stage();
+        Parent root = submittedPageLoader.load();
+        Scene submitScene = new Scene(root);
+        submittedStage.setScene(submitScene);
+        submittedStage.setTitle("Check Status");
+        submittedStage.initModality(Modality.APPLICATION_MODAL);
+        submittedStage.showAndWait();
+    }
+
+    @FXML
+    public void goBack(MouseEvent mouseEvent) throws IOException {
+        CurrentUser.getCurrentUser().logout();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 }

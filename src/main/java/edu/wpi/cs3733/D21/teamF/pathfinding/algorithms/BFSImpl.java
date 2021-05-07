@@ -27,7 +27,7 @@ public class BFSImpl implements IPathfindingAlgorithm {
         if(start == null) //FIXME: DO MORE NULL CHECKS, END SHOULDN'T BE ABLE TO BE NULL ANYWAYS
             return null;
 
-        final Queue<BFSNode> verticesToCheck = new PriorityQueue<>();
+        final Queue<BFSNode> verticesToCheck = new LinkedList<>();
         verticesToCheck.add(new BFSNode(0.0, null, start));
 
         final Set<Vertex> visited = new HashSet<>();

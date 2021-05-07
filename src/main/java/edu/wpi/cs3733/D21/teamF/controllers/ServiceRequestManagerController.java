@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ServiceRequestManagerController implements Initializable {
+public class ServiceRequestManagerController extends AbsController implements Initializable {
     @FXML private JFXButton markAsComplete;
     @FXML private JFXButton saveChanges;
     @FXML private JFXButton removeAssignment;

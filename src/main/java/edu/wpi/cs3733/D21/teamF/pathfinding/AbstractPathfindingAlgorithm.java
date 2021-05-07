@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AbstractPathfindingAlgorithm implements IPathfindingAlgorithm{
-    public Path getPath(Graph graph, Vertex a, Vertex b){
+    public final Path getPath(Graph graph, Vertex a, Vertex b){
         if (!graph.contains(a) || !graph.contains(b)) {
             return null;
         }
