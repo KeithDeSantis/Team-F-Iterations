@@ -19,7 +19,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.MedicineDeliveryServiceRequest">
      <HBox fx:id="header" minWidth="-Infinity" prefHeight="117.0" prefWidth="960.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
-         <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+         <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
              <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
          </ImageView>
          <Label fx:id="title" text="BRIGHAM AND WOMEN'S HOSPITAL Medicine Delivery" textFill="#03256c" wrapText="true">

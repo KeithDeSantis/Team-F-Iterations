@@ -2,9 +2,12 @@ package edu.wpi.cs3733.D21.teamF.pathfinding.algorithms;
 
 import edu.wpi.cs3733.D21.teamF.pathfinding.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
 
-public class BFSImpl implements IPathfindingAlgorithm {
+public class BFSShortestImpl implements IPathfindingAlgorithm {
 
 
     /**
@@ -27,7 +30,7 @@ public class BFSImpl implements IPathfindingAlgorithm {
         if(start == null) //FIXME: DO MORE NULL CHECKS, END SHOULDN'T BE ABLE TO BE NULL ANYWAYS
             return null;
 
-        final Queue<BFSNode> verticesToCheck = new LinkedList<>();
+        final Queue<BFSNode> verticesToCheck = new PriorityQueue<>();
         verticesToCheck.add(new BFSNode(0.0, null, start));
 
         final Set<Vertex> visited = new HashSet<>();

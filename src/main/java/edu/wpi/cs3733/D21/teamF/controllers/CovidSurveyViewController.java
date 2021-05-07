@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-public class CovidSurveyViewController extends ServiceRequests implements Initializable, IController {
+public class CovidSurveyViewController extends ServiceRequests implements Initializable {
 
     @FXML private Label posTestPrompt;
     @FXML private Label fifteenPrompt;
@@ -63,7 +63,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             //create service request, put in database
             String covidInfo = temperatureField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
-            ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
+            ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText(), "uuid");
             //change view to survey submitted page
 
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");

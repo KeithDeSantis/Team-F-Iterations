@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * Controller for new edge or edit edge pop-up in edge editor
  * @author Karen Hou
  */
-public class EditMapEdgeDialogueViewController implements IController {
+public class EditMapEdgeDialogueViewController extends AbsController {
 
     @FXML private JFXComboBox<String> startNode;
     @FXML private JFXComboBox<String> endNode;
