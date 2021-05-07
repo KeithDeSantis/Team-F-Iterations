@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
+import edu.wpi.cs3733.D21.teamF.utils.GraphAndListsLoader;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -38,6 +39,7 @@ public class  AppF extends Application {
     DatabaseAPI.getDatabaseAPI().createCollectionsTable(); //FIXME: DO BETTER
 
     SceneContext.getSceneContext().setStage(primaryStage);
+    GraphAndListsLoader g = GraphAndListsLoader.getGraphAndListsLoader();
 
     //ConnectionHandler.main(false);
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {

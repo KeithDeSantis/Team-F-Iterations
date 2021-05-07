@@ -10,6 +10,7 @@ import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
+import edu.wpi.cs3733.D21.teamF.utils.GraphAndListsLoader;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
@@ -85,9 +86,9 @@ public class MapEditViewController implements IController {
     private boolean isDragging = false;
     private boolean favoriteOnly = false;
 
-    private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
-    private final ObservableList<NodeEntry> nodeEntryObservableList = FXCollections.observableArrayList();
-    private final List<NodeEntry> favoriteList = new ArrayList<>();
+    private ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
+    private ObservableList<NodeEntry> nodeEntryObservableList = FXCollections.observableArrayList();
+    private List<NodeEntry> favoriteList = new ArrayList<>();
     private Circle selectedCircle = null;
 
     private Line selectedLine = null;
@@ -127,6 +128,11 @@ public class MapEditViewController implements IController {
         hamTransition = new HamburgerBackArrowBasicTransition(hamburger);
         hamTransition.setRate(-1);
 
+        nodeEntryObservableList = GraphAndListsLoader.getGraphAndListsLoader().getNodeEntryObservableList();
+        //KD trying loading from singleton
+
+        //for(NodeEntry nodeEntry : nodeEntryObservableList) mapPanel.draw(getEditableNode(nodeEntry));
+        /*
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
         try {
@@ -136,10 +142,11 @@ public class MapEditViewController implements IController {
             e.printStackTrace();
         }
         data.stream().sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()).forEach(node -> {
-            mapPanel.draw(getEditableNode(node));
+            mapPanel.draw(getEditableNode(node)); //TODO still do this
 
             nodeEntryObservableList.add(node);
         });
+         */
 
         int colWidth = 150;
         JFXTreeTableColumn<NodeEntry, String> idColumn = new JFXTreeTableColumn<>("Node ID");
@@ -199,6 +206,10 @@ public class MapEditViewController implements IController {
         searchComboBox.setItems(searchables);
         searchComboBox.setValue("Node ID");
 
+        edgeEntryObservableList = GraphAndListsLoader.getGraphAndListsLoader().getEdgeEntryObservableList();
+        //KD trying to load from singleton
+
+        /*
         // Edge initialization
         List<EdgeEntry> edgeData = new ArrayList<>();
         try {
@@ -208,6 +219,7 @@ public class MapEditViewController implements IController {
             e.printStackTrace();
         }
         edgeEntryObservableList.addAll(edgeData.stream().sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
+         */
 
 
         // Set up cell factory for the edge ID table
@@ -1334,6 +1346,7 @@ public class MapEditViewController implements IController {
         DatabaseAPI.getDatabaseAPI().addNode(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), nodeFloor,
                 nodeBuilding, nodeType, longName, shortName);
 
+
         mapPanel.draw(getEditableNode(nodeEntry));
 
         nodeTreeTable.requestFocus();
@@ -1573,12 +1586,12 @@ public class MapEditViewController implements IController {
         for (EdgeEntry e : edgeEntryObservableList) {
             NodeEntry startNode = null;
             NodeEntry endNode = null;
-            try {
-                startNode = DatabaseAPI.getDatabaseAPI().getNode(e.getStartNode());
-                endNode = DatabaseAPI.getDatabaseAPI().getNode(e.getEndNode());
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+            //try {
+                startNode = getNodeFromList(e.getStartNode());//DatabaseAPI.getDatabaseAPI().getNode(e.getStartNode());
+                endNode = getNodeFromList(e.getEndNode());//DatabaseAPI.getDatabaseAPI().getNode(e.getEndNode());
+            //} catch (SQLException throwables) {
+            //    throwables.printStackTrace();
+            //}
             if (startNode == null || endNode == null) {
                 System.out.println("Edge with no actual Node");
                 //return;
@@ -1645,6 +1658,13 @@ public class MapEditViewController implements IController {
             // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
         }
         handleSearch();
+    }
+
+    public NodeEntry getNodeFromList(String nodeID){
+        for(NodeEntry nodeEntry : nodeEntryObservableList) {
+            if(nodeEntry.getNodeID().equals(nodeID)) return nodeEntry;
+        }
+        return null;
     }
 
     /**
