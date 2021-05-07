@@ -14,7 +14,7 @@ import java.net.URI;
  * Used to display info about the covid vaccine
  * @author Alex Friedman
  */
-public class CovidVaccineDialogController implements IController {
+public class CovidVaccineDialogController extends AbsController {
 
     @FXML
     private JFXTextField zipCodeTxt;
