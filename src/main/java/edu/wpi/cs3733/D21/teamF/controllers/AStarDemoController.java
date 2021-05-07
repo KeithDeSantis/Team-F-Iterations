@@ -1725,7 +1725,7 @@ public class AStarDemoController extends AbsController implements Initializable 
      * Clears all node selections and exits pathfinding mode
      * @author Leo Morris
      */
-    public void clearList() {
+    public void clearList() throws SQLException {
 
         vertices.clear();
         startNode.set("");
@@ -1738,6 +1738,14 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         if(pathVertex.size() != 0) {
             endNavigation();
+        }
+
+        if(filterNodes && CurrentUser.getCurrentUser().getUuid() != null){
+            if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "uuid").getCompleteStatus().equals("false")){
+                endNode.set(idToShortName("FEXIT00301"));
+            } else {
+                endNode.set(idToShortName("FEXIT00201"));
+            }
         }
     }
 
