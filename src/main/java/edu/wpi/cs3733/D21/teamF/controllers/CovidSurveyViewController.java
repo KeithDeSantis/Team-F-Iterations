@@ -62,6 +62,9 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     public void initialize(URL location, ResourceBundle resources){
         String ticketNumber = UUID.randomUUID().toString();
         generatedID.setText(ticketNumber);
+        ClipboardContent content = new ClipboardContent();
+        content.putString(ticketNumber);
+        Clipboard.getSystemClipboard().setContent(content);
     }
 
     /**
@@ -73,6 +76,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             //create service request, put in database
             String covidInfo = temperatureField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
+            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "", "false", generatedID.getText());
             ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
             //Copy UUID to users clipboard TODO add explicit button for this

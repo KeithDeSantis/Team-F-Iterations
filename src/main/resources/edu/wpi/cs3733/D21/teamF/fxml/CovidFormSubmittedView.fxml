@@ -40,7 +40,7 @@
                   <Insets bottom="25.0" top="10.0" />
                </VBox.margin>
                <children>
-                  <JFXButton stylesheets="@../../../../../../stylesheets/QuitButtonStyle.css" text="Close" />
+                  <JFXButton buttonType="RAISED" onAction="#closePopup" stylesheets="@../../../../../../stylesheets/QuitButtonStyle.css" text="Close" />
                       <JFXButton fx:id="checkButton" buttonType="RAISED" onAction="#handleCheck" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Check">
                           <font>
                               <Font name="Montserrat Regular" size="15.0" />

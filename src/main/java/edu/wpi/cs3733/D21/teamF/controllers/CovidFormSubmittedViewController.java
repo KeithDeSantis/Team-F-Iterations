@@ -5,8 +5,11 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -32,11 +35,15 @@ public class CovidFormSubmittedViewController implements IController {
         if(completed().equals("true")){
             isCompleted = true;
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+            Scene scene = checkButton.getScene();
+            ((Stage) scene.getWindow()).close();
             //set destination to 75 Lobby entrance
         }
         else if(completed().equals("false")){
             isCompleted = true;
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+            Scene scene = checkButton.getScene();
+            ((Stage) scene.getWindow()).close();
             //set destination to emergency entrance
         }
         else{
@@ -67,5 +74,9 @@ public class CovidFormSubmittedViewController implements IController {
         enterToCheck.setText(ID);
     }
 
+    public void closePopup() {
+        Scene scene = checkButton.getScene();
+        ((Stage) scene.getWindow()).close();
+    }
 }
 

@@ -657,7 +657,7 @@ public class AStarDemoController implements Initializable, IController {
             });
         });
 
-        if(CurrentUser.getCurrentUser().getUuid() != null)
+        if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI().getServiceRequest(CurrentUser.getCurrentUser().getUuid(), "additionalInstructions"))
         {
             try {
                 if (DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false")){
