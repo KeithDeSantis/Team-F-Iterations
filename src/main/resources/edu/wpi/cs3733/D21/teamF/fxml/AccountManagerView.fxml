@@ -19,7 +19,7 @@
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Label fx:id="title" prefHeight="120.0" prefWidth="755.0" text="Brigham and Women's Account Manager" wrapText="true">
+            <Label fx:id="title" prefHeight="120.0" prefWidth="755.0" style="-fx-font-size: 35" text="BRIGHAM AND WOMEN'S HOSPITAL Account Manager" wrapText="true">
                <font>
                   <Font size="36.0" />
                </font>

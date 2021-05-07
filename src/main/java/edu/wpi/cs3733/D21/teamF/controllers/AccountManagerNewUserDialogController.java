@@ -56,7 +56,7 @@ public class AccountManagerNewUserDialogController {
             passwordField.setStyle("-fx-background-color:  #ff000088");
             isFilled = false;
         }
-        if(userTypeComboBox.getValue().isEmpty()) {
+        if(userTypeComboBox.getValue()==null) {
             userTypeComboBox.setStyle("-fx-border-color:  #ff000088");
             userTypeComboBox.setStyle("-fx-border-width:  2px");
             isFilled = false;
