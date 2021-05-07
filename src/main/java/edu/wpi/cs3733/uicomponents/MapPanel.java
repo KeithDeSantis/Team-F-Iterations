@@ -134,6 +134,10 @@ public class MapPanel extends AnchorPane {
     }
 
 
+    public StringConverter<Double> getDoubleStringConverter() {
+        return doubleStringConverter;
+    }
+
     @FXML
     public void initialize(){
         zoomInButton.setOnAction(this::handleZoom);
