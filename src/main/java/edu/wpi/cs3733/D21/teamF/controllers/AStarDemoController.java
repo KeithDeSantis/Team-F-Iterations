@@ -663,7 +663,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             });
         });
 
-        if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI().getServiceRequest(CurrentUser.getCurrentUser().getUuid(), "additionalInstructions"))
+        if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI()
         {
             try {
                 if (DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false")){
