@@ -23,8 +23,8 @@ public class CurrentUser {
 
         try {
             this.uuid = uuid;
-            DatabaseAPI.getDatabaseAPI().getServiceEntry(uuid);
-            //this.isAuthenticated.set(DatabaseAPI.getDatabaseAPI().getServiceEntry(uuid) != null);
+            DatabaseAPI.getDatabaseAPI().getServiceEntry(uuid, "uuid");
+           // this.isAuthenticated.set(DatabaseAPI.getDatabaseAPI().getServiceEntry(uuid) != null);
         } catch (SQLException exception) {
             this.isAuthenticated.set(false);
             this.uuid = null;

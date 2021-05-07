@@ -113,7 +113,7 @@ public class DefaultPageController extends AbsController {
     private void changeButtons() throws SQLException {
         String ticketID = verifyAgain.getText();
         if (CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(verifyAgain.getText()) ||
-        DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")){
+        DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID, "uuid").getCompleteStatus().equals("true")){
             buttons.setStyle("visibility: visible");
             covidBox.setStyle("visibility: hidden");
         }

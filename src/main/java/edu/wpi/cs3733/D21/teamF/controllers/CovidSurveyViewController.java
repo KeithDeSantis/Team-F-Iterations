@@ -25,9 +25,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-//TODO: Login functional, better info reported to service requests, lock navigation, additional clearing by nurse at entrance
-
-public class CovidSurveyViewController extends ServiceRequests implements Initializable, IController {
+public class CovidSurveyViewController extends ServiceRequests implements Initializable {
 
     @FXML private Label posTestPrompt;
     @FXML private Label fifteenPrompt;
