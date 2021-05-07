@@ -664,7 +664,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         if(CurrentUser.getCurrentUser().getUuid() != null)
         {
             try {
-                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false"))
+                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "uuid").getCompleteStatus().equals("false"))
                     endNode.set(idToShortName("FEXIT00301"));
                 else
                     endNode.set(idToShortName("FEXIT00201"));

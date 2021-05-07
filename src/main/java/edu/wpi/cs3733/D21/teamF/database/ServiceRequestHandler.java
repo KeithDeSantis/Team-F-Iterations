@@ -99,31 +99,34 @@ public class ServiceRequestHandler implements DatabaseEntry {
      * @throws SQLException on error with DB operations
      */
     public ServiceEntry getServiceRequest(String value, String colName) throws SQLException{
-        final String sql = "SELECT * FROM SERVICE_REQUESTS WHERE (?)=(?)";
-        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
-        stmt.setString(1, colName);
-        stmt.setString(2, value);
+        if (colName.equals("uuid") || colName.equals("name") || colName.equals("assignedperson") || colName.equals("completed") ||
+                colName.equals("Additional instructions")) {
+            final String sql = "SELECT * FROM SERVICE_REQUESTS WHERE " + colName + "=(?)";
+            final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+            stmt.setString(1, value);
 
-        ResultSet rset;
-        try {
-            rset = stmt.executeQuery();
-        } catch (SQLException e) {
-            if (e.getMessage().contains("Table/View 'L1NODES' does not exist."))
+            ResultSet rset;
+            try {
+                rset = stmt.executeQuery();
+            } catch (SQLException e) {
+                if (e.getMessage().contains("Table/View 'SERVICE_REQUESTS' does not exist."))
+                    return null;
+                else
+                    e.printStackTrace();
                 return null;
-            else
-                e.printStackTrace();
-            return null;
-        }
-        while (rset.next()) {
-            String requestID = rset.getString(1);
-            String requestName = rset.getString(2);
-            String requestPerson = rset.getString(3);
-            String requestCompleted = rset.getString(4);
-            String requestInfo = rset.getString(5);
+            }
+            while (rset.next()) {
+                String requestID = rset.getString(1);
+                String requestName = rset.getString(2);
+                String requestPerson = rset.getString(3);
+                String requestCompleted = rset.getString(4);
+                String requestInfo = rset.getString(5);
+                rset.close();
+                return new ServiceEntry(requestID, requestName, requestPerson, requestCompleted, requestInfo);
+            }
             rset.close();
-            return new ServiceEntry(requestID, requestName, requestPerson, requestCompleted, requestInfo);
         }
-        rset.close();
+
         return null;
     }
 
