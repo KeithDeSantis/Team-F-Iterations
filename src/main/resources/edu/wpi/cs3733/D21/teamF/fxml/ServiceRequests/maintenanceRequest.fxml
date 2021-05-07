@@ -22,7 +22,7 @@
    <children>
       <HBox fx:id="header" prefHeight="137.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
          <children>
-            <ImageView fx:id="goBack" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+            <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fx:id="goBack" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>

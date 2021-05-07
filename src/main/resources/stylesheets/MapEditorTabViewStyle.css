@@ -1,3 +1,7 @@
+.tab-pane {
+    -fx-background-color: transparent;
+}
+
 .tab-header-background {
     -fx-opacity: 0;
 }

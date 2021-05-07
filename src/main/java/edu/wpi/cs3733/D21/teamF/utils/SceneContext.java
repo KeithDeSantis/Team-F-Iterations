@@ -1,6 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
-import edu.wpi.cs3733.D21.teamF.controllers.IController;
+import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,7 +12,7 @@ public class SceneContext {
 
     private Stage stage;
 
-    private IController controller;
+    private AbsController controller;
 
     private SceneContext() {}
 
@@ -37,9 +37,9 @@ public class SceneContext {
         this.switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
-    public IController getController() {return controller; }
+    public AbsController getController() {return controller; }
 
-    public void setController(IController controller) { this.controller = controller; }
+    public void setController(AbsController controller) { this.controller = controller; }
 
     public Stage getStage() {
         return stage;
