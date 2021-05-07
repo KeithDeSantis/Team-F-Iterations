@@ -36,7 +36,7 @@ class DatabaseAPITest {
     @Test()
     @DisplayName("test dropping nodes table")
     public void testDropNodesTable() {
-        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
+        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short", "desc"};
         assertTrue(DatabaseAPI.getDatabaseAPI().dropNodesTable());
         assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().addNode(newNode));
         DatabaseAPI.getDatabaseAPI().createNodesTable();
@@ -54,7 +54,7 @@ class DatabaseAPITest {
     @DisplayName("test adding nodes table")
     public void testAddNodesTable() throws SQLException
     {
-        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
+        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short", "desc"};
         DatabaseAPI.getDatabaseAPI().dropNodesTable();
         assertTrue(DatabaseAPI.getDatabaseAPI().createNodesTable());
         assertTrue(DatabaseAPI.getDatabaseAPI().addNode(newNode));
@@ -74,7 +74,7 @@ class DatabaseAPITest {
     @DisplayName("test adding a node")
     public void testAddNodeBasic() throws SQLException
     {
-        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
+        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short", "desc"};
         assertTrue(DatabaseAPI.getDatabaseAPI().addNode(newNode));
     }
 
@@ -104,7 +104,7 @@ class DatabaseAPITest {
     @DisplayName("test delete node")
     public void testDeleteNode() throws SQLException
     {
-        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
+        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short", "Desc"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("test"));
     }
@@ -113,7 +113,7 @@ class DatabaseAPITest {
     @DisplayName("test delete invalid node")
     public void testDeleteInvalidNode() throws SQLException
     {
-        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
+        String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short", "Desc"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
         assertFalse(DatabaseAPI.getDatabaseAPI().deleteNode("notTest"));
     }
@@ -130,10 +130,10 @@ class DatabaseAPITest {
     @DisplayName("test generating node entry list")
     public void testGenerateNodeEntries() throws SQLException
     {
-        NodeEntry entry = new NodeEntry("test", "1", "1", "f", "b", "t", "l", "s");
+        NodeEntry entry = new NodeEntry("test", "1", "1", "f", "b", "t", "l", "s", "d");
         ArrayList<NodeEntry> expected = new ArrayList<>();
         expected.add(entry);
-        String[] newNode = {"test", "1", "1", "f", "b", "t", "l", "s"};
+        String[] newNode = {"test", "1", "1", "f", "b", "t", "l", "s", "d"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
         List<NodeEntry> actual = DatabaseAPI.getDatabaseAPI().genNodeEntries();
         assertEquals(expected.get(0).getNodeID(), actual.get(0).getNodeID());
@@ -143,7 +143,7 @@ class DatabaseAPITest {
     @DisplayName("test editing a node")
     public void testEditNode() throws Exception
     {
-        String[] newNode = {"test", "1", "2", "f", "b", "t", "l", "s"};
+        String[] newNode = {"test", "1", "2", "f", "b", "t", "l", "s", "d"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
         assertTrue(DatabaseAPI.getDatabaseAPI().editNode("test", "test1", "nodeid"));
     }
@@ -340,8 +340,8 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test getting a single node")
     public void testGetNode() throws SQLException{
-        NodeEntry expected = new NodeEntry("id", "1", "2", "f", "b", "t", "l", "s");
-        String[] newNode = {"id", "1", "2", "f", "b", "t", "l", "s"};
+        NodeEntry expected = new NodeEntry("id", "1", "2", "f", "b", "t", "l", "s", "d");
+        String[] newNode = {"id", "1", "2", "f", "b", "t", "l", "s", "d"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
         NodeEntry actual = DatabaseAPI.getDatabaseAPI().getNode("id");
         assertEquals(expected.getNodeID(), actual.getNodeID());
