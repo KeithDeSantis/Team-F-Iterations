@@ -93,14 +93,16 @@ public class ServiceRequestHandler implements DatabaseEntry {
 
     /**
      * Generates a ServiceEntry object for a service entry given the uuid
-     * @param uuid the uuid of the service request/ticket to fetch
+     * @param value the column value of the service request/ticket to fetch
+     * @param colName the column to get the service request by
      * @return the ServiceEntry object for the row
      * @throws SQLException on error with DB operations
      */
-    public ServiceEntry getServiceRequest(String uuid) throws SQLException{
-        final String sql = "SELECT * FROM SERVICE_REQUESTS WHERE uuid=(?)";
+    public ServiceEntry getServiceRequest(String value, String colName) throws SQLException{
+        final String sql = "SELECT * FROM SERVICE_REQUESTS WHERE (?)=(?)";
         final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
-        stmt.setString(1, uuid);
+        stmt.setString(1, colName);
+        stmt.setString(2, value);
 
         ResultSet rset;
         try {
