@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.database.EdgeHandler;
 import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
@@ -27,6 +28,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -74,9 +76,13 @@ public class MapEditViewController implements IController {
     @FXML
     private MapPanel mapPanel;
     @FXML
-    private JFXToggleButton edgeCreationToggle;
+    private JFXHamburger hamburger;
+    @FXML
+    private JFXDrawer drawer;
 
-    private boolean clickToMakeEdge;
+    private HamburgerBackArrowBasicTransition hamTransition;
+
+    private boolean isDragging = false;
     private boolean favoriteOnly = false;
 
     private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
@@ -101,8 +107,25 @@ public class MapEditViewController implements IController {
     private final DrawableCircle alignBottom = new DrawableCircle(-1, -1, "ab", "n/a");
 
     @FXML
-    private void initialize() throws SQLException {
-        clickToMakeEdge = false;
+    private void initialize() throws SQLException, IOException {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditorTableView.fxml"));
+        TabPane tablePane = loader.load();
+        EditorTableController tablePaneController = loader.getController();
+        tablePaneController.setRealController(this);
+        tabPane = tablePaneController.getTabPane();
+        nodesTab = tablePaneController.getNodesTab();
+        edgesTab = tablePaneController.getEdgesTab();
+        nodeTreeTable = tablePaneController.getNodeTreeTable();
+        edgeTreeTable = tablePaneController.getEdgeTreeTable();
+        drawer.setSidePane(tablePane);
+        drawer.close();
+        drawer.setMouseTransparent(true);
+
+
+        hamTransition = new HamburgerBackArrowBasicTransition(hamburger);
+        hamTransition.setRate(-1);
 
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
@@ -391,6 +414,7 @@ public class MapEditViewController implements IController {
                 if(nodeEntry.getNodeID().equals(favID)) favoriteList.add(nodeEntry);
             }
         }
+
     }
 
     private void colorAlignmentCircles(DrawableCircle drawableCircle) {
@@ -407,7 +431,8 @@ public class MapEditViewController implements IController {
 
         NodeEntry selectedNode;
         if (nodesTab.isSelected()) {
-            if (nodeTreeTable.getSelectionModel().getSelectedIndex() < 0) return;
+            int selectedIndex = nodeTreeTable.getSelectionModel().getSelectedIndex(); // get index of table that is selected - KD
+            if (nodeTreeTable.getTreeItem(selectedIndex) == null) return;
             try {
                 selectedNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue(); // get item the is selected - KD
             } catch (NullPointerException e) {
@@ -426,8 +451,9 @@ public class MapEditViewController implements IController {
             drawEdgeNodeOnFloor();
         } else if (edgesTab.isSelected()) {
             // Get the current selected edge index
-            if (edgeTreeTable.getSelectionModel().getSelectedIndex() < 0) return;
+            int index = edgeTreeTable.getSelectionModel().getSelectedIndex();
             EdgeEntry selectedEdge;
+            if(edgeTreeTable.getTreeItem(index) == null) return;
             try {
                 selectedEdge = edgeTreeTable.getSelectionModel().getSelectedItem().getValue();
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -459,6 +485,8 @@ public class MapEditViewController implements IController {
             }
         }
         handleSearch();
+        nodeTreeTable.getSelectionModel().clearSelection();
+        edgeTreeTable.getSelectionModel().clearSelection();
     } //FIXME edited node and node disappeared?
 
     /**
@@ -470,9 +498,7 @@ public class MapEditViewController implements IController {
     public void handleDelete() throws SQLException {
         if (nodesTab.isSelected()) {
             int selectedIndex = nodeTreeTable.getSelectionModel().getSelectedIndex(); // get index of table that is selected - KD
-            if (selectedIndex < 0) {
-                return;
-            }
+            if (nodeTreeTable.getTreeItem(selectedIndex) == null) return;
             deleteAssociatedEdges(nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID()); // delete all edges connected to the node
             String targetID = nodeTreeTable.getTreeItem(selectedIndex).getValue().getNodeID();
             DatabaseAPI.getDatabaseAPI().deleteNode(targetID);
@@ -480,9 +506,10 @@ public class MapEditViewController implements IController {
             selectedCircle = null;
             mapPanel.unDraw(targetID);
         } else if (edgesTab.isSelected()) {
+
             int index = edgeTreeTable.getSelectionModel().getSelectedIndex();
             EdgeEntry selectedEdge;
-
+            if(edgeTreeTable.getTreeItem(index) == null) return;
             // Check for a valid index (-1 = no selection)
             try {
                 // Remove the edge, this will update the TableView automatically
@@ -502,6 +529,8 @@ public class MapEditViewController implements IController {
                 alert.showAndWait();
             }
         }
+        nodeTreeTable.getSelectionModel().clearSelection();
+        edgeTreeTable.getSelectionModel().clearSelection();
     }
 
     /**
@@ -1023,40 +1052,43 @@ public class MapEditViewController implements IController {
 
         drawableNode.setOnMouseEntered(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR_HIGHLIGHT);
-            Tooltip.install(drawableNode, tt);
+            if(!isDragging) tt.show(drawableNode, e.getScreenX(), e.getScreenY());
         });
         drawableNode.setOnMouseExited(e -> {
             if (!drawableNode.equals(selectedCircle)) drawableNode.setFill(UIConstants.NODE_COLOR);
-            Tooltip.uninstall(drawableNode, tt);
+            tt.hide();
         });
 
         final List<DrawableEdge> startEdges = new ArrayList<>();
         final List<DrawableEdge> endEdges = new ArrayList<>();
 
-        if (clickToMakeEdge) {
-            drawableNode.setOnMouseClicked(e -> handleCreateEdgeFromNodes(drawableNode));
-        }
-        else {
-            drawableNode.setOnMouseClicked(e -> {
+        drawableNode.setOnMouseClicked(e -> {
                 if(e.isShiftDown())
                     handleCreateEdgeFromNodes(drawableNode);
             });
 
-            drawableNode.setOnMousePressed(e -> handleNodeDragMousePressed(drawableNode, nodeEntry, startEdges, endEdges));
+        drawableNode.setOnMousePressed(e -> handleNodeDragMousePressed(drawableNode, nodeEntry, startEdges, endEdges));
 
-            drawableNode.setOnMouseDragged(e -> {
+        drawableNode.setOnDragDetected(e -> {
+            tt.hide();
+        });
+
+        drawableNode.setOnMouseDragged(e -> {
+                isDragging = true;
+                tt.hide();
                 handleNodeDragMouseDragged(drawableNode, e, startEdges, endEdges);
             });
 
-            drawableNode.setOnMouseReleased(e -> {
+        drawableNode.setOnMouseReleased(e -> {
+                isDragging = false;
                 if(!e.isDragDetect())
                 {
                     firstCircle = null;
                     secondCircle = null;
                 }
                 handleNodeDragMouseReleased(drawableNode);
+                tt.show(drawableNode, e.getScreenX(), e.getScreenY());
             });
-        }
 
         return drawableNode;
     }
@@ -1585,11 +1617,11 @@ public class MapEditViewController implements IController {
 
                 l.setOnMouseEntered(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.NODE_COLOR_HIGHLIGHT);
-                    Tooltip.install(edge, tt);
+                    tt.show(l, event.getScreenX(), event.getScreenY());
                 });
                 l.setOnMouseExited(event -> {
                     if (!l.equals(selectedLine)) l.setStroke(UIConstants.LINE_COLOR);
-                    Tooltip.uninstall(edge, tt);
+                    tt.hide();
                 });
                 l.setOnMouseClicked(event -> {
                     if (selectedLine != null)
@@ -1690,52 +1722,13 @@ public class MapEditViewController implements IController {
         SceneContext.getSceneContext().loadDefault();
     }
 
-    public void handleTabChange(Event event) {
-        /*
-        Tab theTab = (Tab) event.getSource();
-        if (theTab == nodesTab) {
-            ObservableList<String> searchables = FXCollections.observableArrayList();
-            searchables.add("Node ID");
-            searchables.add("Floor");
-            searchables.add("Building");
-            searchables.add("Node Type");
-            searchables.add("Long Name");
-            searchables.add("Short Name");
-            searchComboBox.setItems(searchables);
-            searchComboBox.setValue("Node ID");
-        } else if (theTab == edgesTab) {
-            ObservableList<String> searchables = FXCollections.observableArrayList();
-            searchables.add("Edge ID");
-            searchables.add("Start Node");
-            searchables.add("End Node");
-            searchComboBox.setItems(searchables);
-            searchComboBox.setValue("Edge ID");
-        }
-         */
-    }
-
-    /**
-     * Handles when the toggle for editor mode is switched between Click and Drag or Edge Creation
-     * @author KD
-     */
-    public void handleToggle() {
-        if (edgeCreationToggle.getText().equals("Drag and Drop")) {
-            clickToMakeEdge = true;
-            edgeCreationToggle.setText("Edge Creation");
-        } else {
-            clickToMakeEdge = false;
-            edgeCreationToggle.setText("Drag and Drop");
-        }
-        drawEdgeNodeOnFloor();
-        handleSearch();
-    }
-
     /**
      * Adds selected node to the favorites list of current user
      * @throws SQLException
      * @author KD
      */
     public void handleFavorite() throws SQLException {
+        if(selectedCircle==null) return;
         if(selectedCircle.getFill().equals(Color.GREEN) && mapPanel.getNode(selectedCircle.getId()).shouldDisplay().get()) {
             NodeEntry favNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue();
             if(favoriteButton.getText().equals("Favorite")) {
@@ -1776,6 +1769,21 @@ public class MapEditViewController implements IController {
             if(nodeEntry.getNodeID().equals(nodeID)) isFavorite = true;
         }
         return isFavorite;
+    }
+
+    /**
+     * Opens the side bar that contains the table tree views
+     */
+    public void handleHamburger() {
+        hamTransition.setRate(hamTransition.getRate()*(-1));
+        hamTransition.play();
+        if(drawer.isOpened()) {
+            drawer.close();
+            drawer.setMouseTransparent(true);
+        } else {
+            drawer.open();
+            drawer.setMouseTransparent(false);
+        }
     }
 }
 
