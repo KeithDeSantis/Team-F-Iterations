@@ -37,7 +37,7 @@ public class DrawableFloorInstruction extends ImageView implements IMapDrawable
 
         setFitWidth(20);
         setFitHeight(20);
-        setId(ID);//(curV.getFloor());
+        setId(ID);
         setOnMouseEntered(event -> {
             setFitWidth(30);
             setFitHeight(30);
@@ -78,9 +78,6 @@ public class DrawableFloorInstruction extends ImageView implements IMapDrawable
 
     @Override
     public void bindLocation(DoubleProperty zoomLevel) {
-
-//        imageViewOne.xProperty().bind(this.xCoordinate.divide(mapPanel.getZoomLevel()).subtract(imageViewOne.fitWidthProperty().divide(2)));
-//        imageViewOne.yProperty().bind(this.yCoordinate.divide(mapPanel.getZoomLevel()).subtract(imageViewOne.fitHeightProperty().divide(2)));
         this.xProperty().bind(xCoordinate.divide(zoomLevel).subtract(fitWidthProperty().divide(2)));
         this.yProperty().bind(yCoordinate.divide(zoomLevel).subtract(fitHeightProperty().divide(2)));
     }
@@ -93,14 +90,6 @@ public class DrawableFloorInstruction extends ImageView implements IMapDrawable
     @Override
     public StringProperty getFloor() {
         return this.floor;
-    }
-
-    public IntegerProperty xCoordinateProperty() {
-        return xCoordinate;
-    }
-
-    public IntegerProperty yCoordinateProperty() {
-        return yCoordinate;
     }
 
     public void setFloor(String floor) {
