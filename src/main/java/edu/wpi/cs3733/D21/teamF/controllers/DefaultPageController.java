@@ -48,6 +48,13 @@ public class DefaultPageController extends AbsController {
     private JFXButton editMap;
     @FXML
     private Label loginLabel;
+    @FXML
+    private JFXButton enterApp;
+    @FXML
+    private Label fillOutTheSurvey;
+    @FXML
+    private JFXButton employeeAdminSignIn;
+    boolean isCompleted;
 
     @FXML private void initialize(){
         loginButton.setDisableVisualFocus(true);
@@ -62,17 +69,19 @@ public class DefaultPageController extends AbsController {
 //        buttons.setVisible(true);
 //        covidBox.setVisible(false);
 //    }
-    @FXML
-    private void changeButtons() throws SQLException {
-        String ticketID = verifyAgain.getText();
-        if (CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(verifyAgain.getText()) ||
-        DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")){
+    private void changeButtons(){
+//        String ticketID = verifyAgain.getText();
+//        if (CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(verifyAgain.getText()) ||
+//                DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")) {
             buttons.setVisible(true);
             covidBox.setVisible(false);
+       // }
+    }
 
     private void resetButtons(){
         AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
         if(user != null && CurrentUser.getCurrentUser().isAuthenticated()) {
+            changeButtons();
             switch (user.getUserType()){
                 case "administrator":
                     manageServices.setManaged(true);
@@ -136,7 +145,7 @@ public class DefaultPageController extends AbsController {
      * @author ZheCheng Song
     */
     @FXML
-    private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
+    private void handleButtonPushed(ActionEvent actionEvent) throws IOException, SQLException {
 
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
 
@@ -184,6 +193,39 @@ public class DefaultPageController extends AbsController {
         else if (buttonPushed == surveyButton){
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
         }
+        else if (buttonPushed == employeeAdminSignIn){
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
+        }
+        else if (buttonPushed == enterApp){
+                //do we need to check to see if the input is a uuid or username?
+                if(completed().equals("true")){
+                    isCompleted = true;
+                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+                    Scene scene = enterApp.getScene();
+                    ((Stage) scene.getWindow()).close();
+                    //set destination to 75 Lobby entrance
+                }
+                else if(completed().equals("false")){
+                    isCompleted = true;
+                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+                    Scene scene = enterApp.getScene();
+                    ((Stage) scene.getWindow()).close();
+                    //set destination to emergency entrance
+                }
+                else{
+                    fillOutTheSurvey.setStyle("-fx-text-fill: #c60000FF;");
+                }
+            }
+        }
+    private String completed() throws SQLException {
+        String ticketID = verifyAgain.getText();
+        String complete = "";
+
+        if (ticketID.contains("-")) {
+            complete = DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID, "uuid").getCompleteStatus();
+            CurrentUser.getCurrentUser().tempLogin(ticketID);
+        }
+        return complete;
     }
     public void handleCovidVaccine() throws IOException {
         final FXMLLoader dialogLoader = new FXMLLoader();
