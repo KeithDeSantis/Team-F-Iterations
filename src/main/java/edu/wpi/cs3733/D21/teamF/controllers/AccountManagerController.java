@@ -1,23 +1,22 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.database.UserHandler;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
-import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.stage.Modality;
@@ -25,9 +24,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.AccessController;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -43,7 +39,7 @@ public class AccountManagerController extends AbsController implements Initializ
     private JFXButton home;
     @FXML
     private JFXTreeTableView<AccountEntry> accountView;
-    private ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
+    private final ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
 
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -53,17 +49,14 @@ public class AccountManagerController extends AbsController implements Initializ
         username.setCellValueFactory(cellData -> cellData.getValue().getValue().getUsernameProperty());
 
         username.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
-        username.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<AccountEntry, String>>() {
-            @Override
-            public void handle(TreeTableColumn.CellEditEvent<AccountEntry, String> event) {
-                TreeItem<AccountEntry> selectedAccount = accountView.getTreeItem(event.getTreeTablePosition().getRow());
-                try {
-                    DatabaseAPI.getDatabaseAPI().editUser(selectedAccount.getValue().getUsername(), event.getNewValue(), "username");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                selectedAccount.getValue().setUsername(event.getNewValue());
+        username.setOnEditCommit(event -> {
+            TreeItem<AccountEntry> selectedAccount = accountView.getTreeItem(event.getTreeTablePosition().getRow());
+            try {
+                DatabaseAPI.getDatabaseAPI().editUser(selectedAccount.getValue().getUsername(), event.getNewValue(), "username");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            selectedAccount.getValue().setUsername(event.getNewValue());
         });
 
         JFXTreeTableColumn<AccountEntry, String> password = new JFXTreeTableColumn<>("Password");
@@ -71,18 +64,15 @@ public class AccountManagerController extends AbsController implements Initializ
         password.setCellValueFactory(cellData -> cellData.getValue().getValue().getPasswordProperty());
 
         password.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
-        password.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<AccountEntry, String>>() {
-            @Override
-            public void handle(TreeTableColumn.CellEditEvent<AccountEntry, String> event) {
-                TreeItem<AccountEntry> selectedAccount = accountView.getTreeItem(event.getTreeTablePosition().getRow());
-                try {
-                    String newPass = DatabaseAPI.getDatabaseAPI().getEncryptedPass(event.getNewValue(), selectedAccount.getValue().getSalt());
-                    DatabaseAPI.getDatabaseAPI().editUser(selectedAccount.getValue().getUsername(), newPass, "password");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                selectedAccount.getValue().setUsername(event.getNewValue());
+        password.setOnEditCommit(event -> {
+            TreeItem<AccountEntry> selectedAccount = accountView.getTreeItem(event.getTreeTablePosition().getRow());
+            try {
+                String newPass = DatabaseAPI.getDatabaseAPI().getEncryptedPass(event.getNewValue(), selectedAccount.getValue().getSalt());
+                DatabaseAPI.getDatabaseAPI().editUser(selectedAccount.getValue().getUsername(), newPass, "password");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            selectedAccount.getValue().setUsername(event.getNewValue());
         });
 
         ObservableList<String> typeList = FXCollections.observableArrayList();
@@ -96,17 +86,14 @@ public class AccountManagerController extends AbsController implements Initializ
 
         userType.setCellFactory(ComboBoxTreeTableCell.forTreeTableColumn(typeList));
         //userType.setCellValueFactory(cellData -> cellData.getValue().getValue().getUserTypeProperty());
-        userType.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<AccountEntry, String>>() {
-            @Override
-            public void handle(TreeTableColumn.CellEditEvent<AccountEntry, String> event) {
-                TreeItem<AccountEntry> selectedAccount = accountView.getTreeItem(event.getTreeTablePosition().getRow());
-                try {
-                    DatabaseAPI.getDatabaseAPI().editUser(selectedAccount.getValue().getUsername(), event.getNewValue(), "type");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                selectedAccount.getValue().setUserType(event.getNewValue());
+        userType.setOnEditCommit(event -> {
+            TreeItem<AccountEntry> selectedAccount = accountView.getTreeItem(event.getTreeTablePosition().getRow());
+            try {
+                DatabaseAPI.getDatabaseAPI().editUser(selectedAccount.getValue().getUsername(), event.getNewValue(), "type");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            selectedAccount.getValue().setUserType(event.getNewValue());
         });
 
         final TreeItem<AccountEntry> root = new RecursiveTreeItem<>(accounts, RecursiveTreeObject::getChildren);
@@ -118,9 +105,7 @@ public class AccountManagerController extends AbsController implements Initializ
         try {
             //FIXME: make accounts instead of services
             data = DatabaseAPI.getDatabaseAPI().genAccountEntries();
-            for (AccountEntry e : data) {
-                accounts.add(e);
-            }
+            accounts.addAll(data);
         }
         catch (SQLException e) {
             e.printStackTrace();

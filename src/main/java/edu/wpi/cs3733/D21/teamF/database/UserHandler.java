@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserHandler implements DatabaseEntry {
+class UserHandler implements DatabaseEntry {
 
     /**
      * verify that the admin user exists

@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceRequestHandler implements DatabaseEntry {
+class ServiceRequestHandler implements DatabaseEntry {
 
 
     @Override
