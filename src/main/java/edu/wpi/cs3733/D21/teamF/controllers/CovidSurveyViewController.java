@@ -73,16 +73,20 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
      */
     @FXML private void handleSubmitPushed() throws IOException, SQLException {
         if(formFilled()) {
-            //create service request, put in database
+            // Create service request, put in database
             String covidInfo = temperatureField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "", "false", generatedID.getText());
-            //ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
+            // ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
-            //Copy UUID to users clipboard TODO add explicit button for this
+            // Copy UUID to users clipboard TODO add explicit button for this
             Clipboard.getSystemClipboard().setContent(content);
 
-            //change view to survey submitted page
+            // Generate a new UUID in the event submit is pressed twice (prevents DB errors)
+            generatedID.setText(UUID.randomUUID().toString());
+            content.putString(generatedID.getText());
+
+            // Change view to survey submitted page
             FXMLLoader submittedPageLoader = new FXMLLoader();
             submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
