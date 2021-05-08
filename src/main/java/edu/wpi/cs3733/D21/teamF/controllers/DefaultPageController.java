@@ -154,11 +154,14 @@ public class DefaultPageController extends AbsController {
                 surveyButton.setVisible(false);
                 surveyButton2.setManaged(true);
                 surveyButton2.setVisible(true);
+
+                loginLabel.setText("Please Log in.");
             } else {
                 buttons.setVisible(false);
                 covidBox.setVisible(true);
                 surveyButton.setVisible(true);
                 surveyButton.setManaged(true);
+                loginLabel.setText("Please Log in.");
             }
     }
     /**
