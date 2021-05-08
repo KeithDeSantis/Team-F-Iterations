@@ -103,7 +103,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     //FIXME: DO BETTER
     private Graph graph;
 
-    private final int MAX_RECENTLY_USED = 5;
+    private static final int MAX_RECENTLY_USED = 5;
 
     private static final double PIXEL_TO_METER_RATIO = 10;
 
@@ -1180,7 +1180,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     private void drawDirection(){
 
-        Vertex curV = pathVertex.get(stopsList.get(currentStep.get()));
         switch (currentDirection) {
             case "UP":
                 userNodeDisplay.directionAngleProperty().set(Math.toRadians(90));
