@@ -19,6 +19,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -73,16 +74,20 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
      */
     @FXML private void handleSubmitPushed() throws IOException, SQLException {
         if(formFilled()) {
-            //create service request, put in database
+            // Create service request, put in database
             String covidInfo = temperatureField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "", "false", generatedID.getText());
-            //ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
+            // ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
-            //Copy UUID to users clipboard TODO add explicit button for this
+            // Copy UUID to users clipboard TODO add explicit button for this
             Clipboard.getSystemClipboard().setContent(content);
 
-            //change view to survey submitted page
+            // Generate a new UUID in the event submit is pressed twice (prevents DB errors)
+            generatedID.setText(UUID.randomUUID().toString());
+            content.putString(generatedID.getText());
+
+            // Change view to survey submitted page
             FXMLLoader submittedPageLoader = new FXMLLoader();
             submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
@@ -107,39 +112,44 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     }
     public boolean formFilled(){
         final String tempStr = temperatureField.getText().trim();
+        boolean returnFlag = true;
 
         //Empty temperature field
         if(tempStr.isEmpty()) {
             setTextErrorStyle(temperatureField);
-            return false;
+            returnFlag = false;
         }
         //Verify temperature is a number
         if(!tempStr.matches("\\d*")) {
             setTextErrorStyle(temperatureField);
-            return false;
+            returnFlag =  false;
         }
+        if(!tempStr.isEmpty()) {
+            final int temperature = Integer.parseInt(tempStr);
 
-        final int temperature = Integer.parseInt(tempStr);
-
-        if (temperature < 70 || temperature > 115 ){
-            setTextErrorStyle(temperatureField);
-            return false;
+            if (temperature < 70 || temperature > 115) {
+                setTextErrorStyle(temperatureField);
+                returnFlag = false;
+            }
         }
 
         //FIXME: ADD USER FEEDBACK
 
         if(!yes1.isSelected() && !no1.isSelected())
         {
-            return false;
+            yes1.setUnSelectedColor(Color.RED);
+            no1.setUnSelectedColor(Color.RED);
+            returnFlag = false;
         }
 
         if(!yes2.isSelected() && !no2.isSelected())
         {
-
-            return false;
+            yes2.setUnSelectedColor(Color.RED);
+            no2.setUnSelectedColor(Color.RED);
+            returnFlag =  false;
         }
 
-        return true;
+        return returnFlag;
     }
 
     /**
@@ -153,9 +163,15 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
         yes1.setToggleGroup(question1);
         no1.setToggleGroup(question1);
 
+        yes1.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
+        no1.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
+
         ToggleGroup question2 = new ToggleGroup(); //group for second question
         yes2.setToggleGroup(question2);
         no2.setToggleGroup(question2);
+
+        yes2.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
+        no2.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
     }
 
     /**
