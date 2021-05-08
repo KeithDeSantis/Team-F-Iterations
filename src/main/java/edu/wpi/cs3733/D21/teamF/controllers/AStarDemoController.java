@@ -274,7 +274,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                     // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
                     // No combo box update so we call checkInput()
                     addStopMenu.setOnAction(e -> {
-                        if (addStopMenu.getText().equals("Add Stop")) {
+                        if(addStopMenu.getText().equals("Add Stop")) {
                             vertices.add(graph.getVertex(currEntry.getNodeID()));
                             drawStop(currEntry);
                             try {
@@ -319,7 +319,8 @@ public class AStarDemoController extends AbsController implements Initializable 
 
                         final JFXButton directionsTo = new JFXButton("Direction To");
                         directionsTo.setOnAction(a -> {
-                            endNode.set(idToShortName(currEntry.getNodeID()));try {
+                            endNode.set(idToShortName(currEntry.getNodeID()));
+                            try {
                                 handleEndNodeChange();
                             } catch (SQLException sqlException) {
                                 sqlException.printStackTrace();
@@ -329,14 +330,14 @@ public class AStarDemoController extends AbsController implements Initializable 
 
                         final JFXButton directionsFrom = new JFXButton("Directions From");
                         directionsFrom.setOnAction(a -> {
-                            startNode.set(idToShortName(currEntry.getNodeID()));try {
+                            startNode.set(idToShortName(currEntry.getNodeID()));
+                            try {
                                 handleStartNodeChange();
                             } catch (SQLException sqlException) {
                                 sqlException.printStackTrace();
                             }
                             dialog.close();
                         });
-
 
                         if(CurrentUser.getCurrentUser().isAuthenticated()) {
                             final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
@@ -363,13 +364,10 @@ public class AStarDemoController extends AbsController implements Initializable 
                                 }
                                 dialog.close();
                             });
-
                             layout.setActions(toggleFavorite, directionsTo, directionsFrom, closeBtn);
                         } else {
                             layout.setActions(directionsTo, directionsFrom, closeBtn);
                         }
-
-
 
                         dialog.setContent(layout);
                         mapPanel.showDialog(dialog);
@@ -591,17 +589,19 @@ public class AStarDemoController extends AbsController implements Initializable 
                     } catch (SQLException sqlException) {
                         sqlException.printStackTrace();
                     }
-                    dialog.close();});
+                    dialog.close();
+                });
 
                 final JFXButton directionsFrom = new JFXButton("Directions From");
-                directionsFrom.setOnAction(a ->  {
+                directionsFrom.setOnAction(a -> {
                     startNode.set(idToShortName(currEntry.getNodeID()));
                     try {
                         handleStartNodeChange();
                     } catch (SQLException sqlException) {
                         sqlException.printStackTrace();
                     }
-                    dialog.close();});
+                    dialog.close();
+                });
 
                 if(CurrentUser.getCurrentUser().isAuthenticated()) {
                     final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
@@ -632,6 +632,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 } else {
                     layout.setActions(directionsTo, directionsFrom, closeBtn);
                 }
+
                 dialog.setContent(layout);
                 mapPanel.showDialog(dialog);
             });
@@ -963,7 +964,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                             )
                     );
 
-                    final double maxOffset = edge.getStrokeDashArray().stream().reduce(0d, (a, b) -> a+b);
+                    final double maxOffset = edge.getStrokeDashArray().stream().reduce(0d, Double::sum);
 
                     Timeline pathTimeline = new Timeline(
                             new KeyFrame(
