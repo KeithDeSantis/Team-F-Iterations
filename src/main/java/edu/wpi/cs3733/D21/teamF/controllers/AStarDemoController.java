@@ -131,8 +131,6 @@ public class AStarDemoController extends AbsController implements Initializable 
     private final SimpleStringProperty startNode = new SimpleStringProperty("");
     private final SimpleStringProperty endNode = new SimpleStringProperty("");
 
-    private DrawableNode direction;
-
     private String currentDirection;
 
     final ObservableList<String> nodeList = FXCollections.observableArrayList();
@@ -397,7 +395,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
 
-        direction = null;
 
         /*
          * initializes user node
@@ -1182,31 +1179,22 @@ public class AStarDemoController extends AbsController implements Initializable 
     }
 
     private void drawDirection(){
-        if(direction != null)
-            mapPanel.unDraw(this.direction.getId());
+
         Vertex curV = pathVertex.get(stopsList.get(currentStep.get()));
         switch (currentDirection) {
             case "UP":
-                direction = new DrawableNode((int) Math.round(curV.getX()), (int) Math.round(curV.getY() - 50.0),
-                        "direction", curV.getFloor(), "", "", "", "");
+                userNodeDisplay.directionAngleProperty().set(Math.toRadians(90));
                 break;
             case "LEFT":
-                direction = new DrawableNode((int) Math.round(curV.getX() - 50.0), (int) Math.round(curV.getY()),
-                        "direction", curV.getFloor(), "", "", "", "");
+                userNodeDisplay.directionAngleProperty().set(0);
                 break;
             case "RIGHT":
-                direction = new DrawableNode((int) Math.round(curV.getX() + 50.0), (int) Math.round(curV.getY()),
-                        "direction", curV.getFloor(), "", "", "", "");
+                userNodeDisplay.directionAngleProperty().set(Math.toRadians(180));
                 break;
             case "DOWN":
-                direction = new DrawableNode((int) Math.round(curV.getX()), (int) Math.round(curV.getY() + 50.0),
-                        "direction", curV.getFloor(), "", "", "", "");
+                userNodeDisplay.directionAngleProperty().set(Math.toRadians(270));
                 break;
         }
-        direction.setFill(Color.RED);
-        direction.setRadius(4);
-
-        mapPanel.draw(direction);
     }
 
     private void changeDirection(String inst){
@@ -1414,10 +1402,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         drawDirection();
         setNavIcon();
-
-        if(direction != null && currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1))
-                mapPanel.unDraw(this.direction.getId());
-
     }
 
     /**
@@ -1441,9 +1425,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         //mapPanel.enableInteract();
 
         unDrawSEIcons();
-
-        if(direction != null)
-            mapPanel.unDraw(this.direction.getId());
 
         //mapPanel.switchMap(pathVertex.get(0).getFloor());
         //mapPanel.centerNode(startNodeDisplay);
