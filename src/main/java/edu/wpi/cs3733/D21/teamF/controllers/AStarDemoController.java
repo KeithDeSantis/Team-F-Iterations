@@ -13,12 +13,10 @@ import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
+import edu.wpi.cs3733.uicomponents.entities.DrawableFloorInstruction;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -1818,18 +1816,28 @@ public class AStarDemoController extends AbsController implements Initializable 
 
                 String Ins = instructionsList.get(i);
 
+                double currentFloor =  mapPanel.getDoubleStringConverter().fromString(curV.getFloor());
+                double nextFloor =  mapPanel.getDoubleStringConverter().fromString(nexV.getFloor());
+                boolean isUp = nextFloor > currentFloor;
+
+                //String Ins, boolean isUp, int xCoordinate, int yCoordinate, String ID, String floor
+                final DrawableFloorInstruction imageOne = new DrawableFloorInstruction(Ins, isUp, (int) Math.floor(curV.getX()), (int) Math.floor(curV.getY()), curV.getFloor(), curV.getFloor());
+                final DrawableFloorInstruction imageTwo = new DrawableFloorInstruction(Ins, !isUp, (int) Math.floor(nexV.getX()), (int) Math.floor(nexV.getY()), nexV.getFloor(), nexV.getFloor());
+                mapPanel.draw(imageOne);
+                mapPanel.draw(imageTwo);
+
                 ImageView imageViewOne = new ImageView();
                 ImageView imageViewTwo = new ImageView();
+
                 Image firstImage = null;
                 Image secondImage = null;
+
                 if (Ins.contains("elevator")) {
                     firstImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
                     secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
                 }
                 else if(Ins.contains("stair")){
-                    double currentFloor =  mapPanel.getDoubleStringConverter().fromString(curV.getFloor());
-                    double nextFloor =  mapPanel.getDoubleStringConverter().fromString(nexV.getFloor());
-                    if(nextFloor > currentFloor){
+                    if(isUp){
                         firstImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
                         secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
                     } else {
@@ -1852,6 +1860,22 @@ public class AStarDemoController extends AbsController implements Initializable 
                     imageViewOne.setFitWidth(30);
                     imageViewOne.setFitHeight(30);
                 });
+
+                Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.ZERO,
+                                new KeyValue(imageViewOne.fitWidthProperty(),20, Interpolator.EASE_BOTH),
+                                new KeyValue(imageViewOne.fitHeightProperty(), 20, Interpolator.EASE_BOTH)),
+                        new KeyFrame(Duration.millis(500),
+                                new KeyValue(imageViewOne.fitWidthProperty(),27, Interpolator.EASE_BOTH),
+                                new KeyValue(imageViewOne.fitHeightProperty(), 27, Interpolator.EASE_BOTH)),
+                        new KeyFrame(Duration.millis(1000),
+                                new KeyValue(imageViewOne.fitWidthProperty(),20, Interpolator.EASE_BOTH),
+                                new KeyValue(imageViewOne.fitHeightProperty(), 20, Interpolator.EASE_BOTH))
+                );
+
+                timeline.setCycleCount(Animation.INDEFINITE);
+                timeline.play();
+
                 imageViewOne.setOnMouseExited(event -> {
                     imageViewOne.setFitWidth(20);
                     imageViewOne.setFitHeight(20);
@@ -1874,6 +1898,21 @@ public class AStarDemoController extends AbsController implements Initializable 
                     imageViewTwo.setFitWidth(20);
                     imageViewTwo.setFitHeight(20);
                 });
+
+                Timeline timeline2 = new Timeline(
+                        new KeyFrame(Duration.ZERO,
+                                new KeyValue(imageViewTwo.fitWidthProperty(),20, Interpolator.EASE_BOTH),
+                                new KeyValue(imageViewTwo.fitHeightProperty(), 20, Interpolator.EASE_BOTH)),
+                        new KeyFrame(Duration.millis(500),
+                                new KeyValue(imageViewTwo.fitWidthProperty(),27, Interpolator.EASE_BOTH),
+                                new KeyValue(imageViewTwo.fitHeightProperty(), 27, Interpolator.EASE_BOTH)),
+                        new KeyFrame(Duration.millis(1000),
+                                new KeyValue(imageViewTwo.fitWidthProperty(),20, Interpolator.EASE_BOTH),
+                                new KeyValue(imageViewTwo.fitHeightProperty(), 20, Interpolator.EASE_BOTH))
+                );
+
+                timeline2.setCycleCount(Animation.INDEFINITE);
+                timeline2.play();
 
                 final BooleanBinding firstImageOnFloor = Bindings.equal(imageViewOne.getId(), mapPanel.getFloor());
                 final BooleanBinding secondImageOnFloor = Bindings.equal(imageViewTwo.getId(), mapPanel.getFloor());
