@@ -24,6 +24,8 @@ public class GoogleMapsViewController {
     private JFXButton helpButton;
     @FXML
     private  JFXButton submitButton;
+    @FXML
+    private JFXTextArea outputBox;
 
     public JFXTextField getStreetAddress() {
         return streetAddress;
@@ -73,5 +75,10 @@ public class GoogleMapsViewController {
         for (String s : stateAbbreviations){
             state.getItems().add(s);
         }
+    }
+
+    @FXML
+    public void handleSubmit(){
+        String address = streetAddress.getText()+ " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
     }
 }
