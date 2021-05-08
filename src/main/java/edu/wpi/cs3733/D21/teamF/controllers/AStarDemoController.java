@@ -207,7 +207,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         isCurrentlyNavigating.set(false);
 
         final ContextMenu contextMenu = new ContextMenu();
-        final ContextMenu treeViewMenu = new ContextMenu();
 
         //FIXME: CHANGE TEXT TO BE MORE ACCESSIBLE
         final MenuItem startPathMenu = new MenuItem("Path From Here");
@@ -1313,7 +1312,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         treeView.setDisable(true);
         about.setDisable(true);
         clear.setDisable(true);
-        mapPanel.disableInteract();
+        //mapPanel.disableInteract();
 
         currentStep.set(0);
 
@@ -1439,7 +1438,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         treeView.setDisable(false);
         about.setDisable(false);
         clear.setDisable(false);
-        mapPanel.enableInteract();
+        //mapPanel.enableInteract();
 
         unDrawSEIcons();
 
@@ -1826,111 +1825,17 @@ public class AStarDemoController extends AbsController implements Initializable 
                 mapPanel.draw(imageOne);
                 mapPanel.draw(imageTwo);
 
-                ImageView imageViewOne = new ImageView();
-                ImageView imageViewTwo = new ImageView();
-
-                Image firstImage = null;
-                Image secondImage = null;
-
-                if (Ins.contains("elevator")) {
-                    firstImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
-                    secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
-                }
-                else if(Ins.contains("stair")){
-                    if(isUp){
-                        firstImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
-                        secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
-                    } else {
-                        firstImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
-                        secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
-                    }
-                }
                 final int curStep = i;
 
-                imageViewOne.setImage(firstImage);
-                final SimpleIntegerProperty imageOneX = new SimpleIntegerProperty((int) Math.floor(curV.getX()));
-                final SimpleIntegerProperty imageOneY = new SimpleIntegerProperty((int) Math.floor(curV.getY()));
-                imageViewOne.xProperty().bind(imageOneX.divide(mapPanel.getZoomLevel()).subtract(imageViewOne.fitWidthProperty().divide(2)));
-                imageViewOne.yProperty().bind(imageOneY.divide(mapPanel.getZoomLevel()).subtract(imageViewOne.fitHeightProperty().divide(2)));
-                imageViewOne.setFitWidth(20);
-                imageViewOne.setFitHeight(20);
-                imageViewOne.setId(curV.getFloor());
-                imageViewOne.setOnMouseClicked(event -> goToStep(curStep + 1));
-                imageViewOne.setOnMouseEntered(event -> {
-                    imageViewOne.setFitWidth(30);
-                    imageViewOne.setFitHeight(30);
-                });
+                imageOne.setOnMouseClicked(event -> goToStep(curStep + 1));
 
-                Timeline timeline = new Timeline(
-                        new KeyFrame(Duration.ZERO,
-                                new KeyValue(imageViewOne.fitWidthProperty(),20, Interpolator.EASE_BOTH),
-                                new KeyValue(imageViewOne.fitHeightProperty(), 20, Interpolator.EASE_BOTH)),
-                        new KeyFrame(Duration.millis(500),
-                                new KeyValue(imageViewOne.fitWidthProperty(),27, Interpolator.EASE_BOTH),
-                                new KeyValue(imageViewOne.fitHeightProperty(), 27, Interpolator.EASE_BOTH)),
-                        new KeyFrame(Duration.millis(1000),
-                                new KeyValue(imageViewOne.fitWidthProperty(),20, Interpolator.EASE_BOTH),
-                                new KeyValue(imageViewOne.fitHeightProperty(), 20, Interpolator.EASE_BOTH))
-                );
-
-                timeline.setCycleCount(Animation.INDEFINITE);
-                timeline.play();
-
-                imageViewOne.setOnMouseExited(event -> {
-                    imageViewOne.setFitWidth(20);
-                    imageViewOne.setFitHeight(20);
-                });
-
-                imageViewTwo.setImage(secondImage);
-                final SimpleIntegerProperty imageTwoX = new SimpleIntegerProperty((int) Math.floor(nexV.getX()));
-                final SimpleIntegerProperty imageTwoY = new SimpleIntegerProperty((int) Math.floor(nexV.getY()));
-                imageViewTwo.xProperty().bind(imageTwoX.divide(mapPanel.getZoomLevel()).subtract(imageViewTwo.fitWidthProperty().divide(2)));
-                imageViewTwo.yProperty().bind(imageTwoY.divide(mapPanel.getZoomLevel()).subtract(imageViewTwo.fitHeightProperty().divide(2)));
-                imageViewTwo.setFitWidth(20);
-                imageViewTwo.setFitHeight(20);
-                imageViewTwo.setId(nexV.getFloor());
-                imageViewTwo.setOnMouseClicked(event -> goToStep(curStep));
-                imageViewTwo.setOnMouseEntered(event -> {
-                    imageViewTwo.setFitWidth(30);
-                    imageViewTwo.setFitHeight(30);
-                });
-                imageViewTwo.setOnMouseExited(event -> {
-                    imageViewTwo.setFitWidth(20);
-                    imageViewTwo.setFitHeight(20);
-                });
-
-                Timeline timeline2 = new Timeline(
-                        new KeyFrame(Duration.ZERO,
-                                new KeyValue(imageViewTwo.fitWidthProperty(),20, Interpolator.EASE_BOTH),
-                                new KeyValue(imageViewTwo.fitHeightProperty(), 20, Interpolator.EASE_BOTH)),
-                        new KeyFrame(Duration.millis(500),
-                                new KeyValue(imageViewTwo.fitWidthProperty(),27, Interpolator.EASE_BOTH),
-                                new KeyValue(imageViewTwo.fitHeightProperty(), 27, Interpolator.EASE_BOTH)),
-                        new KeyFrame(Duration.millis(1000),
-                                new KeyValue(imageViewTwo.fitWidthProperty(),20, Interpolator.EASE_BOTH),
-                                new KeyValue(imageViewTwo.fitHeightProperty(), 20, Interpolator.EASE_BOTH))
-                );
-
-                timeline2.setCycleCount(Animation.INDEFINITE);
-                timeline2.play();
-
-                final BooleanBinding firstImageOnFloor = Bindings.equal(imageViewOne.getId(), mapPanel.getFloor());
-                final BooleanBinding secondImageOnFloor = Bindings.equal(imageViewTwo.getId(), mapPanel.getFloor());
-
-                imageViewOne.toFront();
-                imageViewTwo.toFront();
-
-                imageViewOne.visibleProperty().bind(Bindings.when(firstImageOnFloor).then(true).otherwise(false));
-                imageViewTwo.visibleProperty().bind(Bindings.when(secondImageOnFloor).then(true).otherwise(false));
-
-                mapPanel.getCanvas().getChildren().add(imageViewOne);
-                mapPanel.getCanvas().getChildren().add(imageViewTwo);
+                imageTwo.setOnMouseClicked(event -> goToStep(curStep));
             }
         }
     }
 
     private void unDrawSEIcons(){
-        mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof ImageView && !x.equals(mapPanel.getMap()));
+        mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableFloorInstruction);
     }
 
     // Will come in handy when implementing Treeview for instructions
