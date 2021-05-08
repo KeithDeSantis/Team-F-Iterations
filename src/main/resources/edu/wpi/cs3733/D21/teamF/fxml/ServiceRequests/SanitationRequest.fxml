@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.SanitationRequestController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.SanitationRequestController">
    <children>
       <HBox fx:id="header" prefHeight="137.0" prefWidth="960.0" spacing="10.0" style="-fx-background-color: 94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.topAnchor="0.0">
          <children>
@@ -36,7 +36,7 @@
          <children>
             <HBox prefHeight="40.0" prefWidth="200.0">
                <children>
-                  <Label text="Client Name:">
+                  <Label fx:id="clientNameLbl" text="Client Name:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -44,7 +44,7 @@
                         <Insets left="25.0" />
                      </HBox.margin>
                   </Label>
-                  <Label text="Location:">
+                  <Label fx:id="locLbl" text="Location:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -71,7 +71,7 @@
                   </JFXComboBox>
                </children>
             </HBox>
-            <Label text="Job Description:">
+            <Label fx:id="jobDescLbl" text="Job Description:">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

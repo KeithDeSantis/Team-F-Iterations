@@ -14,8 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.ExternalTransController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.ExternalTransController">
 
    <children>
       <HBox fx:id="header" prefHeight="126.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
@@ -40,7 +39,7 @@
       </HBox>
       <VBox prefHeight="354.0" prefWidth="958.0" AnchorPane.topAnchor="150.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Patient Name:" GridPane.valignment="BOTTOM">
+            <Text fx:id="patientNameLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient Name:" GridPane.valignment="BOTTOM">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -53,7 +52,7 @@
                   <Insets left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </JFXTextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Method of Transportation:" GridPane.rowIndex="2">
+            <Text fx:id="motLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Method of Transportation:" GridPane.rowIndex="2">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -66,7 +65,7 @@
                   <Insets left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </JFXTextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Location:" GridPane.rowIndex="4">
+            <Text fx:id="locationLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Location:" GridPane.rowIndex="4">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -79,7 +78,7 @@
                   <Insets left="10.0" />
                </VBox.margin>
             </JFXComboBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Special Requests:" wrappingWidth="187.1328125" GridPane.rowIndex="6">
+            <Text fx:id="specialReqLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Special Requests:" wrappingWidth="187.1328125" GridPane.rowIndex="6">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" top="10.0" />
                </VBox.margin>

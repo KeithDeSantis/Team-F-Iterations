@@ -1,10 +1,8 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTimePicker;
+import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -13,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextInputControl;
 
 import java.io.IOException;
@@ -37,10 +36,40 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     public JFXTextField expirationDate;
     @FXML
     public JFXTextField cardholder;
-
+    @FXML
+    public Label clientNameLbl;
+    @FXML
+    public Label roomLbl;
+    @FXML
+    public Label deliveryLbl;
+    @FXML
+    public Label cardNameLbl;
+    @FXML
+    public Label medicineLbl;
+    @FXML
+    public Label cardLbl;
+    @FXML
+    public Label expLbl;
+    @FXML
+    public JFXButton cancelButton;
+    @FXML
+    public JFXButton clearButton;
+    @FXML
+    public JFXButton submitButton;
 
     @FXML
     public void initialize(){
+        clientNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(clientNameLbl.getText()));
+        roomLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(roomLbl.getText()));
+        deliveryLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(deliveryLbl.getText()));
+        cardNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardNameLbl.getText()));
+        medicineLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(medicineLbl.getText()));
+        cardLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardLbl.getText()));
+        expLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(expLbl.getText()));
+
+        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
+        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
+        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 

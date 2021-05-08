@@ -18,8 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.FloralDeliveryService">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.FloralDeliveryService">
 
    <children>
       <HBox fx:id="header" layoutX="25.0" layoutY="3.0" spacing="10.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -52,7 +51,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Delivery Location:">
+            <Label fx:id="deliveryLocLbl" text="Delivery Location:">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -132,7 +131,7 @@
                   <Insets left="10.0" />
                </GridPane.margin>
             </JFXRadioButton>
-            <Label text="Delivery Date:" GridPane.rowIndex="2">
+            <Label fx:id="deliveryDateLbl" text="Delivery Date:" GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -140,12 +139,12 @@
                   <Insets left="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Flower Type:" GridPane.columnIndex="3">
+            <Label fx:id="flowerTypeLbl" text="Flower Type:" GridPane.columnIndex="3">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Label>
-            <Label text="Container Type:" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <Label fx:id="containerTypeLbl" text="Container Type:" GridPane.columnIndex="3" GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -154,7 +153,7 @@
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin></JFXDatePicker>
-            <Label text="Name:" GridPane.rowIndex="1">
+            <Label fx:id="nameLbl" text="Name:" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -172,7 +171,7 @@
       </GridPane>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="425.0">
          <children>
-            <Label text="Payment Info:">
+            <Label fx:id="paymentLbl" text="Payment Info:">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

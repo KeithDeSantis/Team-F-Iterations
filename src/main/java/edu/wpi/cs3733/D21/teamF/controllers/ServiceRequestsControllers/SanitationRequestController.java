@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -10,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -20,9 +22,16 @@ public class SanitationRequestController extends ServiceRequests {
     @FXML private JFXTextField description;
     @FXML private JFXComboBox<String> loc;
     @FXML private JFXTextField clientName;
+    @FXML private Label clientNameLbl;
+    @FXML private Label locLbl;
+    @FXML private Label jobDescLbl;
 
     @FXML
     private void initialize(){
+        clientNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(clientNameLbl.getText()));
+        locLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(locLbl.getText()));
+        jobDescLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(jobDescLbl.getText()));
+
         try {
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
             final ObservableList<String> nodeList = FXCollections.observableArrayList();

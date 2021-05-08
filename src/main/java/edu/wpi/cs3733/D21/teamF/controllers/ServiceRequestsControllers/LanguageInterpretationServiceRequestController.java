@@ -36,6 +36,9 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     @FXML private Label dtLabel;
     @FXML private Label appointmentLabel;
     @FXML private Label languageLabel;
+    @FXML private JFXButton x;
+    @FXML private JFXButton clearButton;
+    @FXML private JFXButton submitButton;
 
     private final HashMap<String, String> langCodes = new HashMap<>();
 
@@ -111,6 +114,19 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Jay Yen
      */
     public void initialize(URL location, ResourceBundle resources){
+        nameLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLabel.getText()));
+        dtLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dtLabel.getText()));
+        appointmentLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(appointmentLabel.getText()));
+        languageLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(languageLabel.getText()));
+        name.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(name.getPromptText()));
+        date.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(date.getPromptText()));
+        time.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(time.getPromptText()));
+        language.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(language.getPromptText()));
+
+        x.textProperty().bind(Translator.getTranslator().getTranslationBinding(x.getText()));
+        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
+        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
+
         appointment.getItems().add("Non-Specific");
         appointment.getItems().add("Multiple Departments");
         appointment.getItems().add("Allergy and Clinical Immunology");
@@ -228,12 +244,6 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         langCodes.put("Russian", "ru");
         langCodes.put("Spanish", "es");
         langCodes.put("Vietnamese", "vi");
-
-
-        nameLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLabel.getText()));
-        dtLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dtLabel.getText()));
-        appointmentLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(appointmentLabel.getText()));
-        languageLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(languageLabel.getText()));
     }
 
     public boolean formFilled(){

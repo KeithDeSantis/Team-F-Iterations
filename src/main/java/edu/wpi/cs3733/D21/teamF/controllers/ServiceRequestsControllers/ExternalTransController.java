@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -11,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,10 +25,18 @@ public class ExternalTransController extends ServiceRequests{
     @FXML private JFXComboBox<String> loc;
     @FXML private JFXTextField methodTrans;
     @FXML private JFXTextField special;
+    @FXML private Text patientNameLbl;
+    @FXML private Text motLbl;
+    @FXML private Text locationLbl;
+    @FXML private Text specialReqLbl;
 
 
     @FXML
     public void initialize(){
+        patientNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(patientNameLbl.getText()));
+        motLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(motLbl.getText()));
+        locationLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(locationLbl.getText()));
+        specialReqLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(specialReqLbl.getText()));
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 

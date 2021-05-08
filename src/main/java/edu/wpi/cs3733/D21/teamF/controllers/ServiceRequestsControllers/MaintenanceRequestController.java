@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -31,6 +32,8 @@ public class MaintenanceRequestController extends ServiceRequests {
     @FXML private Label locationLabel;
     @FXML private Label descLabel;
     @FXML private JFXButton cancel;
+    @FXML private JFXButton clearButton;
+    @FXML private JFXButton submitButton;
     @FXML private Label urgencyLabel;
     @FXML private Label dateLabel;
     @FXML private JFXComboBox<String> urgencyComboBox;
@@ -49,7 +52,15 @@ public class MaintenanceRequestController extends ServiceRequests {
 
     @FXML
     public void initialize(){
+        typeLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(typeLabel.getText()));
+        locationLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(locationLabel.getText()));
+        urgencyLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyLabel.getText()));
+        dateLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dateLabel.getText()));
+        descLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(descLabel.getText()));
 
+        cancel.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancel.getText()));
+        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
+        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
 
         try{
 
