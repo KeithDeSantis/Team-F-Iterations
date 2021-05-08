@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
@@ -34,6 +35,8 @@ public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton covidSurvey;
     @FXML
+    private JFXButton covidInfo;
+    @FXML
     private JFXButton manageServices;
     @FXML
     private JFXButton pathfindingSettingButton;
@@ -55,6 +58,17 @@ public class DefaultPageController extends AbsController {
         loginButton.setDisableVisualFocus(true);
 	//Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
+
+        loginButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginButton.getText()));
+        loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginLabel.getText()));
+        navigation.textProperty().bind(Translator.getTranslator().getTranslationBinding(navigation.getText()));
+        editMap.textProperty().bind(Translator.getTranslator().getTranslationBinding(editMap.getText()));
+        serviceRequest.textProperty().bind(Translator.getTranslator().getTranslationBinding(serviceRequest.getText()));
+        manageServices.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageServices.getText()));
+        manageAccount.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageAccount.getText()));
+        pathfindingSettingButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(pathfindingSettingButton.getText()));
+        covidInfo.textProperty().bind(Translator.getTranslator().getTranslationBinding(covidInfo.getText()));
+        quit.textProperty().bind(Translator.getTranslator().getTranslationBinding(quit.getText()));
 
         resetButtons();
     }

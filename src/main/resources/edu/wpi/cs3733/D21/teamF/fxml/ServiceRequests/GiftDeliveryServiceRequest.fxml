@@ -23,7 +23,7 @@
     <children>
         <HBox fx:id="header" prefHeight="117.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
             <children>
-                <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                     </image>
@@ -39,7 +39,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                <children>
-                      <Label text="Name:">
+                      <Label fx:id="nameLbl" text="Name:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -64,7 +64,7 @@
                      <children>
                         <JFXDatePicker fx:id="dateField" defaultColor="#03256c" GridPane.columnIndex="1" />
                         <JFXTimePicker fx:id="timeField" defaultColor="#03256c" prefHeight="25.0" prefWidth="148.0" GridPane.columnIndex="2" />
-                        <Label prefHeight="21.0" prefWidth="131.0" text="Schedule Delivery:">
+                        <Label fx:id="schedLbl" prefHeight="21.0" prefWidth="131.0" text="Schedule Delivery:">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -78,7 +78,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0">
                <children>
-                      <Label text="Special Instructions:">
+                      <Label fx:id="specInstructLbl" text="Special Instructions:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -106,7 +106,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Select Gift(s):">
+                        <Label fx:id="giftLbl" text="Select Gift(s):">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -126,7 +126,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                      <Label text="Card Number:">
+                      <Label fx:id="cardNumberLbl" text="Card Number:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -139,7 +139,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </JFXTextField>
-                      <Label text="Expiration Date:">
+                      <Label fx:id="expLbl" text="Expiration Date:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -152,7 +152,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </JFXTextField>
-                      <Label prefHeight="17.0" prefWidth="38.0" text="CSV:">
+                      <Label fx:id="csvLbl" prefHeight="17.0" prefWidth="38.0" text="CSV:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
