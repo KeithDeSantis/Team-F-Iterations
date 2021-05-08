@@ -1317,6 +1317,8 @@ public class AStarDemoController extends AbsController implements Initializable 
         Instruction.setVisible(true);
         navIcon.setVisible(true);
         ETA.setVisible(true);
+        treeView.setManaged(false);
+        treeView.setVisible(false);
         treeView.setDisable(true);
         about.setDisable(true);
         clear.setDisable(true);
@@ -1357,6 +1359,12 @@ public class AStarDemoController extends AbsController implements Initializable 
         this.startNodeDisplay = mapPanel.getNode(pathVertex.get(0).getID());
         this.endNodeDisplay = mapPanel.getNode(pathVertex.get(pathVertex.size()-1).getID());
         mapPanel.centerNode(userNodeDisplay);
+
+        startNodeDisplay.toFront();
+        endNodeDisplay.toFront();
+        userNodeDisplay.toFront();
+
+        drawSEIcons();
 
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
         ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
@@ -1435,10 +1443,14 @@ public class AStarDemoController extends AbsController implements Initializable 
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
         optimize.setDisable(false);
+        treeView.setManaged(true);
+        treeView.setVisible(true);
         treeView.setDisable(false);
         about.setDisable(false);
         clear.setDisable(false);
         mapPanel.enableInteract();
+
+        unDrawSEIcons();
 
         if(direction != null)
             mapPanel.unDraw(this.direction.getId());
@@ -1497,8 +1509,8 @@ public class AStarDemoController extends AbsController implements Initializable 
             image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/uTurnYellow.png"));
         }
         else if(curInstruction.contains("stair")){
-            int nextFloor = Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
-            int currentFloor = Integer.parseInt(pathVertex.get(currentStep.get()-1).getFloor());
+            double nextFloor = floorToInt(curInstruction.substring(curInstruction.length()-1));
+            double currentFloor = floorToInt(pathVertex.get(currentStep.get()-1).getFloor());
             if(nextFloor > currentFloor){
                 image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
             } else {
@@ -1800,6 +1812,127 @@ public class AStarDemoController extends AbsController implements Initializable 
                 !treeView.getSelectionModel().getSelectedItem().equals(rootTreeViewItem)) { // Do not center on drop downs, root item or null items, only actual nodes
             mapPanel.switchMap(findNodeEntry(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue())).getFloor());
             mapPanel.centerNode(mapPanel.getNode(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue())));
+        }
+    }
+
+    private double floorToInt(String floor){
+        switch (floor) {
+            case "L2":
+                return 0.0;
+            case "L1":
+                return 1.0;
+            case "G":
+                return 2.0;
+            case "1":
+                return 3.0;
+            case "2":
+                return 4.0;
+            case "3":
+                return 5.0;
+            default:
+                return -1.0;
+        }
+    }
+
+    private void drawSEIcons(){
+        for(int i = 0; i < stopsList.size() - 1; i++){
+            if(instructionsList.get(i).contains("Take")){
+                Vertex curV = pathVertex.get(stopsList.get(i));
+                Vertex nexV = pathVertex.get(stopsList.get(i + 1));
+
+                String Ins = instructionsList.get(i);
+
+                ImageView imageViewOne = new ImageView();
+                ImageView imageViewTwo = new ImageView();
+                Image firstImage = null;
+                Image secondImage = null;
+                if (Ins.contains("elevator")) {
+                    firstImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
+                    secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
+                }
+                else if(Ins.contains("stair")){
+                    double currentFloor = floorToInt(curV.getFloor());
+                    double nextFloor = floorToInt(nexV.getFloor());
+                    if(nextFloor > currentFloor){
+                        firstImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
+                        secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
+                    } else {
+                        firstImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
+                        secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
+                    }
+                }
+                final int curStep = i;
+
+                imageViewOne.setImage(firstImage);
+                final SimpleIntegerProperty imageOneX = new SimpleIntegerProperty((int) Math.floor(curV.getX()));
+                final SimpleIntegerProperty imageOneY = new SimpleIntegerProperty((int) Math.floor(curV.getY()));
+                imageViewOne.xProperty().bind(imageOneX.divide(mapPanel.getZoomLevel()).subtract(imageViewOne.fitWidthProperty().divide(2)));
+                imageViewOne.yProperty().bind(imageOneY.divide(mapPanel.getZoomLevel()).subtract(imageViewOne.fitHeightProperty().divide(2)));
+                imageViewOne.setFitWidth(20);
+                imageViewOne.setFitHeight(20);
+                imageViewOne.setId(curV.getFloor());
+                imageViewOne.setOnMouseClicked(event -> {
+                    goToStep(curStep + 1);
+                });
+                imageViewOne.setOnMouseEntered(event -> {
+                    imageViewOne.setFitWidth(30);
+                    imageViewOne.setFitHeight(30);
+                });
+                imageViewOne.setOnMouseExited(event -> {
+                    imageViewOne.setFitWidth(20);
+                    imageViewOne.setFitHeight(20);
+                });
+
+                imageViewTwo.setImage(secondImage);
+                final SimpleIntegerProperty imageTwoX = new SimpleIntegerProperty((int) Math.floor(nexV.getX()));
+                final SimpleIntegerProperty imageTwoY = new SimpleIntegerProperty((int) Math.floor(nexV.getY()));
+                imageViewTwo.xProperty().bind(imageTwoX.divide(mapPanel.getZoomLevel()).subtract(imageViewTwo.fitWidthProperty().divide(2)));
+                imageViewTwo.yProperty().bind(imageTwoY.divide(mapPanel.getZoomLevel()).subtract(imageViewTwo.fitHeightProperty().divide(2)));
+                imageViewTwo.setFitWidth(20);
+                imageViewTwo.setFitHeight(20);
+                imageViewTwo.setId(nexV.getFloor());
+                imageViewTwo.setOnMouseClicked(event -> {
+                    goToStep(curStep);
+                });
+                imageViewTwo.setOnMouseEntered(event -> {
+                    imageViewTwo.setFitWidth(30);
+                    imageViewTwo.setFitHeight(30);
+                });
+                imageViewTwo.setOnMouseExited(event -> {
+                    imageViewTwo.setFitWidth(20);
+                    imageViewTwo.setFitHeight(20);
+                });
+
+                final BooleanBinding firstImageOnFloor = Bindings.equal(imageViewOne.getId(), mapPanel.getFloor());
+                final BooleanBinding secondImageOnFloor = Bindings.equal(imageViewTwo.getId(), mapPanel.getFloor());
+
+                imageViewOne.toFront();
+                imageViewTwo.toFront();
+
+                imageViewOne.visibleProperty().bind(Bindings.when(firstImageOnFloor).then(true).otherwise(false));
+                imageViewTwo.visibleProperty().bind(Bindings.when(secondImageOnFloor).then(true).otherwise(false));
+
+                mapPanel.getCanvas().getChildren().add(imageViewOne);
+                mapPanel.getCanvas().getChildren().add(imageViewTwo);
+            }
+        }
+    }
+
+    private void unDrawSEIcons(){
+        mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof ImageView && !x.equals(mapPanel.getMap()));
+    }
+
+    // Will come in handy when implementing Treeview for instructions
+    private void goToStep(int step){
+        if(step < 0 || step > stopsList.size() - 1 || step == currentStep.get()) return;
+        if(step > currentStep.get()){
+            while(step != currentStep.get()){
+                goToNextNode();
+            }
+        }else{
+            while(step != currentStep.get()){
+                goToPrevNode();
+            }
         }
     }
 }
