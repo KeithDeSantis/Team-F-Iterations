@@ -63,7 +63,11 @@ public class DefaultPageController extends AbsController {
 	//Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
 
-        resetButtons();
+        try {
+            resetButtons();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
     // used to see how to toggle visibility
 //    @FXML
@@ -80,7 +84,7 @@ public class DefaultPageController extends AbsController {
        // }
     }
 
-    private void resetButtons() {
+    private void resetButtons() throws SQLException {
         AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
         if (user != null && CurrentUser.getCurrentUser().isAuthenticated()) {
             changeButtons();
@@ -128,14 +132,30 @@ public class DefaultPageController extends AbsController {
                     surveyButton.setVisible(false);
                     surveyButton2.setManaged(false);
                     surveyButton2.setVisible(false);
+
+                    loginLabel.setText("Hello, " + user.getUsername() + "!");
+            } }else if (CurrentUser.getCurrentUser().getUuid() != null &&
+                isCleared(CurrentUser.getCurrentUser().getUuid())) {
+                covidBox.setVisible(false);
+                buttons.setVisible(true);
+                manageServices.setManaged(false);
+                manageServices.setVisible(false);
+                editMap.setManaged(false);
+                editMap.setVisible(false);
+                pathfindingSettingButton.setManaged(false);
+                pathfindingSettingButton.setVisible(false);
+                manageAccount.setManaged(false);
+                manageAccount.setVisible(false);
+                surveyButton.setManaged(false);
+                surveyButton.setVisible(false);
+                surveyButton2.setManaged(true);
+                surveyButton2.setVisible(true);
+            } else {
+                buttons.setVisible(false);
+                covidBox.setVisible(true);
+                surveyButton.setVisible(true);
+                surveyButton.setManaged(true);
             }
-            loginLabel.setText("Hello, " + user.getUsername() + "!");
-        } else {
-            buttons.setVisible(false);
-            covidBox.setVisible(true);
-            surveyButton.setVisible(true);
-            surveyButton.setManaged(true);
-        }
     }
     /**
      * Handles the pushing of a button on the screen
@@ -160,7 +180,7 @@ public class DefaultPageController extends AbsController {
         } else if (buttonPushed == manageServices) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManagerView.fxml");
         } else if (buttonPushed == navigation) {
-            if(CurrentUser.getCurrentUser().isAuthenticated()) {
+            if(CurrentUser.getCurrentUser().isAuthenticated() || isCleared(CurrentUser.getCurrentUser().getUuid())) {
                 SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
             } else {
                 FXMLLoader submittedPageLoader = new FXMLLoader();
@@ -198,9 +218,9 @@ public class DefaultPageController extends AbsController {
         }
         else if (buttonPushed == enterApp){
                 //do we need to check to see if the input is a uuid or username?
-                if(!completed().isEmpty()) {
+                if(!completed(verifyAgain.getText()).isEmpty()) {
                     isCompleted = true;
-                    if (isCleared()) {
+                    if (isCleared(verifyAgain.getText())) {
                         covidBox.setVisible(false);
                         buttons.setVisible(true);
                         manageServices.setManaged(false);
@@ -224,8 +244,7 @@ public class DefaultPageController extends AbsController {
                 }
             }
         }
-    private String completed() throws SQLException {
-        String ticketID = verifyAgain.getText();
+    private String completed(String ticketID) throws SQLException {
         String complete = "";
 
         if (ticketID.contains("-")) {
@@ -235,8 +254,7 @@ public class DefaultPageController extends AbsController {
         return complete;
     }
 
-    private boolean isCleared() throws SQLException{
-        String ID = verifyAgain.getText();
+    private boolean isCleared(String ID) throws SQLException{
         return Boolean.parseBoolean(DatabaseAPI.getDatabaseAPI().getServiceEntry(ID, "additionalInstructions").getCompleteStatus());
     }
 

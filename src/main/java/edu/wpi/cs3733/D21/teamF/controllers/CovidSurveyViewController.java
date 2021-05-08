@@ -83,9 +83,6 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             // Copy UUID to users clipboard TODO add explicit button for this
             Clipboard.getSystemClipboard().setContent(content);
 
-            // Generate a new UUID in the event submit is pressed twice (prevents DB errors)
-            generatedID.setText(UUID.randomUUID().toString());
-            content.putString(generatedID.getText());
 
             // Change view to survey submitted page
             FXMLLoader submittedPageLoader = new FXMLLoader();
@@ -99,6 +96,10 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             submittedStage.setTitle("Submission Complete");
             submittedStage.initModality(Modality.APPLICATION_MODAL);
             submittedStage.showAndWait();
+
+            // Generate a new UUID in the event submit is pressed twice (prevents DB errors)
+            generatedID.setText(UUID.randomUUID().toString());
+            content.putString(generatedID.getText());
 /*
             if(!formSubmittedViewController.isCompleted)
             {

@@ -33,6 +33,11 @@ public class CovidFormSubmittedViewController{
         //do we need to check to see if the input is a uuid or username?
         if(!completed().isEmpty()){
             isCompleted = true;
+            if(isCleared()){
+                CurrentUser.getCurrentUser().tempLogin(enterToCheck.getText());
+                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+            }
+            CurrentUser.getCurrentUser().tempLogin(enterToCheck.getText());
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
             Scene scene = checkButton.getScene();
             ((Stage) scene.getWindow()).close();
@@ -62,6 +67,11 @@ public class CovidFormSubmittedViewController{
         SceneContext.getSceneContext().loadDefault();
         Scene scene = checkButton.getScene();
         ((Stage) scene.getWindow()).close();
+    }
+
+    private boolean isCleared() throws SQLException{
+        String ID = enterToCheck.getText();
+        return Boolean.parseBoolean(DatabaseAPI.getDatabaseAPI().getServiceEntry(ID, "additionalInstructions").getCompleteStatus());
     }
 }
 
