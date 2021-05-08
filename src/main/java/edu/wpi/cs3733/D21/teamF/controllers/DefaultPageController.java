@@ -135,9 +135,10 @@ public class DefaultPageController extends AbsController {
                     surveyButton.setVisible(false);
                     surveyButton2.setManaged(false);
                     surveyButton2.setVisible(false);
+            }
+            loginLabel.setText("Hello, " + user.getUsername() + "!");
 
-                    loginLabel.setText("Hello, " + user.getUsername() + "!");
-            } }else if (CurrentUser.getCurrentUser().getUuid() != null &&
+            }else if (CurrentUser.getCurrentUser().getUuid() != null &&
                 isCleared(CurrentUser.getCurrentUser().getUuid())) {
                 covidBox.setVisible(false);
                 buttons.setVisible(true);
