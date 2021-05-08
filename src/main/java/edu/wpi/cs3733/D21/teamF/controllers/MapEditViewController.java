@@ -250,7 +250,7 @@ public class MapEditViewController extends AbsController {
                     final int xCoordinate = (int) (rectSelector.xProperty().get() * mapPanel.getZoomLevel().get());
                     final int yCoordinate = Integer.parseInt(e.getYCoordinate());
                     updateNode(e.getNodeID(), xCoordinate, yCoordinate);
-                    //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+
                 }
             }
 
@@ -268,7 +268,7 @@ public class MapEditViewController extends AbsController {
                     final int yCoordinate = Integer.parseInt(e.getYCoordinate());
                     updateNode(e.getNodeID(), xCoordinate, yCoordinate);
                 }
-                //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+
             }
         });
         colorAlignmentCircles(alignHorizontalMiddle);
@@ -312,7 +312,7 @@ public class MapEditViewController extends AbsController {
                     final int xCoordinate = Integer.parseInt(e.getXCoordinate());
                     final int yCoordinate = (int) (rectSelector.yProperty().add(rectSelector.heightProperty().divide(2.0)).multiply(mapPanel.getZoomLevel()).get());
                     updateNode(e.getNodeID(), xCoordinate, yCoordinate);
-                    //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+
                 }
             }
         });
@@ -327,7 +327,7 @@ public class MapEditViewController extends AbsController {
                     final int xCoordinate = Integer.parseInt(e.getXCoordinate());
                     final int yCoordinate = (int) (rectSelector.yProperty().add(rectSelector.heightProperty()).multiply(mapPanel.getZoomLevel()).get());
                     updateNode(e.getNodeID(), xCoordinate, yCoordinate);
-                    //((DrawableNode)mapPanel.getNode(e.getNodeID())).xCoordinateProperty().set(xCoordinate);
+
                 }
             }
         });
@@ -379,26 +379,6 @@ public class MapEditViewController extends AbsController {
             }
         });
 
-        /*
-          try {
-            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.xCoordinateProperty().get(), "xcoord");
-            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.yCoordinateProperty().get(), "ycoord");
-
-            ///FIXME: BIND PROPERTIES TOGETHER
-
-            for (NodeEntry entry : nodeEntryObservableList) {
-                if (entry.getNodeID().equals(drawableNode.getId())) {
-                    entry.setXCoordinate("" + drawableNode.xCoordinateProperty().get());
-                    entry.setYCoordinate("" + drawableNode.yCoordinateProperty().get());
-                    break;
-                }
-            }
-
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-         */
         rectSelector.setMouseTransparent(true);
 
         ArrayList<String> favList = DatabaseAPI.getDatabaseAPI().getUserNodes("favorite", CurrentUser.getCurrentUser().getLoggedIn().getUsername());
