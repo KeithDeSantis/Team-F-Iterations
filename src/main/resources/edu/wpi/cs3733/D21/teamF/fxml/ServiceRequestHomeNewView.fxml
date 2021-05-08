@@ -50,7 +50,7 @@
             <RowConstraints maxHeight="1000.0" minHeight="0.0" prefHeight="20.0" vgrow="ALWAYS" />
          </rowConstraints>
          <children>
-            <JFXButton fx:id="Home" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="125.0" prefWidth="230.0" style="-fx-background-color: f0c808;" text=" " textFill="WHITE" GridPane.halignment="CENTER">
+            <JFXButton fx:id="Home" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #94C4F1;" prefHeight="125.0" prefWidth="230.0" text=" " textFill="WHITE" GridPane.halignment="CENTER">
                <font>
                   <Font size="15.0" />
                </font>
