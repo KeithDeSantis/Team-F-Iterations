@@ -10,7 +10,7 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import org.apache.derby.iapi.util.ByteArray;
 
-public class AccountManagerNewUserDialogController {
+public class AccountManagerNewUserDialogController extends AbsController {
 
     @FXML
     private JFXButton okButton;

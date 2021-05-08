@@ -43,7 +43,7 @@ public class AccountManagerController extends AbsController implements Initializ
 
     public void initialize(URL location, ResourceBundle resources) {
 
-        int colWidth = 286;
+        int colWidth = 298;
         JFXTreeTableColumn<AccountEntry, String> username = new JFXTreeTableColumn<>("Username");
         username.setPrefWidth(colWidth);
         username.setCellValueFactory(cellData -> cellData.getValue().getValue().getUsernameProperty());
@@ -158,4 +158,15 @@ public class AccountManagerController extends AbsController implements Initializ
         SceneContext.getSceneContext().loadDefault();
     }
 
+    public void handleHelp() throws IOException {
+        FXMLLoader dialogLoader = new FXMLLoader();
+        dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerHelpView.fxml")); // load in Edit Dialog - KD
+        Stage dialogStage = new Stage();
+        Parent root = dialogLoader.load();
+        AccountManagerHelpController dialogController = dialogLoader.getController();
+        dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
+        dialogStage.initOwner(addUser.getScene().getWindow());
+        dialogStage.setScene(new Scene(root)); // set scene - KD
+        dialogStage.showAndWait(); // open pop up - KD
+    }
 }

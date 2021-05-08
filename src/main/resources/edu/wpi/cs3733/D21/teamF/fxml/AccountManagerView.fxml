@@ -28,7 +28,7 @@
       <JFXTreeTableView fx:id="accountView" layoutX="38.0" layoutY="117.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="323.0" prefWidth="896.0" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="140.0" />
       <HBox alignment="CENTER" layoutX="264.0" layoutY="454.0" prefHeight="59.0" prefWidth="810.0" spacing="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
          <children>
-            <JFXButton buttonType="RAISED" prefHeight="30.0" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help">
+            <JFXButton buttonType="RAISED" prefHeight="30.0" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" onAction="#handleHelp">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
