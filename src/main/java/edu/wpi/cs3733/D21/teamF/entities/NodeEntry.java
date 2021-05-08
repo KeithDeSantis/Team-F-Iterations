@@ -19,23 +19,24 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
     private String nodeType;
     private String longName;
     private String shortName;
+    private String description;
     private final StringProperty nodeIDProperty;
     private final StringProperty shortNameProperty;
 
 
     // KD - Constructor for testing purposes
     public NodeEntry(String nodeID, String name) {
-        this(nodeID,"", "", "" ,"", "",  "", name);
+        this(nodeID,"", "", "" ,"", "",  "", name, "");
     }
 
 
     // KD - Empty Constructor
     public NodeEntry() {
-       this("", "", "", "", "", "", "", "");
+       this("", "", "", "", "", "", "", "", "");
     }
 
     //ahf - constructor for all fields.
-    public NodeEntry(String nodeID, String xCoordinate, String yCoordinate, String floor, String building, String nodeType, String longName, String shortName) {
+    public NodeEntry(String nodeID, String xCoordinate, String yCoordinate, String floor, String building, String nodeType, String longName, String shortName, String description) {
         this.nodeID = nodeID;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
@@ -44,6 +45,7 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
         this.nodeType = nodeType;
         this.longName = longName;
         this.shortName = shortName;
+        this.description = description;
         nodeIDProperty = new SimpleStringProperty(this.nodeID);
         shortNameProperty = new SimpleStringProperty(this.shortName);
     }
@@ -125,5 +127,13 @@ public class NodeEntry extends RecursiveTreeObject<NodeEntry> {
                 longName,
                 shortName
         );
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
