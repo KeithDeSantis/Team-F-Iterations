@@ -4,8 +4,6 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.database.EdgeHandler;
-import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -128,8 +126,7 @@ public class MapEditViewController extends AbsController {
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
         try {
-            NodeHandler newNodeHandler = new NodeHandler();
-            data = newNodeHandler.genNodeEntryObjects();
+            data = DatabaseAPI.getDatabaseAPI().genNodeEntries();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -200,8 +197,7 @@ public class MapEditViewController extends AbsController {
         // Edge initialization
         List<EdgeEntry> edgeData = new ArrayList<>();
         try {
-            EdgeHandler newEdgeHandler = new EdgeHandler();
-            edgeData = newEdgeHandler.genEdgeEntryObjects();
+            edgeData = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
         } catch (SQLException e) {
             e.printStackTrace();
         }

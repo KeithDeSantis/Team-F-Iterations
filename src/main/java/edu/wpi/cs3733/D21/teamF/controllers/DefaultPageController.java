@@ -59,6 +59,9 @@ public class DefaultPageController extends AbsController {
     boolean isCompleted;
 
     @FXML private void initialize(){
+        // Apply fonts to title and buttons
+
+        // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
 	//Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));

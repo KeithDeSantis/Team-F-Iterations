@@ -13,12 +13,10 @@ import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import edu.wpi.cs3733.uicomponents.MapPanel;
 import edu.wpi.cs3733.uicomponents.entities.DrawableEdge;
+import edu.wpi.cs3733.uicomponents.entities.DrawableFloorInstruction;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -105,7 +103,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     //FIXME: DO BETTER
     private Graph graph;
 
-    private final int MAX_RECENTLY_USED = 5;
+    private static final int MAX_RECENTLY_USED = 5;
 
     private static final double PIXEL_TO_METER_RATIO = 10;
 
@@ -132,8 +130,6 @@ public class AStarDemoController extends AbsController implements Initializable 
     private final ArrayList<Vertex> vertices = new ArrayList<>();
     private final SimpleStringProperty startNode = new SimpleStringProperty("");
     private final SimpleStringProperty endNode = new SimpleStringProperty("");
-
-    private DrawableNode direction;
 
     private String currentDirection;
 
@@ -204,7 +200,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         isCurrentlyNavigating.set(false);
 
         final ContextMenu contextMenu = new ContextMenu();
-        final ContextMenu treeViewMenu = new ContextMenu();
 
         //FIXME: CHANGE TEXT TO BE MORE ACCESSIBLE
         final MenuItem startPathMenu = new MenuItem("Path From Here");
@@ -271,7 +266,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                     // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
                     // No combo box update so we call checkInput()
                     addStopMenu.setOnAction(e -> {
-                        if (addStopMenu.getText().equals("Add Stop")) {
+                        if(addStopMenu.getText().equals("Add Stop")) {
                             vertices.add(graph.getVertex(currEntry.getNodeID()));
                             drawStop(currEntry);
                             try {
@@ -316,7 +311,8 @@ public class AStarDemoController extends AbsController implements Initializable 
 
                         final JFXButton directionsTo = new JFXButton("Direction To");
                         directionsTo.setOnAction(a -> {
-                            endNode.set(idToShortName(currEntry.getNodeID()));try {
+                            endNode.set(idToShortName(currEntry.getNodeID()));
+                            try {
                                 handleEndNodeChange();
                             } catch (SQLException sqlException) {
                                 sqlException.printStackTrace();
@@ -326,14 +322,14 @@ public class AStarDemoController extends AbsController implements Initializable 
 
                         final JFXButton directionsFrom = new JFXButton("Directions From");
                         directionsFrom.setOnAction(a -> {
-                            startNode.set(idToShortName(currEntry.getNodeID()));try {
+                            startNode.set(idToShortName(currEntry.getNodeID()));
+                            try {
                                 handleStartNodeChange();
                             } catch (SQLException sqlException) {
                                 sqlException.printStackTrace();
                             }
                             dialog.close();
                         });
-
 
                         if(CurrentUser.getCurrentUser().isAuthenticated()) {
                             final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
@@ -369,8 +365,6 @@ public class AStarDemoController extends AbsController implements Initializable 
                             layout.getActions().add(layout.getActions().size() - 2, directionsTo);
                         }
 
-
-
                         dialog.setContent(layout);
                         mapPanel.showDialog(dialog);
                     });
@@ -402,7 +396,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
 
-        direction = null;
 
         /*
          * initializes user node
@@ -594,17 +587,19 @@ public class AStarDemoController extends AbsController implements Initializable 
                     } catch (SQLException sqlException) {
                         sqlException.printStackTrace();
                     }
-                    dialog.close();});
+                    dialog.close();
+                });
 
                 final JFXButton directionsFrom = new JFXButton("Directions From");
-                directionsFrom.setOnAction(a ->  {
+                directionsFrom.setOnAction(a -> {
                     startNode.set(idToShortName(currEntry.getNodeID()));
                     try {
                         handleStartNodeChange();
                     } catch (SQLException sqlException) {
                         sqlException.printStackTrace();
                     }
-                    dialog.close();});
+                    dialog.close();
+                });
 
                 if(CurrentUser.getCurrentUser().isAuthenticated()) {
                     final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
@@ -638,6 +633,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 if(!filterNodes){
                     layout.getActions().add(layout.getActions().size()-3, directionsTo);
                 }
+
                 dialog.setContent(layout);
                 mapPanel.showDialog(dialog);
             });
@@ -972,7 +968,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                             )
                     );
 
-                    final double maxOffset = edge.getStrokeDashArray().stream().reduce(0d, (a, b) -> a+b);
+                    final double maxOffset = edge.getStrokeDashArray().stream().reduce(0d, Double::sum);
 
                     Timeline pathTimeline = new Timeline(
                             new KeyFrame(
@@ -1193,31 +1189,21 @@ public class AStarDemoController extends AbsController implements Initializable 
     }
 
     private void drawDirection(){
-        if(direction != null)
-            mapPanel.unDraw(this.direction.getId());
-        Vertex curV = pathVertex.get(stopsList.get(currentStep.get()));
+
         switch (currentDirection) {
             case "UP":
-                direction = new DrawableNode((int) Math.round(curV.getX()), (int) Math.round(curV.getY() - 50.0),
-                        "direction", curV.getFloor(), "", "", "", "");
+                userNodeDisplay.directionAngleProperty().set(Math.toRadians(90));
                 break;
             case "LEFT":
-                direction = new DrawableNode((int) Math.round(curV.getX() - 50.0), (int) Math.round(curV.getY()),
-                        "direction", curV.getFloor(), "", "", "", "");
+                userNodeDisplay.directionAngleProperty().set(0);
                 break;
             case "RIGHT":
-                direction = new DrawableNode((int) Math.round(curV.getX() + 50.0), (int) Math.round(curV.getY()),
-                        "direction", curV.getFloor(), "", "", "", "");
+                userNodeDisplay.directionAngleProperty().set(Math.toRadians(180));
                 break;
             case "DOWN":
-                direction = new DrawableNode((int) Math.round(curV.getX()), (int) Math.round(curV.getY() + 50.0),
-                        "direction", curV.getFloor(), "", "", "", "");
+                userNodeDisplay.directionAngleProperty().set(Math.toRadians(270));
                 break;
         }
-        direction.setFill(Color.RED);
-        direction.setRadius(4);
-
-        mapPanel.draw(direction);
     }
 
     private void changeDirection(String inst){
@@ -1318,10 +1304,12 @@ public class AStarDemoController extends AbsController implements Initializable 
         Instruction.setVisible(true);
         navIcon.setVisible(true);
         ETA.setVisible(true);
+        treeView.setManaged(false);
+        treeView.setVisible(false);
         treeView.setDisable(true);
         about.setDisable(true);
         clear.setDisable(true);
-        mapPanel.disableInteract();
+        //mapPanel.disableInteract();
 
         currentStep.set(0);
 
@@ -1358,6 +1346,12 @@ public class AStarDemoController extends AbsController implements Initializable 
         this.startNodeDisplay = mapPanel.getNode(pathVertex.get(0).getID());
         this.endNodeDisplay = mapPanel.getNode(pathVertex.get(pathVertex.size()-1).getID());
         mapPanel.centerNode(userNodeDisplay);
+
+        startNodeDisplay.toFront();
+        endNodeDisplay.toFront();
+        userNodeDisplay.toFront();
+
+        drawSEIcons();
 
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
         ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
@@ -1417,10 +1411,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         drawDirection();
         setNavIcon();
-
-        if(direction != null && currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1))
-                mapPanel.unDraw(this.direction.getId());
-
     }
 
     /**
@@ -1436,13 +1426,14 @@ public class AStarDemoController extends AbsController implements Initializable 
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
         optimize.setDisable(false);
+        treeView.setManaged(true);
+        treeView.setVisible(true);
         treeView.setDisable(false);
         about.setDisable(false);
         clear.setDisable(false);
-        mapPanel.enableInteract();
+        //mapPanel.enableInteract();
 
-        if(direction != null)
-            mapPanel.unDraw(this.direction.getId());
+        unDrawSEIcons();
 
         //mapPanel.switchMap(pathVertex.get(0).getFloor());
         //mapPanel.centerNode(startNodeDisplay);
@@ -1809,6 +1800,53 @@ public class AStarDemoController extends AbsController implements Initializable 
                 !treeView.getSelectionModel().getSelectedItem().equals(rootTreeViewItem)) { // Do not center on drop downs, root item or null items, only actual nodes
             mapPanel.switchMap(findNodeEntry(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue())).getFloor());
             mapPanel.centerNode(mapPanel.getNode(shortNameToID(treeView.getSelectionModel().getSelectedItem().getValue())));
+        }
+    }
+
+
+
+    private void drawSEIcons(){
+        for(int i = 0; i < stopsList.size() - 1; i++){
+            if(instructionsList.get(i).contains("Take")){
+                Vertex curV = pathVertex.get(stopsList.get(i));
+                Vertex nexV = pathVertex.get(stopsList.get(i + 1));
+
+                String Ins = instructionsList.get(i);
+
+                double currentFloor =  mapPanel.getDoubleStringConverter().fromString(curV.getFloor());
+                double nextFloor =  mapPanel.getDoubleStringConverter().fromString(nexV.getFloor());
+                boolean isUp = nextFloor > currentFloor;
+
+                //String Ins, boolean isUp, int xCoordinate, int yCoordinate, String ID, String floor
+                final DrawableFloorInstruction imageOne = new DrawableFloorInstruction(Ins, isUp, (int) Math.floor(curV.getX()), (int) Math.floor(curV.getY()), curV.getFloor(), curV.getFloor());
+                final DrawableFloorInstruction imageTwo = new DrawableFloorInstruction(Ins, !isUp, (int) Math.floor(nexV.getX()), (int) Math.floor(nexV.getY()), nexV.getFloor(), nexV.getFloor());
+                mapPanel.draw(imageOne);
+                mapPanel.draw(imageTwo);
+
+                final int curStep = i;
+
+                imageOne.setOnMouseClicked(event -> goToStep(curStep + 1));
+
+                imageTwo.setOnMouseClicked(event -> goToStep(curStep));
+            }
+        }
+    }
+
+    private void unDrawSEIcons(){
+        mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableFloorInstruction);
+    }
+
+    // Will come in handy when implementing Treeview for instructions
+    private void goToStep(int step){
+        if(step < 0 || step > stopsList.size() - 1 || step == currentStep.get()) return;
+        if(step > currentStep.get()){
+            while(step != currentStep.get()){
+                goToNextNode();
+            }
+        }else{
+            while(step != currentStep.get()){
+                goToPrevNode();
+            }
         }
     }
 }

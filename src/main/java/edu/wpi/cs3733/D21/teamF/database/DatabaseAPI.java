@@ -189,6 +189,10 @@ public class DatabaseAPI {
         return ((UserHandler)this.userHandler).authenticate(username, pass);
     }
 
+    public String getEncryptedPass(String newPass, byte[] salt){
+        return ((UserHandler)this.userHandler).encryptPassword(newPass, salt);
+    }
+
     public List<AccountEntry> genAccountEntries() throws SQLException{
         return ((UserHandler)this.userHandler).genAccountEntryObjects();
     }

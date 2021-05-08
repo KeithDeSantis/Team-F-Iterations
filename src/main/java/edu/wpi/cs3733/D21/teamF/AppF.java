@@ -26,11 +26,11 @@ public class  AppF extends Application {
     primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png")));
     if (DatabaseAPI.getDatabaseAPI().createNodesTable())
     {
-        DatabaseAPI.getDatabaseAPI().populateNodes(CSVManager.load("MapfAllNodes.csv"));
+      DatabaseAPI.getDatabaseAPI().populateNodes(CSVManager.load("MapfAllNodes.csv"));
     }
     if (DatabaseAPI.getDatabaseAPI().createEdgesTable())
     {
-        DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("MapfAllEdges.csv"));
+      DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("MapfAllEdges.csv"));
     }
     DatabaseAPI.getDatabaseAPI().createUserTable();
     DatabaseAPI.getDatabaseAPI().createServiceRequestTable();
