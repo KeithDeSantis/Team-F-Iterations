@@ -8,4 +8,5 @@ public class Main {
    * @param args The arguments for the program (if we use any).
    */
   public static void main(String[] args) { AppF.launch(AppF.class, args); }
+  //Mwahaha
 }
