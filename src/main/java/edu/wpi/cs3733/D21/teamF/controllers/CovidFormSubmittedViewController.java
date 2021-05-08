@@ -31,19 +31,11 @@ public class CovidFormSubmittedViewController{
     @FXML
     private void handleCheck() throws IOException, SQLException {
         //do we need to check to see if the input is a uuid or username?
-        if(completed().equals("true")){
+        if(!completed().isEmpty()){
             isCompleted = true;
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
             Scene scene = checkButton.getScene();
             ((Stage) scene.getWindow()).close();
-            //set destination to 75 Lobby entrance
-        }
-        else if(completed().equals("false")){
-            isCompleted = true;
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
-            Scene scene = checkButton.getScene();
-            ((Stage) scene.getWindow()).close();
-            //set destination to emergency entrance
         }
         else{
             waitMessage.setVisible(true);

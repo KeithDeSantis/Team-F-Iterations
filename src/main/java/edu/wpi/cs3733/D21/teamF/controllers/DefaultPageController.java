@@ -35,6 +35,8 @@ public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton surveyButton;
     @FXML
+    private JFXButton surveyButton2;
+    @FXML
     private JFXButton manageServices;
     @FXML
     JFXTextField verifyAgain;
@@ -78,11 +80,11 @@ public class DefaultPageController extends AbsController {
        // }
     }
 
-    private void resetButtons(){
+    private void resetButtons() {
         AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
-        if(user != null && CurrentUser.getCurrentUser().isAuthenticated()) {
+        if (user != null && CurrentUser.getCurrentUser().isAuthenticated()) {
             changeButtons();
-            switch (user.getUserType()){
+            switch (user.getUserType()) {
                 case "administrator":
                     manageServices.setManaged(true);
                     manageServices.setVisible(true);
@@ -94,6 +96,8 @@ public class DefaultPageController extends AbsController {
                     manageAccount.setVisible(true);
                     surveyButton.setManaged(false);
                     surveyButton.setVisible(false);
+                    surveyButton2.setManaged(false);
+                    surveyButton2.setVisible(false);
                     break;
 
                 case "employee":
@@ -107,6 +111,8 @@ public class DefaultPageController extends AbsController {
                     manageAccount.setVisible(false);
                     surveyButton.setManaged(false);
                     surveyButton.setVisible(false);
+                    surveyButton2.setManaged(false);
+                    surveyButton2.setVisible(false);
                     break;
 
                 default:
@@ -120,23 +126,17 @@ public class DefaultPageController extends AbsController {
                     manageAccount.setVisible(false);
                     surveyButton.setManaged(false);
                     surveyButton.setVisible(false);
+                    surveyButton2.setManaged(false);
+                    surveyButton2.setVisible(false);
             }
             loginLabel.setText("Hello, " + user.getUsername() + "!");
         } else {
-            manageServices.setManaged(false);
-            manageServices.setVisible(false);
-            editMap.setManaged(false);
-            editMap.setVisible(false);
-            pathfindingSettingButton.setManaged(false);
-            pathfindingSettingButton.setVisible(false);
-            manageAccount.setManaged(false);
-            manageAccount.setVisible(false);
-            surveyButton.setManaged(true);
+            buttons.setVisible(false);
+            covidBox.setVisible(true);
             surveyButton.setVisible(true);
-            loginLabel.setText("Please Log In!");
+            surveyButton.setManaged(true);
         }
     }
-
     /**
      * Handles the pushing of a button on the screen
      *
@@ -190,7 +190,7 @@ public class DefaultPageController extends AbsController {
         else if (buttonPushed == quit) {
             Platform.exit();
         }
-        else if (buttonPushed == surveyButton){
+        else if (buttonPushed == surveyButton || buttonPushed == surveyButton2){
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
         }
         else if (buttonPushed == employeeAdminSignIn){
@@ -198,19 +198,26 @@ public class DefaultPageController extends AbsController {
         }
         else if (buttonPushed == enterApp){
                 //do we need to check to see if the input is a uuid or username?
-                if(completed().equals("true")){
+                if(!completed().isEmpty()) {
                     isCompleted = true;
-                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
-                    Scene scene = enterApp.getScene();
-                    ((Stage) scene.getWindow()).close();
-                    //set destination to 75 Lobby entrance
-                }
-                else if(completed().equals("false")){
-                    isCompleted = true;
-                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
-                    Scene scene = enterApp.getScene();
-                    ((Stage) scene.getWindow()).close();
-                    //set destination to emergency entrance
+                    if (isCleared()) {
+                        covidBox.setVisible(false);
+                        buttons.setVisible(true);
+                        manageServices.setManaged(false);
+                        manageServices.setVisible(false);
+                        editMap.setManaged(false);
+                        editMap.setVisible(false);
+                        pathfindingSettingButton.setManaged(false);
+                        pathfindingSettingButton.setVisible(false);
+                        manageAccount.setManaged(false);
+                        manageAccount.setVisible(false);
+                        surveyButton.setManaged(false);
+                        surveyButton.setVisible(false);
+                        surveyButton2.setManaged(true);
+                        surveyButton2.setVisible(true);
+                    } else {
+                        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+                    }
                 }
                 else{
                     fillOutTheSurvey.setStyle("-fx-text-fill: #c60000FF;");
@@ -227,6 +234,12 @@ public class DefaultPageController extends AbsController {
         }
         return complete;
     }
+
+    private boolean isCleared() throws SQLException{
+        String ID = verifyAgain.getText();
+        return Boolean.parseBoolean(DatabaseAPI.getDatabaseAPI().getServiceEntry(ID, "additionalInstructions").getCompleteStatus());
+    }
+
     public void handleCovidVaccine() throws IOException {
         final FXMLLoader dialogLoader = new FXMLLoader();
         dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidVaccineDialog.fxml"));
