@@ -126,10 +126,10 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     // List of intermediate vertices for multi-stop pathfinding - LM
     private final ArrayList<Vertex> vertices = new ArrayList<>();
-    private final SimpleStringProperty startNode = new SimpleStringProperty("");
-    private final SimpleStringProperty endNode = new SimpleStringProperty("");
+    private final StringProperty startNode = new SimpleStringProperty("");
+    private final StringProperty endNode = new SimpleStringProperty("");
 
-    private String currentDirection;
+    private final StringProperty currentDirection = new SimpleStringProperty("UP");
 
     final ObservableList<String> nodeList = FXCollections.observableArrayList();
 
@@ -413,6 +413,25 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         drawableUser.yCoordinateProperty().bind(Bindings.createDoubleBinding(() -> vertexProperty.get().getY(), vertexProperty));
         this.userNodeDisplay = drawableUser;
+
+
+
+       currentDirection.addListener((observable, oldValue, newValue) -> {
+           switch (currentDirection.get()) {
+               case "UP":
+                   userNodeDisplay.directionAngleProperty().set(Math.toRadians(90));
+                   break;
+               case "LEFT":
+                   userNodeDisplay.directionAngleProperty().set(0);
+                   break;
+               case "RIGHT":
+                   userNodeDisplay.directionAngleProperty().set(Math.toRadians(180));
+                   break;
+               case "DOWN":
+                   userNodeDisplay.directionAngleProperty().set(Math.toRadians(270));
+                   break;
+           }
+       });
 
         mapPanel.draw(this.userNodeDisplay);
 
@@ -1186,24 +1205,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
     }
 
-    private void drawDirection(){
-
-        switch (currentDirection) {
-            case "UP":
-                userNodeDisplay.directionAngleProperty().set(Math.toRadians(90));
-                break;
-            case "LEFT":
-                userNodeDisplay.directionAngleProperty().set(0);
-                break;
-            case "RIGHT":
-                userNodeDisplay.directionAngleProperty().set(Math.toRadians(180));
-                break;
-            case "DOWN":
-                userNodeDisplay.directionAngleProperty().set(Math.toRadians(270));
-                break;
-        }
-    }
-
     private void changeDirection(String inst){
         String[] instruction = inst.split(" ");
         if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
@@ -1222,52 +1223,52 @@ public class AStarDemoController extends AbsController implements Initializable 
     }
 
     private void switchDirectionDown() {
-        switch (currentDirection) {
+        switch (currentDirection.get()) {
             case "UP":
-                currentDirection = "DOWN";
+                currentDirection.set("DOWN");
                 break;
             case "LEFT":
-                currentDirection = "RIGHT";
+                currentDirection.set("RIGHT");
                 break;
             case "RIGHT":
-                currentDirection = "LEFT";
+                currentDirection.set("LEFT");
                 break;
             case "DOWN":
-                currentDirection = "UP";
+                currentDirection.set("UP");
                 break;
         }
     }
 
     private void switchDirectionRight() {
-        switch (currentDirection) {
+        switch (currentDirection.get()) {
             case "UP":
-                currentDirection = "RIGHT";
+                currentDirection.set("RIGHT");
                 break;
             case "LEFT":
-                currentDirection = "UP";
+                currentDirection.set("UP");
                 break;
             case "RIGHT":
-                currentDirection = "DOWN";
+                currentDirection.set("DOWN");
                 break;
             case "DOWN":
-                currentDirection = "LEFT";
+                currentDirection.set("LEFT");
                 break;
         }
     }
 
     private void switchDirectionLeft() {
-        switch (currentDirection) {
+        switch (currentDirection.get()) {
             case "UP":
-                currentDirection = "LEFT";
+                currentDirection.set("LEFT");
                 break;
             case "LEFT":
-                currentDirection = "DOWN";
+                currentDirection.set("DOWN");
                 break;
             case "RIGHT":
-                currentDirection = "UP";
+                currentDirection.set("UP");
                 break;
             case "DOWN":
-                currentDirection = "RIGHT";
+                currentDirection.set("RIGHT");
                 break;
         }
     }
@@ -1354,8 +1355,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
         ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
 
-        currentDirection = "UP";
-        drawDirection();
+        currentDirection.set("UP");
         setNavIcon();
         Go.setText("End Navigation");
     }
@@ -1382,7 +1382,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         mapPanel.centerNode(userNodeDisplay);
 
         changeDirectionRevert(instructionsList.get(currentStep.get()));
-        drawDirection();
         setNavIcon();
     }
 
@@ -1407,7 +1406,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         mapPanel.centerNode(userNodeDisplay);
 
-        drawDirection();
         setNavIcon();
     }
 
