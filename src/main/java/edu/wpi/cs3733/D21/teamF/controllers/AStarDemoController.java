@@ -1653,6 +1653,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 mapPanel.switchMap(currVertex.getFloor());
                 mapPanel.centerNode(mapPanel.getNode(currVertex.getID()));
                 currentStep.set(i);
+                changeDirection(instructionsList.get(currentStep.get()));
 
                 final SnapshotParameters params = new SnapshotParameters();
                 final int cX = (int) currVertex.getX();
