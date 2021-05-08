@@ -1560,7 +1560,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         final String initialFloor = mapPanel.getFloor().get();
         final int initialCurrStep = currentStep.get();
-        final double initZoomLevel = mapPanel.getZoomLevel().get();
+        final double initZoomLevel = mapPanel.getInternalZoomLevel().get();
 
         final File file = new File(System.currentTimeMillis() + ".pdf");
 
@@ -1568,7 +1568,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         final PDDocument pdfDocument = new PDDocument();
 
 
-        mapPanel.getZoomLevel().set(2);
+        mapPanel.getInternalZoomLevel().set(2);
 
         final int numPages = (int) Math.ceil((double) stopsList.size()/INSTRUCTIONS_PER_PAGE);
 
@@ -1690,7 +1690,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
         currentStep.set(initialCurrStep);
         mapPanel.switchMap(initialFloor);
-        mapPanel.getZoomLevel().set(initZoomLevel);
+        mapPanel.getInternalZoomLevel().set(initZoomLevel);
 
 
 
