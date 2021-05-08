@@ -312,11 +312,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                         layout.setHeading(new Text(currEntry.getLongName()));
 
                         //FIXME: DO BREAKS W/ CSS
-                        layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
-                                "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
-                                "may also be prone to contain information about running to the second arrangement (it's only the\n" +
-                                "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
-                                "avenue by Radio City."));
+                        layout.setBody(new Text(currEntry.getDescription()));
 
                         final JFXButton closeBtn = new JFXButton("Close");
                         closeBtn.setOnAction(a -> dialog.close());
@@ -582,11 +578,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 layout.setHeading(new Text(currEntry.getLongName()));
 
                 //FIXME: DO BREAKS W/ CSS
-                layout.setBody(new Text("Lorem ipsum this is a generic content body that will be filled out by some system\n" +
-                        "administrator (presumably). It will contain information about the node, floors, etc. I suppose. It\n" +
-                        "may also be prone to contain information about running to the second arrangement (it's only the\n" +
-                        "natural thing!). As per Doctor Wu, it may also contain directions to Magnolia Boulevard and the\n" +
-                        "avenue by Radio City."));
+                layout.setBody(new Text(currEntry.getDescription()));
 
                 final JFXButton closeBtn = new JFXButton("Close");
                 closeBtn.setOnAction(a -> dialog.close());
@@ -664,7 +656,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         if(CurrentUser.getCurrentUser().getUuid() != null)
         {
             try {
-                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid()).getCompleteStatus().equals("false"))
+                if(DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "uuid").getCompleteStatus().equals("false"))
                     endNode.set(idToShortName("FEXIT00301"));
                 else
                     endNode.set(idToShortName("FEXIT00201"));
@@ -1509,8 +1501,8 @@ public class AStarDemoController extends AbsController implements Initializable 
             image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/uTurnYellow.png"));
         }
         else if(curInstruction.contains("stair")){
-            double nextFloor = floorToInt(curInstruction.substring(curInstruction.length()-1));
-            double currentFloor = floorToInt(pathVertex.get(currentStep.get()-1).getFloor());
+            final int nextFloor = mapPanel.getDoubleStringConverter().fromString(curInstruction.substring(curInstruction.length()-1)).intValue();//Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
+            final int currentFloor = mapPanel.getDoubleStringConverter().fromString(pathVertex.get(currentStep.get()-1).getFloor()).intValue();
             if(nextFloor > currentFloor){
                 image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
             } else {
@@ -1815,24 +1807,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
     }
 
-    private double floorToInt(String floor){
-        switch (floor) {
-            case "L2":
-                return 0.0;
-            case "L1":
-                return 1.0;
-            case "G":
-                return 2.0;
-            case "1":
-                return 3.0;
-            case "2":
-                return 4.0;
-            case "3":
-                return 5.0;
-            default:
-                return -1.0;
-        }
-    }
+
 
     private void drawSEIcons(){
         for(int i = 0; i < stopsList.size() - 1; i++){
@@ -1851,8 +1826,8 @@ public class AStarDemoController extends AbsController implements Initializable 
                     secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/takeElevatorYellow.png"));
                 }
                 else if(Ins.contains("stair")){
-                    double currentFloor = floorToInt(curV.getFloor());
-                    double nextFloor = floorToInt(nexV.getFloor());
+                    double currentFloor =  mapPanel.getDoubleStringConverter().fromString(curV.getFloor());
+                    double nextFloor =  mapPanel.getDoubleStringConverter().fromString(nexV.getFloor());
                     if(nextFloor > currentFloor){
                         firstImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
                         secondImage = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goDownStairsYellow.png"));
@@ -1871,9 +1846,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 imageViewOne.setFitWidth(20);
                 imageViewOne.setFitHeight(20);
                 imageViewOne.setId(curV.getFloor());
-                imageViewOne.setOnMouseClicked(event -> {
-                    goToStep(curStep + 1);
-                });
+                imageViewOne.setOnMouseClicked(event -> goToStep(curStep + 1));
                 imageViewOne.setOnMouseEntered(event -> {
                     imageViewOne.setFitWidth(30);
                     imageViewOne.setFitHeight(30);
@@ -1891,9 +1864,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 imageViewTwo.setFitWidth(20);
                 imageViewTwo.setFitHeight(20);
                 imageViewTwo.setId(nexV.getFloor());
-                imageViewTwo.setOnMouseClicked(event -> {
-                    goToStep(curStep);
-                });
+                imageViewTwo.setOnMouseClicked(event -> goToStep(curStep));
                 imageViewTwo.setOnMouseEntered(event -> {
                     imageViewTwo.setFitWidth(30);
                     imageViewTwo.setFitHeight(30);

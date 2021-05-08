@@ -62,9 +62,8 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test adding edges table")
-    public void testAddEdgesTable() throws SQLException
-    {
-        String[] newEdge = {"test",  "start", "end"};
+    public void testAddEdgesTable() throws SQLException {
+        String[] newEdge = {"test", "start", "end"};
         DatabaseAPI.getDatabaseAPI().dropEdgesTable();
         assertTrue(DatabaseAPI.getDatabaseAPI().createEdgesTable());
         assertTrue(DatabaseAPI.getDatabaseAPI().addEdge(newEdge));
@@ -72,8 +71,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test adding a node")
-    public void testAddNodeBasic() throws SQLException
-    {
+    public void testAddNodeBasic() throws SQLException {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
         assertTrue(DatabaseAPI.getDatabaseAPI().addNode(newNode));
     }
@@ -90,7 +88,7 @@ class DatabaseAPITest {
     @DisplayName("test invalid node add")
     public void testInvalidNodeAdd() {
         String[] newNode = {"test", "1234"};
-        assertThrows(SQLException.class, () -> DatabaseAPI.getDatabaseAPI().addNode(newNode));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> DatabaseAPI.getDatabaseAPI().addNode(newNode));
     }
 
     @Test
@@ -102,8 +100,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test delete node")
-    public void testDeleteNode() throws SQLException
-    {
+    public void testDeleteNode() throws SQLException {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteNode("test"));
@@ -111,8 +108,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test delete invalid node")
-    public void testDeleteInvalidNode() throws SQLException
-    {
+    public void testDeleteInvalidNode() throws SQLException {
         String[] newNode = {"test", "10", "10", "floor", "building", "type", "long", "short"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
         assertFalse(DatabaseAPI.getDatabaseAPI().deleteNode("notTest"));
@@ -128,9 +124,8 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test generating node entry list")
-    public void testGenerateNodeEntries() throws SQLException
-    {
-        NodeEntry entry = new NodeEntry("test", "1", "1", "f", "b", "t", "l", "s");
+    public void testGenerateNodeEntries() throws SQLException {
+        NodeEntry entry = new NodeEntry("test", "1", "1", "f", "b", "t", "l", "s", "");
         ArrayList<NodeEntry> expected = new ArrayList<>();
         expected.add(entry);
         String[] newNode = {"test", "1", "1", "f", "b", "t", "l", "s"};
@@ -140,9 +135,17 @@ class DatabaseAPITest {
     }
 
     @Test
+    @DisplayName("test node description generation")
+    public void testNodeDescription() throws SQLException {
+        String[] newNode = {"1", "2", "3", "4", "5", "6", "7", "8"};
+        DatabaseAPI.getDatabaseAPI().addNode(newNode);
+        String expectedDesc = "The node ID is, 1 located on floor, 2\nIn building, 3 of type 4\nWith long and short names, 5, 6";
+        assertEquals(expectedDesc, DatabaseAPI.getDatabaseAPI().getNode("1").getDescription());
+    }
+
+    @Test
     @DisplayName("test editing a node")
-    public void testEditNode() throws Exception
-    {
+    public void testEditNode() throws Exception {
         String[] newNode = {"test", "1", "2", "f", "b", "t", "l", "s"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
         assertTrue(DatabaseAPI.getDatabaseAPI().editNode("test", "test1", "nodeid"));
@@ -169,16 +172,14 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test populating edges table")
-    public void testPopulateEdges() throws Exception
-    {
+    public void testPopulateEdges() throws Exception {
         DatabaseAPI.getDatabaseAPI().populateEdges(CSVManager.load("MapfAllEdges.csv"));
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteEdge("AHALL00202_AHALL00302"));
     }
 
     @Test
     @DisplayName("test generating edge entry list")
-    public void testGenerateEdgeEntries() throws SQLException
-    {
+    public void testGenerateEdgeEntries() throws SQLException {
         EdgeEntry entry = new EdgeEntry("test", "start", "end");
         ArrayList<EdgeEntry> expected = new ArrayList<>();
         expected.add(entry);
@@ -190,8 +191,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test adding a user")
-    public void testAddUser() throws SQLException
-    {
+    public void testAddUser() throws SQLException {
         String[] newUser = {"1", "employee", "declan", "password", "false"};
         assertTrue(DatabaseAPI.getDatabaseAPI().addUser(newUser));
     }
@@ -244,7 +244,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test authenticaion fail via covid status")
-    public void testCovidAuthFail() throws SQLException{
+    public void testCovidAuthFail() throws SQLException {
         String[] infected = {"1", "admin", "username", "password", "false"};
         DatabaseAPI.getDatabaseAPI().addUser(infected);
         assertFalse(DatabaseAPI.getDatabaseAPI().authenticate("username", "password"));
@@ -306,12 +306,11 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test generating service request entry list")
-    public void testGenerateServiceRequestEntries() throws SQLException
-    {
-        ServiceEntry entry = new ServiceEntry("1", "a task", "Ben","true", "instructions");
+    public void testGenerateServiceRequestEntries() throws SQLException {
+        ServiceEntry entry = new ServiceEntry("1", "a task", "Ben", "true", "instructions");
         ArrayList<ServiceEntry> expected = new ArrayList<>();
         expected.add(entry);
-        String[] newService = {"1", "a task", "Ben","true", "instructions"};
+        String[] newService = {"1", "a task", "Ben", "true", "instructions"};
         DatabaseAPI.getDatabaseAPI().addServiceReq(newService);
         List<ServiceEntry> actual = DatabaseAPI.getDatabaseAPI().genServiceRequestEntries();
         assertEquals(expected.get(0).getUuid(), actual.get(0).getUuid());
@@ -319,18 +318,18 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test get individual service request")
-    public void testGetServiceRequest() throws SQLException{
+    public void testGetServiceRequest() throws SQLException {
         String uuid = UUID.randomUUID().toString();
         DatabaseAPI.getDatabaseAPI().addServiceReq("123", "meme", "test", "truefalse", "stuff");
         DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, "language stuff", "test", "false", "be smart");
-        ServiceEntry actual = DatabaseAPI.getDatabaseAPI().getServiceEntry(uuid);
+        ServiceEntry actual = DatabaseAPI.getDatabaseAPI().getServiceEntry(uuid, "uuid");
         assertEquals(actual.getUuid(), uuid);
         assertEquals("language stuff", actual.getRequestType());
     }
 
     @Test
     @DisplayName("Test authentication and encryption")
-    public void testAuthentication() throws SQLException{
+    public void testAuthentication() throws SQLException {
         String[] newUser = {"1", "admin", "declan", "password", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(newUser);
         UserHandler handler = new UserHandler();
@@ -339,8 +338,8 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test getting a single node")
-    public void testGetNode() throws SQLException{
-        NodeEntry expected = new NodeEntry("id", "1", "2", "f", "b", "t", "l", "s");
+    public void testGetNode() throws SQLException {
+        NodeEntry expected = new NodeEntry("id", "1", "2", "f", "b", "t", "l", "s", "");
         String[] newNode = {"id", "1", "2", "f", "b", "t", "l", "s"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
         NodeEntry actual = DatabaseAPI.getDatabaseAPI().getNode("id");
@@ -350,7 +349,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test getting a single edge")
-    public void testGetEdge() throws SQLException{
+    public void testGetEdge() throws SQLException {
         EdgeEntry expected = new EdgeEntry("test", "start", "end");
         String[] newEdge = {"test", "start", "end"};
         DatabaseAPI.getDatabaseAPI().addEdge(newEdge);
@@ -361,7 +360,7 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test verifying the admin user entry")
-    public void testAdmin() throws SQLException{
+    public void testAdmin() throws SQLException {
         String[] admin = {"admin", "administrator", "admin", "admin", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(admin);
         assertTrue(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
@@ -369,19 +368,19 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test admin doesnt exist")
-    public void testNoAdmin() throws SQLException{
+    public void testNoAdmin() throws SQLException {
         assertFalse(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
     }
 
     @Test
     @DisplayName("test adding system preferences")
-    public void testAddSystemPreferences() throws SQLException{
+    public void testAddSystemPreferences() throws SQLException {
         assertTrue(DatabaseAPI.getDatabaseAPI().addSystemPreferences("2", "BFS"));
     }
 
     @Test
     @DisplayName("test deleting system preferences")
-    public void testDeleteSystemPreferences() throws SQLException{
+    public void testDeleteSystemPreferences() throws SQLException {
         DatabaseAPI.getDatabaseAPI().addSystemPreferences("1", "DFS");
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteSystemPreference("1"));
     }
@@ -401,33 +400,33 @@ class DatabaseAPITest {
 
     @Test
     @DisplayName("test getting and adding correct algorithm (1st entry always)")
-    public void testGetAlgorithm() throws SQLException{
+    public void testGetAlgorithm() throws SQLException {
         DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", "A*");
         assertEquals(DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm(), "A*");
     }
 
     @Test
     @DisplayName("test creating collections table")
-    public void testCreateCollections(){
+    public void testCreateCollections() {
         DatabaseAPI.getDatabaseAPI().dropCollectionsTable();
         assertTrue(DatabaseAPI.getDatabaseAPI().createCollectionsTable());
     }
 
     @Test
     @DisplayName("test dropping collections table")
-    public void testDropCollections(){
+    public void testDropCollections() {
         assertTrue(DatabaseAPI.getDatabaseAPI().dropCollectionsTable());
     }
 
     @Test
     @DisplayName("test adding a collections entry")
-    public void testAddingCollectionEntry() throws SQLException{
+    public void testAddingCollectionEntry() throws SQLException {
         assertTrue(DatabaseAPI.getDatabaseAPI().addCollectionEntry("testuser", "testnode", "favorite"));
     }
 
     @Test
     @DisplayName("test database compression")
-    public void testDatabaseCompression() throws SQLException{
+    public void testDatabaseCompression() throws SQLException {
         DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node1", "favorite");
         DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node2", "favorite");
         DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node3", "favorite");
@@ -440,19 +439,8 @@ class DatabaseAPITest {
     }
 
     @Test
-    @DisplayName("test SQL Injection filter")
-    public void testInjection(){
-        assertTrue(DatabaseAPI.getDatabaseAPI().filterInput("test"));
-    }
-
-    @Test
-    @DisplayName("test bad user input")
-    public void testInjectionBad(){
-        assertFalse(DatabaseAPI.getDatabaseAPI().filterInput(")'DROP TABLE USERS--"));
-    }
- @Test
     @DisplayName("test deleting a favorite and recent node")
-    public void testDeleteUserNodes() throws SQLException{
+    public void testDeleteUserNodes() throws SQLException {
         DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node1", "favorite");
         DatabaseAPI.getDatabaseAPI().addCollectionEntry("ben", "node2", "favorite");
         DatabaseAPI.getDatabaseAPI().addCollectionEntry("declan", "node3", "recent");
