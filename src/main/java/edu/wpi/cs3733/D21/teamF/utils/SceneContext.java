@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
+import com.jfoenix.controls.JFXDecorator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
 import javafx.animation.PauseTransition;
 import javafx.concurrent.Task;
@@ -48,7 +49,13 @@ public class SceneContext {
         };
         task.setOnSucceeded( e-> {
             try {
-                stage.setScene(new Scene(task.get()));
+                Stage stage = new Stage();
+                JFXDecorator decorator = new JFXDecorator(stage, task.get());
+                decorator.setCustomMaximize(true);
+                //decorator.setContent(task.get());
+                decorator.setTitle("TEST");
+
+                stage.setScene(new Scene(decorator));//task.get()));
                 stage.show();
             } catch (InterruptedException | ExecutionException interruptedException) {
                 interruptedException.printStackTrace();
