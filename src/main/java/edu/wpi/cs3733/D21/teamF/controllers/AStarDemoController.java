@@ -102,9 +102,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     //FIXME: DO BETTER
     private Graph graph;
-
     private static final int MAX_RECENTLY_USED = 5;
-
     private static final double PIXEL_TO_METER_RATIO = 10;
 
     /**
