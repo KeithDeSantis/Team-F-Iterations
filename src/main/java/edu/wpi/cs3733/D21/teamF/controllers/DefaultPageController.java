@@ -105,7 +105,7 @@ public class DefaultPageController extends AbsController {
             pathfindingSettingButton.setVisible(false);
             manageAccount.setManaged(false);
             manageAccount.setVisible(false);
-            loginLabel.setText("Please Log In!");
+            loginLabel.setText("Please Log In");
         }
     }
 

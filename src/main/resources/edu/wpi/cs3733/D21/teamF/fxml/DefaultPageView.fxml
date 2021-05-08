@@ -32,9 +32,12 @@
          </padding></HBox>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox fx:id="buttons" layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+            <VBox fx:id="buttons" layoutX="47.0" layoutY="10.0" prefHeight="338.0" prefWidth="224.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
                <children>
-                  <Label fx:id="loginLabel" text="Please Log in!" VBox.vgrow="ALWAYS" />
+                  <Label fx:id="loginLabel" alignment="CENTER" prefHeight="46.0" prefWidth="218.0" style="-fx-font-weight: bold;" text="Please Log in" textAlignment="CENTER" textFill="WHITE" wrapText="true" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
                   <JFXButton fx:id="loginButton" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Login" VBox.vgrow="ALWAYS">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
