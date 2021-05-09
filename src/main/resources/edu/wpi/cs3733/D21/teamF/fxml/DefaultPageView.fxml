@@ -14,14 +14,14 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-image: url('imagesAndLogos/BWHExterior.jpg'); -fx-background-size: 1920; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.DefaultPageController">
    <children>
-      <HBox fx:id="header" alignment="CENTER_LEFT" prefHeight="120.0" prefWidth="960.0" spacing="10.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
+      <HBox fx:id="header" alignment="CENTER_LEFT" prefHeight="90.0" prefWidth="960.0" spacing="10.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
          <children>
-            <ImageView fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="78.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
             </ImageView>
-            <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL" wrappingWidth="749.7598876953125">
+            <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL" wrappingWidth="329.7598876953125">
                <font>
                   <Font name="Volkhov Regular" size="40.0" />
                </font>
