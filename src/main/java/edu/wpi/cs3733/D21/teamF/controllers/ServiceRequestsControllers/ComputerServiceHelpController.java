@@ -21,16 +21,16 @@ public class ComputerServiceHelpController extends ServiceRequests  {
 
     @FXML
     public void initialize(){
-        for(Node n : gridPane.getChildren())
-        {
-            if(n instanceof Label)
-            {
-                Label label = (Label) n;
-                label.textProperty().bind(Translator.getTranslator().getTranslationBinding(label.getText()));
-            }
-        }
-
-        back.textProperty().bind(Translator.getTranslator().getTranslationBinding(back.getText()));
+//        for(Node n : gridPane.getChildren())
+//        {
+//            if(n instanceof Label)
+//            {
+//                Label label = (Label) n;
+//                label.textProperty().bind(Translator.getTranslator().getTranslationBinding(label.getText()));
+//            }
+//        }
+//
+//        back.textProperty().bind(Translator.getTranslator().getTranslationBinding(back.getText()));
 
     }
 

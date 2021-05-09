@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.utils;
 
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -101,10 +102,7 @@ public class SceneContext {
 
         System.out.println("CTRL: " + loader.getController());
         this.controller = loader.getController();
-        if(this.controller instanceof MaintenanceRequestController || this.controller instanceof GiftDeliveryServiceRequestController
-        || this.controller instanceof LaundryRequestController || this.controller instanceof ExternalTransController || this.controller instanceof LanguageInterpretationServiceRequestController
-        || this.controller instanceof  InternalTransportationController || this.controller instanceof  FloralDeliveryService || this.controller instanceof FoodDeliveryServiceRequestController
-        || this.controller instanceof  MedicineDeliveryServiceRequest || this.controller instanceof  SanitationRequestController)
+        if(this.controller instanceof ServiceRequests)
             autoTranslate(root);
 
         stage.setScene(new Scene(root));

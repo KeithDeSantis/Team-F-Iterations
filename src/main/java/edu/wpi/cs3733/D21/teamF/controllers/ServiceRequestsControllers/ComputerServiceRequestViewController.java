@@ -70,16 +70,16 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
     @FXML
     public void initialize(){
         computerNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(computerNameLbl.getText()));
-        computerLocLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(computerLocLbl.getText()));
-        requesterLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(requesterLbl.getText()));
-        urgencyLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyLbl.getText()));
-        descLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(descLbl.getText()));
+//        computerLocLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(computerLocLbl.getText()));
+//        requesterLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(requesterLbl.getText()));
+//        urgencyLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyLbl.getText()));
+//        descLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(descLbl.getText()));
+//
+//        cancelBtn.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelBtn.getText()));
+//        clearBtn.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearBtn.getText()));
+//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
 
-        cancelBtn.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelBtn.getText()));
-        clearBtn.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearBtn.getText()));
-        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
-
-        urgencyComboBox.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyComboBox.getPromptText()));
+//        urgencyComboBox.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyComboBox.getPromptText()));
 
        // urgencyComboBox.
 
