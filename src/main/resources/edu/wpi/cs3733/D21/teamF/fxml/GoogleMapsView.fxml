@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -49,7 +50,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <HBox.margin>
-                        <Insets right="25.0" />
+                        <Insets right="50.0" />
                      </HBox.margin>
                      <children>
                         <Label text="City:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
@@ -85,10 +86,13 @@
                         <JFXComboBox fx:id="destination" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
-                  <VBox prefHeight="288.0" prefWidth="320.0">
+                  <VBox alignment="CENTER" prefHeight="288.0" prefWidth="463.0">
                      <HBox.margin>
                         <Insets left="25.0" />
-                     </HBox.margin></VBox>
+                     </HBox.margin>
+                     <children>
+                        <JFXTextArea fx:id="outputBox" focusColor="#405aa800" prefHeight="250.0" prefWidth="463.0" style="-fx-border-radius: 5; -fx-border-color: #000000;" unFocusColor="#4d4d4d00" />
+                     </children></VBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
