@@ -11,17 +11,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Text?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CreditsController">
    <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="2000.0" style="-fx-background-color: #94c4f1; -fx-border-color: #03256c; -fx-border-width: 0px 0px 5px 0px;" AnchorPane.leftAnchor="-0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Label fx:id="title" alignment="CENTER" prefHeight="29.0" prefWidth="423.0" text="API Credits" textAlignment="CENTER" textFill="#03256c">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="/imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="title" text="API CREDITS" />
+               </children>
+            </HBox>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <JFXComboBox fx:id="languageSelect" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
+         <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+         </padding>
+      </AnchorPane>
       <JFXButton fx:id="backButton" layoutX="232.0" layoutY="354.0" onAction="#handleBack" prefHeight="27.0" prefWidth="138.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="232.0" AnchorPane.rightAnchor="230.0" />
       <VBox alignment="CENTER" layoutX="32.0" layoutY="116.0" prefHeight="365.0" prefWidth="895.0" spacing="30.0" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="116.0">
          <children>

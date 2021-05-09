@@ -11,22 +11,32 @@
 <?import javafx.scene.text.Font?>
 
 
+<?import javafx.scene.text.Text?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <AnchorPane prefHeight="200.0" prefWidth="200.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestManagerController">
    <children>
-      <HBox fx:id="header" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView fx:id="goBack" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="title" prefHeight="153.0" prefWidth="845.0" text="BRIGHAM AND WOMEN'S HOSPITAL Service Request Manager" wrapText="true">
-               <font>
-                  <Font name="Volkhov Regular" size="40.0" />
-               </font>
-            </Label>
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="/imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="title" text="SERVICE REQUEST MANAGEMENT" />
+               </children>
+            </HBox>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <JFXComboBox fx:id="languageSelect" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
+         <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+         </padding>
+      </AnchorPane>
       <JFXTreeTableView fx:id="requestView" editable="true" layoutX="23.0" layoutY="144.0" onMouseClicked="#handleSelection" prefHeight="322.0" prefWidth="910.0" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="144.0" />
       <HBox alignment="CENTER" layoutY="440.0" maxHeight="100.0" spacing="10.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0">
          <children>

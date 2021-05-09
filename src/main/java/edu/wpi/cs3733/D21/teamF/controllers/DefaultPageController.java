@@ -66,8 +66,6 @@ public class DefaultPageController extends AbsController {
 
     @FXML
     private void initialize() {
-        // Apply fonts to title and buttons
-
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
         //Bind login/logout
@@ -118,6 +116,7 @@ public class DefaultPageController extends AbsController {
         buttons.setVisible(true);
         covidBox.setVisible(false);
         credits.setVisible(true);
+        covidBox.setManaged(false);
         // }
     }
 
@@ -193,6 +192,7 @@ public class DefaultPageController extends AbsController {
         } else {
             buttons.setVisible(false);
             covidBox.setVisible(true);
+            covidBox.setManaged(true);
             surveyButton.setVisible(true);
             surveyButton.setManaged(true);
             loginLabel.setText("Please Log in.");
