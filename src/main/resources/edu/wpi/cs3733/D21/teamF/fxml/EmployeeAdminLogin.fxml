@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -12,22 +13,32 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.text.Text?>
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.EmployeeAdminLoginController">
    <children>
-      <HBox fx:id="header" prefHeight="100.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="50.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="title" prefHeight="117.0" prefWidth="638.0" text="Brigham and Women's Hospital Login" textFill="#03256c" wrapText="true">
-               <font>
-                  <Font name="Volkhov Regular" size="40.0" />
-               </font>
-            </Label>
+            <HBox fx:id="subHeader" prefHeight="54.0" prefWidth="784.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="title" text="BRIGHAM AND WOMEN'S HOSPITAL LOGIN">
+                     <font>
+                        <Font name="Volkhov Regular" size="40.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="805.0" layoutY="9.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <JFXComboBox fx:id="languageSelect" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
+      </AnchorPane>
       <VBox alignment="TOP_CENTER" layoutY="146.0" prefHeight="394.0" prefWidth="960.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="146.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" lineSpacing="8.0" text="Welcome!" textAlignment="CENTER" wrapText="true">

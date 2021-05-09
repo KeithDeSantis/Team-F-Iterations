@@ -8,6 +8,17 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
 }
 
+#subHeader{
+    -fx-alignment: CENTER-LEFT;
+    -fx-spacing: 10px;
+    -fx-pref-height: 50px;
+}
+
+#languageSelect{
+    -fx-pref-width: 150;
+    -fx-max-width: 150;
+}
+
 #goBack{
     -fx-fit-to-height: 50px;
 }
@@ -17,4 +28,5 @@
     -fx-font-size: 30;
     -fx-font-style: normal;
     -fx-fill: #03256c;
+
 }

@@ -17,17 +17,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.text.Text?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.MedicineDeliveryServiceRequest">
-     <HBox fx:id="header" minWidth="-Infinity" prefHeight="117.0" prefWidth="960.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
-             <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
-         </ImageView>
-         <Label fx:id="title" text="BRIGHAM AND WOMEN'S HOSPITAL Medicine Delivery" textFill="#03256c" wrapText="true">
-             <font>
-                 <Font name="Volkhov Regular" size="40.0" />
-             </font>
-         </Label>
-     </HBox>
+    <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <children>
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <children>
+                    <ImageView fitHeight="50.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                        </image>
+                    </ImageView>
+                    <Text fx:id="title" text="MEDICINE DELIVERY" />
+                </children>
+            </HBox>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                <children>
+                    <JFXComboBox fx:id="languageSelect" />
+                </children>
+            </HBox>
+        </children>
+        <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+        </padding>
+    </AnchorPane>
    <VBox prefHeight="234.0" prefWidth="455.0" AnchorPane.bottomAnchor="156.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="480.0" AnchorPane.topAnchor="150.0">
       <children>
          <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="455.0">
