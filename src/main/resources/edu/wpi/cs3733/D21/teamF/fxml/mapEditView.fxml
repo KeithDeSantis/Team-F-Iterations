@@ -43,7 +43,7 @@
             <Insets bottom="10.0" left="10.0" top="10.0" />
          </padding>
       </AnchorPane>
-      <HBox alignment="CENTER_LEFT" layoutX="5.0" layoutY="177.0" prefHeight="498.0" prefWidth="966.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="177.0">
+      <HBox alignment="CENTER_LEFT" layoutX="5.0" layoutY="177.0" prefHeight="498.0" prefWidth="966.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="120.0">
          <children>
             <VBox alignment="CENTER" prefHeight="484.0" prefWidth="927.0" HBox.hgrow="ALWAYS">
                <children>
@@ -138,7 +138,7 @@
             </VBox>
          </children>
       </HBox>
-      <JFXHamburger fx:id="hamburger" layoutX="5.0" layoutY="151.0" onMouseClicked="#handleHamburger" stylesheets="/stylesheets/HamburgerStyle.css" />
-      <JFXDrawer fx:id="drawer" defaultDrawerSize="300.0" layoutY="177.0" prefHeight="368.0" prefWidth="300.0" style="-fx-background-color: transparent" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="177.0" />
+      <JFXHamburger fx:id="hamburger" layoutX="7.0" layoutY="80.0" onMouseClicked="#handleHamburger" stylesheets="/stylesheets/HamburgerStyle.css" />
+      <JFXDrawer fx:id="drawer" defaultDrawerSize="300.0" layoutY="177.0" prefHeight="368.0" prefWidth="300.0" style="-fx-background-color: transparent" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0" />
    </children>
 </AnchorPane>
