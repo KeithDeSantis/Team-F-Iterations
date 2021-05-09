@@ -1,10 +1,13 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
+import com.sun.mail.smtp.SMTPTransport;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -12,45 +15,43 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EmailHandler {
-    public EmailHandler(){
+    public EmailHandler() {
 
     }
 
-    public int sendEmail(String recipient, String subject, String body){
+    private Properties setMailServerProperties() {
+        Properties props = System.getProperties();
+        props.setProperty("mail.smtps.host", "smtp.gmail.com");
+        props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.setProperty("mail.smtp.socketFactory.fallback", "false");
+        props.setProperty("mail.smtp.port", "465");
+        props.setProperty("mail.smtp.socketFactory.port", "465");
+        props.setProperty("mail.smtps.auth", "true");
+        return props;
+    }
+
+
+    public int sendEmail(String recipient, String subject, String body) throws MessagingException {
         String pattern = "^(.+)@(.+)$";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(recipient);
+        String from = "fuschiafalcons@gmail.com";
+        String pass = "";
 
         if (m.find()) {
-            String emailTo = recipient;
-            String emailFrom = "fuschiafalcons@gmail.com";
-            String smtpServer = "smtp.gmail.com";
-            Properties properties = System.getProperties();
+            Session session = Session.getInstance(setMailServerProperties(), null);
+            final MimeMessage msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(from));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient, false));
+            msg.setSubject(subject);
+            msg.setText(body);
+            SMTPTransport t = (SMTPTransport)session.getTransport("smtps");
 
-            properties.put("mail.smtp.host", smtpServer);
-            properties.put("mail.smtp.port", "587");
-            properties.put("mail.smtp.ssl.enable", "true");
-            properties.put("mail.smtp.auth", "true");
-            properties.put("mail.smtp.starttls.enable", "true");
-            properties.put("mail.smtps.socketFactory.port", "587");
-
-            Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(emailFrom, "");
-                }
-            });
-
-            try {
-                MimeMessage message = new MimeMessage(session);
-                message.setFrom(new InternetAddress(emailFrom));
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
-                message.setSubject(subject);
-                message.setText(body);
-                Transport.send(message);
-            } catch (MessagingException mex) {
-                mex.printStackTrace();
-            }
+            t.connect("smtp.gmail.com", from, pass);
+            t.sendMessage(msg, msg.getAllRecipients());
+            t.close();
         }
+
         else{
             return -1;
         }
