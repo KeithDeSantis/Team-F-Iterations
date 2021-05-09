@@ -36,42 +36,62 @@ public class SceneContext {
         stage.show();
     }
 
+    //    public void switchScene(String fxml) throws IOException {
+//        System.out.println("SW " + fxml);
+//        final Task<Parent> task = new Task<Parent>() {
+//            @Override
+//            public Parent call() {
+//                FXMLLoader loader = new FXMLLoader();
+//                loader.setLocation(getClass().getResource(fxml));
+//                controller = loader.getController();
+//                System.out.println("CTRL " + controller);
+//                try {
+//                    return loader.load();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                return  null;
+//            }
+//        };
+//        task.setOnSucceeded( e-> {
+//            try {
+//                stage.setScene(new Scene(task.get()));
+//                System.out.println("SUCCESS");
+//                stage.show();
+//            } catch (InterruptedException | ExecutionException interruptedException) {
+//                interruptedException.printStackTrace();
+//            }
+//        });
+//
+//        task.setOnScheduled( e -> {
+//            final PauseTransition timeOut = new PauseTransition(Duration.seconds(0.2));
+//            timeOut.setOnFinished((timeout) -> {
+//                System.out.println(fxml + " " + task.isRunning());
+//                if(task.isRunning()) {
+//                    try {
+//                        showLoadingPage();
+//                    } catch (IOException ioException) {
+//                        ioException.printStackTrace();
+//                    }
+//                }
+//            });
+//            timeOut.play();
+//
+//        });
+//
+//        Thread t = new Thread(task);
+//        t.start();
+//    }
     public void switchScene(String fxml) throws IOException {
-        final Task<Parent> task = new Task<Parent>() {
-            @Override
-            public Parent call() throws IOException {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource(fxml));
-                controller = loader.getController();
-                return loader.load();
-            }
-        };
-        task.setOnSucceeded( e-> {
-            try {
-                stage.setScene(new Scene(task.get()));
-                stage.show();
-            } catch (InterruptedException | ExecutionException interruptedException) {
-                interruptedException.printStackTrace();
-            }
-        });
+        System.out.println("SW " + fxml);
 
-        task.setOnScheduled( e -> {
-            final PauseTransition timeOut = new PauseTransition(Duration.seconds(0.2));
-            timeOut.setOnFinished((timeout) -> {
-                if(task.isRunning()) {
-                    try {
-                        showLoadingPage();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                }
-            });
-            timeOut.play();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(fxml));
+        this.controller = loader.getController();
+        Parent root = loader.load();
+        stage.setScene(new Scene(root));
+        stage.show();
 
-        });
-
-        Thread t = new Thread(task);
-        t.start();
     }
 
     public void loadDefault() throws IOException {

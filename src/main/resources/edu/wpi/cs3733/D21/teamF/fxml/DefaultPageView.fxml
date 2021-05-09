@@ -78,7 +78,7 @@
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton buttonType="RAISED" onAction="#handleCovidVaccine" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID-19 Vaccine Information">
+                  <JFXButton fx:id="covidInfo" buttonType="RAISED" onAction="#handleCovidVaccine" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID-19 Vaccine Information">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>

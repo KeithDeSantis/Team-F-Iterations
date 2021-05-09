@@ -37,6 +37,7 @@ public class DefaultPageController extends AbsController {
     private JFXButton surveyButton;
     @FXML
     private JFXButton covidInfo;
+    @FXML
     private JFXButton surveyButton2;
     @FXML
     private JFXButton manageServices;
@@ -71,18 +72,28 @@ public class DefaultPageController extends AbsController {
         //Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
 
-        /*
+
         loginButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginButton.getText()));
+
         // loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginLabel.getText()));
+
         navigation.textProperty().bind(Translator.getTranslator().getTranslationBinding(navigation.getText()));
+
         editMap.textProperty().bind(Translator.getTranslator().getTranslationBinding(editMap.getText()));
+
         serviceRequest.textProperty().bind(Translator.getTranslator().getTranslationBinding(serviceRequest.getText()));
+
         manageServices.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageServices.getText()));
+
         manageAccount.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageAccount.getText()));
+
         pathfindingSettingButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(pathfindingSettingButton.getText()));
+
+
         covidInfo.textProperty().bind(Translator.getTranslator().getTranslationBinding(covidInfo.getText()));
+
         quit.textProperty().bind(Translator.getTranslator().getTranslationBinding(quit.getText()));
-        */
+
 
         try {
             resetButtons();

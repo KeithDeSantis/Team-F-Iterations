@@ -91,7 +91,8 @@ public class ServiceRequestHomeNewController extends AbsController {
             goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LaundryRequest.fxml");
         }
         else if (buttonPushed == medicineDelivery){
-            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");
+            System.out.println("MEDICINE!!!");
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");//"/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");
         }
         else if (buttonPushed == giftDelivery){
             goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
@@ -102,6 +103,7 @@ public class ServiceRequestHomeNewController extends AbsController {
     }
 
     public void goToScreen(String URL)throws IOException{
+        System.out.println("GOTO " + URL);
         SceneContext.getSceneContext().switchScene(URL);
     }
 
