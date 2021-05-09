@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CreditsController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="2000.0" style="-fx-background-color: #94c4f1; -fx-border-color: #03256c; -fx-border-width: 0px 0px 5px 0px;" AnchorPane.leftAnchor="-0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="title" alignment="CENTER" prefHeight="29.0" prefWidth="423.0" text="API Credits" textAlignment="CENTER" textFill="#03256c">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <JFXButton fx:id="backButton" layoutX="232.0" layoutY="354.0" onAction="#handleBack" prefHeight="27.0" prefWidth="138.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="232.0" AnchorPane.rightAnchor="230.0" />
+      <VBox alignment="CENTER" layoutX="32.0" layoutY="116.0" prefHeight="365.0" prefWidth="895.0" spacing="30.0" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="116.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="89.0" prefWidth="896.0" text="Special thanks to the developers of the following API's, which were used in the development of this app:" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <GridPane alignment="CENTER" prefHeight="283.0" prefWidth="896.0" vgap="10.0" VBox.vgrow="ALWAYS">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <JFXButton fx:id="jfoenixButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleJFoenix" text="JFoenix" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="apacheDerbyButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleApacheDerby" text="Apache Derby" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="slf4jButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleSlf4j" text="slf4j" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.columnIndex="3">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="apacheCommonsText" alignment="CENTER" contentDisplay="CENTER" onAction="#handleApacheCommonsText" text="Apache Commons Text" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="orgJsonButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleOrgJson" text="org.json" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="apachePDFBoxButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleApachePDFBox" text="Apache PDFBox" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="javaxMailButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleJavaxMail" text="javax.mail" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="apacheHTTPClientButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleApacheHTTPClient" text="Apache HTTP Client" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="googleTranslateAPIButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleGoogleTranslate" text="Google Translate API" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="googleMapsAPIButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleGoogleMaps" text="Google Maps API" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.columnIndex="2">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="gmailAPIButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleGmailAPI" text="Gmail API" textAlignment="CENTER" textFill="#03256c" underline="true" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </GridPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
