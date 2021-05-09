@@ -2,17 +2,14 @@ package edu.wpi.cs3733.D21.teamF.utils;
 
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
-import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.ExternalTransController;
-import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.GiftDeliveryServiceRequestController;
-import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LaundryRequestController;
-import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.MaintenanceRequestController;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.*;
 import javafx.animation.PauseTransition;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Labeled;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -106,7 +103,7 @@ public class SceneContext {
         System.out.println("CTRL: " + loader.getController());
         this.controller = loader.getController();
         if(this.controller instanceof MaintenanceRequestController || this.controller instanceof GiftDeliveryServiceRequestController
-        || this.controller instanceof LaundryRequestController || this.controller instanceof ExternalTransController)
+        || this.controller instanceof LaundryRequestController || this.controller instanceof ExternalTransController || this.controller instanceof LanguageInterpretationServiceRequestController)
             autoTranslate(root);
 
         stage.setScene(new Scene(root));
@@ -137,6 +134,22 @@ public class SceneContext {
                     continue;
                 text.textProperty().bind(Translator.getTranslator().getTranslationBinding(text.getText()));
             }
+            else if(n instanceof TextInputControl)
+            {
+                final TextInputControl textInputControl = (TextInputControl) n;
+
+                if(textInputControl.getPromptText().toLowerCase().startsWith("brigham and women's hospital"))
+                    continue;
+                textInputControl.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(textInputControl.getPromptText()));
+            }
+            else if(n instanceof ComboBoxBase)
+            {
+                final ComboBoxBase comboBoxBase = (ComboBoxBase) n;
+
+                if(comboBoxBase.getPromptText().toLowerCase().startsWith("brigham and women's hospital"))
+                    continue;
+                comboBoxBase.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(comboBoxBase.getPromptText()));
+            }
         }
     }
 
@@ -150,6 +163,11 @@ public class SceneContext {
             if(node instanceof Parent)
             {
                 getAllChildren((Parent) node, children);
+            }
+            //Should not be else
+            if(node instanceof ButtonBar)
+            {
+                children.addAll(((ButtonBar)node).getButtons());
             }
         }
     }
