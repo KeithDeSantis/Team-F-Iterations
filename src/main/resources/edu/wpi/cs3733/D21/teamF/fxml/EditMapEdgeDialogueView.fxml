@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #c6c6c6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.EditMapEdgeDialogueViewController">
+<AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.EditMapEdgeDialogueViewController">
    <children>
       <HBox alignment="CENTER" prefHeight="70.0" prefWidth="400.0" style="-fx-background-color: #94c4f1ff; -fx-border-color: #03256c; -fx-border-width: 0px 0px 5px 0px;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
