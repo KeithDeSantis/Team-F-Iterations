@@ -420,6 +420,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         ghost.opacityProperty().set(0.5);
         ghost.shouldDisplay().bind(isCurrentlyNavigating);
         ghost.getFloor().bind(Bindings.createStringBinding(() -> vertexProperty.get().getFloor(), vertexProperty));
+        ghost.directionAngleProperty().bind(Bindings.createDoubleBinding(() -> getAngleFor(currentDirection.get()), currentDirection));
 
         final IntegerBinding nextStepProp = Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList);
 
@@ -438,7 +439,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         y1.bind(Bindings.createDoubleBinding(() -> nextVertexProperty.get().getY(), nextVertexProperty));
 
         final Animation animation = new Transition() {
-
             {
                setCycleDuration(Duration.millis(2000));
             }
