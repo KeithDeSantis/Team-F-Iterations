@@ -1,8 +1,11 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.pathfinding.GoogleAPI;
 import javafx.fxml.FXML;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GoogleMapsViewController {
@@ -78,7 +81,10 @@ public class GoogleMapsViewController {
     }
 
     @FXML
-    public void handleSubmit(){
-        String address = streetAddress.getText()+ " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
+    public void handleSubmit() throws IOException {
+        String address = streetAddress.getText() + " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
+        String closestLot = GoogleAPI.getGoogleAPI().parseClosestParkingLot(address);
+        String[] directions = GoogleAPI.getGoogleAPI().queryAPI(address, closestLot);
+        outputBox.setText(directions[0]);
     }
 }
