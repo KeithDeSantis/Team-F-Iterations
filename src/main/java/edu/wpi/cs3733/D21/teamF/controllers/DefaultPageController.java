@@ -25,6 +25,8 @@ import java.sql.SQLException;
 
 public class DefaultPageController extends AbsController {
     @FXML
+    private JFXButton credits;
+    @FXML
     private JFXButton navigation;
     @FXML
     private JFXButton serviceRequest;
@@ -93,6 +95,8 @@ public class DefaultPageController extends AbsController {
 
         quit.textProperty().bind(Translator.getTranslator().getTranslationBinding(quit.getText()));
 
+        credits.textProperty().bind(Translator.getTranslator().getTranslationBinding(credits.getText()));
+
 
         try {
             resetButtons();
@@ -113,6 +117,7 @@ public class DefaultPageController extends AbsController {
 //                DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")) {
         buttons.setVisible(true);
         covidBox.setVisible(false);
+        credits.setVisible(true);
         // }
     }
 
@@ -307,6 +312,10 @@ public class DefaultPageController extends AbsController {
         dialogStage.setScene(new Scene(root));
 
         dialogStage.showAndWait();
+    }
+
+    public void handleCredits() throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CreditsView.fxml");
     }
 
 
