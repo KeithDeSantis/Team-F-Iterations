@@ -6,12 +6,16 @@ import com.jfoenix.controls.JFXSlider;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -34,11 +38,14 @@ public class MapPanel extends AnchorPane {
     @FXML
     public Pane canvas;
 
-    @FXML
-    public JFXButton zoomInButton;
+//    @FXML
+//    public JFXButton zoomInButton;
+//
+//    @FXML
+//    public JFXButton zoomOutButton;
 
     @FXML
-    public JFXButton zoomOutButton;
+    public JFXSlider zoomSlider;
 
     @FXML
     public StackPane stackPane;
@@ -48,15 +55,20 @@ public class MapPanel extends AnchorPane {
 
     private final DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
 
-    private final double MIN_ZOOM = 1, MAX_ZOOM = 8;
+    private final DoubleProperty internalZoomLevel = new SimpleDoubleProperty(5.0);
 
     private final DoubleProperty INITIAL_WIDTH = new SimpleDoubleProperty();
     private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
+    private final DoubleProperty ASPECT_RATIO = new SimpleDoubleProperty();
 
 
     private final StringProperty floor = new SimpleStringProperty("1");
     private final ObjectProperty<String> fp = new SimpleObjectProperty<>();
 
+    private static final double MIN_ZOOM_LEVEL = 8, MAX_ZOOM_LEVEL = 1;
+
+
+    private final BooleanProperty navigating = new SimpleBooleanProperty(false);
 
     //FIXME: DO BETTER!
     private final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
@@ -136,44 +148,65 @@ public class MapPanel extends AnchorPane {
     }
 
 
+    public StringConverter<Double> getDoubleStringConverter() {
+        return doubleStringConverter;
+    }
+
     @FXML
     public void initialize(){
-        this.zoomInButton.setOnAction(this::handleZoom);
-        this.zoomOutButton.setOnAction(this::handleZoom);
+//        zoomInButton.setOnAction(this::handleZoom);
+//        zoomOutButton.setOnAction(this::handleZoom);
 
         // Set button fonts - LM
-        this.scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        this.scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        this.map.setPreserveRatio(true);
+        scroll.hbarPolicyProperty().bind(Bindings.when(navigating)
+                .then(ScrollPane.ScrollBarPolicy.NEVER).otherwise(ScrollPane.ScrollBarPolicy.AS_NEEDED));
+        scroll.vbarPolicyProperty().bind(Bindings.when(navigating)
+                .then(ScrollPane.ScrollBarPolicy.NEVER).otherwise(ScrollPane.ScrollBarPolicy.AS_NEEDED));
+        floorSlider.disableProperty().bind(Bindings.when(navigating).then(true).otherwise(false));
+
+        map.setPreserveRatio(true);
 
 
-        INITIAL_WIDTH.setValue(this.F1Image.getWidth());
-        INITIAL_HEIGHT.setValue(this.F1Image.getHeight());
+        ASPECT_RATIO.set(F1Image.getHeight()/F1Image.getWidth());
 
 
-        this.stackPane.prefWidthProperty().bind(this.widthProperty());
-        this.stackPane.prefHeightProperty().bind(this.heightProperty());
+
+        INITIAL_WIDTH.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL));//setValue(F1Image.getWidth());
+        INITIAL_HEIGHT.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL).multiply(ASPECT_RATIO));//setValue(F1Image.getHeight());
+        //INITIAL_WIDTH.setValue(F1Image.getWidth() * 0.5);
+        //INITIAL_HEIGHT.setValue(F1Image.getHeight() * 0.5);
+
+        stackPane.prefWidthProperty().bind(this.widthProperty());
+        stackPane.prefHeightProperty().bind(this.heightProperty());
+
+        //Weird....Oh... hmmmm...
+        canvas.setStyle("-fx-background-color: #ff0000"); //Yup. Did it a few times before
+        canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(internalZoomLevel));
+        canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(internalZoomLevel));
+
+        zoomLevel.bind(internalZoomLevel.multiply(F1Image.widthProperty().divide(INITIAL_WIDTH)));
+
+        map.fitWidthProperty().bind(INITIAL_WIDTH.divide(internalZoomLevel));
+        map.fitHeightProperty().bind(INITIAL_HEIGHT.divide(internalZoomLevel));
+        map.setImage(F1Image); // Copied from A* Vis - KD
+
+        floorSlider.setLabelFormatter(doubleStringConverter);
+
+        // final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
 
 
-        this.canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(this.zoomLevel));
-        this.canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(this.zoomLevel));
-
-        this.map.fitWidthProperty().bind(INITIAL_WIDTH.divide(this.zoomLevel));
-        this.map.fitHeightProperty().bind(INITIAL_HEIGHT.divide(this.zoomLevel));
-        this.map.setImage(this.F1Image); // Copied from A* Vis - KD
-
-        this.floorSlider.setLabelFormatter(this.doubleStringConverter);
-
-       // final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
-
-
-        Bindings.bindBidirectional(this.floor, this.floorSlider.valueProperty(), this.doublePropertyStringConverter);
+        Bindings.bindBidirectional(this.floor, floorSlider.valueProperty(), doublePropertyStringConverter);
 
         this.floorSlider.valueProperty().addListener(e -> switchMap(this.doubleStringConverter.toString(this.floorSlider.valueProperty().get())));
 
-        this.fp.bind(this.floor);
+        fp.bind(this.floor);
 
         this.scroll.pannableProperty().set(true);
+
+        this.zoomSlider.valueProperty().addListener(e -> {
+            this.internalZoomLevel.set(((DoubleProperty) e).doubleValue());
+        });
+
     }
 
 
@@ -193,19 +226,19 @@ public class MapPanel extends AnchorPane {
         this.floor.setValue(floor);
         switch(floor){
             case "1":
-                this.map.setImage(this.F1Image); break;
+                map.setImage(F1Image); break;
             case "2":
-                this.map.setImage(this.F2Image); break;
+                map.setImage(F2Image); break;
             case "3":
-                this.map.setImage(this.F3Image); break;
+                map.setImage(F3Image); break;
             case "L1":
-                this.map.setImage(this.L1Image); break;
+                map.setImage(L1Image); break;
             case "L2":
-                this.map.setImage(this.L2Image); break;
+                map.setImage(L2Image); break;
             case "G":
-                this.map.setImage(this.GImage); break;
+                map.setImage(GImage); break;
             default:
-                this.map.setImage(this.F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
+                map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
         }
         //drawNodeOnFloor();
     }
@@ -213,12 +246,12 @@ public class MapPanel extends AnchorPane {
 
 
     public ImageView getMap() {
-        return this.map;
+        return map;
     }
 
 
     public DoubleProperty getZoomLevel() {
-        return this.zoomLevel;
+        return zoomLevel;
     }
 
     public ObjectProperty<String> getFloor() {
@@ -226,27 +259,30 @@ public class MapPanel extends AnchorPane {
     }
 
     public Pane getCanvas() {
-        return this.canvas;
+        return canvas;
     }
 
 
-    /**
-     * Basic implementation of Zooming the map by changing the zoom level and reloading
-     * @param actionEvent the press of zoom in or zoom out
-     * @author KD
-     */
-    public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
-        JFXButton btn = (JFXButton) actionEvent.getSource();
-        if(btn == this.zoomInButton) {
-            if(this.zoomLevel.get() > MIN_ZOOM) {
-                this.zoomLevel.setValue(this.zoomLevel.get()  - 1);
-            }
-        } else if (btn == this.zoomOutButton) {
-            if(this.zoomLevel.get() < MAX_ZOOM) {
-                this.zoomLevel.setValue(this.zoomLevel.get() + 1);
-            }
-        }
-    }
+//    /**
+//     * Basic implementation of Zooming the map by changing the zoom level and reloading
+//     * @param actionEvent the press of zoom in or zoom out
+//     * @author KD
+//     */
+//    public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
+//        JFXButton btn = (JFXButton) actionEvent.getSource();
+//        if(btn == zoomInButton) {
+//            if(internalZoomLevel.get() > MAX_ZOOM_LEVEL) {
+//                internalZoomLevel.setValue(internalZoomLevel.get()  - 1);
+//            }
+//        } else if (btn == zoomOutButton) {
+//            if(internalZoomLevel.get() < MIN_ZOOM_LEVEL) {
+//                internalZoomLevel.setValue(internalZoomLevel.get() + 1);
+//            }
+//        }
+//
+//        Image image = map.getImage();
+//        map.setImage(image);
+//    }
 
     /**
      * Center the given node in the map
@@ -255,17 +291,17 @@ public class MapPanel extends AnchorPane {
      */
     public void centerNode(Node node){
 
-        double h = this.scroll.getContent().getBoundsInLocal().getHeight();
+        double h = scroll.getContent().getBoundsInLocal().getHeight();
         double y = (node.getBoundsInParent().getMaxY() +
                 node.getBoundsInParent().getMinY()) / 2.0;
-        double v = this.scroll.getViewportBounds().getHeight();
-        this.scroll.setVvalue(this.scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
+        double v = scroll.getViewportBounds().getHeight();
+        scroll.setVvalue(scroll.getVmax() * ((y - 0.5 * v) / (h - v)));
 
-        double w = this.scroll.getContent().getBoundsInLocal().getWidth();
+        double w = scroll.getContent().getBoundsInLocal().getWidth();
         double x = (node.getBoundsInParent().getMaxX() +
                 node.getBoundsInParent().getMinX()) / 2.0;
-        double hw = this.scroll.getViewportBounds().getWidth();
-        this.scroll.setHvalue(this.scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
+        double hw = scroll.getViewportBounds().getWidth();
+        scroll.setHvalue(scroll.getHmax() * -((x - 0.5 * hw) / (hw - w)));
     }
 
     /**
@@ -277,7 +313,9 @@ public class MapPanel extends AnchorPane {
      */
     public <Element extends Node & IMapDrawable> Element draw(Element element)
     {
-        element.bindLocation(zoomLevel);
+        final DoubleProperty prop = new SimpleDoubleProperty();
+        prop.bind(zoomLevel);
+        element.bindLocation(prop);
 
         element.visibleProperty().bind(element.shouldDisplay().and(this.floor.isEqualTo(element.getFloor())));
 
@@ -327,5 +365,17 @@ public class MapPanel extends AnchorPane {
     public void showDialog(JFXDialog dialog)
     {
         dialog.show(stackPane);
+    }
+
+    EventHandler<ScrollEvent> consume = Event::consume;
+
+    public void disableInteract(){
+        navigating.setValue(true);
+        scroll.addEventFilter(ScrollEvent.ANY, consume);
+    }
+
+    public void enableInteract() {
+        navigating.setValue(false);
+        scroll.removeEventFilter(ScrollEvent.ANY, consume);
     }
 }
