@@ -53,7 +53,7 @@
                             <Insets />
                         </GridPane.margin>
                         <children>
-                            <Label text="Date :">
+                            <Label fx:id="dateLbl" text="Date :">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
@@ -63,7 +63,7 @@
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                         <children>
-                            <Label minWidth="60.0" text="Patient:">
+                            <Label fx:id="patientNameLbl" minWidth="60.0" text="Patient:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
@@ -80,7 +80,7 @@
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
                         <children>
-                            <Label text="Room:">
+                            <Label fx:id="roomLbl" text="Room:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
@@ -90,7 +90,7 @@
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
                         <children>
-                            <Label text="Location:">
+                            <Label fx:id="locLbl" text="Location:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>

@@ -40,6 +40,19 @@ public class ServiceRequestHomeNewController extends AbsController {
     @FXML
     public void initialize(){
         Home.setDisableVisualFocus(true); // Disable visual focus on home button, occurs on returning to menu - LM
+
+//        Home.textProperty().bind(Translator.getTranslator().getTranslationBinding(Home.getText()));
+//        facilitiesMaintenance.textProperty().bind(Translator.getTranslator().getTranslationBinding(facilitiesMaintenance.getText()));
+//        laundryServices.textProperty().bind(Translator.getTranslator().getTranslationBinding(laundryServices.getText()));
+//        externalPatientTrans.textProperty().bind(Translator.getTranslator().getTranslationBinding(externalPatientTrans.getText()));
+//        floralDelivery.textProperty().bind(Translator.getTranslator().getTranslationBinding(floralDelivery.getText()));
+//        foodDelivery.textProperty().bind(Translator.getTranslator().getTranslationBinding(foodDelivery.getText()));
+//        computerServices.textProperty().bind(Translator.getTranslator().getTranslationBinding(computerServices.getText()));
+//        languageInterpretation.textProperty().bind(Translator.getTranslator().getTranslationBinding(languageInterpretation.getText()));
+//        internalPatientTrans.textProperty().bind(Translator.getTranslator().getTranslationBinding(internalPatientTrans.getText()));
+//        sanitationService.textProperty().bind(Translator.getTranslator().getTranslationBinding(sanitationService.getText()));
+//        medicineDelivery.textProperty().bind(Translator.getTranslator().getTranslationBinding(medicineDelivery.getText()));
+//        giftDelivery.textProperty().bind(Translator.getTranslator().getTranslationBinding(giftDelivery.getText()));
     }
 
     @FXML
@@ -77,7 +90,8 @@ public class ServiceRequestHomeNewController extends AbsController {
             goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LaundryRequest.fxml");
         }
         else if (buttonPushed == medicineDelivery){
-            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");
+            System.out.println("MEDICINE!!!");
+            goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");//"/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/MedicineDeliveryServiceRequestView.fxml");
         }
         else if (buttonPushed == giftDelivery){
             goToScreen("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/GiftDeliveryServiceRequest.fxml");
@@ -88,6 +102,7 @@ public class ServiceRequestHomeNewController extends AbsController {
     }
 
     public void goToScreen(String URL)throws IOException{
+        System.out.println("GOTO " + URL);
         SceneContext.getSceneContext().switchScene(URL);
     }
 

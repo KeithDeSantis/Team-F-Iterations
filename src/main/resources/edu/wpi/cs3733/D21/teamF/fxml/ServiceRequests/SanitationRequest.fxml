@@ -36,7 +36,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
                <children>
-                  <Label text="Client Name:">
+                  <Label fx:id="clientNameLbl" text="Client Name:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -44,7 +44,7 @@
                         <Insets left="25.0" />
                      </HBox.margin>
                   </Label>
-                  <Label text="Location:">
+                  <Label fx:id="locLbl" text="Location:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -71,7 +71,7 @@
                   </JFXComboBox>
                </children>
             </HBox>
-            <Label text="Job Description:">
+            <Label fx:id="jobDescLbl" text="Job Description:">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

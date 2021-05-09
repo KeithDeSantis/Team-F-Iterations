@@ -9,10 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,8 +22,6 @@ import java.util.UUID;
  */
 public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
-    @FXML private JFXButton xButton;
-    @FXML private Button helpXButton;
     @FXML private JFXComboBox<String> deliveryLocationField;
     @FXML private JFXTimePicker deliveryTimeField;
     @FXML private JFXTextField allergyField;
@@ -43,20 +38,13 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
     @FXML private JFXCheckBox cbSide2;
     @FXML private JFXCheckBox cbSide3;
     @FXML private JFXCheckBox cbSide4;
-    @FXML private Label title;
-    @FXML private Label locLabel;
-    @FXML private Label delLabel;
-    @FXML private Label allLabel;
-    @FXML private Label siLabel;
-    @FXML private Label mealLabel;
-    @FXML private Label sideLabel;
-    @FXML private Label drinkLabel;
-    @FXML private HBox header;
+
+    public FoodDeliveryServiceRequestController() {
+    }
 
 
     @FXML
     private void initialize(){
-
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 

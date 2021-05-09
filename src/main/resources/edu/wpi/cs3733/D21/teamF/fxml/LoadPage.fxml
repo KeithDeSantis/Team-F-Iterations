@@ -28,7 +28,7 @@
       </HBox>
       <HBox alignment="CENTER" layoutY="117.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="117.0">
          <children>
-            <JFXSpinner />
+            <JFXSpinner nodeOrientation="RIGHT_TO_LEFT" />
          </children>
       </HBox>
    </children>
