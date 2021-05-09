@@ -42,8 +42,10 @@ public class DefaultPageController extends AbsController {
     private JFXButton manageServices;
     @FXML
     JFXTextField verifyAgain;
-    @FXML private VBox buttons;
-    @FXML private VBox covidBox;
+    @FXML
+    private VBox buttons;
+    @FXML
+    private VBox covidBox;
     @FXML
     private JFXButton pathfindingSettingButton;
     @FXML
@@ -60,16 +62,18 @@ public class DefaultPageController extends AbsController {
     private JFXButton employeeAdminSignIn;
     boolean isCompleted;
 
-    @FXML private void initialize(){
+    @FXML
+    private void initialize() {
         // Apply fonts to title and buttons
 
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
-	//Bind login/logout
+        //Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
 
+        /*
         loginButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginButton.getText()));
-       // loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginLabel.getText()));
+        // loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginLabel.getText()));
         navigation.textProperty().bind(Translator.getTranslator().getTranslationBinding(navigation.getText()));
         editMap.textProperty().bind(Translator.getTranslator().getTranslationBinding(editMap.getText()));
         serviceRequest.textProperty().bind(Translator.getTranslator().getTranslationBinding(serviceRequest.getText()));
@@ -78,27 +82,28 @@ public class DefaultPageController extends AbsController {
         pathfindingSettingButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(pathfindingSettingButton.getText()));
         covidInfo.textProperty().bind(Translator.getTranslator().getTranslationBinding(covidInfo.getText()));
         quit.textProperty().bind(Translator.getTranslator().getTranslationBinding(quit.getText()));
+        */
 
-       
         try {
             resetButtons();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
+
     // used to see how to toggle visibility
 //    @FXML
 //    private void handleTestVisibility(ActionEvent actionEvent){
 //        buttons.setVisible(true);
 //        covidBox.setVisible(false);
 //    }
-    private void changeButtons(){
+    private void changeButtons() {
 //        String ticketID = verifyAgain.getText();
 //        if (CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(verifyAgain.getText()) ||
 //                DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")) {
-            buttons.setVisible(true);
-            covidBox.setVisible(false);
-       // }
+        buttons.setVisible(true);
+        covidBox.setVisible(false);
+        // }
     }
 
     private void resetButtons() throws SQLException {
@@ -152,40 +157,33 @@ public class DefaultPageController extends AbsController {
             }
             loginLabel.setText("Hello, " + user.getUsername() + "!");
 
-            }else if (CurrentUser.getCurrentUser().getUuid() != null &&
+        } else if (CurrentUser.getCurrentUser().getUuid() != null &&
                 isCleared(CurrentUser.getCurrentUser().getUuid())) {
-                covidBox.setVisible(false);
-                buttons.setVisible(true);
-                manageServices.setManaged(false);
-                manageServices.setVisible(false);
-                editMap.setManaged(false);
-                editMap.setVisible(false);
-                pathfindingSettingButton.setManaged(false);
-                pathfindingSettingButton.setVisible(false);
-                manageAccount.setManaged(false);
-                manageAccount.setVisible(false);
-                surveyButton.setManaged(false);
-                surveyButton.setVisible(false);
-                surveyButton2.setManaged(true);
-                surveyButton2.setVisible(true);
+            covidBox.setVisible(false);
+            buttons.setVisible(true);
+            manageServices.setManaged(false);
+            manageServices.setVisible(false);
+            editMap.setManaged(false);
+            editMap.setVisible(false);
+            pathfindingSettingButton.setManaged(false);
+            pathfindingSettingButton.setVisible(false);
+            manageAccount.setManaged(false);
+            manageAccount.setVisible(false);
+            surveyButton.setManaged(false);
+            surveyButton.setVisible(false);
+            surveyButton2.setManaged(true);
+            surveyButton2.setVisible(true);
 
-                loginLabel.setText("Please Log in.");
-            } else {
-                buttons.setVisible(false);
-                covidBox.setVisible(true);
-                surveyButton.setVisible(true);
-                surveyButton.setManaged(true);
-                loginLabel.setText("Please Log in.");
-            }
-    @FXML
-    private void changeButtons() throws SQLException {
-        String ticketID = verifyAgain.getText();
-        if (CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(verifyAgain.getText()) ||
-        DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")){
-            buttons.setStyle("visibility: visible");
-            covidBox.setStyle("visibility: hidden");
+            loginLabel.setText("Please Log in.");
+        } else {
+            buttons.setVisible(false);
+            covidBox.setVisible(true);
+            surveyButton.setVisible(true);
+            surveyButton.setManaged(true);
+            loginLabel.setText("Please Log in.");
         }
     }
+
 
     /**
      * Handles the pushing of a button on the screen
