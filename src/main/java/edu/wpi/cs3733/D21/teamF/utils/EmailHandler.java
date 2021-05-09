@@ -1,13 +1,9 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
 import com.sun.mail.smtp.SMTPTransport;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -19,6 +15,10 @@ public class EmailHandler {
 
     }
 
+    /**
+     * Set mail server properties
+     * @return the Properties object to use
+     */
     private Properties setMailServerProperties() {
         Properties props = System.getProperties();
         props.setProperty("mail.smtps.host", "smtp.gmail.com");
@@ -30,7 +30,14 @@ public class EmailHandler {
         return props;
     }
 
-
+    /**
+     * Sends an automated email from the team gmail account
+     * @param recipient the receipient's email
+     * @param subject the email subject body
+     * @param body the body of the email
+     * @return 0 on success -1 otherwise
+     * @throws MessagingException on error with messaging
+     */
     public int sendEmail(String recipient, String subject, String body) throws MessagingException {
         String pattern = "^(.+)@(.+)$";
         Pattern r = Pattern.compile(pattern);
