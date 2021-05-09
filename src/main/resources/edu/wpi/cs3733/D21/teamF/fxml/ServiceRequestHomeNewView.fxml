@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -50,14 +51,14 @@
             <RowConstraints maxHeight="1000.0" minHeight="0.0" prefHeight="20.0" vgrow="ALWAYS" />
          </rowConstraints>
          <children>
-            <JFXButton fx:id="Home" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" style="-fx-background-color: #94C4F1;" prefHeight="125.0" prefWidth="230.0" text=" " textFill="WHITE" GridPane.halignment="CENTER">
+            <JFXButton fx:id="Home" onAction="#handleButtonPushed" onMouseEntered="#handleHoverOn" onMouseExited="#handleHoverOff" prefHeight="125.0" prefWidth="230.0" style="-fx-background-color: #94C4F1;" text=" " textFill="WHITE" GridPane.halignment="CENTER">
                <font>
                   <Font size="15.0" />
                </font>
                <graphic>
                   <ImageView fx:id="homeImage" fitHeight="115.0" fitWidth="183.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/HomeBlackText.png" />
+                        <Image url="@../../../../../../imagesAndLogos/HomeBlackTextCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -69,7 +70,7 @@
                <graphic>
                   <ImageView fx:id="facilitiesImage" fitHeight="119.0" fitWidth="169.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/FacilitiesWhiteText.png" />
+                        <Image url="@../../../../../../imagesAndLogos/FacilitiesBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -81,7 +82,7 @@
                <graphic>
                   <ImageView fx:id="computerImage" fitHeight="106.0" fitWidth="181.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/ComputerWhiteText.png" />
+                        <Image url="@../../../../../../imagesAndLogos/ComputerBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -93,7 +94,7 @@
                <graphic>
                   <ImageView fx:id="floralImage" fitHeight="129.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/FloralDeliveryWhiteText.png" />
+                        <Image url="@../../../../../../imagesAndLogos/FloralDeliveryBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -105,7 +106,7 @@
                <graphic>
                   <ImageView fx:id="foodImage" fitHeight="140.0" fitWidth="174.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/FoodDeliveryBlue.png" />
+                        <Image url="@../../../../../../imagesAndLogos/FoodDeliveryBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -117,7 +118,7 @@
                <graphic>
                   <ImageView fx:id="medicineImage" fitHeight="105.0" fitWidth="174.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/MedDeliveryBlue.png" />
+                        <Image url="@../../../../../../imagesAndLogos/MedDeliveryBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -129,7 +130,7 @@
                <graphic>
                   <ImageView fx:id="laundryImage" fitHeight="160.0" fitWidth="181.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/LaundryServicesBlue.png" />
+                        <Image url="@../../../../../../imagesAndLogos/LaundryServicesBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -141,7 +142,7 @@
                <graphic>
                   <ImageView fx:id="externalImage" fitHeight="139.0" fitWidth="169.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/ExtPatientTransportBlue.png" />
+                        <Image url="@../../../../../../imagesAndLogos/ExtPatientTransportBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -153,7 +154,7 @@
                <graphic>
                   <ImageView fx:id="langImage" fitHeight="113.0" fitWidth="174.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/LangInterpBlue.png" />
+                        <Image url="@../../../../../../imagesAndLogos/LangInterpBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -165,7 +166,7 @@
                <graphic>
                   <ImageView fx:id="giftImage" fitHeight="114.0" fitWidth="184.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/GiftDeliveryWhiteText.png" />
+                        <Image url="@../../../../../../imagesAndLogos/GiftDeliveryBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -177,7 +178,7 @@
                <graphic>
                   <ImageView fx:id="sanitationImage" fitHeight="115.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/SanitationServicesWhiteText.png" />
+                        <Image url="@../../../../../../imagesAndLogos/SanitationServicesBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -189,7 +190,7 @@
                <graphic>
                   <ImageView fx:id="internalImage" fitHeight="111.0" fitWidth="171.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../imagesAndLogos/IntPatientTransportWhiteText.png" />
+                        <Image url="@../../../../../../imagesAndLogos/IntPatientTransportBlueCropped.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -260,6 +261,66 @@
                   <Font name="Montserrat Regular" size="13.0" />
                </font>
             </Text>
+            <Label text="Facilities Maintenance" textFill="#fbfafa" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Computer Services" textFill="#fbfafa" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Gift Delivery" textFill="#fbfafa" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Laundry Services" textFill="#fbfafa" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="External Patient Transportation" textFill="#fbfafa" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Language Interpretation" textFill="#fbfafa" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Internal Patient Transportation" textFill="#fbfafa" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Floral Delivery" textFill="#fbfafa" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Food Delivery" textFill="#fbfafa" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Medicine Delivery" textFill="#fbfafa" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Sanitation Services" textFill="#fbfafa" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label text="Home" textFill="#090909" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
          </children>
       </GridPane>
    </children>
