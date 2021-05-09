@@ -1,11 +1,13 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXComboBox;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javax.annotation.PostConstruct;
+
+import java.util.stream.Collectors;
 
 public abstract class AbsController {
 
@@ -21,12 +23,16 @@ public abstract class AbsController {
     }
 
     @FXML
-    public void changeLanguage(){
-        System.out.println("Hello");
-    }
+    public void changeLanguage(){ } //TODO: Remove?
 
-
+    /**
+     * Used to initialize the lang combo box
+     */
     public void initLanguage(){
-        System.out.println(languageSelect);
+        languageSelect.getItems().addAll(Translator.getTranslator().getLanguages().stream().map(x -> Translator.getTranslator().getLangCode(x)).collect(Collectors.toList()));
+
+        languageSelect.setConverter(Translator.getLanguageCodeConverter());
+
+        languageSelect.valueProperty().bindBidirectional(Translator.getTranslator().languageProperty());
     }
 }

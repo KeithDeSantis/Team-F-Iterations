@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -34,7 +33,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     @FXML private JFXComboBox<String> appointment;
     @FXML private JFXComboBox<String> language;
 
-    private final HashMap<String, String> langCodes = new HashMap<>();
+
 
     public LanguageInterpretationServiceRequestController() {
     }
@@ -62,7 +61,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      */
     public void handleTranslate(ActionEvent actionEvent) {
         if(language.getValue() != null) {
-            String target = langCodes.get(language.getValue()); //gets lang code of the lang specified
+            String target = Translator.getTranslator().getLangCode(language.getValue()); //gets lang code of the lang specified
             Translator.getTranslator().setLanguage(target);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -197,37 +196,10 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
 
-        language.getItems().add("Arabic");
-        language.getItems().add("Dutch");
-        language.getItems().add("English");
-        language.getItems().add("French");
-        language.getItems().add("German");
-        language.getItems().add("Greek");
-        language.getItems().add("Haitian Creole");
-        language.getItems().add("Italian");
-        language.getItems().add("Japanese");
-        language.getItems().add("Korean");
-        language.getItems().add("Portuguese");
-        language.getItems().add("Russian");
-        language.getItems().add("Spanish");
-        language.getItems().add("Vietnamese");
+        language.getItems().addAll(Translator.getTranslator().getLanguages());
 
 
 
-        langCodes.put("Arabic", "ar");
-        langCodes.put("Dutch", "nl");
-        langCodes.put("English", "en");
-        langCodes.put("French", "fr");
-        langCodes.put("German", "de");
-        langCodes.put("Greek", "el");
-        langCodes.put("Haitian Creole", "ht");
-        langCodes.put("Italian", "it");
-        langCodes.put("Japanese", "ja");
-        langCodes.put("Korean", "ko");
-        langCodes.put("Portuguese", "pt");
-        langCodes.put("Russian", "ru");
-        langCodes.put("Spanish", "es");
-        langCodes.put("Vietnamese", "vi");
     }
 
     public boolean formFilled(){
