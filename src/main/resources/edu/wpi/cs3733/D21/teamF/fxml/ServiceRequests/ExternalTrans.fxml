@@ -4,7 +4,6 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -38,7 +37,7 @@
             </Text>
          </children>
       </HBox>
-      <GridPane layoutX="742.0" layoutY="273.0" prefHeight="309.0" prefWidth="920.0" AnchorPane.bottomAnchor="81.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="150.0">
+      <GridPane layoutX="742.0" layoutY="164.0" prefHeight="304.0" prefWidth="920.0" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="164.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -81,17 +80,10 @@
       </GridPane>
       <HBox alignment="CENTER" prefHeight="54.0" prefWidth="601.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ButtonBar prefHeight="54.0" prefWidth="87.0">
-              <buttons>
-                  <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
-                  <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                  <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
-                  <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" prefHeight="31.0" prefWidth="104.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
-              </buttons>
-               <HBox.margin>
-                  <Insets right="25.0" />
-               </HBox.margin>
-            </ButtonBar>
+            <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
+            <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+            <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
+            <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" prefHeight="31.0" prefWidth="104.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
          </children>
       </HBox>
    </children>

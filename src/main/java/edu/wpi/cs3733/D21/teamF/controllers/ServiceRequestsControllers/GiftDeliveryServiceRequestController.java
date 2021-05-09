@@ -40,22 +40,22 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
 
     @FXML
     public void initialize(){
-        nameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLbl.getText()));
-        specInstructLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(specInstructLbl.getText()));
-        cardNumberLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardNumberLbl.getText()));
-        schedLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(schedLbl.getText()));
-        giftLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(giftLbl.getText()));
-        expLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(expLbl.getText()));
-        tbCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(tbCheckBox.getText()));
-        balloonsCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(balloonsCheckBox.getText()));
-        cardsCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardsCheckBox.getText()));
-        puzzlesCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(puzzlesCheckBox.getText()));
-        blanketCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(blanketCheckBox.getText()));
-        magazinesCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(magazinesCheckBox.getText()));
-
-        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
-        clear.textProperty().bind(Translator.getTranslator().getTranslationBinding(clear.getText()));
-        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
+//        nameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLbl.getText()));
+//        specInstructLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(specInstructLbl.getText()));
+//        cardNumberLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardNumberLbl.getText()));
+//        schedLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(schedLbl.getText()));
+//        giftLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(giftLbl.getText()));
+//        expLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(expLbl.getText()));
+//        tbCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(tbCheckBox.getText()));
+//        balloonsCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(balloonsCheckBox.getText()));
+//        cardsCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardsCheckBox.getText()));
+//        puzzlesCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(puzzlesCheckBox.getText()));
+//        blanketCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(blanketCheckBox.getText()));
+//        magazinesCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(magazinesCheckBox.getText()));
+//
+//        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
+//        clear.textProperty().bind(Translator.getTranslator().getTranslationBinding(clear.getText()));
+//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
     }
 
         public String setSpecialInstructions(){

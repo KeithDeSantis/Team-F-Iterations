@@ -52,15 +52,16 @@ public class MaintenanceRequestController extends ServiceRequests {
 
     @FXML
     public void initialize(){
-        typeLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(typeLabel.getText()));
-        locationLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(locationLabel.getText()));
-        urgencyLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyLabel.getText()));
-        dateLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dateLabel.getText()));
-        descLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(descLabel.getText()));
 
-        cancel.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancel.getText()));
-        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
-        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
+//        typeLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(typeLabel.getText()));
+//        locationLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(locationLabel.getText()));
+//        urgencyLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyLabel.getText()));
+//        dateLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dateLabel.getText()));
+//        descLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(descLabel.getText()));
+//
+//        cancel.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancel.getText()));
+//        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
+//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
 
         try{
 

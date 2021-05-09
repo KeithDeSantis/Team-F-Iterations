@@ -1,15 +1,25 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.ExternalTransController;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.GiftDeliveryServiceRequestController;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LaundryRequestController;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.MaintenanceRequestController;
 import javafx.animation.PauseTransition;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Labeled;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class SceneContext {
@@ -87,11 +97,61 @@ public class SceneContext {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(fxml));
-        this.controller = loader.getController();
+
+
+
+
         Parent root = loader.load();
+
+        System.out.println("CTRL: " + loader.getController());
+        this.controller = loader.getController();
+        if(this.controller instanceof MaintenanceRequestController || this.controller instanceof GiftDeliveryServiceRequestController
+        || this.controller instanceof LaundryRequestController || this.controller instanceof ExternalTransController)
+            autoTranslate(root);
+
         stage.setScene(new Scene(root));
         stage.show();
 
+    }
+
+    private static void autoTranslate(Parent root)
+    {
+        final List<Node> children = new ArrayList<>();
+        getAllChildren(root, children);
+
+        for(Node n : children)
+        {
+            if(n instanceof Labeled)
+            {
+                final Labeled labeled = (Labeled) n;
+
+                if(labeled.getText().toLowerCase().startsWith("brigham and women's hospital"))
+                    continue;
+                labeled.textProperty().bind(Translator.getTranslator().getTranslationBinding(labeled.getText()));
+            }
+            else if(n instanceof Text)
+            {
+                final Text text = (Text) n;
+
+                if(text.getText().toLowerCase().startsWith("brigham and women's hospital"))
+                    continue;
+                text.textProperty().bind(Translator.getTranslator().getTranslationBinding(text.getText()));
+            }
+        }
+    }
+
+    private static void getAllChildren(Parent root, List<Node> children)
+    {
+        if(root == null || children == null)
+            return;
+        for(Node node : root.getChildrenUnmodifiable())
+        {
+            children.add(node);
+            if(node instanceof Parent)
+            {
+                getAllChildren((Parent) node, children);
+            }
+        }
     }
 
     public void loadDefault() throws IOException {

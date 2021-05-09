@@ -33,10 +33,10 @@ public class ExternalTransController extends ServiceRequests{
 
     @FXML
     public void initialize(){
-        patientNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(patientNameLbl.getText()));
-        motLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(motLbl.getText()));
-        locationLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(locationLbl.getText()));
-        specialReqLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(specialReqLbl.getText()));
+//        patientNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(patientNameLbl.getText()));
+//        motLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(motLbl.getText()));
+//        locationLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(locationLbl.getText()));
+//        specialReqLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(specialReqLbl.getText()));
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 
