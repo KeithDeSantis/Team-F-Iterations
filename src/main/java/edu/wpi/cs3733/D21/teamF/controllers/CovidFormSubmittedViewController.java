@@ -64,7 +64,6 @@ public class CovidFormSubmittedViewController{
     }
 
     public void closePopup() throws IOException {
-        SceneContext.getSceneContext().loadDefault();
         Scene scene = checkButton.getScene();
         ((Stage) scene.getWindow()).close();
     }
