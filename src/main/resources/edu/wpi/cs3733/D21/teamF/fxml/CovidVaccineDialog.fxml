@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidVaccineDialogController">
@@ -19,13 +20,17 @@
             </Label>
          </children>
       </HBox>
-      <Label fx:id="edgeID" alignment="CENTER" contentDisplay="CENTER" layoutX="119.0" layoutY="86.0" text="Search Based on ZIP code" AnchorPane.bottomAnchor="197.0" AnchorPane.leftAnchor="119.0" AnchorPane.rightAnchor="119.0" AnchorPane.topAnchor="86.0" />
-      <HBox alignment="CENTER" layoutX="100.0" layoutY="111.0" prefHeight="100.0" prefWidth="200.0" spacing="25.0" AnchorPane.bottomAnchor="89.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="111.0">
+      <VBox alignment="CENTER" layoutX="19.0" layoutY="53.0" prefHeight="236.0" prefWidth="359.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="53.0">
          <children>
-            <JFXTextField fx:id="zipCodeTxt" promptText="Zip Code" />
+            <Label fx:id="edgeID" alignment="CENTER" contentDisplay="CENTER" text="Search Based on ZIP code" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
+               <children>
+                  <JFXTextField fx:id="zipCodeTxt" promptText="Zip Code" />
+               </children>
+            </HBox>
+            <JFXButton fx:id="searchBtn" defaultButton="true" maxHeight="20.0" minWidth="60.0" onAction="#handleSearchClicked" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Search" />
+            <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#onVaccineInfoClicked" text="Information about the COVID vaccine from the CDC" />
          </children>
-      </HBox>
-      <JFXButton fx:id="searchBtn" defaultButton="true" layoutX="170.0" layoutY="211.0" maxHeight="20.0" minWidth="60.0" onAction="#handleSearchClicked" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Search" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="165.0" AnchorPane.rightAnchor="165.0" />
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" layoutX="37.0" layoutY="250.0" onAction="#onVaccineInfoClicked" text="Information about the COVID vaccine from the CDC" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="37.0" AnchorPane.rightAnchor="37.0" />
+      </VBox>
    </children>
 </AnchorPane>
