@@ -2,7 +2,6 @@ package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 
 import com.jfoenix.controls.*;
-import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -59,17 +58,6 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
 
     @FXML
     public void initialize(){
-//        clientNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(clientNameLbl.getText()));
-//        roomLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(roomLbl.getText()));
-//        deliveryLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(deliveryLbl.getText()));
-//        cardNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardNameLbl.getText()));
-//        medicineLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(medicineLbl.getText()));
-//        cardLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardLbl.getText()));
-//        expLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(expLbl.getText()));
-//
-//        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
-//        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
-//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 

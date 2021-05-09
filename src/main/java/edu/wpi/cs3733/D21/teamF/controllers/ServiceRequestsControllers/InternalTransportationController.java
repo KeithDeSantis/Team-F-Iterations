@@ -1,8 +1,10 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 
-import com.jfoenix.controls.*;
-import edu.wpi.cs3733.D21.teamF.Translation.Translator;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -11,7 +13,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,8 +20,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class InternalTransportationController extends ServiceRequests {
-
-    @FXML private JFXButton clear;
 
     @FXML private JFXComboBox<String> deliverLocation;
 
@@ -34,32 +33,8 @@ public class InternalTransportationController extends ServiceRequests {
 
     @FXML private JFXCheckBox doctorCheckBox;
 
-    @FXML private JFXButton cancel;
-
-    @FXML private JFXButton submitButton;
-
-    @FXML private Label patientNameLbl;
-
-    @FXML private Label locLbl;
-
-    @FXML private Label roomLbl;
-
-    @FXML private Label dateLbl;
-
     @FXML
     public void initialize(){
-
-//        patientName.textProperty().bind(Translator.getTranslator().getTranslationBinding(patientName.getPromptText()));
-//        patientNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(patientNameLbl.getText()));
-//        locLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(locLbl.getText()));
-//        roomLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(roomLbl.getText()));
-//        dateLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(dateLbl.getText()));
-//        relativesCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(relativesCheckBox.getText()));
-//        doctorCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(doctorCheckBox.getText()));
-//
-//        cancel.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancel.getText()));
-//        clear.textProperty().bind(Translator.getTranslator().getTranslationBinding(clear.getText()));
-//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
         //cancel.setDisableVisualFocus(true); // Clears visual focus from cancel button, cause unknown - LM
 
         try{

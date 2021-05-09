@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.*;
-import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -10,9 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -40,45 +37,11 @@ public class FloralDeliveryService extends ServiceRequests {
     @FXML private JFXCheckBox sunflowerCheckBox;
     @FXML private JFXCheckBox orchidCheckBox;
     @FXML private JFXCheckBox daisyCheckBox;
-    @FXML private Label deliveryLocLbl;
-    @FXML private Label nameLbl;
-    @FXML private Label deliveryDateLbl;
-    @FXML private Label flowerTypeLbl;
-    @FXML private Label containerTypeLbl;
-    @FXML private Label paymentLbl;
-    @FXML private JFXButton cancelButton;
-    @FXML private JFXButton clearButton;
-    @FXML private JFXButton submitButton;
 
-    @FXML private Label successField;
-    @FXML private ImageView logoHome;
 
 
     @FXML
     public void initialize() {
-//        deliveryLocLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(deliveryLocLbl.getText()));
-//        nameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLbl.getText()));
-//        deliveryDateLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(deliveryDateLbl.getText()));
-//        paymentLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(paymentLbl.getText()));
-//        flowerTypeLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(flowerTypeLbl.getText()));
-//        containerTypeLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(containerTypeLbl.getText()));
-//        roseCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(roseCheckBox.getText()));
-//        tulipCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(tulipCheckBox.getText()));
-//        violetCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(violetCheckBox.getText()));
-//        sunflowerCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(sunflowerCheckBox.getText()));
-//        orchidCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(orchidCheckBox.getText()));
-//        daisyCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(daisyCheckBox.getText()));
-//        bouquetButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(bouquetButton.getText()));
-//        vaseButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(vaseButton.getText()));
-//        potButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(potButton.getText()));
-//        cardNumberField.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardNumberField.getPromptText()));
-//        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
-//        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
-//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
-
-//        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
-//        logoHome.setImage(img);
-
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 

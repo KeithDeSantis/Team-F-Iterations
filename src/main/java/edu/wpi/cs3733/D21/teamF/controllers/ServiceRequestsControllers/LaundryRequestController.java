@@ -1,14 +1,11 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
-import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
@@ -20,19 +17,12 @@ import java.util.UUID;
 
 public class LaundryRequestController extends ServiceRequests {
 
-    @FXML private JFXButton cancel;
-    @FXML private JFXButton clearButton;
-    @FXML private JFXButton submitButton;
-    @FXML private JFXButton help;
     @FXML private JFXRadioButton darks;
     @FXML private JFXRadioButton lights;
     @FXML private JFXRadioButton both;
     @FXML private JFXRadioButton hot;
     @FXML private JFXRadioButton cold;
     @FXML private JFXRadioButton folded;
-    @FXML private Label nameLbl;
-    @FXML private Label optionsLbl;
-    @FXML private Label addInstructLbl;
 
     @FXML public TextField employeeID;
     @FXML public TextField clientName;
@@ -64,19 +54,6 @@ public class LaundryRequestController extends ServiceRequests {
 
     @FXML
     public void initialize(){
-//        nameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLbl.getText()));
-//        optionsLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(optionsLbl.getText()));
-//        addInstructLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(addInstructLbl.getText()));
-//        darks.textProperty().bind(Translator.getTranslator().getTranslationBinding(darks.getText()));
-//        lights.textProperty().bind(Translator.getTranslator().getTranslationBinding(lights.getText()));
-//        both.textProperty().bind(Translator.getTranslator().getTranslationBinding(both.getText()));
-//        hot.textProperty().bind(Translator.getTranslator().getTranslationBinding(hot.getText()));
-//        cold.textProperty().bind(Translator.getTranslator().getTranslationBinding(cold.getText()));
-//        folded.textProperty().bind(Translator.getTranslator().getTranslationBinding(folded.getText()));
-//
-//        cancel.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancel.getText()));
-//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
-//        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
     }
 
     @FXML

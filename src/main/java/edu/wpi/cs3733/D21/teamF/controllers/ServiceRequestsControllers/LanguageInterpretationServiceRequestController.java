@@ -1,6 +1,9 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTimePicker;
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
@@ -13,34 +16,28 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.ResourceBundle;
+import java.util.UUID;
 
 
 public class LanguageInterpretationServiceRequestController extends ServiceRequests implements Initializable {
-    @FXML private JFXButton close;
     @FXML private JFXTextField name;
     @FXML private JFXDatePicker date;
     @FXML private JFXTimePicker time;
     @FXML private JFXComboBox<String> appointment;
     @FXML private JFXComboBox<String> language;
-    @FXML private JFXButton help;
-    @FXML private JFXButton translate;
-    @FXML private Label nameLabel;
-    @FXML private Label dtLabel;
-    @FXML private Label appointmentLabel;
-    @FXML private Label languageLabel;
-    @FXML private JFXButton x;
-    @FXML private JFXButton clearButton;
-    @FXML private JFXButton submitButton;
 
     private final HashMap<String, String> langCodes = new HashMap<>();
+
+    public LanguageInterpretationServiceRequestController() {
+    }
 
     /**
      * Opens the help window
@@ -114,19 +111,6 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Jay Yen
      */
     public void initialize(URL location, ResourceBundle resources){
-//        nameLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLabel.getText()));
-//        dtLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dtLabel.getText()));
-//        appointmentLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(appointmentLabel.getText()));
-//        languageLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(languageLabel.getText()));
-//        name.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(name.getPromptText()));
-//        date.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(date.getPromptText()));
-//        time.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(time.getPromptText()));
-//        language.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(language.getPromptText()));
-//
-//        x.textProperty().bind(Translator.getTranslator().getTranslationBinding(x.getText()));
-//        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
-//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
-
         appointment.getItems().add("Non-Specific");
         appointment.getItems().add("Multiple Departments");
         appointment.getItems().add("Allergy and Clinical Immunology");

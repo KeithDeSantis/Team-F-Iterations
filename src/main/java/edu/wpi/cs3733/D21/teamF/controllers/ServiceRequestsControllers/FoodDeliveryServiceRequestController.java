@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 import com.jfoenix.controls.*;
-import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -10,10 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,8 +22,6 @@ import java.util.UUID;
  */
 public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
-    @FXML private JFXButton xButton;
-    @FXML private Button helpXButton;
     @FXML private JFXComboBox<String> deliveryLocationField;
     @FXML private JFXTimePicker deliveryTimeField;
     @FXML private JFXTextField allergyField;
@@ -44,45 +38,13 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
     @FXML private JFXCheckBox cbSide2;
     @FXML private JFXCheckBox cbSide3;
     @FXML private JFXCheckBox cbSide4;
-    @FXML private Label title;
-    @FXML private Label locLabel;
-    @FXML private Label delLabel;
-    @FXML private Label allLabel;
-    @FXML private Label siLabel;
-    @FXML private Label mealLabel;
-    @FXML private Label sideLabel;
-    @FXML private Label drinkLabel;
-    @FXML private JFXButton cancelButton;
-    @FXML private JFXButton clearButton;
-    @FXML private JFXButton submitButton;
-    @FXML private HBox header;
+
+    public FoodDeliveryServiceRequestController() {
+    }
 
 
     @FXML
     private void initialize(){
-//        locLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(locLabel.getText()));
-//        delLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(delLabel.getText()));
-//        allLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(allLabel.getText()));
-//        siLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(siLabel.getText()));
-//        mealLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(mealLabel.getText()));
-//        sideLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(sideLabel.getText()));
-//        drinkLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(drinkLabel.getText()));
-//        rButtonFood1.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonFood1.getText()));
-//        rButtonFood2.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonFood2.getText()));
-//        rButtonFood3.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonFood3.getText()));
-//        rButtonFood4.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonFood4.getText()));
-//        cbSide1.textProperty().bind(Translator.getTranslator().getTranslationBinding(cbSide1.getText()));
-//        cbSide2.textProperty().bind(Translator.getTranslator().getTranslationBinding(cbSide2.getText()));
-//        cbSide3.textProperty().bind(Translator.getTranslator().getTranslationBinding(cbSide3.getText()));
-//        cbSide4.textProperty().bind(Translator.getTranslator().getTranslationBinding(cbSide4.getText()));
-//        rButtonDrink1.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonDrink1.getText()));
-//        rButtonDrink2.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonDrink2.getText()));
-//        rButtonDrink3.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonDrink3.getText()));
-
-//        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
-//        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
-//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
-
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 
