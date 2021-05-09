@@ -7,22 +7,31 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
     String username;
     String password;
     String userType;
-
+    byte[] salt;
     String covidStatus;
     SimpleStringProperty usernameProperty;
     SimpleStringProperty passwordProperty;
     SimpleStringProperty userTypeProperty;
 
-    public AccountEntry(String username, String password, String userType, String status) {
+    public AccountEntry(String username, String password, String userType, String status, byte[] salt) {
         this.username = username;
         this.password = password;
         this.userType = userType;
         this.covidStatus = status;
+        this.salt = salt;
         usernameProperty = new SimpleStringProperty(username);
         passwordProperty = new SimpleStringProperty(password);
         userTypeProperty = new SimpleStringProperty(userType);
     }
 
+
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
     public String getUsername() {
         return username;
     }

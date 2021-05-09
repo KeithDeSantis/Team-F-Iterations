@@ -4,9 +4,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXSlider;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,12 +51,17 @@ public class MapPanel extends AnchorPane {
 
     private final DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
 
+    private final DoubleProperty internalZoomLevel = new SimpleDoubleProperty(5.0);
+
     private final DoubleProperty INITIAL_WIDTH = new SimpleDoubleProperty();
     private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
+    private final DoubleProperty ASPECT_RATIO = new SimpleDoubleProperty();
 
 
     private final StringProperty floor = new SimpleStringProperty("1");
     private final ObjectProperty<String> fp = new SimpleObjectProperty<>();
+
+    private static final double MIN_ZOOM_LEVEL = 8;
 
 
     private final BooleanProperty navigating = new SimpleBooleanProperty(false);
@@ -139,6 +144,10 @@ public class MapPanel extends AnchorPane {
     }
 
 
+    public StringConverter<Double> getDoubleStringConverter() {
+        return doubleStringConverter;
+    }
+
     @FXML
     public void initialize(){
         zoomInButton.setOnAction(this::handleZoom);
@@ -154,19 +163,27 @@ public class MapPanel extends AnchorPane {
         map.setPreserveRatio(true);
 
 
-        INITIAL_WIDTH.setValue(F1Image.getWidth());
-        INITIAL_HEIGHT.setValue(F1Image.getHeight());
+        ASPECT_RATIO.set(F1Image.getHeight()/F1Image.getWidth());
 
+
+
+        INITIAL_WIDTH.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL));//setValue(F1Image.getWidth());
+        INITIAL_HEIGHT.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL).multiply(ASPECT_RATIO));//setValue(F1Image.getHeight());
+        //INITIAL_WIDTH.setValue(F1Image.getWidth() * 0.5);
+        //INITIAL_HEIGHT.setValue(F1Image.getHeight() * 0.5);
 
         stackPane.prefWidthProperty().bind(this.widthProperty());
         stackPane.prefHeightProperty().bind(this.heightProperty());
 
+        //Weird....Oh... hmmmm...
+        canvas.setStyle("-fx-background-color: #ff0000"); //Yup. Did it a few times before
+        canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(internalZoomLevel));
+        canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(internalZoomLevel));
 
-        canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
-        canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
+        zoomLevel.bind(internalZoomLevel.multiply(F1Image.widthProperty().divide(INITIAL_WIDTH)));
 
-        map.fitWidthProperty().bind(INITIAL_WIDTH.divide(zoomLevel));
-        map.fitHeightProperty().bind(INITIAL_HEIGHT.divide(zoomLevel));
+        map.fitWidthProperty().bind(INITIAL_WIDTH.divide(internalZoomLevel));
+        map.fitHeightProperty().bind(INITIAL_HEIGHT.divide(internalZoomLevel));
         map.setImage(F1Image); // Copied from A* Vis - KD
 
         floorSlider.setLabelFormatter(doubleStringConverter);
@@ -226,6 +243,10 @@ public class MapPanel extends AnchorPane {
         return zoomLevel;
     }
 
+    public DoubleProperty getInternalZoomLevel() {
+        return internalZoomLevel;
+    }
+
     public ObjectProperty<String> getFloor() {
         return this.fp;
     }
@@ -243,12 +264,12 @@ public class MapPanel extends AnchorPane {
     public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
         JFXButton btn = (JFXButton) actionEvent.getSource();
         if(btn == zoomInButton) {
-            if(zoomLevel.get() > 1) {
-                zoomLevel.setValue(zoomLevel.get()  - 1);
+            if(internalZoomLevel.get() > 1) {
+                internalZoomLevel.setValue(internalZoomLevel.get()  - 1);
             }
         } else if (btn == zoomOutButton) {
-            if(zoomLevel.get() < 8) {
-                zoomLevel.setValue(zoomLevel.get() + 1);
+            if(internalZoomLevel.get() < MIN_ZOOM_LEVEL) {
+                internalZoomLevel.setValue(internalZoomLevel.get() + 1);
             }
         }
 
@@ -285,7 +306,9 @@ public class MapPanel extends AnchorPane {
      */
     public <Element extends Node & IMapDrawable> Element draw(Element element)
     {
-        element.bindLocation(zoomLevel);
+        final DoubleProperty prop = new SimpleDoubleProperty();
+        prop.bind(zoomLevel);
+        element.bindLocation(prop);
 
         element.visibleProperty().bind(element.shouldDisplay().and(this.floor.isEqualTo(element.getFloor())));
 
@@ -337,7 +360,7 @@ public class MapPanel extends AnchorPane {
         dialog.show(stackPane);
     }
 
-    EventHandler<ScrollEvent> consume = event -> event.consume();
+    EventHandler<ScrollEvent> consume = Event::consume;
 
     public void disableInteract(){
         navigating.setValue(true);

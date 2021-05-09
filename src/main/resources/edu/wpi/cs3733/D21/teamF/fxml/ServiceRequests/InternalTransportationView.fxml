@@ -18,9 +18,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.InternalTransportationController">
         <children>
-            <HBox fx:id="header" prefHeight="137.0" prefWidth="960.0" spacing="10.0" style="-fx-background-color: #94C4F1;" stylesheets="/stylesheets/DefaultHeaderBG.css">
+            <HBox fx:id="header" prefHeight="137.0" prefWidth="960.0" spacing="10.0" style="-fx-background-color: #94C4F1;" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <children>
                     <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -37,7 +38,7 @@
                     <Insets bottom="10.0" left="10.0" top="10.0" />
                 </padding>
             </HBox>
-            <GridPane prefHeight="270.0" prefWidth="960.0" AnchorPane.topAnchor="150.0">
+            <GridPane prefHeight="270.0" prefWidth="960.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -53,17 +54,17 @@
                             <Insets />
                         </GridPane.margin>
                         <children>
-                            <Label fx:id="dateLbl" text="Date :">
+                            <Label text="Date :">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
                             </Label>
-                            <JFXDatePicker fx:id="movingDate" defaultColor="#03256c" />
+                            <JFXDatePicker fx:id="movingDate" />
                         </children>
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                         <children>
-                            <Label fx:id="patientNameLbl" text="Patient:">
+                            <Label minWidth="60.0" text="Patient:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
@@ -72,12 +73,15 @@
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
                             </JFXTextField>
                         </children>
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
                         <children>
-                            <Label fx:id="roomLbl" text="Room:">
+                            <Label text="Room:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
@@ -87,7 +91,7 @@
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
                         <children>
-                            <Label fx:id="locLbl" text="Location:">
+                            <Label text="Location:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
@@ -115,7 +119,7 @@
                     </HBox>
                 </children>
             </GridPane>
-            <HBox alignment="CENTER" layoutX="459.0" layoutY="514.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="430.0">
+            <HBox alignment="CENTER" layoutY="433.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                 <children>
                     <ButtonBar prefHeight="40.0" prefWidth="200.0">
                         <buttons>

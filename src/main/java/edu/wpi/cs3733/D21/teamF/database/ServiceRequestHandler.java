@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceRequestHandler implements DatabaseEntry {
+class ServiceRequestHandler implements DatabaseEntry {
 
 
     @Override
@@ -28,7 +28,7 @@ public class ServiceRequestHandler implements DatabaseEntry {
     @Override
     public boolean editEntry(String id, String newVal, String colName) throws Exception{
         if (colName.equals("name") || colName.equals("assignedperson") || colName.equals("completed") ||
-        colName.equals("Additional instructions")) {
+        colName.equals("additionalInstructions")) {
             String query = String.format("UPDATE service_requests SET %s=(?) WHERE uuid=(?)", colName);
             try {
                 PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
@@ -93,35 +93,40 @@ public class ServiceRequestHandler implements DatabaseEntry {
 
     /**
      * Generates a ServiceEntry object for a service entry given the uuid
-     * @param uuid the uuid of the service request/ticket to fetch
+     * @param value the column value of the service request/ticket to fetch
+     * @param colName the column to get the service request by
      * @return the ServiceEntry object for the row
      * @throws SQLException on error with DB operations
      */
-    public ServiceEntry getServiceRequest(String uuid) throws SQLException{
-        final String sql = "SELECT * FROM SERVICE_REQUESTS WHERE uuid=(?)";
-        final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
-        stmt.setString(1, uuid);
+    public ServiceEntry getServiceRequest(String value, String colName) throws SQLException{
+        if (colName.equals("uuid") || colName.equals("name") || colName.equals("assignedperson") || colName.equals("completed") ||
+                colName.equals("additionalInstructions")) {
+            final String sql = "SELECT * FROM SERVICE_REQUESTS WHERE " + colName + "=(?)";
+            final PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
+            stmt.setString(1, value);
 
-        ResultSet rset;
-        try {
-            rset = stmt.executeQuery();
-        } catch (SQLException e) {
-            if (e.getMessage().contains("Table/View 'L1NODES' does not exist."))
+            ResultSet rset;
+            try {
+                rset = stmt.executeQuery();
+            } catch (SQLException e) {
+                if (e.getMessage().contains("Table/View 'SERVICE_REQUESTS' does not exist."))
+                    return null;
+                else
+                    e.printStackTrace();
                 return null;
-            else
-                e.printStackTrace();
-            return null;
-        }
-        while (rset.next()) {
-            String requestID = rset.getString(1);
-            String requestName = rset.getString(2);
-            String requestPerson = rset.getString(3);
-            String requestCompleted = rset.getString(4);
-            String requestInfo = rset.getString(5);
+            }
+            while (rset.next()) {
+                String requestID = rset.getString(1);
+                String requestName = rset.getString(2);
+                String requestPerson = rset.getString(3);
+                String requestCompleted = rset.getString(4);
+                String requestInfo = rset.getString(5);
+                rset.close();
+                return new ServiceEntry(requestID, requestName, requestPerson, requestCompleted, requestInfo);
+            }
             rset.close();
-            return new ServiceEntry(requestID, requestName, requestPerson, requestCompleted, requestInfo);
         }
-        rset.close();
+
         return null;
     }
 

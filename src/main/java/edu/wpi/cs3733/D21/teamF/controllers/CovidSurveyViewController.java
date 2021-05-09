@@ -4,12 +4,24 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,6 +56,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private JFXCheckBox stayAwake;
     @FXML private JFXCheckBox fever;
     @FXML private JFXTextField generatedID;
+    private ClipboardContent content = new ClipboardContent();
 
 
     /**
@@ -52,6 +65,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     public void initialize(URL location, ResourceBundle resources){
         String ticketNumber = UUID.randomUUID().toString();
         generatedID.setText(ticketNumber);
+        content.putString(ticketNumber);
     }
 
     /**
@@ -60,69 +74,83 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
      */
     @FXML private void handleSubmitPushed() throws IOException, SQLException {
         if(formFilled()) {
-            //create service request, put in database
+            // Create service request, put in database
             String covidInfo = temperatureField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
-            ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
-            //change view to survey submitted page
+            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "", "false", generatedID.getText());
+            // ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
-            /*
+            // Copy UUID to users clipboard TODO add explicit button for this
+            Clipboard.getSystemClipboard().setContent(content);
+
+
+            // Change view to survey submitted page
             FXMLLoader submittedPageLoader = new FXMLLoader();
             submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
             Parent root = submittedPageLoader.load();
             CovidFormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
+            formSubmittedViewController.autoFill(generatedID.getText());
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
             submittedStage.initModality(Modality.APPLICATION_MODAL);
             submittedStage.showAndWait();
 
+            // Generate a new UUID in the event submit is pressed twice (prevents DB errors)
+            generatedID.setText(UUID.randomUUID().toString());
+            content.putString(generatedID.getText());
+/*
             if(!formSubmittedViewController.isCompleted)
             {
                 DatabaseAPI.getDatabaseAPI().deleteServiceRequest(generatedID.getText());
             }
 
-             */
+ */
+
+
         }
     }
     public boolean formFilled(){
         final String tempStr = temperatureField.getText().trim();
+        boolean returnFlag = true;
 
         //Empty temperature field
         if(tempStr.isEmpty()) {
             setTextErrorStyle(temperatureField);
-            return false;
+            returnFlag = false;
         }
         //Verify temperature is a number
         if(!tempStr.matches("\\d*")) {
             setTextErrorStyle(temperatureField);
-            return false;
+            returnFlag =  false;
         }
+        if(!tempStr.isEmpty()) {
+            final int temperature = Integer.parseInt(tempStr);
 
-        final int temperature = Integer.parseInt(tempStr);
-
-        if (temperature < 70 || temperature > 115 ){
-            setTextErrorStyle(temperatureField);
-            return false;
+            if (temperature < 70 || temperature > 115) {
+                setTextErrorStyle(temperatureField);
+                returnFlag = false;
+            }
         }
 
         //FIXME: ADD USER FEEDBACK
 
         if(!yes1.isSelected() && !no1.isSelected())
         {
-            return false;
+            yes1.setUnSelectedColor(Color.RED);
+            no1.setUnSelectedColor(Color.RED);
+            returnFlag = false;
         }
 
         if(!yes2.isSelected() && !no2.isSelected())
         {
-
-            return false;
+            yes2.setUnSelectedColor(Color.RED);
+            no2.setUnSelectedColor(Color.RED);
+            returnFlag =  false;
         }
 
-        return true;
+        return returnFlag;
     }
 
     /**
@@ -136,9 +164,15 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
         yes1.setToggleGroup(question1);
         no1.setToggleGroup(question1);
 
+        yes1.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
+        no1.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
+
         ToggleGroup question2 = new ToggleGroup(); //group for second question
         yes2.setToggleGroup(question2);
         no2.setToggleGroup(question2);
+
+        yes2.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
+        no2.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
     }
 
     /**
@@ -150,6 +184,20 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     }
 
     public void handleCheckStatus() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
+        FXMLLoader submittedPageLoader = new FXMLLoader();
+        submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
+        Stage submittedStage = new Stage();
+        Parent root = submittedPageLoader.load();
+        Scene submitScene = new Scene(root);
+        submittedStage.setScene(submitScene);
+        submittedStage.setTitle("Check Status");
+        submittedStage.initModality(Modality.APPLICATION_MODAL);
+        submittedStage.showAndWait();
+    }
+
+    @FXML
+    public void goBack(MouseEvent mouseEvent) throws IOException {
+        CurrentUser.getCurrentUser().logout();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 }

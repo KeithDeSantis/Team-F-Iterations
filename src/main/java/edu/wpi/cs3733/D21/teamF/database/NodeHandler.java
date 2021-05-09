@@ -9,19 +9,27 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NodeHandler implements DatabaseEntry {
+class NodeHandler implements DatabaseEntry {
+    public String genNodeDescription(String[] values){
+        final String description = "The node ID is, " + values[0] + " located on floor, " + values[3] + "\nIn building, " +
+                values[4] + " of type " + values[5] + "\nWith long and short names, " + values[6] + ", " + values[7];
+        return description;
+    }
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
-        final String query = "INSERT INTO AllNodes values(?, ?, ?, ?, ?, ?, ?, ?)";
+        final String query = "INSERT INTO AllNodes values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
+        final String description = DatabaseAPI.getDatabaseAPI().makeNodeDescription(colValues);
         int colCounter = 1;
         for (String s : colValues){
             stmt.setString(colCounter, s);
             colCounter = colCounter + 1;
         }
+        colCounter = 9;
+        stmt.setString(colCounter, description);
         return stmt.executeUpdate() != 0;
     }
 
@@ -32,7 +40,8 @@ public class NodeHandler implements DatabaseEntry {
     public boolean editEntry(String id, String newVal, String colName) throws Exception{
         boolean success;
         if (colName.equals("nodeid") || colName.equals("xcoord") || colName.equals("ycoord") || colName.equals("floor")
-        || colName.equals("building") || colName.equals("nodetype") || colName.equals("longname") || colName.equals("shortname")) {
+        || colName.equals("building") || colName.equals("nodetype") || colName.equals("longname") || colName.equals("shortname") ||
+        colName.equals("description")) {
             String query = String.format("UPDATE AllNodes SET %s=(?) WHERE NODEID=(?)", colName);
             try {
                 PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(query);
@@ -69,7 +78,7 @@ public class NodeHandler implements DatabaseEntry {
     public boolean createTable() {
         final String initNodesTable = "CREATE TABLE AllNodes(NodeID varchar(200), " +
                 "xCoord int, yCoord int, floor varchar(200), building varchar(200), " +
-                "nodeType varchar(200), longName varchar(200), shortName varchar(200), primary key(NodeID))";
+                "nodeType varchar(200), longName varchar(200), shortName varchar(200), description varchar(400), primary key(NodeID))";
         try{
             Statement stmt = ConnectionHandler.getConnection().createStatement();
             stmt.execute(initNodesTable);
@@ -132,8 +141,10 @@ public class NodeHandler implements DatabaseEntry {
             String type = rset.getString(6);
             String longName = rset.getString(7);
             String shortName = rset.getString(8);
+            String description = rset.getString(9);
 
-            NodeEntry newEntry = new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
+            NodeEntry newEntry = new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor,
+                    building, type, longName, shortName, description);
             entries.add(newEntry);
         }
         rset.close();
@@ -171,9 +182,11 @@ public class NodeHandler implements DatabaseEntry {
             final String type = rset.getString(6);
             final String longName = rset.getString(7);
             final String shortName = rset.getString(8);
+            final String description = rset.getString(9);
             rset.close();
 
-            return new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type, longName, shortName);
+            return new NodeEntry(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), floor, building, type,
+                    longName, shortName, description);
         }
         rset.close();
         return null;

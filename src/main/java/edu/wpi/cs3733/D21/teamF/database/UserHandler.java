@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserHandler implements DatabaseEntry {
+class UserHandler implements DatabaseEntry {
 
     /**
      * verify that the admin user exists
@@ -56,7 +56,7 @@ public class UserHandler implements DatabaseEntry {
      * @param salt the salt bytearray to append to the plaintext and hash
      * @return returns a string representation of the encrypted password
      */
-    private static String encryptPassword(String plainText, byte[] salt)
+    public String encryptPassword(String plainText, byte[] salt)
     {
         String cipherText = "";
         try{
@@ -253,8 +253,9 @@ public class UserHandler implements DatabaseEntry {
             String password = resultSet.getString(4);
             String usertype = resultSet.getString(2);
             String status = resultSet.getString(5);
+            byte[] salt = resultSet.getBytes(6);
 
-            AccountEntry newEntry = new AccountEntry(username, password, usertype, status);
+            AccountEntry newEntry = new AccountEntry(username, password, usertype, status, salt);
             entries.add(newEntry);
         }
         resultSet.close();
@@ -278,7 +279,8 @@ public class UserHandler implements DatabaseEntry {
             String type = resultSet.getString(2);
             String password = resultSet.getString(4);
             String status = resultSet.getString(5);
-            user = new AccountEntry(username, password, type, status);
+            byte[] salt = resultSet.getBytes(6);
+            user = new AccountEntry(username, password, type, status, salt);
         }
         stmt.close();
         resultSet.close();

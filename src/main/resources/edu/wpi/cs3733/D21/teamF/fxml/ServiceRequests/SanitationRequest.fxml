@@ -15,9 +15,9 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.SanitationRequestController">
    <children>
-      <HBox fx:id="header" prefHeight="137.0" prefWidth="960.0" spacing="10.0" style="-fx-background-color: 94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="header" prefHeight="137.0" prefWidth="960.0" spacing="10.0" style="-fx-background-color: 94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                </image>
@@ -32,9 +32,9 @@
             <Insets bottom="10.0" left="10.0" top="10.0" />
          </padding>
       </HBox>
-      <VBox layoutY="138.0" prefHeight="302.0" prefWidth="910.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">
+      <VBox alignment="CENTER" layoutY="138.0" prefHeight="302.0" prefWidth="910.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">
          <children>
-            <HBox prefHeight="40.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
                <children>
                   <Label fx:id="clientNameLbl" text="Client Name:">
                      <font>
@@ -57,7 +57,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox prefHeight="40.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
                <children>
                   <JFXTextField fx:id="clientName" maxWidth="-Infinity" prefHeight="31.0" prefWidth="300.0">
                      <HBox.margin>
@@ -79,14 +79,14 @@
                   <Insets left="25.0" top="25.0" />
                </VBox.margin>
             </Label>
-            <JFXTextField fx:id="description" prefHeight="143.0" prefWidth="785.0" style="-fx-border-color: #000000;">
+            <JFXTextField fx:id="description" prefHeight="2000.0" prefWidth="785.0" style="-fx-border-color: #000000;">
                <VBox.margin>
-                  <Insets left="25.0" right="100.0" top="25.0" />
+                  <Insets bottom="25.0" left="25.0" right="25.0" top="10.0" />
                </VBox.margin>
             </JFXTextField>
          </children>
       </VBox>
-      <HBox alignment="TOP_CENTER" prefHeight="31.0" prefWidth="960.0" AnchorPane.bottomAnchor="50.0">
+      <HBox alignment="CENTER" prefHeight="31.0" prefWidth="960.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <JFXButton fx:id="cancel" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel">
                <font>

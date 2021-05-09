@@ -4,8 +4,6 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.database.EdgeHandler;
-import edu.wpi.cs3733.D21.teamF.database.NodeHandler;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -128,8 +126,7 @@ public class MapEditViewController extends AbsController {
         // Node initialization
         List<NodeEntry> data = new ArrayList<>();
         try {
-            NodeHandler newNodeHandler = new NodeHandler();
-            data = newNodeHandler.genNodeEntryObjects();
+            data = DatabaseAPI.getDatabaseAPI().genNodeEntries();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -200,8 +197,7 @@ public class MapEditViewController extends AbsController {
         // Edge initialization
         List<EdgeEntry> edgeData = new ArrayList<>();
         try {
-            EdgeHandler newEdgeHandler = new EdgeHandler();
-            edgeData = newEdgeHandler.genEdgeEntryObjects();
+            edgeData = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -937,7 +933,7 @@ public class MapEditViewController extends AbsController {
 
             if (nodeData != null) {
                 if (!nodeData.isEmpty() && nodeData.get(0).length == 8) {
-                    nodeEntryObservableList.addAll(nodeData.stream().map(line -> new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7])).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
+                    nodeEntryObservableList.addAll(nodeData.stream().map(line -> new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7], "")).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
 
                     nodeEntryObservableList.forEach(n -> mapPanel.draw(getEditableNode(n)));
 
@@ -1014,7 +1010,7 @@ public class MapEditViewController extends AbsController {
             if (!nodeData.isEmpty() && nodeData.get(0).length == 8 && !edgeData.isEmpty() && edgeData.get(0).length == 3) {
                 List<NodeEntry> list = new ArrayList<>();
                 for (String[] nodeDatum : nodeData) {
-                    NodeEntry nodeEntry = new NodeEntry(nodeDatum[0], nodeDatum[1], nodeDatum[2], nodeDatum[3], nodeDatum[4], nodeDatum[5], nodeDatum[6], nodeDatum[7]);
+                    NodeEntry nodeEntry = new NodeEntry(nodeDatum[0], nodeDatum[1], nodeDatum[2], nodeDatum[3], nodeDatum[4], nodeDatum[5], nodeDatum[6], nodeDatum[7], "");
                     list.add(nodeEntry);
                 }
                 list.sort(Comparator.comparing(NodeEntry::getNodeID));
