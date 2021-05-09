@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidVaccineDialogController">
    <children>
-      <HBox alignment="CENTER" prefHeight="44.0" prefWidth="400.0" style="-fx-background-color: #94c4f1; -fx-border-width: 0px 0px 4px 0px; -fx-border-color: #03256c;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" prefHeight="44.0" prefWidth="400.0" style="-fx-background-color: #f0f2f5; -fx-border-width: 0px 0px 4px 0px; -fx-border-color: #03256c;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="title" text="COVID Vaccine Information" textFill="#03256c">
                <font>

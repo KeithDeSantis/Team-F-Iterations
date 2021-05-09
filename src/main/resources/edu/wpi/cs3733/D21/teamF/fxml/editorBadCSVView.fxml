@@ -19,7 +19,7 @@
             <JFXButton fx:id="okButton" buttonType="RAISED" onAction="#handleOK" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="OK" />
          </children>
       </VBox>
-      <HBox alignment="CENTER" prefHeight="46.0" prefWidth="300.0" style="-fx-background-color: #94c4f1ff; -fx-border-width: 0px 0px 5px 0px; -fx-border-color: #03256c;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" prefHeight="46.0" prefWidth="300.0" style="-fx-background-color: #f0f2f5; -fx-border-width: 0px 0px 5px 0px; -fx-border-color: #03256c;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="formatErrorTitle" text="CSV Format Error" />
          </children>
