@@ -139,6 +139,7 @@
                   </JFXButton>
                </children>
             </VBox>
+            <JFXButton fx:id="credits" alignment="CENTER" contentDisplay="CENTER" layoutX="859.0" layoutY="359.0" onAction="#handleCredits" prefHeight="30.0" prefWidth="87.0" text="Credits" textAlignment="CENTER" textFill="WHITE" underline="true" wrapText="true" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          </children>
       </AnchorPane>
    </children>
