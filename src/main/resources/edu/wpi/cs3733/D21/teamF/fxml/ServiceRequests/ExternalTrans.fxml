@@ -53,25 +53,25 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Patient Name:" GridPane.valignment="BOTTOM">
+            <Text fx:id="patientNameLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient Name:" GridPane.valignment="BOTTOM">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Text>
             <JFXTextField fx:id="patientName" prefHeight="22.0" prefWidth="2000.0" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Method of Transportation:" GridPane.rowIndex="2">
+            <Text fx:id="motLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Method of Transportation:" GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Text>
             <JFXTextField fx:id="methodTrans" prefWidth="2000.0" GridPane.rowIndex="3" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Location:" GridPane.rowIndex="4">
+            <Text fx:id="locationLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Location:" GridPane.rowIndex="4">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Text>
             <JFXComboBox fx:id="loc" prefHeight="27.0" prefWidth="208.0" GridPane.rowIndex="5" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Special Requests:" wrappingWidth="187.1328125" GridPane.rowIndex="6">
+            <Text fx:id="specialReqLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Special Requests:" wrappingWidth="187.1328125" GridPane.rowIndex="6">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
