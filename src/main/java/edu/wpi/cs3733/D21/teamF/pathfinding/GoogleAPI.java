@@ -85,7 +85,7 @@ public class GoogleAPI {
         url.append(urlBase);
         url.append("?origin=").append(GoogleAPI.getGoogleAPI().urlEncode(origin));
         url.append("&destination=").append(GoogleAPI.getGoogleAPI().urlEncode(destination));
-        String apiKey = "AIzaSyCadNiFQ2ZAXyO22RTCzyk9z44jKTJZs6E"; //TODO: ADD/REMOVE API KEY HERE
+        String apiKey = ""; //TODO: ADD/REMOVE API KEY HERE
         url.append("&key=").append(apiKey);
         System.out.println(url);
         return url.toString();
