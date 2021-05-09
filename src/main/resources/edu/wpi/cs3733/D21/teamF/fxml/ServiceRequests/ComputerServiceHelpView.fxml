@@ -96,7 +96,7 @@
                   </GridPane>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <JFXButton fx:id="back" buttonType="RAISED" onAction="#goBack" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Back">
+                        <JFXButton fx:id="back" buttonType="RAISED" onAction="#goToRequest" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Back">
                            <HBox.margin>
                               <Insets left="450.0" top="20.0" />
                            </HBox.margin>

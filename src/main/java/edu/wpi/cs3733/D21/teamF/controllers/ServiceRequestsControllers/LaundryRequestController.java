@@ -1,6 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
@@ -18,8 +17,6 @@ import java.util.UUID;
 
 public class LaundryRequestController extends ServiceRequests {
 
-    @FXML private JFXButton cancel;
-    @FXML private JFXButton help;
     @FXML private JFXRadioButton darks;
     @FXML private JFXRadioButton lights;
     @FXML private JFXRadioButton both;
@@ -53,6 +50,10 @@ public class LaundryRequestController extends ServiceRequests {
 
     public void setAdditionalInstructions(TextField additionalInstructions) {
         this.additionalInstructions = additionalInstructions;
+    }
+
+    @FXML
+    public void initialize(){
     }
 
     @FXML

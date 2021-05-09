@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
@@ -13,8 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,32 +22,19 @@ import java.util.stream.Collectors;
 public class MaintenanceRequestController extends ServiceRequests {
     @FXML private JFXComboBox<String> locationField;
     @FXML private JFXComboBox<String> typeComboBox;
-    @FXML private ImageView goBack;
     @FXML private JFXTextArea descriptionField;
-    @FXML private Label typeLabel;
-    @FXML private Label locationLabel;
-    @FXML private Label descLabel;
-    @FXML private JFXButton cancel;
-    @FXML private Label urgencyLabel;
-    @FXML private Label dateLabel;
     @FXML private JFXComboBox<String> urgencyComboBox;
     @FXML private JFXDatePicker dateOfIncident;
-    @FXML private JFXComboBox<String> assignment;
-    @FXML private Label assignmentLabel;
 
     ObservableList<String> problemTypes = FXCollections.observableArrayList("Electrical", "Lighting",
             "Elevator", "Plumbing", "Safety Hazard", "Damage", "Spill", "HAZ-MAT");
 
     ObservableList<String> urgencyLevels = FXCollections.observableArrayList("URGENT", "PRIORITY", "LOW PRIORITY");
 
-    ObservableList<String> locations = FXCollections.observableArrayList();
-
     //ObservableList<String> employeeList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize(){
-
-
         try{
 
             // Insert problem types and urgency into combo boxes
