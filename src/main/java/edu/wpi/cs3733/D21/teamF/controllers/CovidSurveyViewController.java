@@ -75,7 +75,10 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private void handleSubmitPushed() throws IOException, SQLException {
         if(formFilled()) {
             // Create service request, put in database
-            String covidInfo = "Temp: " + temperatureField.getText() + "ºF, Symptoms: ";
+            String covidInfo = "Temp: " + temperatureField.getText() + "ºF, ";
+            if(yes1.isSelected()) covidInfo += "Tested Positive, ";
+            if(yes2.isSelected()) covidInfo += "Had Close Contact, ";
+            covidInfo += "Symptoms: ";
             if(cough.isSelected()) covidInfo += "Cough, ";
             if(breathing.isSelected()) covidInfo += "Trouble Breathing, ";
             if(fatigue.isSelected()) covidInfo += "Fatigue, ";
