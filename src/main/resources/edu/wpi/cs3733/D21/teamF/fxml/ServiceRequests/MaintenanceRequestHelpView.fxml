@@ -13,24 +13,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.MaintenanceRequestController">
+<?import javafx.scene.text.Text?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.MaintenanceRequestController">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox fx:id="header" prefHeight="120.0" prefWidth="600.0" stylesheets="/stylesheets/DefaultHeaderBG.css">
+            <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <ImageView fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="title" prefHeight="117.0" prefWidth="773.0" text="BRIGHAM AND WOMEN'S HOSPITAL Maintenance Request Help Page" wrapText="true">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
+                  <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fitHeight="50.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                           </image>
+                        </ImageView>
+                        <Text fx:id="title" text="MAINTENANCE REQUEST" />
+                     </children>
+                  </HBox>
+                  <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                     <children>
+                        <JFXComboBox fx:id="languageSelect" />
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </padding>
+            </AnchorPane>
             <VBox prefHeight="433.0" prefWidth="960.0">
                <children>
                   <GridPane prefHeight="316.0" prefWidth="960.0">

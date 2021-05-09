@@ -12,21 +12,32 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
-      <HBox fx:id="header" prefHeight="85.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fx:id="goBack" accessibleRole="BUTTON" fitHeight="90.0" fitWidth="200.0" onMouseClicked="#handleGoBack" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
-               </image>
-            </ImageView>
-            <Text fx:id="title" text="BRIGHAM AND WOMEN'S HOSPITAL NAVIGATION" wrappingWidth="741.9599609375">
-               <font>
-                  <Font name="Volkhov Regular" size="40.0" />
-               </font>
-            </Text>
-         </children></HBox>
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" onMouseClicked="#handleGoBack" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="/imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="title" text="NAVIGATION" />
+               </children>
+            </HBox>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <JFXComboBox fx:id="languageSelect" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+         </padding>
+      </AnchorPane>
       <HBox VBox.vgrow="ALWAYS">
          <children>
             <JFXTreeView fx:id="treeView" stylesheets="/stylesheets/TreeViewStyle.css" prefWidth="250" onMouseClicked="#handleListSelection"/>

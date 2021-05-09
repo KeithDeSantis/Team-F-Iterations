@@ -5,9 +5,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
-import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -75,8 +72,28 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private void handleSubmitPushed() throws IOException, SQLException {
         if(formFilled()) {
             // Create service request, put in database
-            String covidInfo = temperatureField.getText();
-            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
+            String covidInfo = "Temp: " + temperatureField.getText() + "ºF, ";
+            if(yes1.isSelected()) covidInfo += "Tested Positive, ";
+            if(yes2.isSelected()) covidInfo += "Had Close Contact, ";
+            covidInfo += "Symptoms: ";
+            if(cough.isSelected()) covidInfo += "Cough, ";
+            if(breathing.isSelected()) covidInfo += "Trouble Breathing, ";
+            if(fatigue.isSelected()) covidInfo += "Fatigue, ";
+            if(aches.isSelected()) covidInfo += "Aches, ";
+            if(headache.isSelected()) covidInfo +="Headache, ";
+            if(lossOfTaste.isSelected()) covidInfo += "Loss of Tates or Smell, ";
+            if(soreThroat.isSelected()) covidInfo += "Sore Throat, ";
+            if(congestion.isSelected()) covidInfo += "Congestion, ";
+            if(nausea.isSelected()) covidInfo += "Nausea, ";
+            if(diarrhea.isSelected()) covidInfo += "Diarrhea, ";
+            if(blueSkin.isSelected()) covidInfo += "Blueness or Paleness, ";
+            if(pain.isSelected()) covidInfo += "Persistent Pain, ";
+            if(confusion.isSelected()) covidInfo += "New Confusion, ";
+            if(stayAwake.isSelected()) covidInfo += "Unable to Stay Awake, ";
+            if(fever.isSelected()) covidInfo += "fever, ";
+            if(covidInfo.endsWith(", ")) covidInfo = covidInfo.substring(0, covidInfo.length() - 2);
+            else covidInfo += "None";
+            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "",covidInfo);
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "", "false", generatedID.getText());
             // ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
@@ -100,13 +117,6 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             // Generate a new UUID in the event submit is pressed twice (prevents DB errors)
             generatedID.setText(UUID.randomUUID().toString());
             content.putString(generatedID.getText());
-/*
-            if(!formSubmittedViewController.isCompleted)
-            {
-                DatabaseAPI.getDatabaseAPI().deleteServiceRequest(generatedID.getText());
-            }
-
- */
 
 
         }

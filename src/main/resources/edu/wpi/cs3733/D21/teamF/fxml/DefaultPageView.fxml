@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -14,24 +15,86 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-image: url('imagesAndLogos/BWHExterior.jpg'); -fx-background-size: 1920; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.DefaultPageController">
    <children>
-      <HBox fx:id="header" alignment="CENTER_LEFT" prefHeight="120.0" prefWidth="960.0" spacing="10.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
+      <AnchorPane fx:id="header" prefHeight="90.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
          <children>
-            <ImageView fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
-               </image>
-            </ImageView>
-            <Text fx:id="title" fill="#03256c" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL" wrappingWidth="749.7598876953125">
-               <font>
-                  <Font name="Volkhov Regular" size="40.0" />
-               </font>
-            </Text>
+            <HBox alignment="CENTER_LEFT" layoutY="-22.706666946411133" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="title" text="BRIGHAM AND WOMEN'S HOSPITAL">
+                     <font>
+                        <Font name="Volkhov Regular" size="40.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox layoutX="805.0" layoutY="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <JFXComboBox fx:id="languageSelect" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" onAction="#changeLanguage"/>
+               </children>
+            </HBox>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" top="5.0" />
-         </padding></HBox>
+         </padding></AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <children>
+            <HBox alignment="CENTER" layoutX="190.0" layoutY="81.0" prefHeight="470.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox fx:id="covidBox" alignment="CENTER" maxHeight="100.0" prefHeight="100.0" prefWidth="550.0" spacing="5.0" style="-fx-background-color: #FFFFFF; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);" HBox.hgrow="NEVER">
+                     <children>
+                        <Label text="If you've completed the survey, please enter your ticket number">
+                           <font>
+                              <Font name="Montserrat SemiBold" size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <JFXTextField fx:id="verifyAgain" prefHeight="31.0" prefWidth="224.0">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" top="10.0" />
+                           </VBox.margin>
+                        </JFXTextField>
+                        <JFXButton fx:id="enterApp" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Enter App">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="Montserrat SemiBold" size="15.0" />
+                           </font>
+                        </JFXButton>
+                        <Label fx:id="fillOutTheSurvey" text="Otherwise, please take the COVID survey">
+                           <font>
+                              <Font name="Montserrat Regular" size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <JFXButton fx:id="surveyButton" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="130.0" prefWidth="402.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID-19 Survey">
+                           <font>
+                              <Font name="Montserrat SemiBold" size="40.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="employeeAdminSignIn" buttonType="RAISED" onAction="#handleButtonPushed" style="-fx-border-color: #0000002f; -fx-border-radius: 5px;" text="Employee Sign In">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="Montserrat Regular" size="15.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             <VBox fx:id="buttons" layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
                <children>
                   <Label fx:id="loginLabel" alignment="CENTER" prefHeight="46.0" prefWidth="218.0" style="-fx-font-weight: bold;" text="Please Log in" textAlignment="CENTER" textFill="WHITE" wrapText="true" VBox.vgrow="ALWAYS">
@@ -78,7 +141,7 @@
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton buttonType="RAISED" onAction="#handleCovidVaccine" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID-19 Vaccine Information">
+                  <JFXButton fx:id="covidInfo" buttonType="RAISED" onAction="#handleCovidVaccine" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID-19 Vaccine Information">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
@@ -90,55 +153,7 @@
                   </JFXButton>
                </children>
             </VBox>
-            <VBox fx:id="covidBox" alignment="CENTER" layoutX="200.0" layoutY="91.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="91.0">
-               <children>
-                  <Label text="If you've completed the survey, please enter your ticket number">
-                     <font>
-                        <Font name="Montserrat SemiBold" size="15.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <JFXTextField fx:id="verifyAgain" prefHeight="31.0" prefWidth="224.0">
-                     <VBox.margin>
-                        <Insets left="50.0" right="50.0" top="10.0" />
-                     </VBox.margin>
-                  </JFXTextField>
-                  <JFXButton fx:id="enterApp" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Enter App">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="Montserrat SemiBold" size="15.0" />
-                     </font>
-                  </JFXButton>
-                  <Label fx:id="fillOutTheSurvey" text="Otherwise, please take the COVID survey">
-                     <font>
-                        <Font name="Montserrat Regular" size="15.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <JFXButton fx:id="surveyButton" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="130.0" prefWidth="402.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="COVID-19 Survey">
-                     <font>
-                        <Font name="Montserrat SemiBold" size="40.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" />
-                     </VBox.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="employeeAdminSignIn" buttonType="RAISED" onAction="#handleButtonPushed" text="Employee/Admin Sign In">
-                     <VBox.margin>
-                        <Insets bottom="10.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="Montserrat Regular" size="15.0" />
-                     </font>
-                  </JFXButton>
-               </children>
-            </VBox>
+            <JFXButton fx:id="credits" alignment="CENTER" contentDisplay="CENTER" layoutX="859.0" layoutY="359.0" onAction="#handleCredits" prefHeight="30.0" prefWidth="87.0" text="Credits" textAlignment="CENTER" textFill="WHITE" underline="true" wrapText="true" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          </children>
       </AnchorPane>
    </children>

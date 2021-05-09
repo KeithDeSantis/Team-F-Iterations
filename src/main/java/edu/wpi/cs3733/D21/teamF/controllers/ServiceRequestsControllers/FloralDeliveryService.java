@@ -9,9 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -39,15 +37,11 @@ public class FloralDeliveryService extends ServiceRequests {
     @FXML private JFXCheckBox sunflowerCheckBox;
     @FXML private JFXCheckBox orchidCheckBox;
     @FXML private JFXCheckBox daisyCheckBox;
-    @FXML private Label successField;
-    @FXML private ImageView logoHome;
+
 
 
     @FXML
     public void initialize() {
-//        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
-//        logoHome.setImage(img);
-
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 

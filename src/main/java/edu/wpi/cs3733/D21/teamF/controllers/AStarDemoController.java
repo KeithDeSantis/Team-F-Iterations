@@ -22,7 +22,6 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableIntegerValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -924,8 +923,8 @@ public class AStarDemoController extends AbsController implements Initializable 
                     "\nFloor: " + node.getFloor());
 
             tt.setStyle("-fx-font: normal bold 15 Langdon; "
-                    + "-fx-base: #AE3522; "
-                    + "-fx-text-fill: orange;");
+                    + "-fx-background-color: #03256C; "
+                    + "-fx-text-fill: white;");
             Tooltip.install(drawableNode, tt);
 
 
@@ -1091,11 +1090,11 @@ public class AStarDemoController extends AbsController implements Initializable 
                     }
 
                     Tooltip tt = new JFXTooltip();
-                    tt.textProperty().set(instructionsList.get(localStop) + "\nETA: " + etaList.get(localStop));
+                    tt.textProperty().set(instructionsList.get(localStop) + "\n" + etaList.get(localStop));
 
                     tt.setStyle("-fx-font: normal bold 15 Langdon; "
-                            + "-fx-base: #AE3522; "
-                            + "-fx-text-fill: orange;");
+                            + "-fx-background-color: #03256C; "
+                            + "-fx-text-fill: white;");
                     Tooltip.install(edge, tt);
 
                     mapPanel.draw(edge);

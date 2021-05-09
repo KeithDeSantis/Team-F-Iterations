@@ -19,27 +19,36 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.GiftDeliveryServiceRequestController">
     <children>
-        <HBox fx:id="header" prefHeight="117.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
-                    </image>
-                </ImageView>
-                <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Gift Delivery" wrappingWidth="735.2825317382812">
-               <font>
-                  <Font name="Volkhov Regular" size="40.0" />
-               </font>
-            </Text>
+                <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <ImageView fitHeight="50.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                            </image>
+                        </ImageView>
+                        <Text fx:id="title" text="GIFT DELIVERY" />
+                    </children>
+                </HBox>
+                <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                    <children>
+                        <JFXComboBox fx:id="languageSelect" />
+                    </children>
+                </HBox>
             </children>
-        </HBox>
+            <padding>
+                <Insets bottom="10.0" left="10.0" top="10.0" />
+            </padding>
+        </AnchorPane>
       <VBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
          <children>
             <HBox alignment="CENTER" prefWidth="2000.0" spacing="50.0" VBox.vgrow="SOMETIMES">
                <children>
-                      <Label alignment="CENTER_RIGHT" minWidth="60.0" text="Name:">
+                      <Label fx:id="nameLbl" alignment="CENTER_RIGHT" minWidth="60.0" text="Name:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -64,7 +73,7 @@
                      <children>
                         <JFXDatePicker fx:id="dateField" defaultColor="#03256c" GridPane.columnIndex="1" />
                         <JFXTimePicker fx:id="timeField" defaultColor="#03256c" prefHeight="25.0" prefWidth="148.0" GridPane.columnIndex="2" />
-                        <Label prefHeight="21.0" prefWidth="131.0" text="Delivery:">
+                        <Label fx:id="schedLbl" prefHeight="21.0" prefWidth="131.0" text="Delivery:">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -78,7 +87,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="172.0" prefWidth="935.0" VBox.vgrow="SOMETIMES">
                <children>
-                      <Label minWidth="150.0" text="Special Instructions:">
+                      <Label fx:id="specInstructLbl" minWidth="150.0" text="Special Instructions:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -106,7 +115,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Select Gift(s):">
+                        <Label fx:id="giftLbl" text="Select Gift(s):">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -126,7 +135,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="2000.0" VBox.vgrow="SOMETIMES">
                <children>
-                      <Label text="Card Number:">
+                      <Label fx:id="cardNumberLbl" text="Card Number:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -139,7 +148,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </JFXTextField>
-                      <Label text="Expiration Date:">
+                      <Label fx:id="expLbl" text="Expiration Date:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>

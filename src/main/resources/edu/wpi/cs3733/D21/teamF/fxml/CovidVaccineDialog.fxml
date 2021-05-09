@@ -2,40 +2,35 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #c6c6c6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidVaccineDialogController">
+<AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidVaccineDialogController">
    <children>
-      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0">
+      <HBox alignment="CENTER" prefHeight="44.0" prefWidth="400.0" style="-fx-background-color: #94c4f1; -fx-border-width: 0px 0px 4px 0px; -fx-border-color: #03256c;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#94c4f1" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="400.0" />
             <Label fx:id="title" text="COVID Vaccine Information" textFill="#03256c">
                <font>
                   <Font name="Volkhov Regular" size="24.0" />
                </font>
             </Label>
          </children>
-      </StackPane>
-      <Line endX="100.0" startX="-300.0" stroke="#03256c" strokeWidth="5.0">
-         <VBox.margin>
-            <Insets bottom="25.0" />
-         </VBox.margin>
-      </Line>
-      <Label fx:id="edgeID" text="Search Based on ZIP code" />
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
-         <children>
-            <JFXTextField fx:id="zipCodeTxt" promptText="Zip Code" />
-         </children>
       </HBox>
-      <JFXButton fx:id="searchBtn" defaultButton="true" onAction="#handleSearchClicked" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Search" />
-      <Hyperlink onAction="#onVaccineInfoClicked" text="Information about the COVID vaccine from the CDC" />
+      <VBox alignment="CENTER" layoutX="19.0" layoutY="53.0" prefHeight="236.0" prefWidth="359.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="53.0">
+         <children>
+            <Label fx:id="edgeID" alignment="CENTER" contentDisplay="CENTER" text="Search Based on ZIP code" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
+               <children>
+                  <JFXTextField fx:id="zipCodeTxt" promptText="Zip Code" />
+               </children>
+            </HBox>
+            <JFXButton fx:id="searchBtn" defaultButton="true" maxHeight="20.0" minWidth="60.0" onAction="#handleSearchClicked" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Search" />
+            <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#onVaccineInfoClicked" text="Information about the COVID vaccine from the CDC" />
+         </children>
+      </VBox>
    </children>
-</VBox>
+</AnchorPane>

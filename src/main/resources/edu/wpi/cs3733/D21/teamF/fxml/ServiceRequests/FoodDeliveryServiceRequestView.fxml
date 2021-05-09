@@ -20,22 +20,31 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.text.Text?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: E6E6E6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.FoodDeliveryServiceRequestController">
    <children>
-      <HBox fx:id="header" prefHeight="120" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="120.0" prefWidth="744.0" text="BRIGHAM AND WOMEN'S HOSPITAL Food Delivery Request" textFill="#03256c" wrapText="true">
-               <font>
-                  <Font name="Volkhov Regular" size="40.0" />
-               </font>
-            </Label>
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="title" text="FOOD DELIVERY" />
+               </children>
+            </HBox>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <JFXComboBox fx:id="languageSelect" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
+         <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+         </padding>
+      </AnchorPane>
       <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" visible="false" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="30.0">
          <font>
             <Font size="18.0" />

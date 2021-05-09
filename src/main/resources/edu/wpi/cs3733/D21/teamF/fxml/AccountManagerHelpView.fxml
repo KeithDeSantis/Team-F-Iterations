@@ -7,17 +7,35 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AccountManagerHelpController">
    <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="2000.0" style="-fx-background-color: #94c4f1; -fx-border-color: #03256c; -fx-border-width: 0px 0px 5px 0px;" AnchorPane.leftAnchor="-0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Label fx:id="title" alignment="CENTER" prefHeight="29.0" prefWidth="423.0" text="Account Manager Help" textAlignment="CENTER">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="/imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="title" text="ACCOUNT MANAGEMENT" />
+               </children>
+            </HBox>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <JFXComboBox fx:id="languageSelect" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
+         <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+         </padding>
+      </AnchorPane>
       <JFXButton fx:id="okButton" layoutX="232.0" layoutY="354.0" onAction="#handleOk" prefHeight="27.0" prefWidth="138.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="OK" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="232.0" AnchorPane.rightAnchor="230.0" />
       <VBox alignment="CENTER" layoutX="32.0" layoutY="116.0" prefHeight="225.0" prefWidth="174.0" spacing="30.0" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="116.0">
          <children>

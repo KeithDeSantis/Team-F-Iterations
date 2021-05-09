@@ -20,23 +20,28 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.InternalTransportationController">
         <children>
-            <HBox fx:id="header" prefHeight="137.0" prefWidth="960.0" spacing="10.0" style="-fx-background-color: #94C4F1;" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                 <children>
-                    <ImageView fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                            <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
-                        </image>
-                    </ImageView>
-                    <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Internal Patient Transportation" wrappingWidth="735.79150390625">
-                        <font>
-                            <Font name="Volkhov Regular" size="40.0" />
-                        </font>
-                    </Text>
+                    <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <children>
+                            <ImageView fitHeight="50.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                                </image>
+                            </ImageView>
+                            <Text fx:id="title" text="INTERNAL PATIENT TRANSPORTATION" />
+                        </children>
+                    </HBox>
+                    <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                        <children>
+                            <JFXComboBox fx:id="languageSelect" />
+                        </children>
+                    </HBox>
                 </children>
                 <padding>
                     <Insets bottom="10.0" left="10.0" top="10.0" />
                 </padding>
-            </HBox>
+            </AnchorPane>
             <GridPane prefHeight="270.0" prefWidth="960.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -53,7 +58,7 @@
                             <Insets />
                         </GridPane.margin>
                         <children>
-                            <Label text="Date :">
+                            <Label fx:id="dateLbl" text="Date :">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
@@ -63,7 +68,7 @@
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                         <children>
-                            <Label minWidth="60.0" text="Patient:">
+                            <Label fx:id="patientNameLbl" minWidth="60.0" text="Patient:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
@@ -80,7 +85,7 @@
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
                         <children>
-                            <Label text="Room:">
+                            <Label fx:id="roomLbl" text="Room:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
@@ -90,7 +95,7 @@
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
                         <children>
-                            <Label text="Location:">
+                            <Label fx:id="locLbl" text="Location:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
