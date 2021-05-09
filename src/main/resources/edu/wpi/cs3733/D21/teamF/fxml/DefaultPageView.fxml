@@ -33,7 +33,7 @@
             </HBox>
             <HBox layoutX="805.0" layoutY="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                <children>
-                  <JFXComboBox maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                  <JFXComboBox fx:id="languageSelect" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" onAction="#changeLanguage"/>
                </children>
             </HBox>
          </children>

@@ -58,6 +58,7 @@ public class SceneContext {
                     Parent root = loader.load();
 
                     controller = loader.getController();
+                    controller.initLanguage();
                     if(controller instanceof ServiceRequests)
                         autoTranslate(root);
 
