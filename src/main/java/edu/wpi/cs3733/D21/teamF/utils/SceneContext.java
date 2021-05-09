@@ -3,21 +3,20 @@ package edu.wpi.cs3733.D21.teamF.utils;
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.*;
-import javafx.animation.PauseTransition;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ComboBoxBase;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class SceneContext {
 
@@ -103,7 +102,9 @@ public class SceneContext {
         System.out.println("CTRL: " + loader.getController());
         this.controller = loader.getController();
         if(this.controller instanceof MaintenanceRequestController || this.controller instanceof GiftDeliveryServiceRequestController
-        || this.controller instanceof LaundryRequestController || this.controller instanceof ExternalTransController || this.controller instanceof LanguageInterpretationServiceRequestController)
+        || this.controller instanceof LaundryRequestController || this.controller instanceof ExternalTransController || this.controller instanceof LanguageInterpretationServiceRequestController
+        || this.controller instanceof  InternalTransportationController || this.controller instanceof  FloralDeliveryService || this.controller instanceof FoodDeliveryServiceRequestController
+        || this.controller instanceof  MedicineDeliveryServiceRequest || this.controller instanceof  SanitationRequestController)
             autoTranslate(root);
 
         stage.setScene(new Scene(root));

@@ -60,13 +60,13 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
     @FXML
     private void initialize(){
-        locLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(locLabel.getText()));
-        delLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(delLabel.getText()));
-        allLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(allLabel.getText()));
-        siLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(siLabel.getText()));
-        mealLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(mealLabel.getText()));
-        sideLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(sideLabel.getText()));
-        drinkLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(drinkLabel.getText()));
+//        locLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(locLabel.getText()));
+//        delLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(delLabel.getText()));
+//        allLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(allLabel.getText()));
+//        siLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(siLabel.getText()));
+//        mealLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(mealLabel.getText()));
+//        sideLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(sideLabel.getText()));
+//        drinkLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(drinkLabel.getText()));
 //        rButtonFood1.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonFood1.getText()));
 //        rButtonFood2.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonFood2.getText()));
 //        rButtonFood3.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonFood3.getText()));
@@ -79,9 +79,9 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
 //        rButtonDrink2.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonDrink2.getText()));
 //        rButtonDrink3.textProperty().bind(Translator.getTranslator().getTranslationBinding(rButtonDrink3.getText()));
 
-        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
-        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
-        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
+//        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
+//        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
+//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
 
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();

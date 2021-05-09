@@ -28,9 +28,9 @@ public class SanitationRequestController extends ServiceRequests {
 
     @FXML
     private void initialize(){
-        clientNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(clientNameLbl.getText()));
-        locLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(locLbl.getText()));
-        jobDescLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(jobDescLbl.getText()));
+//        clientNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(clientNameLbl.getText()));
+//        locLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(locLbl.getText()));
+//        jobDescLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(jobDescLbl.getText()));
 
         try {
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();

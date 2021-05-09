@@ -56,25 +56,25 @@ public class FloralDeliveryService extends ServiceRequests {
 
     @FXML
     public void initialize() {
-        deliveryLocLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(deliveryLocLbl.getText()));
-        nameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLbl.getText()));
-        deliveryDateLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(deliveryDateLbl.getText()));
-        paymentLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(paymentLbl.getText()));
-        flowerTypeLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(flowerTypeLbl.getText()));
-        containerTypeLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(containerTypeLbl.getText()));
-        roseCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(roseCheckBox.getText()));
-        tulipCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(tulipCheckBox.getText()));
-        violetCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(violetCheckBox.getText()));
-        sunflowerCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(sunflowerCheckBox.getText()));
-        orchidCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(orchidCheckBox.getText()));
-        daisyCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(daisyCheckBox.getText()));
-        bouquetButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(bouquetButton.getText()));
-        vaseButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(vaseButton.getText()));
-        potButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(potButton.getText()));
-        cardNumberField.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardNumberField.getPromptText()));
-        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
-        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
-        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
+//        deliveryLocLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(deliveryLocLbl.getText()));
+//        nameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLbl.getText()));
+//        deliveryDateLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(deliveryDateLbl.getText()));
+//        paymentLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(paymentLbl.getText()));
+//        flowerTypeLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(flowerTypeLbl.getText()));
+//        containerTypeLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(containerTypeLbl.getText()));
+//        roseCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(roseCheckBox.getText()));
+//        tulipCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(tulipCheckBox.getText()));
+//        violetCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(violetCheckBox.getText()));
+//        sunflowerCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(sunflowerCheckBox.getText()));
+//        orchidCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(orchidCheckBox.getText()));
+//        daisyCheckBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(daisyCheckBox.getText()));
+//        bouquetButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(bouquetButton.getText()));
+//        vaseButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(vaseButton.getText()));
+//        potButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(potButton.getText()));
+//        cardNumberField.textProperty().bind(Translator.getTranslator().getTranslationBinding(cardNumberField.getPromptText()));
+//        cancelButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelButton.getText()));
+//        clearButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearButton.getText()));
+//        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
 
 //        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
 //        logoHome.setImage(img);
