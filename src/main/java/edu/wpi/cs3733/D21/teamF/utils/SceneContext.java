@@ -6,6 +6,7 @@ import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import javafx.animation.PauseTransition;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -74,6 +75,7 @@ public class SceneContext {
         task.setOnSucceeded( e-> {
             try {
                 stage.getScene().setRoot(task.get());
+                stage.getScene().setCursor(Cursor.DEFAULT);
                 stage.show();
             } catch (InterruptedException | ExecutionException interruptedException) {
                 interruptedException.printStackTrace();
