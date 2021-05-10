@@ -136,7 +136,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     private final IntegerProperty currentStep = new SimpleIntegerProperty(0);
 
     // List of intermediate vertices for multi-stop pathfinding - LM
-    private final ArrayList<Vertex> vertices = new ArrayList<>();
+    private final ObservableList<Vertex> vertices = FXCollections.observableArrayList();
     private final StringProperty startNode = new SimpleStringProperty("");
     private final StringProperty endNode = new SimpleStringProperty("");
 
@@ -290,7 +290,9 @@ public class AStarDemoController extends AbsController implements Initializable 
             addStopMenu.setOnAction(e -> {
                 if(addStopMenu.getText().equals("Add Stop")) {
                     vertices.add(graph.getVertex(currEntry.getNodeID()));
-                    drawStop(currEntry);
+                    mapPanel.switchMap(currEntry.getFloor());
+                    mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
+                    //drawStop(currEntry);
                     try {
                         addNodeToRecent(currEntry);
                     } catch (SQLException sqlException) {
@@ -626,7 +628,9 @@ public class AStarDemoController extends AbsController implements Initializable 
             addStopMenu.setOnAction(e -> {
                 if(addStopMenu.getText().equals("Add Stop")) {
                     vertices.add(graph.getVertex(currEntry.getNodeID()));
-                    drawStop(currEntry);
+                    mapPanel.switchMap(currEntry.getFloor());
+                    mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
+                    //drawStop(currEntry);
                     try {
                         addNodeToRecent(currEntry);
                     } catch (SQLException sqlException) {
@@ -759,29 +763,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
     }
 
-
-    /**
-     * Draws an intermediate stop on the map
-     * @param nodeEntry The NodeEntry of the stop being drawn
-     * @author Leo Morris
-     */
-    private void drawStop(NodeEntry nodeEntry) {
-        DrawableNode stop = new DrawableNode(Integer.parseInt(nodeEntry.getXCoordinate()),
-                Integer.parseInt(nodeEntry.getYCoordinate()),
-                nodeEntry.getNodeID(), nodeEntry.getFloor(), nodeEntry.getBuilding(), nodeEntry.getNodeType(),
-                nodeEntry.getLongName(), nodeEntry.getShortName());
-
-        stop.setStrokeWidth(2.0);
-        stop.setFill(new Color(0.75,0,0,1));
-        stop.setStroke(new Color(1,0,0,1));
-        stop.setScaleX(1); //FIXME: DO BETTER
-        stop.setScaleY(1);
-        stop.setMouseTransparent(true);
-        mapPanel.draw(stop);
-        mapPanel.switchMap(nodeEntry.getFloor());
-        mapPanel.centerNode(stop);
-    }
-
     private String shortNameToID(String shortName){
         for(NodeEntry node : allNodeEntries) {
             if (node.getShortName().equals(shortName)) {
@@ -910,18 +891,28 @@ public class AStarDemoController extends AbsController implements Initializable 
             final BooleanBinding isEndNode = Bindings.equal(endNode, idToShortName(drawableNode.getId()));
             final BooleanBinding isStartOrEndNode = isStartNode.or(isEndNode);
 
-            drawableNode.scaleXProperty().bind(Bindings.when(isStartOrEndNode).then(1).otherwise(0.8));
-            drawableNode.scaleYProperty().bind(Bindings.when(isStartOrEndNode).then(1).otherwise(0.8));
+            final BooleanBinding isStop = Bindings.createBooleanBinding(() -> vertices.contains(graph.getVertex(nodeID)), vertices);
+
+
+
+            drawableNode.scaleXProperty().bind(Bindings.when(isStartOrEndNode.or(isStop)).then(1).otherwise(0.8));
+            drawableNode.scaleYProperty().bind(drawableNode.scaleXProperty());
+           // drawableNode.scaleYProperty().bind(Bindings.when(isStartOrEndNode).then(1).otherwise(0.8));
 //            drawableNode.radiusProperty().bind(Bindings.when(isStartOrEndNode).then(10).otherwise(5));
 
             //  drawableNode.fillProperty().set(new Color(0, 0, 0, 0));
             drawableNode.setStrokeWidth(2.0);
 
-            drawableNode.fillProperty().bind(Bindings.when(isStartOrEndNode).then(getNodeTypeColor(drawableNode.getNodeType())).otherwise(new Color(0, 0, 0, 0)));
+            drawableNode.fillProperty().bind(Bindings.when(isStartOrEndNode).then(getNodeTypeColor(drawableNode.getNodeType())).otherwise(
+                    Bindings.when(isStop).then(new Color(.75, 0, 0, 1)).otherwise(new Color(0, 0, 0, 0))
+
+                    ));
 
             drawableNode.strokeProperty().bind(
                     Bindings.when(isStartNode).then(Color.ORANGE).otherwise(
-                            Bindings.when(isEndNode).then(Color.GREEN).otherwise(getNodeTypeColor(drawableNode.getNodeType()))
+                            Bindings.when(isEndNode).then(Color.GREEN).otherwise(
+                                    Bindings.when(isStop).then(new Color(1, 0, 0, 1)).otherwise(
+                                        getNodeTypeColor(drawableNode.getNodeType())))
                     ));
 
             drawableNode.opacityProperty().bind(Bindings.when(isCurrentlyNavigating.not().or(isStartOrEndNode)).then(1.0).otherwise(0.2));
