@@ -25,6 +25,11 @@
          <children>
             <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
+                  <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
                   <JFXButton onAction="#handleHome" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
                   <Text fx:id="title" text="COVID-19 SURVEY" />
                </children>

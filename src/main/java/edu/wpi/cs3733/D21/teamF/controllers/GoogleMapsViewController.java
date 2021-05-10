@@ -108,7 +108,7 @@ public class GoogleMapsViewController extends AbsController {
             dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/GoogleMapsHelpView.fxml")); // load in Edit Dialog - KD
             Stage dialogStage = new Stage();
             Parent root = dialogLoader.load();
-            AccountManagerHelpController dialogController = dialogLoader.getController();
+            GoogleMapsHelpController dialogController = dialogLoader.getController();
             dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
             dialogStage.initOwner(destinationAddress.getScene().getWindow());
             dialogStage.setScene(new Scene(root)); // set scene - KD
