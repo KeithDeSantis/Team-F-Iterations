@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXSlider;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
