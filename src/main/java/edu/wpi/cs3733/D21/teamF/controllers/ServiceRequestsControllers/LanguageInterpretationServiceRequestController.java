@@ -64,12 +64,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
             String target = Translator.getTranslator().getLangCode(language.getValue()); //gets lang code of the lang specified
             Translator.getTranslator().setLanguage(target);
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
-            alert.setTitle("Language Missing");
-            alert.setHeaderText("Specify language");
-            alert.setContentText("Please select a language from the dropdown list.");
-            alert.showAndWait();
+            setTextErrorStyle(language);
         }
     }
 
