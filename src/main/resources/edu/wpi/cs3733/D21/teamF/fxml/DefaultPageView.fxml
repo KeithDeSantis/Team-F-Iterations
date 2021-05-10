@@ -95,7 +95,7 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox fx:id="buttons" layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+            <VBox fx:id="buttons" layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
                <children>
                   <Label fx:id="loginLabel" alignment="CENTER" prefHeight="46.0" prefWidth="218.0" style="-fx-font-weight: bold;" text="Please Log in" textAlignment="CENTER" textFill="WHITE" wrapText="true" VBox.vgrow="ALWAYS">
                      <font>
@@ -111,7 +111,7 @@
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="googleMapsPage" buttonType="RAISED" prefWidth="250.0" text="Google Maps Page" VBox.vgrow="ALWAYS">
+                  <JFXButton fx:id="googleMapsPage" buttonType="RAISED" onAction="#handleGoogleMaps" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Google Maps Page" VBox.vgrow="ALWAYS">
                      <font>
                         <Font size="15.0" />
                      </font>

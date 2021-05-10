@@ -240,8 +240,6 @@ public class DefaultPageController extends AbsController {
                 submittedStage.initModality(Modality.APPLICATION_MODAL);
                 submittedStage.showAndWait();
             }
-        } else if (buttonPushed == googleMapsPage){
-            SceneContext.getSceneContext().switchScene("");
         } else if (buttonPushed == serviceRequest) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
         } else if (buttonPushed == manageAccount) {
@@ -324,7 +322,9 @@ public class DefaultPageController extends AbsController {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CreditsView.fxml");
     }
 
-
+    public void handleGoogleMaps() throws IOException {
+        SceneContext.getSceneContext().switchScene("edu/wpi/cs3733/D21/teamF/fxml/GoogleMapsView.fxml");
+    }
 
 
 }
