@@ -163,7 +163,6 @@ public class AccountManagerController extends AbsController implements Initializ
         dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerHelpView.fxml")); // load in Edit Dialog - KD
         Stage dialogStage = new Stage();
         Parent root = dialogLoader.load();
-        AccountManagerHelpController dialogController = dialogLoader.getController();
         dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
         dialogStage.initOwner(addUser.getScene().getWindow());
         dialogStage.setScene(new Scene(root)); // set scene - KD

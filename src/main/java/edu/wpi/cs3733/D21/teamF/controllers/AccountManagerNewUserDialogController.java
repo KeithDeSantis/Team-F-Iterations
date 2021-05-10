@@ -1,6 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
@@ -11,8 +10,6 @@ import javafx.stage.Stage;
 
 public class AccountManagerNewUserDialogController extends AbsController {
 
-    @FXML
-    private JFXButton okButton;
     @FXML
     private JFXTextField userNameField;
     @FXML

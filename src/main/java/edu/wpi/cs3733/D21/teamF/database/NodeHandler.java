@@ -11,9 +11,8 @@ import java.util.List;
 
 class NodeHandler implements DatabaseEntry {
     public String genNodeDescription(String[] values){
-        final String description = "The node ID is, " + values[0] + " located on floor, " + values[3] + "\nIn building, " +
+        return "The node ID is, " + values[0] + " located on floor, " + values[3] + "\nIn building, " +
                 values[4] + " of type " + values[5] + "\nWith long and short names, " + values[6] + ", " + values[7];
-        return description;
     }
     /**
      * {@inheritDoc}
