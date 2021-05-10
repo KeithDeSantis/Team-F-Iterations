@@ -151,6 +151,8 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     boolean filterNodes = false; // Boolean for filtering user selections to only outdoor nodes
 
+    private String direct = "UP";
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //ahf - yes this should be done better. At some point.
@@ -776,22 +778,6 @@ public class AStarDemoController extends AbsController implements Initializable 
                return (Math.toRadians(270));
         }
         return 0;
-        /*
-        switch (currentDirection.get()) {
-            case "UP":
-                userNodeDisplay.directionAngleProperty().set(Math.toRadians(90));
-                break;
-            case "LEFT":
-                userNodeDisplay.directionAngleProperty().set(0);
-                break;
-            case "RIGHT":
-                userNodeDisplay.directionAngleProperty().set(Math.toRadians(180));
-                break;
-            case "DOWN":
-                userNodeDisplay.directionAngleProperty().set(Math.toRadians(270));
-                break;
-        }
-         */
     }
 
     private String idToShortName(String ID){
@@ -1215,9 +1201,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
 
         // Calculate Directions
-        currentDirection.set("UP");
+        direct = "UP";
         for (String inst : instructionsList) {
-            directionsList.add(currentDirection.get());
+            directionsList.add(direct);
             changeDirection(inst);
         }
     }
@@ -1302,52 +1288,52 @@ public class AStarDemoController extends AbsController implements Initializable 
     }
 
     private void switchDirectionDown() {
-        switch (currentDirection.get()) {
+        switch (direct) {
             case "UP":
-                currentDirection.set("DOWN");
+                direct = "DOWN";
                 break;
             case "LEFT":
-                currentDirection.set("RIGHT");
+                direct = "RIGHT";
                 break;
             case "RIGHT":
-                currentDirection.set("LEFT");
+                direct = "LEFT";
                 break;
             case "DOWN":
-                currentDirection.set("UP");
+                direct = "UP";
                 break;
         }
     }
 
     private void switchDirectionRight() {
-        switch (currentDirection.get()) {
+        switch (direct) {
             case "UP":
-                currentDirection.set("RIGHT");
+                direct = "RIGHT";
                 break;
             case "LEFT":
-                currentDirection.set("UP");
+                direct = "UP";
                 break;
             case "RIGHT":
-                currentDirection.set("DOWN");
+                direct = "DOWN";
                 break;
             case "DOWN":
-                currentDirection.set("LEFT");
+                direct = "LEFT";
                 break;
         }
     }
 
     private void switchDirectionLeft() {
-        switch (currentDirection.get()) {
+        switch (direct) {
             case "UP":
-                currentDirection.set("LEFT");
+                direct = "LEFT";
                 break;
             case "LEFT":
-                currentDirection.set("DOWN");
+                direct = "DOWN";
                 break;
             case "RIGHT":
-                currentDirection.set("UP");
+                direct = "UP";
                 break;
             case "DOWN":
-                currentDirection.set("RIGHT");
+                direct = "RIGHT";
                 break;
         }
     }
