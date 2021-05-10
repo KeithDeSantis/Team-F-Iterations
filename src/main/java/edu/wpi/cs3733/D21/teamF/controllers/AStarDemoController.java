@@ -116,6 +116,11 @@ public class AStarDemoController extends AbsController implements Initializable 
     private DrawableNode endNodeDisplay;
     private DrawableUser userNodeDisplay;
 
+    @FXML
+    private Label startLabel;
+    @FXML
+    private Label endLabel;
+
     // Global variables for the stepper
     private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
 
@@ -169,6 +174,8 @@ public class AStarDemoController extends AbsController implements Initializable 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //ahf - yes this should be done better. At some point.
+        startLabel.textProperty().bind(startNode);
+        endLabel.textProperty().bind(endNode);
 
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
