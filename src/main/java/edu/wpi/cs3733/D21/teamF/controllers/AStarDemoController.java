@@ -485,7 +485,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             double ans = Math.sqrt(Math.pow(x1.get() - x0.get(), 2) + Math.pow(y1.get() - y0.get(), 2));
 
             //NaN is possible somehow?. Don't remove it!
-            if(ans == Double.NaN || ans == 0 || ans == Double.NEGATIVE_INFINITY || ans == Double.POSITIVE_INFINITY)
+            if(Double.isNaN(ans) || ans == 0 || ans == Double.NEGATIVE_INFINITY || ans == Double.POSITIVE_INFINITY)
                 ans = 10;
 
             return (2000/(ans * 10));
@@ -1008,9 +1008,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         final Vertex endVertex = this.graph.getVertex(shortNameToID(endNode.getValue()));
 
 
-        List<Vertex> pathVertices = new ArrayList<>();
-        pathVertices.clear();
-        pathVertices.addAll(vertices);
+        List<Vertex> pathVertices = new ArrayList<>(vertices);
 
         final Path path;
 
