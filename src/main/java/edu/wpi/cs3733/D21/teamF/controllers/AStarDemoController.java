@@ -33,6 +33,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -51,6 +52,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +99,9 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     @FXML
     private JFXTreeView<String> treeView;
+
+    @FXML
+    private JFXTreeView<String> instructionTreeView;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -148,6 +153,14 @@ public class AStarDemoController extends AbsController implements Initializable 
     TreeItem<String> serviceItem = new TreeItem<>("Services");
     TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
     TreeItem<String> recentItem = new TreeItem<>("Recently Used");
+
+    TreeItem<String> instructionTreeViewItem = new TreeItem<>("instructions");
+    TreeItem<String> floorOneInstruction = new TreeItem<>("Floor One Instructions");
+    TreeItem<String> floorTwoInstruction = new TreeItem<>("Floor Two Instructions");
+    TreeItem<String> floorThreeInstruction = new TreeItem<>("Floor Two Instructions");
+    TreeItem<String> floorGroundInstruction = new TreeItem<>("Ground Floor Instructions");
+    TreeItem<String> floorLowerOneInstruction = new TreeItem<>("Floor L1 Instructions");
+    TreeItem<String> floorLowerTwoInstruction = new TreeItem<>("Floor L2 Instructions");
 
     boolean filterNodes = false; // Boolean for filtering user selections to only outdoor nodes
 
@@ -393,6 +406,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         Instruction.setVisible(false);
         navIcon.setVisible(false);
         ETA.setVisible(false);
+        instructionTreeView.setManaged(false);
+        instructionTreeView.setVisible(false);
+        instructionTreeView.setDisable(true);
 
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
 
@@ -403,7 +419,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         final DrawableUser drawableUser = new DrawableUser(0, 0, "userNode", "");
 
-        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stopsList))
+        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stopsList).or(Bindings.isEmpty(pathVertex)))
                 .then(new Vertex("N/A", -1, -1, "N/A"))
                 .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stopsList, currentStep)));
 
@@ -424,7 +440,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         final IntegerBinding nextStepProp = Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList);
 
-        final ObjectBinding<Vertex> nextVertexProperty = Bindings.when(Bindings.isEmpty(stopsList))
+        final ObjectBinding<Vertex> nextVertexProperty = Bindings.when(Bindings.isEmpty(stopsList).or(Bindings.isEmpty(pathVertex)))
                 .then(new Vertex("N/A", -1, -1, "N/A"))
                 .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stopsList, nextStepProp)));
 
@@ -514,6 +530,12 @@ public class AStarDemoController extends AbsController implements Initializable 
             }
         }
 
+
+        // Setting up instruction tree view
+        instructionTreeViewItem.getChildren().addAll(floorLowerTwoInstruction, floorLowerOneInstruction, floorGroundInstruction
+        , floorOneInstruction, floorTwoInstruction, floorThreeInstruction);
+        instructionTreeView.setRoot(rootTreeViewItem);
+        this.instructionTreeView.setShowRoot(false);
 
         // add tree items to root item (shown in order of addition)
         rootTreeViewItem.getChildren().addAll(conferenceItem, departmentItem, entranceItem, infoItem,
@@ -1354,6 +1376,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         treeView.setManaged(false);
         treeView.setVisible(false);
         treeView.setDisable(true);
+        instructionTreeView.setManaged(true);
+        instructionTreeView.setVisible(true);
+        instructionTreeView.setDisable(false);
         about.setDisable(true);
         clear.setDisable(true);
         //mapPanel.disableInteract();
@@ -1472,6 +1497,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         treeView.setManaged(true);
         treeView.setVisible(true);
         treeView.setDisable(false);
+        instructionTreeView.setManaged(false);
+        instructionTreeView.setVisible(false);
+        instructionTreeView.setDisable(true);
         about.setDisable(false);
         clear.setDisable(false);
         //mapPanel.enableInteract();
@@ -1532,8 +1560,8 @@ public class AStarDemoController extends AbsController implements Initializable 
             image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/uTurnYellow.png"));
         }
         else if(curInstruction.contains("stair")){
-            final int nextFloor = mapPanel.getDoubleStringConverter().fromString(curInstruction.substring(curInstruction.length()-1)).intValue();//Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
-            final int currentFloor = mapPanel.getDoubleStringConverter().fromString(pathVertex.get(currentStep.get()-1).getFloor()).intValue();
+            final int nextFloor = mapPanel.getDoubleStringConverter().fromString(curInstruction.substring(curInstruction.length()-2)).intValue();//Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
+            final int currentFloor = mapPanel.getDoubleStringConverter().fromString(pathVertex.get(currentStep.get()).getFloor()).intValue();
             if(nextFloor > currentFloor){
                 image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
             } else {
@@ -1890,6 +1918,24 @@ public class AStarDemoController extends AbsController implements Initializable 
         }else{
             while(step != currentStep.get()){
                 goToPrevNode();
+            }
+        }
+    }
+
+    public void handleInstructionListSelection(MouseEvent mouseEvent) {
+        if(instructionTreeView.getSelectionModel().getSelectedItem()!=null &&
+                !instructionTreeView.getSelectionModel().getSelectedItem().getParent().equals(instructionTreeViewItem) &&
+                !instructionTreeView.getSelectionModel().getSelectedItem().equals(instructionTreeViewItem)) { // Do not center on drop downs, root item or null items, only actual nodes
+            // Fill in
+        }
+    }
+
+    private void addInstructionsToTreeView(){
+        String floor = mapPanel.getFloor().get();
+        for(String ins : instructionsList){
+
+            if(ins.contains("Take")){
+                //
             }
         }
     }

@@ -105,12 +105,16 @@ public class MapPanel extends AnchorPane {
                 case "L1":
                     return 1.0;
                 case "G":
+                case " G":
                     return 2.0;
                 case "1":
+                case " 1":
                     return 3.0;
                 case "2":
+                case " 2":
                     return 4.0;
                 case "3":
+                case " 3":
                     return 5.0;
                 default:
                     return -1.0;
