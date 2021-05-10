@@ -18,14 +18,6 @@ public abstract class ServiceRequests extends AbsController {
 
     @FXML
     private JFXButton submitButton;
-    @FXML
-    private JFXButton cancelButton;
-    @FXML
-    private JFXButton helpButton;
-    @FXML
-    private JFXButton clearButton;
-    @FXML
-    private JFXButton back;
 
     public void handleSubmit(ActionEvent e) throws IOException, SQLException {}
 

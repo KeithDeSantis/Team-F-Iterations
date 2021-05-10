@@ -27,7 +27,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
@@ -1424,10 +1423,7 @@ public class MapEditViewController extends AbsController {
         }
 
         // Check if need to switch map
-        if (startNode.getFloor().equals(mapPanel.getFloor().get()) || endNode.getFloor().equals(mapPanel.getFloor().get())) {
-            //drawEdgeNodeOnFloor();
-
-        } else {
+        if (!startNode.getFloor().equals(mapPanel.getFloor().get()) && !endNode.getFloor().equals(mapPanel.getFloor().get())) {
             mapPanel.switchMap(startNode.getFloor());
         }
 
@@ -1749,11 +1745,12 @@ public class MapEditViewController extends AbsController {
      * @author KD
      */
     public boolean isInFavorites(String nodeID) {
-        boolean isFavorite = false;
         for(NodeEntry nodeEntry : favoriteList) {
-            if(nodeEntry.getNodeID().equals(nodeID)) isFavorite = true;
+            if (nodeEntry.getNodeID().equals(nodeID)) {
+                return true;
+            }
         }
-        return isFavorite;
+        return false;
     }
 
     /**

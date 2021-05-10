@@ -2,15 +2,11 @@ package edu.wpi.cs3733.D21.teamF.utils;
 
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
-import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestHomeNewController;
-import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
-
 import javafx.animation.PauseTransition;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.Labeled;
@@ -64,7 +60,7 @@ public class SceneContext {
                     controller = loader.getController();
                     controller.initLanguage();
                     //if(controller instanceof ServiceRequests || controller instanceof ServiceRequestHomeNewController);
-                        autoTranslate(root);
+                    autoTranslate(root);
 
                     return root;
                 } catch (IOException e) {

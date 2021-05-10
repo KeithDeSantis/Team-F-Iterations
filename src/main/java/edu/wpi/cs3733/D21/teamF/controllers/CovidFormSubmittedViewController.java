@@ -63,7 +63,7 @@ public class CovidFormSubmittedViewController{
         enterToCheck.setText(ID);
     }
 
-    public void closePopup() throws IOException {
+    public void closePopup() {
         Scene scene = checkButton.getScene();
         ((Stage) scene.getWindow()).close();
     }
