@@ -180,8 +180,6 @@ public class MapPanel extends AnchorPane {
         stackPane.prefWidthProperty().bind(this.widthProperty());
         stackPane.prefHeightProperty().bind(this.heightProperty());
 
-        //Weird....Oh... hmmmm...
-        //canvas.setStyle("-fx-background-color: #ff0000"); //Yup. Did it a few times before
         canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(internalZoomLevel));
         canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(internalZoomLevel));
 

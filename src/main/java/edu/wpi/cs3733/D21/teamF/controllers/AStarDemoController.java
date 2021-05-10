@@ -17,7 +17,10 @@ import edu.wpi.cs3733.uicomponents.entities.DrawableFloorInstruction;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
 import javafx.animation.*;
-import javafx.beans.binding.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.IntegerBinding;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,7 +36,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -52,7 +54,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -154,7 +155,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
     TreeItem<String> recentItem = new TreeItem<>("Recently Used");
 
-    TreeItem<String> instructionTreeViewItem = new TreeItem<>("instructions");
+    TreeItem<String> instructionTreeViewItem = new TreeItem<>("Instructions");
     TreeItem<String> floorOneInstruction = new TreeItem<>("Floor One Instructions");
     TreeItem<String> floorTwoInstruction = new TreeItem<>("Floor Two Instructions");
     TreeItem<String> floorThreeInstruction = new TreeItem<>("Floor Three Instructions");
@@ -1924,7 +1925,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
     }
 
-    public void handleInstructionListSelection(MouseEvent mouseEvent) {
+    public void handleInstructionListSelection() {
         if(instructionTreeView.getSelectionModel().getSelectedItem()!=null &&
                 !instructionTreeView.getSelectionModel().getSelectedItem().getParent().equals(instructionTreeViewItem) &&
                 !instructionTreeView.getSelectionModel().getSelectedItem().equals(instructionTreeViewItem)) { // Do not center on drop downs, root item or null items, only actual nodes
@@ -1943,6 +1944,8 @@ public class AStarDemoController extends AbsController implements Initializable 
     }
 
     private void addInstructionsToTreeView(){
+        instructionTreeViewItem.getChildren().clear();
+
         floorTwoInstruction.getChildren().clear();
         floorLowerOneInstruction.getChildren().clear();
         floorGroundInstruction.getChildren().clear();
@@ -1984,5 +1987,9 @@ public class AStarDemoController extends AbsController implements Initializable 
                 floor = ins.substring(ins.length()-2);
             }
         }
+
+        instructionTreeViewItem.getChildren().addAll(floorLowerTwoInstruction, floorLowerOneInstruction, floorGroundInstruction
+                , floorOneInstruction, floorTwoInstruction, floorThreeInstruction);
+        instructionTreeViewItem.getChildren().removeIf(x -> x.getChildren().isEmpty());
     }
 }
