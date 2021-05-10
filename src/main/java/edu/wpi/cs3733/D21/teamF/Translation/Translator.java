@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.Translation;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableStringValue;
@@ -79,31 +80,53 @@ public class Translator {
 
 //        final StringProperty val = new SimpleStringProperty(text);
 
+        StringProperty value = new SimpleStringProperty(text);
+
+        language.addListener((observable, oldValue, newValue) -> {
+            value.unbind();
+            final StringProperty prop = translate(text);
+            value.bind(prop);
+        });
+
+        return Bindings.createStringBinding(() -> value.get(), value);
+        /*
         ObjectBinding<StringProperty> langBinding = Bindings.createObjectBinding(() -> translate(text), language);
 
         ObjectProperty<StringProperty> prop = new SimpleObjectProperty<>();
         prop.bind(langBinding);
-//
-//        prop.addListener((observable, oldValue, newValue) -> {
-//            System.out.println("L " + newValue);
-//        });
-//
-//        ObjectBinding<StringProperty> binding = Bindings.createObjectBinding(() -> prop.get(), prop, prop.get());
-//        binding.addListener((observable, oldValue, newValue) -> {
-//            System.out.println("BC " + newValue);
-//        });
+
+        prop.addListener((observable, oldValue, newValue) -> {
+            System.out.println("L " + newValue);
+        });
+
+        ObjectBinding<StringProperty> binding = Bindings.createObjectBinding(() -> prop.get(), prop);
+        binding.addListener((observable, oldValue, newValue) -> {
+            System.out.println("BC " + newValue);
+        });
+
+       StringBinding bindingS = Bindings.createStringBinding(() -> prop.get().get(), prop.get());
+        bindingS.addListener((observable, oldValue, newValue) -> {
+            System.out.println("BCS " + newValue);
+        });
+
 
 
         final StringProperty val = new SimpleStringProperty(text);
 
 //        val.bind(Bindings.createObjectBinding(() -> prop.get(), prop));
        // val.bind(prop.get()); //Bindings.createObjectBinding(() -> prop.get(), prop));
-        val.bind(Bindings.createStringBinding(() -> prop.get().get(), prop));
+        StringBinding strBinding = Bindings.createStringBinding(() -> prop.get().get(), prop, prop.get());
+        val.bind(strBinding);
+        val.addListener((observable, oldValue, newValue) -> {
+            System.out.println("SB " + newValue);
+        });
         //val.bind(Bindings.createStringBinding(() -> translate(text), language));
 
        return Bindings.createStringBinding(val::get, val);
 
         //return Bindings.createStringBinding(() -> translate(language), la)
+
+         */
     }
 
     /**
@@ -197,7 +220,7 @@ public class Translator {
         }
 
         System.out.println("Could not translate: " + language.get() + " -> " + text);
-        final StringProperty ans = new SimpleStringProperty(null);
+        final StringProperty ans = new SimpleStringProperty("WAIT");
 
         final Task<String> getTask = new Task<String>() {
             @Override
@@ -217,8 +240,8 @@ public class Translator {
             try {
                 final String translation = getTask.get();
                 translationLookupTable.get(language.get()).put(text, translation);
-                ans.set(translation);
-                System.out.println("SUCCESS: " + text + " -> " + translation);
+                ans.setValue(translation);
+                System.out.println("SUCCESS: " + text + " -> " + translation  + " " + ans.get());
             } catch (InterruptedException | ExecutionException interruptedException) {
                 interruptedException.printStackTrace();
                 ans.set("ERROR"); //FIXME: DO BETTER!!
@@ -241,7 +264,7 @@ public class Translator {
      * @throws IOException if an error occurred
      * @author Johvanni Perez
      */
-    public synchronized String translate(String src, String target, String text) throws IOException {
+    public String translate(String src, String target, String text) throws IOException {
 
         String urlStr = "https://script.google.com/macros/s/AKfycbzk_1ZP98MqQNuWvs_Yo3UamuN7WCABIG3UiUUighYgCeqIf4ha4qUzubb2jxopuTP7/exec"
                 + "?q=" + URLEncoder.encode(text, "UTF-8") +
