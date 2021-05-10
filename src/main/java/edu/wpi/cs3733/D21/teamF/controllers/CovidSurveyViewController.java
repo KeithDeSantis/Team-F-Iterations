@@ -190,7 +190,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
      * @throws IOException
      */
     public void handleEmployeeSignIn() throws IOException{
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
 
     public void handleCheckStatus() throws IOException {

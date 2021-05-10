@@ -42,7 +42,7 @@ public class RegisterController extends AbsController {
                     password.setText("");
                 }else {
                     DatabaseAPI.getDatabaseAPI().addUser(user, "visitor", user, pass, "");
-                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
+                    SceneContext.getSceneContext().loadDefault();
                 }
             } catch (NullPointerException n) {
                 errorMessage.setStyle("-fx-text-fill: #c60000FF;");
@@ -50,7 +50,7 @@ public class RegisterController extends AbsController {
             }
         }
         else if (buttonPushed == goBack) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
+            SceneContext.getSceneContext().loadDefault();
         }
 
     }

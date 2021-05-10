@@ -62,6 +62,11 @@ public class DefaultPageController extends AbsController {
     private Label fillOutTheSurvey;
     @FXML
     private JFXButton employeeAdminSignIn;
+    @FXML
+    private JFXTextField associateUser;
+    @FXML
+    private JFXButton register;
+
     boolean isCompleted;
 
     @FXML
@@ -125,6 +130,8 @@ public class DefaultPageController extends AbsController {
         AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
         if (user != null && CurrentUser.getCurrentUser().isAuthenticated()) {
             if(user.getCovidStatus().equals("")){
+                associateUser.setText(user.getUsername());
+                CurrentUser.getCurrentUser().logout();
                 buttons.setVisible(false);
                 covidBox.setVisible(true);
                 covidBox.setManaged(true);
@@ -273,17 +280,17 @@ public class DefaultPageController extends AbsController {
         }
         else if (buttonPushed == enterApp) {
             //do we need to check to see if the input is a uuid or username?
-            if (CurrentUser.getCurrentUser().isAuthenticated()) {
-                AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
-                if (!completed(verifyAgain.getText()).isEmpty()) {
+            String username = associateUser.getText();
+            AccountEntry user = DatabaseAPI.getDatabaseAPI().getUser(username);
+            if (user != null && user.getCovidStatus().equals("")) {
+                if (!isCompleted(verifyAgain.getText()).isEmpty()) {
                     isCompleted = true;
-                    DatabaseAPI.getDatabaseAPI().editUser(user.getUsername(), Boolean.toString(isCleared(verifyAgain.getText())) , "cleared");
-                    CurrentUser.getCurrentUser().logout();
-                    resetButtons();
+                    DatabaseAPI.getDatabaseAPI().editUser(user.getUsername(), isCompleted(verifyAgain.getText()), "cleared");
+                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
                 } else {
                     fillOutTheSurvey.setStyle("-fx-text-fill: #c60000FF;");
                 }
-            } else {
+            }else{
                 if (!completed(verifyAgain.getText()).isEmpty()) {
                     isCompleted = true;
                     if (isCleared(verifyAgain.getText())) {
@@ -304,12 +311,20 @@ public class DefaultPageController extends AbsController {
                     } else {
                         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
                     }
-                } else {
-                    fillOutTheSurvey.setStyle("-fx-text-fill: #c60000FF;");
                 }
             }
+        }else if (buttonPushed == register) {
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/RegisterView.fxml");
         }
     }
+
+    private String isCompleted(String ID) throws SQLException {
+        String complete = "";
+        if (ID.contains("-"))
+            complete = DatabaseAPI.getDatabaseAPI().getServiceEntry(ID, "uuid").getCompleteStatus();
+        return complete;
+    }
+
     private String completed(String ticketID) throws SQLException {
         String complete = "";
 

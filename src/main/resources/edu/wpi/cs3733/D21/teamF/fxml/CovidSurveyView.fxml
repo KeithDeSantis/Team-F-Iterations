@@ -250,7 +250,7 @@
       </HBox>
       <HBox alignment="CENTER" layoutY="496.0" prefHeight="34.0" prefWidth="2000.0" spacing="25.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <children>
-            <JFXButton fx:id="employeeSignIn" buttonType="RAISED" onAction="#handleEmployeeSignIn" prefWidth="2000.0" text="Sign in" textFill="#03256c" underline="true" HBox.hgrow="ALWAYS">
+            <JFXButton fx:id="goBack" buttonType="RAISED" onAction="#handleEmployeeSignIn" prefWidth="2000.0" text="Return to Main Page" textFill="#03256c" underline="true" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

@@ -22,8 +22,6 @@ public class EmployeeAdminLoginController extends AbsController {
     @FXML
     private JFXButton signIn;
     @FXML
-    private JFXButton register;
-    @FXML
     private Label errorMessage;
     @FXML
     private JFXButton goBack;
@@ -57,9 +55,7 @@ public class EmployeeAdminLoginController extends AbsController {
             }
         }
         else if (buttonPushed == goBack) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
-        }else if(buttonPushed == register){
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/RegisterView.fxml");
+            SceneContext.getSceneContext().loadDefault();
         }
 
     }

@@ -70,23 +70,14 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </JFXPasswordField>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-               <children>
-                  <JFXButton fx:id="register" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" defaultButton="true" onAction="#handleButtonPushed" prefWidth="1000.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Register">
-                     <font>
-                        <Font name="Montserrat Regular" size="15.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton fx:id="signIn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" defaultButton="true" onAction="#handleButtonPushed" prefWidth="1000.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Sign In">
-                     <font>
-                        <Font name="Montserrat Regular" size="15.0" />
-                     </font>
-                  </JFXButton>
-               </children>
+            <JFXButton fx:id="signIn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" defaultButton="true" onAction="#handleButtonPushed" prefWidth="2000.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Sign In" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
                <VBox.margin>
-                  <Insets left="20.0" right="20.0" />
+                  <Insets left="150.0" right="150.0" />
                </VBox.margin>
-            </HBox>
+            </JFXButton>
             <JFXButton fx:id="goBack" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleButtonPushed" prefWidth="2000.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
