@@ -6,11 +6,11 @@ import edu.wpi.cs3733.D21.teamF.pathfinding.GoogleAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.fxml.FXML;
 
-import java.awt.event.ActionEvent;
+import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GoogleMapsViewController {
+public class GoogleMapsViewController extends AbsController{
     @FXML
     private JFXTextField streetAddress;
     @FXML
@@ -121,4 +121,5 @@ public class GoogleMapsViewController {
             }
         }
     }
+
 }

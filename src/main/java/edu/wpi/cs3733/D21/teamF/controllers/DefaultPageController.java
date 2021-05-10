@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class DefaultPageController extends AbsController {
+public class DefaultPageController extends 0er {
     @FXML
     private JFXButton credits;
     @FXML
@@ -84,6 +84,8 @@ public class DefaultPageController extends AbsController {
 
         serviceRequest.textProperty().bind(Translator.getTranslator().getTranslationBinding(serviceRequest.getText()));
 
+        googleMapsPage.textProperty().bind(Translator.getTranslator().getTranslationBinding(googleMapsPage.getText()));
+
         manageServices.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageServices.getText()));
 
         manageAccount.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageAccount.getText()));
@@ -136,6 +138,8 @@ public class DefaultPageController extends AbsController {
                     pathfindingSettingButton.setVisible(true);
                     manageAccount.setManaged(true);
                     manageAccount.setVisible(true);
+                    //googleMapsPage.setVisible(true);
+                    //googleMapsPage.setManaged(true);
                     surveyButton.setManaged(false);
                     surveyButton.setVisible(false);
                     surveyButton2.setManaged(false);
@@ -220,7 +224,12 @@ public class DefaultPageController extends AbsController {
                 resetButtons();
             }else
                 SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
-        } else if (buttonPushed == editMap) {
+        }else if (buttonPushed == googleMapsPage){
+            System.out.println("here");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GoogleMapsView.fxml");
+            System.out.println("here1");
+        }
+        else if (buttonPushed == editMap) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
         } else if (buttonPushed == manageServices) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManagerView.fxml");
@@ -238,8 +247,6 @@ public class DefaultPageController extends AbsController {
                 submittedStage.initModality(Modality.APPLICATION_MODAL);
                 submittedStage.showAndWait();
             }
-        } else if (buttonPushed == googleMapsPage){
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GoogleMapsView.fxml");
         } else if (buttonPushed == serviceRequest) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
         } else if (buttonPushed == manageAccount) {
