@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -16,9 +17,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
-
-<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.scene.text.Text?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidSurveyViewController">
    <children>
       <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -250,7 +250,7 @@
       </HBox>
       <HBox alignment="CENTER" layoutY="496.0" prefHeight="34.0" prefWidth="2000.0" spacing="25.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <children>
-            <JFXButton fx:id="employeeSignIn" buttonType="RAISED" onAction="#handleEmployeeSignIn" prefWidth="2000.0" text="Sign in as employee/admin" textFill="#03256c" underline="true" HBox.hgrow="ALWAYS">
+            <JFXButton fx:id="employeeSignIn" buttonType="RAISED" onAction="#handleEmployeeSignIn" prefWidth="2000.0" text="Sign in" textFill="#03256c" underline="true" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
