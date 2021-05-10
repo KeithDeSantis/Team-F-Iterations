@@ -122,4 +122,8 @@ public class GoogleMapsViewController extends AbsController {
             }
         }
     }
+
+    public void handleGoBack() throws IOException {
+        SceneContext.getSceneContext().loadDefault();
+    }
 }
