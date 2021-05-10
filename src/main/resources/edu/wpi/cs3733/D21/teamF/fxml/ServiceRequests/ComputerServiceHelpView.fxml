@@ -23,7 +23,7 @@
                <children>
                   <HBox fx:id="subHeader" layoutY="-43.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <ImageView fitHeight="50.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="50.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                            </image>
