@@ -66,7 +66,10 @@ public class AStarDemoController extends AbsController implements Initializable 
 
 
     @FXML
-    private MapPanel mapPanel;
+    public JFXButton endNavBtn;
+
+    @FXML
+    public MapPanel mapPanel;
 
     @FXML
     private JFXButton Go;
@@ -1439,8 +1442,8 @@ public class AStarDemoController extends AbsController implements Initializable 
                 Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList)));
 
         setNavIcon();
-        Go.textProperty().unbind();
-        Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("End Navigation"));
+     //   Go.textProperty().unbind();
+      //  Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("End Navigation"));
     }
 
     /**
@@ -1513,8 +1516,8 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         unDrawSEIcons();
 
-        Go.textProperty().unbind();
-        Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("Start Navigation"));
+      //  Go.textProperty().unbind();
+     //   Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("Start Navigation"));
     }
 
     /**
