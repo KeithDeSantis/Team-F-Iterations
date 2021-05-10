@@ -764,6 +764,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     private double getAngleFor(String dir)
     {
+        if(dir == null) return 0;
         switch (dir) {
             case "UP":
                 return (Math.toRadians(90));
