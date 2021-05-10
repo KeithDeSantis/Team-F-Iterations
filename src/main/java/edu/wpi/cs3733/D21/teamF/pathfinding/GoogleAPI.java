@@ -23,6 +23,21 @@ public class GoogleAPI {
 
     }
 
+    public String parseClosestParkingLot(String origin) throws IOException {
+        String address = "";
+        String[] parkingLots = {"0 Francis St, Boston, MA 02115", "15-51 New Whitney St, Boston, MA 02115"};
+        int time = 0;
+        for (String s : parkingLots){
+            String[] results = GoogleAPI.getGoogleAPI().queryAPI(origin, s);
+            int temp = Integer.parseInt(results[1].split(" ")[0]);
+            if (temp > time){
+                time = temp;
+                address = s;
+            }
+        }
+        return address;
+    }
+
     /**
      * URL Encodes parameter
      * @param param the string to url encode
@@ -38,13 +53,15 @@ public class GoogleAPI {
      * @param json the Google data
      * @author Declan Murphy
      */
-    public String parseGoogleData(String json) {
+    public String[] parseGoogleData(String json) {
         final JSONObject parsed = new JSONObject(json);
         final JSONObject route = (JSONObject) (parsed.getJSONArray("routes")).get(0);
         final JSONObject leg = (JSONObject) (route.getJSONArray("legs")).get(0);
+        final JSONObject durationArray = leg.getJSONObject("duration");
+        String travelTime = durationArray.getString("text");
         final JSONArray steps = leg.getJSONArray("steps");
         StringBuilder directions = new StringBuilder();
-        for (int i=0; i< steps.length(); i++){
+        for (int i=0; i<steps.length(); i++){
             String temp = ((JSONObject) steps.get(i)).getString("html_instructions");
             if (temp != null) {
                 directions.append(temp).append("\n");
@@ -52,7 +69,7 @@ public class GoogleAPI {
         }
         String results = directions.toString();
         results = results.replaceAll("\\<.*?\\>", "");
-        return results;
+        return new String[]{results, travelTime};
     }
 
     /**
@@ -82,7 +99,7 @@ public class GoogleAPI {
      * @throws IOException if a problem occurs in openConnection() or getInputStream()
      * @author Declan Murphy, Tony Vuolo (bdane)
      */
-    public String queryAPI(String origin, String destination) throws IOException {
+    public String[] queryAPI(String origin, String destination) throws IOException {
         StringBuilder apiResponse = new StringBuilder();
         HttpURLConnection connection = (HttpURLConnection) new URL(buildUrl(origin, destination)).openConnection();
         connection.setRequestProperty("User-Agent", "Mozilla/5.0");
