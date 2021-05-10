@@ -33,6 +33,14 @@
             </HBox>
             <HBox layoutX="805.0" layoutY="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                <children>
+                  <ImageView fitHeight="25.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/translateBlack.png" />
+                     </image>
+                  </ImageView>
                   <JFXComboBox fx:id="languageSelect" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" onAction="#changeLanguage"/>
                </children>
             </HBox>

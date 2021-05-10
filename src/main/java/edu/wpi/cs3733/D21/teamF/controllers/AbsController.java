@@ -12,14 +12,14 @@ import java.util.stream.Collectors;
 public abstract class AbsController {
 
     @FXML
-    private JFXComboBox<String> languageSelect;
+    public JFXComboBox<String> languageSelect;
 
     public void hoverOnHome(MouseEvent e) {
         ((Node) e.getSource()).getScene().setCursor(Cursor.HAND);
     }
 
     public void hoverOffHome(MouseEvent e) {
-        ((Node) e.getSource()).getScene().setCursor(Cursor.DEFAULT);
+        if(!(((Node) e.getSource()).getScene()==null)) ((Node) e.getSource()).getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML

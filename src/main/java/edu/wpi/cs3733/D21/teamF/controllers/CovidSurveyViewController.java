@@ -212,4 +212,9 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
         CurrentUser.getCurrentUser().logout();
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
     }
+
+    @Override
+    public void handleHome() throws IOException {
+        SceneContext.getSceneContext().loadDefault();
+    }
 }

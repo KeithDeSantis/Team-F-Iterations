@@ -40,19 +40,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MapEditViewController extends AbsController {
-
-    @FXML
-    private JFXButton saveButton;
-    @FXML
-    private JFXButton loadButton;
-    @FXML
-    private JFXButton resetFromDB;
+    
     @FXML
     private JFXButton newButton;
-    @FXML
-    private JFXButton editButton;
-    @FXML
-    private JFXButton deleteButton;
     @FXML
     private JFXButton favoriteButton;
     @FXML
