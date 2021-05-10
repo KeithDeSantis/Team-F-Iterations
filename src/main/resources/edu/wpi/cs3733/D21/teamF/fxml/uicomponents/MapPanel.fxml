@@ -40,7 +40,7 @@
                                     <Font name="Tahoma" size="13.0" />
                                  </font>
                               </Label>
-                              <JFXSlider fx:id="floorSlider" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="3.0" />
+                              <JFXSlider fx:id="floorSlider" blockIncrement="1.0" majorTickUnit="1.0" max="6.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="3.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="38.0" prefWidth="186.0" spacing="5.0">

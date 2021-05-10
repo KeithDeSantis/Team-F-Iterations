@@ -73,6 +73,7 @@ public class MapPanel extends AnchorPane {
     private final Image L1Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel1.png"));
     private final Image L2Image = new Image(getClass().getResourceAsStream("/maps/00_thelowerlevel2.png"));
     private final Image GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
+    private final Image FLBImage = new Image(getClass().getResourceAsStream("/maps/FLB-Team3.png"));
 
     final StringConverter<Double> doubleStringConverter = new StringConverter<Double>() {
         @Override
@@ -92,6 +93,8 @@ public class MapPanel extends AnchorPane {
                     return "2";
                 case 5:
                     return "3";
+                case 6:
+                    return "FL-B";
                 default:
                     return "N/A";
             }
@@ -99,23 +102,21 @@ public class MapPanel extends AnchorPane {
 
         @Override
         public Double fromString(String s) {
-            switch (s) {
+            switch (s.trim()) {
                 case "L2":
                     return 0.0;
                 case "L1":
                     return 1.0;
                 case "G":
-                case " G":
                     return 2.0;
                 case "1":
-                case " 1":
                     return 3.0;
                 case "2":
-                case " 2":
                     return 4.0;
                 case "3":
-                case " 3":
                     return 5.0;
+                case"FL-B":
+                    return 6.0;
                 default:
                     return -1.0;
 
@@ -180,7 +181,7 @@ public class MapPanel extends AnchorPane {
         stackPane.prefHeightProperty().bind(this.heightProperty());
 
         //Weird....Oh... hmmmm...
-        canvas.setStyle("-fx-background-color: #ff0000"); //Yup. Did it a few times before
+        //canvas.setStyle("-fx-background-color: #ff0000"); //Yup. Did it a few times before
         canvas.prefWidthProperty().bind(INITIAL_WIDTH.divide(internalZoomLevel));
         canvas.prefHeightProperty().bind(INITIAL_HEIGHT.divide(internalZoomLevel));
 
@@ -230,6 +231,8 @@ public class MapPanel extends AnchorPane {
                 map.setImage(L2Image); break;
             case "G":
                 map.setImage(GImage); break;
+            case "FL-B":
+                map.setImage(FLBImage); break;
             default:
                 map.setImage(F1Image); System.out.println("No Such Floor!"); break; //FIXME : Error Handling
         }
