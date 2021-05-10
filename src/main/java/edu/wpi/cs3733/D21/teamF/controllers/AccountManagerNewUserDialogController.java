@@ -20,7 +20,7 @@ public class AccountManagerNewUserDialogController extends AbsController {
     @FXML
     private JFXComboBox<String> userTypeComboBox;
 
-    private AccountEntry newAccount = new AccountEntry("","","","", null);
+    private AccountEntry newAccount = new AccountEntry("","","","", "", null);
 
     private ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
 

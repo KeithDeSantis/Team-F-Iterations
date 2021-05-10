@@ -31,9 +31,9 @@ public class LoginController extends AbsController {
         Button buttonPushed = (JFXButton) actionEvent.getSource();  //Getting current stage
         if (buttonPushed == signIn) {
             if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
-                DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin", "true");
-                DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff", "true");
-                DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest", "true");
+                DatabaseAPI.getDatabaseAPI().addUser("admin@fuschiafalcons.com", "administrator", "admin", "admin", "true");
+                DatabaseAPI.getDatabaseAPI().addUser("staff@fuschiafalcons.com", "employee", "staff", "staff", "true");
+                DatabaseAPI.getDatabaseAPI().addUser("guest@fuschiafalcons.com", "visitor", "patient", "patient", "true");
             }
             String user = username.getText();
             String pass = password.getText();

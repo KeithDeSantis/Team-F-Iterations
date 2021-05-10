@@ -125,7 +125,7 @@ public class AccountManagerController extends AbsController implements Initializ
             accounts.remove(user);
         }
         else if (buttonPushed == addUser){
-            AccountEntry newAccount = new AccountEntry("","","","", null);
+            AccountEntry newAccount = new AccountEntry("","","","", "",null);
 
             openNewDialog(newAccount);
 
