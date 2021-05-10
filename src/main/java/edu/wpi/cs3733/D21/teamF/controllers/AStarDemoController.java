@@ -766,8 +766,8 @@ public class AStarDemoController extends AbsController implements Initializable 
         stop.setStrokeWidth(2.0);
         stop.setFill(new Color(0.75,0,0,1));
         stop.setStroke(new Color(1,0,0,1));
-        stop.setScaleX(1.5);
-        stop.setScaleY(1.5);
+        stop.setScaleX(1); //FIXME: DO BETTER
+        stop.setScaleY(1);
         stop.setMouseTransparent(true);
         mapPanel.draw(stop);
         mapPanel.switchMap(nodeEntry.getFloor());
@@ -902,7 +902,9 @@ public class AStarDemoController extends AbsController implements Initializable 
             final BooleanBinding isEndNode = Bindings.equal(endNode, idToShortName(drawableNode.getId()));
             final BooleanBinding isStartOrEndNode = isStartNode.or(isEndNode);
 
-            drawableNode.radiusProperty().bind(Bindings.when(isStartOrEndNode).then(10).otherwise(5));
+            drawableNode.scaleXProperty().bind(Bindings.when(isStartOrEndNode).then(1).otherwise(0.8));
+            drawableNode.scaleYProperty().bind(Bindings.when(isStartOrEndNode).then(1).otherwise(0.8));
+//            drawableNode.radiusProperty().bind(Bindings.when(isStartOrEndNode).then(10).otherwise(5));
 
             //  drawableNode.fillProperty().set(new Color(0, 0, 0, 0));
             drawableNode.setStrokeWidth(2.0);

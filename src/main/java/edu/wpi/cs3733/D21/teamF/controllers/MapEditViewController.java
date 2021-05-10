@@ -29,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -74,11 +75,11 @@ public class MapEditViewController extends AbsController {
     private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
     private final ObservableList<NodeEntry> nodeEntryObservableList = FXCollections.observableArrayList();
     private final List<NodeEntry> favoriteList = new ArrayList<>();
-    private Circle selectedCircle = null;
+    private Shape selectedCircle = null;
 
     private Line selectedLine = null;
-    private Circle firstCircle = null;
-    private Circle secondCircle = null;
+    private Node firstCircle = null;
+    private Node secondCircle = null;
 
     List<NodeEntry> nodeList = new ArrayList<>();
 
