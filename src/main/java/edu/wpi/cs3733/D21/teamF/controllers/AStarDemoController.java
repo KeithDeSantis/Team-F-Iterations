@@ -157,7 +157,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     TreeItem<String> instructionTreeViewItem = new TreeItem<>("instructions");
     TreeItem<String> floorOneInstruction = new TreeItem<>("Floor One Instructions");
     TreeItem<String> floorTwoInstruction = new TreeItem<>("Floor Two Instructions");
-    TreeItem<String> floorThreeInstruction = new TreeItem<>("Floor Two Instructions");
+    TreeItem<String> floorThreeInstruction = new TreeItem<>("Floor Three Instructions");
     TreeItem<String> floorGroundInstruction = new TreeItem<>("Ground Floor Instructions");
     TreeItem<String> floorLowerOneInstruction = new TreeItem<>("Floor L1 Instructions");
     TreeItem<String> floorLowerTwoInstruction = new TreeItem<>("Floor L2 Instructions");
@@ -534,7 +534,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         // Setting up instruction tree view
         instructionTreeViewItem.getChildren().addAll(floorLowerTwoInstruction, floorLowerOneInstruction, floorGroundInstruction
         , floorOneInstruction, floorTwoInstruction, floorThreeInstruction);
-        instructionTreeView.setRoot(rootTreeViewItem);
+        instructionTreeView.setRoot(instructionTreeViewItem);
         this.instructionTreeView.setShowRoot(false);
 
         // add tree items to root item (shown in order of addition)
@@ -1425,6 +1425,8 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         drawSEIcons();
 
+        addInstructionsToTreeView();
+
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
         ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
         currentDirection.bind(Bindings.stringValueAt(directionsList, currentStep));
@@ -1927,15 +1929,59 @@ public class AStarDemoController extends AbsController implements Initializable 
                 !instructionTreeView.getSelectionModel().getSelectedItem().getParent().equals(instructionTreeViewItem) &&
                 !instructionTreeView.getSelectionModel().getSelectedItem().equals(instructionTreeViewItem)) { // Do not center on drop downs, root item or null items, only actual nodes
             // Fill in
+            int index = getInstructionIndex(instructionTreeView.getSelectionModel().getSelectedItem().getValue());
+            goToStep(index);
         }
     }
 
-    private void addInstructionsToTreeView(){
-        String floor = mapPanel.getFloor().get();
-        for(String ins : instructionsList){
+    private int getInstructionIndex (String ins) {
+        for(int i = 0; i < instructionsList.size(); i++){
+            if (ins.contains(instructionsList.get(i)))
+                return i;
+        }
+        return -1;
+    }
 
+    private void addInstructionsToTreeView(){
+        floorTwoInstruction.getChildren().clear();
+        floorLowerOneInstruction.getChildren().clear();
+        floorGroundInstruction.getChildren().clear();
+        floorOneInstruction.getChildren().clear();
+        floorTwoInstruction.getChildren().clear();
+        floorThreeInstruction.getChildren().clear();
+
+        String floor = pathVertex.get(0).getFloor();
+        int index = 0;
+        for(String ins : instructionsList){
+            index++;
+            switch (floor) {
+                case "L2":
+                    floorLowerTwoInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "L1":
+                    floorLowerOneInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "G":
+                case " G":
+                    floorGroundInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "1":
+                case " 1":
+                    floorOneInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "2":
+                case " 2":
+                    floorTwoInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "3":
+                case " 3":
+                    floorThreeInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                default:
+                    break;
+            }
             if(ins.contains("Take")){
-                //
+                floor = ins.substring(ins.length()-2);
             }
         }
     }
