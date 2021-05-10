@@ -36,7 +36,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Text;
@@ -64,7 +66,10 @@ public class AStarDemoController extends AbsController implements Initializable 
 
 
     @FXML
-    private MapPanel mapPanel;
+    public JFXButton endNavBtn;
+
+    @FXML
+    public MapPanel mapPanel;
 
     @FXML
     private JFXButton Go;
@@ -116,9 +121,10 @@ public class AStarDemoController extends AbsController implements Initializable 
     private DrawableUser userNodeDisplay;
 
     @FXML
-    private Label startLabel;
+    private HBox topHBox;
+
     @FXML
-    private Label endLabel;
+    private HBox lowerHBox;
 
     // Global variables for the stepper
     private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
@@ -166,10 +172,44 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //ahf - yes this should be done better. At some point.
-        startLabel.textProperty().bind(startNode);
-        endLabel.textProperty().bind(endNode);
 
+        final Rectangle confGraphic = new Rectangle(16, 16);
+        confGraphic.setFill(getNodeTypeColor("CONF"));
+        conferenceItem.setGraphic(confGraphic);
+
+        final Rectangle deptGraphic = new Rectangle(16, 16);
+        deptGraphic.setFill(getNodeTypeColor("DEPT"));
+        departmentItem.setGraphic(deptGraphic);
+
+        final Rectangle exitGraphic = new Rectangle(16, 16);
+        exitGraphic.setFill(getNodeTypeColor("EXIT"));
+        entranceItem.setGraphic(exitGraphic);
+
+        final Rectangle infoGraphic = new Rectangle(16, 16);
+        infoGraphic.setFill(getNodeTypeColor("INFO"));
+        infoItem.setGraphic(infoGraphic);
+
+        final Rectangle labsGraphic = new Rectangle(16, 16);
+        labsGraphic.setFill(getNodeTypeColor("LABS"));
+        labItem.setGraphic(labsGraphic);
+
+        final Rectangle parkingGraphic = new Rectangle(16, 16);
+        parkingGraphic.setFill(getNodeTypeColor("PARK"));
+        parkingItem.setGraphic(parkingGraphic);
+
+        final Rectangle restroomGraphic = new Rectangle(16, 16);
+        restroomGraphic.setFill(getNodeTypeColor("REST"));
+        restroomItem.setGraphic(restroomGraphic);
+
+        final Rectangle retailGraphic = new Rectangle(16, 16);
+        retailGraphic.setFill(getNodeTypeColor("RETL"));
+        retailItem.setGraphic(retailGraphic);
+
+        final Rectangle serviceGraphic = new Rectangle(16, 16);
+        serviceGraphic.setFill(getNodeTypeColor("SERV"));
+        serviceItem.setGraphic(serviceGraphic);
+
+        //ahf - yes this should be done better. At some point.
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
             List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
@@ -399,6 +439,14 @@ public class AStarDemoController extends AbsController implements Initializable 
         instructionTreeView.setDisable(true);
 
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
+
+        topHBox.visibleProperty().bind(isCurrentlyNavigating.not());
+        topHBox.disableProperty().bind(isCurrentlyNavigating);
+        topHBox.managedProperty().bind(isCurrentlyNavigating.not());
+        lowerHBox.visibleProperty().bind(isCurrentlyNavigating);
+        lowerHBox.disableProperty().bind(isCurrentlyNavigating.not());
+        lowerHBox.managedProperty().bind(isCurrentlyNavigating);
+
 
 
         /*
@@ -1394,8 +1442,8 @@ public class AStarDemoController extends AbsController implements Initializable 
                 Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList)));
 
         setNavIcon();
-        Go.textProperty().unbind();
-        Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("End Navigation"));
+     //   Go.textProperty().unbind();
+      //  Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("End Navigation"));
     }
 
     /**
@@ -1468,8 +1516,8 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         unDrawSEIcons();
 
-        Go.textProperty().unbind();
-        Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("Start Navigation"));
+      //  Go.textProperty().unbind();
+     //   Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("Start Navigation"));
     }
 
     /**

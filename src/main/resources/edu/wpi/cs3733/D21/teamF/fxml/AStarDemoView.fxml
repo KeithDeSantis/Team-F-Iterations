@@ -6,12 +6,14 @@
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
 <VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
@@ -39,31 +41,20 @@
             <JFXTreeView fx:id="instructionTreeView" onMouseClicked="#handleInstructionListSelection" prefWidth="250" stylesheets="/stylesheets/TreeViewStyle.css" />
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS"/>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                  <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS" />
+                  <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="NEVER">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
+                        <HBox fx:id="topHBox" alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
                            <children>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                 <children>
-                                    <Label text="Start:" />
-                                    <Label fx:id="startLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="93.0" prefWidth="89.0" textAlignment="CENTER" wrapText="true" />
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                 <children>
-                                    <Label text="End:" />
-                                    <Label fx:id="endLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="82.0" textAlignment="CENTER" wrapText="true" />
-                                 </children>
-                              </VBox>
+                              <JFXButton fx:id="Go" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation" />
                               <JFXButton fx:id="about" buttonType="RAISED" onAction="#gotoAboutPage" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="About" />
                               <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                              <JFXButton fx:id="Go" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation" />
                               <JFXToggleButton fx:id="optimize" onAction="#checkInput" prefHeight="30.0" text="Optimize Route" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0">
+                        <HBox fx:id="lowerHBox" alignment="CENTER" prefHeight="0.0" prefWidth="900.0">
                            <children>
+                              <JFXButton fx:id="endNavBtn" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="End Navigation" />
                               <JFXButton fx:id="viewInstructionsBtn" buttonType="RAISED" onAction="#handleViewInstructions" stylesheets="/stylesheets/DefaultButtonStyle.css" text="View List">
                                  <HBox.margin>
                                     <Insets right="25.0" />
