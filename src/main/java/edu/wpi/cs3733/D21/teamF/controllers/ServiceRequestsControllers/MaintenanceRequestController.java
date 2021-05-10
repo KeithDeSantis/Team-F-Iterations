@@ -102,22 +102,18 @@ public class MaintenanceRequestController extends ServiceRequests {
         if(typeComboBox.getValue() == null){
             filled = false;
             setTextErrorStyle(typeComboBox);
-            typeComboBox.setPromptText("Specify the problem");
         }
         if(locationField.getValue() == null){
             filled = false;
             setTextErrorStyle(locationField);
-            locationField.setPromptText("Please give a location");
         }
         if(descriptionField.getText().isEmpty()){
             filled = false;
             setTextErrorStyle(descriptionField);
-            descriptionField.setPromptText("Please give a description of the problem");
         }
         if(urgencyComboBox.getValue() == null){
             filled = false;
             setTextErrorStyle(urgencyComboBox);
-            urgencyComboBox.setPromptText("Please give a location");
         }
         return filled;
     }

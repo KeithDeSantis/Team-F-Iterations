@@ -2,7 +2,9 @@ package edu.wpi.cs3733.D21.teamF.utils;
 
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestHomeNewController;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
+
 import javafx.animation.PauseTransition;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
@@ -42,8 +44,10 @@ public class SceneContext {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LoadPage.fxml"));
         controller = loader.getController();
-        stage.setScene(new Scene(loader.load()));
-        stage.show();
+        if(!(stage.getScene()==null)) { // Added for first loading the app, allows us to use getScene().setRoot() since getScene() returns null at first - KD
+            stage.getScene().setRoot(loader.load());
+            stage.show();
+        }
     }
 
         public void switchScene(String fxml) throws IOException {
@@ -59,7 +63,7 @@ public class SceneContext {
 
                     controller = loader.getController();
                     controller.initLanguage();
-                    if(controller instanceof ServiceRequests)
+                    //if(controller instanceof ServiceRequests || controller instanceof ServiceRequestHomeNewController);
                         autoTranslate(root);
 
                     return root;
@@ -71,7 +75,7 @@ public class SceneContext {
         };
         task.setOnSucceeded( e-> {
             try {
-                stage.setScene(new Scene(task.get()));
+                stage.getScene().setRoot(task.get());
                 stage.show();
             } catch (InterruptedException | ExecutionException interruptedException) {
                 interruptedException.printStackTrace();
@@ -97,7 +101,7 @@ public class SceneContext {
         t.start();
     }
 
-    private static void autoTranslate(Parent root)
+    public static void autoTranslate(Parent root)
     {
         final List<Node> children = new ArrayList<>();
         getAllChildren(root, children);

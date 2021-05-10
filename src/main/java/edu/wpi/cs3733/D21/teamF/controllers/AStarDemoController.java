@@ -17,10 +17,7 @@ import edu.wpi.cs3733.uicomponents.entities.DrawableFloorInstruction;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
 import javafx.animation.*;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.IntegerBinding;
-import javafx.beans.binding.ObjectBinding;
+import javafx.beans.binding.*;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +33,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -54,6 +52,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +100,9 @@ public class AStarDemoController extends AbsController implements Initializable 
     @FXML
     private JFXTreeView<String> treeView;
 
+    @FXML
+    private JFXTreeView<String> instructionTreeView;
+
     //FIXME: DO BETTER
     private Graph graph;
     private static final int MAX_RECENTLY_USED = 5;
@@ -114,6 +116,11 @@ public class AStarDemoController extends AbsController implements Initializable 
     private DrawableNode endNodeDisplay;
     private DrawableUser userNodeDisplay;
 
+    @FXML
+    private Label startLabel;
+    @FXML
+    private Label endLabel;
+
     // Global variables for the stepper
     private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
 
@@ -123,6 +130,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     private final ObservableList<Integer> stopsList = FXCollections.observableArrayList();
     private final ObservableList<String> instructionsList = FXCollections.observableArrayList();
     private final ObservableList<String> etaList = FXCollections.observableArrayList();
+    private final ObservableList<String> directionsList = FXCollections.observableArrayList();
     private final IntegerProperty currentStep = new SimpleIntegerProperty(0);
 
     // List of intermediate vertices for multi-stop pathfinding - LM
@@ -131,6 +139,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     private final StringProperty endNode = new SimpleStringProperty("");
 
     private final StringProperty currentDirection = new SimpleStringProperty("UP");
+    private final StringProperty nextDirection = new SimpleStringProperty("UP");
 
     final ObservableList<String> nodeList = FXCollections.observableArrayList();
 
@@ -150,11 +159,23 @@ public class AStarDemoController extends AbsController implements Initializable 
     TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
     TreeItem<String> recentItem = new TreeItem<>("Recently Used");
 
+    TreeItem<String> instructionTreeViewItem = new TreeItem<>("instructions");
+    TreeItem<String> floorOneInstruction = new TreeItem<>("Floor One Instructions");
+    TreeItem<String> floorTwoInstruction = new TreeItem<>("Floor Two Instructions");
+    TreeItem<String> floorThreeInstruction = new TreeItem<>("Floor Three Instructions");
+    TreeItem<String> floorGroundInstruction = new TreeItem<>("Ground Floor Instructions");
+    TreeItem<String> floorLowerOneInstruction = new TreeItem<>("Floor L1 Instructions");
+    TreeItem<String> floorLowerTwoInstruction = new TreeItem<>("Floor L2 Instructions");
+
     boolean filterNodes = false; // Boolean for filtering user selections to only outdoor nodes
+
+    private String direct = "UP";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //ahf - yes this should be done better. At some point.
+        startLabel.textProperty().bind(startNode);
+        endLabel.textProperty().bind(endNode);
 
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
@@ -392,6 +413,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         Instruction.setVisible(false);
         navIcon.setVisible(false);
         ETA.setVisible(false);
+        instructionTreeView.setManaged(false);
+        instructionTreeView.setVisible(false);
+        instructionTreeView.setDisable(true);
 
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
 
@@ -402,7 +426,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         final DrawableUser drawableUser = new DrawableUser(0, 0, "userNode", "");
 
-        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stopsList))
+        final ObjectBinding<Vertex> vertexProperty = Bindings.when(Bindings.isEmpty(stopsList).or(Bindings.isEmpty(pathVertex)))
                 .then(new Vertex("N/A", -1, -1, "N/A"))
                 .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stopsList, currentStep)));
 
@@ -423,7 +447,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         final IntegerBinding nextStepProp = Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList);
 
-        final ObjectBinding<Vertex> nextVertexProperty = Bindings.when(Bindings.isEmpty(stopsList))
+        final ObjectBinding<Vertex> nextVertexProperty = Bindings.when(Bindings.isEmpty(stopsList).or(Bindings.isEmpty(pathVertex)))
                 .then(new Vertex("N/A", -1, -1, "N/A"))
                 .otherwise(Bindings.valueAt(pathVertex, Bindings.integerValueAt(stopsList, nextStepProp)));
 
@@ -445,9 +469,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             protected void interpolate(double fraction) {
                 ghost.xCoordinateProperty().set((int) (fraction * x1.get() + (1 - fraction) * x0.get()));
                 ghost.yCoordinateProperty().set((int) (fraction * y1.get() + (1 - fraction) * y0.get()));
-
-                //FIXME: ENABLE
-                //meme.directionAngleProperty().bind(fraction * getAngleFor(x1.get));
+                ghost.directionAngleProperty().bind(Bindings.createDoubleBinding(() -> getAngleFor(nextDirection.get()), nextDirection));
             }
 
         };
@@ -515,6 +537,12 @@ public class AStarDemoController extends AbsController implements Initializable 
             }
         }
 
+
+        // Setting up instruction tree view
+        instructionTreeViewItem.getChildren().addAll(floorLowerTwoInstruction, floorLowerOneInstruction, floorGroundInstruction
+        , floorOneInstruction, floorTwoInstruction, floorThreeInstruction);
+        instructionTreeView.setRoot(instructionTreeViewItem);
+        this.instructionTreeView.setShowRoot(false);
 
         // add tree items to root item (shown in order of addition)
         rootTreeViewItem.getChildren().addAll(conferenceItem, departmentItem, entranceItem, infoItem,
@@ -767,6 +795,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     private double getAngleFor(String dir)
     {
+        if(dir == null) return 0;
         switch (dir) {
             case "UP":
                 return (Math.toRadians(90));
@@ -778,22 +807,6 @@ public class AStarDemoController extends AbsController implements Initializable 
                return (Math.toRadians(270));
         }
         return 0;
-        /*
-        switch (currentDirection.get()) {
-            case "UP":
-                userNodeDisplay.directionAngleProperty().set(Math.toRadians(90));
-                break;
-            case "LEFT":
-                userNodeDisplay.directionAngleProperty().set(0);
-                break;
-            case "RIGHT":
-                userNodeDisplay.directionAngleProperty().set(Math.toRadians(180));
-                break;
-            case "DOWN":
-                userNodeDisplay.directionAngleProperty().set(Math.toRadians(270));
-                break;
-        }
-         */
     }
 
     private String idToShortName(String ID){
@@ -1147,6 +1160,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         stopsList.clear();
         instructionsList.clear();
         etaList.clear();
+        directionsList.clear();
         if(this.pathVertex.isEmpty()) return;
 
         // Assert "Up" is forward for start
@@ -1213,6 +1227,13 @@ public class AStarDemoController extends AbsController implements Initializable 
         // Calculate ETA
         for (Integer stop : stopsList) {
             etaList.add(calculateETA(stop, pathVertex.size() - 1));
+        }
+
+        // Calculate Directions
+        direct = "UP";
+        for (String inst : instructionsList) {
+            directionsList.add(direct);
+            changeDirection(inst);
         }
     }
 
@@ -1296,70 +1317,53 @@ public class AStarDemoController extends AbsController implements Initializable 
     }
 
     private void switchDirectionDown() {
-        switch (currentDirection.get()) {
+        switch (direct) {
             case "UP":
-                currentDirection.set("DOWN");
+                direct = "DOWN";
                 break;
             case "LEFT":
-                currentDirection.set("RIGHT");
+                direct = "RIGHT";
                 break;
             case "RIGHT":
-                currentDirection.set("LEFT");
+                direct = "LEFT";
                 break;
             case "DOWN":
-                currentDirection.set("UP");
+                direct = "UP";
                 break;
         }
     }
 
     private void switchDirectionRight() {
-        switch (currentDirection.get()) {
+        switch (direct) {
             case "UP":
-                currentDirection.set("RIGHT");
+                direct = "RIGHT";
                 break;
             case "LEFT":
-                currentDirection.set("UP");
+                direct = "UP";
                 break;
             case "RIGHT":
-                currentDirection.set("DOWN");
+                direct = "DOWN";
                 break;
             case "DOWN":
-                currentDirection.set("LEFT");
+                direct = "LEFT";
                 break;
         }
     }
 
     private void switchDirectionLeft() {
-        switch (currentDirection.get()) {
+        switch (direct) {
             case "UP":
-                currentDirection.set("LEFT");
+                direct = "LEFT";
                 break;
             case "LEFT":
-                currentDirection.set("DOWN");
+                direct = "DOWN";
                 break;
             case "RIGHT":
-                currentDirection.set("UP");
+                direct = "UP";
                 break;
             case "DOWN":
-                currentDirection.set("RIGHT");
+                direct = "RIGHT";
                 break;
-        }
-    }
-
-    private void changeDirectionRevert(String inst){
-        String[] instruction = inst.split(" ");
-        if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
-            switch (instruction[1]) {
-                case "around":
-                    switchDirectionDown();
-                    break;
-                case "left":
-                    switchDirectionRight();
-                    break;
-                case "right":
-                    switchDirectionLeft();
-                    break;
-            }
         }
     }
 
@@ -1379,6 +1383,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         treeView.setManaged(false);
         treeView.setVisible(false);
         treeView.setDisable(true);
+        instructionTreeView.setManaged(true);
+        instructionTreeView.setVisible(true);
+        instructionTreeView.setDisable(false);
         about.setDisable(true);
         clear.setDisable(true);
         //mapPanel.disableInteract();
@@ -1425,10 +1432,14 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         drawSEIcons();
 
+        addInstructionsToTreeView();
+
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
         ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
+        currentDirection.bind(Bindings.stringValueAt(directionsList, currentStep));
+        nextDirection.bind(Bindings.stringValueAt(directionsList,
+                Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList)));
 
-        currentDirection.set("UP");
         setNavIcon();
         Go.setText("End Navigation");
     }
@@ -1454,7 +1465,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         mapPanel.centerNode(userNodeDisplay);
 
-        changeDirectionRevert(instructionsList.get(currentStep.get()));
         setNavIcon();
     }
 
@@ -1463,8 +1473,6 @@ public class AStarDemoController extends AbsController implements Initializable 
      * @author ZheCheng Song
      */
     public void goToNextNode() {
-        changeDirection(instructionsList.get(currentStep.get()));
-
         currentStep.set(currentStep.get() + 1);
         if(currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1)){
             Next.setDisable(true);
@@ -1498,6 +1506,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         treeView.setManaged(true);
         treeView.setVisible(true);
         treeView.setDisable(false);
+        instructionTreeView.setManaged(false);
+        instructionTreeView.setVisible(false);
+        instructionTreeView.setDisable(true);
         about.setDisable(false);
         clear.setDisable(false);
         //mapPanel.enableInteract();
@@ -1558,8 +1569,8 @@ public class AStarDemoController extends AbsController implements Initializable 
             image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/uTurnYellow.png"));
         }
         else if(curInstruction.contains("stair")){
-            final int nextFloor = mapPanel.getDoubleStringConverter().fromString(curInstruction.substring(curInstruction.length()-1)).intValue();//Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
-            final int currentFloor = mapPanel.getDoubleStringConverter().fromString(pathVertex.get(currentStep.get()-1).getFloor()).intValue();
+            final int nextFloor = mapPanel.getDoubleStringConverter().fromString(curInstruction.substring(curInstruction.length()-2)).intValue();//Integer.parseInt(curInstruction.substring(curInstruction.length()-1));
+            final int currentFloor = mapPanel.getDoubleStringConverter().fromString(pathVertex.get(currentStep.get()).getFloor()).intValue();
             if(nextFloor > currentFloor){
                 image = new Image(getClass().getResourceAsStream("/imagesAndLogos/navIcons/goUpStairsYellow.png"));
             } else {
@@ -1916,6 +1927,68 @@ public class AStarDemoController extends AbsController implements Initializable 
         }else{
             while(step != currentStep.get()){
                 goToPrevNode();
+            }
+        }
+    }
+
+    public void handleInstructionListSelection(MouseEvent mouseEvent) {
+        if(instructionTreeView.getSelectionModel().getSelectedItem()!=null &&
+                !instructionTreeView.getSelectionModel().getSelectedItem().getParent().equals(instructionTreeViewItem) &&
+                !instructionTreeView.getSelectionModel().getSelectedItem().equals(instructionTreeViewItem)) { // Do not center on drop downs, root item or null items, only actual nodes
+            // Fill in
+            int index = getInstructionIndex(instructionTreeView.getSelectionModel().getSelectedItem().getValue());
+            goToStep(index);
+        }
+    }
+
+    private int getInstructionIndex (String ins) {
+        for(int i = 0; i < instructionsList.size(); i++){
+            if (ins.contains(instructionsList.get(i)))
+                return i;
+        }
+        return -1;
+    }
+
+    private void addInstructionsToTreeView(){
+        floorTwoInstruction.getChildren().clear();
+        floorLowerOneInstruction.getChildren().clear();
+        floorGroundInstruction.getChildren().clear();
+        floorOneInstruction.getChildren().clear();
+        floorTwoInstruction.getChildren().clear();
+        floorThreeInstruction.getChildren().clear();
+
+        String floor = pathVertex.get(0).getFloor();
+        int index = 0;
+        for(String ins : instructionsList){
+            index++;
+            switch (floor) {
+                case "L2":
+                    floorLowerTwoInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "L1":
+                    floorLowerOneInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "G":
+                case " G":
+                    floorGroundInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "1":
+                case " 1":
+                    floorOneInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "2":
+                case " 2":
+                    floorTwoInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                case "3":
+                case " 3":
+                    floorThreeInstruction.getChildren().add(new TreeItem<>(index + ". " +ins));
+                    break;
+                default:
+                    break;
+            }
+            if(ins.contains("Take")){
+                floor = ins.substring(ins.length()-2);
             }
         }
     }
