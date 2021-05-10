@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF;
 
+import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
 import edu.wpi.cs3733.D21.teamF.database.ConnectionHandler;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.utils.CSVManager;
@@ -7,6 +8,7 @@ import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -50,7 +52,13 @@ public class  AppF extends Application {
       }
     }));
     try {
-      primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"))));
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
+      Parent root = loader.load();
+      ((AbsController)loader.getController()).initLanguage();
+
+      primaryStage.setScene(new Scene(root));
+
       primaryStage.show();
       //SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");//DefaultPageView.fxml"); Commented out to deal with initial boot ( the .getScene() call in switchScene() will return null unless we manually load it in to start) - KD
     } catch (IOException e) {
