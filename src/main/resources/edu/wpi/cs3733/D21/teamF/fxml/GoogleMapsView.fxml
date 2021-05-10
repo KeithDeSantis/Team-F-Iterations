@@ -15,11 +15,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <?import javafx.scene.text.Text?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.GoogleMapsViewController">
     <children>
-        <AnchorPane fx:id="header" prefHeight="90.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
+        <AnchorPane fx:id="header" prefHeight="90.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <HBox alignment="CENTER_LEFT" layoutY="-22.706666946411133" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
@@ -44,9 +44,9 @@
             <padding>
                 <Insets bottom="5.0" left="5.0" top="5.0" />
             </padding></AnchorPane>
-        <VBox prefHeight="420.0" prefWidth="960.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
+        <VBox prefHeight="420.0" prefWidth="960.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
             <children>
-                <HBox alignment="CENTER" prefHeight="288.0" prefWidth="960.0">
+                <HBox alignment="CENTER" prefHeight="288.0" prefWidth="960.0" VBox.vgrow="ALWAYS">
                     <children>
                         <GridPane alignment="CENTER" prefHeight="288.0" prefWidth="320.0">
                             <columnConstraints>
@@ -54,8 +54,6 @@
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.99999237060547" minWidth="10.0" prefWidth="190.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -81,7 +79,7 @@
                                     <GridPane.margin>
                                         <Insets right="25.0" />
                                     </GridPane.margin></Label>
-                                <JFXComboBox fx:id="state" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <JFXComboBox fx:id="state" prefHeight="27.0" prefWidth="58.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                 <JFXTextField fx:id="city" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                 <JFXTextField fx:id="streetAddress" GridPane.columnIndex="1" />
                                 <JFXTextField fx:id="zipCode" GridPane.columnIndex="1" GridPane.rowIndex="3">
@@ -89,31 +87,41 @@
                                         <Insets />
                                     </GridPane.margin>
                                 </JFXTextField>
-                                <Label text="To:" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-                                <Label text="Destination:" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
-                                    <GridPane.margin>
-                                        <Insets right="25.0" />
-                                    </GridPane.margin>
-                                </Label>
-                                <JFXComboBox fx:id="destination" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                             </children>
                         </GridPane>
-                        <VBox alignment="CENTER" prefHeight="288.0" prefWidth="463.0">
+                        <VBox alignment="CENTER" prefHeight="288.0" prefWidth="463.0" HBox.hgrow="SOMETIMES">
                             <HBox.margin>
-                                <Insets left="25.0" />
+                                <Insets left="25.0" right="25.0" />
                             </HBox.margin>
                             <children>
-                                <JFXTextArea fx:id="outputBox" focusColor="#405aa800" prefHeight="250.0" prefWidth="463.0" style="-fx-border-radius: 5; -fx-border-color: #000000;" unFocusColor="#4d4d4d00" />
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+                           <children>
+                              <Label text="Directions to:">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="destinationAddress">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                                <JFXTextArea fx:id="outputBox" focusColor="#405aa800" prefHeight="2000.0" prefWidth="463.0" style="-fx-border-radius: 5; -fx-border-color: #000000;" unFocusColor="#4d4d4d00" />
                             </children></VBox>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="60.0" VBox.vgrow="SOMETIMES">
                     <children>
                         <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
                         <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                         <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
                         <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
                     </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
                 </HBox>
             </children>
         </VBox>

@@ -5,6 +5,7 @@ import edu.wpi.cs3733.D21.teamF.pathfinding.GoogleAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ public class GoogleMapsViewController extends AbsController {
     @FXML
     private JFXTextField zipCode;
     @FXML
-    private JFXComboBox<String> destination;
+    private Label destinationLabel;
     @FXML
     private JFXButton cancelButton;
     @FXML
@@ -46,10 +47,6 @@ public class GoogleMapsViewController extends AbsController {
         return zipCode;
     }
 
-    public JFXComboBox<String> getDestination() {
-        return destination;
-    }
-
     public void setStreetAddress(JFXTextField streetAddress) {
         this.streetAddress = streetAddress;
     }
@@ -64,10 +61,6 @@ public class GoogleMapsViewController extends AbsController {
 
     public void setZipCode(JFXTextField zipCode) {
         this.zipCode = zipCode;
-    }
-
-    public void setDestination(JFXComboBox<String> destination) {
-        this.destination = destination;
     }
 
     @FXML
@@ -106,14 +99,9 @@ public class GoogleMapsViewController extends AbsController {
         }
         else if (buttonPushed == clearButton){
             JFXTextField[] values = {streetAddress, city, zipCode};
-            JFXComboBox[] combos = {state, destination};
 
             for (JFXTextField j : values){
                 j.setText("");
-            }
-
-            for (JFXComboBox j : combos){
-                j.setValue(null);
             }
         }
     }
