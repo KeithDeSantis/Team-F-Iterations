@@ -169,7 +169,8 @@ public class DefaultPageController extends AbsController {
                     surveyButton2.setManaged(false);
                     surveyButton2.setVisible(false);
             }
-            loginLabel.setText("Hello, " + user.getUsername() + "!");
+            loginLabel.textProperty().unbind();
+            loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("Hello, " + user.getUsername() + "!"));
 
         } else if (CurrentUser.getCurrentUser().getUuid() != null &&
                 isCleared(CurrentUser.getCurrentUser().getUuid())) {
@@ -188,14 +189,16 @@ public class DefaultPageController extends AbsController {
             surveyButton2.setManaged(true);
             surveyButton2.setVisible(true);
 
-            loginLabel.setText("Please Log in.");
+            loginLabel.textProperty().unbind();
+            loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("PLease Log in."));
         } else {
             buttons.setVisible(false);
             covidBox.setVisible(true);
             covidBox.setManaged(true);
             surveyButton.setVisible(true);
             surveyButton.setManaged(true);
-            loginLabel.setText("Please Log in.");
+            loginLabel.textProperty().unbind();
+            loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("PLease Log in."));
         }
     }
 
