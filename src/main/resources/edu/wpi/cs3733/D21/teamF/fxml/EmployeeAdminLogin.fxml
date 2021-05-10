@@ -12,8 +12,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <?import javafx.scene.text.Text?>
+
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.EmployeeAdminLoginController">
    <children>
       <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -70,14 +70,23 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </JFXPasswordField>
-            <JFXButton fx:id="signIn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" defaultButton="true" onAction="#handleButtonPushed" prefWidth="2000.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Sign In" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <JFXButton fx:id="register" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" defaultButton="true" onAction="#handleButtonPushed" prefWidth="1000.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Register">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="signIn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" defaultButton="true" onAction="#handleButtonPushed" prefWidth="1000.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Sign In">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                  </JFXButton>
+               </children>
                <VBox.margin>
-                  <Insets left="150.0" right="150.0" />
+                  <Insets left="20.0" right="20.0" />
                </VBox.margin>
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-            </JFXButton>
+            </HBox>
             <JFXButton fx:id="goBack" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleButtonPushed" prefWidth="2000.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Go back" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />

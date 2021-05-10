@@ -112,8 +112,7 @@ class UserHandler implements DatabaseEntry {
         byte[] salt;
         if (resultSet.next()) {
             salt = resultSet.getBytes(6);
-            if (encryptPassword(password, salt).equals(resultSet.getString(4)) &&
-                    resultSet.getString(5).equals("true")) {
+            if (encryptPassword(password, salt).equals(resultSet.getString(4))) {
                 authenticated = true;
             }
         }

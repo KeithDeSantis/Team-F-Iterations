@@ -71,6 +71,7 @@ public class DefaultPageController extends AbsController {
         //Bind login/logout
         loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
 
+        employeeAdminSignIn.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
 
         loginButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginButton.getText()));
 
@@ -123,54 +124,62 @@ public class DefaultPageController extends AbsController {
     private void resetButtons() throws SQLException {
         AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
         if (user != null && CurrentUser.getCurrentUser().isAuthenticated()) {
-            changeButtons();
-            switch (user.getUserType()) {
-                case "administrator":
-                    manageServices.setManaged(true);
-                    manageServices.setVisible(true);
-                    editMap.setManaged(true);
-                    editMap.setVisible(true);
-                    pathfindingSettingButton.setManaged(true);
-                    pathfindingSettingButton.setVisible(true);
-                    manageAccount.setManaged(true);
-                    manageAccount.setVisible(true);
-                    surveyButton.setManaged(false);
-                    surveyButton.setVisible(false);
-                    surveyButton2.setManaged(false);
-                    surveyButton2.setVisible(false);
-                    break;
+            if(user.getCovidStatus().equals("")){
+                buttons.setVisible(false);
+                covidBox.setVisible(true);
+                covidBox.setManaged(true);
+                surveyButton.setVisible(true);
+                surveyButton.setManaged(true);
+                loginLabel.setText("Please Log in.");
+            }else {
+                changeButtons();
+                switch (user.getUserType()) {
+                    case "administrator":
+                        manageServices.setManaged(true);
+                        manageServices.setVisible(true);
+                        editMap.setManaged(true);
+                        editMap.setVisible(true);
+                        pathfindingSettingButton.setManaged(true);
+                        pathfindingSettingButton.setVisible(true);
+                        manageAccount.setManaged(true);
+                        manageAccount.setVisible(true);
+                        surveyButton.setManaged(false);
+                        surveyButton.setVisible(false);
+                        surveyButton2.setManaged(false);
+                        surveyButton2.setVisible(false);
+                        break;
 
-                case "employee":
-                    manageServices.setManaged(true);
-                    manageServices.setVisible(true);
-                    editMap.setManaged(true);
-                    editMap.setVisible(true);
-                    pathfindingSettingButton.setManaged(false);
-                    pathfindingSettingButton.setVisible(false);
-                    manageAccount.setManaged(false);
-                    manageAccount.setVisible(false);
-                    surveyButton.setManaged(false);
-                    surveyButton.setVisible(false);
-                    surveyButton2.setManaged(false);
-                    surveyButton2.setVisible(false);
-                    break;
+                    case "employee":
+                        manageServices.setManaged(true);
+                        manageServices.setVisible(true);
+                        editMap.setManaged(true);
+                        editMap.setVisible(true);
+                        pathfindingSettingButton.setManaged(false);
+                        pathfindingSettingButton.setVisible(false);
+                        manageAccount.setManaged(false);
+                        manageAccount.setVisible(false);
+                        surveyButton.setManaged(false);
+                        surveyButton.setVisible(false);
+                        surveyButton2.setManaged(false);
+                        surveyButton2.setVisible(false);
+                        break;
 
-                default:
-                    manageServices.setManaged(false);
-                    manageServices.setVisible(false);
-                    editMap.setManaged(false);
-                    editMap.setVisible(false);
-                    pathfindingSettingButton.setManaged(false);
-                    pathfindingSettingButton.setVisible(false);
-                    manageAccount.setManaged(false);
-                    manageAccount.setVisible(false);
-                    surveyButton.setManaged(false);
-                    surveyButton.setVisible(false);
-                    surveyButton2.setManaged(false);
-                    surveyButton2.setVisible(false);
+                    default:
+                        manageServices.setManaged(false);
+                        manageServices.setVisible(false);
+                        editMap.setManaged(false);
+                        editMap.setVisible(false);
+                        pathfindingSettingButton.setManaged(false);
+                        pathfindingSettingButton.setVisible(false);
+                        manageAccount.setManaged(false);
+                        manageAccount.setVisible(false);
+                        surveyButton.setManaged(false);
+                        surveyButton.setVisible(false);
+                        surveyButton2.setManaged(false);
+                        surveyButton2.setVisible(false);
+                }
+                loginLabel.setText("Hello, " + user.getUsername() + "!");
             }
-            loginLabel.setText("Hello, " + user.getUsername() + "!");
-
         } else if (CurrentUser.getCurrentUser().getUuid() != null &&
                 isCleared(CurrentUser.getCurrentUser().getUuid())) {
             covidBox.setVisible(false);
@@ -208,7 +217,7 @@ public class DefaultPageController extends AbsController {
      * @author ZheCheng Song
     */
     @FXML
-    private void handleButtonPushed(ActionEvent actionEvent) throws IOException, SQLException {
+    private void handleButtonPushed(ActionEvent actionEvent) throws Exception {
 
         Button buttonPushed = (Button) actionEvent.getSource();  //Getting current stage
 
@@ -257,11 +266,25 @@ public class DefaultPageController extends AbsController {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
         }
         else if (buttonPushed == employeeAdminSignIn){
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
+            if(CurrentUser.getCurrentUser().isAuthenticated())
+                CurrentUser.getCurrentUser().logout();
+            else
+                SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
         }
-        else if (buttonPushed == enterApp){
-                //do we need to check to see if the input is a uuid or username?
-                if(!completed(verifyAgain.getText()).isEmpty()) {
+        else if (buttonPushed == enterApp) {
+            //do we need to check to see if the input is a uuid or username?
+            if (CurrentUser.getCurrentUser().isAuthenticated()) {
+                AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
+                if (!completed(verifyAgain.getText()).isEmpty()) {
+                    isCompleted = true;
+                    DatabaseAPI.getDatabaseAPI().editUser(user.getUsername(), Boolean.toString(isCleared(verifyAgain.getText())) , "cleared");
+                    CurrentUser.getCurrentUser().logout();
+                    resetButtons();
+                } else {
+                    fillOutTheSurvey.setStyle("-fx-text-fill: #c60000FF;");
+                }
+            } else {
+                if (!completed(verifyAgain.getText()).isEmpty()) {
                     isCompleted = true;
                     if (isCleared(verifyAgain.getText())) {
                         covidBox.setVisible(false);
@@ -281,12 +304,12 @@ public class DefaultPageController extends AbsController {
                     } else {
                         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
                     }
-                }
-                else{
+                } else {
                     fillOutTheSurvey.setStyle("-fx-text-fill: #c60000FF;");
                 }
             }
         }
+    }
     private String completed(String ticketID) throws SQLException {
         String complete = "";
 

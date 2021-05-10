@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
@@ -14,13 +15,11 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class EmployeeAdminLoginController extends AbsController {
+public class RegisterController extends AbsController {
     @FXML
     private JFXTextField username;
     @FXML
     private JFXPasswordField password;
-    @FXML
-    private JFXButton signIn;
     @FXML
     private JFXButton register;
     @FXML
@@ -31,36 +30,29 @@ public class EmployeeAdminLoginController extends AbsController {
 
     public void handleButtonPushed(ActionEvent actionEvent) throws IOException, SQLException {
         Button buttonPushed = (JFXButton) actionEvent.getSource();  //Getting current stage
-        if (buttonPushed == signIn) {
-            if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
-                DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin", "true");
-                DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff", "true");
-                DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest", "true");
-            }
+        if (buttonPushed == register) {
             String user = username.getText();
             String pass = password.getText();
 
             try {
-                if (CurrentUser.getCurrentUser().login(user, pass)) {
-                    SceneContext.getSceneContext().loadDefault();
-                } else {
+                if(DatabaseAPI.getDatabaseAPI().getUser(user) != null){
                     errorMessage.setStyle("-fx-text-fill: #c60000FF;");
-                    errorMessage.setText("Username and/or password do not match our records");
+                    errorMessage.setText("User already exist!");
+                    username.setText("");
                     password.setText("");
+                }else {
+                    DatabaseAPI.getDatabaseAPI().addUser(user, "visitor", user, pass, "");
+                    SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
                 }
             } catch (NullPointerException n) {
                 errorMessage.setStyle("-fx-text-fill: #c60000FF;");
-                errorMessage.setText("Null Pointer!");
                 password.setText("");
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         else if (buttonPushed == goBack) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
-        }else if(buttonPushed == register){
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/RegisterView.fxml");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/EmployeeAdminLogin.fxml");
         }
 
     }
+
 }
