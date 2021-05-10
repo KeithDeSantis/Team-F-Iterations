@@ -36,6 +36,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
@@ -117,9 +118,10 @@ public class AStarDemoController extends AbsController implements Initializable 
     private DrawableUser userNodeDisplay;
 
     @FXML
-    private Label startLabel;
+    private HBox topHBox;
+
     @FXML
-    private Label endLabel;
+    private HBox lowerHBox;
 
     // Global variables for the stepper
     private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
@@ -205,9 +207,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         serviceItem.setGraphic(serviceGraphic);
 
         //ahf - yes this should be done better. At some point.
-        startLabel.textProperty().bind(startNode);
-        endLabel.textProperty().bind(endNode);
-
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
             List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
@@ -437,6 +436,14 @@ public class AStarDemoController extends AbsController implements Initializable 
         instructionTreeView.setDisable(true);
 
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
+
+        topHBox.visibleProperty().bind(isCurrentlyNavigating.not());
+        topHBox.disableProperty().bind(isCurrentlyNavigating);
+        topHBox.managedProperty().bind(isCurrentlyNavigating.not());
+        lowerHBox.visibleProperty().bind(isCurrentlyNavigating);
+        lowerHBox.disableProperty().bind(isCurrentlyNavigating.not());
+        lowerHBox.managedProperty().bind(isCurrentlyNavigating);
+
 
 
         /*
