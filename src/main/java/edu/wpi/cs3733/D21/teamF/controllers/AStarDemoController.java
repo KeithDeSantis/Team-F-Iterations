@@ -37,6 +37,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Text;
@@ -166,6 +167,43 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        final Rectangle confGraphic = new Rectangle(16, 16);
+        confGraphic.setFill(getNodeTypeColor("CONF"));
+        conferenceItem.setGraphic(confGraphic);
+
+        final Rectangle deptGraphic = new Rectangle(16, 16);
+        deptGraphic.setFill(getNodeTypeColor("DEPT"));
+        departmentItem.setGraphic(deptGraphic);
+
+        final Rectangle exitGraphic = new Rectangle(16, 16);
+        exitGraphic.setFill(getNodeTypeColor("EXIT"));
+        entranceItem.setGraphic(exitGraphic);
+
+        final Rectangle infoGraphic = new Rectangle(16, 16);
+        infoGraphic.setFill(getNodeTypeColor("INFO"));
+        infoItem.setGraphic(infoGraphic);
+
+        final Rectangle labsGraphic = new Rectangle(16, 16);
+        labsGraphic.setFill(getNodeTypeColor("LABS"));
+        labItem.setGraphic(labsGraphic);
+
+        final Rectangle parkingGraphic = new Rectangle(16, 16);
+        parkingGraphic.setFill(getNodeTypeColor("PARK"));
+        parkingItem.setGraphic(parkingGraphic);
+
+        final Rectangle restroomGraphic = new Rectangle(16, 16);
+        restroomGraphic.setFill(getNodeTypeColor("REST"));
+        restroomItem.setGraphic(restroomGraphic);
+
+        final Rectangle retailGraphic = new Rectangle(16, 16);
+        retailGraphic.setFill(getNodeTypeColor("RETL"));
+        retailItem.setGraphic(retailGraphic);
+
+        final Rectangle serviceGraphic = new Rectangle(16, 16);
+        serviceGraphic.setFill(getNodeTypeColor("SERV"));
+        serviceItem.setGraphic(serviceGraphic);
+
         //ahf - yes this should be done better. At some point.
         startLabel.textProperty().bind(startNode);
         endLabel.textProperty().bind(endNode);
