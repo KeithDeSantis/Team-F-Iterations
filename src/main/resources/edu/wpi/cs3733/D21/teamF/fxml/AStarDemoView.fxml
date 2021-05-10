@@ -13,8 +13,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import edu.wpi.cs3733.uicomponents.MapPanel?>
 
+<?import edu.wpi.cs3733.uicomponents.MapPanel?>
 <VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
       <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -45,11 +45,23 @@
             <JFXTreeView fx:id="instructionTreeView" onMouseClicked="#handleInstructionListSelection" prefWidth="250" stylesheets="/stylesheets/TreeViewStyle.css" />
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS"/>
+                  <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS" />
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
                            <children>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Start:" />
+                                    <Label fx:id="startLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="93.0" prefWidth="89.0" textAlignment="CENTER" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                                 <children>
+                                    <Label text="End:" />
+                                    <Label fx:id="endLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="82.0" textAlignment="CENTER" wrapText="true" />
+                                 </children>
+                              </VBox>
                               <JFXButton fx:id="about" buttonType="RAISED" onAction="#gotoAboutPage" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="About" />
                               <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                               <JFXButton fx:id="Go" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation" />
