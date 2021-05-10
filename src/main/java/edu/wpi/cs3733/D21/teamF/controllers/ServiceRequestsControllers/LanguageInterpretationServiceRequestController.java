@@ -47,17 +47,6 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      */
     public void handleHelp(ActionEvent actionEvent) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml");
-        /*
-        Stage submittedStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml"));
-        Scene helpPopUp = new Scene(root);
-        submittedStage.setScene(helpPopUp);
-        submittedStage.setTitle("Language Interpretation Help");
-        submittedStage.initModality(Modality.APPLICATION_MODAL);
-        submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
-        submittedStage.showAndWait();
-
-         */
     }
     /**
      * Calls translate function when translate button is clicked
@@ -69,7 +58,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
             String target = Translator.getTranslator().getLangCode(language.getValue()); //gets lang code of the lang specified
             Translator.getTranslator().setLanguage(target);
         } else {
-            setTextErrorStyle(language);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
+            alert.setTitle("Language Missing");
+            alert.setHeaderText("Specify language");
+            alert.setContentText("Please select a language from the dropdown list.");
+            alert.showAndWait();
         }
     }
 

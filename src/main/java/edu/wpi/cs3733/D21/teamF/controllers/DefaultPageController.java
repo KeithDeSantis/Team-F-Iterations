@@ -29,6 +29,8 @@ public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton navigation;
     @FXML
+    private JFXButton googleMapsPage;
+    @FXML
     private JFXButton serviceRequest;
     @FXML
     private JFXButton quit;
@@ -82,6 +84,8 @@ public class DefaultPageController extends AbsController {
 
         serviceRequest.textProperty().bind(Translator.getTranslator().getTranslationBinding(serviceRequest.getText()));
 
+        googleMapsPage.textProperty().bind(Translator.getTranslator().getTranslationBinding(googleMapsPage.getText()));
+
         manageServices.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageServices.getText()));
 
         manageAccount.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageAccount.getText()));
@@ -134,6 +138,8 @@ public class DefaultPageController extends AbsController {
                     pathfindingSettingButton.setVisible(true);
                     manageAccount.setManaged(true);
                     manageAccount.setVisible(true);
+                    googleMapsPage.setVisible(true);
+                    googleMapsPage.setManaged(true);
                     surveyButton.setManaged(false);
                     surveyButton.setVisible(false);
                     surveyButton2.setManaged(false);
@@ -145,6 +151,8 @@ public class DefaultPageController extends AbsController {
                     manageServices.setVisible(true);
                     editMap.setManaged(true);
                     editMap.setVisible(true);
+                    googleMapsPage.setVisible(true);
+                    googleMapsPage.setManaged(true);
                     pathfindingSettingButton.setManaged(false);
                     pathfindingSettingButton.setVisible(false);
                     manageAccount.setManaged(false);
@@ -160,6 +168,8 @@ public class DefaultPageController extends AbsController {
                     manageServices.setVisible(false);
                     editMap.setManaged(false);
                     editMap.setVisible(false);
+                    googleMapsPage.setVisible(true);
+                    googleMapsPage.setManaged(true);
                     pathfindingSettingButton.setManaged(false);
                     pathfindingSettingButton.setVisible(false);
                     manageAccount.setManaged(false);
@@ -169,7 +179,8 @@ public class DefaultPageController extends AbsController {
                     surveyButton2.setManaged(false);
                     surveyButton2.setVisible(false);
             }
-            loginLabel.setText("Hello, " + user.getUsername() + "!");
+            loginLabel.textProperty().unbind();
+            loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("Hello, " + user.getUsername() + "!"));
 
         } else if (CurrentUser.getCurrentUser().getUuid() != null &&
                 isCleared(CurrentUser.getCurrentUser().getUuid())) {
@@ -188,14 +199,16 @@ public class DefaultPageController extends AbsController {
             surveyButton2.setManaged(true);
             surveyButton2.setVisible(true);
 
-            loginLabel.setText("Please Log in.");
+            loginLabel.textProperty().unbind();
+            loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("PLease Log in."));
         } else {
             buttons.setVisible(false);
             covidBox.setVisible(true);
             covidBox.setManaged(true);
             surveyButton.setVisible(true);
             surveyButton.setManaged(true);
-            loginLabel.setText("Please Log in.");
+            loginLabel.textProperty().unbind();
+            loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("PLease Log in."));
         }
     }
 
@@ -218,7 +231,12 @@ public class DefaultPageController extends AbsController {
                 resetButtons();
             }else
                 SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
-        } else if (buttonPushed == editMap) {
+        }else if (buttonPushed == googleMapsPage){
+            System.out.println("here");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GoogleMapsView.fxml");
+            System.out.println("here1");
+        }
+        else if (buttonPushed == editMap) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
         } else if (buttonPushed == manageServices) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManagerView.fxml");
@@ -230,6 +248,7 @@ public class DefaultPageController extends AbsController {
                 submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
                 Stage submittedStage = new Stage();
                 Parent root = submittedPageLoader.load();
+                SceneContext.autoTranslate(root);
                 Scene submitScene = new Scene(root);
                 submittedStage.setScene(submitScene);
                 submittedStage.setTitle("Check COVID Status");
@@ -245,6 +264,7 @@ public class DefaultPageController extends AbsController {
             dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/PreferredPathfindingAlgoView.fxml"));
             Stage dialogStage = new Stage();
             Parent root2 = dialogLoader.load();
+            SceneContext.autoTranslate(root2);
             dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
             dialogStage.initOwner(pathfindingSettingButton.getScene().getWindow());
             dialogStage.setScene(new Scene(root2)); // set scene - KD
@@ -306,7 +326,7 @@ public class DefaultPageController extends AbsController {
         dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidVaccineDialog.fxml"));
         final Stage dialogStage = new Stage();
         final Parent root = dialogLoader.load();
-
+        SceneContext.autoTranslate(root);
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.initOwner(surveyButton.getScene().getWindow());
         dialogStage.setScene(new Scene(root));
