@@ -19,7 +19,7 @@ public class GoogleMapsViewController extends AbsController {
     @FXML
     private JFXTextField zipCode;
     @FXML
-    private Label destinationLabel;
+    private Label destinationAddress;
     @FXML
     private JFXButton cancelButton;
     @FXML
@@ -89,6 +89,8 @@ public class GoogleMapsViewController extends AbsController {
             String address = streetAddress.getText() + " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
             String closestLot = GoogleAPI.getGoogleAPI().parseClosestParkingLot(address);
             String[] directions = GoogleAPI.getGoogleAPI().queryAPI(address, closestLot);
+            String eta = directions[1];
+            destinationAddress.setText(closestLot);
             outputBox.setText(directions[0]);
         }
         else if (buttonPushed == cancelButton){

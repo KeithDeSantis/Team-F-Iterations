@@ -138,8 +138,8 @@ public class DefaultPageController extends AbsController {
                     pathfindingSettingButton.setVisible(true);
                     manageAccount.setManaged(true);
                     manageAccount.setVisible(true);
-                    //googleMapsPage.setVisible(true);
-                    //googleMapsPage.setManaged(true);
+                    googleMapsPage.setVisible(true);
+                    googleMapsPage.setManaged(true);
                     surveyButton.setManaged(false);
                     surveyButton.setVisible(false);
                     surveyButton2.setManaged(false);
@@ -151,6 +151,8 @@ public class DefaultPageController extends AbsController {
                     manageServices.setVisible(true);
                     editMap.setManaged(true);
                     editMap.setVisible(true);
+                    googleMapsPage.setVisible(true);
+                    googleMapsPage.setManaged(true);
                     pathfindingSettingButton.setManaged(false);
                     pathfindingSettingButton.setVisible(false);
                     manageAccount.setManaged(false);
@@ -166,6 +168,8 @@ public class DefaultPageController extends AbsController {
                     manageServices.setVisible(false);
                     editMap.setManaged(false);
                     editMap.setVisible(false);
+                    googleMapsPage.setVisible(true);
+                    googleMapsPage.setManaged(true);
                     pathfindingSettingButton.setManaged(false);
                     pathfindingSettingButton.setVisible(false);
                     manageAccount.setManaged(false);
