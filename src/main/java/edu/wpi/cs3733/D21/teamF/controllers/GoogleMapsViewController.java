@@ -1,16 +1,14 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
-import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GoogleAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-import javafx.event.ActionEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 
-public class GoogleMapsViewController extends AbsController{
+public class GoogleMapsViewController extends AbsController {
     @FXML
     private JFXTextField streetAddress;
     @FXML
@@ -73,13 +71,11 @@ public class GoogleMapsViewController extends AbsController{
     }
 
     @FXML
-    public void initialize(){
+    private void initialize(){
         String[] stateAbbreviations = {"AK","AL","AR","AZ","CA","CO","CT","DE","FL","GA","HI","IA","ID","IL","IN","KS",
                 "KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR",
                 "PA","RI","SC","SD","TN","TX","UT","VA","VT","WA","WI","WV","WY"};
-        for (String s : stateAbbreviations){
-            state.getItems().add(s);
-        }
+        state.getItems().addAll(stateAbbreviations);
     }
 
     /*
@@ -93,9 +89,9 @@ public class GoogleMapsViewController extends AbsController{
      */
 
     @FXML
-    public void handleButtonPushed(ActionEvent actionEvent) throws IOException {
+    private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
         JFXButton buttonPushed = (JFXButton) actionEvent.getSource();
-
+        
         if (buttonPushed == submitButton){
             String address = streetAddress.getText() + " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
             String closestLot = GoogleAPI.getGoogleAPI().parseClosestParkingLot(address);
@@ -121,5 +117,4 @@ public class GoogleMapsViewController extends AbsController{
             }
         }
     }
-
 }

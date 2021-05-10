@@ -16,22 +16,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.text.Text?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.GoogleMapsViewController">
     <children>
-        <HBox fx:id="header" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="header" prefHeight="90.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
             <children>
-                <ImageView fx:id="goBack" fitHeight="120.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
-                    </image>
-                </ImageView>
-                <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="117.0" prefWidth="746.0" text="BRIGHAM AND WOMEN'S HOSPITAL Google Maps Directions" wrapText="true">
-                    <font>
-                        <Font name="Volkhov Regular" size="40.0" />
-                    </font>
-                </Label>
+                <HBox alignment="CENTER_LEFT" layoutY="-22.706666946411133" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+                            </image>
+                        </ImageView>
+                        <Text fx:id="title" text="BRIGHAM AND WOMEN'S HOSPITAL">
+                            <font>
+                                <Font name="Volkhov Regular" size="40.0" />
+                            </font>
+                        </Text>
+                    </children>
+                </HBox>
+                <HBox layoutX="805.0" layoutY="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                    <children>
+                        <JFXComboBox fx:id="languageSelect" maxWidth="150.0" minWidth="150.0" onAction="#changeLanguage" prefWidth="150.0" />
+                    </children>
+                </HBox>
             </children>
-        </HBox>
+            <padding>
+                <Insets bottom="5.0" left="5.0" top="5.0" />
+            </padding></AnchorPane>
         <VBox prefHeight="420.0" prefWidth="960.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
             <children>
                 <HBox alignment="CENTER" prefHeight="288.0" prefWidth="960.0">
