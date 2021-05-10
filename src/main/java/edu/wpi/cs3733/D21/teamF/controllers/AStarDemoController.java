@@ -26,7 +26,6 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
@@ -63,8 +62,6 @@ import java.util.stream.Collectors;
 
 public class AStarDemoController extends AbsController implements Initializable {
 
-    @FXML
-    private ImageView goBack;
 
     @FXML
     private MapPanel mapPanel;
@@ -387,21 +384,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 mapPanel.showDialog(dialog);
             });
 
-            addFavoriteMenu.setOnAction(e -> {
-                if (addFavoriteMenu.getText().equals("Add To Favorites")) {
-                    try {
-                        addNodeToFavorites(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                } else {
-                    try {
-                        removeNodeFromFavorites(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                }
-            });
+            addFavoriteFromMenu(addFavoriteMenu, currEntry);
         });
 
         Go.setDisable(true);
@@ -723,21 +706,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 mapPanel.showDialog(dialog);
             });
 
-            addFavoriteMenu.setOnAction(e -> {
-                if (addFavoriteMenu.getText().equals("Add To Favorites")) {
-                    try {
-                        addNodeToFavorites(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                } else {
-                    try {
-                        removeNodeFromFavorites(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                }
-            });
+            addFavoriteFromMenu(addFavoriteMenu, currEntry);
         });
         try{
             if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "additionalInstructions").getCompleteStatus().equals("false")) {
@@ -753,6 +722,24 @@ public class AStarDemoController extends AbsController implements Initializable 
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+    }
+
+    private void addFavoriteFromMenu(MenuItem addFavoriteMenu, NodeEntry currEntry) {
+        addFavoriteMenu.setOnAction(e -> {
+            if (addFavoriteMenu.getText().equals("Add To Favorites")) {
+                try {
+                    addNodeToFavorites(currEntry);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+            } else {
+                try {
+                    removeNodeFromFavorites(currEntry);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+            }
+        });
     }
 
     private String shortNameToID(String shortName){
@@ -829,22 +816,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         return closest;
     }
 
-    /**
-     * Handles the pushing of a button on the screen
-     *
-     * @param actionEvent the button's push
-     * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
-     * @author ZheCheng Song
-     */
-    @FXML
-    public void handleButtonPushed(ActionEvent actionEvent) throws IOException {
-
-        ImageView buttonPushed = (ImageView) actionEvent.getSource();  //Getting current stage
-
-        if (buttonPushed == goBack) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-        }
-    }
 
     /**
      *
@@ -889,10 +860,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             drawableNode.scaleXProperty().bind(Bindings.when(isStartOrEndNode.or(isStop)).then(1).otherwise(0.8));
             drawableNode.scaleYProperty().bind(drawableNode.scaleXProperty());
-           // drawableNode.scaleYProperty().bind(Bindings.when(isStartOrEndNode).then(1).otherwise(0.8));
-//            drawableNode.radiusProperty().bind(Bindings.when(isStartOrEndNode).then(10).otherwise(5));
 
-            //  drawableNode.fillProperty().set(new Color(0, 0, 0, 0));
             drawableNode.setStrokeWidth(2.0);
 
             drawableNode.fillProperty().bind(Bindings.when(isStartOrEndNode).then(getNodeTypeColor(drawableNode.getNodeType())).otherwise(
@@ -1497,15 +1465,11 @@ public class AStarDemoController extends AbsController implements Initializable 
         instructionTreeView.setDisable(true);
         about.setDisable(false);
         clear.setDisable(false);
-        //mapPanel.enableInteract();
 
         unDrawSEIcons();
 
-        //mapPanel.switchMap(pathVertex.get(0).getFloor());
-        //mapPanel.centerNode(startNodeDisplay);
         Go.textProperty().unbind();
         Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("Start Navigation"));
-        //Go.setText("Start Navigation");
     }
 
     /**
