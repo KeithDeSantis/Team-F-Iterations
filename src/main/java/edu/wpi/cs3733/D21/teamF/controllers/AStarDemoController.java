@@ -162,12 +162,6 @@ public class AStarDemoController extends AbsController implements Initializable 
     TreeItem<String> recentItem = new TreeItem<>("Recently Used");
 
     TreeItem<String> instructionTreeViewItem = new TreeItem<>("Instructions");
-    TreeItem<String> floorOneInstruction = new TreeItem<>("Floor One Instructions");
-    TreeItem<String> floorTwoInstruction = new TreeItem<>("Floor Two Instructions");
-    TreeItem<String> floorThreeInstruction = new TreeItem<>("Floor Three Instructions");
-    TreeItem<String> floorGroundInstruction = new TreeItem<>("Ground Floor Instructions");
-    TreeItem<String> floorLowerOneInstruction = new TreeItem<>("Floor L1 Instructions");
-    TreeItem<String> floorLowerTwoInstruction = new TreeItem<>("Floor L2 Instructions");
 
     boolean filterNodes = false; // Boolean for filtering user selections to only outdoor nodes
 
@@ -543,8 +537,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
 
         // Setting up instruction tree view
-        instructionTreeViewItem.getChildren().addAll(floorLowerTwoInstruction, floorLowerOneInstruction, floorGroundInstruction
-        , floorOneInstruction, floorTwoInstruction, floorThreeInstruction);
         instructionTreeView.setRoot(instructionTreeViewItem);
         this.instructionTreeView.setShowRoot(false);
 
@@ -1948,12 +1940,13 @@ public class AStarDemoController extends AbsController implements Initializable 
     private void addInstructionsToTreeView(){
         instructionTreeViewItem.getChildren().clear();
 
-        floorTwoInstruction.getChildren().clear();
-        floorLowerOneInstruction.getChildren().clear();
-        floorGroundInstruction.getChildren().clear();
-        floorOneInstruction.getChildren().clear();
-        floorTwoInstruction.getChildren().clear();
-        floorThreeInstruction.getChildren().clear();
+        TreeItem<String> floorOneInstruction = new TreeItem<>("Floor One Instructions");
+        TreeItem<String> floorTwoInstruction = new TreeItem<>("Floor Two Instructions");
+        TreeItem<String> floorThreeInstruction = new TreeItem<>("Floor Three Instructions");
+        TreeItem<String> floorGroundInstruction = new TreeItem<>("Ground Floor Instructions");
+        TreeItem<String> floorLowerOneInstruction = new TreeItem<>("Floor L1 Instructions");
+        TreeItem<String> floorLowerTwoInstruction = new TreeItem<>("Floor L2 Instructions");
+
 
         String floor = pathVertex.get(0).getFloor();
         int index = 0;
