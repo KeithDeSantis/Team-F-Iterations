@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class DefaultPageController extends 0er {
+public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton credits;
     @FXML
