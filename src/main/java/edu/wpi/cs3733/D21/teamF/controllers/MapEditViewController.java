@@ -1072,7 +1072,7 @@ public class MapEditViewController extends AbsController {
                     secondCircle = null;
                 }
                 handleNodeDragMouseReleased(drawableNode);
-                tt.show(drawableNode, e.getScreenX(), e.getScreenY());
+                //tt.show(drawableNode, e.getScreenX(), e.getScreenY());
             });
 
         return drawableNode;
@@ -1377,7 +1377,7 @@ public class MapEditViewController extends AbsController {
             selectedLine.setStroke(UIConstants.LINE_COLOR);
 
 
-        Circle c = (Circle) mapPanel.getCanvas().lookup("#" + node.getNodeID());
+        Shape c = (Shape) mapPanel.getCanvas().lookup("#" + node.getNodeID());
         if (c == null) {
             //FIXME Null Warning
             return;
