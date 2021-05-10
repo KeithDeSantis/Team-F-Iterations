@@ -15,7 +15,7 @@
 
 <?import javafx.scene.text.Text?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LanguageInterpretationServiceRequestController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LanguageInterpretationHelpController">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -99,7 +99,7 @@
                   </GridPane>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <JFXButton fx:id="back" buttonType="RAISED" onAction="#goBack" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Back">
+                        <JFXButton fx:id="back" buttonType="RAISED" onAction="#back" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Back">
                            <HBox.margin>
                               <Insets left="450.0" top="20.0" />
                            </HBox.margin>

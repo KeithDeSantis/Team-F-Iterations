@@ -19,7 +19,7 @@ public abstract class AbsController {
     }
 
     public void hoverOffHome(MouseEvent e) {
-        ((Node) e.getSource()).getScene().setCursor(Cursor.DEFAULT);
+        if(!(((Node) e.getSource()).getScene()==null)) ((Node) e.getSource()).getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML

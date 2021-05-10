@@ -42,8 +42,10 @@ public class SceneContext {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LoadPage.fxml"));
         controller = loader.getController();
-        stage.setScene(new Scene(loader.load()));
-        stage.show();
+        if(!(stage.getScene()==null)) { // Added for first loading the app, allows us to use getScene().setRoot() since getScene() returns null at first - KD
+            stage.getScene().setRoot(loader.load());
+            stage.show();
+        }
     }
 
         public void switchScene(String fxml) throws IOException {
@@ -71,7 +73,7 @@ public class SceneContext {
         };
         task.setOnSucceeded( e-> {
             try {
-                stage.setScene(new Scene(task.get()));
+                stage.getScene().setRoot(task.get());
                 stage.show();
             } catch (InterruptedException | ExecutionException interruptedException) {
                 interruptedException.printStackTrace();
