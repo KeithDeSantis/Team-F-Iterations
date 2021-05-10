@@ -2,7 +2,9 @@ package edu.wpi.cs3733.D21.teamF.utils;
 
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
+import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestHomeNewController;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
+
 import javafx.animation.PauseTransition;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
@@ -59,7 +61,7 @@ public class SceneContext {
 
                     controller = loader.getController();
                     controller.initLanguage();
-                    if(controller instanceof ServiceRequests)
+                    //if(controller instanceof ServiceRequests || controller instanceof ServiceRequestHomeNewController);
                         autoTranslate(root);
 
                     return root;
@@ -97,7 +99,7 @@ public class SceneContext {
         t.start();
     }
 
-    private static void autoTranslate(Parent root)
+    public static void autoTranslate(Parent root)
     {
         final List<Node> children = new ArrayList<>();
         getAllChildren(root, children);

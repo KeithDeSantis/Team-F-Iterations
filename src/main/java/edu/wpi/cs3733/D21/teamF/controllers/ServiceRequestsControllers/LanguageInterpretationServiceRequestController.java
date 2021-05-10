@@ -8,6 +8,7 @@ import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,14 +46,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Jay Yen
      */
     public void handleHelp(ActionEvent actionEvent) throws IOException {
-        Stage submittedStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml"));
-        Scene helpPopUp = new Scene(root);
-        submittedStage.setScene(helpPopUp);
-        submittedStage.setTitle("Language Interpretation Help");
-        submittedStage.initModality(Modality.APPLICATION_MODAL);
-        submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
-        submittedStage.showAndWait();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml");
     }
     /**
      * Calls translate function when translate button is clicked

@@ -106,6 +106,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
             Parent root = submittedPageLoader.load();
+            SceneContext.autoTranslate(root);
             CovidFormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
             formSubmittedViewController.autoFill(generatedID.getText());
             Scene submitScene = new Scene(root);
@@ -198,6 +199,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
         submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
         Stage submittedStage = new Stage();
         Parent root = submittedPageLoader.load();
+        SceneContext.autoTranslate(root);
         Scene submitScene = new Scene(root);
         submittedStage.setScene(submitScene);
         submittedStage.setTitle("Check Status");

@@ -230,6 +230,7 @@ public class DefaultPageController extends AbsController {
                 submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
                 Stage submittedStage = new Stage();
                 Parent root = submittedPageLoader.load();
+                SceneContext.autoTranslate(root);
                 Scene submitScene = new Scene(root);
                 submittedStage.setScene(submitScene);
                 submittedStage.setTitle("Check COVID Status");
@@ -245,6 +246,7 @@ public class DefaultPageController extends AbsController {
             dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/PreferredPathfindingAlgoView.fxml"));
             Stage dialogStage = new Stage();
             Parent root2 = dialogLoader.load();
+            SceneContext.autoTranslate(root2);
             dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
             dialogStage.initOwner(pathfindingSettingButton.getScene().getWindow());
             dialogStage.setScene(new Scene(root2)); // set scene - KD
@@ -306,7 +308,7 @@ public class DefaultPageController extends AbsController {
         dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidVaccineDialog.fxml"));
         final Stage dialogStage = new Stage();
         final Parent root = dialogLoader.load();
-
+        SceneContext.autoTranslate(root);
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.initOwner(surveyButton.getScene().getWindow());
         dialogStage.setScene(new Scene(root));
