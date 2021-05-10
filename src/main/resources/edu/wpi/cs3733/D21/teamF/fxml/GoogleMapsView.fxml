@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.GoogleMapsViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.GoogleMapsViewController">
     <children>
         <HBox fx:id="header" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -97,10 +97,10 @@
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <JFXButton fx:id="cancelButton" buttonType="RAISED" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
-                        <JFXButton fx:id="clearButton" buttonType="RAISED" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                        <JFXButton fx:id="helpButton" buttonType="RAISED" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
-                        <JFXButton fx:id="submitButton" buttonType="RAISED" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+                        <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
+                        <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+                        <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
+                        <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
                     </children>
                 </HBox>
             </children>

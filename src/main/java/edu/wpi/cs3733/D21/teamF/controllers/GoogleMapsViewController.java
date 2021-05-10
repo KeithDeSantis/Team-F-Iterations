@@ -3,8 +3,10 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GoogleAPI;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.fxml.FXML;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -80,11 +82,43 @@ public class GoogleMapsViewController {
         }
     }
 
+    /*
     @FXML
     public void handleSubmit() throws IOException {
         String address = streetAddress.getText() + " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
         String closestLot = GoogleAPI.getGoogleAPI().parseClosestParkingLot(address);
         String[] directions = GoogleAPI.getGoogleAPI().queryAPI(address, closestLot);
         outputBox.setText(directions[0]);
+    }
+     */
+
+    @FXML
+    public void handleButtonPushed(ActionEvent actionEvent) throws IOException {
+        JFXButton buttonPushed = (JFXButton) actionEvent.getSource();
+
+        if (buttonPushed == submitButton){
+            String address = streetAddress.getText() + " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
+            String closestLot = GoogleAPI.getGoogleAPI().parseClosestParkingLot(address);
+            String[] directions = GoogleAPI.getGoogleAPI().queryAPI(address, closestLot);
+            outputBox.setText(directions[0]);
+        }
+        else if (buttonPushed == cancelButton){
+            SceneContext.getSceneContext().loadDefault();
+        }
+        else if (buttonPushed == helpButton){
+            int i = 1+1;
+        }
+        else if (buttonPushed == clearButton){
+            JFXTextField[] values = {streetAddress, city, zipCode};
+            JFXComboBox[] combos = {state, destination};
+
+            for (JFXTextField j : values){
+                j.setText("");
+            }
+
+            for (JFXComboBox j : combos){
+                j.setValue(null);
+            }
+        }
     }
 }
