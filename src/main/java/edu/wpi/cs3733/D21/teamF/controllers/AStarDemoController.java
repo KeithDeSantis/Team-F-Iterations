@@ -24,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
@@ -34,6 +35,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -97,11 +99,15 @@ public class AStarDemoController extends AbsController implements Initializable 
     @FXML
     public JFXToggleButton optimize;
 
-    @FXML
     private JFXTreeView<String> treeView;
 
-    @FXML
     private JFXTreeView<String> instructionTreeView;
+
+    @FXML
+    private JFXHamburger hamburger;
+
+    @FXML
+    private JFXDrawer drawer;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -169,6 +175,22 @@ public class AStarDemoController extends AbsController implements Initializable 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //ahf - yes this should be done better. At some point.
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/NavTreeTableView.fxml"));
+        HBox tablePane = null;
+        try {
+            tablePane = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NavTreeTableController navTreeTableController = loader.getController();
+        navTreeTableController.setRealController(this);
+        treeView = navTreeTableController.getTreeView();
+        instructionTreeView = navTreeTableController.getInstructionTreeView();
+        drawer.setSidePane(tablePane);
+        drawer.close();
+        drawer.setMouseTransparent(true);
 
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
