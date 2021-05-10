@@ -300,20 +300,27 @@ class UserHandler implements DatabaseEntry {
 
     /**
      * Make an AccountEntry object for a user given a username
-     * @param username username of user to make entry for
+     * @param userVal username of user to make entry for
      * @return AccountEntry object
      * @throws SQLException on error with DB operations
      */
-    public AccountEntry getUser(String username) throws SQLException{
-        String sql = "SELECT * FROM USERS WHERE USERNAME=(?)";
+    public AccountEntry getUser(String userVal) throws SQLException{
+        String sql = "";
+        if (this.isEmail(userVal)){
+            sql = "SELECT * FROM USERS WHERE EMAIL=(?)";
+        }
+        else{
+            sql = "SELECT * FROM USERS WHERE USERNAME=(?)";
+        }
         PreparedStatement stmt = ConnectionHandler.getConnection().prepareStatement(sql);
-        stmt.setString(1, username);
+        stmt.setString(1, userVal);
         ResultSet resultSet;
         AccountEntry user = null;
         resultSet = stmt.executeQuery();
         while (resultSet.next()){
             String email = resultSet.getString(1);
             String type = resultSet.getString(2);
+            String username = resultSet.getString(3);
             String password = resultSet.getString(4);
             String status = resultSet.getString(5);
             byte[] salt = resultSet.getBytes(6);
