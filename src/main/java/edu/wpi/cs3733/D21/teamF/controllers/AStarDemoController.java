@@ -659,7 +659,6 @@ public class AStarDemoController extends AbsController implements Initializable 
                 final JFXButton closeBtn = new JFXButton("Close");
                 closeBtn.setOnAction(a -> dialog.close());
 
-
                 final JFXButton directionsTo = new JFXButton("Direction To");
                 directionsTo.setOnAction(a -> {
                     endNode.set(idToShortName(currEntry.getNodeID()));
@@ -707,6 +706,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                         }
                         dialog.close();
                     });
+
                     layout.setActions(toggleFavorite, directionsFrom, closeBtn);
                 } else {
                     layout.setActions(directionsFrom, closeBtn);
