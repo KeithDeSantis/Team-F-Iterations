@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-image: url('imagesAndLogos/BWHExterior.jpg'); -fx-background-size: 1920; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.DefaultPageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-image: url('imagesAndLogos/BWHExterior.jpg'); -fx-background-size: 1920; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.DefaultPageController">
    <children>
       <AnchorPane fx:id="header" prefHeight="90.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
          <children>
@@ -33,7 +33,7 @@
             </HBox>
             <HBox layoutX="805.0" layoutY="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                <children>
-                  <JFXComboBox fx:id="languageSelect" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" onAction="#changeLanguage"/>
+                  <JFXComboBox fx:id="languageSelect" maxWidth="150.0" minWidth="150.0" onAction="#changeLanguage" prefWidth="150.0" />
                </children>
             </HBox>
          </children>
@@ -95,7 +95,7 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox fx:id="buttons" layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+            <VBox fx:id="buttons" layoutX="47.0" layoutY="60.0" prefHeight="135.0" prefWidth="224.0" spacing="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
                <children>
                   <Label fx:id="loginLabel" alignment="CENTER" prefHeight="46.0" prefWidth="218.0" style="-fx-font-weight: bold;" text="Please Log in" textAlignment="CENTER" textFill="WHITE" wrapText="true" VBox.vgrow="ALWAYS">
                      <font>
@@ -109,6 +109,11 @@
                   <JFXButton fx:id="navigation" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Navigation" VBox.vgrow="ALWAYS">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="googleMapsPage" buttonType="RAISED" prefWidth="250.0" text="Google Maps Page" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="15.0" />
                      </font>
                   </JFXButton>
                   <JFXButton fx:id="editMap" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@/stylesheets/DefaultButtonStyle.css" text="Edit Map">

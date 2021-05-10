@@ -29,6 +29,8 @@ public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton navigation;
     @FXML
+    private JFXButton googleMapsPage;
+    @FXML
     private JFXButton serviceRequest;
     @FXML
     private JFXButton quit;
@@ -77,6 +79,8 @@ public class DefaultPageController extends AbsController {
         // loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginLabel.getText()));
 
         navigation.textProperty().bind(Translator.getTranslator().getTranslationBinding(navigation.getText()));
+
+        googleMapsPage.textProperty().bind(Translator.getTranslator().getTranslationBinding(googleMapsPage.getText()));
 
         editMap.textProperty().bind(Translator.getTranslator().getTranslationBinding(editMap.getText()));
 
@@ -236,6 +240,8 @@ public class DefaultPageController extends AbsController {
                 submittedStage.initModality(Modality.APPLICATION_MODAL);
                 submittedStage.showAndWait();
             }
+        } else if (buttonPushed == googleMapsPage){
+            SceneContext.getSceneContext().switchScene("");
         } else if (buttonPushed == serviceRequest) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
         } else if (buttonPushed == manageAccount) {
