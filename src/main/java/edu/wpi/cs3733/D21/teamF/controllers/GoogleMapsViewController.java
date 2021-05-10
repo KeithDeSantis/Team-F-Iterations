@@ -30,6 +30,8 @@ public class GoogleMapsViewController extends AbsController {
     private  JFXButton submitButton;
     @FXML
     private JFXTextArea outputBox;
+    @FXML
+    private Label etaLabel;
 
     public JFXTextField getStreetAddress() {
         return streetAddress;
@@ -89,7 +91,7 @@ public class GoogleMapsViewController extends AbsController {
             String address = streetAddress.getText() + " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
             String closestLot = GoogleAPI.getGoogleAPI().parseClosestParkingLot(address);
             String[] directions = GoogleAPI.getGoogleAPI().queryAPI(address, closestLot);
-            String eta = directions[1];
+            etaLabel.setText(directions[1]);
             destinationAddress.setText(closestLot);
             outputBox.setText(directions[0]);
         }

@@ -79,7 +79,7 @@
                                     <GridPane.margin>
                                         <Insets right="25.0" />
                                     </GridPane.margin></Label>
-                                <JFXComboBox fx:id="state" prefHeight="27.0" prefWidth="58.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <JFXComboBox fx:id="state" prefHeight="27.0" prefWidth="114.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                 <JFXTextField fx:id="city" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                 <JFXTextField fx:id="streetAddress" GridPane.columnIndex="1" />
                                 <JFXTextField fx:id="zipCode" GridPane.columnIndex="1" GridPane.rowIndex="3">
@@ -94,7 +94,7 @@
                                 <Insets left="25.0" right="25.0" />
                             </HBox.margin>
                             <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+                        <HBox alignment="CENTER_LEFT" minHeight="25.0" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
                            <children>
                               <Label text="Directions to:">
                                  <font>
@@ -102,6 +102,20 @@
                                  </font>
                               </Label>
                               <Label fx:id="destinationAddress">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox minHeight="26.0" prefHeight="26.0" prefWidth="540.0" spacing="40.0">
+                           <children>
+                              <Label text="ETA:">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="etaLabel">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
