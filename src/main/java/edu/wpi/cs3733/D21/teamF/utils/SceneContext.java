@@ -38,6 +38,25 @@ public class SceneContext {
         return SceneContextSingletonHelper.sceneContext;
     }
 
+    public void asyncUpdate() throws IOException {
+        final Scene current = stage.getScene();
+
+        System.out.println(current);
+        showLoadingPage();
+
+        final PauseTransition timeOut = new PauseTransition(Duration.seconds(5));
+        timeOut.setOnFinished((timeout) -> {
+
+            stage.setScene(current);
+
+        });
+        timeOut.play();
+
+        //stage.setScene(current);
+        //stage.show();
+
+    }
+
     private void showLoadingPage() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/LoadPage.fxml"));
@@ -46,7 +65,7 @@ public class SceneContext {
         stage.show();
     }
 
-        public void switchScene(String fxml) throws IOException {
+    public void switchScene(String fxml) throws IOException {
 
         final Task<Parent> task = new Task<Parent>() {
             @Override

@@ -1,11 +1,15 @@
 package edu.wpi.cs3733.D21.teamF.Translation;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableStringValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.util.StringConverter;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -15,6 +19,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
@@ -69,7 +74,36 @@ public class Translator {
      * @author Alex Friedman (ahf)
      */
     public ObservableValue<String> getTranslationBinding(String text) {
-        return Bindings.createStringBinding(() -> translate(text), language);
+
+        //ObservableValue<Integer> obsInt = new SimpleIntegerProperty(0).asObject();
+
+//        final StringProperty val = new SimpleStringProperty(text);
+
+        ObjectBinding<StringProperty> langBinding = Bindings.createObjectBinding(() -> translate(text), language);
+
+        ObjectProperty<StringProperty> prop = new SimpleObjectProperty<>();
+        prop.bind(langBinding);
+//
+//        prop.addListener((observable, oldValue, newValue) -> {
+//            System.out.println("L " + newValue);
+//        });
+//
+//        ObjectBinding<StringProperty> binding = Bindings.createObjectBinding(() -> prop.get(), prop, prop.get());
+//        binding.addListener((observable, oldValue, newValue) -> {
+//            System.out.println("BC " + newValue);
+//        });
+
+
+        final StringProperty val = new SimpleStringProperty(text);
+
+//        val.bind(Bindings.createObjectBinding(() -> prop.get(), prop));
+       // val.bind(prop.get()); //Bindings.createObjectBinding(() -> prop.get(), prop));
+        val.bind(Bindings.createStringBinding(() -> prop.get().get(), prop));
+        //val.bind(Bindings.createStringBinding(() -> translate(text), language));
+
+       return Bindings.createStringBinding(val::get, val);
+
+        //return Bindings.createStringBinding(() -> translate(language), la)
     }
 
     /**
@@ -145,9 +179,9 @@ public class Translator {
      * @throws IOException If an error occurred w/ the API
      * @author Alex Friedman (ahf)
      */
-    public String translate(String text) throws IOException {
+    public synchronized StringProperty translate(String text) {
         if(language.get().equals("en")) //Block english to english spam api calls
-            return text;
+            return new SimpleStringProperty(text);
 
         /*
          * Accesses our local cache
@@ -159,15 +193,43 @@ public class Translator {
         {
             final String translation = languageLookup.get(text);
             if(translation != null)
-                return  translation;
+                return new SimpleStringProperty(translation);
         }
 
         System.out.println("Could not translate: " + language.get() + " -> " + text);
-        final String translation = translate("en", language.get(), text);
+        final StringProperty ans = new SimpleStringProperty(null);
 
-        translationLookupTable.get(language.get()).put(text, translation);
+        final Task<String> getTask = new Task<String>() {
+            @Override
+            protected String call()  {
+                try {
+                    return translate("en", language.get(), text);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "ERROR:0"; //FIXME:
+                }
+            }
+        };
+     //   final String translation = translate("en", language.get(), text);
 
-        return translation;
+        getTask.setOnSucceeded(e -> {
+
+            try {
+                final String translation = getTask.get();
+                translationLookupTable.get(language.get()).put(text, translation);
+                ans.set(translation);
+                System.out.println("SUCCESS: " + text + " -> " + translation);
+            } catch (InterruptedException | ExecutionException interruptedException) {
+                interruptedException.printStackTrace();
+                ans.set("ERROR"); //FIXME: DO BETTER!!
+            }
+        });
+
+        Thread t = new Thread(getTask);
+        t.start();
+
+
+        return ans;
     }
 
     /**
@@ -179,7 +241,7 @@ public class Translator {
      * @throws IOException if an error occurred
      * @author Johvanni Perez
      */
-    public String translate(String src, String target, String text) throws IOException {
+    public synchronized String translate(String src, String target, String text) throws IOException {
 
         String urlStr = "https://script.google.com/macros/s/AKfycbzk_1ZP98MqQNuWvs_Yo3UamuN7WCABIG3UiUUighYgCeqIf4ha4qUzubb2jxopuTP7/exec"
                 + "?q=" + URLEncoder.encode(text, "UTF-8") +
