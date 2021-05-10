@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.text.Text?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import javafx.scene.image.Image?>
-<?import javafx.geometry.Insets?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.GoogleMapsHelpController">
    <children>
       <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -23,7 +23,7 @@
                         <Image url="/imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
-                  <Text fx:id="title" text="ACCOUNT MANAGEMENT" />
+                  <Text fx:id="title" text="GOOGLE MAPS" />
                </children>
             </HBox>
             <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
@@ -39,13 +39,11 @@
       <JFXButton fx:id="okButton" layoutX="232.0" layoutY="354.0" onAction="#handleOk" prefHeight="27.0" prefWidth="138.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="OK" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="232.0" AnchorPane.rightAnchor="230.0" />
       <VBox alignment="CENTER" layoutX="32.0" layoutY="116.0" prefHeight="225.0" prefWidth="174.0" spacing="30.0" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="116.0">
          <children>
-            <JFXButton fx:id="usernameButton" onAction="#handleUsername" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Usernames" textAlignment="CENTER" />
-            <JFXButton fx:id="passwordButton" onAction="#handlePasswords" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Passwords" textAlignment="CENTER" />
-            <JFXButton fx:id="userTypeButton" onAction="#handleUserType" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="User Types" textAlignment="CENTER" />
-            <JFXButton fx:id="defaultUserButton" onAction="#handleDefaultUsers" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Default Users" textAlignment="CENTER" />
+            <JFXButton fx:id="aboutButton" onAction="#handleAbout" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="About " textAlignment="CENTER" />
+            <JFXButton fx:id="howToUseButton" onAction="#handleHowTo" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="How to use" textAlignment="CENTER" />
          </children>
       </VBox>
-      <Label fx:id="helpTextLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="214.0" layoutY="126.0" prefHeight="205.0" prefWidth="362.0" text="Please choose a topic!" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="69.0" AnchorPane.leftAnchor="214.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="126.0">
+      <Label fx:id="helpTextLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="206.0" layoutY="126.0" prefHeight="205.0" prefWidth="362.0" text="Please choose a topic!" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="69.0" AnchorPane.leftAnchor="206.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="126.0">
          <font>
             <Font size="14.0" />
          </font>

@@ -5,7 +5,12 @@ import edu.wpi.cs3733.D21.teamF.pathfinding.GoogleAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -99,7 +104,15 @@ public class GoogleMapsViewController extends AbsController {
             SceneContext.getSceneContext().loadDefault();
         }
         else if (buttonPushed == helpButton){
-            int i = 1+1;
+            FXMLLoader dialogLoader = new FXMLLoader();
+            dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/GoogleMapsHelpView.fxml")); // load in Edit Dialog - KD
+            Stage dialogStage = new Stage();
+            Parent root = dialogLoader.load();
+            AccountManagerHelpController dialogController = dialogLoader.getController();
+            dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
+            dialogStage.initOwner(destinationAddress.getScene().getWindow());
+            dialogStage.setScene(new Scene(root)); // set scene - KD
+            dialogStage.showAndWait(); // open pop up - KD
         }
         else if (buttonPushed == clearButton){
             JFXTextField[] values = {streetAddress, city, zipCode};
