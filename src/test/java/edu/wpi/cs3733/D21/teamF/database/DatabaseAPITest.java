@@ -139,7 +139,7 @@ class DatabaseAPITest {
     public void testNodeDescription() throws SQLException {
         String[] newNode = {"1", "2", "3", "4", "5", "6", "7", "8"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
-        String expectedDesc = "The node ID is, 1 located on floor, 2\nIn building, 3 of type 4\nWith long and short names, 5, 6";
+        String expectedDesc = "The node ID is, 1 located on floor, 4\nIn building, 5 of type 6\nWith long and short names, 7, 8";
         assertEquals(expectedDesc, DatabaseAPI.getDatabaseAPI().getNode("1").getDescription());
     }
 

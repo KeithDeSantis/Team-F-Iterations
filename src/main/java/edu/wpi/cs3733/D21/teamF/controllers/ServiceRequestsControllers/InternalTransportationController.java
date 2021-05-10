@@ -1,7 +1,10 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -18,8 +21,6 @@ import java.util.UUID;
 
 public class InternalTransportationController extends ServiceRequests {
 
-    @FXML private JFXButton clear;
-
     @FXML private JFXComboBox<String> deliverLocation;
 
     @FXML private JFXDatePicker movingDate;
@@ -31,8 +32,6 @@ public class InternalTransportationController extends ServiceRequests {
     @FXML private JFXCheckBox relativesCheckBox;
 
     @FXML private JFXCheckBox doctorCheckBox;
-
-    @FXML private JFXButton cancel;
 
     @FXML
     public void initialize(){

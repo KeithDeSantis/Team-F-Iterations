@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.sql.*;
 
-public class SystemPreferences implements DatabaseEntry{
+class SystemPreferences implements DatabaseEntry{
     @Override
     public boolean addEntry(String[] colValues) throws SQLException {
         final String query = "INSERT INTO SYSTEM_PREFERENCES VALUES(?, ?)";

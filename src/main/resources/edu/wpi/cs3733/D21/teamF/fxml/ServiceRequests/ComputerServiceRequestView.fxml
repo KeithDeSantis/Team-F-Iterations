@@ -13,112 +13,105 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.ComputerServiceRequestViewController">
-
    <children>
-      <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fitHeight="120.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
-               </image>
-            </ImageView>
-            <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Computer Service Request" wrappingWidth="736.0577087402344">
-               <font>
-                  <Font name="Volkhov Regular" size="40.0" />
-               </font>
-            </Text>
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="title" text="IT SERVICES" />
+               </children>
+            </HBox>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <JFXComboBox fx:id="languageSelect" />
+               </children>
+            </HBox>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" top="10.0" />
          </padding>
-      </HBox>
-      <VBox layoutX="313.0" layoutY="141.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="150.0">
+      </AnchorPane>
+      <GridPane AnchorPane.bottomAnchor="78.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="170.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="350.0" minWidth="10.0" prefWidth="188.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="2000.0" minWidth="10.0" prefWidth="522.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <AnchorPane prefHeight="429.0" prefWidth="760.0">
-               <children>
-                  <GridPane AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="10.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="350.0" minWidth="10.0" prefWidth="188.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="522.0" minWidth="10.0" prefWidth="522.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label fx:id="computerNameLbl" prefHeight="19.0" prefWidth="149.0" text="Computer Name:">
-                           <font>
-                              <Font name="Montserrat Regular" size="15.0" />
-                           </font>
-                        </Label>
-                        <JFXTextField fx:id="computerNameText" alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="31.0" prefWidth="500.0" GridPane.columnIndex="1">
-                           <GridPane.margin>
-                              <Insets left="25.0" right="25.0" />
-                           </GridPane.margin>
-                        </JFXTextField>
-                        <Label fx:id="computerLocLbl" text="Computer Location: " GridPane.rowIndex="1">
-                           <font>
-                              <Font name="Montserrat Regular" size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="requesterLbl" text="Requester: " GridPane.rowIndex="2">
-                           <font>
-                              <Font name="Montserrat Regular" size="15.0" />
-                           </font>
-                        </Label>
-                        <JFXTextField fx:id="requesterTextText" alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="31.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets left="25.0" right="25.0" />
-                           </GridPane.margin>
-                        </JFXTextField>
-                        <Label fx:id="urgencyLbl" text="Urgency:" GridPane.rowIndex="3">
-                           <font>
-                              <Font name="Montserrat Regular" size="15.0" />
-                           </font>
-                        </Label>
-                        <JFXComboBox fx:id="urgencyComboBox" prefHeight="31.0" prefWidth="170.0" promptText="Select urgency" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <GridPane.margin>
-                              <Insets left="25.0" />
-                           </GridPane.margin>
-                        </JFXComboBox>
-                        <JFXTextArea fx:id="descriptionText" maxWidth="-Infinity" prefHeight="57.0" prefWidth="469.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                           <GridPane.margin>
-                              <Insets left="25.0" right="25.0" />
-                           </GridPane.margin>
-                        </JFXTextArea>
-                        <Label fx:id="descLbl" text="Description" GridPane.rowIndex="4">
-                           <font>
-                              <Font name="Montserrat Regular" size="15.0" />
-                           </font>
-                        </Label>
-                        <JFXComboBox fx:id="computerLocation" prefHeight="31.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets left="25.0" />
-                           </GridPane.margin></JFXComboBox>
-                     </children>
-                  </GridPane>
-                  <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="325.0">
-                     <children>
-                        <JFXButton fx:id="cancelBtn" buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
-                        <JFXButton fx:id="clearBtn" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-                        <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
-                        <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
-                     </children>
-                  </HBox>
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </AnchorPane>
+            <Label fx:id="computerNameLbl" prefHeight="19.0" prefWidth="149.0" text="Computer Name:">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="computerNameText" alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="31.0" prefWidth="2000.0" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="25.0" right="25.0" />
+               </GridPane.margin>
+            </JFXTextField>
+            <Label fx:id="computerLocLbl" text="Computer Location: " GridPane.rowIndex="1">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="requesterLbl" text="Requester: " GridPane.rowIndex="2">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="requesterTextText" alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="31.0" prefWidth="2000.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="25.0" right="25.0" />
+               </GridPane.margin>
+            </JFXTextField>
+            <Label fx:id="urgencyLbl" text="Urgency:" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </Label>
+            <JFXComboBox fx:id="urgencyComboBox" prefHeight="31.0" prefWidth="320.0" promptText="Select urgency" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="25.0" />
+               </GridPane.margin>
+            </JFXComboBox>
+            <JFXTextArea fx:id="descriptionText" maxWidth="-Infinity" prefHeight="57.0" prefWidth="2000.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="25.0" right="25.0" />
+               </GridPane.margin>
+            </JFXTextArea>
+            <Label fx:id="descLbl" text="Description" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+            </Label>
+            <JFXComboBox fx:id="computerLocation" prefHeight="31.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="25.0" />
+               </GridPane.margin>
+            </JFXComboBox>
          </children>
-      </VBox>
+      </GridPane>
+      <HBox alignment="CENTER" layoutY="495.0" prefHeight="40.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <JFXButton fx:id="cancelBtn" buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
+            <JFXButton fx:id="clearBtn" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+            <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
+            <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

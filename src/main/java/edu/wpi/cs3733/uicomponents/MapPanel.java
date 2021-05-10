@@ -243,6 +243,10 @@ public class MapPanel extends AnchorPane {
         return zoomLevel;
     }
 
+    public DoubleProperty getInternalZoomLevel() {
+        return internalZoomLevel;
+    }
+
     public ObjectProperty<String> getFloor() {
         return this.fp;
     }
