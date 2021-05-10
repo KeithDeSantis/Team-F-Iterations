@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
-import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -1442,8 +1441,6 @@ public class AStarDemoController extends AbsController implements Initializable 
                 Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList)));
 
         setNavIcon();
-     //   Go.textProperty().unbind();
-      //  Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("End Navigation"));
     }
 
     /**
@@ -1516,8 +1513,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         unDrawSEIcons();
 
-      //  Go.textProperty().unbind();
-     //   Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("Start Navigation"));
     }
 
     /**
