@@ -17,10 +17,7 @@ import edu.wpi.cs3733.uicomponents.entities.DrawableFloorInstruction;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
 import javafx.animation.*;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.IntegerBinding;
-import javafx.beans.binding.ObjectBinding;
+import javafx.beans.binding.*;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -123,6 +120,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     private final ObservableList<Integer> stopsList = FXCollections.observableArrayList();
     private final ObservableList<String> instructionsList = FXCollections.observableArrayList();
     private final ObservableList<String> etaList = FXCollections.observableArrayList();
+    private final ObservableList<String> directionsList = FXCollections.observableArrayList();
     private final IntegerProperty currentStep = new SimpleIntegerProperty(0);
 
     // List of intermediate vertices for multi-stop pathfinding - LM
@@ -131,6 +129,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     private final StringProperty endNode = new SimpleStringProperty("");
 
     private final StringProperty currentDirection = new SimpleStringProperty("UP");
+    private final StringProperty nextDirection = new SimpleStringProperty("UP");
 
     final ObservableList<String> nodeList = FXCollections.observableArrayList();
 
@@ -445,9 +444,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             protected void interpolate(double fraction) {
                 ghost.xCoordinateProperty().set((int) (fraction * x1.get() + (1 - fraction) * x0.get()));
                 ghost.yCoordinateProperty().set((int) (fraction * y1.get() + (1 - fraction) * y0.get()));
-
-                //FIXME: ENABLE
-                //meme.directionAngleProperty().bind(fraction * getAngleFor(x1.get));
+                ghost.directionAngleProperty().bind(Bindings.createDoubleBinding(() -> getAngleFor(nextDirection.get()), nextDirection));
             }
 
         };
@@ -1147,6 +1144,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         stopsList.clear();
         instructionsList.clear();
         etaList.clear();
+        directionsList.clear();
         if(this.pathVertex.isEmpty()) return;
 
         // Assert "Up" is forward for start
@@ -1213,6 +1211,13 @@ public class AStarDemoController extends AbsController implements Initializable 
         // Calculate ETA
         for (Integer stop : stopsList) {
             etaList.add(calculateETA(stop, pathVertex.size() - 1));
+        }
+
+        // Calculate Directions
+        currentDirection.set("UP");
+        for (String inst : instructionsList) {
+            directionsList.add(currentDirection.get());
+            changeDirection(inst);
         }
     }
 
@@ -1346,23 +1351,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
     }
 
-    private void changeDirectionRevert(String inst){
-        String[] instruction = inst.split(" ");
-        if(!instruction[0].equals("Take") && !instruction[0].equals("Look")){
-            switch (instruction[1]) {
-                case "around":
-                    switchDirectionDown();
-                    break;
-                case "left":
-                    switchDirectionRight();
-                    break;
-                case "right":
-                    switchDirectionLeft();
-                    break;
-            }
-        }
-    }
-
     /**
      * Function to react to 'Start Navigation' button being pressed and start the route stepper
      * @author ZheCheng Song
@@ -1427,8 +1415,10 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
         ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
+        currentDirection.bind(Bindings.stringValueAt(directionsList, currentStep));
+        nextDirection.bind(Bindings.stringValueAt(directionsList,
+                Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList)));
 
-        currentDirection.set("UP");
         setNavIcon();
         Go.setText("End Navigation");
     }
@@ -1454,7 +1444,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         mapPanel.centerNode(userNodeDisplay);
 
-        changeDirectionRevert(instructionsList.get(currentStep.get()));
         setNavIcon();
     }
 
@@ -1463,8 +1452,6 @@ public class AStarDemoController extends AbsController implements Initializable 
      * @author ZheCheng Song
      */
     public void goToNextNode() {
-        changeDirection(instructionsList.get(currentStep.get()));
-
         currentStep.set(currentStep.get() + 1);
         if(currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1)){
             Next.setDisable(true);
