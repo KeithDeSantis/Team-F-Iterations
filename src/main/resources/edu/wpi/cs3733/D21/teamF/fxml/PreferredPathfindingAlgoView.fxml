@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="200.0" prefWidth="350.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.PreferredPathfindingAlgoController">
    <children>
-      <HBox alignment="CENTER" prefHeight="52.0" prefWidth="350.0" style="-fx-background-color: #94c4f1ff; -fx-border-color: #03256c; -fx-border-width: 0px 0px 5px 0px;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" prefHeight="52.0" prefWidth="350.0" style="-fx-background-color: #f0f2f5; -fx-border-color: #03256c; -fx-border-width: 0px 0px 5px 0px;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="title" text="Preferred Pathfinding Algorithm:" />
          </children>
