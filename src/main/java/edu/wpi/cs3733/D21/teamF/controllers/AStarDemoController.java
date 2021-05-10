@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -117,6 +118,11 @@ public class AStarDemoController extends AbsController implements Initializable 
     private DrawableNode endNodeDisplay;
     private DrawableUser userNodeDisplay;
 
+    @FXML
+    private Label startLabel;
+    @FXML
+    private Label endLabel;
+
     // Global variables for the stepper
     private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
 
@@ -170,6 +176,8 @@ public class AStarDemoController extends AbsController implements Initializable 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //ahf - yes this should be done better. At some point.
+        startLabel.textProperty().bind(startNode);
+        endLabel.textProperty().bind(endNode);
 
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
@@ -1437,7 +1445,8 @@ public class AStarDemoController extends AbsController implements Initializable 
                 Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList)));
 
         setNavIcon();
-        Go.setText("End Navigation");
+        Go.textProperty().unbind();
+        Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("End Navigation"));
     }
 
     /**
@@ -1513,7 +1522,9 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         //mapPanel.switchMap(pathVertex.get(0).getFloor());
         //mapPanel.centerNode(startNodeDisplay);
-        Go.setText("Start Navigation");
+        Go.textProperty().unbind();
+        Go.textProperty().bind(Translator.getTranslator().getTranslationBinding("Start Navigation"));
+        //Go.setText("Start Navigation");
     }
 
     /**

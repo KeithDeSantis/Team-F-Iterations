@@ -1,18 +1,18 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
-import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
-import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-import javafx.fxml.FXML;
-import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.scene.input.MouseEvent;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
-public class LanguageInterpretationHelpController extends ServiceRequests {
+public class LanguageInterpretationHelpController extends AbsController {
+    public void handleHome(MouseEvent mouseEvent) throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
+    }
 
-    public void back(javafx.event.ActionEvent actionEvent) throws IOException {
+    public void goBack(ActionEvent actionEvent) throws IOException{
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationServiceRequestView.fxml");
     }
 }
