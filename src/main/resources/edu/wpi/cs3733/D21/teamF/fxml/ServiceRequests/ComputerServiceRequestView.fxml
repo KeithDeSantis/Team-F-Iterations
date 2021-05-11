@@ -119,10 +119,10 @@
       </GridPane>
       <HBox alignment="CENTER" layoutY="495.0" prefHeight="40.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <JFXButton fx:id="cancelBtn" buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
-            <JFXButton fx:id="clearBtn" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-            <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
-            <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+            <JFXButton fx:id="cancelBtn" buttonType="RAISED" minWidth="70.0" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
+            <JFXButton fx:id="clearBtn" buttonType="RAISED" minWidth="70.0" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+            <JFXButton fx:id="helpButton" buttonType="RAISED" minWidth="70.0" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
+            <JFXButton fx:id="submitButton" buttonType="RAISED" minWidth="70.0" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
          </children>
       </HBox>
    </children>

@@ -192,22 +192,22 @@
       </VBox>
       <HBox alignment="CENTER" prefHeight="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-                    <JFXButton fx:id="cancelButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel">
+                    <JFXButton fx:id="cancelButton" buttonType="RAISED" minWidth="70.0" mnemonicParsing="false" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel">
                <HBox.margin>
                   <Insets left="25.0" />
                </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="clear" buttonType="RAISED" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear">
+            <JFXButton fx:id="clear" buttonType="RAISED" minWidth="70.0" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear">
                <HBox.margin>
                   <Insets left="25.0" />
                </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?">
+            <JFXButton fx:id="helpButton" buttonType="RAISED" minWidth="70.0" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?">
                <HBox.margin>
                   <Insets left="25.0" />
                </HBox.margin>
             </JFXButton>
-                    <JFXButton fx:id="submitButton" buttonType="RAISED" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
+                    <JFXButton fx:id="submitButton" buttonType="RAISED" minWidth="70.0" mnemonicParsing="false" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
                <HBox.margin>
                   <Insets left="25.0" />
                </HBox.margin>

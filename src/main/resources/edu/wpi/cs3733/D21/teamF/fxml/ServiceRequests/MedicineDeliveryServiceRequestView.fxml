@@ -212,21 +212,21 @@
           <padding>
               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
           </padding>
-          <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" HBox.hgrow="SOMETIMES">
+          <JFXButton fx:id="cancelButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" minWidth="70.0" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" HBox.hgrow="SOMETIMES">
               <font>
                   <Font size="18.0" />
               </font>
           </JFXButton>
-      <JFXButton fx:id="clearButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutX="20.0" layoutY="20.0" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear">
+      <JFXButton fx:id="clearButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutX="20.0" layoutY="20.0" minWidth="70.0" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear">
          <font>
             <Font size="18.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?">
+      <JFXButton fx:id="helpButton" buttonType="RAISED" minWidth="70.0" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?">
          <font>
             <Font size="18.0" />
          </font></JFXButton>
-          <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" HBox.hgrow="SOMETIMES">
+          <JFXButton fx:id="submitButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" minWidth="70.0" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" HBox.hgrow="SOMETIMES">
               <font>
                   <Font size="18.0" />
               </font>

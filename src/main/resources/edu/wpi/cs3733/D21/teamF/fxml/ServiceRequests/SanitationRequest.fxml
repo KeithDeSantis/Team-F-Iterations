@@ -93,7 +93,7 @@
       </GridPane>
       <HBox alignment="CENTER" prefHeight="31.0" prefWidth="960.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <JFXButton fx:id="cancel" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel">
+            <JFXButton fx:id="cancel" minWidth="70.0" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel">
                <font>
                   <Font name="Montserrat Regular" size="20.0" />
                </font>
@@ -101,7 +101,7 @@
                   <Insets left="25.0" />
                </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="clear" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear">
+            <JFXButton fx:id="clear" minWidth="70.0" onAction="#handleClear" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Clear">
                <font>
                   <Font size="20.0" />
                </font>
@@ -109,12 +109,12 @@
                   <Insets left="25.0" />
                </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?">
+            <JFXButton fx:id="helpButton" buttonType="RAISED" minWidth="70.0" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?">
                <HBox.margin>
                   <Insets left="25.0" />
                </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="submitButton" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
+            <JFXButton fx:id="submitButton" minWidth="70.0" onAction="#handleSubmit" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Submit">
                <font>
                   <Font name="Montserrat Regular" size="20.0" />
                </font>
