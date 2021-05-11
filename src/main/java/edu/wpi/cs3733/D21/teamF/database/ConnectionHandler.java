@@ -10,7 +10,7 @@ public class ConnectionHandler {
     private static Connection establishConnection() throws SQLException {
         String protocol = "jdbc:derby:";
         String embeddedURL;
-        String remoteURL = protocol + "//conntinuity.org:10142/projectC2;create=true;user=falcons;password=";
+        String remoteURL = protocol + "//conntinuity.org:10142/projectC2;create=true;connectTimeout=5000;user=falcons;password=";
 
         embeddedURL = protocol + "projectC1;create=true";
 
