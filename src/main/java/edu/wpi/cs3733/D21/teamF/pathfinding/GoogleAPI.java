@@ -23,6 +23,12 @@ public class GoogleAPI {
 
     }
 
+    /**
+     * Method to parse the closest parking lot of the hospital to user
+     * @param origin the origin address of the user
+     * @return String address of the parking lot
+     * @throws IOException on error with IO
+     */
     public String parseClosestParkingLot(String origin) throws IOException {
         String address = "";
         String[] parkingLots = {"0 Francis St, Boston, MA 02115", "15-51 New Whitney St, Boston, MA 02115"};
@@ -112,6 +118,9 @@ public class GoogleAPI {
         return GoogleAPI.getGoogleAPI().parseGoogleData(apiResponse.toString());
     }
 
+    /**
+     * Singleton helper
+     */
     private static class googleSingletonHelper {
         private static final GoogleAPI googleAPI = new GoogleAPI();
     }

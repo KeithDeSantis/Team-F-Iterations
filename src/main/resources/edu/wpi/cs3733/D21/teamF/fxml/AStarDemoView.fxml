@@ -15,6 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
 <VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
@@ -81,7 +82,7 @@
                               <JFXButton fx:id="endNavBtn" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="End Navigation" />
                               <JFXButton fx:id="viewInstructionsBtn" buttonType="RAISED" onAction="#handleViewInstructions" stylesheets="/stylesheets/DefaultButtonStyle.css" text="View List">
                                  <HBox.margin>
-                                    <Insets right="25.0" />
+                                    <Insets left="10.0" right="15.0" />
                                  </HBox.margin>
                               </JFXButton>
                               <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="300.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="BLACK">
