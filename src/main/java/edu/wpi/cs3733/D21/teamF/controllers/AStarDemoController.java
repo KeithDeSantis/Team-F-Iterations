@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
+import edu.wpi.cs3733.D21.teamF.controllers.components.NavigationListCell;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -35,8 +36,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -115,7 +116,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     private JFXTreeView<String> instructionTreeView;
     
     @FXML
-    private JFXListView stopList;
+    private JFXListView<String> stopList;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -609,23 +610,38 @@ public class AStarDemoController extends AbsController implements Initializable 
         /*
          * Initialize the stop list
          */
-        /*
+
+        stopList.setCellFactory(x -> {
+            final NavigationListCell cell = new NavigationListCell();
+
+            cell.getCloseBtn().setOnMouseClicked(e -> {
+                final String shortName = cell.getLabel().getText();
+                final String ID = shortNameToID(shortName);
+                vertices.removeIf(vertex -> vertex.getID().equals(ID));
+            });
+
+            return cell;
+        });
         vertices.addListener((ListChangeListener<Vertex>) c -> {
             while(c.next()){} //Needed to get all changes
-            stopList.getChildren().clear();
+            stopList.getItems().clear();
+            //stopList.getChildren().clear();
             for (Vertex stop : vertices)
             {
                 System.out.println(stop.getID());
-                final Label stopLbl = new Label(stop.getID());
-                stopList.addAnimatedNode(stopLbl);
-                stopList.getListAnimation(true);
-                stopList.animateList();
-                stopList.animateList(true); // this confuses me so much but it works - KD
+                //final Label stopLbl = new Label(stop.getID());
+                final NavigationListCell cell = new NavigationListCell();
+
+
+                stopList.getItems().add(idToShortName(stop.getID()));
+                //stopList.addAnimatedNode(stopLbl);
+                //stopList.getListAnimation(true);
+                //stopList.animateList();
+                //stopList.animateList(true); // this confuses me so much but it works - KD
             }
             System.out.println("---------");
         });
 
-         */
     }
 
     private EventHandler<ActionEvent> handleWhatsHereMenu(NodeEntry currEntry, int i) {
