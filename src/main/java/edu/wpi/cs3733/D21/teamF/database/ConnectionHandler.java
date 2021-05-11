@@ -7,24 +7,31 @@ public class ConnectionHandler {
     private ConnectionHandler() {}
 
     //FIXME: at some point, refactor better, probably move into helper
-    private static Connection establishConnection()
-    {
+    private static Connection establishConnection() throws SQLException {
         String protocol = "jdbc:derby:";
-        String URL;
+        String embeddedURL;
+        String remoteURL = protocol + "//conntinuity.org:10142/projectC2;create=true;user=falcons;password=";
 
-        URL = protocol + "projectC1;create=true";
+        embeddedURL = protocol + "projectC1;create=true";
 
         try {
-            return DriverManager.getConnection(URL);
+            return DriverManager.getConnection(remoteURL);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("ARE WE REMOTE????");
+            return DriverManager.getConnection(embeddedURL);
         }
-
-        return null;
     }
 
     private static class ConnectionSingletonHelper {
-        private static final Connection connection = establishConnection();
+        private static Connection connection;
+
+        static {
+            try {
+                connection = establishConnection();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
     }
 
     public static Connection getConnection() {
