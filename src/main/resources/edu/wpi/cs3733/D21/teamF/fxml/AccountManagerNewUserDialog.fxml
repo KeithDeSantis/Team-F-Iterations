@@ -22,6 +22,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <JFXTextField fx:id="userNameField" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -63,6 +64,16 @@
             <Insets left="10.0" right="30.0" />
          </GridPane.margin>
       </JFXComboBox>
-      <JFXButton fx:id="okButton" onAction="#handleOk" prefHeight="27.0" prefWidth="138.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="OK" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+      <JFXButton fx:id="okButton" onAction="#handleOk" prefHeight="27.0" prefWidth="138.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="OK" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+      <Label fx:id="emailLabel" text="Email:" GridPane.rowIndex="4">
+         <font>
+            <Font name="Tahoma" size="18.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="emailField" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4">
+         <GridPane.margin>
+            <Insets left="10.0" right="30.0" />
+         </GridPane.margin>
+      </JFXTextField>
    </children>
 </GridPane>

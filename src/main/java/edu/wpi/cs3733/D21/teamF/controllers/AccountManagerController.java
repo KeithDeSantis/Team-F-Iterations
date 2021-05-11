@@ -8,6 +8,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,7 +44,7 @@ public class AccountManagerController extends AbsController implements Initializ
 
     public void initialize(URL location, ResourceBundle resources) {
 
-        int colWidth = 298;
+        int colWidth = 224;
         JFXTreeTableColumn<AccountEntry, String> username = new JFXTreeTableColumn<>("Username");
         username.setPrefWidth(colWidth);
         username.setCellValueFactory(cellData -> cellData.getValue().getValue().getUsernameProperty());
@@ -72,7 +73,27 @@ public class AccountManagerController extends AbsController implements Initializ
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            selectedAccount.getValue().setUsername(event.getNewValue());
+            selectedAccount.getValue().setPassword(event.getNewValue());
+        });
+
+        JFXTreeTableColumn<AccountEntry, String> emails = new JFXTreeTableColumn<>("Email");
+        emails.setPrefWidth(colWidth);
+        emails.setCellValueFactory(cellData -> cellData.getValue().getValue().getEmailProperty());
+
+        emails.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
+        emails.setOnEditCommit(event -> {
+            TreeItem<AccountEntry> selectedAccount = accountView.getTreeItem(event.getTreeTablePosition().getRow());
+            try {
+                if(DatabaseAPI.getDatabaseAPI().isValidEmail(event.getNewValue())) {
+                    DatabaseAPI.getDatabaseAPI().editUser(selectedAccount.getValue().getUsername(), event.getNewValue(), "email");
+                    selectedAccount.getValue().setEmail(event.getNewValue());
+                } else {
+                    selectedAccount.getValue().setEmail(event.getOldValue());
+                    accountView.refresh();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         ObservableList<String> typeList = FXCollections.observableArrayList();
@@ -99,7 +120,7 @@ public class AccountManagerController extends AbsController implements Initializ
         final TreeItem<AccountEntry> root = new RecursiveTreeItem<>(accounts, RecursiveTreeObject::getChildren);
         accountView.setRoot(root);
         accountView.setShowRoot(false);
-        accountView.getColumns().setAll(username, password, userType);
+        accountView.getColumns().setAll(username, password, userType, emails);
 
         List<AccountEntry> data;
         try {
@@ -130,7 +151,7 @@ public class AccountManagerController extends AbsController implements Initializ
             openNewDialog(newAccount);
 
             if(!(newAccount.getUsername().isEmpty() || newAccount.getPassword().isEmpty() || newAccount.getUserType().isEmpty() || newAccount.getCovidStatus().isEmpty())) {
-                DatabaseAPI.getDatabaseAPI().addUser(newAccount.getUsername(), newAccount.getUserType(), newAccount.getUsername(), newAccount.getPassword(), newAccount.getCovidStatus());
+                DatabaseAPI.getDatabaseAPI().addUser(newAccount.getEmail(), newAccount.getUserType(), newAccount.getUsername(), newAccount.getPassword(), newAccount.getCovidStatus());
                 accounts.add(newAccount);
                 SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
             }
