@@ -101,6 +101,9 @@ public class AStarDemoController extends AbsController implements Initializable 
     public JFXToggleButton optimize;
 
     @FXML
+    public JFXToggleButton disableStair;
+
+    @FXML
     private JFXTreeView<String> treeView;
 
     @FXML
@@ -233,7 +236,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
 
 
-
+        // Saving Usable nodes' shortName to List
         List<String> shortNameList = new ArrayList<>();
         for(Vertex vertex : this.graph.getVertices()){
             NodeEntry node = findNodeEntry(vertex.getID());
@@ -427,15 +430,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         });
 
         Go.setDisable(true);
-        Prev.setVisible(false);
-        Next.setVisible(false);
         pathVertex.clear();
-        Instruction.setVisible(false);
-        navIcon.setVisible(false);
-        ETA.setVisible(false);
-        instructionTreeView.setManaged(false);
-        instructionTreeView.setVisible(false);
-        instructionTreeView.setDisable(true);
 
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
 
@@ -446,7 +441,26 @@ public class AStarDemoController extends AbsController implements Initializable 
         lowerHBox.disableProperty().bind(isCurrentlyNavigating.not());
         lowerHBox.managedProperty().bind(isCurrentlyNavigating);
 
-
+        // initializes navigation related bindings
+        Next.disableProperty().bind(Bindings.when(
+                isCurrentlyNavigating.and(currentStep.isNotEqualTo(Bindings.createIntegerBinding(() -> stopsList.size() - 1 , stopsList)))).then(false).otherwise(true));
+        Prev.disableProperty().bind(Bindings.when(
+                isCurrentlyNavigating.and(currentStep.isNotEqualTo(0))).then(false).otherwise(true));
+        Next.visibleProperty().bind(isCurrentlyNavigating);
+        Prev.visibleProperty().bind(isCurrentlyNavigating);
+        Instruction.visibleProperty().bind(isCurrentlyNavigating);
+        ETA.visibleProperty().bind(isCurrentlyNavigating);
+        navIcon.visibleProperty().bind(isCurrentlyNavigating);
+        instructionTreeView.managedProperty().bind(isCurrentlyNavigating);
+        instructionTreeView.visibleProperty().bind(isCurrentlyNavigating);
+        instructionTreeView.disableProperty().bind(isCurrentlyNavigating.not());
+        optimize.disableProperty().bind(isCurrentlyNavigating);
+        disableStair.disableProperty().bind(isCurrentlyNavigating);
+        about.disableProperty().bind(isCurrentlyNavigating);
+        clear.disableProperty().bind(isCurrentlyNavigating);
+        treeView.managedProperty().bind(isCurrentlyNavigating.not());
+        treeView.visibleProperty().bind(isCurrentlyNavigating.not());
+        treeView.disableProperty().bind(isCurrentlyNavigating);
 
         /*
          * initializes user node
@@ -1036,9 +1050,15 @@ public class AStarDemoController extends AbsController implements Initializable 
 
 
             if(optimize.isSelected()) {
-                path = this.graph.getUnorderedPath(pathVertices);
+                if(disableStair.isSelected())
+                    path = this.graph.getUnorderedPathNoStair(pathVertices);
+                else
+                    path = this.graph.getUnorderedPath(pathVertices);
             } else {
-                path = this.graph.getPath(pathVertices);
+                if(disableStair.isSelected())
+                    path = this.graph.getPathNoStair(pathVertices);
+                else
+                    path = this.graph.getPath(pathVertices);
             }
 
 
@@ -1372,26 +1392,7 @@ public class AStarDemoController extends AbsController implements Initializable 
      * @author ZheCheng Song
      */
     public void startNavigation() {
-        Next.setVisible(true);
-        Next.setDisable(false);
-        Prev.setVisible(true);
-        Prev.setDisable(true);
-        optimize.setDisable(true);
-        Instruction.setVisible(true);
-        navIcon.setVisible(true);
-        ETA.setVisible(true);
-        treeView.setManaged(false);
-        treeView.setVisible(false);
-        treeView.setDisable(true);
-        instructionTreeView.setManaged(true);
-        instructionTreeView.setVisible(true);
-        instructionTreeView.setDisable(false);
-        about.setDisable(true);
-        clear.setDisable(true);
-        //mapPanel.disableInteract();
-
         currentStep.set(0);
-
         isCurrentlyNavigating.set(true);
 
         parseRoute();
@@ -1450,14 +1451,6 @@ public class AStarDemoController extends AbsController implements Initializable 
     public void goToPrevNode() {
         currentStep.set(currentStep.get() - 1);
 
-        if(currentStep.get() == 0){
-            Prev.setDisable(true);
-        }
-        else {
-            Prev.setDisable(false);
-            Next.setDisable(false);
-        }
-
         if(!pathVertex.get(stopsList.get(currentStep.get())).getFloor().equals(mapPanel.getFloor().getValue())){
             mapPanel.switchMap(pathVertex.get(stopsList.get(currentStep.get())).getFloor());
         }
@@ -1473,13 +1466,7 @@ public class AStarDemoController extends AbsController implements Initializable 
      */
     public void goToNextNode() {
         currentStep.set(currentStep.get() + 1);
-        if(currentStep.get() == Math.min(stopsList.size() - 1, instructionsList.size() - 1)){
-            Next.setDisable(true);
-        }
-        else {
-            Prev.setDisable(false);
-            Next.setDisable(false);
-        }
+
         if(!pathVertex.get(stopsList.get(currentStep.get())).getFloor().equals(mapPanel.getFloor().getValue())){
             mapPanel.switchMap(pathVertex.get(stopsList.get(currentStep.get())).getFloor());
         }
@@ -1494,25 +1481,9 @@ public class AStarDemoController extends AbsController implements Initializable 
      * @author ZheCheng Song
      */
     public void endNavigation() {
-        Prev.setVisible(false);
-        Next.setVisible(false);
-        Instruction.setVisible(false);
-        ETA.setVisible(false);
-        navIcon.setVisible(false);
         currentStep.set(0);
         isCurrentlyNavigating.set(false);
-        optimize.setDisable(false);
-        treeView.setManaged(true);
-        treeView.setVisible(true);
-        treeView.setDisable(false);
-        instructionTreeView.setManaged(false);
-        instructionTreeView.setVisible(false);
-        instructionTreeView.setDisable(true);
-        about.setDisable(false);
-        clear.setDisable(false);
-
         unDrawSEIcons();
-
     }
 
     /**
