@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -11,11 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
 <?import javafx.scene.text.Text?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.FloralDeliveryService">
+
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.FloralDeliveryService">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -86,7 +85,7 @@
                            </GridPane.margin>
                         </Label>
                         <Label alignment="CENTER" contentDisplay="CENTER" text="The date the flowers are to be delivered (if left blank they will be delivered as soon as possible)." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Label text="Special Instructions:" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                        <Label text="Email:" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                            <GridPane.margin>
                               <Insets right="30.0" />
                            </GridPane.margin>
@@ -106,7 +105,7 @@
                               <Insets right="30.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Add any special instructions such as note cards or verbal messages for the recipient." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please enter the email of the requester for updates on the status of your request." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Label prefHeight="20.0" prefWidth="116.0" text="Payment Information:" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets right="30.0" />
