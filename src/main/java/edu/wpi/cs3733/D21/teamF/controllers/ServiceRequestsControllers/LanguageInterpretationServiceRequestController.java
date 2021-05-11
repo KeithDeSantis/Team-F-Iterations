@@ -48,24 +48,6 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
     public void handleHelp(ActionEvent actionEvent) throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml");
     }
-    /**
-     * Calls translate function when translate button is clicked
-     * @param actionEvent
-     * @author Johvanni Perez
-     */
-    public void handleTranslate(ActionEvent actionEvent) {
-        if(language.getValue() != null) {
-            String target = Translator.getTranslator().getLangCode(language.getValue()); //gets lang code of the lang specified
-            Translator.getTranslator().setLanguage(target);
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
-            alert.setTitle("Language Missing");
-            alert.setHeaderText("Specify language");
-            alert.setContentText("Please select a language from the dropdown list.");
-            alert.showAndWait();
-        }
-    }
 
     /**
      * Opens a window that shows a request received message, and adds a service request to the database
@@ -190,10 +172,8 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
 
+        //Do we need this line? ->
         language.getItems().addAll(Translator.getTranslator().getLanguages());
-
-
-
     }
 
     public boolean formFilled(){
