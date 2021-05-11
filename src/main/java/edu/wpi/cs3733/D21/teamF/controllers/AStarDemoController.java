@@ -1444,7 +1444,11 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         addInstructionsToTreeView();
 
-        Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
+        final StringProperty currentInstructionText = new SimpleStringProperty("");
+        currentInstructionText.bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
+
+
+        Instruction.textProperty().bind(Translator.getTranslator().getTranslationBinding(currentInstructionText));//Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.createStringBinding(() -> Translator.getTranslator().translate(instructionsList.get(currentStep.get())), currentStep)));///Bindings.stringValueAt(instructionsList, currentStep)));
         ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
         currentDirection.bind(Bindings.stringValueAt(directionsList, currentStep));
         nextDirection.bind(Bindings.stringValueAt(directionsList,
@@ -1607,6 +1611,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         layout.setActions(printBtn, closeBtn);
 
         dialog.setContent(layout);
+        SceneContext.autoTranslate(dialog);
         mapPanel.showDialog(dialog);
     }
 
