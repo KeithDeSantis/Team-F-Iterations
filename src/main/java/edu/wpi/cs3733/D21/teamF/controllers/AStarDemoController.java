@@ -1522,8 +1522,8 @@ public class AStarDemoController extends AbsController implements Initializable 
         //FIXME: DO BREAKS W/ CSS
         ScrollPane scrollPane = new ScrollPane();
         Label directionsLabel = new Label();
-        scrollPane.setPrefWidth(290);
-        scrollPane.setPrefHeight(180);
+        scrollPane.setPrefWidth(400);
+        scrollPane.setPrefHeight(220);
         directionsLabel.setText(directions.toString());
         layout.setBody(scrollPane);
         scrollPane.setContent(directionsLabel);
