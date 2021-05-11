@@ -676,8 +676,16 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             layout.setHeading(new Text(currEntry.getLongName()));
 
+            ScrollPane scrollPane = new ScrollPane();
+            Label instructionsLabel = new Label();
+            scrollPane.setPrefWidth(500);
+            scrollPane.setPrefHeight(220);
+            instructionsLabel.setText(currEntry.getDescription());
+            layout.setBody(scrollPane);
+            scrollPane.setContent(instructionsLabel);
+
             //FIXME: DO BREAKS W/ CSS
-            layout.setBody(new Text(currEntry.getDescription()));
+            //layout.setBody(new Text(currEntry.getDescription()));
 
             final JFXButton closeBtn = new JFXButton("Close");
             closeBtn.setOnAction(a -> dialog.close());
