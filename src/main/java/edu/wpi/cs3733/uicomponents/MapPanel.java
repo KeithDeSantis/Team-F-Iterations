@@ -80,6 +80,8 @@ public class MapPanel extends AnchorPane {
     private final Image GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
     private final Image FLBImage = new Image(getClass().getResourceAsStream("/maps/FLB-Team3.png"));
 
+    private double WIDTH, HEIGHT;
+
     final StringConverter<Double> doubleStringConverter = new StringConverter<Double>() {
         @Override
         public String toString(Double d) {
@@ -175,12 +177,12 @@ public class MapPanel extends AnchorPane {
 
         ASPECT_RATIO.set(F1Image.getHeight()/F1Image.getWidth());
 
-
+        WIDTH = F1Image.getWidth() / internalZoomLevel.doubleValue();
+        HEIGHT = F1Image.getHeight() / internalZoomLevel.doubleValue();
 
         INITIAL_WIDTH.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL));//setValue(F1Image.getWidth());
         INITIAL_HEIGHT.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL).multiply(ASPECT_RATIO));//setValue(F1Image.getHeight());
-        //INITIAL_WIDTH.setValue(F1Image.getWidth() * 0.5);
-        //INITIAL_HEIGHT.setValue(F1Image.getHeight() * 0.5);
+
 
         stackPane.prefWidthProperty().bind(this.widthProperty());
         stackPane.prefHeightProperty().bind(this.heightProperty());
@@ -198,7 +200,6 @@ public class MapPanel extends AnchorPane {
 
         // final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
 
-
         Bindings.bindBidirectional(this.floor, floorSlider.valueProperty(), doublePropertyStringConverter);
 
         this.floorSlider.valueProperty().addListener(e -> switchMap(this.doubleStringConverter.toString(this.floorSlider.valueProperty().get())));
@@ -207,26 +208,30 @@ public class MapPanel extends AnchorPane {
 
         this.scroll.pannableProperty().set(true);
 
-        final double PIXEL_TO_ZOOM = this.scroll.viewportBoundsProperty().get().getWidth() / this.internalZoomLevel.doubleValue();
-        final double PIXELS = PIXEL_TO_ZOOM * 8.5;
+        final Bounds bounds = scroll.getViewportBounds();
 
         this.zoomSlider.valueProperty().addListener(e -> {
+            final Bounds oldBounds = scroll.getViewportBounds();
             final double oldZoomLevel = this.internalZoomLevel.doubleValue();
             final double oldH = this.scroll.hvalueProperty().doubleValue();
             final double oldV = this.scroll.vvalueProperty().doubleValue();
-
-
+            final double OLD_PERCENT_WIDTH = oldBounds.getWidth() / WIDTH;
+            final double OLD_PERCENT_HEIGHT = oldBounds.getHeight() / HEIGHT;
 
             this.internalZoomLevel.set(((DoubleProperty) e).doubleValue());
             final double newZoomLevel = this.internalZoomLevel.doubleValue();
             final double newH = this.scroll.hvalueProperty().doubleValue();
             final double newV = this.scroll.vvalueProperty().doubleValue();
             final double RATIO = this.internalZoomLevel.doubleValue() / oldZoomLevel;
+            final Bounds newBounds = scroll.getViewportBounds();
+            WIDTH /= RATIO;
+            HEIGHT /= RATIO;
+            final double NEW_PERCENT_WIDTH = newBounds.getWidth() / WIDTH;
+            final double NEW_PERCENT_HEIGHT = newBounds.getHeight() / HEIGHT;
 
+            this.scroll.hvalueProperty().set(newH/RATIO - 0.5*(NEW_PERCENT_WIDTH-OLD_PERCENT_WIDTH) / (1 - NEW_PERCENT_WIDTH));
+            this.scroll.vvalueProperty().set(newV/RATIO - 0.5*(NEW_PERCENT_HEIGHT-OLD_PERCENT_HEIGHT) / (1 - NEW_PERCENT_HEIGHT));
 
-
-            this.scroll.hvalueProperty().set(newH / RATIO);
-            this.scroll.vvalueProperty().set(newV / RATIO);
         });
 
     }
