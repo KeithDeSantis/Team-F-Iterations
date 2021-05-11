@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -263,10 +264,22 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         //FIXME: CHANGE TEXT TO BE MORE ACCESSIBLE
         final MenuItem startPathMenu = new MenuItem("Path From Here");
-        final MenuItem addStopMenu = new MenuItem("Add Stop Here");
+        startPathMenu.textProperty().bind(Translator.getTranslator().getTranslationBinding(startPathMenu.getText()));
+
+        final StringProperty addStopMenuText = new SimpleStringProperty("Add Stop Here");
+        final MenuItem addStopMenu = new MenuItem();
+        addStopMenu.textProperty().bind(Translator.getTranslator().getTranslationBinding(addStopMenuText));
+
         final MenuItem endPathMenu = new MenuItem("Path End Here");
-        final MenuItem whatsHereMenu = new MenuItem("What's Here?");
-        final MenuItem addFavoriteMenu = new MenuItem("Add Favorite"); // only added when signed in
+        endPathMenu.textProperty().bind(Translator.getTranslator().getTranslationBinding(endPathMenu.getText()));
+
+        final StringProperty whatsHereMenuText = new SimpleStringProperty("What's Here?");
+        final MenuItem whatsHereMenu = new MenuItem();
+        whatsHereMenu.textProperty().bind(Translator.getTranslator().getTranslationBinding(whatsHereMenuText));
+
+        final StringProperty addFavoriteMenuText = new SimpleStringProperty("Add Favorite");
+        final MenuItem addFavoriteMenu = new MenuItem(); // only added when signed in
+        addFavoriteMenu.textProperty().bind(Translator.getTranslator().getTranslationBinding(addFavoriteMenuText));
 
         contextMenu.getItems().addAll(startPathMenu,addStopMenu, endPathMenu, new SeparatorMenuItem(), whatsHereMenu);
 
@@ -288,20 +301,20 @@ public class AStarDemoController extends AbsController implements Initializable 
             if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))){return;}
 
             // Set whats here menu text back to what it should be on the map
-            whatsHereMenu.setText("What's Here?");
+            whatsHereMenuText.set("What's Here?");
 
             // Set add stop text to make sense
             if (vertices.contains(graph.getVertex(currEntry.getNodeID()))) {
-                addStopMenu.setText("Remove Stop");
+                addStopMenuText.set("Remove Stop");
             } else {
-                addStopMenu.setText("Add Stop");
+                addStopMenuText.set("Add Stop");
             }
             if(CurrentUser.getCurrentUser().getUuid() == null && CurrentUser.getCurrentUser().isAuthenticated()) {
                 try {
                     if (getUserFavorites().contains(currEntry.getNodeID())) {
-                        addFavoriteMenu.setText("Remove Favorite");
+                        addFavoriteMenuText.set("Remove Favorite");
                     } else {
-                        addFavoriteMenu.setText("Add To Favorites");
+                        addFavoriteMenuText.set("Add To Favorites");
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -325,7 +338,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             //FIXME: Make these ones require that thing is visible
             whatsHereMenu.setOnAction(handleWhatsHereMenu(currEntry, 2));
 
-            addFavoriteFromMenu(addFavoriteMenu, currEntry);
+            addFavoriteFromMenu(addFavoriteMenuText, addFavoriteMenu, currEntry);
         });
 
         Go.setDisable(true);
@@ -528,21 +541,21 @@ public class AStarDemoController extends AbsController implements Initializable 
             if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))){return;}
 
             // Replace text on the whats here menu to make a little more sense
-            whatsHereMenu.setText("What's This?");
+            whatsHereMenuText.set("What's This?");
 
             // Swap text on the add stop item based on if selected node in in the list
             if(vertices.contains(graph.getVertex(currEntry.getNodeID()))){
-                addStopMenu.setText("Remove Stop");
+                addStopMenuText.set("Remove Stop");
             } else {
-                addStopMenu.setText("Add Stop");
+                addStopMenuText.set("Add Stop");
             }
 
             if(CurrentUser.getCurrentUser().isAuthenticated()) {
                 try {
                     if (getUserFavorites().contains(currEntry.getNodeID())) {
-                        addFavoriteMenu.setText("Remove Favorite");
+                        addFavoriteMenuText.set("Remove Favorite");
                     } else {
-                        addFavoriteMenu.setText("Add To Favorites");
+                        addFavoriteMenuText.set("Add To Favorites");
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -566,7 +579,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             //FIXME: Make these ones require that thing is visible
             whatsHereMenu.setOnAction(handleWhatsHereMenu(currEntry, 3));
 
-            addFavoriteFromMenu(addFavoriteMenu, currEntry);
+            addFavoriteFromMenu(addFavoriteMenuText, addFavoriteMenu, currEntry);
         });
         try{
             if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "additionalInstructions").getCompleteStatus().equals("false")) {
@@ -707,9 +720,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         };
     }
 
-    private void addFavoriteFromMenu(MenuItem addFavoriteMenu, NodeEntry currEntry) {
+    private void addFavoriteFromMenu(StringProperty favoritesText, MenuItem addFavoriteMenu, NodeEntry currEntry) {
         addFavoriteMenu.setOnAction(e -> {
-            if (addFavoriteMenu.getText().equals("Add To Favorites")) {
+            if (favoritesText.get().equals("Add To Favorites")) {
                 try {
                     addNodeToFavorites(currEntry);
                 } catch (SQLException sqlException) {

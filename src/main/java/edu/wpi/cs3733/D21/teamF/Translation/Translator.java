@@ -73,6 +73,16 @@ public class Translator {
     }
 
     /**
+     * Used to get a binding to translate a string to
+     * @param text The text in english
+     * @return A binding that binds the text to a string
+     * @author Alex Friedman (ahf)
+     */
+    public ObservableValue<String> getTranslationBinding(StringProperty text) {
+        return Bindings.createStringBinding(() -> translate(text.get()), text, language);
+    }
+
+    /**
      * Used to set the language that we translate to
      * @param language The language code that we translate to (eg en for English)
      * @author Alex Friedman
