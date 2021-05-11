@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -20,4 +21,5 @@ public class GoogleMapsHelpController {
     public void handleOk() {
         ((Stage) helpTextLabel.getScene().getWindow()).close();
     }
+
 }
