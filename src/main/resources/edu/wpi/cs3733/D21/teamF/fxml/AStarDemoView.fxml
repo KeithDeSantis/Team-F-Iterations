@@ -43,8 +43,12 @@
       </AnchorPane>
       <HBox VBox.vgrow="ALWAYS">
          <children>
-            <VBox prefHeight="2000.0" prefWidth="286.0">
+            <VBox alignment="CENTER" prefHeight="2000.0" prefWidth="286.0">
                <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="286.0" text="Destinations:" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin></Label>
                   <AnchorPane minHeight="185.0" prefHeight="2000.0" prefWidth="2000.0">
                      <children>
                         <JFXNodesList fx:id="stopList" alignment="TOP_CENTER" prefHeight="28.0" prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0" />
