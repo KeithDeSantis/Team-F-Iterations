@@ -81,7 +81,7 @@
                               <JFXButton fx:id="endNavBtn" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="End Navigation" />
                               <JFXButton fx:id="viewInstructionsBtn" buttonType="RAISED" onAction="#handleViewInstructions" stylesheets="/stylesheets/DefaultButtonStyle.css" text="View List">
                                  <HBox.margin>
-                                    <Insets right="25.0" />
+                                    <Insets left="10.0" right="15.0" />
                                  </HBox.margin>
                               </JFXButton>
                               <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="300.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="BLACK">
