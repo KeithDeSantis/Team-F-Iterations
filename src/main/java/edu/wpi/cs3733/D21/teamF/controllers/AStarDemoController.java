@@ -679,8 +679,21 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             layout.setHeading(new Text(currEntry.getLongName()));
 
+            ScrollPane scrollPane = new ScrollPane();
+            Label instructionsLabel = new Label();
+            scrollPane.setPrefWidth(500);
+            scrollPane.setPrefHeight(220);
+            try {
+                instructionsLabel.setText(Translator.getTranslator().translate(currEntry.getDescription()));
+            } catch (IOException ioException) {
+                instructionsLabel.setText(currEntry.getDescription());
+                ioException.printStackTrace();
+            }
+            layout.setBody(scrollPane);
+            scrollPane.setContent(instructionsLabel);
+
             //FIXME: DO BREAKS W/ CSS
-            layout.setBody(new Text(currEntry.getDescription()));
+            //layout.setBody(new Text(currEntry.getDescription()));
 
             final JFXButton closeBtn = new JFXButton("Close");
             closeBtn.setOnAction(a -> dialog.close());
@@ -1444,7 +1457,11 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         addInstructionsToTreeView();
 
-        Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
+        final StringProperty currentInstructionText = new SimpleStringProperty("");
+        currentInstructionText.bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
+
+
+        Instruction.textProperty().bind(Translator.getTranslator().getTranslationBinding(currentInstructionText));//Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.createStringBinding(() -> Translator.getTranslator().translate(instructionsList.get(currentStep.get())), currentStep)));///Bindings.stringValueAt(instructionsList, currentStep)));
         ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
         currentDirection.bind(Bindings.stringValueAt(directionsList, currentStep));
         nextDirection.bind(Bindings.stringValueAt(directionsList,
@@ -1562,7 +1579,7 @@ public class AStarDemoController extends AbsController implements Initializable 
      * On clicked, displays the whole list of instructions
      * @author Alex Friedman (ahf)
      */
-    public void handleViewInstructions() {
+    public void handleViewInstructions() throws IOException {
         final JFXDialog dialog = new JFXDialog();
         final JFXDialogLayout layout = new JFXDialogLayout();
 
@@ -1573,7 +1590,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         StringBuilder directions = new StringBuilder();
         for(int i = 0; i < stopsList.size(); i++)
         {
-            final String instruction = instructionsList.get(i);
+            final String instruction = Translator.getTranslator().translate(instructionsList.get(i));
             final String eta = etaList.get(i);
 
             if(i < stopsList.size() - 1)
@@ -1589,6 +1606,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         directionsLabel.setText(directions.toString());
         layout.setBody(scrollPane);
         scrollPane.setContent(directionsLabel);
+        //directionsLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(directionsLabel.getText()));
 
 
         final JFXButton closeBtn = new JFXButton("Close");
@@ -1607,6 +1625,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         layout.setActions(printBtn, closeBtn);
 
         dialog.setContent(layout);
+        SceneContext.autoTranslate(dialog);
         mapPanel.showDialog(dialog);
     }
 
@@ -1669,7 +1688,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             contentStream.newLineAtOffset(25, 690);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("Directions from: " + startNode.getValue());
+            contentStream.showText(Translator.getTranslator().translate("Directions from: ") + startNode.getValue());
             contentStream.newLine();
             contentStream.endText();
 
@@ -1680,7 +1699,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             contentStream.newLineAtOffset(25, 670);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("To: " + endNode.getValue());
+            contentStream.showText(Translator.getTranslator().translate("To: ") + endNode.getValue());
             contentStream.newLine();
             contentStream.endText();
 
@@ -1692,7 +1711,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             contentStream.newLineAtOffset(480, 30);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("Page " + (p + 1) + " of " + numPages);
+            contentStream.showText(Translator.getTranslator().translate("Page " + (p + 1) + " of " + numPages));
             contentStream.newLine();
             contentStream.endText();
 
@@ -1708,9 +1727,9 @@ public class AStarDemoController extends AbsController implements Initializable 
                 final String eta = etaList.get(i);
 
                 if (i < stopsList.size() - 1)
-                    contentStream.showText(instruction + "     (" + eta + ")");
+                    contentStream.showText(Translator.getTranslator().translate(instruction) + "     (" + eta + ")");
                 else
-                    contentStream.showText(instruction);
+                    contentStream.showText(Translator.getTranslator().translate(instruction));
                 contentStream.endText();
 
 
@@ -1745,7 +1764,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
                 PDImageXObject pdfImage = LosslessFactory.createFromImage(pdfDocument, scaledBuffered);
 
-                contentStream.drawImage(pdfImage, 320, 555 - (i % INSTRUCTIONS_PER_PAGE) * 110);
+                contentStream.drawImage(pdfImage, 350, 555 - (i % INSTRUCTIONS_PER_PAGE) * 110);
 
 
                 // ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));
