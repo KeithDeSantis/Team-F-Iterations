@@ -122,7 +122,7 @@ public class ServiceRequestManagerController extends AbsController implements In
             newBoolean = "true";
         }
         DatabaseAPI.getDatabaseAPI().editServiceRequest(selectedEntry.getUuid(), newBoolean, "completed");
-        if (newBoolean.equals("true")){
+        if (newBoolean.equals("true") && (selectedEntry.getRequestType().equals("Nurse Appointment") || selectedEntry.getRequestType().equals("ticket"))){
             EmailHandler.getEmailHandler().sendEmail(selectedEntry.getAdditionalInstructions().split(":")[1],
                     "Your Covid-19 clearance level has been updated!", "Please check your status with the application" +
                     " your ticket number is: " + selectedEntry.getAdditionalInstructions().split(":")[0]);
