@@ -228,7 +228,6 @@ public class MapPanel extends AnchorPane {
             HEIGHT /= RATIO;
             final double NEW_PERCENT_WIDTH = newBounds.getWidth() / WIDTH;
             final double NEW_PERCENT_HEIGHT = newBounds.getHeight() / HEIGHT;
-
             this.scroll.hvalueProperty().set(newH/RATIO - 0.5*(NEW_PERCENT_WIDTH-OLD_PERCENT_WIDTH) / (1 - NEW_PERCENT_WIDTH));
             this.scroll.vvalueProperty().set(newV/RATIO - 0.5*(NEW_PERCENT_HEIGHT-OLD_PERCENT_HEIGHT) / (1 - NEW_PERCENT_HEIGHT));
 
