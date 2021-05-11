@@ -1481,6 +1481,7 @@ public class MapEditViewController extends AbsController {
         dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditMapNodeDialogView.fxml")); // load in Edit Dialog - KD
         Stage dialogStage = new Stage();
         Parent root = dialogLoader.load();
+        SceneContext.autoTranslate(root);
         EditMapNodeDialogViewController dialogController = dialogLoader.getController(); // get edit dialog's controller - KD
 
         dialogController.setDialogStage(dialogStage); // set the stage attribute - KD
