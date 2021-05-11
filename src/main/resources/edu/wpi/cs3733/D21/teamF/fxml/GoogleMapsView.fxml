@@ -6,8 +6,6 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -17,6 +15,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.GoogleMapsViewController">
     <children>
         <AnchorPane fx:id="header" prefHeight="90.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -28,6 +28,7 @@
                                 <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                             </image>
                         </ImageView>
+                        <JFXButton fx:id="back" buttonType="RAISED" onAction="#handleGoBack" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Back" />
                         <Text fx:id="title" text="BRIGHAM AND WOMEN'S HOSPITAL">
                             <font>
                                 <Font name="Volkhov Regular" size="40.0" />
@@ -128,7 +129,6 @@
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="60.0" VBox.vgrow="SOMETIMES">
                     <children>
-                        <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" />
                         <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                         <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
                         <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />

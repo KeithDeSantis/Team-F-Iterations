@@ -24,11 +24,12 @@
          <children>
             <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ImageView fitHeight="50.0" onMouseClicked="#handleHome" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
+                  <JFXButton onAction="#handleHome" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
                   <Text fx:id="title" text="LANGUAGE INTERPRETATION" />
                </children>
             </HBox>
@@ -153,9 +154,9 @@
          <children>
             <ButtonBar prefHeight="51.0" prefWidth="384.0">
                <buttons>
-                  <JFXButton buttonType="RAISED" onAction="#handleCancel" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" textAlignment="CENTER" fx:id="x">
+                  <JFXButton buttonType="RAISED" onAction="#handleCancel" prefWidth="157.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Cancel" textAlignment="CENTER" fx:id="x">
                      <font>
-                        <Font name="Montserrat Regular" size="15.0" />
+                        <Font size="15.0" />
                      </font>
                   </JFXButton>
                   <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
