@@ -82,12 +82,12 @@
                               <Insets right="30.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please type in the preferred name of the patient." wrapText="true" GridPane.columnIndex="1">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Please enter the email of the requester for updates on the status of your request." wrapText="true" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label text="Name:" GridPane.halignment="RIGHT">
+                        <Label text="Email:" GridPane.halignment="RIGHT">
                            <GridPane.margin>
                               <Insets right="30.0" />
                            </GridPane.margin>

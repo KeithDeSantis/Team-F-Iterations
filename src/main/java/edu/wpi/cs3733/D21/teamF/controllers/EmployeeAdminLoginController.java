@@ -27,7 +27,6 @@ public class EmployeeAdminLoginController extends AbsController {
     @FXML
     private JFXButton goBack;
 
-
     public void handleButtonPushed(ActionEvent actionEvent) throws IOException, SQLException {
         Button buttonPushed = (JFXButton) actionEvent.getSource();  //Getting current stage
         if (buttonPushed == signIn) {
@@ -38,18 +37,19 @@ public class EmployeeAdminLoginController extends AbsController {
             }
             String user = username.getText();
             String pass = password.getText();
-
             try {
                 final AccountEntry current = DatabaseAPI.getDatabaseAPI().getUser(user);
                 final boolean isAdmin = current.getUserType().equals("administrator");
                 final boolean isStaff = current.getUserType().equals("employee");
                 if (CurrentUser.getCurrentUser().login(user, pass) && (isAdmin || isStaff)) {
                     SceneContext.getSceneContext().loadDefault();
-                } else {
+                }
+                else {
                     errorMessage.setStyle("-fx-text-fill: #c60000FF;");
                     password.setText("");
                 }
-            } catch (NullPointerException n) {
+            }
+            catch (NullPointerException n) {
                 errorMessage.setStyle("-fx-text-fill: #c60000FF;");
                 password.setText("");
             }

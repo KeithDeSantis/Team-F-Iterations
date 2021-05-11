@@ -71,6 +71,9 @@ public class GoogleMapsViewController extends AbsController {
         this.zipCode = zipCode;
     }
 
+    /**
+     * Initializes the state dropdown menu with State abbreviations
+     */
     @FXML
     private void initialize(){
         String[] stateAbbreviations = {"AK","AL","AR","AZ","CA","CO","CT","DE","FL","GA","HI","IA","ID","IL","IN","KS",
@@ -89,6 +92,11 @@ public class GoogleMapsViewController extends AbsController {
     }
      */
 
+    /**
+     * Method to handle the push of button and do appropriate actions
+     * @param actionEvent the action event object on mouse press
+     * @throws IOException on IO error
+     */
     @FXML
     private void handleButtonPushed(ActionEvent actionEvent) throws IOException {
         JFXButton buttonPushed = (JFXButton) actionEvent.getSource();
@@ -103,9 +111,11 @@ public class GoogleMapsViewController extends AbsController {
             destinationAddress.textProperty().bind(Translator.getTranslator().getTranslationBinding(closestLot));
             outputBox.setText(directions[0]);
         }
+
         else if (buttonPushed == cancelButton){
             SceneContext.getSceneContext().loadDefault();
         }
+
         else if (buttonPushed == helpButton){
             FXMLLoader dialogLoader = new FXMLLoader();
             dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/GoogleMapsHelpView.fxml")); // load in Edit Dialog - KD
@@ -117,6 +127,7 @@ public class GoogleMapsViewController extends AbsController {
             dialogStage.setScene(new Scene(root)); // set scene - KD
             dialogStage.showAndWait(); // open pop up - KD
         }
+
         else if (buttonPushed == clearButton){
             JFXTextField[] values = {streetAddress, city, zipCode};
 

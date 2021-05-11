@@ -96,6 +96,8 @@ public class MapEditViewController extends AbsController {
     @FXML
     private void initialize() throws SQLException, IOException {
 
+        mapPanel.scroll.pannableProperty().set(false);
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/EditorTableView.fxml"));
         TabPane tablePane = loader.load();

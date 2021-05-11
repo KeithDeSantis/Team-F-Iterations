@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
+import edu.wpi.cs3733.D21.teamF.controllers.components.NavigationListCell;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -24,6 +25,7 @@ import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -34,8 +36,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -112,6 +114,9 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     @FXML
     private JFXTreeView<String> instructionTreeView;
+    
+    @FXML
+    private JFXListView<String> stopList;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -334,7 +339,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, addStopMenu, currEntry));
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(handleEndPathMenu(currEntry));
@@ -534,8 +539,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         // Set the root item
         treeView.setRoot(rootTreeViewItem);
 
-        System.out.println("TREEEE: " + treeView.getRoot().getChildren().get(0));
-
         // Hide root item (we don't need it visible, we always want to list to be there
         this.treeView.setShowRoot(false);
 
@@ -579,7 +582,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, addStopMenu, currEntry));
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(handleEndPathMenu(currEntry));
@@ -603,6 +606,67 @@ public class AStarDemoController extends AbsController implements Initializable 
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+        
+        /*
+         * Initialize the stop list
+         */
+
+        stopList.setCellFactory(x -> {
+            final NavigationListCell cell = new NavigationListCell();
+            cell.getCloseBtn().visibleProperty().bind(isCurrentlyNavigating.not());
+            cell.getCloseBtn().setStyle("-fx-background-color: #E8321E; -fx-text-fill: #FFFFFF;");
+            cell.getCloseBtn().setOnMouseClicked(e -> {
+                final String shortName = cell.getLabel().getText();
+                final String ID = shortNameToID(shortName);
+                vertices.removeIf(vertex -> vertex.getID().equals(ID));
+
+                if(startNode.get().equals(shortName)) {
+                    startNode.set("");
+                    checkInput();
+                    Go.setDisable(true);
+                }
+                if(endNode.get().equals(shortName)) {
+                    endNode.set("");
+                    checkInput();
+                    Go.setDisable(true);
+                }
+            });
+
+            cell.setOnMouseClicked(e -> {
+                if(isCurrentlyNavigating.get())
+                    return;
+                mapPanel.centerNode(mapPanel.getNode(shortNameToID(cell.getLabel().getText())));
+                mapPanel.switchMap(mapPanel.getNode(shortNameToID(cell.getLabel().getText())).getFloor().get());
+            });
+
+            return cell;
+        });
+
+
+        startNode.addListener((observable, oldValue, newValue) -> updateDestinationList());
+        endNode.addListener((observable, oldValue, newValue) -> updateDestinationList());
+
+        vertices.addListener((ListChangeListener<Vertex>) c -> {
+            while(c.next()){} //Needed to get all changes
+            updateDestinationList();
+        });
+
+    }
+
+    private void updateDestinationList() {
+        stopList.getItems().clear();
+        List<String> destinationLists = new ArrayList<>();
+        if(!startNode.get().isEmpty())
+            destinationLists.add(startNode.get());
+
+        destinationLists.addAll(vertices.stream().map(v -> idToShortName(v.getID())).collect(Collectors.toList()));
+        if(!endNode.get().isEmpty())
+            destinationLists.add(endNode.get());
+
+        for(String stop : destinationLists)//for (Vertex stop : vertices)
+        {
+            stopList.getItems().add(stop);//stop.getID()));
+        }
     }
 
     private EventHandler<ActionEvent> handleWhatsHereMenu(NodeEntry currEntry, int i) {
@@ -615,8 +679,21 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             layout.setHeading(new Text(currEntry.getLongName()));
 
+            ScrollPane scrollPane = new ScrollPane();
+            Label instructionsLabel = new Label();
+            scrollPane.setPrefWidth(500);
+            scrollPane.setPrefHeight(220);
+            try {
+                instructionsLabel.setText(Translator.getTranslator().translate(currEntry.getDescription()));
+            } catch (IOException ioException) {
+                instructionsLabel.setText(currEntry.getDescription());
+                ioException.printStackTrace();
+            }
+            layout.setBody(scrollPane);
+            scrollPane.setContent(instructionsLabel);
+
             //FIXME: DO BREAKS W/ CSS
-            layout.setBody(new Text(currEntry.getDescription()));
+            //layout.setBody(new Text(currEntry.getDescription()));
 
             final JFXButton closeBtn = new JFXButton("Close");
             closeBtn.setOnAction(a -> dialog.close());
@@ -697,7 +774,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         };
     }
 
-    private EventHandler<ActionEvent> handleAddStopMenu(StringProperty stopMenuText, MenuItem addStopMenu, NodeEntry currEntry) {
+    private EventHandler<ActionEvent> handleAddStopMenu(StringProperty stopMenuText, NodeEntry currEntry) {
         return e -> {
             if (stopMenuText.get().equals("Add Stop")) {
                 vertices.add(graph.getVertex(currEntry.getNodeID()));
@@ -711,8 +788,6 @@ public class AStarDemoController extends AbsController implements Initializable 
                 }
             } else {
                 vertices.remove(graph.getVertex(currEntry.getNodeID()));
-                mapPanel.unDraw(currEntry.getNodeID());
-                getDrawableNode(currEntry.getNodeID());
             }
             checkInput();
         };
@@ -1382,7 +1457,11 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         addInstructionsToTreeView();
 
-        Instruction.textProperty().bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
+        final StringProperty currentInstructionText = new SimpleStringProperty("");
+        currentInstructionText.bind(Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.stringValueAt(instructionsList, currentStep)));
+
+
+        Instruction.textProperty().bind(Translator.getTranslator().getTranslationBinding(currentInstructionText));//Bindings.when(Bindings.isEmpty(instructionsList)).then("").otherwise(Bindings.createStringBinding(() -> Translator.getTranslator().translate(instructionsList.get(currentStep.get())), currentStep)));///Bindings.stringValueAt(instructionsList, currentStep)));
         ETA.textProperty().bind(Bindings.stringValueAt(etaList, currentStep));
         currentDirection.bind(Bindings.stringValueAt(directionsList, currentStep));
         nextDirection.bind(Bindings.stringValueAt(directionsList,
@@ -1500,7 +1579,7 @@ public class AStarDemoController extends AbsController implements Initializable 
      * On clicked, displays the whole list of instructions
      * @author Alex Friedman (ahf)
      */
-    public void handleViewInstructions() {
+    public void handleViewInstructions() throws IOException {
         final JFXDialog dialog = new JFXDialog();
         final JFXDialogLayout layout = new JFXDialogLayout();
 
@@ -1511,7 +1590,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         StringBuilder directions = new StringBuilder();
         for(int i = 0; i < stopsList.size(); i++)
         {
-            final String instruction = instructionsList.get(i);
+            final String instruction = Translator.getTranslator().translate(instructionsList.get(i));
             final String eta = etaList.get(i);
 
             if(i < stopsList.size() - 1)
@@ -1527,6 +1606,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         directionsLabel.setText(directions.toString());
         layout.setBody(scrollPane);
         scrollPane.setContent(directionsLabel);
+        //directionsLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(directionsLabel.getText()));
 
 
         final JFXButton closeBtn = new JFXButton("Close");
@@ -1545,6 +1625,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         layout.setActions(printBtn, closeBtn);
 
         dialog.setContent(layout);
+        SceneContext.autoTranslate(dialog);
         mapPanel.showDialog(dialog);
     }
 
@@ -1607,7 +1688,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             contentStream.newLineAtOffset(25, 690);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("Directions from: " + startNode.getValue());
+            contentStream.showText(Translator.getTranslator().translate("Directions from: ") + startNode.getValue());
             contentStream.newLine();
             contentStream.endText();
 
@@ -1618,7 +1699,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             contentStream.newLineAtOffset(25, 670);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("To: " + endNode.getValue());
+            contentStream.showText(Translator.getTranslator().translate("To: ") + endNode.getValue());
             contentStream.newLine();
             contentStream.endText();
 
@@ -1630,7 +1711,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             contentStream.newLineAtOffset(480, 30);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
 
-            contentStream.showText("Page " + (p + 1) + " of " + numPages);
+            contentStream.showText(Translator.getTranslator().translate("Page " + (p + 1) + " of " + numPages));
             contentStream.newLine();
             contentStream.endText();
 
@@ -1646,9 +1727,9 @@ public class AStarDemoController extends AbsController implements Initializable 
                 final String eta = etaList.get(i);
 
                 if (i < stopsList.size() - 1)
-                    contentStream.showText(instruction + "     (" + eta + ")");
+                    contentStream.showText(Translator.getTranslator().translate(instruction) + "     (" + eta + ")");
                 else
-                    contentStream.showText(instruction);
+                    contentStream.showText(Translator.getTranslator().translate(instruction));
                 contentStream.endText();
 
 
@@ -1683,7 +1764,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
                 PDImageXObject pdfImage = LosslessFactory.createFromImage(pdfDocument, scaledBuffered);
 
-                contentStream.drawImage(pdfImage, 320, 555 - (i % INSTRUCTIONS_PER_PAGE) * 110);
+                contentStream.drawImage(pdfImage, 350, 555 - (i % INSTRUCTIONS_PER_PAGE) * 110);
 
 
                 // ImageIO.write(bufferedImage, "png", new File(System.currentTimeMillis() + ".png"));

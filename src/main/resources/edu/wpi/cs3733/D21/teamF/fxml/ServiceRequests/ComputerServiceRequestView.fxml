@@ -49,17 +49,17 @@
             <Insets bottom="10.0" left="10.0" top="10.0" />
          </padding>
       </AnchorPane>
-      <GridPane AnchorPane.bottomAnchor="78.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="170.0">
+      <GridPane layoutX="67.0" layoutY="152.0" prefHeight="300.0" prefWidth="854.0" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="110.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="350.0" minWidth="10.0" prefWidth="188.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="2000.0" minWidth="10.0" prefWidth="522.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="2000.0" minHeight="10.0" prefHeight="2000.0" vgrow="ALWAYS" />
+          <RowConstraints maxHeight="2000.0" minHeight="10.0" prefHeight="2000.0" vgrow="ALWAYS" />
+          <RowConstraints maxHeight="2000.0" minHeight="10.0" prefHeight="2000.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
             <Label fx:id="computerNameLbl" prefHeight="19.0" prefWidth="149.0" text="Computer Name:">
@@ -67,9 +67,9 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="computerNameText" alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="31.0" prefWidth="2000.0" GridPane.columnIndex="1">
+            <JFXTextField fx:id="computerNameText" maxWidth="-Infinity" prefHeight="31.0" prefWidth="2000.0" GridPane.columnIndex="1">
                <GridPane.margin>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets right="25.0" />
                </GridPane.margin>
             </JFXTextField>
             <Label fx:id="computerLocLbl" text="Computer Location: " GridPane.rowIndex="1">
@@ -82,44 +82,47 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="requesterEmailText" alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="31.0" prefWidth="2000.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <JFXTextField fx:id="requesterEmailText" maxWidth="-Infinity" prefHeight="31.0" prefWidth="2000.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets right="25.0" />
                </GridPane.margin>
             </JFXTextField>
-            <Label fx:id="urgencyLbl" text="Urgency:" GridPane.rowIndex="3">
+            <Label fx:id="urgencyLbl" text="Urgency:" GridPane.columnIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Label>
-            <JFXComboBox fx:id="urgencyComboBox" prefHeight="31.0" prefWidth="320.0" promptText="Select urgency" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <JFXComboBox fx:id="urgencyComboBox" prefHeight="31.0" prefWidth="320.0" promptText="Select Urgency" GridPane.columnIndex="3">
                <GridPane.margin>
-                  <Insets left="25.0" />
+                  <Insets right="25.0" />
                </GridPane.margin>
             </JFXComboBox>
-            <JFXTextArea fx:id="descriptionText" maxWidth="-Infinity" prefHeight="57.0" prefWidth="2000.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <JFXTextArea fx:id="descriptionText" focusColor="#405aa800" maxWidth="-Infinity" prefHeight="57.0" prefWidth="2000.0" style="-fx-border-width: 2; -fx-border-color: #000000; -fx-border-radius: 5;" unFocusColor="#4d4d4d00" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
                <GridPane.margin>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets bottom="10.0" right="25.0" top="50.0" />
                </GridPane.margin>
             </JFXTextArea>
-            <Label fx:id="descLbl" text="Description" GridPane.rowIndex="4">
+            <Label fx:id="descLbl" text="Description:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
-            </Label>
-            <JFXComboBox fx:id="computerLocation" prefHeight="31.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
-                  <Insets left="25.0" />
+                  <Insets bottom="50.0" />
+               </GridPane.margin>
+            </Label>
+            <JFXComboBox fx:id="computerLocation" prefHeight="31.0" prefWidth="320.0" promptText="Select Location" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets right="25.0" />
                </GridPane.margin>
             </JFXComboBox>
          </children>
       </GridPane>
       <HBox alignment="CENTER" layoutY="495.0" prefHeight="40.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <JFXButton fx:id="cancelBtn" buttonType="RAISED" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
-            <JFXButton fx:id="clearBtn" buttonType="RAISED" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
-            <JFXButton fx:id="helpButton" buttonType="RAISED" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
-            <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
+            <JFXButton fx:id="cancelBtn" buttonType="RAISED" minWidth="70.0" onAction="#handleCancel" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Cancel" />
+            <JFXButton fx:id="clearBtn" buttonType="RAISED" minWidth="70.0" onAction="#handleClear" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
+            <JFXButton fx:id="helpButton" buttonType="RAISED" minWidth="70.0" onAction="#handleHelp" stylesheets="/stylesheets/DefaultButtonStyle.css" text="?" />
+            <JFXButton fx:id="submitButton" buttonType="RAISED" minWidth="70.0" onAction="#handleSubmit" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Submit" />
          </children>
       </HBox>
    </children>

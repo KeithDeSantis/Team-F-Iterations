@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.geometry.Insets?>
@@ -13,6 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
 
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
 <VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
@@ -42,9 +44,17 @@
       </AnchorPane>
       <HBox VBox.vgrow="ALWAYS">
          <children>
-            <VBox prefHeight="2000.0" prefWidth="286.0">
+            <VBox alignment="CENTER" prefHeight="2000.0" prefWidth="286.0">
                <children>
-                  <AnchorPane prefHeight="2000.0" prefWidth="2000.0" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="286.0" text="Destinations:" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin></Label>
+                  <AnchorPane minHeight="185.0" prefHeight="2000.0" prefWidth="2000.0">
+                     <children>
+                        <JFXListView fx:id="stopList" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
                   <HBox prefHeight="2000.0" prefWidth="2000.0">
                      <children>
                         <JFXTreeView fx:id="treeView" onMouseClicked="#handleListSelection" prefHeight="2000.0" prefWidth="2000.0" stylesheets="/stylesheets/TreeViewStyle.css" />
@@ -55,7 +65,7 @@
             </VBox>
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS" />
+                  <MapPanel fx:id="mapPanel" prefHeight="420.0" prefWidth="698.0" VBox.vgrow="ALWAYS" />
                   <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="NEVER">
                      <children>
                         <HBox fx:id="topHBox" alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
@@ -72,7 +82,7 @@
                               <JFXButton fx:id="endNavBtn" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="End Navigation" />
                               <JFXButton fx:id="viewInstructionsBtn" buttonType="RAISED" onAction="#handleViewInstructions" stylesheets="/stylesheets/DefaultButtonStyle.css" text="View List">
                                  <HBox.margin>
-                                    <Insets right="25.0" />
+                                    <Insets left="10.0" right="15.0" />
                                  </HBox.margin>
                               </JFXButton>
                               <Label fx:id="Instruction" alignment="CENTER" contentDisplay="CENTER" prefWidth="300.0" style="-fx-background-color: #F0C808;" text="Instructions" textFill="BLACK">
@@ -106,11 +116,11 @@
                            </VBox.margin>
                         </HBox>
                      </children>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
                   </VBox>
                </children>
-               <padding>
-                  <Insets left="10.0" right="10.0" />
-               </padding>
             </VBox>
          </children>
       </HBox>

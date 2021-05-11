@@ -59,7 +59,7 @@
             <Font size="18.0" />
          </font>
       </JFXButton>
-      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="125.0">
+      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0">
          <children>
             <GridPane prefHeight="290.0" prefWidth="1800.0">
               <columnConstraints>
@@ -108,7 +108,7 @@
                      <GridPane.margin>
                         <Insets left="2.0" right="2.0" />
                      </GridPane.margin></JFXTextField>
-                  <JFXComboBox fx:id="deliveryLocationField" prefWidth="500.0" GridPane.columnIndex="1">
+                  <JFXComboBox fx:id="deliveryLocationField" prefWidth="500.0" promptText="Select Location" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets left="2.0" />
                      </GridPane.margin></JFXComboBox>
