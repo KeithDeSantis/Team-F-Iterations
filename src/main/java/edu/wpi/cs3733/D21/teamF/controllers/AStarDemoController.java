@@ -613,7 +613,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         stopList.setCellFactory(x -> {
             final NavigationListCell cell = new NavigationListCell();
-
+            cell.getCloseBtn().setStyle("-fx-background-color: #E8321E; -fx-text-fill: #FFFFFF;");
             cell.getCloseBtn().setOnMouseClicked(e -> {
                 final String shortName = cell.getLabel().getText();
                 final String ID = shortNameToID(shortName);
