@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.pathfinding.GoogleAPI;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
@@ -96,8 +97,10 @@ public class GoogleMapsViewController extends AbsController {
             String address = streetAddress.getText() + " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
             String closestLot = GoogleAPI.getGoogleAPI().parseClosestParkingLot(address);
             String[] directions = GoogleAPI.getGoogleAPI().queryAPI(address, closestLot);
-            etaLabel.setText(directions[1]);
-            destinationAddress.setText(closestLot);
+            etaLabel.textProperty().unbind();
+            etaLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(directions[1]));
+            destinationAddress.textProperty().unbind();
+            destinationAddress.textProperty().bind(Translator.getTranslator().getTranslationBinding(closestLot));
             outputBox.setText(directions[0]);
         }
         else if (buttonPushed == cancelButton){
