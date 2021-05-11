@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXNodesList?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.geometry.Insets?>
@@ -44,7 +45,11 @@
          <children>
             <VBox prefHeight="2000.0" prefWidth="286.0">
                <children>
-                  <AnchorPane prefHeight="2000.0" prefWidth="2000.0" />
+                  <AnchorPane prefHeight="2000.0" prefWidth="2000.0">
+                     <children>
+                        <JFXNodesList fx:id="stopList" prefHeight="235.0" prefWidth="286.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
                   <HBox prefHeight="2000.0" prefWidth="2000.0">
                      <children>
                         <JFXTreeView fx:id="treeView" onMouseClicked="#handleListSelection" prefHeight="2000.0" prefWidth="2000.0" stylesheets="/stylesheets/TreeViewStyle.css" />

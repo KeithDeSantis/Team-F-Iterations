@@ -111,6 +111,9 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     @FXML
     private JFXTreeView<String> instructionTreeView;
+    
+    @FXML
+    private JFXNodesList stopList;
 
     //FIXME: DO BETTER
     private Graph graph;
