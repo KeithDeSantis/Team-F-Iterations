@@ -15,6 +15,7 @@ public class ConnectionHandler {
         embeddedURL = protocol + "projectC1;create=true";
 
         try {
+            DriverManager.setLoginTimeout(5);
             return DriverManager.getConnection(remoteURL);
         } catch (SQLException e) {
             System.out.println("ARE WE REMOTE????");
