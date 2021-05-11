@@ -1341,8 +1341,9 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         mapPanel.switchMap(pathVertex.get(0).getFloor());
 
-        if(userNodeDisplay != null)
-            mapPanel.unDraw(userNodeDisplay.getId());
+
+        //if(userNodeDisplay != null) //This can't be null anymore
+        mapPanel.unDraw(userNodeDisplay.getId());
         mapPanel.draw(this.userNodeDisplay);
 
         this.startNodeDisplay = mapPanel.getNode(pathVertex.get(0).getID());
