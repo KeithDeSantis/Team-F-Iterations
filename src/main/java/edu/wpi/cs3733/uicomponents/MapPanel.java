@@ -204,8 +204,26 @@ public class MapPanel extends AnchorPane {
 
         this.scroll.pannableProperty().set(true);
 
+        final double PIXEL_TO_ZOOM = this.scroll.viewportBoundsProperty().get().getWidth() / this.internalZoomLevel.doubleValue();
+        final double PIXELS = PIXEL_TO_ZOOM * 8.5;
+
         this.zoomSlider.valueProperty().addListener(e -> {
+            final double oldZoomLevel = this.internalZoomLevel.doubleValue();
+            final double oldH = this.scroll.hvalueProperty().doubleValue();
+            final double oldV = this.scroll.vvalueProperty().doubleValue();
+
+
+
             this.internalZoomLevel.set(((DoubleProperty) e).doubleValue());
+            final double newZoomLevel = this.internalZoomLevel.doubleValue();
+            final double newH = this.scroll.hvalueProperty().doubleValue();
+            final double newV = this.scroll.vvalueProperty().doubleValue();
+            final double RATIO = this.internalZoomLevel.doubleValue() / oldZoomLevel;
+
+
+
+            this.scroll.hvalueProperty().set(newH / RATIO);
+            this.scroll.vvalueProperty().set(newV / RATIO);
         });
 
     }
