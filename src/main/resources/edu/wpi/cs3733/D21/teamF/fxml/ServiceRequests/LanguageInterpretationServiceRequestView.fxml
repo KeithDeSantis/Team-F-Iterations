@@ -64,7 +64,7 @@
             <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label fx:id="nameLabel" lineSpacing="8.0" prefHeight="29.0" prefWidth="97.0" text="Name">
+            <Label fx:id="nameLabel" lineSpacing="8.0" prefHeight="29.0" prefWidth="97.0" text="Email">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -72,7 +72,7 @@
                   <Insets left="25.0" />
                </GridPane.margin>
             </Label>
-            <JFXTextField fx:id="name" focusColor="#03256c" prefHeight="29.0" prefWidth="2000.0" promptText="Name" unFocusColor="BLACK" GridPane.rowIndex="1">
+            <JFXTextField fx:id="email" focusColor="#03256c" prefHeight="29.0" prefWidth="2000.0" promptText="Name" unFocusColor="BLACK" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

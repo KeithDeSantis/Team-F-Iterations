@@ -27,7 +27,7 @@ public class FloralDeliveryService extends ServiceRequests {
     @FXML private JFXRadioButton potButton;
     @FXML private JFXComboBox<String> deliveryField;
     @FXML private JFXDatePicker dateField;
-    @FXML private JFXTextField nameField;
+    @FXML private JFXTextField emailField;
     @FXML private JFXTextField cardNumberField;
     @FXML private JFXTextField cardCVCField;
     @FXML private JFXTextField cardExpField;
@@ -78,7 +78,8 @@ public class FloralDeliveryService extends ServiceRequests {
             String type = "Flower Delivery";
             String uuid = UUID.randomUUID().toString();
             String additionalInfo = "Date: " + dateField.getValue() + "Deliver to: " + deliveryField.getValue() +
-            "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText();
+            "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText()
+                    + " Email;" + emailField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", additionalInfo);
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
@@ -89,7 +90,7 @@ public class FloralDeliveryService extends ServiceRequests {
         boolean isFilled = true;
 
         setNormalStyle(bouquetButton, vaseButton, potButton, roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox,
-                orchidCheckBox, daisyCheckBox, deliveryField, nameField, cardNumberField, cardCVCField, cardExpField, dateField);
+                orchidCheckBox, daisyCheckBox, deliveryField, emailField, cardNumberField, cardCVCField, cardExpField, dateField);
 
         if(!(bouquetButton.isSelected() || vaseButton.isSelected() || potButton.isSelected())) {
             isFilled = false;
@@ -103,9 +104,9 @@ public class FloralDeliveryService extends ServiceRequests {
             isFilled = false;
             setTextErrorStyle(deliveryField);
         }
-        if(nameField.getText().length() == 0) {
+        if(emailField.getText().length() == 0) {
             isFilled = false;
-            setTextErrorStyle(nameField);
+            setTextErrorStyle(emailField);
         }
         if(cardNumberField.getText().length() == 0) {
             isFilled = false;
@@ -137,14 +138,14 @@ public class FloralDeliveryService extends ServiceRequests {
         orchidCheckBox.setSelected(false);
         daisyCheckBox.setSelected(false);
         deliveryField.setValue(null);
-        nameField.setText("");
+        emailField.setText("");
         cardNumberField.setText("");
         cardExpField.setText("");
         cardCVCField.setText("");
         dateField.setValue(null);
 
         setNormalStyle(bouquetButton, vaseButton, potButton, roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox,
-                orchidCheckBox, daisyCheckBox, deliveryField, nameField, cardNumberField, cardCVCField, cardExpField, dateField);
+                orchidCheckBox, daisyCheckBox, deliveryField, emailField, cardNumberField, cardCVCField, cardExpField, dateField);
     }
 
 

@@ -77,12 +77,12 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Label>
-            <Label fx:id="requesterLbl" text="Requester: " GridPane.rowIndex="2">
+            <Label fx:id="requesterLbl" text="Requester Email: " GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="requesterTextText" alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="31.0" prefWidth="2000.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <JFXTextField fx:id="requesterEmailText" alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="31.0" prefWidth="2000.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="25.0" right="25.0" />
                </GridPane.margin>

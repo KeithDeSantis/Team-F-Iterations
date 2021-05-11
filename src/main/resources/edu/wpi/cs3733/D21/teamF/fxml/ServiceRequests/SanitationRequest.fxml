@@ -50,7 +50,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="clientNameLbl" text="Client Name:">
+                  <Label fx:id="clientNameLbl" text="Client Email:">
                      <font>
                         <Font name="Montserrat Regular" size="15.0" />
                      </font>
@@ -73,7 +73,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
                <children>
-                  <JFXTextField fx:id="clientName" maxWidth="-Infinity" prefHeight="31.0" prefWidth="300.0">
+                  <JFXTextField fx:id="clientEmail" maxWidth="-Infinity" prefHeight="31.0" prefWidth="300.0">
                      <HBox.margin>
                         <Insets left="25.0" />
                      </HBox.margin>

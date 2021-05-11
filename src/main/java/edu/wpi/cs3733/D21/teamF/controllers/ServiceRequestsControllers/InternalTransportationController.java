@@ -25,7 +25,7 @@ public class InternalTransportationController extends ServiceRequests {
 
     @FXML private JFXDatePicker movingDate;
 
-    @FXML private JFXTextField patientName;
+    @FXML private JFXTextField email;
 
     @FXML private JFXComboBox<String> patientRoom;
 
@@ -53,7 +53,7 @@ public class InternalTransportationController extends ServiceRequests {
     public boolean formFilled() {
 
         boolean isFilled = true;
-        setNormalStyle(deliverLocation, movingDate, patientName, patientRoom);
+        setNormalStyle(deliverLocation, movingDate, email, patientRoom);
 
         if(deliverLocation.getValue() == null) {
             isFilled = false;
@@ -67,9 +67,9 @@ public class InternalTransportationController extends ServiceRequests {
 //            isFilled = false;
 //            setTextErrorStyle(movingTime);
 //        }
-        if(patientName.getText().length() <= 0) {
+        if(email.getText().length() <= 0) {
             isFilled = false;
-            setTextErrorStyle(patientName);
+            setTextErrorStyle(email);
         }
         if(patientRoom.getValue() == null) {
             isFilled = false;
@@ -87,7 +87,7 @@ public class InternalTransportationController extends ServiceRequests {
             String person = "";
             String completed = "false";
             String additionalInfo = "Delivery Location: " + deliverLocation.getValue() + "Delivery Date: " + movingDate.getValue()
-                    + "Patient Room: " + patientRoom.getValue();
+                    + "Patient Room: " + patientRoom.getValue() + " Email;" + email.getText();
 
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
@@ -100,11 +100,11 @@ public class InternalTransportationController extends ServiceRequests {
     public void handleClear() {
         deliverLocation.setValue(null);
         movingDate.setValue(null);
-        patientName.setText("");
+        email.setText("");
         patientRoom.setValue(null);
         relativesCheckBox.setSelected(false);
         doctorCheckBox.setSelected(false);
-        setNormalStyle(deliverLocation, movingDate, patientName, patientRoom, relativesCheckBox, doctorCheckBox);
+        setNormalStyle(deliverLocation, movingDate, email, patientRoom, relativesCheckBox, doctorCheckBox);
     }
 
     public void handleHelp(ActionEvent actionEvent) throws IOException {

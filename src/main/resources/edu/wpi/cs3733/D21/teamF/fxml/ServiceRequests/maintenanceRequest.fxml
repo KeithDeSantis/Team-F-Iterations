@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -99,7 +100,7 @@
                   </JFXComboBox>
                </children>
             </VBox>
-            <VBox maxHeight="150.0" prefHeight="100.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+            <VBox maxHeight="150.0" prefHeight="100.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
                <children>
                   <Label fx:id="descLabel" text="Description of the Problem:">
                      <font>
@@ -148,6 +149,23 @@
                         <Insets left="25.0" right="25.0" top="10.0" />
                      </VBox.margin>
                   </JFXDatePicker>
+               </children>
+            </VBox>
+            <VBox maxHeight="150.0" prefHeight="100.0" prefWidth="500.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+               <children>
+                  <Label fx:id="descLabel1" text="Email:">
+                     <font>
+                        <Font name="Montserrat Regular" size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXTextField fx:id="emailField">
+                     <VBox.margin>
+                        <Insets left="25.0" right="25.0" top="10.0" />
+                     </VBox.margin>
+                  </JFXTextField>
                </children>
             </VBox>
          </children>

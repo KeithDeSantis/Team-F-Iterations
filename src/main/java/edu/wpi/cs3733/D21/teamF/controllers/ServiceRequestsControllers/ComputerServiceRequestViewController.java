@@ -28,7 +28,7 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
     private JFXComboBox<String> computerLocation;
 
     @FXML
-    private JFXTextField requesterTextText;
+    private JFXTextField requesterEmailText;
 
     @FXML
     private JFXComboBox<StringProperty> urgencyComboBox;
@@ -71,7 +71,7 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
             String type = "Computer Service";
             String assignedPerson = "";
             String additionalInfo = "Computer name: " + computerNameText.getText() + "Computer location: " + computerLocation.getValue()
-                    + "Urgency: " + urgencyComboBox.getValue() + "Requester: " + requesterTextText.getText();
+                    + "Urgency: " + urgencyComboBox.getValue() + "Requester Email;" + requesterEmailText.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
             openSuccessWindow();
         }
@@ -91,7 +91,7 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
         boolean accept = true;
 
         //Clear old styles
-        setNormalStyle(computerNameText, computerLocation, requesterTextText, urgencyComboBox,descriptionText);
+        setNormalStyle(computerNameText, computerLocation, requesterEmailText, urgencyComboBox,descriptionText);
 
 
         if(computerNameText.getText().trim().isEmpty())
@@ -106,9 +106,9 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
             accept = false;
         }
 
-        if(requesterTextText.getText().trim().isEmpty())
+        if(requesterEmailText.getText().trim().isEmpty())
         {
-            setTextErrorStyle(requesterTextText);
+            setTextErrorStyle(requesterEmailText);
             accept = false;
         }
 
@@ -131,10 +131,10 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
     @FXML
     public void handleClear() {
 
-        setNormalStyle(computerNameText, computerLocation, requesterTextText, urgencyComboBox,descriptionText);
+        setNormalStyle(computerNameText, computerLocation, requesterEmailText, urgencyComboBox,descriptionText);
         computerNameText.setText("");
         computerLocation.setValue(null);
-        requesterTextText.setText("");
+        requesterEmailText.setText("");
 
         urgencyComboBox.setValue(null);
 

@@ -64,12 +64,12 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Text fx:id="patientNameLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient Name:" GridPane.valignment="BOTTOM">
+            <Text fx:id="patientNameLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient Email:" GridPane.valignment="BOTTOM">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Text>
-            <JFXTextField fx:id="patientName" prefHeight="22.0" prefWidth="2000.0" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+            <JFXTextField fx:id="patientEmail" prefHeight="22.0" prefWidth="2000.0" GridPane.rowIndex="1" GridPane.valignment="TOP" />
             <Text fx:id="motLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="Method of Transportation:" GridPane.rowIndex="2">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />

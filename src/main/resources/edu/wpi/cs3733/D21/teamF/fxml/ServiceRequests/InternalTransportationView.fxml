@@ -77,12 +77,12 @@
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                         <children>
-                            <Label fx:id="patientNameLbl" minWidth="60.0" text="Patient:">
+                            <Label fx:id="patientNameLbl" minWidth="60.0" text="Email:">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>
                             </Label>
-                            <JFXTextField fx:id="patientName" alignment="CENTER" promptText="Name of Patient">
+                            <JFXTextField fx:id="email" alignment="CENTER">
                                 <font>
                                     <Font name="Montserrat Regular" size="15.0" />
                                 </font>

@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
-    public JFXTextField clientName;
+    public JFXTextField clientEmail;
     @FXML
     public JFXComboBox<String> clientRoom;
     @FXML
@@ -81,12 +81,12 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
     @FXML
     public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
         boolean submitSuccessful = true;
-        setNormalStyle(clientRoom, clientName, deliveryTime, medicineInformation, cardholder, cardNumber, cvc, expirationDate);
+        setNormalStyle(clientRoom, clientEmail, deliveryTime, medicineInformation, cardholder, cardNumber, cvc, expirationDate);
         for(int i = 0; i < 6; i++) {
             TextInputControl node = null;
             switch(i) {
                 case 0:
-                    node = clientName;
+                    node = clientEmail;
                     break;
                 case 1:
                     node = medicineInformation;
@@ -129,7 +129,7 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
             String completed = "false";
             String additionalInfo = "Delivery Location: " + clientRoom.getValue() + "Medicine Info: " + medicineInformation.getText()
                     + "Card Number: " + cardNumber.getText() + "Card Holder: " + cardholder.getText() + "CVC: " + cvc.getText()
-                    + "Expiration Date: " + expirationDate.getText();
+                    + "Expiration Date: " + expirationDate.getText() + "Email;" + clientEmail.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
 
             // Loads form submitted window and passes in current stage to return to request home
@@ -162,7 +162,7 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
 
     @Override
     public void handleClear() {
-        clientName.setText("");
+        clientEmail.setText("");
         clientRoom.setValue(null);
         deliveryTime.setValue(null);
         medicineInformation.setText("");
@@ -170,7 +170,7 @@ public class MedicineDeliveryServiceRequest extends ServiceRequests {
         cardNumber.setText("");
         cvc.setText("");
         expirationDate.setText("");
-        setNormalStyle(clientRoom, clientName, medicineInformation, deliveryTime, cardholder, cvc, cardNumber, expirationDate);
+        setNormalStyle(clientRoom, clientEmail, medicineInformation, deliveryTime, cardholder, cvc, cardNumber, expirationDate);
     }
 
     public void handleHelp(ActionEvent e) throws IOException {

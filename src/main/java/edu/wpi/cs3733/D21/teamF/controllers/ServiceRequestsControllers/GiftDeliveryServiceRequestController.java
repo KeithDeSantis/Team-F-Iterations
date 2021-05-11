@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class GiftDeliveryServiceRequestController extends ServiceRequests {
-    @FXML private JFXTextField name;
+    @FXML private JFXTextField email;
     @FXML private JFXTextField ccNumber;
     @FXML private JFXTextField expirationDate;
     @FXML private JFXTextField csv;
@@ -53,9 +53,9 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
         if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String type = "Gift Delivery";
-            String additionalInformation = "Requester: " + name.getText() + "CC Number: " + ccNumber.getText() +
+            String additionalInformation = "Requester: " + email.getText() + "CC Number: " + ccNumber.getText() +
                     "Expiration: " + expirationDate.getText() + "CSV: " + csv.getText() + "Special instructions: " + setSpecialInstructions() +
-                    "Schedule Delivery: " + dateField.getValue() + timeField.getValue();
+                    "Schedule Delivery: " + dateField.getValue() + timeField.getValue() + " Email;" + email.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", additionalInformation);
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
@@ -70,11 +70,11 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
     public boolean formFilled() {
 
         boolean isFilled = true;
-        setNormalStyle(name, ccNumber, csv, expirationDate);
+        setNormalStyle(email, ccNumber, csv, expirationDate);
 
-        if(name.getText().length() == 0){
+        if(email.getText().length() == 0){
             isFilled = false;
-            setTextErrorStyle(name);
+            setTextErrorStyle(email);
         }
         if(ccNumber.getText().length() == 0){
             isFilled = false;
@@ -93,7 +93,7 @@ public class GiftDeliveryServiceRequestController extends ServiceRequests {
 
     @FXML
     public void handleClear() {
-        name.setText("");
+        email.setText("");
         ccNumber.setText("");
         expirationDate.setText("");
         csv.setText("");

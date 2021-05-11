@@ -4,6 +4,7 @@ package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
@@ -25,6 +26,7 @@ public class MaintenanceRequestController extends ServiceRequests {
     @FXML private JFXTextArea descriptionField;
     @FXML private JFXComboBox<String> urgencyComboBox;
     @FXML private JFXDatePicker dateOfIncident;
+    @FXML private JFXTextField emailField;
 
     ObservableList<String> problemTypes = FXCollections.observableArrayList("Electrical", "Lighting",
             "Elevator", "Plumbing", "Safety Hazard", "Damage", "Spill", "HAZ-MAT");
@@ -91,7 +93,7 @@ public class MaintenanceRequestController extends ServiceRequests {
 //            }
 
             String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
-                    "Urgency: " + urgencyComboBox.getValue();
+                    "Urgency: " + urgencyComboBox.getValue() + "Email;" + emailField;
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name,"", "false", additionalInfo);
             openSuccessWindow();
         }

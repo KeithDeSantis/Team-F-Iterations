@@ -11,14 +11,7 @@ import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +21,7 @@ import java.util.UUID;
 
 
 public class LanguageInterpretationServiceRequestController extends ServiceRequests implements Initializable {
-    @FXML private JFXTextField name;
+    @FXML private JFXTextField email;
     @FXML private JFXDatePicker date;
     @FXML private JFXTimePicker time;
     @FXML private JFXComboBox<String> appointment;
@@ -59,7 +52,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
-                    " Name: " + name.getText() + " Appointment: " + appointment.getValue() + " Language: " + language.getValue();
+                    " Email;" + email.getText() + " Appointment: " + appointment.getValue() + " Language: " + language.getValue();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
@@ -71,12 +64,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
     @Override
     public void handleClear(){
-        name.setText("");
+        email.setText("");
         date.setValue(null);
         time.setValue(null);
         appointment.setValue(null);
         language.setValue(null);
-        setNormalStyle(name, date, time, appointment, language);
+        setNormalStyle(email, date, time, appointment, language);
     }
 
     /**
@@ -177,8 +170,8 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
     public boolean formFilled(){
         boolean isFilled = true;
-        if(name.getText().trim().isEmpty()){
-            setTextErrorStyle(name);
+        if(email.getText().trim().isEmpty()){
+            setTextErrorStyle(email);
             isFilled = false;
         }
         if(date.getValue() == null){

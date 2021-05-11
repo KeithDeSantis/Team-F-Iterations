@@ -171,7 +171,7 @@
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin></JFXDatePicker>
-            <Label fx:id="nameLbl" text="Name:" GridPane.rowIndex="1">
+            <Label fx:id="nameLbl" text="Email:" GridPane.rowIndex="1">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
@@ -179,7 +179,7 @@
                   <Insets left="10.0" />
                </GridPane.margin>
             </Label>
-            <JFXTextField fx:id="nameField" focusColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <JFXTextField fx:id="emailField" focusColor="#03256c" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>

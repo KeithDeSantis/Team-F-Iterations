@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -14,7 +15,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import com.jfoenix.controls.JFXComboBox?>
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LaundryRequestController">
    <children>
       <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -52,7 +52,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="nameLbl" text="Name:">
+                  <Label fx:id="nameLbl" text="Email:">
                      <padding>
                         <Insets left="10.0" right="10.0" />
                      </padding>
@@ -63,7 +63,7 @@
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <JFXTextField fx:id="employeeID" prefHeight="31.0" prefWidth="520.0">
+                  <JFXTextField fx:id="email" prefHeight="31.0" prefWidth="520.0">
                      <HBox.margin>
                         <Insets left="25.0" />
                      </HBox.margin>
