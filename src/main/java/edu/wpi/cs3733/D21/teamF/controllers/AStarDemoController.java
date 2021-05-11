@@ -813,7 +813,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         if(!(startNode.getValue().isEmpty())) {
             this.startNodeDisplay = mapPanel.getNode(shortNameToID(startNode.get()));
 
-            mapPanel.switchMap(findNodeEntry(startNodeDisplay.getId()).getFloor());
+            mapPanel.switchMap(this.startNodeDisplay.getFloor().get());//findNodeEntry(startNodeDisplay.getId()).getFloor());
             mapPanel.centerNode(startNodeDisplay);
             addNodeToRecent(DatabaseAPI.getDatabaseAPI().getNode(shortNameToID(startNode.getValue())));
         }
@@ -933,7 +933,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         //FIXME: USE BINDINGS?
         if(!(endNode.getValue().isEmpty())) {
             this.endNodeDisplay = mapPanel.getNode(shortNameToID(endNode.getValue()));//getDrawableNode(endComboBox.getValue(), Color.GREEN, 10);
-            mapPanel.switchMap(findNodeEntry(endNodeDisplay.getId()).getFloor());
+            mapPanel.switchMap(this.endNodeDisplay.getFloor().get());////findNodeEntry(endNodeDisplay.getId()).getFloor());
             mapPanel.centerNode(endNodeDisplay);
             addNodeToRecent(DatabaseAPI.getDatabaseAPI().getNode(shortNameToID(endNode.getValue())));
         }
