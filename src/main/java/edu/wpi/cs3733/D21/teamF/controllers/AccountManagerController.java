@@ -44,7 +44,7 @@ public class AccountManagerController extends AbsController implements Initializ
 
     public void initialize(URL location, ResourceBundle resources) {
 
-        int colWidth = 298;
+        int colWidth = 224;
         JFXTreeTableColumn<AccountEntry, String> username = new JFXTreeTableColumn<>("Username");
         username.setPrefWidth(colWidth);
         username.setCellValueFactory(cellData -> cellData.getValue().getValue().getUsernameProperty());
