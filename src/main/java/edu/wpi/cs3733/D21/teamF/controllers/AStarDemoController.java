@@ -618,30 +618,52 @@ public class AStarDemoController extends AbsController implements Initializable 
                 final String shortName = cell.getLabel().getText();
                 final String ID = shortNameToID(shortName);
                 vertices.removeIf(vertex -> vertex.getID().equals(ID));
+
+                if(startNode.get().equals(shortName)) {
+                    startNode.set("");
+                    checkInput();
+                    Go.setDisable(true);
+                }
+                if(endNode.get().equals(shortName)) {
+                    endNode.set("");
+                    checkInput();
+                    Go.setDisable(true);
+                }
+            });
+
+            cell.setOnMouseClicked(e -> {
+                mapPanel.centerNode(mapPanel.getNode(shortNameToID(cell.getLabel().getText())));
+                mapPanel.switchMap(mapPanel.getNode(shortNameToID(cell.getLabel().getText())).getFloor().get());
             });
 
             return cell;
         });
+
+
+        startNode.addListener((observable, oldValue, newValue) -> updateDestinationList());
+        endNode.addListener((observable, oldValue, newValue) -> updateDestinationList());
+
         vertices.addListener((ListChangeListener<Vertex>) c -> {
             while(c.next()){} //Needed to get all changes
-            stopList.getItems().clear();
-            //stopList.getChildren().clear();
-            for (Vertex stop : vertices)
-            {
-                System.out.println(stop.getID());
-                //final Label stopLbl = new Label(stop.getID());
-                final NavigationListCell cell = new NavigationListCell();
-
-
-                stopList.getItems().add(idToShortName(stop.getID()));
-                //stopList.addAnimatedNode(stopLbl);
-                //stopList.getListAnimation(true);
-                //stopList.animateList();
-                //stopList.animateList(true); // this confuses me so much but it works - KD
-            }
-            System.out.println("---------");
+            updateDestinationList();
         });
 
+    }
+
+    private void updateDestinationList() {
+        stopList.getItems().clear();
+        List<String> destinationLists = new ArrayList<>();
+        if(!startNode.get().isEmpty())
+            destinationLists.add(startNode.get());
+
+        destinationLists.addAll(vertices.stream().map(v -> idToShortName(v.getID())).collect(Collectors.toList()));
+        if(!endNode.get().isEmpty())
+            destinationLists.add(endNode.get());
+
+        for(String stop : destinationLists)//for (Vertex stop : vertices)
+        {
+            stopList.getItems().add(stop);//stop.getID()));
+        }
     }
 
     private EventHandler<ActionEvent> handleWhatsHereMenu(NodeEntry currEntry, int i) {
