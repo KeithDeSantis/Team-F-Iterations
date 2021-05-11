@@ -183,15 +183,23 @@ public class SceneContext {
 
         item.valueProperty().bind(Translator.getTranslator().getTranslationBinding(item.getValue()));
 
+        for(TreeItem<String> child : item.getChildren())
+        {
+            child.valueProperty().bind(Translator.getTranslator().getTranslationBinding(child.getValue()));
+        }
+
         item.getChildren().addListener((ListChangeListener<TreeItem<?>>) c -> {
+            while(c.next()) {} //get all changes
+
             for(TreeItem<String> child : item.getChildren())
             {
-                if(recursive)
+                if(recursive) {
                     bindTreeItem(child, true);
+                }
                 else
                 {
-                    child.valueProperty().unbind();
-                    child.valueProperty().bind(Translator.getTranslator().getTranslationBinding(child.getValue()));
+                    if(!child.valueProperty().isBound())
+                        child.valueProperty().bind(Translator.getTranslator().getTranslationBinding(child.getValue()));
                 }
             }
         });
