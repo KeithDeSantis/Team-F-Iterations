@@ -172,7 +172,6 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
 
-        //Do we need this line? ->
         language.getItems().addAll(Translator.getTranslator().getLanguages());
     }
 
