@@ -7,6 +7,12 @@ public class ConnectionHandler {
     private ConnectionHandler() {}
 
     //FIXME: at some point, refactor better, probably move into helper
+
+    /**
+     * Method to establish the connection to DB
+     * @return Connection object
+     * @throws SQLException on error with the DB
+     */
     private static Connection establishConnection() throws SQLException {
         String protocol = "jdbc:derby:";
         String embeddedURL;
@@ -17,10 +23,12 @@ public class ConnectionHandler {
         try {
             DriverManager.setLoginTimeout(5);
             return DriverManager.getConnection(remoteURL);
+
         } catch (SQLException e) {
             System.out.println("ARE WE REMOTE????");
             return DriverManager.getConnection(embeddedURL);
         }
+
     }
 
     private static class ConnectionSingletonHelper {
@@ -29,6 +37,7 @@ public class ConnectionHandler {
         static {
             try {
                 connection = establishConnection();
+
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
