@@ -155,28 +155,31 @@ public class AStarDemoController extends AbsController implements Initializable 
 
 
     // Create root tree item (will be hidden later)
-    TreeItem<String> rootTreeViewItem = new TreeItem<>("shortNames");
+    private final TreeItem<String> rootTreeViewItem = new TreeItem<>("shortNames");
     // List of all nodes in each category
-    TreeItem<String> conferenceItem = new TreeItem<>("Conference Rooms");
-    TreeItem<String> departmentItem = new TreeItem<>("Departments");
-    TreeItem<String> entranceItem = new TreeItem<>("Entrances");
-    TreeItem<String> infoItem = new TreeItem<>("Information");
-    TreeItem<String> labItem = new TreeItem<>("Labs");
-    TreeItem<String> parkingItem = new TreeItem<>("Parking");
-    TreeItem<String> restroomItem = new TreeItem<>("Restrooms");
-    TreeItem<String> retailItem = new TreeItem<>("Retail");
-    TreeItem<String> serviceItem = new TreeItem<>("Services");
-    TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
-    TreeItem<String> recentItem = new TreeItem<>("Recently Used");
+    private final TreeItem<String> conferenceItem = new TreeItem<>("Conference Rooms");
+    private final TreeItem<String> departmentItem = new TreeItem<>("Departments");
+    private final TreeItem<String> entranceItem = new TreeItem<>("Entrances");
+    private final TreeItem<String> infoItem = new TreeItem<>("Information");
+    private final TreeItem<String> labItem = new TreeItem<>("Labs");
+    private final TreeItem<String> parkingItem = new TreeItem<>("Parking");
+    private final TreeItem<String> restroomItem = new TreeItem<>("Restrooms");
+    private final TreeItem<String> retailItem = new TreeItem<>("Retail");
+    private final TreeItem<String> serviceItem = new TreeItem<>("Services");
+    private final TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
+    private final TreeItem<String> recentItem = new TreeItem<>("Recently Used");
 
-    TreeItem<String> instructionTreeViewItem = new TreeItem<>("Instructions");
+    private final TreeItem<String> instructionTreeViewItem = new TreeItem<>("Instructions");
 
-    boolean filterNodes = false; // Boolean for filtering user selections to only outdoor nodes
+    private boolean filterNodes = false; // Boolean for filtering user selections to only outdoor nodes
 
     private String direct = "UP";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        SceneContext.bindTreeItem(rootTreeViewItem, false);
+        SceneContext.bindTreeItem(instructionTreeViewItem, true);
 
         final Rectangle confGraphic = new Rectangle(16, 16);
         confGraphic.setFill(getNodeTypeColor("CONF"));
@@ -330,7 +333,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(handleAddStopMenu(addStopMenu, currEntry));
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, addStopMenu, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(handleEndPathMenu(currEntry));
@@ -498,6 +501,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
 
 
+
         // Setting up instruction tree view
         instructionTreeView.setRoot(instructionTreeViewItem);
         this.instructionTreeView.setShowRoot(false);
@@ -505,6 +509,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         // add tree items to root item (shown in order of addition)
         rootTreeViewItem.getChildren().addAll(conferenceItem, departmentItem, entranceItem, infoItem,
                 labItem, parkingItem, retailItem, serviceItem, restroomItem);
+
 
         // Check if a user is signed in a create the Tree Items for favorite and recent if needed
         if(CurrentUser.getCurrentUser().getUuid() == null && CurrentUser.getCurrentUser().isAuthenticated()) {
@@ -527,6 +532,8 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         // Set the root item
         treeView.setRoot(rootTreeViewItem);
+
+        System.out.println("TREEEE: " + treeView.getRoot().getChildren().get(0));
 
         // Hide root item (we don't need it visible, we always want to list to be there
         this.treeView.setShowRoot(false);
@@ -571,7 +578,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(handleAddStopMenu(addStopMenu, currEntry));
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, addStopMenu, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(handleEndPathMenu(currEntry));
@@ -690,9 +697,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         };
     }
 
-    private EventHandler<ActionEvent> handleAddStopMenu(MenuItem addStopMenu, NodeEntry currEntry) {
+    private EventHandler<ActionEvent> handleAddStopMenu(StringProperty stopMenuText, MenuItem addStopMenu, NodeEntry currEntry) {
         return e -> {
-            if (addStopMenu.getText().equals("Add Stop")) {
+            if (stopMenuText.get().equals("Add Stop")) {
                 vertices.add(graph.getVertex(currEntry.getNodeID()));
                 mapPanel.switchMap(currEntry.getFloor());
                 mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));

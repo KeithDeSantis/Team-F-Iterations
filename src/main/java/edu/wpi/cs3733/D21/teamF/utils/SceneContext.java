@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
 import javafx.animation.PauseTransition;
+import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -163,7 +164,37 @@ public class SceneContext {
             {
                 children.addAll(((ButtonBar)node).getButtons());
             }
+
+//            if(node instanceof TreeView)
+//            {
+//                TreeView<?> treeView = (TreeView<?>) node;
+//                if(treeView.get)
+//                //TreeView<String> treeView = (TreeView<String>) node;
+//                treeView.getChildrenUnmodifiable()
+//            }
         }
+    }
+
+    public static void bindTreeItem(TreeItem<String> item, boolean recursive)
+    {
+        //Can bind tree items, but text cannot be dynamically changed. This could be fixed by adding a custom item type
+        if(item == null)
+            return;
+
+        item.valueProperty().bind(Translator.getTranslator().getTranslationBinding(item.getValue()));
+
+        item.getChildren().addListener((ListChangeListener<TreeItem<?>>) c -> {
+            for(TreeItem<String> child : item.getChildren())
+            {
+                if(recursive)
+                    bindTreeItem(child, true);
+                else
+                {
+                    child.valueProperty().unbind();
+                    child.valueProperty().bind(Translator.getTranslator().getTranslationBinding(child.getValue()));
+                }
+            }
+        });
     }
 
     public void loadDefault() throws IOException {
