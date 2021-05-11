@@ -683,7 +683,12 @@ public class AStarDemoController extends AbsController implements Initializable 
             Label instructionsLabel = new Label();
             scrollPane.setPrefWidth(500);
             scrollPane.setPrefHeight(220);
-            instructionsLabel.setText(currEntry.getDescription());
+            try {
+                instructionsLabel.setText(Translator.getTranslator().translate(currEntry.getDescription()));
+            } catch (IOException ioException) {
+                instructionsLabel.setText(currEntry.getDescription());
+                ioException.printStackTrace();
+            }
             layout.setBody(scrollPane);
             scrollPane.setContent(instructionsLabel);
 
