@@ -94,6 +94,22 @@ public class Graph {
         return false;
     }
 
+    private void disableStairs(){
+        for(Edge e : this.edges){
+            if(e.getVertices()[0].getID().contains("STAI") && e.getVertices()[1].getID().contains("STAI")){
+                e.setLargeWeight();
+            }
+        }
+    }
+
+    private void enableStairs(){
+        for(Edge e : this.edges){
+            if(e.getVertices()[0].getID().contains("STAI") && e.getVertices()[1].getID().contains("STAI")){
+                e.setComputedWeight();
+            }
+        }
+    }
+
     /**
      * Finds the path of least weight between two Vertices
      * @param a the start Vertex
@@ -103,6 +119,13 @@ public class Graph {
      */
     public Path getPath(Vertex a, Vertex b) {
         return pathfindingAlgorithm.getPath(this, a, b);
+    }
+
+    public Path getPathNoStair(Vertex a, Vertex b) {
+        disableStairs();
+        Path path = getPath(a, b);
+        enableStairs();
+        return path;
     }
 
     /**
@@ -128,6 +151,13 @@ public class Graph {
             path.concatenate(currentSegment);
             prev = current;
         }
+        return path;
+    }
+
+    public Path getPathNoStair(List<Vertex> v) {
+        disableStairs();
+        Path path = getPath(v);
+        enableStairs();
         return path;
     }
 
@@ -209,6 +239,12 @@ public class Graph {
         return getPath(getEfficientOrder(list.toArray(new Vertex[0])));
     }
 
+    public Path getUnorderedPathNoStair(List<Vertex> list) {
+        disableStairs();
+        Path path = getUnorderedPath(list);
+        enableStairs();
+        return path;
+    }
     /**
      * Gets the Traveling Salesman solution to the
      * @param v the array of Vertices

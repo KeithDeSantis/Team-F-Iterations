@@ -21,11 +21,12 @@
          <children>
             <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ImageView fitHeight="50.0" onMouseClicked="#handleGoBack" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="/imagesAndLogos/BandWLogo.png" />
+                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
+                  <JFXButton onAction="#handleGoBack" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
                   <Text fx:id="title" text="NAVIGATION" />
                </children>
             </HBox>
@@ -54,6 +55,7 @@
                               <JFXButton fx:id="about" buttonType="RAISED" onAction="#gotoAboutPage" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="About" />
                               <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                               <JFXToggleButton fx:id="optimize" onAction="#checkInput" prefHeight="30.0" text="Optimize Route" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />
+                              <JFXToggleButton fx:id="disableStair" onAction="#checkInput" prefHeight="30.0" text="Disable Stairs" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />
                            </children>
                         </HBox>
                         <HBox fx:id="lowerHBox" alignment="CENTER" prefHeight="0.0" prefWidth="900.0">

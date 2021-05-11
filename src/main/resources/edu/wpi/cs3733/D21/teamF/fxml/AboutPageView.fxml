@@ -21,11 +21,12 @@
          <children>
             <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ImageView fitHeight="50.0" onMouseClicked="#goBack" onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="/imagesAndLogos/BandWLogo.png" />
+                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
                      </image>
                   </ImageView>
+                  <JFXButton onAction="#goBack" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
                   <Text fx:id="title" text="ABOUT US" />
                </children>
             </HBox>
@@ -148,11 +149,6 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </GridPane.margin>
             </Text>
-            <JFXButton fx:id="back" onAction="#goBack" prefHeight="23.0" prefWidth="70.0" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </GridPane.margin>
-            </JFXButton>
          </children>
       </GridPane>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="2000.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">

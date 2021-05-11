@@ -31,7 +31,7 @@ public class Edge {
      * Computes the proper weight of this Edge
      * @author Tony Vuolo (bdane)
      */
-    private void setComputedWeight() {
+    public void setComputedWeight() {
         floorLayerMap.put("L2", 0);
         floorLayerMap.put("L1", 1);
         floorLayerMap.put("GG", 2);
@@ -52,6 +52,10 @@ public class Edge {
         } else {
             this.weight = a.EuclideanDistance(b);
         }
+    }
+
+    public void setLargeWeight(){
+        this.weight = 100000;
     }
 
     /**

@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
+import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -1731,9 +1732,13 @@ public class MapEditViewController extends AbsController {
     public void handleFavoriteToggle() {
         favoriteOnly = !favoriteOnly;
         if(favoriteButton.getText().equals("Favorite")) {
-            favoriteButton.setText("Unfavorite");
-        } else if(favoriteButton.getText().equals("Unfavorite")) {
-            favoriteButton.setText("Favorite");
+            favoriteButton.textProperty().unbind();
+            favoriteButton.textProperty().bind(Translator.getTranslator().getTranslationBinding("Unfavorite"));
+
+        }
+        else if(favoriteButton.getText().equals("Unfavorite")) {
+            favoriteButton.textProperty().unbind();
+            favoriteButton.textProperty().bind(Translator.getTranslator().getTranslationBinding("Favorite"));
         }
         handleSearch();
     }

@@ -214,7 +214,6 @@ public class ServiceRequestManagerController extends AbsController implements In
             case "false":
             case "true":
             case "":
-                markAsComplete.setText("Toggle Status");
                 markAsComplete.setDisable(false);
                 break;
         }
