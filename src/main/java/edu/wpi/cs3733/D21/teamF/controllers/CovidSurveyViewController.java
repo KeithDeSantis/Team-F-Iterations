@@ -96,7 +96,8 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             if(fever.isSelected()) covidInfo += "fever, ";
             if(covidInfo.endsWith(", ")) covidInfo = covidInfo.substring(0, covidInfo.length() - 2);
             else covidInfo += "None";
-            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "",covidInfo);
+            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "",covidInfo +
+                    ";" + emailField.getText());
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "",
                     "false", generatedID.getText() + ":" + emailField.getText());
             // ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
