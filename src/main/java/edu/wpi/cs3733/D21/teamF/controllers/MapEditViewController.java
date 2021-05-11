@@ -172,17 +172,17 @@ public class MapEditViewController extends AbsController {
             });
         });
 
-        ObservableList<String> searchables = FXCollections.observableArrayList();
-        searchables.add("Node ID");
-        searchables.add("Floor");
-        searchables.add("Building");
-        searchables.add("Node Type");
-        searchables.add("Long Name");
-        searchables.add("Short Name");
-        searchables.add("Edge ID");
-        searchables.add("Start Node");
-        searchables.add("End Node");
-        searchComboBox.setItems(searchables);
+        ObservableList<String> searchableTypes = FXCollections.observableArrayList();
+        searchableTypes.add("Node ID");
+        searchableTypes.add("Floor");
+        searchableTypes.add("Building");
+        searchableTypes.add("Node Type");
+        searchableTypes.add("Long Name");
+        searchableTypes.add("Short Name");
+        searchableTypes.add("Edge ID");
+        searchableTypes.add("Start Node");
+        searchableTypes.add("End Node");
+        searchComboBox.setItems(searchableTypes);
         searchComboBox.setValue("Node ID");
 
         // Edge initialization
@@ -370,26 +370,6 @@ public class MapEditViewController extends AbsController {
             }
         });
 
-        /*
-          try {
-            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.xCoordinateProperty().get(), "xcoord");
-            DatabaseAPI.getDatabaseAPI().editNode(drawableNode.getId(), "" + drawableNode.yCoordinateProperty().get(), "ycoord");
-
-            ///FIXME: BIND PROPERTIES TOGETHER
-
-            for (NodeEntry entry : nodeEntryObservableList) {
-                if (entry.getNodeID().equals(drawableNode.getId())) {
-                    entry.setXCoordinate("" + drawableNode.xCoordinateProperty().get());
-                    entry.setYCoordinate("" + drawableNode.yCoordinateProperty().get());
-                    break;
-                }
-            }
-
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-         */
         rectSelector.setMouseTransparent(true);
 
         ArrayList<String> favList = DatabaseAPI.getDatabaseAPI().getUserNodes("favorite", CurrentUser.getCurrentUser().getLoggedIn().getUsername());
@@ -477,7 +457,7 @@ public class MapEditViewController extends AbsController {
     /**
      * Deletes the selected item based on the tab open
      *
-     * @throws SQLException
+     * @throws SQLException if a DB error occurred
      * @author KD LM KH ZS
      */
     public void handleDelete() throws SQLException {
@@ -809,18 +789,7 @@ public class MapEditViewController extends AbsController {
     public void handleSave() {
         if (nodesTab.isSelected()) {
             //FIXME: NULL ERROR CHECK.
-            final String fileName = "Untitled";
-
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Save CSV File");
-            fileChooser.setInitialFileName(fileName);
-
-            FileChooser.ExtensionFilter extFilter =
-                    new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-            fileChooser.getExtensionFilters().add(extFilter);
-
-            Stage FileStage = new Stage();
-            File file = fileChooser.showSaveDialog(FileStage);
+            final File file = saveFile();
 
             if (file != null) {
                 //FIXME: DO BETTER!!!
@@ -842,22 +811,10 @@ public class MapEditViewController extends AbsController {
                     CSVManager.writeToFile(file, data);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return;
                 }
             }
         } else if (edgesTab.isSelected()) {
-            final String fileName = "Untitled";
-
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Save CSV File");
-            fileChooser.setInitialFileName(fileName);
-
-            FileChooser.ExtensionFilter extFilter =
-                    new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-            fileChooser.getExtensionFilters().add(extFilter);
-
-            Stage FileStage = new Stage();
-            File file = fileChooser.showSaveDialog(FileStage);
+            final File file = saveFile();
 
             if (file != null) {
                 //FIXME: DO BETTER!!!
@@ -874,10 +831,24 @@ public class MapEditViewController extends AbsController {
                     CSVManager.writeToFile(file, data);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return;
                 }
             }
         }
+    }
+
+    private File saveFile() {
+        final String fileName = "Untitled";
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV File");
+        fileChooser.setInitialFileName(fileName);
+
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        Stage FileStage = new Stage();
+        return fileChooser.showSaveDialog(FileStage);
     }
 
     /**
@@ -887,19 +858,10 @@ public class MapEditViewController extends AbsController {
      */
     public void handleLoad() throws SQLException, IOException {
         if (nodesTab.isSelected()) {
-            FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter =
-                    new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-            fileChooser.getExtensionFilters().add(extFilter);
-            fileChooser.setTitle("Choose CSV File");
-            Stage FileStage = new Stage();
-            File file = fileChooser.showOpenDialog(FileStage);
-            final String fileName = String.valueOf(file);
-
-
+            final String fileName = openCSVFileChooser();
             List<String[]> nodeData;
 
-            //FIXME: METHODIZE THISS!!!!
+            //FIXME: METHODIZE THIS!!!!
             try {
                 nodeData = (fileName == null || fileName.trim().isEmpty()) ? CSVManager.load("MapfAllNodes.csv") : CSVManager.load(new File(fileName));
             } catch (Exception e) {
@@ -908,43 +870,24 @@ public class MapEditViewController extends AbsController {
             }
 
             if (nodeData.get(0).length != 8) {
-                FXMLLoader dialogLoader = new FXMLLoader();
-                dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/editorBadCSVView.fxml")); // load in Edit Dialog - KD
-                Stage dialogStage = new Stage();
-                Parent root = dialogLoader.load();
-                dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
-                dialogStage.initOwner(newButton.getScene().getWindow());
-                dialogStage.setScene(new Scene(root)); // set scene - KD
-                dialogStage.showAndWait();
-                return; //TODO This is Keith's bad attempt to make sure the user doesn't try to load in an edge CSV
+                displayBadCSV();
             }
 
             nodeEntryObservableList.clear();
             mapPanel.clearMap();
 
-            if (nodeData != null) {
-                if (!nodeData.isEmpty() && nodeData.get(0).length == 8) {
-                    nodeEntryObservableList.addAll(nodeData.stream().map(line -> new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7], "")).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
+            if (!nodeData.isEmpty() && nodeData.get(0).length == 8) {
+                nodeEntryObservableList.addAll(nodeData.stream().map(line -> new NodeEntry(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7], "")).sorted(Comparator.comparing(NodeEntry::getNodeID)).collect(Collectors.toList()));
 
-                    nodeEntryObservableList.forEach(n -> mapPanel.draw(getEditableNode(n)));
+                nodeEntryObservableList.forEach(n -> mapPanel.draw(getEditableNode(n)));
 
-                    DatabaseAPI.getDatabaseAPI().dropNodesTable();
-                    DatabaseAPI.getDatabaseAPI().createNodesTable();
-                    DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
-                }
+                DatabaseAPI.getDatabaseAPI().dropNodesTable();
+                DatabaseAPI.getDatabaseAPI().createNodesTable();
+                DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
             }
             drawEdgeNodeOnFloor(); // TODO this is interesting, if two incompatible CSVs are loaded what will happen?
         } else if (edgesTab.isSelected()) {
-            FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter =
-                    new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-            fileChooser.getExtensionFilters().add(extFilter);
-            fileChooser.setTitle("Choose CSV File");
-            Stage FileStage = new Stage();
-            File file = fileChooser.showOpenDialog(FileStage);
-            final String fileName = String.valueOf(file);
-
-
+            final String fileName = openCSVFileChooser();
             List<String[]> edgeData;
 
             try {
@@ -954,31 +897,46 @@ public class MapEditViewController extends AbsController {
                 return;
             }
             if (edgeData.get(0).length != 3) {
-                FXMLLoader dialogLoader = new FXMLLoader();
-                dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/editorBadCSVView.fxml")); // load in Edit Dialog - KD
-                Stage dialogStage = new Stage();
-                Parent root = dialogLoader.load();
-                dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
-                dialogStage.initOwner(newButton.getScene().getWindow());
-                dialogStage.setScene(new Scene(root)); // set scene - KD
-                dialogStage.showAndWait();
-                return; //TODO This is Keith's bad attempt to make sure the user doesn't try to load in an node CSV
+                displayBadCSV();
+                return;
             }
 
             edgeEntryObservableList.clear();
 
-            if (edgeData != null) {
-                if (!edgeData.isEmpty() && edgeData.get(0).length == 3) {
-                    edgeEntryObservableList.addAll(edgeData.stream().map(line -> new EdgeEntry(line[0], line[1], line[2])).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
+            if (!edgeData.isEmpty() && edgeData.get(0).length == 3) {
+                edgeEntryObservableList.addAll(edgeData.stream().map(line -> new EdgeEntry(line[0], line[1], line[2])).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
 
-                    DatabaseAPI.getDatabaseAPI().dropEdgesTable();
-                    DatabaseAPI.getDatabaseAPI().createEdgesTable();
-                    DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
-                }
+                DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+                DatabaseAPI.getDatabaseAPI().createEdgesTable();
+                DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
             }
             drawEdgeNodeOnFloor(); // TODO this is interesting, if two incompatible CSVs are loaded what will happen?
         }
     } //FIXME issues with loading CSVs, specifically how they are loaded in.  Eventually check to make sure loading proper CSV, or do two different buttons - KD
+
+    private String openCSVFileChooser() {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setTitle("Choose CSV File");
+        Stage FileStage = new Stage();
+        File file = fileChooser.showOpenDialog(FileStage);
+
+        return String.valueOf(file);
+    }
+
+    private void displayBadCSV() throws IOException {
+        FXMLLoader dialogLoader = new FXMLLoader();
+        dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/editorBadCSVView.fxml")); // load in Edit Dialog - KD
+        Stage dialogStage = new Stage();
+        Parent root = dialogLoader.load();
+        dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
+        dialogStage.initOwner(newButton.getScene().getWindow());
+        dialogStage.setScene(new Scene(root)); // set scene - KD
+        dialogStage.showAndWait();
+        //TODO This is Keith's bad attempt to make sure the user doesn't try to load in an node CSV
+    }
 
     public void handleReset() throws SQLException {
         mapPanel.clearMap();
@@ -997,27 +955,25 @@ public class MapEditViewController extends AbsController {
             return;
         }
 
-        if (nodeData != null && edgeData != null) {
-            if (!nodeData.isEmpty() && nodeData.get(0).length == 8 && !edgeData.isEmpty() && edgeData.get(0).length == 3) {
-                List<NodeEntry> list = new ArrayList<>();
-                for (String[] nodeDatum : nodeData) {
-                    NodeEntry nodeEntry = new NodeEntry(nodeDatum[0], nodeDatum[1], nodeDatum[2], nodeDatum[3], nodeDatum[4], nodeDatum[5], nodeDatum[6], nodeDatum[7], "");
-                    list.add(nodeEntry);
-                }
-                list.sort(Comparator.comparing(NodeEntry::getNodeID));
-                nodeEntryObservableList.addAll(list);
-                edgeEntryObservableList.addAll(edgeData.stream().map(line -> new EdgeEntry(line[0], line[1], line[2])).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
-
-                DatabaseAPI.getDatabaseAPI().dropNodesTable();
-                DatabaseAPI.getDatabaseAPI().createNodesTable();
-                DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
-
-                DatabaseAPI.getDatabaseAPI().dropEdgesTable();
-                DatabaseAPI.getDatabaseAPI().createEdgesTable();
-                DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
-
-                drawEdgeNodeOnFloor(); //FIXME do better with queries
+        if (!nodeData.isEmpty() && nodeData.get(0).length == 8 && !edgeData.isEmpty() && edgeData.get(0).length == 3) {
+            List<NodeEntry> list = new ArrayList<>();
+            for (String[] nodeDatum : nodeData) {
+                NodeEntry nodeEntry = new NodeEntry(nodeDatum[0], nodeDatum[1], nodeDatum[2], nodeDatum[3], nodeDatum[4], nodeDatum[5], nodeDatum[6], nodeDatum[7], "");
+                list.add(nodeEntry);
             }
+            list.sort(Comparator.comparing(NodeEntry::getNodeID));
+            nodeEntryObservableList.addAll(list);
+            edgeEntryObservableList.addAll(edgeData.stream().map(line -> new EdgeEntry(line[0], line[1], line[2])).sorted(Comparator.comparing(EdgeEntry::getEdgeID)).collect(Collectors.toList()));
+
+            DatabaseAPI.getDatabaseAPI().dropNodesTable();
+            DatabaseAPI.getDatabaseAPI().createNodesTable();
+            DatabaseAPI.getDatabaseAPI().populateNodes(nodeData); //NOTE: now can specify CSV arguments
+
+            DatabaseAPI.getDatabaseAPI().dropEdgesTable();
+            DatabaseAPI.getDatabaseAPI().createEdgesTable();
+            DatabaseAPI.getDatabaseAPI().populateEdges(edgeData); //NOTE: now can specify CSV arguments
+
+            drawEdgeNodeOnFloor(); //FIXME do better with queries
         }
 
     }
@@ -1054,9 +1010,7 @@ public class MapEditViewController extends AbsController {
 
         drawableNode.setOnMousePressed(e -> handleNodeDragMousePressed(drawableNode, nodeEntry, startEdges, endEdges));
 
-        drawableNode.setOnDragDetected(e -> {
-            tt.hide();
-        });
+        drawableNode.setOnDragDetected(e -> tt.hide());
 
         drawableNode.setOnMouseDragged(e -> {
                 isDragging = true;
@@ -1245,7 +1199,7 @@ public class MapEditViewController extends AbsController {
     }
 
     private DrawableEdge getEditableEdge(EdgeEntry edge, NodeEntry startNode, NodeEntry endNode) {
-        final DrawableEdge drawableEdge = new DrawableEdge(
+        return new DrawableEdge(
                 Integer.parseInt(startNode.getXCoordinate()),
                 Integer.parseInt(startNode.getYCoordinate()),
                 Integer.parseInt(endNode.getXCoordinate()),
@@ -1256,8 +1210,6 @@ public class MapEditViewController extends AbsController {
                 startNode,
                 endNode
         );
-
-        return drawableEdge;
     }
 
     /**
@@ -1300,7 +1252,7 @@ public class MapEditViewController extends AbsController {
     /**
      * Used to update a node entry in the UI and database //FIXME: Add delete if we already had the node
      *
-     * @param nodeEntry
+     * @param nodeEntry The NodeEntry
      */
     private void updateNodeEntry(NodeEntry nodeEntry) throws SQLException {
 
@@ -1308,16 +1260,15 @@ public class MapEditViewController extends AbsController {
             return;
 
         String nodeID = nodeEntry.getNodeID();
-        int xCoord = Integer.parseInt(nodeEntry.getXCoordinate());
-        int yCoord = Integer.parseInt(nodeEntry.getYCoordinate());
+        int xCoordinate = Integer.parseInt(nodeEntry.getXCoordinate());
+        int yCoordinate = Integer.parseInt(nodeEntry.getYCoordinate());
         String nodeFloor = nodeEntry.getFloor();
         String nodeBuilding = nodeEntry.getBuilding();
         String nodeType = nodeEntry.getNodeType();
         String longName = nodeEntry.getLongName();
         String shortName = nodeEntry.getShortName();
 
-        DatabaseAPI.getDatabaseAPI().addNode(nodeID, Integer.toString(xCoord), Integer.toString(yCoord), nodeFloor,
-                nodeBuilding, nodeType, longName, shortName);
+        DatabaseAPI.getDatabaseAPI().addNode(nodeID, Integer.toString(xCoordinate), Integer.toString(yCoordinate), nodeFloor, nodeBuilding, nodeType, longName, shortName);
 
         mapPanel.draw(getEditableNode(nodeEntry));
 
@@ -1362,10 +1313,7 @@ public class MapEditViewController extends AbsController {
         }
 
         // Check if need to switch map
-        if (node.getFloor().equals(mapPanel.getFloor().get())) {
-            //mapPanel.drawNodeOnFloor();
-        } else {
-            //floor = node.getFloor();
+        if (!node.getFloor().equals(mapPanel.getFloor().get())) {
             mapPanel.switchMap(node.getFloor());
         }
 
@@ -1413,8 +1361,8 @@ public class MapEditViewController extends AbsController {
         try {
             startNode = DatabaseAPI.getDatabaseAPI().getNode(edge.getStartNode());
             endNode = DatabaseAPI.getDatabaseAPI().getNode(edge.getEndNode());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
 
         // startNode or endNode not stored in database
@@ -1559,8 +1507,8 @@ public class MapEditViewController extends AbsController {
             try {
                 startNode = DatabaseAPI.getDatabaseAPI().getNode(e.getStartNode());
                 endNode = DatabaseAPI.getDatabaseAPI().getNode(e.getEndNode());
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
             }
             if (startNode == null || endNode == null) {
                 System.out.println("Edge with no actual Node");
@@ -1625,7 +1573,6 @@ public class MapEditViewController extends AbsController {
         // Draw all corresponding nodes
         for (NodeEntry n : nodeEntryObservableList) {
             mapPanel.draw(getEditableNode(n));
-            // drawCircle(Double.parseDouble(n.getXcoord()) / mapPanel.getZoomLevel(), Double.parseDouble(n.getYcoord()) / mapPanel.getZoomLevel(), n.getNodeID());
         }
         handleSearch();
     }
@@ -1633,8 +1580,8 @@ public class MapEditViewController extends AbsController {
     /**
      * Open window for user to create new edge with two node selected
      *
-     * @throws IOException
-     * @throws SQLException
+     * @throws IOException if an error occurred
+     * @throws SQLException if a DB issue occurred
      * @author ZheCheng
      */
     private void createNewEdgeFromNodes() throws IOException, SQLException {
@@ -1679,7 +1626,7 @@ public class MapEditViewController extends AbsController {
     /**
      * Helper that deletes all edges a node is connected to when a node is deleted
      *
-     * @param nodeID
+     * @param nodeID The id of the node to check
      * @author KD
      */
     public void deleteAssociatedEdges(String nodeID) throws SQLException {
@@ -1696,7 +1643,7 @@ public class MapEditViewController extends AbsController {
         for (Integer i : indicesToRemove) {
             edgeEntryObservableList.remove(edgeEntryObservableList.get(i));
             for (int index = 0; index < indicesToRemove.size(); index++) {
-                indicesToRemove.set(index, indicesToRemove.get(index) - 1); // to accomodate the changing indices of edgeEntryObservableList
+                indicesToRemove.set(index, indicesToRemove.get(index) - 1); // to accommodate the changing indices of edgeEntryObservableList
             }
         }
     }
@@ -1707,7 +1654,7 @@ public class MapEditViewController extends AbsController {
 
     /**
      * Adds selected node to the favorites list of current user
-     * @throws SQLException
+     * @throws SQLException if an error occurred
      * @author KD
      */
     public void handleFavorite() throws SQLException {
@@ -1715,7 +1662,7 @@ public class MapEditViewController extends AbsController {
         if(selectedCircle.getFill().equals(Color.GREEN) && mapPanel.getNode(selectedCircle.getId()).shouldDisplay().get()) {
             NodeEntry favNode = nodeTreeTable.getSelectionModel().getSelectedItem().getValue();
             if(favoriteButton.getText().equals("Favorite")) {
-                if (isInFavorites(favNode.getNodeID())) return; // dont want duplicate favorite - KD
+                if (isInFavorites(favNode.getNodeID())) return; // don't want duplicate favorite - KD
                 DatabaseAPI.getDatabaseAPI().addCollectionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), favNode.getNodeID(), "favorite");
                 favoriteList.add(favNode);
             } else if(favoriteButton.getText().equals("Unfavorite")) {
@@ -1746,8 +1693,8 @@ public class MapEditViewController extends AbsController {
 
     /**
      * Helper that returns true if the given ID is a favorite
-     * @param nodeID
-     * @return
+     * @param nodeID The string ID of the node to check
+     * @return true if the node was in favorites. False otherwise.
      * @author KD
      */
     public boolean isInFavorites(String nodeID) {
