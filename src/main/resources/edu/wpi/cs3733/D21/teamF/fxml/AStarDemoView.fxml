@@ -2,7 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXNodesList?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.geometry.Insets?>
@@ -51,7 +51,7 @@
                      </VBox.margin></Label>
                   <AnchorPane minHeight="185.0" prefHeight="2000.0" prefWidth="2000.0">
                      <children>
-                        <JFXNodesList fx:id="stopList" alignment="TOP_CENTER" prefHeight="28.0" prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0" />
+                        <JFXListView fx:id="stopList" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                   <HBox prefHeight="2000.0" prefWidth="2000.0">

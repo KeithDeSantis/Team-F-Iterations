@@ -115,7 +115,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     private JFXTreeView<String> instructionTreeView;
     
     @FXML
-    private JFXNodesList stopList;
+    private JFXListView stopList;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -609,6 +609,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         /*
          * Initialize the stop list
          */
+        /*
         vertices.addListener((ListChangeListener<Vertex>) c -> {
             while(c.next()){} //Needed to get all changes
             stopList.getChildren().clear();
@@ -623,6 +624,8 @@ public class AStarDemoController extends AbsController implements Initializable 
             }
             System.out.println("---------");
         });
+
+         */
     }
 
     private EventHandler<ActionEvent> handleWhatsHereMenu(NodeEntry currEntry, int i) {
