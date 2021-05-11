@@ -2,11 +2,13 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
+import org.apache.derby.iapi.db.Database;
 
 public class AccountManagerNewUserDialogController extends AbsController {
 
@@ -16,6 +18,8 @@ public class AccountManagerNewUserDialogController extends AbsController {
     private JFXTextField passwordField;
     @FXML
     private JFXComboBox<String> userTypeComboBox;
+    @FXML
+    private JFXTextField emailField;
 
     private AccountEntry newAccount = new AccountEntry("","","","", "", null);
 
@@ -34,6 +38,7 @@ public class AccountManagerNewUserDialogController extends AbsController {
             newAccount.setUsername(userNameField.getText());
             newAccount.setPassword(passwordField.getText());
             newAccount.setUserType(userTypeComboBox.getValue());
+            newAccount.setEmail(emailField.getText());
             newAccount.setCovidStatus("true");
             ((Stage) userNameField.getScene().getWindow()).close();
         }
@@ -55,6 +60,10 @@ public class AccountManagerNewUserDialogController extends AbsController {
         if(userTypeComboBox.getValue()==null) {
             userTypeComboBox.setStyle("-fx-border-color:  #ff000088");
             userTypeComboBox.setStyle("-fx-border-width:  2px");
+            isFilled = false;
+        }
+        if(!(DatabaseAPI.getDatabaseAPI().isValidEmail(emailField.getText()))) {
+            emailField.setStyle("-fx-background-color:  #ff000088");
             isFilled = false;
         }
         return isFilled;

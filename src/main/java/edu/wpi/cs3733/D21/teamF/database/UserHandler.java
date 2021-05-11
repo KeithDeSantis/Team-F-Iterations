@@ -22,7 +22,7 @@ class UserHandler implements DatabaseEntry {
      * @param email input string to match
      * @return true if is an email, false otherwise
      */
-    private boolean isEmail(String email){
+    public boolean isEmail(String email){
         String pattern = "^(.+)@(.+)$";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(email);

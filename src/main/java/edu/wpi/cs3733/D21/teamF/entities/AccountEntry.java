@@ -13,6 +13,7 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
     SimpleStringProperty usernameProperty;
     SimpleStringProperty passwordProperty;
     SimpleStringProperty userTypeProperty;
+    SimpleStringProperty emailProperty;
 
     public AccountEntry(String email, String username, String password, String userType, String status, byte[] salt) {
         this.email = email;
@@ -24,6 +25,7 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
         usernameProperty = new SimpleStringProperty(username);
         passwordProperty = new SimpleStringProperty(password);
         userTypeProperty = new SimpleStringProperty(userType);
+        emailProperty = new SimpleStringProperty(email);
     }
 
     public String getEmail() {
@@ -32,6 +34,7 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
 
     public void setEmail(String email) {
         this.email = email;
+        this.emailProperty.set(email);
     }
 
     public byte[] getSalt() {
@@ -47,6 +50,7 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
 
     public void setUsername(String username) {
         this.username = username;
+        usernameProperty = new SimpleStringProperty(username);
     }
 
     public String getPassword() {
@@ -55,6 +59,7 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
 
     public void setPassword(String password) {
         this.password = password;
+        passwordProperty = new SimpleStringProperty(password);
     }
 
     public String getUserType() {
@@ -63,6 +68,7 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
 
     public void setUserType(String userType) {
         this.userType = userType;
+        userTypeProperty = new SimpleStringProperty(userType);
     }
 
     public String getCovidStatus() {
@@ -83,6 +89,7 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
 
     public void setUsernameProperty(String usernameProperty) {
         this.usernameProperty.set(usernameProperty);
+        username = usernameProperty;
     }
 
     public SimpleStringProperty getPasswordProperty() {
@@ -91,6 +98,7 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
 
     public void setPasswordProperty(String passwordProperty) {
         this.passwordProperty.set(passwordProperty);
+        password = passwordProperty;
     }
 
     public SimpleStringProperty getUserTypeProperty() {
@@ -99,5 +107,23 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
 
     public void setUserTypeProperty(String userTypeProperty) {
         this.userTypeProperty.set(userTypeProperty);
+        userType = userTypeProperty;
+    }
+
+    public SimpleStringProperty passwordPropertyProperty() {
+        return passwordProperty;
+    }
+
+    public SimpleStringProperty userTypePropertyProperty() {
+        return userTypeProperty;
+    }
+
+    public SimpleStringProperty getEmailProperty() {
+        return emailProperty;
+    }
+
+    public void setEmailProperty(String emailProperty) {
+        this.emailProperty.set(emailProperty);
+        email = emailProperty;
     }
 }

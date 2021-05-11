@@ -201,6 +201,10 @@ public class DatabaseAPI {
         return ((UserHandler)this.userHandler).verifyAdmin();
     }
 
+    public boolean isValidEmail(String email){
+        return ((UserHandler)this.userHandler).isEmail(email);
+    }
+
     public boolean addSystemPreferences(String...colValues) throws SQLException{
         for (String s: colValues){
             if (!(this.filterInput(s))){

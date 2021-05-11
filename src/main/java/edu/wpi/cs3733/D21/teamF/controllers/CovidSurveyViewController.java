@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -37,6 +39,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private JFXRadioButton no1;
     @FXML private JFXRadioButton no2;
     @FXML private JFXTextField temperatureField;
+    @FXML private JFXTextField emailField;
     @FXML private JFXCheckBox cough;
     @FXML private JFXCheckBox breathing;
     @FXML private JFXCheckBox fatigue;
@@ -69,7 +72,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
      * creates a service request and puts it in the database, then changes to the submitted view
      * @throws IOException
      */
-    @FXML private void handleSubmitPushed() throws IOException, SQLException {
+    @FXML private void handleSubmitPushed() throws IOException, SQLException, MessagingException {
         if(formFilled()) {
             // Create service request, put in database
             String covidInfo = "Temp: " + temperatureField.getText() + "ºF, ";
@@ -93,13 +96,18 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             if(fever.isSelected()) covidInfo += "fever, ";
             if(covidInfo.endsWith(", ")) covidInfo = covidInfo.substring(0, covidInfo.length() - 2);
             else covidInfo += "None";
-            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "",covidInfo);
-            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "", "false", generatedID.getText());
+            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "",covidInfo +
+                    ";" + emailField.getText());
+            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "",
+                    "false", generatedID.getText() + ":" + emailField.getText());
             // ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
             // Copy UUID to users clipboard TODO add explicit button for this
             Clipboard.getSystemClipboard().setContent(content);
 
+            EmailHandler.getEmailHandler().sendEmail(emailField.getText(), "Your Covid -19 Ticket Number",
+                    "Below is your unique ticket ID for the Covid-19 survey, use this to check your clearance status. \n"
+            + generatedID.getText());
 
             // Change view to survey submitted page
             FXMLLoader submittedPageLoader = new FXMLLoader();
@@ -122,8 +130,10 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
 
         }
     }
+
     public boolean formFilled(){
         final String tempStr = temperatureField.getText().trim();
+        final String emailStr = emailField.getText().trim();
         boolean returnFlag = true;
 
         //Empty temperature field
@@ -143,6 +153,10 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
                 setTextErrorStyle(temperatureField);
                 returnFlag = false;
             }
+        }
+        if(!(DatabaseAPI.getDatabaseAPI().isValidEmail(emailStr))) {
+            setTextErrorStyle(emailField);
+            returnFlag = false;
         }
 
         //FIXME: ADD USER FEEDBACK

@@ -28,4 +28,8 @@ public class AccountManagerHelpController extends AbsController {
     public void handleDefaultUsers() {
         helpTextLabel.setText("There are three \"default\" users, admin, staff, and guest.  While they appear in the table, any edits you make to them will have no effect (other than deletion).  These three accounts are meant to ensure the user never gets totally locked out of the account manager.");
     }
+
+    public void handleEmail() {
+        helpTextLabel.setText("Enter the email associated with the new account.");
+    }
 }
