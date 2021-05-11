@@ -37,6 +37,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private JFXRadioButton no1;
     @FXML private JFXRadioButton no2;
     @FXML private JFXTextField temperatureField;
+    @FXML private JFXTextField emailField;
     @FXML private JFXCheckBox cough;
     @FXML private JFXCheckBox breathing;
     @FXML private JFXCheckBox fatigue;
@@ -122,8 +123,10 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
 
         }
     }
+
     public boolean formFilled(){
         final String tempStr = temperatureField.getText().trim();
+        final String emailStr = emailField.getText().trim();
         boolean returnFlag = true;
 
         //Empty temperature field
@@ -143,6 +146,11 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
                 setTextErrorStyle(temperatureField);
                 returnFlag = false;
             }
+        }
+        //TODO check if valid email
+        if(emailStr.isEmpty()) {
+            setTextErrorStyle(emailField);
+            returnFlag = false;
         }
 
         //FIXME: ADD USER FEEDBACK

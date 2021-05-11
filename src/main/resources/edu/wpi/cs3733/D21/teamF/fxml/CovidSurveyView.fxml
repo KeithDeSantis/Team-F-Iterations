@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -16,9 +17,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
-
-<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.scene.text.Text?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #E6E6E6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.CovidSurveyViewController">
    <children>
       <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -61,13 +61,14 @@
                   <RowConstraints minHeight="10.0" prefHeight="2000.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="2000.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="2000.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="2000.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label fx:id="posTestPrompt" prefHeight="47.0" prefWidth="355.0" text="Have you received a positive COVID test in the past 14 days? " wrapText="true">
                            <font>
-                              <Font name="Montserrat Regular" size="15.0" />
+                              <Font size="12.0" />
                            </font>
                         </Label>
                         <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="355.0" spacing="50.0">
@@ -102,7 +103,7 @@
                      <children>
                         <Label fx:id="fifteenPrompt" prefHeight="70.0" prefWidth="355.0" text="Have you spent more than 15 mins with someone who received a positive COVID test in the past 14 days? " wrapText="true">
                            <font>
-                              <Font name="Montserrat Regular" size="15.0" />
+                              <Font size="12.0" />
                            </font>
                         </Label>
                         <HBox alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="419.0" spacing="50.0">
@@ -137,10 +138,20 @@
                      <children>
                         <Label fx:id="tempPrompt" prefHeight="49.0" prefWidth="355.0" text="Please take your temperature (degrees F) and type it into the box: " wrapText="true">
                            <font>
-                              <Font name="Montserrat Regular" size="15.0" />
+                              <Font size="12.0" />
                            </font>
                         </Label>
                         <JFXTextField fx:id="temperatureField" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="330.0" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="79.0" prefWidth="440.0" GridPane.rowIndex="3">
+                     <children>
+                        <Label fx:id="tempPrompt1" prefHeight="49.0" prefWidth="355.0" text="Please enter your email, we will send you your login key to check your status:" wrapText="true">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField fx:id="emailField" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="330.0" />
                      </children>
                   </VBox>
                </children>
