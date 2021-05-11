@@ -5,11 +5,13 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXSlider;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -37,11 +39,14 @@ public class MapPanel extends AnchorPane {
     @FXML
     public Pane canvas;
 
-    @FXML
-    public JFXButton zoomInButton;
+//    @FXML
+//    public JFXButton zoomInButton;
+//
+//    @FXML
+//    public JFXButton zoomOutButton;
 
     @FXML
-    public JFXButton zoomOutButton;
+    public JFXSlider zoomSlider;
 
     @FXML
     public StackPane stackPane;
@@ -61,7 +66,7 @@ public class MapPanel extends AnchorPane {
     private final StringProperty floor = new SimpleStringProperty("1");
     private final ObjectProperty<String> fp = new SimpleObjectProperty<>();
 
-    private static final double MIN_ZOOM_LEVEL = 8;
+    private static final double MIN_ZOOM_LEVEL = 8, MAX_ZOOM_LEVEL = 1;
 
 
     private final BooleanProperty navigating = new SimpleBooleanProperty(false);
@@ -155,8 +160,8 @@ public class MapPanel extends AnchorPane {
 
     @FXML
     public void initialize(){
-        zoomInButton.setOnAction(this::handleZoom);
-        zoomOutButton.setOnAction(this::handleZoom);
+//        zoomInButton.setOnAction(this::handleZoom);
+//        zoomOutButton.setOnAction(this::handleZoom);
 
         // Set button fonts - LM
         scroll.hbarPolicyProperty().bind(Bindings.when(navigating)
@@ -191,7 +196,7 @@ public class MapPanel extends AnchorPane {
 
         floorSlider.setLabelFormatter(doubleStringConverter);
 
-       // final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
+        // final StringBinding binding =  Bindings.createStringBinding(() -> floorSlider.getLabelFormatter().toString(floorSlider.valueProperty().get()), floorSlider.valueProperty());
 
 
         Bindings.bindBidirectional(this.floor, floorSlider.valueProperty(), doublePropertyStringConverter);
@@ -199,6 +204,31 @@ public class MapPanel extends AnchorPane {
         this.floorSlider.valueProperty().addListener(e -> switchMap(this.doubleStringConverter.toString(this.floorSlider.valueProperty().get())));
 
         fp.bind(this.floor);
+
+        this.scroll.pannableProperty().set(true);
+
+        final double PIXEL_TO_ZOOM = this.scroll.viewportBoundsProperty().get().getWidth() / this.internalZoomLevel.doubleValue();
+        final double PIXELS = PIXEL_TO_ZOOM * 8.5;
+
+        this.zoomSlider.valueProperty().addListener(e -> {
+            final double oldZoomLevel = this.internalZoomLevel.doubleValue();
+            final double oldH = this.scroll.hvalueProperty().doubleValue();
+            final double oldV = this.scroll.vvalueProperty().doubleValue();
+
+
+
+            this.internalZoomLevel.set(((DoubleProperty) e).doubleValue());
+            final double newZoomLevel = this.internalZoomLevel.doubleValue();
+            final double newH = this.scroll.hvalueProperty().doubleValue();
+            final double newV = this.scroll.vvalueProperty().doubleValue();
+            final double RATIO = this.internalZoomLevel.doubleValue() / oldZoomLevel;
+
+
+
+            this.scroll.hvalueProperty().set(newH / RATIO);
+            this.scroll.vvalueProperty().set(newV / RATIO);
+        });
+
     }
 
 
@@ -261,26 +291,26 @@ public class MapPanel extends AnchorPane {
     }
 
 
-    /**
-     * Basic implementation of Zooming the map by changing the zoom level and reloading
-     * @param actionEvent the press of zoom in or zoom out
-     * @author KD
-     */
-    public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
-        JFXButton btn = (JFXButton) actionEvent.getSource();
-        if(btn == zoomInButton) {
-            if(internalZoomLevel.get() > 1) {
-                internalZoomLevel.setValue(internalZoomLevel.get()  - 1);
-            }
-        } else if (btn == zoomOutButton) {
-            if(internalZoomLevel.get() < MIN_ZOOM_LEVEL) {
-                internalZoomLevel.setValue(internalZoomLevel.get() + 1);
-            }
-        }
-
-        Image image = map.getImage();
-        map.setImage(image);
-    }
+//    /**
+//     * Basic implementation of Zooming the map by changing the zoom level and reloading
+//     * @param actionEvent the press of zoom in or zoom out
+//     * @author KD
+//     */
+//    public void handleZoom(ActionEvent actionEvent) { //TODO Fix Centering so centering node works when zoom level is changed
+//        JFXButton btn = (JFXButton) actionEvent.getSource();
+//        if(btn == zoomInButton) {
+//            if(internalZoomLevel.get() > MAX_ZOOM_LEVEL) {
+//                internalZoomLevel.setValue(internalZoomLevel.get()  - 1);
+//            }
+//        } else if (btn == zoomOutButton) {
+//            if(internalZoomLevel.get() < MIN_ZOOM_LEVEL) {
+//                internalZoomLevel.setValue(internalZoomLevel.get() + 1);
+//            }
+//        }
+//
+//        Image image = map.getImage();
+//        map.setImage(image);
+//    }
 
     /**
      * Center the given node in the map
