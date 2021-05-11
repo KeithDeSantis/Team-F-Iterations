@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.utils;
 
+import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.AbsController;
 import javafx.animation.PauseTransition;
@@ -7,10 +8,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ComboBoxBase;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.TextInputControl;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -128,13 +126,23 @@ public class SceneContext {
                     continue;
                 textInputControl.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(textInputControl.getPromptText()));
             }
-            else if(n instanceof ComboBoxBase)
+            else if(n instanceof ComboBoxBase<?>)
             {
-                final ComboBoxBase comboBoxBase = (ComboBoxBase) n;
+                final ComboBoxBase<?> comboBoxBase = (ComboBoxBase<?>) n;
 
                 if(comboBoxBase.getPromptText().toLowerCase().startsWith("brigham and women's hospital"))
                     continue;
                 comboBoxBase.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(comboBoxBase.getPromptText()));
+            }
+            else if(n instanceof JFXTreeTableView)
+            {
+                final TreeTableView<?> treeTableView = (TreeTableView<?>) n;
+
+                for(TreeTableColumn<?, ?> c : treeTableView.getColumns()) {
+                    if (c.getText().toLowerCase().startsWith("brigham and women's hospital"))
+                        continue;
+                    c.textProperty().bind(Translator.getTranslator().getTranslationBinding(c.getText()));
+                }
             }
         }
     }

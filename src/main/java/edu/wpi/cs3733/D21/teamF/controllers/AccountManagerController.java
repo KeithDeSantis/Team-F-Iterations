@@ -41,8 +41,8 @@ public class AccountManagerController extends AbsController implements Initializ
 
     public void initialize(URL location, ResourceBundle resources) {
 
-        int colWidth = 224;
-        JFXTreeTableColumn<AccountEntry, String> username = new JFXTreeTableColumn<>("Username");
+        final int colWidth = 224;
+        final JFXTreeTableColumn<AccountEntry, String> username = new JFXTreeTableColumn<>("Username");
         username.setPrefWidth(colWidth);
         username.setCellValueFactory(cellData -> cellData.getValue().getValue().getUsernameProperty());
 
@@ -57,7 +57,7 @@ public class AccountManagerController extends AbsController implements Initializ
             selectedAccount.getValue().setUsername(event.getNewValue());
         });
 
-        JFXTreeTableColumn<AccountEntry, String> password = new JFXTreeTableColumn<>("Password");
+        final JFXTreeTableColumn<AccountEntry, String> password = new JFXTreeTableColumn<>("Password");
         password.setPrefWidth(colWidth);
         password.setCellValueFactory(cellData -> cellData.getValue().getValue().getPasswordProperty());
 
@@ -73,7 +73,7 @@ public class AccountManagerController extends AbsController implements Initializ
             selectedAccount.getValue().setPassword(event.getNewValue());
         });
 
-        JFXTreeTableColumn<AccountEntry, String> emails = new JFXTreeTableColumn<>("Email");
+        final JFXTreeTableColumn<AccountEntry, String> emails = new JFXTreeTableColumn<>("Email");
         emails.setPrefWidth(colWidth);
         emails.setCellValueFactory(cellData -> cellData.getValue().getValue().getEmailProperty());
 
@@ -97,7 +97,8 @@ public class AccountManagerController extends AbsController implements Initializ
         typeList.add("administrator");
         typeList.add("employee");
         typeList.add("visitor");
-        JFXTreeTableColumn<AccountEntry, String> userType = new JFXTreeTableColumn<>("User Type");
+
+        final JFXTreeTableColumn<AccountEntry, String> userType = new JFXTreeTableColumn<>("User Type");
         userType.setPrefWidth(colWidth);
         userType.setCellValueFactory(cellData -> cellData.getValue().getValue().getUserTypeProperty());
 
