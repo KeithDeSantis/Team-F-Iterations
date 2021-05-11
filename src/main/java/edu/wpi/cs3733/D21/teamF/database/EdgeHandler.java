@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EdgeHandler implements DatabaseEntry {
+class EdgeHandler implements DatabaseEntry {
 
     /**
      * {@inheritDoc}

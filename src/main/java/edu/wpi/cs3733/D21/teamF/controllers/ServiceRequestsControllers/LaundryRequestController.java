@@ -1,15 +1,16 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,8 +19,6 @@ import java.util.UUID;
 
 public class LaundryRequestController extends ServiceRequests {
 
-    @FXML private JFXButton cancel;
-    @FXML private JFXButton help;
     @FXML private JFXRadioButton darks;
     @FXML private JFXRadioButton lights;
     @FXML private JFXRadioButton both;
@@ -27,16 +26,16 @@ public class LaundryRequestController extends ServiceRequests {
     @FXML private JFXRadioButton cold;
     @FXML private JFXRadioButton folded;
 
-    @FXML public TextField employeeID;
+    @FXML public TextField email;
     @FXML public TextField clientName;
     @FXML public TextField additionalInstructions;
 
-    public TextField getEmployeeID() {
-        return employeeID;
+    public TextField getEmail() {
+        return email;
     }
 
-    public void setEmployeeID(TextField employeeID) {
-        this.employeeID = employeeID;
+    public void setEmail(TextField email) {
+        this.email = email;
     }
 
     public TextField getClientName() {
@@ -56,14 +55,21 @@ public class LaundryRequestController extends ServiceRequests {
     }
 
     @FXML
-    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+    public void initialize(){
+    }
+
+    @FXML
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException, MessagingException {
         if(formFilled()) {
             // Loads form submitted window and passes in current stage to return to request home
             String uuid = UUID.randomUUID().toString();
             String type = "Laundry Request";
             String person = "";
             String completed = "false";
-            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInformation());
+            String additionalInstructions = additionalInformation();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInstructions);
+            EmailHandler.getEmailHandler().sendEmail(additionalInstructions.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request " + type + " it will be completed as soon as possible");
 
             openSuccessWindow();
         }
@@ -84,6 +90,8 @@ public class LaundryRequestController extends ServiceRequests {
                 additionalInfo.append(", ").append(r.getText());
             }
         }
+
+        additionalInfo.append(" ;").append(email.getText());
 
         return additionalInfo.toString();
     }
@@ -108,15 +116,15 @@ public class LaundryRequestController extends ServiceRequests {
     public boolean formFilled() {
         boolean isFilled = true;
 
-        setNormalStyle(employeeID, hot, cold, darks, lights, both);
+        setNormalStyle(email, hot, cold, darks, lights, both);
 
-        if(employeeID.getText().length() == 0){
+        if(email.getText().length() == 0){
             isFilled = false;
-            setTextErrorStyle(employeeID);
+            setTextErrorStyle(email);
         }
-//        if(clientName.getText().length() == 0){
+//        if(clientEmail.getText().length() == 0){
 //            isFilled = false;
-//            setTextErrorStyle(clientName);
+//            setTextErrorStyle(clientEmail);
 //        }
         if(! (hot.isSelected() || cold.isSelected())){
             isFilled = false;
@@ -138,10 +146,10 @@ public class LaundryRequestController extends ServiceRequests {
         hot.setSelected(false);
         cold.setSelected(false);
         folded.setSelected(false);
-        employeeID.setText("");
-        //clientName.setText("");
+        email.setText("");
+        //clientEmail.setText("");
         additionalInstructions.setText("");
-        setNormalStyle(both, lights, darks, hot, cold, folded, employeeID, additionalInstructions);
+        setNormalStyle(both, lights, darks, hot, cold, folded, email, additionalInstructions);
     }
 
     public void handleHelp(ActionEvent e) throws IOException {

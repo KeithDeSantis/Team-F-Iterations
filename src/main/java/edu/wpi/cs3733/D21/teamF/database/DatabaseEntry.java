@@ -3,7 +3,7 @@ package edu.wpi.cs3733.D21.teamF.database;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface DatabaseEntry {
+interface DatabaseEntry {
     /**
      * Adds an entry into the table of the concrete class
      * @param colValues String array of values for the new entry

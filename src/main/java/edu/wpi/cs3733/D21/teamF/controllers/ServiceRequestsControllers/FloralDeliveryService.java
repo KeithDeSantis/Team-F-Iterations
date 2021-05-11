@@ -4,15 +4,15 @@ import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -29,7 +29,7 @@ public class FloralDeliveryService extends ServiceRequests {
     @FXML private JFXRadioButton potButton;
     @FXML private JFXComboBox<String> deliveryField;
     @FXML private JFXDatePicker dateField;
-    @FXML private JFXTextField nameField;
+    @FXML private JFXTextField emailField;
     @FXML private JFXTextField cardNumberField;
     @FXML private JFXTextField cardCVCField;
     @FXML private JFXTextField cardExpField;
@@ -39,15 +39,11 @@ public class FloralDeliveryService extends ServiceRequests {
     @FXML private JFXCheckBox sunflowerCheckBox;
     @FXML private JFXCheckBox orchidCheckBox;
     @FXML private JFXCheckBox daisyCheckBox;
-    @FXML private Label successField;
-    @FXML private ImageView logoHome;
+
 
 
     @FXML
     public void initialize() {
-//        Image img = new Image(getClass().getResourceAsStream("/imagesAndLogos/BandWLogo.png"));
-//        logoHome.setImage(img);
-
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 
@@ -79,13 +75,16 @@ public class FloralDeliveryService extends ServiceRequests {
      * @param actionEvent
      * @author KD
      */
-    public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException {
+    public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException, MessagingException {
         if(formFilled()) {
             String type = "Flower Delivery";
             String uuid = UUID.randomUUID().toString();
             String additionalInfo = "Date: " + dateField.getValue() + "Deliver to: " + deliveryField.getValue() +
-            "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText();
+            "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText()
+                    + " Email;" + emailField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", additionalInfo);
+            EmailHandler.getEmailHandler().sendEmail(additionalInfo.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request " + type + " it will be completed as soon as possible");
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
         }
@@ -95,7 +94,7 @@ public class FloralDeliveryService extends ServiceRequests {
         boolean isFilled = true;
 
         setNormalStyle(bouquetButton, vaseButton, potButton, roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox,
-                orchidCheckBox, daisyCheckBox, deliveryField, nameField, cardNumberField, cardCVCField, cardExpField, dateField);
+                orchidCheckBox, daisyCheckBox, deliveryField, emailField, cardNumberField, cardCVCField, cardExpField, dateField);
 
         if(!(bouquetButton.isSelected() || vaseButton.isSelected() || potButton.isSelected())) {
             isFilled = false;
@@ -109,9 +108,9 @@ public class FloralDeliveryService extends ServiceRequests {
             isFilled = false;
             setTextErrorStyle(deliveryField);
         }
-        if(nameField.getText().length() == 0) {
+        if(emailField.getText().length() == 0) {
             isFilled = false;
-            setTextErrorStyle(nameField);
+            setTextErrorStyle(emailField);
         }
         if(cardNumberField.getText().length() == 0) {
             isFilled = false;
@@ -143,14 +142,14 @@ public class FloralDeliveryService extends ServiceRequests {
         orchidCheckBox.setSelected(false);
         daisyCheckBox.setSelected(false);
         deliveryField.setValue(null);
-        nameField.setText("");
+        emailField.setText("");
         cardNumberField.setText("");
         cardExpField.setText("");
         cardCVCField.setText("");
         dateField.setValue(null);
 
         setNormalStyle(bouquetButton, vaseButton, potButton, roseCheckBox, tulipCheckBox, violetCheckBox, sunflowerCheckBox,
-                orchidCheckBox, daisyCheckBox, deliveryField, nameField, cardNumberField, cardCVCField, cardExpField, dateField);
+                orchidCheckBox, daisyCheckBox, deliveryField, emailField, cardNumberField, cardCVCField, cardExpField, dateField);
     }
 
 

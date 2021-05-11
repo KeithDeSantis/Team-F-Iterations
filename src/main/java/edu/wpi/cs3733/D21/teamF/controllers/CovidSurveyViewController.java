@@ -4,13 +4,24 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
-import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -28,6 +39,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private JFXRadioButton no1;
     @FXML private JFXRadioButton no2;
     @FXML private JFXTextField temperatureField;
+    @FXML private JFXTextField emailField;
     @FXML private JFXCheckBox cough;
     @FXML private JFXCheckBox breathing;
     @FXML private JFXCheckBox fatigue;
@@ -44,6 +56,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private JFXCheckBox stayAwake;
     @FXML private JFXCheckBox fever;
     @FXML private JFXTextField generatedID;
+    private final ClipboardContent content = new ClipboardContent();
 
 
     /**
@@ -52,77 +65,117 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     public void initialize(URL location, ResourceBundle resources){
         String ticketNumber = UUID.randomUUID().toString();
         generatedID.setText(ticketNumber);
+        content.putString(ticketNumber);
     }
 
     /**
      * creates a service request and puts it in the database, then changes to the submitted view
      * @throws IOException
      */
-    @FXML private void handleSubmitPushed() throws IOException, SQLException {
+    @FXML private void handleSubmitPushed() throws IOException, SQLException, MessagingException {
         if(formFilled()) {
-            //create service request, put in database
-            String covidInfo = temperatureField.getText();
-            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "", "Temperature: " + covidInfo);
-            ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText(), "uuid");
-            //change view to survey submitted page
+            // Create service request, put in database
+            String covidInfo = "Temp: " + temperatureField.getText() + "ºF, ";
+            if(yes1.isSelected()) covidInfo += "Tested Positive, ";
+            if(yes2.isSelected()) covidInfo += "Had Close Contact, ";
+            covidInfo += "Symptoms: ";
+            if(cough.isSelected()) covidInfo += "Cough, ";
+            if(breathing.isSelected()) covidInfo += "Trouble Breathing, ";
+            if(fatigue.isSelected()) covidInfo += "Fatigue, ";
+            if(aches.isSelected()) covidInfo += "Aches, ";
+            if(headache.isSelected()) covidInfo +="Headache, ";
+            if(lossOfTaste.isSelected()) covidInfo += "Loss of Tates or Smell, ";
+            if(soreThroat.isSelected()) covidInfo += "Sore Throat, ";
+            if(congestion.isSelected()) covidInfo += "Congestion, ";
+            if(nausea.isSelected()) covidInfo += "Nausea, ";
+            if(diarrhea.isSelected()) covidInfo += "Diarrhea, ";
+            if(blueSkin.isSelected()) covidInfo += "Blueness or Paleness, ";
+            if(pain.isSelected()) covidInfo += "Persistent Pain, ";
+            if(confusion.isSelected()) covidInfo += "New Confusion, ";
+            if(stayAwake.isSelected()) covidInfo += "Unable to Stay Awake, ";
+            if(fever.isSelected()) covidInfo += "fever, ";
+            if(covidInfo.endsWith(", ")) covidInfo = covidInfo.substring(0, covidInfo.length() - 2);
+            else covidInfo += "None";
+            DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "",covidInfo +
+                    ";" + emailField.getText());
+            DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "",
+                    "false", generatedID.getText() + ":" + emailField.getText());
+            // ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
-            /*
+            // Copy UUID to users clipboard TODO add explicit button for this
+            Clipboard.getSystemClipboard().setContent(content);
+
+            EmailHandler.getEmailHandler().sendEmail(emailField.getText(), "Your Covid -19 Ticket Number",
+                    "Below is your unique ticket ID for the Covid-19 survey, use this to check your clearance status. \n"
+            + generatedID.getText());
+
+            // Change view to survey submitted page
             FXMLLoader submittedPageLoader = new FXMLLoader();
             submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
             Stage submittedStage = new Stage();
             Parent root = submittedPageLoader.load();
+            SceneContext.autoTranslate(root);
             CovidFormSubmittedViewController formSubmittedViewController = submittedPageLoader.getController();
-            formSubmittedViewController.changeStage((Stage) posTestPrompt.getScene().getWindow());
+            formSubmittedViewController.autoFill(generatedID.getText());
             Scene submitScene = new Scene(root);
             submittedStage.setScene(submitScene);
             submittedStage.setTitle("Submission Complete");
             submittedStage.initModality(Modality.APPLICATION_MODAL);
             submittedStage.showAndWait();
 
-            if(!formSubmittedViewController.isCompleted)
-            {
-                DatabaseAPI.getDatabaseAPI().deleteServiceRequest(generatedID.getText());
-            }
+            // Generate a new UUID in the event submit is pressed twice (prevents DB errors)
+            generatedID.setText(UUID.randomUUID().toString());
+            content.putString(generatedID.getText());
 
-             */
+
         }
     }
+
     public boolean formFilled(){
         final String tempStr = temperatureField.getText().trim();
+        final String emailStr = emailField.getText().trim();
+        boolean returnFlag = true;
 
         //Empty temperature field
         if(tempStr.isEmpty()) {
             setTextErrorStyle(temperatureField);
-            return false;
+            returnFlag = false;
         }
         //Verify temperature is a number
         if(!tempStr.matches("\\d*")) {
             setTextErrorStyle(temperatureField);
-            return false;
+            returnFlag =  false;
         }
+        if(!tempStr.isEmpty()) {
+            final int temperature = Integer.parseInt(tempStr);
 
-        final int temperature = Integer.parseInt(tempStr);
-
-        if (temperature < 70 || temperature > 115 ){
-            setTextErrorStyle(temperatureField);
-            return false;
+            if (temperature < 70 || temperature > 115) {
+                setTextErrorStyle(temperatureField);
+                returnFlag = false;
+            }
+        }
+        if(!(DatabaseAPI.getDatabaseAPI().isValidEmail(emailStr))) {
+            setTextErrorStyle(emailField);
+            returnFlag = false;
         }
 
         //FIXME: ADD USER FEEDBACK
 
         if(!yes1.isSelected() && !no1.isSelected())
         {
-            return false;
+            yes1.setUnSelectedColor(Color.RED);
+            no1.setUnSelectedColor(Color.RED);
+            returnFlag = false;
         }
 
         if(!yes2.isSelected() && !no2.isSelected())
         {
-
-            return false;
+            yes2.setUnSelectedColor(Color.RED);
+            no2.setUnSelectedColor(Color.RED);
+            returnFlag =  false;
         }
 
-        return true;
+        return returnFlag;
     }
 
     /**
@@ -136,9 +189,15 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
         yes1.setToggleGroup(question1);
         no1.setToggleGroup(question1);
 
+        yes1.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
+        no1.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
+
         ToggleGroup question2 = new ToggleGroup(); //group for second question
         yes2.setToggleGroup(question2);
         no2.setToggleGroup(question2);
+
+        yes2.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
+        no2.setUnSelectedColor(Color.rgb(0x03,0x25,0x6c));
     }
 
     /**
@@ -150,6 +209,26 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     }
 
     public void handleCheckStatus() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml");
+        FXMLLoader submittedPageLoader = new FXMLLoader();
+        submittedPageLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/CovidFormSubmittedView.fxml"));
+        Stage submittedStage = new Stage();
+        Parent root = submittedPageLoader.load();
+        SceneContext.autoTranslate(root);
+        Scene submitScene = new Scene(root);
+        submittedStage.setScene(submitScene);
+        submittedStage.setTitle("Check Status");
+        submittedStage.initModality(Modality.APPLICATION_MODAL);
+        submittedStage.showAndWait();
+    }
+
+    @FXML
+    public void goBack(MouseEvent mouseEvent) throws IOException {
+        CurrentUser.getCurrentUser().logout();
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
+    }
+
+    @Override
+    public void handleHome() throws IOException {
+        SceneContext.getSceneContext().loadDefault();
     }
 }

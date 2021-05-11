@@ -1,6 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -8,14 +7,15 @@ import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -30,37 +30,13 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
     private JFXComboBox<String> computerLocation;
 
     @FXML
-    private JFXTextField requesterTextText;
+    private JFXTextField requesterEmailText;
 
     @FXML
     private JFXComboBox<StringProperty> urgencyComboBox;
 
     @FXML
     private JFXTextArea descriptionText;
-
-    @FXML
-    private Label computerNameLbl;
-
-    @FXML
-    private Label computerLocLbl;
-
-    @FXML
-    private Label requesterLbl;
-
-    @FXML
-    private Label urgencyLbl;
-
-    @FXML
-    private Label descLbl;
-
-    @FXML
-    private JFXButton cancelBtn;
-
-    @FXML
-    private JFXButton clearBtn;
-
-    @FXML
-    private  JFXButton submitButton;
 
 
     private static final String LOW_URGENCY = "Low";// (fix when possible)";
@@ -69,19 +45,6 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
 
     @FXML
     public void initialize(){
-        computerNameLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(computerNameLbl.getText()));
-        computerLocLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(computerLocLbl.getText()));
-        requesterLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(requesterLbl.getText()));
-        urgencyLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyLbl.getText()));
-        descLbl.textProperty().bind(Translator.getTranslator().getTranslationBinding(descLbl.getText()));
-
-        cancelBtn.textProperty().bind(Translator.getTranslator().getTranslationBinding(cancelBtn.getText()));
-        clearBtn.textProperty().bind(Translator.getTranslator().getTranslationBinding(clearBtn.getText()));
-        submitButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(submitButton.getText()));
-
-        urgencyComboBox.promptTextProperty().bind(Translator.getTranslator().getTranslationBinding(urgencyComboBox.getPromptText()));
-
-       // urgencyComboBox.
 
         try {
             urgencyComboBox.setItems(Translator.getTranslator().getTranslationsFor(LOW_URGENCY, MEDIUM_URGENCY, HIGH_URGENCY));
@@ -103,15 +66,18 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
     }
 
     @FXML
-    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException, MessagingException {
         if(formFilled())
         {
             String uuid = UUID.randomUUID().toString();
             String type = "Computer Service";
             String assignedPerson = "";
             String additionalInfo = "Computer name: " + computerNameText.getText() + "Computer location: " + computerLocation.getValue()
-                    + "Urgency: " + urgencyComboBox.getValue() + "Requester: " + requesterTextText.getText();
+                    + "Urgency: " + urgencyComboBox.getValue() + "Requester Email;" + requesterEmailText.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
+            EmailHandler.getEmailHandler().sendEmail(additionalInfo.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request " + type + " it will be completed as soon as possible");
+
             openSuccessWindow();
         }
     }
@@ -130,7 +96,7 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
         boolean accept = true;
 
         //Clear old styles
-        setNormalStyle(computerNameText, computerLocation, requesterTextText, urgencyComboBox,descriptionText);
+        setNormalStyle(computerNameText, computerLocation, requesterEmailText, urgencyComboBox,descriptionText);
 
 
         if(computerNameText.getText().trim().isEmpty())
@@ -145,9 +111,9 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
             accept = false;
         }
 
-        if(requesterTextText.getText().trim().isEmpty())
+        if(requesterEmailText.getText().trim().isEmpty())
         {
-            setTextErrorStyle(requesterTextText);
+            setTextErrorStyle(requesterEmailText);
             accept = false;
         }
 
@@ -170,10 +136,10 @@ public class ComputerServiceRequestViewController extends ServiceRequests {
     @FXML
     public void handleClear() {
 
-        setNormalStyle(computerNameText, computerLocation, requesterTextText, urgencyComboBox,descriptionText);
+        setNormalStyle(computerNameText, computerLocation, requesterEmailText, urgencyComboBox,descriptionText);
         computerNameText.setText("");
         computerLocation.setValue(null);
-        requesterTextText.setText("");
+        requesterEmailText.setText("");
 
         urgencyComboBox.setValue(null);
 

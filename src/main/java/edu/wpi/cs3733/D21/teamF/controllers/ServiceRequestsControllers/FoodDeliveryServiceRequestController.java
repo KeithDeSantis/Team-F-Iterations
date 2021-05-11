@@ -4,16 +4,15 @@ import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -25,12 +24,10 @@ import java.util.UUID;
  */
 public class FoodDeliveryServiceRequestController extends ServiceRequests {
 
-    @FXML private JFXButton xButton;
-    @FXML private Button helpXButton;
     @FXML private JFXComboBox<String> deliveryLocationField;
     @FXML private JFXTimePicker deliveryTimeField;
     @FXML private JFXTextField allergyField;
-    @FXML private JFXTextField specialInstructionsField;
+    @FXML private JFXTextField emailField;
     @FXML private JFXRadioButton rButtonFood1;
     @FXML private JFXRadioButton rButtonFood2;
     @FXML private JFXRadioButton rButtonFood3;
@@ -43,20 +40,13 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
     @FXML private JFXCheckBox cbSide2;
     @FXML private JFXCheckBox cbSide3;
     @FXML private JFXCheckBox cbSide4;
-    @FXML private Label title;
-    @FXML private Label locLabel;
-    @FXML private Label delLabel;
-    @FXML private Label allLabel;
-    @FXML private Label siLabel;
-    @FXML private Label mealLabel;
-    @FXML private Label sideLabel;
-    @FXML private Label drinkLabel;
-    @FXML private HBox header;
+
+    public FoodDeliveryServiceRequestController() {
+    }
 
 
     @FXML
     private void initialize(){
-
         try{
             List<NodeEntry> nodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
 
@@ -80,14 +70,17 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
      * @author KH
      */
     @FXML
-    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException, MessagingException {
         if (formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String type = "Food Delivery";
             String person = "";
             String completed = "false";
-            String additionalInfo = "Delivery Location: " + deliveryLocationField.getValue() + "Delivery time: " + deliveryTimeField.getValue();
+            String additionalInfo = "Delivery Location: " + deliveryLocationField.getValue() + "Delivery time: " + deliveryTimeField.getValue()
+                    + " Email;" + emailField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
+            EmailHandler.getEmailHandler().sendEmail(additionalInfo.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request " + type + " it will be completed as soon as possible");
 
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
@@ -103,7 +96,7 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
     public boolean formFilled() {
         boolean isFilled = true;
 
-        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, specialInstructionsField,
+        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, emailField,
                 rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
                 rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
 
@@ -156,7 +149,7 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
         deliveryLocationField.setValue(null);
         deliveryTimeField.setValue(null);
         allergyField.setText("");
-        specialInstructionsField.setText("");
+        emailField.setText("");
         rButtonDrink1.setSelected(false);
         rButtonDrink2.setSelected(false);
         rButtonDrink3.setSelected(false);
@@ -169,7 +162,7 @@ public class FoodDeliveryServiceRequestController extends ServiceRequests {
         cbSide2.setSelected(false);
         cbSide3.setSelected(false);
         cbSide4.setSelected(false);
-        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, specialInstructionsField,
+        setNormalStyle(deliveryLocationField, deliveryTimeField, allergyField, emailField,
                 rButtonFood1, rButtonFood2, rButtonFood3, rButtonFood4, rButtonDrink1, rButtonDrink2,
                 rButtonDrink3, rButtonDrink4, cbSide1, cbSide2, cbSide3, cbSide4);
 

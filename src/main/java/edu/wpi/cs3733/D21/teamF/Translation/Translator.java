@@ -14,10 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +25,29 @@ public class Translator {
 
     //FIXME: ALWAYS SET THIS TO BE TRUE FOR JARS!!!!!
     private static final boolean isProduction = false;
+
+    private final List<String> languages;
+
+    private final HashMap<String, String> langCodes = new HashMap<>();
+
+    private static final StringConverter<String> languageCodeConverter = new StringConverter<String>() {
+        @Override
+        public String toString(String object) {
+            for(String s : Translator.getTranslator().getLanguages())
+                if(Translator.getTranslator().getLangCode(s).equals(object))
+                    return s;
+            return null;
+        }
+
+        @Override
+        public String fromString(String string) {
+            return Translator.getTranslator().getLangCode(string);
+        }
+    };
+
+    public static StringConverter<String> getLanguageCodeConverter() {
+        return languageCodeConverter;
+    }
 
     /**
      * Used to track what language code we are using. Defaults to english.
@@ -50,6 +70,16 @@ public class Translator {
      */
     public ObservableValue<String> getTranslationBinding(String text) {
         return Bindings.createStringBinding(() -> translate(text), language);
+    }
+
+    /**
+     * Used to get a binding to translate a string to
+     * @param text The text in english
+     * @return A binding that binds the text to a string
+     * @author Alex Friedman (ahf)
+     */
+    public ObservableValue<String> getTranslationBinding(StringProperty text) {
+        return Bindings.createStringBinding(() -> translate(text.get()), text, language);
     }
 
     /**
@@ -179,7 +209,55 @@ public class Translator {
     }
 
 
+    public List<String> getLanguages() {
+        return Collections.unmodifiableList(languages);
+    }
+
+    public String getLangCode(String language)
+    {
+        return langCodes.get(language); //Prevents direct access to our codes
+    }
+
+    public StringProperty languageProperty() {
+        return language;
+    }
+
     private Translator() {
+
+        languages = new ArrayList<>();
+
+        languages.add("Arabic");
+        languages.add("Dutch");
+        languages.add("English");
+        languages.add("French");
+        languages.add("German");
+        languages.add("Greek");
+        languages.add("Haitian Creole");
+        languages.add("Italian");
+        languages.add("Japanese");
+        languages.add("Korean");
+        languages.add("Portuguese");
+        languages.add("Russian");
+        languages.add("Spanish");
+        languages.add("Vietnamese");
+
+        Collections.sort(languages);
+
+        langCodes.put("Arabic", "ar");
+        langCodes.put("Dutch", "nl");
+        langCodes.put("English", "en");
+        langCodes.put("French", "fr");
+        langCodes.put("German", "de");
+        langCodes.put("Greek", "el");
+        langCodes.put("Haitian Creole", "ht");
+        langCodes.put("Italian", "it");
+        langCodes.put("Japanese", "ja");
+        langCodes.put("Korean", "ko");
+        langCodes.put("Portuguese", "pt");
+        langCodes.put("Russian", "ru");
+        langCodes.put("Spanish", "es");
+        langCodes.put("Vietnamese", "vi");
+
 
         //If we're not in production mode, we need to collapse all the files, and track new changes.
         if(!isProduction)

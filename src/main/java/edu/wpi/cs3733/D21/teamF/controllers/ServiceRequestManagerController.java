@@ -8,6 +8,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
-import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +27,6 @@ public class ServiceRequestManagerController extends AbsController implements In
     @FXML private JFXButton markAsComplete;
     @FXML private JFXButton saveChanges;
     @FXML private JFXButton removeAssignment;
-    @FXML private ImageView goBack;
     @FXML private JFXTreeTableView<ServiceEntry> requestView;
     @FXML private JFXButton delete;
 
@@ -123,6 +122,39 @@ public class ServiceRequestManagerController extends AbsController implements In
             newBoolean = "true";
         }
         DatabaseAPI.getDatabaseAPI().editServiceRequest(selectedEntry.getUuid(), newBoolean, "completed");
+        /*
+        if (newBoolean.equals("true") && (selectedEntry.getRequestType().equals("Nurse Appointment") || selectedEntry.getRequestType().equals("ticket"))){
+            EmailHandler.getEmailHandler().sendEmail(selectedEntry.getAdditionalInstructions().split(":")[1],
+                    "Your Covid-19 clearance level has been updated!", "Please check your status with the application" +
+                    " your ticket number is: " + selectedEntry.getAdditionalInstructions().split(":")[0]);
+        }
+         */
+
+        if (newBoolean.equals("true")){
+            if (selectedEntry.getRequestType().equals("Nurse Appointment") && newBoolean.equals("false")){
+                EmailHandler.getEmailHandler().sendEmail(selectedEntry.getAdditionalInstructions().split(":")[1],
+                        "Update to your Covid-19 clearance", "Hello,\nUnfortunately, after your nurse appointment " +
+                                "you are not cleared for hospital entrance, please get tested and keep in touch.");
+            }
+            else if (selectedEntry.getRequestType().equals("Nurse Appointment") && newBoolean.equals("true")){
+                EmailHandler.getEmailHandler().sendEmail(selectedEntry.getAdditionalInstructions().split(":")[1],
+                        "Update to your Covid-19 clearance", "Hello,\nBased on your nurse appointment " +
+                        "you are cleared to enter the hospital, thank you for your cooperation.");
+            }
+            else if (selectedEntry.getRequestType().equals("ticket") && newBoolean.equals("true")){
+                System.out.println("testing");
+                EmailHandler.getEmailHandler().sendEmail(selectedEntry.getAdditionalInstructions().split(";")[1],
+                        "Update to your Covid-19 ticket status", "Hello,\n Based on the results of your "
+                + "Covid-19 survey, you may come to the hospital for a nurse appointment, before entering the facilities");
+            }
+
+            else if (selectedEntry.getRequestType().equals("ticket") && newBoolean.equals("false")){
+                System.out.println("testing");
+                EmailHandler.getEmailHandler().sendEmail(selectedEntry.getAdditionalInstructions().split(";")[1],
+                        "Update to your Covid-19 ticket status", "Hello,\nBased on the results of your " +
+                        "Covid-19 survey, you are not cleared to come for a nurse appointment, please get tested and keep in touch");
+            }
+        }
         refreshTable();
     }
 
@@ -210,7 +242,6 @@ public class ServiceRequestManagerController extends AbsController implements In
             case "false":
             case "true":
             case "":
-                markAsComplete.setText("Toggle Status");
                 markAsComplete.setDisable(false);
                 break;
         }

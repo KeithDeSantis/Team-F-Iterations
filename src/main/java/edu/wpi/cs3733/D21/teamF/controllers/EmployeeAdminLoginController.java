@@ -32,20 +32,24 @@ public class EmployeeAdminLoginController extends AbsController {
         Button buttonPushed = (JFXButton) actionEvent.getSource();  //Getting current stage
         if (buttonPushed == signIn) {
             if (!DatabaseAPI.getDatabaseAPI().verifyAdminExists()) {
-                DatabaseAPI.getDatabaseAPI().addUser("admin", "administrator", "admin", "admin", "true");
-                DatabaseAPI.getDatabaseAPI().addUser("staff", "employee", "staff", "staff", "true");
-                DatabaseAPI.getDatabaseAPI().addUser("guest", "visitor", "guest", "guest", "true");
+                DatabaseAPI.getDatabaseAPI().addUser("admin@fuschiafalcons.com", "administrator", "admin", "admin", "true");
+                DatabaseAPI.getDatabaseAPI().addUser("staff@fuschiafalcons.com", "employee", "staff", "staff", "true");
+                DatabaseAPI.getDatabaseAPI().addUser("guest@fuschiafalcons.com", "visitor", "patient", "patient", "true");
             }
             String user = username.getText();
             String pass = password.getText();
 
-            final AccountEntry current = DatabaseAPI.getDatabaseAPI().getUser(user);
-            final boolean isAdmin = current.getUserType().equals("administrator");
-            final boolean isStaff = current.getUserType().equals("employee");
-            if (CurrentUser.getCurrentUser().login(user, pass) && (isAdmin || isStaff)){
-                SceneContext.getSceneContext().loadDefault();
-            }
-            else {
+            try {
+                final AccountEntry current = DatabaseAPI.getDatabaseAPI().getUser(user);
+                final boolean isAdmin = current.getUserType().equals("administrator");
+                final boolean isStaff = current.getUserType().equals("employee");
+                if (CurrentUser.getCurrentUser().login(user, pass) && (isAdmin || isStaff)) {
+                    SceneContext.getSceneContext().loadDefault();
+                } else {
+                    errorMessage.setStyle("-fx-text-fill: #c60000FF;");
+                    password.setText("");
+                }
+            } catch (NullPointerException n) {
                 errorMessage.setStyle("-fx-text-fill: #c60000FF;");
                 password.setText("");
             }

@@ -4,9 +4,9 @@ package edu.wpi.cs3733.uicomponents.entities;
 import edu.wpi.cs3733.uicomponents.IMapDrawable;
 import edu.wpi.cs3733.D21.teamF.utils.UIConstants;
 import javafx.beans.property.*;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.*;
 
-public class DrawableNode extends Circle implements IMapDrawable
+public class DrawableNode extends Path implements IMapDrawable
 {
     private final IntegerProperty xCoordinate;
     private final IntegerProperty yCoordinate;
@@ -18,11 +18,22 @@ public class DrawableNode extends Circle implements IMapDrawable
 
     private final SimpleBooleanProperty shouldDisplay;
 
-    private final DoubleProperty localRadius;
-
+    private final MoveTo move = new MoveTo(10, -20);
 
     public DrawableNode(int xCoordinate, int yCoordinate, String ID, String floor, String building, String nodeType, String longName, String shortName)
     {
+        super();
+       // move.setAbsolute(false);
+        ArcTo arc = new ArcTo(1, 1, 0, -20, 0, false, false);
+        arc.setAbsolute(false);
+        CubicCurveTo l1 = new CubicCurveTo(0, 7, 3, 6, 10, 20);
+        l1.setAbsolute(false);
+        //(double controlX1, double controlY1, double controlX2, double controlY2, double x, double y)
+        MoveTo m2 = new MoveTo(10, -20);
+        m2.setAbsolute(false);
+        CubicCurveTo l2 = new CubicCurveTo(0, 7, -4, 6, -10, 20);
+        l2.setAbsolute(false);
+        getElements().addAll(move, arc, l1, m2, l2);
         this.xCoordinate = new SimpleIntegerProperty(xCoordinate);
         this.yCoordinate = new SimpleIntegerProperty(yCoordinate);
 
@@ -36,19 +47,16 @@ public class DrawableNode extends Circle implements IMapDrawable
 
         this.setId(ID);
 
-        this.setRadius(UIConstants.NODE_RADIUS);
-        this.localRadius = new SimpleDoubleProperty(this.getRadius());
 
         this.setFill(UIConstants.NODE_COLOR);
         this.setOpacity(0.5);
+
     }
 
     @Override
     public void bindLocation(DoubleProperty zoomLevel) {
-        this.centerXProperty().bind(xCoordinate.divide(zoomLevel));
-        this.centerYProperty().bind(yCoordinate.divide(zoomLevel));
-
-        //this.radiusProperty().bind(localRadius.divide(zoomLevel));
+        this.move.xProperty().bind(xCoordinate.divide(zoomLevel).add(10));
+        this.move.yProperty().bind(yCoordinate.divide(zoomLevel).subtract(20));
     }
 
     @Override

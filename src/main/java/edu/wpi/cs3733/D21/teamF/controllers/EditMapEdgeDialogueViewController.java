@@ -1,6 +1,5 @@
 package edu.wpi.cs3733.D21.teamF.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -28,9 +27,6 @@ public class EditMapEdgeDialogueViewController extends AbsController {
 
     @FXML
     private Label edgeID;
-
-    @FXML
-    private JFXButton ok;
 
     private EdgeEntry edge = new EdgeEntry();
     private Stage dialogueStage;

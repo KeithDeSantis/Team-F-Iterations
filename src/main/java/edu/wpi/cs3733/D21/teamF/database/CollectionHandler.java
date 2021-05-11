@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class CollectionHandler {
+class CollectionHandler {
     /**
      * Returns a list of a user's favorite or recently used nodes
      * @param type either favorite or recent for node filtering

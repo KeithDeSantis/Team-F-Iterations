@@ -2,126 +2,72 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AccountManagerController">
    <children>
-      <HBox fx:id="header" layoutY="-6.0" prefHeight="120.0" prefWidth="960.0" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="title" prefHeight="120.0" prefWidth="755.0" text="BWH Account Manager" wrapText="true">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
-         </children></HBox>
-      <VBox alignment="TOP_CENTER" layoutY="30.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="135.0">
-         <children>
-            <HBox alignment="CENTER">
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <JFXTreeTableView fx:id="accountView" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="860.0" />
+                  <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <JFXButton onAction="#handleHome" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
+                  <Text fx:id="title" text="ACCOUNT MANAGEMENT" />
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
             </HBox>
-            <GridPane alignment="CENTER">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="75.0" valignment="CENTER" vgrow="SOMETIMES" />
-               </rowConstraints>
-
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" top="25.0" />
-               </VBox.margin>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                <children>
-                  <Label text="Username" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <Label text="Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                     <font>
-                        <Font name="Tahoma" size="15.0" />
-                     </font>
-                  </Label>
-                  <JFXTextField fx:id="username" onMouseClicked="#changingUsername" promptText="Change username" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="25.0" right="25.0" />
-                     </GridPane.margin>
-                  </JFXTextField>
-                  <JFXTextField fx:id="password" layoutX="339.0" layoutY="50.0" onMouseClicked="#changingPassword" promptText="Change Password" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="25.0" right="25.0" />
-                     </GridPane.margin>
-                  </JFXTextField>
-                  <JFXTextField fx:id="addUsername" promptText="Add User's username" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets left="25.0" right="25.0" top="25.0" />
-                     </GridPane.margin>
-                  </JFXTextField>
-                  <JFXTextField fx:id="addPassword" promptText="Add User's password" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets left="25.0" right="25.0" top="25.0" />
-                     </GridPane.margin>
-                  </JFXTextField>
-                  <Label text="Type of User" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <JFXComboBox fx:id="changeUserType" onMouseClicked="#changingUserType" promptText="Change User Type" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <JFXComboBox fx:id="newUserType" promptText="New User Type" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets top="25.0" />
-                     </GridPane.margin>
-                  </JFXComboBox>
+                  <ImageView fitHeight="25.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/translateBlack.png" />
+                     </image>
+                  </ImageView>
+                  <JFXComboBox fx:id="languageSelect" />
                </children>
-
-            </GridPane>
+            </HBox>
          </children>
-      </VBox>
-      <ButtonBar layoutX="608.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="56.0" prefWidth="725.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
-        <buttons>
-            <JFXButton fx:id="home" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Home" />
-            <JFXButton buttonType="RAISED" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help">
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-            </JFXButton>
-            <JFXButton fx:id="addUser" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Add User" />
-            <JFXButton fx:id="saveChanges" buttonType="RAISED" onAction="#handleButtonPushed" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Save Changes">
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-            </JFXButton>
-            <JFXButton fx:id="deleteUser" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="29.0" prefWidth="176.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete User">
-               <font>
-                  <Font name="Montserrat Regular" size="15.0" />
-               </font>
-            </JFXButton>
-        </buttons>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
          <padding>
-            <Insets right="25.0" top="25.0" />
+            <Insets bottom="10.0" left="10.0" top="10.0" />
          </padding>
-      </ButtonBar>
+      </AnchorPane>
+      <JFXTreeTableView fx:id="accountView" layoutX="38.0" layoutY="65.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="896.0" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="76.0" />
+      <HBox alignment="CENTER" layoutX="264.0" layoutY="454.0" prefHeight="59.0" prefWidth="810.0" spacing="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
+         <children>
+            <JFXButton buttonType="RAISED" onAction="#handleHelp" prefHeight="30.0" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton fx:id="addUser" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="30.0" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Add User">
+               <font>
+                  <Font size="15.0" />
+               </font></JFXButton>
+            <JFXButton fx:id="deleteUser" buttonType="RAISED" onAction="#handleButtonPushed" prefHeight="30.0" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Delete User">
+               <font>
+                  <Font name="Montserrat Regular" size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </JFXButton>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

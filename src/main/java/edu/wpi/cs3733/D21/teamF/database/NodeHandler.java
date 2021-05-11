@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
-import org.apache.derby.impl.sql.catalog.DD_Version;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,11 +9,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NodeHandler implements DatabaseEntry {
+class NodeHandler implements DatabaseEntry {
     public String genNodeDescription(String[] values){
-        final String description = "The node ID is, " + values[0] + " located on floor, " + values[1] + "\nIn building, " +
-                values[2] + " of type " + values[3] + "\nWith long and short names, " + values[4] + ", " + values[5];
-        return description;
+        return "The node ID is, " + values[0] + " located on floor, " + values[3] + "\nIn building, " +
+                values[4] + " of type " + values[5] + "\nWith long and short names, " + values[6] + ", " + values[7];
     }
     /**
      * {@inheritDoc}

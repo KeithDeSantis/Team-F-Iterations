@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -14,30 +15,44 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LaundryRequestController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.LaundryRequestController">
    <children>
-      <HBox fx:id="header" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #94c4f1;" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fitHeight="150.0" fitWidth="100.0" onMouseClicked="#handleHome" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
-               </image>
-            </ImageView>
-            <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="BRIGHAM AND WOMEN'S HOSPITAL Laundry Services" wrappingWidth="744.3521118164062">
-               <font>
-                  <Font name="Volkhov Regular" size="40.0" />
-               </font>
-            </Text>
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <JFXButton onAction="#handleHome" stylesheets="@../../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
+                  <Text fx:id="title" text="LAUNDRY SERVICES" />
+               </children>
+            </HBox>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../imagesAndLogos/translateBlack.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <JFXComboBox fx:id="languageSelect" />
+               </children>
+            </HBox>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" top="10.0" />
          </padding>
-      </HBox>
-      <VBox layoutX="325.0" layoutY="93.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">
+      </AnchorPane>
+      <VBox layoutX="325.0" layoutY="93.0" prefHeight="283.0" prefWidth="910.0" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
                <children>
-                  <Label text="Name:">
+                  <Label fx:id="nameLbl" text="Email:">
                      <padding>
                         <Insets left="10.0" right="10.0" />
                      </padding>
@@ -48,14 +63,14 @@
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <JFXTextField fx:id="employeeID" prefHeight="31.0" prefWidth="520.0">
+                  <JFXTextField fx:id="email" prefHeight="31.0" prefWidth="520.0">
                      <HBox.margin>
                         <Insets left="25.0" />
                      </HBox.margin>
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
@@ -93,7 +108,7 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Options">
+                        <Label fx:id="optionsLbl" text="Options">
                            <font>
                               <Font name="Montserrat Regular" size="18.0" />
                            </font>
@@ -136,7 +151,7 @@
                   </VBox>
                </children>
             </HBox>
-            <Label text="Additional Instructions:">
+            <Label fx:id="addInstructLbl" text="Additional Instructions:">
                <VBox.margin>
                   <Insets left="25.0" top="10.0" />
                </VBox.margin>
@@ -144,7 +159,7 @@
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="additionalInstructions">
+            <JFXTextField fx:id="additionalInstructions" prefHeight="2000.0" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>

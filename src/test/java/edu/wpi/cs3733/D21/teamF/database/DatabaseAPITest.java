@@ -139,7 +139,7 @@ class DatabaseAPITest {
     public void testNodeDescription() throws SQLException {
         String[] newNode = {"1", "2", "3", "4", "5", "6", "7", "8"};
         DatabaseAPI.getDatabaseAPI().addNode(newNode);
-        String expectedDesc = "The node ID is, 1 located on floor, 2\nIn building, 3 of type 4\nWith long and short names, 5, 6";
+        String expectedDesc = "The node ID is, 1 located on floor, 4\nIn building, 5 of type 6\nWith long and short names, 7, 8";
         assertEquals(expectedDesc, DatabaseAPI.getDatabaseAPI().getNode("1").getDescription());
     }
 
@@ -192,7 +192,7 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test adding a user")
     public void testAddUser() throws SQLException {
-        String[] newUser = {"1", "employee", "declan", "password", "false"};
+        String[] newUser = {"test@gmail.com", "employee", "declan", "password", "false"};
         assertTrue(DatabaseAPI.getDatabaseAPI().addUser(newUser));
     }
 
@@ -200,7 +200,7 @@ class DatabaseAPITest {
     @DisplayName("test deleting a user")
     public void testDeleteUser() throws SQLException
     {
-        String[] newUser = {"1", "employee", "declan", "password", "true"};
+        String[] newUser = {"person@wilson.wong", "employee", "declan", "password", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(newUser);
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUser("declan"));
     }
@@ -232,8 +232,8 @@ class DatabaseAPITest {
     public void testPopulateUsers() throws SQLException
     {
         ArrayList<String[]> users = new ArrayList<>();
-        String[] user1 = {"1", "admin", "username", "password", "false"};
-        String[] user2 = {"2", "employee", "testuser", "testpass", "not-assigned"};
+        String[] user1 = {"wilson@wong.com", "admin", "username", "password", "false"};
+        String[] user2 = {"agile@scrum.xyz", "employee", "testuser", "testpass", "not-assigned"};
         users.add(user1);
         users.add(user2);
 
@@ -330,10 +330,30 @@ class DatabaseAPITest {
     @Test
     @DisplayName("Test authentication and encryption")
     public void testAuthentication() throws SQLException {
-        String[] newUser = {"1", "admin", "declan", "password", "true"};
+        String[] newUser = {"test@wong.com", "admin", "declan", "password", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(newUser);
         UserHandler handler = new UserHandler();
         assertTrue(handler.authenticate("declan", "password"));
+    }
+
+    @Test
+    @DisplayName("test email authentication")
+    public void testEmailAuth() throws SQLException{
+        String[] testUser = {"test@gmail.com", "administrator", "declan", "password", "true"};
+        DatabaseAPI.getDatabaseAPI().addUser(testUser);
+        assertTrue(DatabaseAPI.getDatabaseAPI().authenticate("test@gmail.com", "password"));
+    }
+
+    @Test
+    @DisplayName("test all default user email authentication")
+    public void testDefaultEmailAuth() throws SQLException{
+        DatabaseAPI.getDatabaseAPI().addUser("admin@fuschiafalcons.com", "administrator", "admin", "admin", "true");
+        DatabaseAPI.getDatabaseAPI().addUser("staff@fuschiafalcons.com", "employee", "staff", "staff", "true");
+        DatabaseAPI.getDatabaseAPI().addUser("guest@fuschiafalcons.com", "visitor", "patient", "patient", "true");
+
+        assertTrue(DatabaseAPI.getDatabaseAPI().authenticate("admin@fuschiafalcons.com", "admin"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().authenticate("staff@fuschiafalcons.com", "staff"));
+        assertTrue(DatabaseAPI.getDatabaseAPI().authenticate("guest@fuschiafalcons.com", "patient"));
     }
 
     @Test
@@ -361,7 +381,7 @@ class DatabaseAPITest {
     @Test
     @DisplayName("test verifying the admin user entry")
     public void testAdmin() throws SQLException {
-        String[] admin = {"admin", "administrator", "admin", "admin", "true"};
+        String[] admin = {"admin@meme.com", "administrator", "admin", "admin", "true"};
         DatabaseAPI.getDatabaseAPI().addUser(admin);
         assertTrue(DatabaseAPI.getDatabaseAPI().verifyAdminExists());
     }
@@ -448,5 +468,11 @@ class DatabaseAPITest {
 
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUserNode("node1", "declan", "favorite"));
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUserNode("node4", "ben", "recent"));
+    }
+
+    @Test
+    @DisplayName("test valid email")
+    public void testValidEmail(){
+        assertTrue(DatabaseAPI.getDatabaseAPI().isValidEmail("dpmurphy@wpi.edu"));
     }
 }

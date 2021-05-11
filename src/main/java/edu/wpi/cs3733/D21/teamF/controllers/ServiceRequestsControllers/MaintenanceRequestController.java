@@ -1,21 +1,21 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -25,32 +25,20 @@ import java.util.stream.Collectors;
 public class MaintenanceRequestController extends ServiceRequests {
     @FXML private JFXComboBox<String> locationField;
     @FXML private JFXComboBox<String> typeComboBox;
-    @FXML private ImageView goBack;
     @FXML private JFXTextArea descriptionField;
-    @FXML private Label typeLabel;
-    @FXML private Label locationLabel;
-    @FXML private Label descLabel;
-    @FXML private JFXButton cancel;
-    @FXML private Label urgencyLabel;
-    @FXML private Label dateLabel;
     @FXML private JFXComboBox<String> urgencyComboBox;
     @FXML private JFXDatePicker dateOfIncident;
-    @FXML private JFXComboBox<String> assignment;
-    @FXML private Label assignmentLabel;
+    @FXML private JFXTextField emailField;
 
     ObservableList<String> problemTypes = FXCollections.observableArrayList("Electrical", "Lighting",
             "Elevator", "Plumbing", "Safety Hazard", "Damage", "Spill", "HAZ-MAT");
 
     ObservableList<String> urgencyLevels = FXCollections.observableArrayList("URGENT", "PRIORITY", "LOW PRIORITY");
 
-    ObservableList<String> locations = FXCollections.observableArrayList();
-
     //ObservableList<String> employeeList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize(){
-
-
         try{
 
             // Insert problem types and urgency into combo boxes
@@ -84,7 +72,7 @@ public class MaintenanceRequestController extends ServiceRequests {
      * @throws SQLException
      * @author Leo Morris
      */
-    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException, MessagingException {
         if(formFilled()) {
             String name = urgencyComboBox.getValue() + ": ";
             if (typeComboBox.getValue().equals("Damage") || typeComboBox.getValue().equals("Safety Hazard") || typeComboBox.getValue().equals("Spill")) {
@@ -107,8 +95,11 @@ public class MaintenanceRequestController extends ServiceRequests {
 //            }
 
             String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
-                    "Urgency: " + urgencyComboBox.getValue();
+                    "Urgency: " + urgencyComboBox.getValue() + "Email;" + emailField;
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name,"", "false", additionalInfo);
+            EmailHandler.getEmailHandler().sendEmail(additionalInfo.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request Maintenance it will be completed as soon as possible");
+
             openSuccessWindow();
         }
     }
@@ -118,22 +109,18 @@ public class MaintenanceRequestController extends ServiceRequests {
         if(typeComboBox.getValue() == null){
             filled = false;
             setTextErrorStyle(typeComboBox);
-            typeComboBox.setPromptText("Specify the problem");
         }
         if(locationField.getValue() == null){
             filled = false;
             setTextErrorStyle(locationField);
-            locationField.setPromptText("Please give a location");
         }
         if(descriptionField.getText().isEmpty()){
             filled = false;
             setTextErrorStyle(descriptionField);
-            descriptionField.setPromptText("Please give a description of the problem");
         }
         if(urgencyComboBox.getValue() == null){
             filled = false;
             setTextErrorStyle(urgencyComboBox);
-            urgencyComboBox.setPromptText("Please give a location");
         }
         return filled;
     }

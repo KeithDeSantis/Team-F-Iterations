@@ -1,50 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
 <?import edu.wpi.cs3733.uicomponents.MapPanel?>
 <VBox alignment="TOP_CENTER" prefHeight="414.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultPageStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AStarDemoController">
    <children>
-      <HBox fx:id="header" prefHeight="85.0" prefWidth="960.0" stylesheets="@../../../../../../stylesheets/DefaultHeaderBG.css">
+      <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView onMouseEntered="#hoverOnHome" onMouseExited="#hoverOffHome" fx:id="goBack" accessibleRole="BUTTON" fitHeight="90.0" fitWidth="200.0" onMouseClicked="#handleGoBack" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
-               </image>
-            </ImageView>
-            <Text fx:id="title" text="BRIGHAM AND WOMEN'S HOSPITAL NAVIGATION" wrappingWidth="741.9599609375">
-               <font>
-                  <Font name="Volkhov Regular" size="40.0" />
-               </font>
-            </Text>
-         </children></HBox>
+            <HBox fx:id="subHeader" layoutY="-16.1865234375" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imagesAndLogos/BandWLogo.png" />
+                     </image>
+                  </ImageView>
+                  <JFXButton onAction="#handleGoBack" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="Back" />
+                  <Text fx:id="title" text="NAVIGATION" />
+               </children>
+            </HBox>
+            <HBox layoutX="880.0" layoutY="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <JFXComboBox fx:id="languageSelect" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+         </padding>
+      </AnchorPane>
       <HBox VBox.vgrow="ALWAYS">
          <children>
-            <JFXTreeView fx:id="treeView" stylesheets="/stylesheets/TreeViewStyle.css" prefWidth="250" onMouseClicked="#handleListSelection"/>
+            <VBox prefHeight="2000.0" prefWidth="286.0">
+               <children>
+                  <AnchorPane prefHeight="2000.0" prefWidth="2000.0" />
+                  <HBox prefHeight="2000.0" prefWidth="2000.0">
+                     <children>
+                        <JFXTreeView fx:id="treeView" onMouseClicked="#handleListSelection" prefHeight="2000.0" prefWidth="2000.0" stylesheets="/stylesheets/TreeViewStyle.css" />
+                        <JFXTreeView fx:id="instructionTreeView" onMouseClicked="#handleInstructionListSelection" prefHeight="2000.0" prefWidth="2000.0" stylesheets="/stylesheets/TreeViewStyle.css" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS"/>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                  <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS" />
+                  <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="NEVER">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
+                        <HBox fx:id="topHBox" alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
                            <children>
-                              <JFXButton fx:id="about" buttonType="RAISED" onAction="#gotoAboutPage" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="About"/>
-                              <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                               <JFXButton fx:id="Go" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation" />
+                              <JFXButton fx:id="about" buttonType="RAISED" onAction="#gotoAboutPage" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="About" />
+                              <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                               <JFXToggleButton fx:id="optimize" onAction="#checkInput" prefHeight="30.0" text="Optimize Route" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />
+                              <JFXToggleButton fx:id="disableStair" onAction="#checkInput" prefHeight="30.0" text="Disable Stairs" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="0.0" prefWidth="900.0">
+                        <HBox fx:id="lowerHBox" alignment="CENTER" prefHeight="0.0" prefWidth="900.0">
                            <children>
+                              <JFXButton fx:id="endNavBtn" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="End Navigation" />
                               <JFXButton fx:id="viewInstructionsBtn" buttonType="RAISED" onAction="#handleViewInstructions" stylesheets="/stylesheets/DefaultButtonStyle.css" text="View List">
                                  <HBox.margin>
                                     <Insets right="25.0" />

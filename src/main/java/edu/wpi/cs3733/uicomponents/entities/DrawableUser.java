@@ -1,11 +1,13 @@
 package edu.wpi.cs3733.uicomponents.entities;
 
 import edu.wpi.cs3733.uicomponents.IMapDrawable;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class DrawableUser extends Circle implements IMapDrawable
+public class DrawableUser extends Group implements IMapDrawable
 {
     private final IntegerProperty xCoordinate;
     private final IntegerProperty yCoordinate;
@@ -13,10 +15,17 @@ public class DrawableUser extends Circle implements IMapDrawable
 
     private final SimpleBooleanProperty shouldDisplay;
 
+    private final Circle user;
+    private final Circle direction;
+
+    private final DoubleProperty directionAngle;
+
     public DrawableUser(int xCoordinate, int yCoordinate, String ID, String floor)
     {
         this.xCoordinate = new SimpleIntegerProperty(xCoordinate);
         this.yCoordinate = new SimpleIntegerProperty(yCoordinate);
+
+        this.directionAngle = new SimpleDoubleProperty(0);
 
         this.floor = new SimpleStringProperty(floor);
 
@@ -24,15 +33,36 @@ public class DrawableUser extends Circle implements IMapDrawable
 
         this.setId(ID);
 
-        this.setRadius(10);
+        user = new Circle();
+        user.setRadius(10);
 
-        this.setFill(Color.CYAN);
+        user.setFill(Color.CYAN);
+
+        this.getChildren().add(user);
+
+
+        direction = new Circle();
+        direction.setRadius(4);
+        direction.setFill(Color.RED);
+
+        this.getChildren().add(direction);
+    }
+
+    public DoubleProperty directionAngleProperty() {
+        return directionAngle;
     }
 
     @Override
     public void bindLocation(DoubleProperty zoomLevel) {
-        this.centerXProperty().bind(xCoordinate.divide(zoomLevel));
-        this.centerYProperty().bind(yCoordinate.divide(zoomLevel));
+        user.centerXProperty().bind(xCoordinate.divide(zoomLevel));
+        user.centerYProperty().bind(yCoordinate.divide(zoomLevel));
+
+        direction.centerXProperty().bind(xCoordinate.divide(zoomLevel).subtract(user.radiusProperty().multiply(
+                Bindings.createDoubleBinding(() -> Math.cos(directionAngle.get()), directionAngle))
+        ));
+        direction.centerYProperty().bind(yCoordinate.divide(zoomLevel).subtract(user.radiusProperty().multiply(
+                Bindings.createDoubleBinding(() -> Math.sin(directionAngle.get()), directionAngle))
+        ));
     }
 
     @Override

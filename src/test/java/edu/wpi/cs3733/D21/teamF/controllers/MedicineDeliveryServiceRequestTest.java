@@ -32,7 +32,7 @@ public class MedicineDeliveryServiceRequestTest extends ApplicationTest {
     public void testFormSubmission() {
         clickOn("#employeeName");
         write("j");
-        clickOn("#clientName");
+        clickOn("#clientEmail");
         write("j");
         clickOn("#clientRoom");
         write("j");

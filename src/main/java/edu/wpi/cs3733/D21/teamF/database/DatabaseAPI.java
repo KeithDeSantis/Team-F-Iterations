@@ -185,8 +185,12 @@ public class DatabaseAPI {
         return ((UserHandler)this.userHandler).getUser(username);
     }
 
-    public boolean authenticate(String username, String pass) throws SQLException {
-        return ((UserHandler)this.userHandler).authenticate(username, pass);
+    public boolean authenticate(String user, String pass) throws SQLException {
+        return ((UserHandler)this.userHandler).authenticate(user, pass);
+    }
+
+    public String getEncryptedPass(String newPass, byte[] salt){
+        return ((UserHandler)this.userHandler).encryptPassword(newPass, salt);
     }
 
     public List<AccountEntry> genAccountEntries() throws SQLException{
@@ -195,6 +199,10 @@ public class DatabaseAPI {
 
     public boolean verifyAdminExists() throws SQLException{
         return ((UserHandler)this.userHandler).verifyAdmin();
+    }
+
+    public boolean isValidEmail(String email){
+        return ((UserHandler)this.userHandler).isEmail(email);
     }
 
     public boolean addSystemPreferences(String...colValues) throws SQLException{

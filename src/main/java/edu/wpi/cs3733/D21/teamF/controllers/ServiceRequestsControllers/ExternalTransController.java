@@ -6,12 +6,14 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.UUID;
 
 
 public class ExternalTransController extends ServiceRequests{
-    @FXML private JFXTextField patientName;
+    @FXML private JFXTextField patientEmail;
     @FXML private JFXComboBox<String> loc;
     @FXML private JFXTextField methodTrans;
     @FXML private JFXTextField special;
@@ -42,14 +44,16 @@ public class ExternalTransController extends ServiceRequests{
     }
 
     @FXML
-    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException, MessagingException {
         if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String type = "External Transit";
             String assignedPerson = "";
             String additionalInfo = "Location: " + loc.getValue() + "Transit method: " + methodTrans.getText()
-                    + "Special info:" + special.getText();
+                    + "Special info:" + special.getText() + "Email;" + patientEmail.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, assignedPerson, "false", additionalInfo);
+            EmailHandler.getEmailHandler().sendEmail(additionalInfo.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request " + type + " it will be completed as soon as possible");
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
         }
@@ -58,12 +62,12 @@ public class ExternalTransController extends ServiceRequests{
     @Override
     public boolean formFilled() {
             boolean isFilled = true;
-            setNormalStyle(patientName, methodTrans, special, loc);
+            setNormalStyle(patientEmail, methodTrans, special, loc);
 
-        setNormalStyle(patientName, methodTrans, special, loc);
-        if(patientName.getText().length() == 0){
+        setNormalStyle(patientEmail, methodTrans, special, loc);
+        if(patientEmail.getText().length() == 0){
             isFilled = false;
-            setTextErrorStyle(patientName);
+            setTextErrorStyle(patientEmail);
         }
         if(methodTrans.getText().length() == 0){
             isFilled = false;
@@ -78,11 +82,11 @@ public class ExternalTransController extends ServiceRequests{
 
     @Override
     public void handleClear() {
-        patientName.setText("");
+        patientEmail.setText("");
         loc.setValue(null);
         methodTrans.setText("");
         special.setText("");
-        setNormalStyle(patientName, loc, methodTrans, special);
+        setNormalStyle(patientEmail, loc, methodTrans, special);
     }
 
     public void handleHelp(ActionEvent e) throws IOException {

@@ -1,16 +1,21 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,21 +23,17 @@ import java.util.UUID;
 
 public class InternalTransportationController extends ServiceRequests {
 
-    @FXML private JFXButton clear;
-
     @FXML private JFXComboBox<String> deliverLocation;
 
     @FXML private JFXDatePicker movingDate;
 
-    @FXML private JFXTextField patientName;
+    @FXML private JFXTextField email;
 
     @FXML private JFXComboBox<String> patientRoom;
 
     @FXML private JFXCheckBox relativesCheckBox;
 
     @FXML private JFXCheckBox doctorCheckBox;
-
-    @FXML private JFXButton cancel;
 
     @FXML
     public void initialize(){
@@ -54,7 +55,7 @@ public class InternalTransportationController extends ServiceRequests {
     public boolean formFilled() {
 
         boolean isFilled = true;
-        setNormalStyle(deliverLocation, movingDate, patientName, patientRoom);
+        setNormalStyle(deliverLocation, movingDate, email, patientRoom);
 
         if(deliverLocation.getValue() == null) {
             isFilled = false;
@@ -68,9 +69,9 @@ public class InternalTransportationController extends ServiceRequests {
 //            isFilled = false;
 //            setTextErrorStyle(movingTime);
 //        }
-        if(patientName.getText().length() <= 0) {
+        if(email.getText().length() <= 0) {
             isFilled = false;
-            setTextErrorStyle(patientName);
+            setTextErrorStyle(email);
         }
         if(patientRoom.getValue() == null) {
             isFilled = false;
@@ -80,7 +81,7 @@ public class InternalTransportationController extends ServiceRequests {
         return isFilled;
     }
 
-    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException, MessagingException {
         if(formFilled()) // form is complete
         {
             String uuid = UUID.randomUUID().toString();
@@ -88,9 +89,11 @@ public class InternalTransportationController extends ServiceRequests {
             String person = "";
             String completed = "false";
             String additionalInfo = "Delivery Location: " + deliverLocation.getValue() + "Delivery Date: " + movingDate.getValue()
-                    + "Patient Room: " + patientRoom.getValue();
+                    + "Patient Room: " + patientRoom.getValue() + " Email;" + email.getText();
 
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
+            EmailHandler.getEmailHandler().sendEmail(additionalInfo.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request " + type + " it will be completed as soon as possible");
 
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
@@ -101,11 +104,11 @@ public class InternalTransportationController extends ServiceRequests {
     public void handleClear() {
         deliverLocation.setValue(null);
         movingDate.setValue(null);
-        patientName.setText("");
+        email.setText("");
         patientRoom.setValue(null);
         relativesCheckBox.setSelected(false);
         doctorCheckBox.setSelected(false);
-        setNormalStyle(deliverLocation, movingDate, patientName, patientRoom, relativesCheckBox, doctorCheckBox);
+        setNormalStyle(deliverLocation, movingDate, email, patientRoom, relativesCheckBox, doctorCheckBox);
     }
 
     public void handleHelp(ActionEvent actionEvent) throws IOException {

@@ -1,43 +1,38 @@
 package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTimePicker;
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
+import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ResourceBundle;
+import java.util.UUID;
 
 
 public class LanguageInterpretationServiceRequestController extends ServiceRequests implements Initializable {
-    @FXML private JFXButton close;
-    @FXML private JFXTextField name;
+    @FXML private JFXTextField email;
     @FXML private JFXDatePicker date;
     @FXML private JFXTimePicker time;
     @FXML private JFXComboBox<String> appointment;
     @FXML private JFXComboBox<String> language;
-    @FXML private JFXButton help;
-    @FXML private JFXButton translate;
-    @FXML private Label nameLabel;
-    @FXML private Label dtLabel;
-    @FXML private Label appointmentLabel;
-    @FXML private Label languageLabel;
 
-    private final HashMap<String, String> langCodes = new HashMap<>();
+
+
+    public LanguageInterpretationServiceRequestController() {
+    }
 
     /**
      * Opens the help window
@@ -46,32 +41,7 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @author Jay Yen
      */
     public void handleHelp(ActionEvent actionEvent) throws IOException {
-        Stage submittedStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml"));
-        Scene helpPopUp = new Scene(root);
-        submittedStage.setScene(helpPopUp);
-        submittedStage.setTitle("Language Interpretation Help");
-        submittedStage.initModality(Modality.APPLICATION_MODAL);
-        submittedStage.initOwner(((Button) actionEvent.getSource()).getScene().getWindow());
-        submittedStage.showAndWait();
-    }
-    /**
-     * Calls translate function when translate button is clicked
-     * @param actionEvent
-     * @author Johvanni Perez
-     */
-    public void handleTranslate(ActionEvent actionEvent) {
-        if(language.getValue() != null) {
-            String target = langCodes.get(language.getValue()); //gets lang code of the lang specified
-            Translator.getTranslator().setLanguage(target);
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(( (Button) actionEvent.getSource()).getScene().getWindow());  // open alert
-            alert.setTitle("Language Missing");
-            alert.setHeaderText("Specify language");
-            alert.setContentText("Please select a language from the dropdown list.");
-            alert.showAndWait();
-        }
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequests/LanguageInterpretationHelpView.fxml");
     }
 
     /**
@@ -80,14 +50,16 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @throws IOException
      * @author Jay Yen
      */
-    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException, MessagingException {
         if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
-                    " Name: " + name.getText() + " Appointment: " + appointment.getValue() + " Language: " + language.getValue();
+                      " Appointment: " + appointment.getValue() + " Language: " + language.getValue() + " Email;" + email.getText();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
+            EmailHandler.getEmailHandler().sendEmail(additionalInstr.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request Language Interpretation it will be completed as soon as possible");
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
         }
@@ -96,12 +68,12 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
 
     @Override
     public void handleClear(){
-        name.setText("");
+        email.setText("");
         date.setValue(null);
         time.setValue(null);
         appointment.setValue(null);
         language.setValue(null);
-        setNormalStyle(name, date, time, appointment, language);
+        setNormalStyle(email, date, time, appointment, language);
     }
 
     /**
@@ -197,49 +169,13 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
         appointment.getItems().add("Women's Health");
         appointment.getItems().add("Other");
 
-        language.getItems().add("Arabic");
-        language.getItems().add("Dutch");
-        language.getItems().add("English");
-        language.getItems().add("French");
-        language.getItems().add("German");
-        language.getItems().add("Greek");
-        language.getItems().add("Haitian Creole");
-        language.getItems().add("Italian");
-        language.getItems().add("Japanese");
-        language.getItems().add("Korean");
-        language.getItems().add("Portuguese");
-        language.getItems().add("Russian");
-        language.getItems().add("Spanish");
-        language.getItems().add("Vietnamese");
-
-
-
-        langCodes.put("Arabic", "ar");
-        langCodes.put("Dutch", "nl");
-        langCodes.put("English", "en");
-        langCodes.put("French", "fr");
-        langCodes.put("German", "de");
-        langCodes.put("Greek", "el");
-        langCodes.put("Haitian Creole", "ht");
-        langCodes.put("Italian", "it");
-        langCodes.put("Japanese", "ja");
-        langCodes.put("Korean", "ko");
-        langCodes.put("Portuguese", "pt");
-        langCodes.put("Russian", "ru");
-        langCodes.put("Spanish", "es");
-        langCodes.put("Vietnamese", "vi");
-
-
-        nameLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(nameLabel.getText()));
-        dtLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(dtLabel.getText()));
-        appointmentLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(appointmentLabel.getText()));
-        languageLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(languageLabel.getText()));
+        language.getItems().addAll(Translator.getTranslator().getLanguages());
     }
 
     public boolean formFilled(){
         boolean isFilled = true;
-        if(name.getText().trim().isEmpty()){
-            setTextErrorStyle(name);
+        if(email.getText().trim().isEmpty()){
+            setTextErrorStyle(email);
             isFilled = false;
         }
         if(date.getValue() == null){

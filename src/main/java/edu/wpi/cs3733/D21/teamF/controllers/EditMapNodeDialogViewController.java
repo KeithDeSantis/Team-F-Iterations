@@ -2,9 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -22,15 +20,7 @@ public class EditMapNodeDialogViewController extends AbsController {
     @FXML private TextField nodeTypeField;
     @FXML private TextField longNameField;
     @FXML private TextField shortNameField;
-    @FXML private Label nodeIDLabel;
-    @FXML private Label xCoordLabel;
-    @FXML private Label yCoordLabel;
-    @FXML private Label floorLabel;
-    @FXML private Label buildingLabel;
-    @FXML private Label nodeTypeLabel;
-    @FXML private Label longNameLabel;
-    @FXML private Label shortNameLabel;
-    @FXML private Label title;
+
 
     private NodeEntry node = new NodeEntry(); // This will be the node that we pass in to edit - KD
     private Stage dialogStage; // This will be so we have access to our stage - KD
@@ -53,11 +43,10 @@ public class EditMapNodeDialogViewController extends AbsController {
 
     /**
      * Updates node information with newly inputted info
-     * @param e
      * @author KD
      */
     @FXML
-    private void handleOkClicked(ActionEvent e) {
+    private void handleOkClicked() {
         if(isFilledOut()) // ensure the form is filled out - KD
         {
             node.setNodeID(nodeIDField.getText()); // set all the fields of our node object to the new values given by the user - KD
