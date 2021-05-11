@@ -8,7 +8,6 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,14 +29,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class AccountManagerController extends AbsController implements Initializable {
-    @FXML
-    private JFXButton quit;
+
     @FXML
     private JFXButton deleteUser;
     @FXML
     private JFXButton addUser;
-    @FXML
-    private JFXButton home;
+
     @FXML
     private JFXTreeTableView<AccountEntry> accountView;
     private final ObservableList<AccountEntry> accounts = FXCollections.observableArrayList();
@@ -137,10 +134,7 @@ public class AccountManagerController extends AbsController implements Initializ
 
     public void handleButtonPushed(ActionEvent actionEvent) throws SQLException, IOException {
         JFXButton buttonPushed = (JFXButton) actionEvent.getSource();
-        if (buttonPushed == quit){
-            SceneContext.getSceneContext().loadDefault();
-        }
-        else if (buttonPushed == deleteUser && accountView.getSelectionModel().getSelectedIndex() >= 0){
+        if (buttonPushed == deleteUser && accountView.getSelectionModel().getSelectedIndex() >= 0){
             AccountEntry user = accountView.getSelectionModel().getSelectedItem().getValue();
             DatabaseAPI.getDatabaseAPI().deleteUser(user.getUsername());
             accounts.remove(user);
@@ -155,9 +149,6 @@ public class AccountManagerController extends AbsController implements Initializ
                 accounts.add(newAccount);
                 SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerView.fxml");
             }
-        }
-        else if (buttonPushed == home){
-            SceneContext.getSceneContext().loadDefault();
         }
     }
 
