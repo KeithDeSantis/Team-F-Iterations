@@ -35,6 +35,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -611,7 +612,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             final JFXDialog dialog = new JFXDialog();
             final JFXDialogLayout layout = new JFXDialogLayout();
-
 
             layout.setHeading(new Text(currEntry.getLongName()));
 
@@ -1519,9 +1519,15 @@ public class AStarDemoController extends AbsController implements Initializable 
             else
                 directions.append(instruction);
         }
-
+        layout.setLayoutX(500);
+        layout.setLayoutY(500);
         //FIXME: DO BREAKS W/ CSS
-        layout.setBody(new Text(directions.toString()));
+        ScrollPane scrollPane = new ScrollPane();
+        Label directionsLabel = new Label();
+        directionsLabel.setText(directions.toString());
+        layout.setBody(scrollPane);
+        scrollPane.setContent(directionsLabel);
+
 
         final JFXButton closeBtn = new JFXButton("Close");
         closeBtn.setOnAction(a -> dialog.close());
