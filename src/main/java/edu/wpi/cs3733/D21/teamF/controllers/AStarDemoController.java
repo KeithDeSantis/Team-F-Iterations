@@ -221,16 +221,19 @@ public class AStarDemoController extends AbsController implements Initializable 
             e.printStackTrace();
         }
 
-
+        String algorithmFromAPI;
         try {
-            final String algorithmFromAPI = DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm();
+            algorithmFromAPI = DatabaseAPI.getDatabaseAPI().getCurrentAlgorithm();
 
-            if(algorithmFromAPI == null)
+            if(algorithmFromAPI == null) {
                 DatabaseAPI.getDatabaseAPI().addSystemPreferences("MASTER", "A Star"); //We default to A* if noting explicitly set
+                algorithmFromAPI = "A Star";
+            }
             else
                 graph.setPathfindingAlgorithm(algorithmFromAPI);
 
         } catch (SQLException exception) {
+            algorithmFromAPI = "A Star"; //Default to A*
             exception.printStackTrace();
         }
 
@@ -456,6 +459,12 @@ public class AStarDemoController extends AbsController implements Initializable 
         instructionTreeView.disableProperty().bind(isCurrentlyNavigating.not());
         optimize.disableProperty().bind(isCurrentlyNavigating);
         disableStair.disableProperty().bind(isCurrentlyNavigating);
+        if(algorithmFromAPI.toLowerCase().equals("depth-first-search") || algorithmFromAPI.toLowerCase().equals("breadth-first-search"))
+        {
+            disableStair.visibleProperty().set(false);
+            disableStair.setManaged(false);
+        }
+
         about.disableProperty().bind(isCurrentlyNavigating);
         clear.disableProperty().bind(isCurrentlyNavigating);
         treeView.managedProperty().bind(isCurrentlyNavigating.not());
