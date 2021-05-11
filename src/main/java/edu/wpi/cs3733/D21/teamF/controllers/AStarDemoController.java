@@ -638,15 +638,18 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             if (CurrentUser.getCurrentUser().isAuthenticated()) {
                 final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
+                boolean addFavorite = true;
                 try {
                     if (getUserFavorites().contains(currEntry.getNodeID())) {
                         toggleFavorite.setText("Remove Favorite");
+                        addFavorite = false;
                     }
                 } catch (SQLException sqlException) {
                     sqlException.printStackTrace();
                 }
+                boolean finalAddFavorite = addFavorite;
                 toggleFavorite.setOnAction(a -> {
-                    if (toggleFavorite.getText().equals("Add To Favorites")) {
+                    if (finalAddFavorite) {
                         try {
                             addNodeToFavorites(currEntry);
                         } catch (SQLException sqlException) {
@@ -671,6 +674,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             }
 
             dialog.setContent(layout);
+            SceneContext.autoTranslate(dialog);
             mapPanel.showDialog(dialog);
         };
     }
