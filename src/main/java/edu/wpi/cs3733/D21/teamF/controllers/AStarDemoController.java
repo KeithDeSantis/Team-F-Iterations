@@ -613,6 +613,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
         stopList.setCellFactory(x -> {
             final NavigationListCell cell = new NavigationListCell();
+            cell.getCloseBtn().visibleProperty().bind(isCurrentlyNavigating.not());
             cell.getCloseBtn().setStyle("-fx-background-color: #E8321E; -fx-text-fill: #FFFFFF;");
             cell.getCloseBtn().setOnMouseClicked(e -> {
                 final String shortName = cell.getLabel().getText();
@@ -632,6 +633,8 @@ public class AStarDemoController extends AbsController implements Initializable 
             });
 
             cell.setOnMouseClicked(e -> {
+                if(isCurrentlyNavigating.get())
+                    return;
                 mapPanel.centerNode(mapPanel.getNode(shortNameToID(cell.getLabel().getText())));
                 mapPanel.switchMap(mapPanel.getNode(shortNameToID(cell.getLabel().getText())).getFloor().get());
             });
