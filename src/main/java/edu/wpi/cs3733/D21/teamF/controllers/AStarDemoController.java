@@ -25,6 +25,8 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
@@ -311,123 +313,17 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
             // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
-            startPathMenu.setOnAction(e -> {
-                if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))) return;
-                startNode.set(idToShortName(currEntry.getNodeID()));
-                try {
-                    handleStartNodeChange();
-                } catch (SQLException sqlException) {
-                    sqlException.printStackTrace();
-                }
-            });
+            startPathMenu.setOnAction(handleStartPathMenu(currEntry));
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(e -> {
-                if(addStopMenu.getText().equals("Add Stop")) {
-                    vertices.add(graph.getVertex(currEntry.getNodeID()));
-                    mapPanel.switchMap(currEntry.getFloor());
-                    mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
-                    //drawStop(currEntry);
-                    try {
-                        addNodeToRecent(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                } else {
-                    vertices.remove(graph.getVertex(currEntry.getNodeID()));
-                    mapPanel.unDraw(currEntry.getNodeID());
-                    getDrawableNode(currEntry.getNodeID());
-                }
-                checkInput();
-            });
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenu, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
-            endPathMenu.setOnAction(e -> {
-                endNode.set(idToShortName(currEntry.getNodeID()));
-                try {
-                    handleEndNodeChange();
-                } catch (SQLException sqlException) {
-                    sqlException.printStackTrace();
-                }
-            });
+            endPathMenu.setOnAction(handleEndPathMenu(currEntry));
 
             //FIXME: Make these ones require that thing is visible
-            whatsHereMenu.setOnAction(e -> {
-                mapPanel.switchMap(currEntry.getFloor());
-                mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
-
-                final JFXDialog dialog = new JFXDialog();
-                final JFXDialogLayout layout = new JFXDialogLayout();
-
-
-                layout.setHeading(new Text(currEntry.getLongName()));
-
-                //FIXME: DO BREAKS W/ CSS
-                layout.setBody(new Text(currEntry.getDescription()));
-
-                final JFXButton closeBtn = new JFXButton("Close");
-                closeBtn.setOnAction(a -> dialog.close());
-
-                final JFXButton directionsTo = new JFXButton("Direction To");
-                directionsTo.setOnAction(a -> {
-                    endNode.set(idToShortName(currEntry.getNodeID()));
-                    try {
-                        handleEndNodeChange();
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                    dialog.close();
-                });
-
-                final JFXButton directionsFrom = new JFXButton("Directions From");
-                directionsFrom.setOnAction(a -> {
-                    startNode.set(idToShortName(currEntry.getNodeID()));
-                    try {
-                        handleStartNodeChange();
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                    dialog.close();
-                });
-
-                if(CurrentUser.getCurrentUser().isAuthenticated()) {
-                    final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
-                    try{
-                        if(getUserFavorites().contains(currEntry.getNodeID())){
-                            toggleFavorite.setText("Remove Favorite");
-                        }
-                    } catch (SQLException sqlException){
-                        sqlException.printStackTrace();
-                    }
-                    toggleFavorite.setOnAction(a -> {
-                        if (toggleFavorite.getText().equals("Add To Favorites")) {
-                            try {
-                                addNodeToFavorites(currEntry);
-                            } catch (SQLException sqlException) {
-                                sqlException.printStackTrace();
-                            }
-                        } else {
-                            try {
-                                removeNodeFromFavorites(currEntry);
-                            } catch (SQLException sqlException) {
-                                sqlException.printStackTrace();
-                            }
-                        }
-                        dialog.close();
-                    });
-
-                    layout.setActions(toggleFavorite, directionsFrom, closeBtn);
-                } else {
-                    layout.setActions(directionsFrom, closeBtn);
-                }
-                if(!filterNodes){
-                    layout.getActions().add(layout.getActions().size() - 2, directionsTo);
-                }
-
-                dialog.setContent(layout);
-                mapPanel.showDialog(dialog);
-            });
+            whatsHereMenu.setOnAction(handleWhatsHereMenu(currEntry, 2));
 
             addFavoriteFromMenu(addFavoriteMenu, currEntry);
         });
@@ -658,123 +554,17 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // Sets the start node and removes the old start node from the list (re-added in updatePath()) - LM
             // Combo box updates already call checkInput() so calling it for set start and end nodes here is redundant
-            startPathMenu.setOnAction(e -> {
-                if(filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK"))) return;
-                startNode.set(idToShortName(currEntry.getNodeID()));
-                try {
-                    handleStartNodeChange();
-                } catch (SQLException sqlException) {
-                    sqlException.printStackTrace();
-                }
-            });
+            startPathMenu.setOnAction(handleStartPathMenu(currEntry));
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(e -> {
-                if(addStopMenu.getText().equals("Add Stop")) {
-                    vertices.add(graph.getVertex(currEntry.getNodeID()));
-                    mapPanel.switchMap(currEntry.getFloor());
-                    mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
-                    //drawStop(currEntry);
-                    try {
-                        addNodeToRecent(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                } else {
-                    vertices.remove(graph.getVertex(currEntry.getNodeID()));
-                    mapPanel.unDraw(currEntry.getNodeID());
-                    getDrawableNode(currEntry.getNodeID());
-                }
-                checkInput();
-            });
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenu, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
-            endPathMenu.setOnAction(e -> {
-                endNode.set(idToShortName(currEntry.getNodeID()));
-                try {
-                    handleEndNodeChange();
-                } catch (SQLException sqlException) {
-                    sqlException.printStackTrace();
-                }
-            });
+            endPathMenu.setOnAction(handleEndPathMenu(currEntry));
 
             //FIXME: Make these ones require that thing is visible
-            whatsHereMenu.setOnAction(e -> {
-                mapPanel.switchMap(currEntry.getFloor());
-                mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
-
-                final JFXDialog dialog = new JFXDialog();
-                final JFXDialogLayout layout = new JFXDialogLayout();
-
-
-                layout.setHeading(new Text(currEntry.getLongName()));
-
-                //FIXME: DO BREAKS W/ CSS
-                layout.setBody(new Text(currEntry.getDescription()));
-
-                final JFXButton closeBtn = new JFXButton("Close");
-                closeBtn.setOnAction(a -> dialog.close());
-
-                final JFXButton directionsTo = new JFXButton("Direction To");
-                directionsTo.setOnAction(a -> {
-                    endNode.set(idToShortName(currEntry.getNodeID()));
-                    try {
-                        handleEndNodeChange();
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                    dialog.close();
-                });
-
-                final JFXButton directionsFrom = new JFXButton("Directions From");
-                directionsFrom.setOnAction(a -> {
-                    startNode.set(idToShortName(currEntry.getNodeID()));
-                    try {
-                        handleStartNodeChange();
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                    dialog.close();
-                });
-
-                if(CurrentUser.getCurrentUser().isAuthenticated()) {
-                    final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
-                    try{
-                        if(getUserFavorites().contains(currEntry.getNodeID())){
-                            toggleFavorite.setText("Remove Favorite");
-                        }
-                    } catch (SQLException sqlException){
-                        sqlException.printStackTrace();
-                    }
-                    toggleFavorite.setOnAction(a -> {
-                        if (toggleFavorite.getText().equals("Add To Favorites")) {
-                            try {
-                                addNodeToFavorites(currEntry);
-                            } catch (SQLException sqlException) {
-                                sqlException.printStackTrace();
-                            }
-                        } else {
-                            try {
-                                removeNodeFromFavorites(currEntry);
-                            } catch (SQLException sqlException) {
-                                sqlException.printStackTrace();
-                            }
-                        }
-                        dialog.close();
-                    });
-
-                    layout.setActions(toggleFavorite, directionsFrom, closeBtn);
-                } else {
-                    layout.setActions(directionsFrom, closeBtn);
-                }
-                if(!filterNodes){
-                    layout.getActions().add(layout.getActions().size()-3, directionsTo);
-                }
-
-                dialog.setContent(layout);
-                mapPanel.showDialog(dialog);
-            });
+            whatsHereMenu.setOnAction(handleWhatsHereMenu(currEntry, 3));
 
             addFavoriteFromMenu(addFavoriteMenu, currEntry);
         });
@@ -792,6 +582,129 @@ public class AStarDemoController extends AbsController implements Initializable 
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+    }
+
+    private EventHandler<ActionEvent> handleWhatsHereMenu(NodeEntry currEntry, int i) {
+        return e -> {
+            mapPanel.switchMap(currEntry.getFloor());
+            mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID())); //FIXME: DO on all?
+
+            final JFXDialog dialog = new JFXDialog();
+            final JFXDialogLayout layout = new JFXDialogLayout();
+
+
+            layout.setHeading(new Text(currEntry.getLongName()));
+
+            //FIXME: DO BREAKS W/ CSS
+            layout.setBody(new Text(currEntry.getDescription()));
+
+            final JFXButton closeBtn = new JFXButton("Close");
+            closeBtn.setOnAction(a -> dialog.close());
+
+            final JFXButton directionsTo = new JFXButton("Direction To");
+            directionsTo.setOnAction(a -> {
+                endNode.set(idToShortName(currEntry.getNodeID()));
+                try {
+                    handleEndNodeChange();
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+                dialog.close();
+            });
+
+            final JFXButton directionsFrom = new JFXButton("Directions From");
+            directionsFrom.setOnAction(a -> {
+                startNode.set(idToShortName(currEntry.getNodeID()));
+                try {
+                    handleStartNodeChange();
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+                dialog.close();
+            });
+
+            if (CurrentUser.getCurrentUser().isAuthenticated()) {
+                final JFXButton toggleFavorite = new JFXButton("Add To Favorites");
+                try {
+                    if (getUserFavorites().contains(currEntry.getNodeID())) {
+                        toggleFavorite.setText("Remove Favorite");
+                    }
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+                toggleFavorite.setOnAction(a -> {
+                    if (toggleFavorite.getText().equals("Add To Favorites")) {
+                        try {
+                            addNodeToFavorites(currEntry);
+                        } catch (SQLException sqlException) {
+                            sqlException.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            removeNodeFromFavorites(currEntry);
+                        } catch (SQLException sqlException) {
+                            sqlException.printStackTrace();
+                        }
+                    }
+                    dialog.close();
+                });
+
+                layout.setActions(toggleFavorite, directionsFrom, closeBtn);
+            } else {
+                layout.setActions(directionsFrom, closeBtn);
+            }
+            if (!filterNodes) {
+                layout.getActions().add(layout.getActions().size() - i, directionsTo);
+            }
+
+            dialog.setContent(layout);
+            mapPanel.showDialog(dialog);
+        };
+    }
+
+    private EventHandler<ActionEvent> handleEndPathMenu(NodeEntry currEntry) {
+        return e -> {
+            endNode.set(idToShortName(currEntry.getNodeID()));
+            try {
+                handleEndNodeChange();
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+            }
+        };
+    }
+
+    private EventHandler<ActionEvent> handleAddStopMenu(MenuItem addStopMenu, NodeEntry currEntry) {
+        return e -> {
+            if (addStopMenu.getText().equals("Add Stop")) {
+                vertices.add(graph.getVertex(currEntry.getNodeID()));
+                mapPanel.switchMap(currEntry.getFloor());
+                mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
+                //drawStop(currEntry);
+                try {
+                    addNodeToRecent(currEntry);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+            } else {
+                vertices.remove(graph.getVertex(currEntry.getNodeID()));
+                mapPanel.unDraw(currEntry.getNodeID());
+                getDrawableNode(currEntry.getNodeID());
+            }
+            checkInput();
+        };
+    }
+
+    private EventHandler<ActionEvent> handleStartPathMenu(NodeEntry currEntry) {
+        return e -> {
+            if (filterNodes && !(currEntry.getNodeType().equals("PARK") || currEntry.getNodeType().equals("WALK")))
+                return;
+            startNode.set(idToShortName(currEntry.getNodeID()));
+            try {
+                handleStartNodeChange();
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+            }
+        };
     }
 
     private void addFavoriteFromMenu(MenuItem addFavoriteMenu, NodeEntry currEntry) {
@@ -1892,7 +1805,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         mapPanel.getCanvas().getChildren().removeIf(x -> x instanceof DrawableFloorInstruction);
     }
 
-    // Will come in handy when implementing Treeview for instructions
+    // Will come in handy when implementing TreeView for instructions
     private void goToStep(int step){
         if(step < 0 || step > stopsList.size() - 1 || step == currentStep.get()) return;
         if(step > currentStep.get()){
