@@ -87,6 +87,13 @@ public class DefaultPageController extends AbsController {
     }
 
     private void resetButtons() throws SQLException {
+
+        loginButton.textProperty().unbind();
+        if(CurrentUser.getCurrentUser().authenticatedProperty().get())
+            loginButton.textProperty().bind(Translator.getTranslator().getTranslationBinding("Sign Out"));
+        else
+            loginButton.textProperty().bind(Translator.getTranslator().getTranslationBinding("Login"));
+        //loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then(Translator.getTranslator().getTranslationBinding("Sign Out")).otherwise(Translator.getTranslator().getTranslationBinding("Login")));
         AccountEntry user = CurrentUser.getCurrentUser().getLoggedIn();
         if (user != null && CurrentUser.getCurrentUser().isAuthenticated()) {
             changeButtons();
