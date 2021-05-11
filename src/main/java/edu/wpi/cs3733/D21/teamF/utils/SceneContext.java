@@ -189,7 +189,7 @@ public class SceneContext {
         }
 
         item.getChildren().addListener((ListChangeListener<TreeItem<?>>) c -> {
-            while(c.next()) {} //get all changes
+            while(c.next()) {} //get all changes this needs to stay like this!!!
 
             for(TreeItem<String> child : item.getChildren())
             {

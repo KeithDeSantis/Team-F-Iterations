@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamF.controllers;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.Translation.Translator;
+import edu.wpi.cs3733.D21.teamF.controllers.components.NavigationListCell;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.entities.EdgeEntry;
@@ -24,6 +25,7 @@ import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -34,8 +36,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -112,6 +114,9 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     @FXML
     private JFXTreeView<String> instructionTreeView;
+    
+    @FXML
+    private JFXListView<String> stopList;
 
     //FIXME: DO BETTER
     private Graph graph;
@@ -334,7 +339,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, addStopMenu, currEntry));
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(handleEndPathMenu(currEntry));
@@ -534,8 +539,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         // Set the root item
         treeView.setRoot(rootTreeViewItem);
 
-        System.out.println("TREEEE: " + treeView.getRoot().getChildren().get(0));
-
         // Hide root item (we don't need it visible, we always want to list to be there
         this.treeView.setShowRoot(false);
 
@@ -579,7 +582,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, addStopMenu, currEntry));
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(handleEndPathMenu(currEntry));
@@ -602,6 +605,67 @@ public class AStarDemoController extends AbsController implements Initializable 
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
+        }
+        
+        /*
+         * Initialize the stop list
+         */
+
+        stopList.setCellFactory(x -> {
+            final NavigationListCell cell = new NavigationListCell();
+            cell.getCloseBtn().visibleProperty().bind(isCurrentlyNavigating.not());
+            cell.getCloseBtn().setStyle("-fx-background-color: #E8321E; -fx-text-fill: #FFFFFF;");
+            cell.getCloseBtn().setOnMouseClicked(e -> {
+                final String shortName = cell.getLabel().getText();
+                final String ID = shortNameToID(shortName);
+                vertices.removeIf(vertex -> vertex.getID().equals(ID));
+
+                if(startNode.get().equals(shortName)) {
+                    startNode.set("");
+                    checkInput();
+                    Go.setDisable(true);
+                }
+                if(endNode.get().equals(shortName)) {
+                    endNode.set("");
+                    checkInput();
+                    Go.setDisable(true);
+                }
+            });
+
+            cell.setOnMouseClicked(e -> {
+                if(isCurrentlyNavigating.get())
+                    return;
+                mapPanel.centerNode(mapPanel.getNode(shortNameToID(cell.getLabel().getText())));
+                mapPanel.switchMap(mapPanel.getNode(shortNameToID(cell.getLabel().getText())).getFloor().get());
+            });
+
+            return cell;
+        });
+
+
+        startNode.addListener((observable, oldValue, newValue) -> updateDestinationList());
+        endNode.addListener((observable, oldValue, newValue) -> updateDestinationList());
+
+        vertices.addListener((ListChangeListener<Vertex>) c -> {
+            while(c.next()){} //Needed to get all changes
+            updateDestinationList();
+        });
+
+    }
+
+    private void updateDestinationList() {
+        stopList.getItems().clear();
+        List<String> destinationLists = new ArrayList<>();
+        if(!startNode.get().isEmpty())
+            destinationLists.add(startNode.get());
+
+        destinationLists.addAll(vertices.stream().map(v -> idToShortName(v.getID())).collect(Collectors.toList()));
+        if(!endNode.get().isEmpty())
+            destinationLists.add(endNode.get());
+
+        for(String stop : destinationLists)//for (Vertex stop : vertices)
+        {
+            stopList.getItems().add(stop);//stop.getID()));
         }
     }
 
@@ -697,7 +761,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         };
     }
 
-    private EventHandler<ActionEvent> handleAddStopMenu(StringProperty stopMenuText, MenuItem addStopMenu, NodeEntry currEntry) {
+    private EventHandler<ActionEvent> handleAddStopMenu(StringProperty stopMenuText, NodeEntry currEntry) {
         return e -> {
             if (stopMenuText.get().equals("Add Stop")) {
                 vertices.add(graph.getVertex(currEntry.getNodeID()));
@@ -711,8 +775,6 @@ public class AStarDemoController extends AbsController implements Initializable 
                 }
             } else {
                 vertices.remove(graph.getVertex(currEntry.getNodeID()));
-                mapPanel.unDraw(currEntry.getNodeID());
-                getDrawableNode(currEntry.getNodeID());
             }
             checkInput();
         };
