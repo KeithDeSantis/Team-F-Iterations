@@ -459,7 +459,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         instructionTreeView.disableProperty().bind(isCurrentlyNavigating.not());
         optimize.disableProperty().bind(isCurrentlyNavigating);
         disableStair.disableProperty().bind(isCurrentlyNavigating);
-        if(algorithmFromAPI.toLowerCase().equals("depth-first-search") || algorithmFromAPI.toLowerCase().equals("breadth-first-search"))
+        if(algorithmFromAPI.equalsIgnoreCase("depth-first-search") || algorithmFromAPI.equalsIgnoreCase("breadth-first-search"))
         {
             disableStair.visibleProperty().set(false);
             disableStair.setManaged(false);
