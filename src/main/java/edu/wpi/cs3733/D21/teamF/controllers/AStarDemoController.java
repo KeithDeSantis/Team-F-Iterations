@@ -24,6 +24,7 @@ import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -536,8 +537,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         // Set the root item
         treeView.setRoot(rootTreeViewItem);
 
-        System.out.println("TREEEE: " + treeView.getRoot().getChildren().get(0));
-
         // Hide root item (we don't need it visible, we always want to list to be there
         this.treeView.setShowRoot(false);
 
@@ -605,6 +604,21 @@ public class AStarDemoController extends AbsController implements Initializable 
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+        
+        /*
+         * Initialize the stop list
+         */
+        vertices.addListener((ListChangeListener<Vertex>) c -> {
+            while(c.next()){} //Needed to get all changes
+            stopList.getChildren().clear();
+            for (Vertex stop : vertices)
+            {
+                System.out.println(stop.getID());
+                final Label stopLbl = new Label(stop.getID());
+                stopList.getChildren().add(stopLbl);
+            }
+            System.out.println("---------");
+        });
     }
 
     private EventHandler<ActionEvent> handleWhatsHereMenu(NodeEntry currEntry, int i) {
@@ -714,8 +728,8 @@ public class AStarDemoController extends AbsController implements Initializable 
                 }
             } else {
                 vertices.remove(graph.getVertex(currEntry.getNodeID()));
-                mapPanel.unDraw(currEntry.getNodeID());
-                getDrawableNode(currEntry.getNodeID());
+//                mapPanel.unDraw(currEntry.getNodeID());
+//                getDrawableNode(currEntry.getNodeID());
             }
             checkInput();
         };
