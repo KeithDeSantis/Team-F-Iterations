@@ -10,13 +10,14 @@ public class ConnectionHandler {
     private static Connection establishConnection() throws SQLException {
         String protocol = "jdbc:derby:";
         String embeddedURL;
-        String remoteURL = "";
+        String remoteURL = protocol + "//conntinuity.org:10142/projectC2;create=true;user=falcons;password=";
 
         embeddedURL = protocol + "projectC1;create=true";
 
         try {
             return DriverManager.getConnection(remoteURL);
         } catch (SQLException e) {
+            System.out.println("ARE WE REMOTE????");
             return DriverManager.getConnection(embeddedURL);
         }
     }
