@@ -339,7 +339,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, addStopMenu, currEntry));
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(handleEndPathMenu(currEntry));
@@ -582,7 +582,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
             // When adding a new stop, the vertex is added to the intermediate vertex list and the path is redrawn - LM
             // No combo box update so we call checkInput()
-            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, addStopMenu, currEntry));
+            addStopMenu.setOnAction(handleAddStopMenu(addStopMenuText, currEntry));
 
             // Sets the end node and removed the previous node from the list (re-added in updatePath()) - LM
             endPathMenu.setOnAction(handleEndPathMenu(currEntry));
@@ -758,7 +758,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         };
     }
 
-    private EventHandler<ActionEvent> handleAddStopMenu(StringProperty stopMenuText, MenuItem addStopMenu, NodeEntry currEntry) {
+    private EventHandler<ActionEvent> handleAddStopMenu(StringProperty stopMenuText, NodeEntry currEntry) {
         return e -> {
             if (stopMenuText.get().equals("Add Stop")) {
                 vertices.add(graph.getVertex(currEntry.getNodeID()));
@@ -772,8 +772,6 @@ public class AStarDemoController extends AbsController implements Initializable 
                 }
             } else {
                 vertices.remove(graph.getVertex(currEntry.getNodeID()));
-//                mapPanel.unDraw(currEntry.getNodeID());
-//                getDrawableNode(currEntry.getNodeID());
             }
             checkInput();
         };
