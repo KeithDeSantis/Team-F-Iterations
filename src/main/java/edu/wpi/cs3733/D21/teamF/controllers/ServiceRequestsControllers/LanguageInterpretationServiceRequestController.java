@@ -8,11 +8,13 @@ import edu.wpi.cs3733.D21.teamF.Translation.Translator;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.ServiceEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -48,14 +50,16 @@ public class LanguageInterpretationServiceRequestController extends ServiceReque
      * @throws IOException
      * @author Jay Yen
      */
-    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent actionEvent) throws IOException, SQLException, MessagingException {
         if(formFilled()) {
             String uuid = UUID.randomUUID().toString();
             String additionalInstr = "Date: " + date.getValue().toString() + " Time: " + time.getValue() +
-                    " Email;" + email.getText() + " Appointment: " + appointment.getValue() + " Language: " + language.getValue();
+                      " Appointment: " + appointment.getValue() + " Language: " + language.getValue() + " Email;" + email.getText();
             ServiceEntry newServiceRequest = new ServiceEntry(uuid,"Language Interpretation Request", " ", "false", additionalInstr);
             DatabaseAPI.getDatabaseAPI().addServiceReq(newServiceRequest.getUuid(), newServiceRequest.getRequestType(),
                     newServiceRequest.getAssignedTo(), newServiceRequest.getCompleteStatus(), newServiceRequest.getAdditionalInstructions());
+            EmailHandler.getEmailHandler().sendEmail(additionalInstr.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request Language Interpretation it will be completed as soon as possible");
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
         }

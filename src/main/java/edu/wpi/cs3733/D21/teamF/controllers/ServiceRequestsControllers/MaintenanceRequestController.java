@@ -8,12 +8,14 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -70,7 +72,7 @@ public class MaintenanceRequestController extends ServiceRequests {
      * @throws SQLException
      * @author Leo Morris
      */
-    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException, MessagingException {
         if(formFilled()) {
             String name = urgencyComboBox.getValue() + ": ";
             if (typeComboBox.getValue().equals("Damage") || typeComboBox.getValue().equals("Safety Hazard") || typeComboBox.getValue().equals("Spill")) {
@@ -95,6 +97,9 @@ public class MaintenanceRequestController extends ServiceRequests {
             String additionalInfo = "Location: " + locationField.getValue() + "Date: " + dateOfIncident.getValue() +
                     "Urgency: " + urgencyComboBox.getValue() + "Email;" + emailField;
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), name,"", "false", additionalInfo);
+            EmailHandler.getEmailHandler().sendEmail(additionalInfo.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request Maintenance it will be completed as soon as possible");
+
             openSuccessWindow();
         }
     }

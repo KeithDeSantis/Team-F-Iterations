@@ -4,6 +4,7 @@ import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleGroup;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -73,7 +75,7 @@ public class FloralDeliveryService extends ServiceRequests {
      * @param actionEvent
      * @author KD
      */
-    public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException {
+    public void handleSubmit(ActionEvent actionEvent) throws SQLException, IOException, MessagingException {
         if(formFilled()) {
             String type = "Flower Delivery";
             String uuid = UUID.randomUUID().toString();
@@ -81,6 +83,8 @@ public class FloralDeliveryService extends ServiceRequests {
             "CC Number: " + cardNumberField.getText() + "CC CVC: " + cardCVCField.getText() + "CC Exp. Date: " + cardExpField.getText()
                     + " Email;" + emailField.getText();
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, "", "false", additionalInfo);
+            EmailHandler.getEmailHandler().sendEmail(additionalInfo.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request " + type + " it will be completed as soon as possible");
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();
         }

@@ -3,12 +3,14 @@ package edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers;
 import com.jfoenix.controls.JFXRadioButton;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -57,14 +59,17 @@ public class LaundryRequestController extends ServiceRequests {
     }
 
     @FXML
-    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException, MessagingException {
         if(formFilled()) {
             // Loads form submitted window and passes in current stage to return to request home
             String uuid = UUID.randomUUID().toString();
             String type = "Laundry Request";
             String person = "";
             String completed = "false";
-            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInformation());
+            String additionalInstructions = additionalInformation();
+            DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInstructions);
+            EmailHandler.getEmailHandler().sendEmail(additionalInstructions.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request " + type + " it will be completed as soon as possible");
 
             openSuccessWindow();
         }

@@ -8,12 +8,14 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamF.controllers.ServiceRequests;
 import edu.wpi.cs3733.D21.teamF.database.DatabaseAPI;
 import edu.wpi.cs3733.D21.teamF.entities.NodeEntry;
+import edu.wpi.cs3733.D21.teamF.utils.EmailHandler;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -79,7 +81,7 @@ public class InternalTransportationController extends ServiceRequests {
         return isFilled;
     }
 
-    public void handleSubmit(ActionEvent e) throws IOException, SQLException {
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException, MessagingException {
         if(formFilled()) // form is complete
         {
             String uuid = UUID.randomUUID().toString();
@@ -90,6 +92,8 @@ public class InternalTransportationController extends ServiceRequests {
                     + "Patient Room: " + patientRoom.getValue() + " Email;" + email.getText();
 
             DatabaseAPI.getDatabaseAPI().addServiceReq(uuid, type, person, completed, additionalInfo);
+            EmailHandler.getEmailHandler().sendEmail(additionalInfo.split(";")[1], "Service Request Confirmation",
+                    "Hello,\nThis is a confirmation email for your service request " + type + " it will be completed as soon as possible");
 
             // Loads form submitted window and passes in current stage to return to request home
             openSuccessWindow();

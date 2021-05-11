@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -19,7 +20,7 @@ public abstract class ServiceRequests extends AbsController {
     @FXML
     private JFXButton submitButton;
 
-    public void handleSubmit(ActionEvent e) throws IOException, SQLException {}
+    public void handleSubmit(ActionEvent e) throws IOException, SQLException, MessagingException {}
 
     public void handleCancel() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestHomeNewView.fxml");
