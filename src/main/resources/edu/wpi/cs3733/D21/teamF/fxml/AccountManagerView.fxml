@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
-
 <?import javafx.scene.text.Text?>
-<?import com.jfoenix.controls.JFXComboBox?>
+
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.AccountManagerController">
    <children>
       <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -45,10 +44,10 @@
             <Insets bottom="10.0" left="10.0" top="10.0" />
          </padding>
       </AnchorPane>
-      <JFXTreeTableView fx:id="accountView" layoutX="38.0" layoutY="117.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="323.0" prefWidth="896.0" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="140.0" />
+      <JFXTreeTableView fx:id="accountView" layoutX="38.0" layoutY="65.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="896.0" stylesheets="/stylesheets/NodeEditorTreeTableStyle.css" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="76.0" />
       <HBox alignment="CENTER" layoutX="264.0" layoutY="454.0" prefHeight="59.0" prefWidth="810.0" spacing="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
          <children>
-            <JFXButton buttonType="RAISED" prefHeight="30.0" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help" onAction="#handleHelp">
+            <JFXButton buttonType="RAISED" onAction="#handleHelp" prefHeight="30.0" prefWidth="2000.0" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Help">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />
                </font>
