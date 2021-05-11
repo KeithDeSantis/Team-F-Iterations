@@ -1825,7 +1825,7 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     public void addNodeToRecent(NodeEntry node) throws SQLException{
         if(CurrentUser.getCurrentUser().isAuthenticated()) {
-            if(!favoriteItem.getChildren().removeIf(t -> t.getValue().equals(node.getShortName()))) // Remove any tree item with a matching short name (prevents duplicates)
+            if(!recentItem.getChildren().removeIf(t -> t.getValue().equals(node.getShortName()))) // Remove any tree item with a matching short name (prevents duplicates)
                 DatabaseAPI.getDatabaseAPI().addCollectionEntry(CurrentUser.getCurrentUser().getLoggedIn().getUsername(), node.getNodeID(), "recent"); // if it wasn't removed, add it to the db list
             recentItem.getChildren().add(0, new TreeItem<>(node.getShortName()));
             while(getUserRecent().size() > MAX_RECENTLY_USED){ // Should only run once, just covers a previously missed deletion
