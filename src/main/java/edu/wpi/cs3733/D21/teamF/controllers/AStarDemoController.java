@@ -615,7 +615,10 @@ public class AStarDemoController extends AbsController implements Initializable 
             {
                 System.out.println(stop.getID());
                 final Label stopLbl = new Label(stop.getID());
-                stopList.getChildren().add(stopLbl);
+                stopList.addAnimatedNode(stopLbl);
+                stopList.getListAnimation(true);
+                stopList.animateList();
+                stopList.animateList(true); // this confuses me so much but it works - KD
             }
             System.out.println("---------");
         });
