@@ -55,6 +55,7 @@
                               <JFXButton fx:id="about" buttonType="RAISED" onAction="#gotoAboutPage" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="About" />
                               <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                               <JFXToggleButton fx:id="optimize" onAction="#checkInput" prefHeight="30.0" text="Optimize Route" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />
+                              <JFXToggleButton fx:id="disableStair" onAction="#checkInput" prefHeight="30.0" text="Disable Stairs" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />
                            </children>
                         </HBox>
                         <HBox fx:id="lowerHBox" alignment="CENTER" prefHeight="0.0" prefWidth="900.0">
