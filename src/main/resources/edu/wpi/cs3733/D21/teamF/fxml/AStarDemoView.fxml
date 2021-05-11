@@ -42,8 +42,17 @@
       </AnchorPane>
       <HBox VBox.vgrow="ALWAYS">
          <children>
-            <JFXTreeView fx:id="treeView" onMouseClicked="#handleListSelection" prefWidth="250" stylesheets="/stylesheets/TreeViewStyle.css" />
-            <JFXTreeView fx:id="instructionTreeView" onMouseClicked="#handleInstructionListSelection" prefWidth="250" stylesheets="/stylesheets/TreeViewStyle.css" />
+            <VBox prefHeight="2000.0" prefWidth="286.0">
+               <children>
+                  <AnchorPane prefHeight="2000.0" prefWidth="2000.0" />
+                  <HBox prefHeight="2000.0" prefWidth="2000.0">
+                     <children>
+                        <JFXTreeView fx:id="treeView" onMouseClicked="#handleListSelection" prefHeight="2000.0" prefWidth="2000.0" stylesheets="/stylesheets/TreeViewStyle.css" />
+                        <JFXTreeView fx:id="instructionTreeView" onMouseClicked="#handleInstructionListSelection" prefHeight="2000.0" prefWidth="2000.0" stylesheets="/stylesheets/TreeViewStyle.css" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
             <VBox HBox.hgrow="ALWAYS">
                <children>
                   <MapPanel fx:id="mapPanel" prefHeight="450.0" prefWidth="700.0" VBox.vgrow="ALWAYS" />
