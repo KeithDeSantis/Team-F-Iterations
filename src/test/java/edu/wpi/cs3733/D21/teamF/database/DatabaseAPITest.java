@@ -469,4 +469,10 @@ class DatabaseAPITest {
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUserNode("node1", "declan", "favorite"));
         assertTrue(DatabaseAPI.getDatabaseAPI().deleteUserNode("node4", "ben", "recent"));
     }
+
+    @Test
+    @DisplayName("test valid email")
+    public void testValidEmail(){
+        assertTrue(DatabaseAPI.getDatabaseAPI().isValidEmail("dpmurphy@wpi.edu"));
+    }
 }

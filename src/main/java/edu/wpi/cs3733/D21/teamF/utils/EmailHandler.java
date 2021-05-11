@@ -62,7 +62,6 @@ public class EmailHandler {
         else{
             return -1;
         }
-
         return 0;
     }
 
