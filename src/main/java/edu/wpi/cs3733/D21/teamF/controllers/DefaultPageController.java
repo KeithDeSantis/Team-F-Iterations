@@ -8,7 +8,6 @@ import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +28,8 @@ public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton navigation;
     @FXML
+    private JFXButton googleMapsPage;
+    @FXML
     private JFXButton serviceRequest;
     @FXML
     private JFXButton quit;
@@ -36,8 +37,6 @@ public class DefaultPageController extends AbsController {
     private JFXButton loginButton;
     @FXML
     private JFXButton surveyButton;
-    @FXML
-    private JFXButton covidInfo;
     @FXML
     private JFXButton surveyButton2;
     @FXML
@@ -69,55 +68,22 @@ public class DefaultPageController extends AbsController {
         // CLear visual focus for login button (unknown why it defaults to false) - LM
         loginButton.setDisableVisualFocus(true);
         //Bind login/logout
-        loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
+        //loginButton.textProperty().bind(Bindings.when(CurrentUser.getCurrentUser().authenticatedProperty()).then("Sign Out").otherwise("Login"));
 
-
-        loginButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginButton.getText()));
-
-        // loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(loginLabel.getText()));
-
-        navigation.textProperty().bind(Translator.getTranslator().getTranslationBinding(navigation.getText()));
-
-        editMap.textProperty().bind(Translator.getTranslator().getTranslationBinding(editMap.getText()));
-
-        serviceRequest.textProperty().bind(Translator.getTranslator().getTranslationBinding(serviceRequest.getText()));
-
-        manageServices.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageServices.getText()));
-
-        manageAccount.textProperty().bind(Translator.getTranslator().getTranslationBinding(manageAccount.getText()));
-
-        pathfindingSettingButton.textProperty().bind(Translator.getTranslator().getTranslationBinding(pathfindingSettingButton.getText()));
-
-
-        covidInfo.textProperty().bind(Translator.getTranslator().getTranslationBinding(covidInfo.getText()));
-
-        quit.textProperty().bind(Translator.getTranslator().getTranslationBinding(quit.getText()));
-
-        credits.textProperty().bind(Translator.getTranslator().getTranslationBinding(credits.getText()));
 
 
         try {
             resetButtons();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
     }
 
-    // used to see how to toggle visibility
-//    @FXML
-//    private void handleTestVisibility(ActionEvent actionEvent){
-//        buttons.setVisible(true);
-//        covidBox.setVisible(false);
-//    }
     private void changeButtons() {
-//        String ticketID = verifyAgain.getText();
-//        if (CurrentUser.getCurrentUser().getLoggedIn().getUsername().equals(verifyAgain.getText()) ||
-//                DatabaseAPI.getDatabaseAPI().getServiceEntry(ticketID).getCompleteStatus().equals("true")) {
         buttons.setVisible(true);
         covidBox.setVisible(false);
         credits.setVisible(true);
         covidBox.setManaged(false);
-        // }
     }
 
     private void resetButtons() throws SQLException {
@@ -134,6 +100,8 @@ public class DefaultPageController extends AbsController {
                     pathfindingSettingButton.setVisible(true);
                     manageAccount.setManaged(true);
                     manageAccount.setVisible(true);
+                    googleMapsPage.setVisible(true);
+                    googleMapsPage.setManaged(true);
                     surveyButton.setManaged(false);
                     surveyButton.setVisible(false);
                     surveyButton2.setManaged(false);
@@ -145,6 +113,8 @@ public class DefaultPageController extends AbsController {
                     manageServices.setVisible(true);
                     editMap.setManaged(true);
                     editMap.setVisible(true);
+                    googleMapsPage.setVisible(true);
+                    googleMapsPage.setManaged(true);
                     pathfindingSettingButton.setManaged(false);
                     pathfindingSettingButton.setVisible(false);
                     manageAccount.setManaged(false);
@@ -160,6 +130,8 @@ public class DefaultPageController extends AbsController {
                     manageServices.setVisible(false);
                     editMap.setManaged(false);
                     editMap.setVisible(false);
+                    googleMapsPage.setVisible(true);
+                    googleMapsPage.setManaged(true);
                     pathfindingSettingButton.setManaged(false);
                     pathfindingSettingButton.setVisible(false);
                     manageAccount.setManaged(false);
@@ -169,34 +141,40 @@ public class DefaultPageController extends AbsController {
                     surveyButton2.setManaged(false);
                     surveyButton2.setVisible(false);
             }
-            loginLabel.setText("Hello, " + user.getUsername() + "!");
+            loginLabel.textProperty().unbind();
+            loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("Hello, " + user.getUsername() + "!"));
 
-        } else if (CurrentUser.getCurrentUser().getUuid() != null &&
-                isCleared(CurrentUser.getCurrentUser().getUuid())) {
-            covidBox.setVisible(false);
-            buttons.setVisible(true);
-            manageServices.setManaged(false);
-            manageServices.setVisible(false);
-            editMap.setManaged(false);
-            editMap.setVisible(false);
-            pathfindingSettingButton.setManaged(false);
-            pathfindingSettingButton.setVisible(false);
-            manageAccount.setManaged(false);
-            manageAccount.setVisible(false);
-            surveyButton.setManaged(false);
-            surveyButton.setVisible(false);
-            surveyButton2.setManaged(true);
-            surveyButton2.setVisible(true);
+        } else if (CurrentUser.getCurrentUser().getUuid() != null && isCleared(CurrentUser.getCurrentUser().getUuid())) {
+            displayDefaultUser();
 
-            loginLabel.setText("Please Log in.");
+            loginLabel.textProperty().unbind();
+            loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("PLease Log in."));
         } else {
             buttons.setVisible(false);
             covidBox.setVisible(true);
             covidBox.setManaged(true);
             surveyButton.setVisible(true);
             surveyButton.setManaged(true);
-            loginLabel.setText("Please Log in.");
+            loginLabel.textProperty().unbind();
+            loginLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding("PLease Log in."));
         }
+    }
+
+    private void displayDefaultUser() {
+        covidBox.setVisible(false);
+        buttons.setVisible(true);
+        manageServices.setManaged(false);
+        manageServices.setVisible(false);
+        editMap.setManaged(false);
+        editMap.setVisible(false);
+        pathfindingSettingButton.setManaged(false);
+        pathfindingSettingButton.setVisible(false);
+        manageAccount.setManaged(false);
+        manageAccount.setVisible(false);
+        surveyButton.setManaged(false);
+        surveyButton.setVisible(false);
+        surveyButton2.setManaged(true);
+        surveyButton2.setVisible(true);
     }
 
 
@@ -218,7 +196,12 @@ public class DefaultPageController extends AbsController {
                 resetButtons();
             }else
                 SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/Login.fxml");
-        } else if (buttonPushed == editMap) {
+        }else if (buttonPushed == googleMapsPage){
+            System.out.println("here");
+            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/GoogleMapsView.fxml");
+            System.out.println("here1");
+        }
+        else if (buttonPushed == editMap) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/mapEditView.fxml");
         } else if (buttonPushed == manageServices) {
             SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/ServiceRequestManagerView.fxml");
@@ -266,20 +249,7 @@ public class DefaultPageController extends AbsController {
                 if(!completed(verifyAgain.getText()).isEmpty()) {
                     isCompleted = true;
                     if (isCleared(verifyAgain.getText())) {
-                        covidBox.setVisible(false);
-                        buttons.setVisible(true);
-                        manageServices.setManaged(false);
-                        manageServices.setVisible(false);
-                        editMap.setManaged(false);
-                        editMap.setVisible(false);
-                        pathfindingSettingButton.setManaged(false);
-                        pathfindingSettingButton.setVisible(false);
-                        manageAccount.setManaged(false);
-                        manageAccount.setVisible(false);
-                        surveyButton.setManaged(false);
-                        surveyButton.setVisible(false);
-                        surveyButton2.setManaged(true);
-                        surveyButton2.setVisible(true);
+                        displayDefaultUser();
                     } else {
                         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
                     }
@@ -319,8 +289,4 @@ public class DefaultPageController extends AbsController {
     public void handleCredits() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CreditsView.fxml");
     }
-
-
-
-
 }

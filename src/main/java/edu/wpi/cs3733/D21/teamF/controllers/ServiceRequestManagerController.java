@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
-import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +26,6 @@ public class ServiceRequestManagerController extends AbsController implements In
     @FXML private JFXButton markAsComplete;
     @FXML private JFXButton saveChanges;
     @FXML private JFXButton removeAssignment;
-    @FXML private ImageView goBack;
     @FXML private JFXTreeTableView<ServiceEntry> requestView;
     @FXML private JFXButton delete;
 

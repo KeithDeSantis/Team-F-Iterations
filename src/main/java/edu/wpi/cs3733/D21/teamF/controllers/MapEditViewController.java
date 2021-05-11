@@ -27,8 +27,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -74,11 +74,11 @@ public class MapEditViewController extends AbsController {
     private final ObservableList<EdgeEntry> edgeEntryObservableList = FXCollections.observableArrayList();
     private final ObservableList<NodeEntry> nodeEntryObservableList = FXCollections.observableArrayList();
     private final List<NodeEntry> favoriteList = new ArrayList<>();
-    private Circle selectedCircle = null;
+    private Shape selectedCircle = null;
 
     private Line selectedLine = null;
-    private Circle firstCircle = null;
-    private Circle secondCircle = null;
+    private Node firstCircle = null;
+    private Node secondCircle = null;
 
     List<NodeEntry> nodeList = new ArrayList<>();
 
@@ -1071,7 +1071,7 @@ public class MapEditViewController extends AbsController {
                     secondCircle = null;
                 }
                 handleNodeDragMouseReleased(drawableNode);
-                tt.show(drawableNode, e.getScreenX(), e.getScreenY());
+                //tt.show(drawableNode, e.getScreenX(), e.getScreenY());
             });
 
         return drawableNode;
@@ -1376,7 +1376,7 @@ public class MapEditViewController extends AbsController {
             selectedLine.setStroke(UIConstants.LINE_COLOR);
 
 
-        Circle c = (Circle) mapPanel.getCanvas().lookup("#" + node.getNodeID());
+        Shape c = (Shape) mapPanel.getCanvas().lookup("#" + node.getNodeID());
         if (c == null) {
             //FIXME Null Warning
             return;
@@ -1423,10 +1423,7 @@ public class MapEditViewController extends AbsController {
         }
 
         // Check if need to switch map
-        if (startNode.getFloor().equals(mapPanel.getFloor().get()) || endNode.getFloor().equals(mapPanel.getFloor().get())) {
-            //drawEdgeNodeOnFloor();
-
-        } else {
+        if (!startNode.getFloor().equals(mapPanel.getFloor().get()) && !endNode.getFloor().equals(mapPanel.getFloor().get())) {
             mapPanel.switchMap(startNode.getFloor());
         }
 
@@ -1748,11 +1745,12 @@ public class MapEditViewController extends AbsController {
      * @author KD
      */
     public boolean isInFavorites(String nodeID) {
-        boolean isFavorite = false;
         for(NodeEntry nodeEntry : favoriteList) {
-            if(nodeEntry.getNodeID().equals(nodeID)) isFavorite = true;
+            if (nodeEntry.getNodeID().equals(nodeID)) {
+                return true;
+            }
         }
-        return isFavorite;
+        return false;
     }
 
     /**

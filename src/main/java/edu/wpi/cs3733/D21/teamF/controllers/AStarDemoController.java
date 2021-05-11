@@ -17,12 +17,14 @@ import edu.wpi.cs3733.uicomponents.entities.DrawableFloorInstruction;
 import edu.wpi.cs3733.uicomponents.entities.DrawableNode;
 import edu.wpi.cs3733.uicomponents.entities.DrawableUser;
 import javafx.animation.*;
-import javafx.beans.binding.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.IntegerBinding;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
@@ -33,8 +35,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Text;
@@ -52,7 +55,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,11 +63,12 @@ import java.util.stream.Collectors;
 
 public class AStarDemoController extends AbsController implements Initializable {
 
-    @FXML
-    private ImageView goBack;
 
     @FXML
-    private MapPanel mapPanel;
+    public JFXButton endNavBtn;
+
+    @FXML
+    public MapPanel mapPanel;
 
     @FXML
     private JFXButton Go;
@@ -116,6 +119,12 @@ public class AStarDemoController extends AbsController implements Initializable 
     private DrawableNode endNodeDisplay;
     private DrawableUser userNodeDisplay;
 
+    @FXML
+    private HBox topHBox;
+
+    @FXML
+    private HBox lowerHBox;
+
     // Global variables for the stepper
     private final ObservableList<Vertex> pathVertex = FXCollections.observableArrayList();
 
@@ -129,7 +138,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     private final IntegerProperty currentStep = new SimpleIntegerProperty(0);
 
     // List of intermediate vertices for multi-stop pathfinding - LM
-    private final ArrayList<Vertex> vertices = new ArrayList<>();
+    private final ObservableList<Vertex> vertices = FXCollections.observableArrayList();
     private final StringProperty startNode = new SimpleStringProperty("");
     private final StringProperty endNode = new SimpleStringProperty("");
 
@@ -154,13 +163,7 @@ public class AStarDemoController extends AbsController implements Initializable 
     TreeItem<String> favoriteItem = new TreeItem<>("Favorites");
     TreeItem<String> recentItem = new TreeItem<>("Recently Used");
 
-    TreeItem<String> instructionTreeViewItem = new TreeItem<>("instructions");
-    TreeItem<String> floorOneInstruction = new TreeItem<>("Floor One Instructions");
-    TreeItem<String> floorTwoInstruction = new TreeItem<>("Floor Two Instructions");
-    TreeItem<String> floorThreeInstruction = new TreeItem<>("Floor Three Instructions");
-    TreeItem<String> floorGroundInstruction = new TreeItem<>("Ground Floor Instructions");
-    TreeItem<String> floorLowerOneInstruction = new TreeItem<>("Floor L1 Instructions");
-    TreeItem<String> floorLowerTwoInstruction = new TreeItem<>("Floor L2 Instructions");
+    TreeItem<String> instructionTreeViewItem = new TreeItem<>("Instructions");
 
     boolean filterNodes = false; // Boolean for filtering user selections to only outdoor nodes
 
@@ -168,8 +171,44 @@ public class AStarDemoController extends AbsController implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //ahf - yes this should be done better. At some point.
 
+        final Rectangle confGraphic = new Rectangle(16, 16);
+        confGraphic.setFill(getNodeTypeColor("CONF"));
+        conferenceItem.setGraphic(confGraphic);
+
+        final Rectangle deptGraphic = new Rectangle(16, 16);
+        deptGraphic.setFill(getNodeTypeColor("DEPT"));
+        departmentItem.setGraphic(deptGraphic);
+
+        final Rectangle exitGraphic = new Rectangle(16, 16);
+        exitGraphic.setFill(getNodeTypeColor("EXIT"));
+        entranceItem.setGraphic(exitGraphic);
+
+        final Rectangle infoGraphic = new Rectangle(16, 16);
+        infoGraphic.setFill(getNodeTypeColor("INFO"));
+        infoItem.setGraphic(infoGraphic);
+
+        final Rectangle labsGraphic = new Rectangle(16, 16);
+        labsGraphic.setFill(getNodeTypeColor("LABS"));
+        labItem.setGraphic(labsGraphic);
+
+        final Rectangle parkingGraphic = new Rectangle(16, 16);
+        parkingGraphic.setFill(getNodeTypeColor("PARK"));
+        parkingItem.setGraphic(parkingGraphic);
+
+        final Rectangle restroomGraphic = new Rectangle(16, 16);
+        restroomGraphic.setFill(getNodeTypeColor("REST"));
+        restroomItem.setGraphic(restroomGraphic);
+
+        final Rectangle retailGraphic = new Rectangle(16, 16);
+        retailGraphic.setFill(getNodeTypeColor("RETL"));
+        retailItem.setGraphic(retailGraphic);
+
+        final Rectangle serviceGraphic = new Rectangle(16, 16);
+        serviceGraphic.setFill(getNodeTypeColor("SERV"));
+        serviceItem.setGraphic(serviceGraphic);
+
+        //ahf - yes this should be done better. At some point.
         try {
             allNodeEntries = DatabaseAPI.getDatabaseAPI().genNodeEntries();
             List<EdgeEntry> allEdgeEntries = DatabaseAPI.getDatabaseAPI().genEdgeEntries();
@@ -281,7 +320,9 @@ public class AStarDemoController extends AbsController implements Initializable 
             addStopMenu.setOnAction(e -> {
                 if(addStopMenu.getText().equals("Add Stop")) {
                     vertices.add(graph.getVertex(currEntry.getNodeID()));
-                    drawStop(currEntry);
+                    mapPanel.switchMap(currEntry.getFloor());
+                    mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
+                    //drawStop(currEntry);
                     try {
                         addNodeToRecent(currEntry);
                     } catch (SQLException sqlException) {
@@ -382,21 +423,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 mapPanel.showDialog(dialog);
             });
 
-            addFavoriteMenu.setOnAction(e -> {
-                if (addFavoriteMenu.getText().equals("Add To Favorites")) {
-                    try {
-                        addNodeToFavorites(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                } else {
-                    try {
-                        removeNodeFromFavorites(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                }
-            });
+            addFavoriteFromMenu(addFavoriteMenu, currEntry);
         });
 
         Go.setDisable(true);
@@ -411,6 +438,14 @@ public class AStarDemoController extends AbsController implements Initializable 
         instructionTreeView.setDisable(true);
 
         viewInstructionsBtn.visibleProperty().bind(ETA.visibleProperty());
+
+        topHBox.visibleProperty().bind(isCurrentlyNavigating.not());
+        topHBox.disableProperty().bind(isCurrentlyNavigating);
+        topHBox.managedProperty().bind(isCurrentlyNavigating.not());
+        lowerHBox.visibleProperty().bind(isCurrentlyNavigating);
+        lowerHBox.disableProperty().bind(isCurrentlyNavigating.not());
+        lowerHBox.managedProperty().bind(isCurrentlyNavigating);
+
 
 
         /*
@@ -474,7 +509,7 @@ public class AStarDemoController extends AbsController implements Initializable 
             double ans = Math.sqrt(Math.pow(x1.get() - x0.get(), 2) + Math.pow(y1.get() - y0.get(), 2));
 
             //NaN is possible somehow?. Don't remove it!
-            if(ans == Double.NaN || ans == 0 || ans == Double.NEGATIVE_INFINITY || ans == Double.POSITIVE_INFINITY)
+            if(Double.isNaN(ans) || ans == 0 || ans == Double.NEGATIVE_INFINITY || ans == Double.POSITIVE_INFINITY)
                 ans = 10;
 
             return (2000/(ans * 10));
@@ -532,8 +567,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
 
         // Setting up instruction tree view
-        instructionTreeViewItem.getChildren().addAll(floorLowerTwoInstruction, floorLowerOneInstruction, floorGroundInstruction
-        , floorOneInstruction, floorTwoInstruction, floorThreeInstruction);
         instructionTreeView.setRoot(instructionTreeViewItem);
         this.instructionTreeView.setShowRoot(false);
 
@@ -617,7 +650,9 @@ public class AStarDemoController extends AbsController implements Initializable 
             addStopMenu.setOnAction(e -> {
                 if(addStopMenu.getText().equals("Add Stop")) {
                     vertices.add(graph.getVertex(currEntry.getNodeID()));
-                    drawStop(currEntry);
+                    mapPanel.switchMap(currEntry.getFloor());
+                    mapPanel.centerNode(mapPanel.getNode(currEntry.getNodeID()));
+                    //drawStop(currEntry);
                     try {
                         addNodeToRecent(currEntry);
                     } catch (SQLException sqlException) {
@@ -657,7 +692,6 @@ public class AStarDemoController extends AbsController implements Initializable 
 
                 final JFXButton closeBtn = new JFXButton("Close");
                 closeBtn.setOnAction(a -> dialog.close());
-
 
                 final JFXButton directionsTo = new JFXButton("Direction To");
                 directionsTo.setOnAction(a -> {
@@ -706,6 +740,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                         }
                         dialog.close();
                     });
+
                     layout.setActions(toggleFavorite, directionsFrom, closeBtn);
                 } else {
                     layout.setActions(directionsFrom, closeBtn);
@@ -718,21 +753,7 @@ public class AStarDemoController extends AbsController implements Initializable 
                 mapPanel.showDialog(dialog);
             });
 
-            addFavoriteMenu.setOnAction(e -> {
-                if (addFavoriteMenu.getText().equals("Add To Favorites")) {
-                    try {
-                        addNodeToFavorites(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                } else {
-                    try {
-                        removeNodeFromFavorites(currEntry);
-                    } catch (SQLException sqlException) {
-                        sqlException.printStackTrace();
-                    }
-                }
-            });
+            addFavoriteFromMenu(addFavoriteMenu, currEntry);
         });
         try{
             if(CurrentUser.getCurrentUser().getUuid() != null && DatabaseAPI.getDatabaseAPI().getServiceEntry(CurrentUser.getCurrentUser().getUuid(), "additionalInstructions").getCompleteStatus().equals("false")) {
@@ -750,27 +771,22 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
     }
 
-
-    /**
-     * Draws an intermediate stop on the map
-     * @param nodeEntry The NodeEntry of the stop being drawn
-     * @author Leo Morris
-     */
-    private void drawStop(NodeEntry nodeEntry) {
-        DrawableNode stop = new DrawableNode(Integer.parseInt(nodeEntry.getXCoordinate()),
-                Integer.parseInt(nodeEntry.getYCoordinate()),
-                nodeEntry.getNodeID(), nodeEntry.getFloor(), nodeEntry.getBuilding(), nodeEntry.getNodeType(),
-                nodeEntry.getLongName(), nodeEntry.getShortName());
-
-        stop.setStrokeWidth(2.0);
-        stop.setFill(new Color(0.75,0,0,1));
-        stop.setStroke(new Color(1,0,0,1));
-        stop.setScaleX(1.5);
-        stop.setScaleY(1.5);
-        stop.setMouseTransparent(true);
-        mapPanel.draw(stop);
-        mapPanel.switchMap(nodeEntry.getFloor());
-        mapPanel.centerNode(stop);
+    private void addFavoriteFromMenu(MenuItem addFavoriteMenu, NodeEntry currEntry) {
+        addFavoriteMenu.setOnAction(e -> {
+            if (addFavoriteMenu.getText().equals("Add To Favorites")) {
+                try {
+                    addNodeToFavorites(currEntry);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+            } else {
+                try {
+                    removeNodeFromFavorites(currEntry);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+            }
+        });
     }
 
     private String shortNameToID(String shortName){
@@ -847,22 +863,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         return closest;
     }
 
-    /**
-     * Handles the pushing of a button on the screen
-     *
-     * @param actionEvent the button's push
-     * @throws IOException in case of scene switch, if the next fxml scene file cannot be found
-     * @author ZheCheng Song
-     */
-    @FXML
-    public void handleButtonPushed(ActionEvent actionEvent) throws IOException {
-
-        ImageView buttonPushed = (ImageView) actionEvent.getSource();  //Getting current stage
-
-        if (buttonPushed == goBack) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");
-        }
-    }
 
     /**
      *
@@ -901,16 +901,25 @@ public class AStarDemoController extends AbsController implements Initializable 
             final BooleanBinding isEndNode = Bindings.equal(endNode, idToShortName(drawableNode.getId()));
             final BooleanBinding isStartOrEndNode = isStartNode.or(isEndNode);
 
-            drawableNode.radiusProperty().bind(Bindings.when(isStartOrEndNode).then(10).otherwise(5));
+            final BooleanBinding isStop = Bindings.createBooleanBinding(() -> vertices.contains(graph.getVertex(nodeID)), vertices);
 
-            //  drawableNode.fillProperty().set(new Color(0, 0, 0, 0));
+
+
+            drawableNode.scaleXProperty().bind(Bindings.when(isStartOrEndNode.or(isStop)).then(1).otherwise(0.8));
+            drawableNode.scaleYProperty().bind(drawableNode.scaleXProperty());
+
             drawableNode.setStrokeWidth(2.0);
 
-            drawableNode.fillProperty().bind(Bindings.when(isStartOrEndNode).then(getNodeTypeColor(drawableNode.getNodeType())).otherwise(new Color(0, 0, 0, 0)));
+            drawableNode.fillProperty().bind(Bindings.when(isStartOrEndNode).then(getNodeTypeColor(drawableNode.getNodeType())).otherwise(
+                    Bindings.when(isStop).then(new Color(.75, 0, 0, 1)).otherwise(new Color(0, 0, 0, 0))
+
+                    ));
 
             drawableNode.strokeProperty().bind(
                     Bindings.when(isStartNode).then(Color.ORANGE).otherwise(
-                            Bindings.when(isEndNode).then(Color.GREEN).otherwise(getNodeTypeColor(drawableNode.getNodeType()))
+                            Bindings.when(isEndNode).then(Color.GREEN).otherwise(
+                                    Bindings.when(isStop).then(new Color(1, 0, 0, 1)).otherwise(
+                                        getNodeTypeColor(drawableNode.getNodeType())))
                     ));
 
             drawableNode.opacityProperty().bind(Bindings.when(isCurrentlyNavigating.not().or(isStartOrEndNode)).then(1.0).otherwise(0.2));
@@ -1006,9 +1015,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         final Vertex endVertex = this.graph.getVertex(shortNameToID(endNode.getValue()));
 
 
-        List<Vertex> pathVertices = new ArrayList<>();
-        pathVertices.clear();
-        pathVertices.addAll(vertices);
+        List<Vertex> pathVertices = new ArrayList<>(vertices);
 
         final Path path;
 
@@ -1434,7 +1441,6 @@ public class AStarDemoController extends AbsController implements Initializable 
                 Bindings.createIntegerBinding(() -> Math.min(currentStep.get() + 1, stopsList.size() - 1), currentStep, stopsList)));
 
         setNavIcon();
-        Go.setText("End Navigation");
     }
 
     /**
@@ -1504,13 +1510,9 @@ public class AStarDemoController extends AbsController implements Initializable 
         instructionTreeView.setDisable(true);
         about.setDisable(false);
         clear.setDisable(false);
-        //mapPanel.enableInteract();
 
         unDrawSEIcons();
 
-        //mapPanel.switchMap(pathVertex.get(0).getFloor());
-        //mapPanel.centerNode(startNodeDisplay);
-        Go.setText("Start Navigation");
     }
 
     /**
@@ -1924,7 +1926,7 @@ public class AStarDemoController extends AbsController implements Initializable 
         }
     }
 
-    public void handleInstructionListSelection(MouseEvent mouseEvent) {
+    public void handleInstructionListSelection() {
         if(instructionTreeView.getSelectionModel().getSelectedItem()!=null &&
                 !instructionTreeView.getSelectionModel().getSelectedItem().getParent().equals(instructionTreeViewItem) &&
                 !instructionTreeView.getSelectionModel().getSelectedItem().equals(instructionTreeViewItem)) { // Do not center on drop downs, root item or null items, only actual nodes
@@ -1943,12 +1945,15 @@ public class AStarDemoController extends AbsController implements Initializable 
     }
 
     private void addInstructionsToTreeView(){
-        floorTwoInstruction.getChildren().clear();
-        floorLowerOneInstruction.getChildren().clear();
-        floorGroundInstruction.getChildren().clear();
-        floorOneInstruction.getChildren().clear();
-        floorTwoInstruction.getChildren().clear();
-        floorThreeInstruction.getChildren().clear();
+        instructionTreeViewItem.getChildren().clear();
+
+        TreeItem<String> floorOneInstruction = new TreeItem<>("Floor One Instructions");
+        TreeItem<String> floorTwoInstruction = new TreeItem<>("Floor Two Instructions");
+        TreeItem<String> floorThreeInstruction = new TreeItem<>("Floor Three Instructions");
+        TreeItem<String> floorGroundInstruction = new TreeItem<>("Ground Floor Instructions");
+        TreeItem<String> floorLowerOneInstruction = new TreeItem<>("Floor L1 Instructions");
+        TreeItem<String> floorLowerTwoInstruction = new TreeItem<>("Floor L2 Instructions");
+
 
         String floor = pathVertex.get(0).getFloor();
         int index = 0;
@@ -1984,5 +1989,9 @@ public class AStarDemoController extends AbsController implements Initializable 
                 floor = ins.substring(ins.length()-2);
             }
         }
+
+        instructionTreeViewItem.getChildren().addAll(floorLowerTwoInstruction, floorLowerOneInstruction, floorGroundInstruction
+                , floorOneInstruction, floorTwoInstruction, floorThreeInstruction);
+        instructionTreeViewItem.getChildren().removeIf(x -> x.getChildren().isEmpty());
     }
 }

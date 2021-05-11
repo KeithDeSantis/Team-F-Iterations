@@ -53,7 +53,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
     @FXML private JFXCheckBox stayAwake;
     @FXML private JFXCheckBox fever;
     @FXML private JFXTextField generatedID;
-    private ClipboardContent content = new ClipboardContent();
+    private final ClipboardContent content = new ClipboardContent();
 
 
     /**

@@ -4,6 +4,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
 
 public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
+    String email;
     String username;
     String password;
     String userType;
@@ -13,7 +14,8 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
     SimpleStringProperty passwordProperty;
     SimpleStringProperty userTypeProperty;
 
-    public AccountEntry(String username, String password, String userType, String status, byte[] salt) {
+    public AccountEntry(String email, String username, String password, String userType, String status, byte[] salt) {
+        this.email = email;
         this.username = username;
         this.password = password;
         this.userType = userType;
@@ -24,6 +26,13 @@ public class AccountEntry extends RecursiveTreeObject<AccountEntry> {
         userTypeProperty = new SimpleStringProperty(userType);
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public byte[] getSalt() {
         return salt;
