@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.GiftDeliveryServiceRequestController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.GiftDeliveryServiceRequestController">
     <children>
         <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
@@ -53,7 +53,7 @@
                 <Insets bottom="10.0" left="10.0" top="10.0" />
             </padding>
         </AnchorPane>
-      <VBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+      <VBox prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="110.0">
          <children>
             <HBox alignment="CENTER" prefWidth="2000.0" spacing="50.0" VBox.vgrow="SOMETIMES">
                <children>
@@ -104,12 +104,12 @@
                         <Insets left="25.0" />
                      </HBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="specialInstructions" prefHeight="155.0" prefWidth="1800.0">
+                  <JFXTextArea fx:id="specialInstructions" focusColor="#405aa800" prefHeight="155.0" prefWidth="1800.0" style="-fx-border-color: #000000; -fx-border-radius: 5;" unFocusColor="#4d4d4d00">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                      <HBox.margin>
-                        <Insets left="25.0" />
+                        <Insets left="25.0" right="25.0" top="25.0" />
                      </HBox.margin>
                   </JFXTextArea>
                   <GridPane prefHeight="153.0" prefWidth="2000.0">

@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.MaintenanceRequestController">
+<AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e6e6e6;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamF.controllers.ServiceRequestsControllers.MaintenanceRequestController">
    <children>
       <AnchorPane fx:id="header" stylesheets="/stylesheets/DefaultHeaderBG.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
@@ -51,7 +51,7 @@
             <Insets bottom="10.0" left="10.0" top="10.0" />
          </padding>
       </AnchorPane>
-      <GridPane hgap="20.0" prefHeight="300.0" prefWidth="2000.0" vgap="10.0" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">
+      <GridPane hgap="20.0" prefHeight="300.0" prefWidth="2000.0" vgap="10.0" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="110.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="2000.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="2000.0" />
@@ -93,7 +93,7 @@
                         <Insets top="25.0" />
                      </padding>
                   </Label>
-                  <JFXComboBox fx:id="locationField" focusColor="#03256c" onAction="#reset2" prefWidth="2000.0" unFocusColor="BLACK">
+                  <JFXComboBox fx:id="locationField" focusColor="#03256c" onAction="#reset2" prefWidth="2000.0" promptText="Select Location" unFocusColor="BLACK">
                      <VBox.margin>
                         <Insets left="25.0" right="25.0" top="10.0" />
                      </VBox.margin>
@@ -127,7 +127,7 @@
                         <Insets left="25.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="urgencyComboBox" focusColor="#03256c" onAction="#reset2" prefWidth="2000.0" unFocusColor="BLACK">
+                  <JFXComboBox fx:id="urgencyComboBox" focusColor="#03256c" onAction="#reset2" prefWidth="2000.0" promptText="Select Urgency" unFocusColor="BLACK">
                      <VBox.margin>
                         <Insets left="25.0" right="25.0" top="10.0" />
                      </VBox.margin>
@@ -144,7 +144,7 @@
                         <Insets left="25.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXDatePicker fx:id="dateOfIncident" defaultColor="#03256c" onAction="#reset2" prefWidth="2000.0" promptText="DD/MM/YYYY">
+                  <JFXDatePicker fx:id="dateOfIncident" defaultColor="#03256c" onAction="#reset2" prefWidth="2000.0">
                      <VBox.margin>
                         <Insets left="25.0" right="25.0" top="10.0" />
                      </VBox.margin>
