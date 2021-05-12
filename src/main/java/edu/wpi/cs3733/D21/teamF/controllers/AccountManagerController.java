@@ -175,13 +175,14 @@ public class AccountManagerController extends AbsController implements Initializ
     public void handleHelp() throws IOException {
         FXMLLoader dialogLoader = new FXMLLoader();
         dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/AccountManagerHelpView.fxml")); // load in Edit Dialog - KD
-        loadPopup(dialogLoader, addUser);
+        loadPopup(dialogLoader, addUser, true);
     }
 
-    static void loadPopup(FXMLLoader dialogLoader, JFXButton addUser) throws IOException {
+    static void loadPopup(FXMLLoader dialogLoader, JFXButton addUser, boolean autoTranslate) throws IOException {
         Stage dialogStage = new Stage();
         Parent root = dialogLoader.load();
-        ((AbsController)dialogLoader.getController()).initLanguage();
+        if(autoTranslate)
+            ((AbsController)dialogLoader.getController()).initLanguage();
         SceneContext.autoTranslate(root);
         dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
         dialogStage.initOwner(addUser.getScene().getWindow());

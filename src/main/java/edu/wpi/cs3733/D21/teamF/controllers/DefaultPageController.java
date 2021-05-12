@@ -234,7 +234,7 @@ public class DefaultPageController extends AbsController {
         } else if(buttonPushed == pathfindingSettingButton) {
             FXMLLoader dialogLoader = new FXMLLoader();
             dialogLoader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/PreferredPathfindingAlgoView.fxml"));
-            AccountManagerController.loadPopup(dialogLoader, pathfindingSettingButton);
+            AccountManagerController.loadPopup(dialogLoader, pathfindingSettingButton, false);
         }
         else if (buttonPushed == quit) {
             Platform.exit();
