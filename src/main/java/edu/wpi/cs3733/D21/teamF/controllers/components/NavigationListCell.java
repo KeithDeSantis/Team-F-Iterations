@@ -2,10 +2,9 @@ package edu.wpi.cs3733.D21.teamF.controllers.components;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
