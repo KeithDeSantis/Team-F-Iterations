@@ -217,61 +217,6 @@
                   <Font size="13.0" />
                </font>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Declan" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Jason" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Jay" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ZheCheng" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Montserrat Regular" size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Keith" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Karen" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tony" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ben" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leo" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Montserrat Regular" size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alex" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Montserrat Regular" size="13.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Johvanni" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Montserrat Regular" size="13.0" />
-               </font>
-            </Text>
             <Label fx:id="facilities" prefHeight="19.0" prefWidth="170.0" text="Facilities Maintenance" textFill="#fbfafa" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
                <font>
                   <Font name="Montserrat Regular" size="15.0" />

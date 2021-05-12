@@ -7,6 +7,17 @@
 * Iteration 2 - iteration-2-master - 40525c9
 * Iteration 1 - iteration-1-master - 4dbedee
 
+## Remote Apache Derby Server Information
+
+When running our application please be on the WPI wifi, or have an IP address within the WPI address space.
+
+For security reasons, only devices in the WPI IP space can access our VPS.
+
+## Contact For Issues
+
+Please contact our lead software engineer, [ahfriedman](https://github.com/ahfriedman), with any errors regarding the server.
+
+
 ## Important Files
 ### build.gradle / gradle.properties
 This is the gradle configuration file. Modify this file to add dependencies to your project. In
