@@ -338,6 +338,47 @@ public class Translator {
         }
     }
 
+    private static void collapseAll() throws IOException {
+        final HashMap<String, HashMap<String, String>> initialLookupTables = new HashMap<>();
+        {
+            final String tableDirectory = "src/main/resources/TranslationTables/";
+            final File translationTables = new File(tableDirectory);
+            for(String file : translationTables.list())
+            {
+                try {
+                    final FileInputStream fileInputStream = new FileInputStream(tableDirectory + file);
+                    final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+                    final HashMap<String, HashMap<String, String>> currMap = (HashMap<String, HashMap<String, String>>) objectInputStream.readObject();
+
+                    for(String s : currMap.keySet())
+                    {
+                        if(initialLookupTables.get(s) == null)
+                            initialLookupTables.put(s, new HashMap<>());
+
+                        for(String l : currMap.get(s).keySet())
+                            initialLookupTables.get(s).put(l, currMap.get(s).get(l));
+                    }
+
+                    objectInputStream.close();
+                    fileInputStream.close();
+
+
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            final FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/TranslationTables/TranslationTableCache.bin");
+
+            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            objectOutputStream.writeObject(initialLookupTables);
+            objectOutputStream.close();
+            fileOutputStream.close();
+        }
+    }
+
     private static class TranslatorSingletonHelper{
         private static final Translator translator = new Translator();
     }
