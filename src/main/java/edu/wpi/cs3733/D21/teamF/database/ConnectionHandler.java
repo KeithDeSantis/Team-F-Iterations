@@ -1,5 +1,7 @@
 package edu.wpi.cs3733.D21.teamF.database;
 
+import edu.wpi.cs3733.D21.teamF.utils.KeyManager;
+
 import java.sql.*;
 
 public class ConnectionHandler {
@@ -16,7 +18,7 @@ public class ConnectionHandler {
     private static Connection establishConnection() throws SQLException {
         String protocol = "jdbc:derby:";
         String embeddedURL;
-        String remoteURL = protocol + "//conntinuity.org:10142/projectC2;create=true;user=falcons;password=";
+        String remoteURL = protocol + "//conntinuity.org:10142/projectC2;create=true;user=falcons;password=" + KeyManager.getKeyManager().getKey("ahfDerbyPass");
 
         embeddedURL = protocol + "projectC1;create=true";
 
@@ -25,7 +27,6 @@ public class ConnectionHandler {
             return DriverManager.getConnection(remoteURL);
 
         } catch (SQLException e) {
-            System.out.println("ARE WE REMOTE????");
             return DriverManager.getConnection(embeddedURL);
         }
 
