@@ -17,14 +17,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
+/**appea
  * This class is used to manage translation across the application
  * @author Alex Friedman (ahf
  */
 public class Translator {
 
     //FIXME: ALWAYS SET THIS TO BE TRUE FOR JARS!!!!!
-    private static final boolean isProduction = false;
+    private static final boolean isProduction = true;
 
     private final List<String> languages;
 
