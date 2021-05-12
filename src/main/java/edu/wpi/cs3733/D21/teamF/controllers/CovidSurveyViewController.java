@@ -99,7 +99,7 @@ public class CovidSurveyViewController extends ServiceRequests implements Initia
             DatabaseAPI.getDatabaseAPI().addServiceReq(generatedID.getText(), "ticket", "", "",covidInfo +
                     ";" + emailField.getText());
             DatabaseAPI.getDatabaseAPI().addServiceReq(UUID.randomUUID().toString(), "Nurse Appointment", "",
-                    "false", generatedID.getText() + ":" + emailField.getText());
+                    "false", generatedID.getText());
             // ServiceEntry ticket = DatabaseAPI.getDatabaseAPI().getServiceEntry(generatedID.getText());
 
             // Copy UUID to users clipboard TODO add explicit button for this
