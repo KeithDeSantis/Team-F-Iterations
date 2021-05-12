@@ -277,6 +277,9 @@ public class DefaultPageController extends AbsController {
     }
 
     private boolean isCleared(String ID) throws SQLException{
+        String value = DatabaseAPI.getDatabaseAPI().getServiceEntry(ID, "additionalInstructions").getCompleteStatus();
+        if(value == null) //FIXME: DO BETTER!
+            return false;
         return Boolean.parseBoolean(DatabaseAPI.getDatabaseAPI().getServiceEntry(ID, "additionalInstructions").getCompleteStatus());
     }
 
