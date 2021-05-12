@@ -60,7 +60,7 @@ public class Translator {
      * <code>translationLookupTable.get(language).get(textInEnglish)</code>
      * Assuming that the string has been cached
      */
-    private final HashMap<String, HashMap<String, String>> translationLookupTable = new HashMap<>();
+    private HashMap<String, HashMap<String, String>> translationLookupTable = new HashMap<>();
 
     /**
      * Used to get a binding to translate a string to
@@ -223,6 +223,11 @@ public class Translator {
     }
 
     private Translator() {
+//        try {
+//            collapseAll();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         languages = new ArrayList<>();
 
@@ -260,8 +265,92 @@ public class Translator {
 
 
         //If we're not in production mode, we need to collapse all the files, and track new changes.
-        if(!isProduction)
-        {
+        if (!isProduction) {
+            final HashMap<String, HashMap<String, String>> initialLookupTables = new HashMap<>();
+            {
+                final String tableDirectory = "src/main/resources/TranslationTables/";
+                final File translationTables = new File(tableDirectory);
+                for (String file : translationTables.list()) {
+                    try {
+                        final FileInputStream fileInputStream = new FileInputStream(tableDirectory + file);
+                        final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+                        final HashMap<String, HashMap<String, String>> currMap = (HashMap<String, HashMap<String, String>>) objectInputStream.readObject();
+
+                        for (String s : currMap.keySet()) {
+                            if (initialLookupTables.get(s) == null)
+                                initialLookupTables.put(s, new HashMap<>());
+
+                            for (String l : currMap.get(s).keySet())
+                                initialLookupTables.get(s).put(l, currMap.get(s).get(l));
+                        }
+
+                        objectInputStream.close();
+                        fileInputStream.close();
+
+
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                for (String s : initialLookupTables.keySet())
+                    for (String l : initialLookupTables.get(s).keySet()) {
+                        if (translationLookupTable.get(s) == null)
+                            translationLookupTable.put(s, new HashMap<>());
+
+                        System.out.println("ADDING: " + s + " -> " + l);
+                        translationLookupTable.get(s).put(l, initialLookupTables.get(s).get(l));
+                    }
+            }
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    final Iterator<String> langIterator = translationLookupTable.keySet().iterator();
+                    while (langIterator.hasNext()) {
+                        final String lang = langIterator.next();
+
+                        if (initialLookupTables.get(lang) != null) {
+                            translationLookupTable.get(lang).keySet().removeIf(s -> initialLookupTables.get(lang).get(s) != null);
+                        }
+
+                        if (translationLookupTable.get(lang).keySet().isEmpty())
+                            langIterator.remove();
+                    }
+
+                    if (translationLookupTable.keySet().isEmpty())
+                        return;
+
+                    System.out.println((new File("")).getAbsolutePath());
+                    final FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/TranslationTables/" + System.currentTimeMillis() + ".bin");
+
+                    final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+                    objectOutputStream.writeObject(translationLookupTable);
+                    objectOutputStream.close();
+                    fileOutputStream.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }));
+        } else {
+            try {
+                final ObjectInputStream objectInputStream = new ObjectInputStream(getClass().getResourceAsStream("/TranslationTables/TranslationTableCache.bin"));
+
+                translationLookupTable = (HashMap<String, HashMap<String, String>>) objectInputStream.readObject();
+
+                objectInputStream.close();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+        private static void collapseAll() throws IOException {
             final HashMap<String, HashMap<String, String>> initialLookupTables = new HashMap<>();
             {
                 final String tableDirectory = "src/main/resources/TranslationTables/";
@@ -292,103 +381,26 @@ public class Translator {
                     }
                 }
 
-                for(String s : initialLookupTables.keySet())
-                    for(String l : initialLookupTables.get(s).keySet())
-                    {
-                        if(translationLookupTable.get(s) == null)
-                            translationLookupTable.put(s, new HashMap<>());
+                final FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/TranslationTables/TranslationTableCache.bin");
 
-                        System.out.println("ADDING: " + s + " -> " + l);
-                        translationLookupTable.get(s).put(l, initialLookupTables.get(s).get(l));
-                    }
+                final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+                objectOutputStream.writeObject(initialLookupTables);
+                objectOutputStream.close();
+                fileOutputStream.close();
             }
+        }
 
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    final Iterator<String> langIterator = translationLookupTable.keySet().iterator();
-                    while (langIterator.hasNext())
-                    {
-                        final String lang = langIterator.next();
+        private static class TranslatorSingletonHelper{
+            private static final Translator translator = new Translator();
+        }
 
-                        if(initialLookupTables.get(lang) != null)
-                        {
-                            translationLookupTable.get(lang).keySet().removeIf(s -> initialLookupTables.get(lang).get(s) != null);
-                        }
-
-                        if(translationLookupTable.get(lang).keySet().isEmpty())
-                            langIterator.remove();
-                    }
-
-                    if(translationLookupTable.keySet().isEmpty())
-                        return;
-
-                    System.out.println((new File("")).getAbsolutePath());
-                    final FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/TranslationTables/" + System.currentTimeMillis() + ".bin");
-
-                    final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
-                    objectOutputStream.writeObject(translationLookupTable);
-                    objectOutputStream.close();
-                    fileOutputStream.close();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }));
+        /**
+         * Gets the translator
+         * @return The singleton instance of the translator
+         * @author Alex Friedman (ahf)
+         */
+        public static Translator getTranslator(){
+            return TranslatorSingletonHelper.translator;
         }
     }
-
-    private static void collapseAll() throws IOException {
-        final HashMap<String, HashMap<String, String>> initialLookupTables = new HashMap<>();
-        {
-            final String tableDirectory = "src/main/resources/TranslationTables/";
-            final File translationTables = new File(tableDirectory);
-            for(String file : translationTables.list())
-            {
-                try {
-                    final FileInputStream fileInputStream = new FileInputStream(tableDirectory + file);
-                    final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-
-                    final HashMap<String, HashMap<String, String>> currMap = (HashMap<String, HashMap<String, String>>) objectInputStream.readObject();
-
-                    for(String s : currMap.keySet())
-                    {
-                        if(initialLookupTables.get(s) == null)
-                            initialLookupTables.put(s, new HashMap<>());
-
-                        for(String l : currMap.get(s).keySet())
-                            initialLookupTables.get(s).put(l, currMap.get(s).get(l));
-                    }
-
-                    objectInputStream.close();
-                    fileInputStream.close();
-
-
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            final FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/TranslationTables/TranslationTableCache.bin");
-
-            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
-            objectOutputStream.writeObject(initialLookupTables);
-            objectOutputStream.close();
-            fileOutputStream.close();
-        }
-    }
-
-    private static class TranslatorSingletonHelper{
-        private static final Translator translator = new Translator();
-    }
-
-    /**
-     * Gets the translator
-     * @return The singleton instance of the translator
-     * @author Alex Friedman (ahf)
-     */
-    public static Translator getTranslator(){
-        return TranslatorSingletonHelper.translator;
-    }
-}
