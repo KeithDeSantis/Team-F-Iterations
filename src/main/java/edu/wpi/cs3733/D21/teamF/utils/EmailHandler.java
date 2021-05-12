@@ -43,7 +43,7 @@ public class EmailHandler {
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(recipient);
         String from = "fuschiafalcons@gmail.com";
-        String pass = "";
+        String pass = KeyManager.getKeyManager().getKey("gmailPass");
 
         if (m.find()) {
             Session session = Session.getInstance(setMailServerProperties(), null);

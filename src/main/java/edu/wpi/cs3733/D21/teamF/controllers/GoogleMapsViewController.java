@@ -127,6 +127,12 @@ public class GoogleMapsViewController extends AbsController {
             for (JFXTextField j : values){
                 j.setText("");
             }
+            outputBox.textProperty().unbind();
+            outputBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(""));
+            etaLabel.textProperty().unbind();
+            etaLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(""));
+            destinationAddress.textProperty().unbind();
+            destinationAddress.textProperty().bind(Translator.getTranslator().getTranslationBinding(""));
         }
     }
 

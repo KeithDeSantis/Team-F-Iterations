@@ -223,6 +223,9 @@ public class ServiceRequestManagerController extends AbsController implements In
      * @author Leo Morris
      */
     public void getSelection() {
+        if (requestView.getSelectionModel().getSelectedItem() == null){
+            return;
+        }
         try {
             selectedEntry = requestView.getSelectionModel().getSelectedItem().getValue();
             index = requestView.getSelectionModel().getSelectedIndex();
