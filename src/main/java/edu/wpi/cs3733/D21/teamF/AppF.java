@@ -56,6 +56,7 @@ public class  AppF extends Application {
       loader.setLocation(getClass().getResource("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml"));
       Parent root = loader.load();
       ((AbsController)loader.getController()).initLanguage();
+      SceneContext.autoTranslate(root);
 
       primaryStage.setScene(new Scene(root));
 
