@@ -220,7 +220,6 @@ public class MapPanel extends AnchorPane {
             final double oldV = this.scroll.vvalueProperty().doubleValue();
             final double OLD_PERCENT_WIDTH = oldBounds.getWidth() / WIDTH.get();
             final double OLD_PERCENT_HEIGHT = oldBounds.getHeight() / HEIGHT.get();
-            System.out.println(OLD_PERCENT_WIDTH + " " + OLD_PERCENT_HEIGHT);
 
             this.internalZoomLevel.set(((DoubleProperty) e).doubleValue());
             final double newZoomLevel = this.internalZoomLevel.doubleValue();
@@ -231,7 +230,6 @@ public class MapPanel extends AnchorPane {
 
             final double NEW_PERCENT_WIDTH = oldBounds.getWidth() / WIDTH.get();
             final double NEW_PERCENT_HEIGHT = oldBounds.getHeight() / HEIGHT.get();
-            System.out.println(NEW_PERCENT_WIDTH + " " + NEW_PERCENT_HEIGHT);
 
             this.scroll.setHvalue(newH/RATIO - 0.5*(NEW_PERCENT_WIDTH-OLD_PERCENT_WIDTH) / (1 - OLD_PERCENT_WIDTH) / RATIO);
             this.scroll.setVvalue(newV/RATIO - 0.5*(NEW_PERCENT_HEIGHT-OLD_PERCENT_HEIGHT) / (1 - OLD_PERCENT_HEIGHT) / RATIO);
