@@ -57,6 +57,7 @@ public class MapPanel extends AnchorPane {
     private final DoubleProperty zoomLevel = new SimpleDoubleProperty(5.0);
 
     private final DoubleProperty internalZoomLevel = new SimpleDoubleProperty(5.0);
+    private final DoubleProperty oldZoomLevel = new SimpleDoubleProperty(5.0);
 
     private final DoubleProperty INITIAL_WIDTH = new SimpleDoubleProperty();
     private final DoubleProperty INITIAL_HEIGHT = new SimpleDoubleProperty();
@@ -71,6 +72,7 @@ public class MapPanel extends AnchorPane {
 
     private final BooleanProperty navigating = new SimpleBooleanProperty(false);
 
+
     //FIXME: DO BETTER!
     private final Image F1Image = new Image(getClass().getResourceAsStream("/maps/01_thefirstfloor.png"));
     private final Image F2Image = new Image(getClass().getResourceAsStream("/maps/02_thesecondfloor.png"));
@@ -80,7 +82,8 @@ public class MapPanel extends AnchorPane {
     private final Image GImage = new Image(getClass().getResourceAsStream("/maps/00_thegroundfloor.png"));
     private final Image FLBImage = new Image(getClass().getResourceAsStream("/maps/FLB-Team3.png"));
 
-    private double WIDTH, HEIGHT;
+    private final DoubleProperty WIDTH = new SimpleDoubleProperty();
+    private final DoubleProperty HEIGHT = new SimpleDoubleProperty();
 
     final StringConverter<Double> doubleStringConverter = new StringConverter<Double>() {
         @Override
@@ -177,8 +180,8 @@ public class MapPanel extends AnchorPane {
 
         ASPECT_RATIO.set(F1Image.getHeight()/F1Image.getWidth());
 
-        WIDTH = F1Image.getWidth() / internalZoomLevel.doubleValue();
-        HEIGHT = F1Image.getHeight() / internalZoomLevel.doubleValue();
+        WIDTH.bind(canvas.prefWidthProperty());
+        HEIGHT.bind(canvas.prefHeightProperty());
 
         INITIAL_WIDTH.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL));//setValue(F1Image.getWidth());
         INITIAL_HEIGHT.bind(this.widthProperty().multiply(MIN_ZOOM_LEVEL).multiply(ASPECT_RATIO));//setValue(F1Image.getHeight());
@@ -212,24 +215,26 @@ public class MapPanel extends AnchorPane {
 
         this.zoomSlider.valueProperty().addListener(e -> {
             final Bounds oldBounds = scroll.getViewportBounds();
-            final double oldZoomLevel = this.internalZoomLevel.doubleValue();
+            this.oldZoomLevel.set(this.internalZoomLevel.doubleValue());
             final double oldH = this.scroll.hvalueProperty().doubleValue();
             final double oldV = this.scroll.vvalueProperty().doubleValue();
-            final double OLD_PERCENT_WIDTH = oldBounds.getWidth() / WIDTH;
-            final double OLD_PERCENT_HEIGHT = oldBounds.getHeight() / HEIGHT;
+            final double OLD_PERCENT_WIDTH = oldBounds.getWidth() / WIDTH.get();
+            final double OLD_PERCENT_HEIGHT = oldBounds.getHeight() / HEIGHT.get();
+            System.out.println(OLD_PERCENT_WIDTH + " " + OLD_PERCENT_HEIGHT);
 
             this.internalZoomLevel.set(((DoubleProperty) e).doubleValue());
             final double newZoomLevel = this.internalZoomLevel.doubleValue();
             final double newH = this.scroll.hvalueProperty().doubleValue();
             final double newV = this.scroll.vvalueProperty().doubleValue();
-            final double RATIO = this.internalZoomLevel.doubleValue() / oldZoomLevel;
+            final double RATIO = this.internalZoomLevel.doubleValue() / this.oldZoomLevel.doubleValue();
             final Bounds newBounds = scroll.getViewportBounds();
-            WIDTH /= RATIO;
-            HEIGHT /= RATIO;
-            final double NEW_PERCENT_WIDTH = newBounds.getWidth() / WIDTH;
-            final double NEW_PERCENT_HEIGHT = newBounds.getHeight() / HEIGHT;
-            this.scroll.hvalueProperty().set(newH/RATIO - 0.5*(NEW_PERCENT_WIDTH-OLD_PERCENT_WIDTH) / (1 - NEW_PERCENT_WIDTH));
-            this.scroll.vvalueProperty().set(newV/RATIO - 0.5*(NEW_PERCENT_HEIGHT-OLD_PERCENT_HEIGHT) / (1 - NEW_PERCENT_HEIGHT));
+
+            final double NEW_PERCENT_WIDTH = oldBounds.getWidth() / WIDTH.get();
+            final double NEW_PERCENT_HEIGHT = oldBounds.getHeight() / HEIGHT.get();
+            System.out.println(NEW_PERCENT_WIDTH + " " + NEW_PERCENT_HEIGHT);
+
+            this.scroll.setHvalue(newH/RATIO - 0.5*(NEW_PERCENT_WIDTH-OLD_PERCENT_WIDTH) / (1 - OLD_PERCENT_WIDTH) / RATIO);
+            this.scroll.setVvalue(newV/RATIO - 0.5*(NEW_PERCENT_HEIGHT-OLD_PERCENT_HEIGHT) / (1 - OLD_PERCENT_HEIGHT) / RATIO);
 
         });
 
