@@ -59,6 +59,8 @@ public class  AppF extends Application {
 
       primaryStage.setScene(new Scene(root));
 
+      primaryStage.setMinWidth(960);//primaryStage.getWidth());
+      primaryStage.setMinHeight(540);//primaryStage.getHeight());
       primaryStage.show();
       //SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/DefaultPageView.fxml");//DefaultPageView.fxml"); Commented out to deal with initial boot ( the .getScene() call in switchScene() will return null unless we manually load it in to start) - KD
     } catch (IOException e) {
