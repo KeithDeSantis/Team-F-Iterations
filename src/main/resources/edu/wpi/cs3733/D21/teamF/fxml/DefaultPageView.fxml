@@ -41,7 +41,7 @@
                         <Image url="@../../../../../../imagesAndLogos/translateBlack.png" />
                      </image>
                   </ImageView>
-                  <JFXComboBox fx:id="languageSelect" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" onAction="#changeLanguage"/>
+                  <JFXComboBox fx:id="languageSelect" maxWidth="150.0" minWidth="150.0" onAction="#changeLanguage" prefWidth="150.0" />
                </children>
             </HBox>
          </children>
@@ -98,6 +98,14 @@
                            <font>
                               <Font name="Montserrat Regular" size="15.0" />
                            </font>
+                        </JFXButton>
+                        <JFXButton fx:id="quit" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#handleButtonPushed" stylesheets="@../../../../../../stylesheets/QuitButtonStyle.css" text="Quit" textFill="WHITE">
+                           <font>
+                              <Font name="Montserrat Regular" size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
                         </JFXButton>
                      </children>
                   </VBox>
@@ -159,7 +167,7 @@
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="quit" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@../../../../../../stylesheets/QuitButtonStyle.css" text="Quit">
+                  <JFXButton fx:id="quitEntry" buttonType="RAISED" onAction="#handleButtonPushed" prefWidth="250.0" stylesheets="@../../../../../../stylesheets/QuitButtonStyle.css" text="Quit">
                      <font>
                         <Font name="Montserrat SemiBold" size="15.0" />
                      </font>

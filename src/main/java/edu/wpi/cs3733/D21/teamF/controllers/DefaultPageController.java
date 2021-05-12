@@ -43,6 +43,8 @@ public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton manageServices;
     @FXML
+    private JFXButton quitEntry;
+    @FXML
     JFXTextField verifyAgain;
     @FXML
     private VBox buttons;
@@ -259,6 +261,9 @@ public class DefaultPageController extends AbsController {
                     fillOutTheSurvey.setStyle("-fx-text-fill: #c60000FF;");
                 }
             }
+        else if (buttonPushed == quitEntry) {
+            Platform.exit();
+        }
         }
     private String completed(String ticketID) throws SQLException {
         String complete = "";
