@@ -8,7 +8,6 @@ import edu.wpi.cs3733.D21.teamF.entities.AccountEntry;
 import edu.wpi.cs3733.D21.teamF.entities.CurrentUser;
 import edu.wpi.cs3733.D21.teamF.utils.SceneContext;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,6 +41,8 @@ public class DefaultPageController extends AbsController {
     private JFXButton surveyButton2;
     @FXML
     private JFXButton manageServices;
+    @FXML
+    private JFXButton quitEntry;
     @FXML
     JFXTextField verifyAgain;
     @FXML
@@ -259,6 +260,9 @@ public class DefaultPageController extends AbsController {
                     fillOutTheSurvey.setStyle("-fx-text-fill: #c60000FF;");
                 }
             }
+        else if (buttonPushed == quitEntry) {
+            Platform.exit();
+        }
         }
     private String completed(String ticketID) throws SQLException {
         String complete = "";

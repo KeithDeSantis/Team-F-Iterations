@@ -58,29 +58,6 @@ public class AStarImpl implements IPathfindingAlgorithm {
                 }
             }
         }
-//        List<Vertex> pathList = null;
-//        if(proxy.equals(b)) {
-//            pathList = new LinkedList<>();
-//            boolean continueBackwardPathGeneration = true;
-//            while(continueBackwardPathGeneration) {
-//                proxy = linkages.get(proxy.getID());
-//                if (proxy == null) {
-//                    continueBackwardPathGeneration = false;
-//                } else {
-//                    pathList.add(0, proxy);
-//                }
-//            }
-//        }
-//        Path path = new Path();
-//        if(pathList == null) {
-//            path = null;
-//        } else {
-//            for(Vertex vertex : pathList) {
-//                path.addVertexToPath(vertex, 0);
-//            }
-//            path.addVertexToPath(b, weights.get(b.getID()));
-//        }
-//        return path == null ? null : path.asList();
 
         Path path = null;
         if(proxy.equals(b)) {

@@ -55,7 +55,7 @@ public class EmployeeAdminLoginController extends AbsController {
             }
         }
         else if (buttonPushed == goBack) {
-            SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CovidSurveyView.fxml");
+            SceneContext.getSceneContext().loadDefault();
         }
 
     }

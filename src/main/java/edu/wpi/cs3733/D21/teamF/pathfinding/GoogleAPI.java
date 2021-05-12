@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import edu.wpi.cs3733.D21.teamF.utils.KeyManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,7 +32,7 @@ public class GoogleAPI {
      */
     public String parseClosestParkingLot(String origin) throws IOException {
         String address = "";
-        String[] parkingLots = {"0 Francis St, Boston, MA 02115", "15-51 New Whitney St, Boston, MA 02115"};
+        String[] parkingLots = {"80 Francis St, Boston, MA 02115", "15-51 New Whitney St, Boston, MA 02115"};
         int time = 0;
         for (String s : parkingLots){
             String[] results = GoogleAPI.getGoogleAPI().queryAPI(origin, s);
@@ -91,7 +92,7 @@ public class GoogleAPI {
         url.append(urlBase);
         url.append("?origin=").append(GoogleAPI.getGoogleAPI().urlEncode(origin));
         url.append("&destination=").append(GoogleAPI.getGoogleAPI().urlEncode(destination));
-        String apiKey = ""; //TODO: ADD/REMOVE API KEY HERE
+        final String apiKey = KeyManager.getKeyManager().getKey("googleAPI");
         url.append("&key=").append(apiKey);
         System.out.println(url);
         return url.toString();
