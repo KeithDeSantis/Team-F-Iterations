@@ -13,6 +13,10 @@ When running our application please be on the WPI wifi, or have an IP address wi
 
 For security reasons, only devices in the WPI IP space can access our VPS.
 
+## Environment & Keys
+
+For security purposes, this project is missing the .env file with the required keys for the project (APIs & etc). We included this file in our submission, however, if there is an issue, please contact us. 
+
 ## Contact For Issues
 
 Please contact our lead software engineer, [ahfriedman](https://github.com/ahfriedman), with any errors regarding the server.
