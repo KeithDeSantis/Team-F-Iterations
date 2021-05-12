@@ -32,7 +32,7 @@ public class GoogleAPI {
      */
     public String parseClosestParkingLot(String origin) throws IOException {
         String address = "";
-        String[] parkingLots = {"0 Francis St, Boston, MA 02115", "15-51 New Whitney St, Boston, MA 02115"};
+        String[] parkingLots = {"80 Francis St, Boston, MA 02115", "15-51 New Whitney St, Boston, MA 02115"};
         int time = 0;
         for (String s : parkingLots){
             String[] results = GoogleAPI.getGoogleAPI().queryAPI(origin, s);

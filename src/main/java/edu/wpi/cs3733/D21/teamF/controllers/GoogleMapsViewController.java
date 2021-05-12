@@ -27,7 +27,7 @@ public class GoogleMapsViewController extends AbsController {
     @FXML
     private Label destinationAddress;
     @FXML
-    private JFXButton cancelButton;
+    public JFXButton cancelButton;
     @FXML
     private JFXButton clearButton;
     @FXML
@@ -82,15 +82,6 @@ public class GoogleMapsViewController extends AbsController {
         state.getItems().addAll(stateAbbreviations);
     }
 
-    /*
-    @FXML
-    public void handleSubmit() throws IOException {
-        String address = streetAddress.getText() + " " + city.getText() + " " + state.getValue() + ", " + zipCode.getText();
-        String closestLot = GoogleAPI.getGoogleAPI().parseClosestParkingLot(address);
-        String[] directions = GoogleAPI.getGoogleAPI().queryAPI(address, closestLot);
-        outputBox.setText(directions[0]);
-    }
-     */
 
     /**
      * Method to handle the push of button and do appropriate actions
@@ -109,7 +100,7 @@ public class GoogleMapsViewController extends AbsController {
             etaLabel.textProperty().bind(Translator.getTranslator().getTranslationBinding(directions[1]));
             destinationAddress.textProperty().unbind();
             destinationAddress.textProperty().bind(Translator.getTranslator().getTranslationBinding(closestLot));
-            outputBox.setText(directions[0]);
+            outputBox.textProperty().bind(Translator.getTranslator().getTranslationBinding(directions[0]));
         }
 
         else if (buttonPushed == cancelButton){
@@ -122,6 +113,8 @@ public class GoogleMapsViewController extends AbsController {
             Stage dialogStage = new Stage();
             Parent root = dialogLoader.load();
             GoogleMapsHelpController dialogController = dialogLoader.getController();
+            dialogController.initLanguage();
+            SceneContext.autoTranslate(root);
             dialogStage.initModality(Modality.WINDOW_MODAL); // make window a pop up - KD
             dialogStage.initOwner(destinationAddress.getScene().getWindow());
             dialogStage.setScene(new Scene(root)); // set scene - KD
