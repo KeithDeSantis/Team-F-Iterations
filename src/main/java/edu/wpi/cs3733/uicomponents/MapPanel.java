@@ -235,7 +235,6 @@ public class MapPanel extends AnchorPane {
 
             this.scroll.setHvalue(newH/RATIO - 0.5*(NEW_PERCENT_WIDTH-OLD_PERCENT_WIDTH) / (1 - OLD_PERCENT_WIDTH) / RATIO);
             this.scroll.setVvalue(newV/RATIO - 0.5*(NEW_PERCENT_HEIGHT-OLD_PERCENT_HEIGHT) / (1 - OLD_PERCENT_HEIGHT) / RATIO);
-
         });
 
     }
