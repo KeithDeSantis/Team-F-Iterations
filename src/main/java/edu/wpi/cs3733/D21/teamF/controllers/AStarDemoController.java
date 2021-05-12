@@ -86,9 +86,6 @@ public class AStarDemoController extends AbsController implements Initializable 
     private JFXButton Next;
 
     @FXML
-    private JFXButton about;
-
-    @FXML
     private JFXButton clear;
 
     @FXML
@@ -383,7 +380,6 @@ public class AStarDemoController extends AbsController implements Initializable 
             disableStair.setManaged(false);
         }
 
-        about.disableProperty().bind(isCurrentlyNavigating);
         clear.disableProperty().bind(isCurrentlyNavigating);
         treeView.managedProperty().bind(isCurrentlyNavigating.not());
         treeView.visibleProperty().bind(isCurrentlyNavigating.not());
@@ -1825,10 +1821,6 @@ public class AStarDemoController extends AbsController implements Initializable 
         } else {
             startNavigation();
         }
-    }
-
-    public void gotoAboutPage() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AboutPageView.fxml");
     }
 
     public List<String> getUserFavorites() throws SQLException {

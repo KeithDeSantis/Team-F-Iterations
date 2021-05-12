@@ -71,7 +71,6 @@
                         <HBox fx:id="topHBox" alignment="CENTER" prefHeight="34.0" prefWidth="896.0" spacing="10.0">
                            <children>
                               <JFXButton fx:id="Go" buttonType="RAISED" onAction="#toggleNavigation" prefWidth="150" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Start Navigation" />
-                              <JFXButton fx:id="about" buttonType="RAISED" onAction="#gotoAboutPage" stylesheets="@../../../../../../stylesheets/DefaultButtonStyle.css" text="About" />
                               <JFXButton fx:id="clear" buttonType="RAISED" onAction="#clearList" ripplerFill="WHITE" stylesheets="/stylesheets/DefaultButtonStyle.css" text="Clear" />
                               <JFXToggleButton fx:id="optimize" onAction="#checkInput" prefHeight="30.0" text="Optimize Route" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />
                               <JFXToggleButton fx:id="disableStair" onAction="#checkInput" prefHeight="30.0" text="Disable Stairs" toggleColor="#d7b20e" toggleLineColor="#f0c808" unToggleColor="#1048b9" unToggleLineColor="#03256c" />

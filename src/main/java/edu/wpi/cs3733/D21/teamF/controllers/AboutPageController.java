@@ -12,6 +12,6 @@ public class AboutPageController extends AbsController {
 
 
     public void goBack() throws IOException {
-        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AStarDemoView.fxml");
+        SceneContext.getSceneContext().loadDefault();
     }
 }

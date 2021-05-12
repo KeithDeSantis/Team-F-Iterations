@@ -37,6 +37,8 @@ public class DefaultPageController extends AbsController {
     @FXML
     private JFXButton loginButton;
     @FXML
+    private JFXButton about;
+    @FXML
     private JFXButton surveyButton;
     @FXML
     private JFXButton surveyButton2;
@@ -294,5 +296,9 @@ public class DefaultPageController extends AbsController {
 
     public void handleCredits() throws IOException {
         SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/CreditsView.fxml");
+    }
+
+    public void handleAbout() throws IOException {
+        SceneContext.getSceneContext().switchScene("/edu/wpi/cs3733/D21/teamF/fxml/AboutPageView.fxml");
     }
 }
