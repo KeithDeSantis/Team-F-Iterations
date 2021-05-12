@@ -114,49 +114,49 @@ public class ServiceRequestHomeNewController extends AbsController {
 
         if (btn == Home){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/HomeBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/homeBlack.png.png"));
             homeImage.setImage(image);
             home.setStyle("-fx-text-fill: #000000");
         }
         else if (btn == facilitiesMaintenance){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/FacilitiesBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/facilitiesBlack.png.png"));
             facilitiesImage.setImage(image);
             facilities.setStyle("-fx-text-fill: #000000");
         }
         else if (btn == laundryServices){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/LaundryBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/laundryBlack.png.png"));
             laundryImage.setImage(image);
             laundry.setStyle("-fx-text-fill: #000000");
         }
         else if (btn == externalPatientTrans){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/ExtPatientBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/extPatientBlack.png.png"));
             externalImage.setImage(image);
             extPatient.setStyle("-fx-text-fill: #000000");
         }
         else if (btn == floralDelivery){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/FloralBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/floralBlack.png.png"));
             floralImage.setImage(image);
             floral.setStyle("-fx-text-fill: #000000");
         }
         else if (btn == foodDelivery){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/FoodBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/foodBlack.png.png"));
             foodImage.setImage(image);
             food.setStyle("-fx-text-fill: #000000");
         }
         else if (btn == computerServices){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/ComputerBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/computerBlack.png.png"));
             computerImage.setImage(image);
             computer.setStyle("-fx-text-fill: #000000");
         }
         else if (btn == languageInterpretation){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/LangInterpBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/langInterpBlack.png.png"));
             langImage.setImage(image);
             langInterp.setStyle("-fx-text-fill: #000000");
         }
@@ -168,19 +168,19 @@ public class ServiceRequestHomeNewController extends AbsController {
         }
         else if (btn == sanitationService){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/SanitationBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/sanitationBlack.png.png"));
             sanitationImage.setImage(image);
             sanitation.setStyle("-fx-text-fill: #000000");
         }
         else if (btn == medicineDelivery){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/MedicineBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/medicineBlack.png.png"));
             medicineImage.setImage(image);
             medicine.setStyle("-fx-text-fill: #000000");
         }
         else if (btn == giftDelivery){
             btn.setStyle("-fx-background-color: #F0C808");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/GiftBlack.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/giftBlack.png.png"));
             giftImage.setImage(image);
             gift.setStyle("-fx-text-fill: #000000");
         }
@@ -197,67 +197,67 @@ public class ServiceRequestHomeNewController extends AbsController {
         }
         else if (btn == facilitiesMaintenance){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/FacilitiesWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/facilitiesWhite.png"));
             facilitiesImage.setImage(image);
             facilities.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == laundryServices){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/LaundryWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/laundryWhite.png.png"));
             laundryImage.setImage(image);
             laundry.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == externalPatientTrans){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/ExtPatientWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/extPatientWhite.png.png"));
             externalImage.setImage(image);
             extPatient.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == floralDelivery){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/FloralWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/floralWhite.png.png"));
             floralImage.setImage(image);
             floral.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == foodDelivery){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/FoodWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/foodWhite.png.png"));
             foodImage.setImage(image);
             food.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == computerServices){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/ComputerWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/computerWhite.png.png"));
             computerImage.setImage(image);
             computer.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == languageInterpretation){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/LangInterpWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/langInterpWhite.png.png"));
             langImage.setImage(image);
             langInterp.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == internalPatientTrans){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/IntPatientWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/intPatientWhite.png.png"));
             internalImage.setImage(image);
             intPatient.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == sanitationService){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/SanitationWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/sanitationWhite.png.png"));
             sanitationImage.setImage(image);
             sanitation.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == medicineDelivery){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/MedicineWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/medicineWhite.png.png"));
             medicineImage.setImage(image);
             medicine.setStyle("-fx-text-fill: #FFFFFF");
         }
         else if (btn == giftDelivery){
             btn.setStyle("-fx-background-color: #03256c");
-            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/GiftWhite.png"));
+            Image image = new Image(getClass().getResourceAsStream("/imagesAndLogos/serviceButtonNoText/giftWhite.png.png"));
             giftImage.setImage(image);
             gift.setStyle("-fx-text-fill: #FFFFFF");
         }
