@@ -1,11 +1,8 @@
 # CS 3733-D21 Fuchsia Falcons (Team F) - Project
 
+This application represents the collective effort of an 11 person team over a 7 week term in Software Engineering at WPI in Spring of 2021. Our group was tasked with creating a desktop/kiosk application for use at Brigham and Women's Hospital, and were given multiple requirements including a pathfinding system, a map editor, service requests, and a system allowing for the creation, deletion, and maintanence of users. The UI was made in JavaFX using JFoenix, and the backend database was constructed with Apache Derby.
+
 ----------
-## Important Updates & Branches:
-* [Version Name] - [Tag] - [Hash]
-* Iteration 3 - iteration-3-master - 5cbea33 
-* Iteration 2 - iteration-2-master - 40525c9
-* Iteration 1 - iteration-1-master - 4dbedee
 
 ## Remote Apache Derby Server Information
 
@@ -20,6 +17,8 @@ For security purposes, this project is missing the .env file with the required k
 ## Contact For Issues
 
 Please contact our lead software engineer, [ahfriedman](https://github.com/ahfriedman), with any errors regarding the server.
+
+NOTE: The server is intentionally down at the moment, and when the application is run in offline mode it will create a local Apache Derby database on your machine.
 
 
 ## Important Files
